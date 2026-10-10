@@ -13,7 +13,8 @@ Owner lane: `skills/bilimind/` (SKILL.md, references/, install.ps1, scripts/zip-
   tool, then the Coder and the Checker in parallel, then narrate, export and build. It ENDS with
   `present_files` on index.html, plan.md and REPORT.md. The final reply gives counts, checks,
   rejections and rewrites, cost, credits and wall time. Publishing with `workbuddy_sites_deploy` happens
-  only when the user's own message asks for it. `bm run` appears only as "never". The description
+  only when the user's own message asks for it. `run` (the desktop app's fixed pipeline) appears only as
+  "never call `run`". The description
   carries the trigger words (exam, final, lecture slides, past paper, revision, course, onboarding, SOP,
   staff training, study plan, flashcards, quiz). Every command and flag in the playbooks exists in the
   built CLI (a test checks this against `bilimind.mjs <cmd> --help`).
@@ -48,8 +49,9 @@ Owner lane: `skills/bilimind/` (SKILL.md, references/, install.ps1, scripts/zip-
   - Avatars: 5 PNGs, 512x512, 110-170 KB each. They are geometric cobalt/lime portraits with no text,
     drawn as SVG and rendered by headless Edge (`avatars/src/make-avatars.mjs`).
   - WorkBuddy's own `validate_expert.py` reports "Expert package is valid!" with no warnings. A dry-run
-    `register_expert.py` into a SCRATCH config folder also succeeded. **Not registered for real**: that
-    is the orchestrator's call.
+    `register_expert.py` into a SCRATCH config folder also succeeded. Then it was registered for real on
+    this laptop (10 October, from our terminal, `--session-id dormathon-build`), and WorkBuddy adopted it
+    into My Experts. Details: `workbuddy/bilimind-crew/STATUS.md`.
 - **Tests**: `node --test skills/bilimind/test/skill.test.mjs` passes 12 of 12. It covers the
   frontmatter and trigger words, the playbook rules, CLI commands and flags against the bundle,
   playbook sync, agent frontmatter (LF, no tools), the plugin.json spec, avatar size and dimensions, a
@@ -62,7 +64,7 @@ Owner lane: `skills/bilimind/` (SKILL.md, references/, install.ps1, scripts/zip-
 
 - Nothing has been run inside WorkBuddy yet: the parallel Agent spawns, the TeamCreate/SendMessage
   relay, `${CODEBUDDY_SKILL_DIR}` substitution and `present_files` are all written to the documented
-  behaviour (spike facts) but are untested here. That is gate G3, the owner's first real run.
+  behaviour (spike facts) but are untested. That is gate G3, a first real run inside WorkBuddy.
 - Open team questions (EXPERT-TEAM.md section 8): T2 (are repeated member names allowed? the lead
   already uses unique `-2`/`-3` names), T3 (does TeamCreate load cleanly?), T5 (does a preloaded skill
   substitute its folder? the lead has an `ls` fallback over both install locations).
@@ -74,10 +76,10 @@ Owner lane: `skills/bilimind/` (SKILL.md, references/, install.ps1, scripts/zip-
 1. After WP6's final bundle: `node skills/bilimind/scripts/zip-skill.mjs --team` (refreshes the team's
    copy of bilimind.mjs and the player; `--check` fails while they are stale), then rerun the tests.
 2. Install the skill: `powershell -ExecutionPolicy Bypass -File skills\bilimind\install.ps1` (optionally
-   `-Workspace C:\Demo\DS-Final`).
+   `-Workspace C:\Demo\DS-Final`). Done on this laptop.
 3. Register the team: follow hackathon/EXPERT-TEAM.md steps B-E, but copy from
-   **`workbuddy/bilimind-crew`** (not the spike draft). Register from inside WorkBuddy so the session
-   marker is written.
+   **`workbuddy/bilimind-crew`** (not the spike draft). Done on this laptop; after any rebuild, copy again
+   and re-run register (it updates in place).
 4. G3: run the hero sentence and read the transcript. Check for zero questions, 4 parallel Writers,
    the Coder and Checker in parallel, present_files last and a real rejection in REPORT.md. Tune the
    SKILL.md wording on anything the agent misreads.

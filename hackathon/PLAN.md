@@ -1,3 +1,5 @@
+> Superseded planning notes from the event; the current state is in the README and docs/workbuddy.md.
+
 # BiliMind for WorkBuddy: final Dormathon build plan
 
 Track 2 (WorkBuddy, Agentic Solutions). Written 2026-10-10. Status: COMPLETE (final build plan).

@@ -31,6 +31,6 @@ use.
 ## Where we disagree with WorkBuddy, and why
 
 WorkBuddy estimated $0.10 to $0.45 per course plus about $0.60 for paid narration. We measured our real runs instead:
-$0.040, $0.094 and $0.055 for the three showcase courses, and $0.046 and $0.047 for unattended runs. Narration uses
+$0.040, $0.094 and $0.055 for the three showcase courses, and $0.016 to $0.049 for unattended runs in the app (README, Real runs). Narration uses
 free Edge voices, not a paid voice service (see each course's `REPORT.md`). WorkBuddy is right that fully offline
 local models are not tested yet. We present them as next steps, not as a result.

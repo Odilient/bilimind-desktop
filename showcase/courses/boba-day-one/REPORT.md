@@ -1,5 +1,9 @@
 # What the agents did: Mutiara Tea Bar crew day-one
 
+> This demo course was built by the app's pipeline (run from the command line) and then reviewed by our
+> team; every change after the unattended run is listed in [_notes](../_notes/boba-day-one.md). The review's
+> steps are logged under the agent names in `crew/log.jsonl`; its notes are marked "Team review" below.
+
 Built Sunday 11 October at 0:36 (Asia/Kuala_Lumpur) · 7 lessons · 11 agents · text-model cost $0.09 · wall time 24 min 39 s.
 
 > We hire new crew every few weeks at Mutiara Tea Bar. Turn our SOP folder into a day-one course they must pass before their first shift, narrated in English and Malay.
@@ -113,9 +117,9 @@ No `code-test` runs were logged.
 ## Decisions in the agents' own words
 
 - **Lead** (00:12): Kept food_handler_law, moh_handler_certificate, hygiene_rules, allergens, dairy_allergy_scenario, shift_routines (by marks per minute, heaviest deck first); cut pearls_and_tea, pearl_faults, drink_catalog, malay_order_phrases, building_a_drink, too_sweet_scenario, capstone_first_shift.
-- **Lead** (00:19): Lead review of the unattended plan: it kept the thin MOH-booking subtopic but cut BS01, the menu/sticker codes and the Malay order, which are on the SOP's day-one must-do list (section 12) and the sentence asks for Malay. Re-planned: keep 8 lessons, cut the MOH subtopic (folded into the food-handler lesson).
-- **Lead** (00:20): Plan: 7 lessons, allergens first (SOP 6.4: wrong milk for an allergy customer is the most serious mistake in this shop). 4 orders tried; the planner always stacks reviews on the last day, so Sat 17 Oct needs 50 of 45 min (kept, mentioned).
-- **Lead** (00:35): Re-planned in the path's own order (law and hygiene before you touch the bar, then allergens, then running the bar): the page's path and the plan now agree, and no day goes over 45 min (the allergens-first order put 50 min on Sat 17).
+- **Team review** (00:19): Team review of the unattended plan: it kept the thin MOH-booking subtopic but cut BS01, the menu/sticker codes and the Malay order, which are on the SOP's day-one must-do list (section 12) and the sentence asks for Malay. Re-planned: keep 8 lessons, cut the MOH subtopic (folded into the food-handler lesson).
+- **Team review** (00:20): Plan: 7 lessons, allergens first (SOP 6.4: wrong milk for an allergy customer is the most serious mistake in this shop). 4 orders tried; the planner always stacks reviews on the last day, so Sat 17 Oct needs 50 of 45 min (kept, mentioned).
+- **Team review** (00:35): Re-planned in the path's own order (law and hygiene before you touch the bar, then allergens, then running the bar): the page's path and the plan now agree, and no day goes over 45 min (the allergens-first order put 50 min on Sat 17).
 
 ## Timeline
 
@@ -172,7 +176,7 @@ No `code-test` runs were logged.
 | 00:19:16 | Lead | narrate | 14 clips, 36.4 min | 2 min 46 s |  |
 | 00:19:16 | Lead | export | 10 files | 0 s |  |
 | 00:19:16 | Lead | build | index.html 1135 KB, 6 lessons | 0 s |  |
-| 00:19:46 | Lead | note | Lead review of the unattended plan: it kept the thin MOH-booking subtopic but cut BS01, the menu/sticker codes and the Malay order, which are on the SOP's day-one must-do list (section 12) and the sentence asks for Malay. Re-planned: keep 8 lessons, cut the MOH subtopic (folded into the food-handler lesson). | 0 s |  |
+| 00:19:46 | Team review | note | Team review of the unattended plan: it kept the thin MOH-booking subtopic but cut BS01, the menu/sticker codes and the Malay order, which are on the SOP's day-one must-do list (section 12) and the sentence asks for Malay. Re-planned: keep 8 lessons, cut the MOH subtopic (folded into the food-handler lesson). | 0 s |  |
 | 00:19:46 | Lead | plan | 8 lessons, 195/315 min, 17 reviews, 4 warnings | 0 s |  |
 | 00:19:56 | Lead | plan | 8 lessons, 195/315 min, 16 reviews, 4 warnings | 0 s |  |
 | 00:19:56 | Lead | plan | 8 lessons, 195/315 min, 15 reviews, 5 warnings | 0 s |  |
@@ -181,7 +185,7 @@ No `code-test` runs were logged.
 | 00:20:27 | Lead | plan | 7 lessons, 175/315 min, 15 reviews, 4 warnings | 0 s |  |
 | 00:20:28 | Lead | plan | 7 lessons, 175/315 min, 15 reviews, 4 warnings | 0 s |  |
 | 00:20:41 | Lead | plan | 7 lessons, 175/315 min, 15 reviews, 4 warnings | 0 s |  |
-| 00:20:42 | Lead | note | Plan: 7 lessons, allergens first (SOP 6.4: wrong milk for an allergy customer is the most serious mistake in this shop). 4 orders tried; the planner always stacks reviews on the last day, so Sat 17 Oct needs 50 of 45 min (kept, mentioned). | 0 s |  |
+| 00:20:42 | Team review | note | Plan: 7 lessons, allergens first (SOP 6.4: wrong milk for an allergy customer is the most serious mistake in this shop). 4 orders tried; the planner always stacks reviews on the last day, so Sat 17 Oct needs 50 of 45 min (kept, mentioned). | 0 s |  |
 | 00:21:05 | Writer · shift_routines | draft shift_routines | 7 blocks, 6 questions, 4 citations | 7 s | $0.0015 |
 | 00:21:09 | Writer · malay_order_phrases | draft malay_order_phrases | 6 blocks, 4 questions, 2 citations | 11 s | $0.0020 |
 | 00:21:15 | Writer · drink_catalog | draft drink_catalog | 8 blocks, 4 questions, 3 citations | 16 s | $0.0030 |
@@ -240,7 +244,7 @@ No `code-test` runs were logged.
 | 00:28:48 | Lead | export | 11 files | 0 s |  |
 | 00:28:49 | Lead | build | index.html 1172 KB, 7 lessons | 0 s |  |
 | 00:35:31 | Lead | plan | 7 lessons, 175/315 min, 17 reviews, 2 warnings | 0 s |  |
-| 00:35:42 | Lead | note | Re-planned in the path's own order (law and hygiene before you touch the bar, then allergens, then running the bar): the page's path and the plan now agree, and no day goes over 45 min (the allergens-first order put 50 min on Sat 17). | 0 s |  |
+| 00:35:42 | Team review | note | Re-planned in the path's own order (law and hygiene before you touch the bar, then allergens, then running the bar): the page's path and the plan now agree, and no day goes over 45 min (the allergens-first order put 50 min on Sat 17). | 0 s |  |
 | 00:35:58 | Lead | narrate | 17 clips, 51.2 min | 15 s |  |
 
 ---

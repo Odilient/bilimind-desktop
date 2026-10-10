@@ -1,3 +1,5 @@
+> Superseded planning notes from the event; the current state is in the README and docs/workbuddy.md.
+
 # WorkBuddy spike (H4): what to paste, what to look for, results form
 
 Owner at the keyboard, about 15 minutes, about 10-40 credits. The skill is already installed; there is

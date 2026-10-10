@@ -7,7 +7,7 @@ that explanation, with links and screenshots.
 **To be clear about what was built where.** Our product is BiliMind Desktop, an open-source Electron app.
 The desktop app, the engine and the three showcase courses were built by our team with AI coding agents
 outside WorkBuddy. WorkBuddy was a work tool for us during Dormathon (the pitch deck, a comparison, reviews),
-and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users can run it there.
+and BiliMind also ships as a WorkBuddy skill and Expert Team, designed so WorkBuddy users can run it there.
 
 ## Summary
 
@@ -51,14 +51,14 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
     parallel, a Coder and a Checker, ending with `present_files` opening the course in WorkBuddy's Preview;
   - an **Expert Team** "BiliMind Crew" (`workbuddy/bilimind-crew/`): Dean Bilim (lead), Paige Turner
     (Lesson Writer), Ada Passmore (Exercise Tester), Vera Citewell (Slide Fact-Checker). We validated it with
-    WorkBuddy's own `validate_expert.py` and registered it with `register_expert.py`, so it appears in
-    "My Experts".
-- **Scenario:** a WorkBuddy user sets the workspace to their folder and types one sentence; the skill runs
-  the same engine as the desktop app. The courses in this repo were built by the desktop app and the CLI,
-  not inside WorkBuddy.
+    WorkBuddy's own `validate_expert.py` and registered it with `register_expert.py` (from our own
+    terminal, with `--session-id`), so it appears in "My Experts".
+- **Scenario (how it is meant to run):** a WorkBuddy user sets the workspace to their folder and types one
+  sentence; WorkBuddy's agent leads the crew and calls the bundled CLI, the same engine as the desktop app.
+  The courses in this repo were built by the desktop app and the CLI, not inside WorkBuddy.
 - **When:** Saturday 10 October evening (spike) to about 23:55 (team registered).
 
-| WorkBuddy feature | How the skill uses it | Where in this repo |
+| WorkBuddy feature | How the skill is written to use it | Where in this repo |
 |---|---|---|
 | Skills | The Lead's rules and steps; triggers on exam, past paper, revision, SOP, onboarding | `skills/bilimind/SKILL.md`, `references/*.md` |
 | Expert Team | Lead + three members with cards and avatars | `workbuddy/bilimind-crew/.codebuddy-plugin/plugin.json`, `agents/*.md` |
@@ -85,7 +85,8 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
 
 ## Practical notes for other WorkBuddy builders
 
-Things we found on our machine that are not obvious from the docs:
+Things we found on our machine, by reading WorkBuddy's install, config folder and tool definitions and by
+running its expert-manager scripts, that are not obvious from the docs:
 
 - The international build keeps its data in `~/.workbuddy-ai`, not `~/.workbuddy`. Inside WorkBuddy the app
   sets `WORKBUDDY_CONFIG_DIR` and `CODEBUDDY_CONFIG_DIR` for the agent's processes.

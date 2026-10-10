@@ -1,7 +1,9 @@
 # Expert Team "bilimind-crew": how to create and register it on this PC
 
-Status: package drafted and **validated** with WorkBuddy's own validator (in a scratch copy of the config
-folder). **Not registered yet**: register only when the orchestrator decides (WP16, after G1).
+Status: written before registration. The final package, `workbuddy/bilimind-crew/` (not the spike draft
+below), passes WorkBuddy's own validator and was registered on this PC on 10 October with these steps (step D's
+fallback, `--session-id dormathon-build`); WorkBuddy adopted it into My Experts. See
+`workbuddy/bilimind-crew/STATUS.md`.
 
 Draft package (source of truth): `hackathon/spike/expert-team/bilimind-crew/`
 Placeholder avatars: `node hackathon/spike/tools/make-avatars.mjs` (already run).

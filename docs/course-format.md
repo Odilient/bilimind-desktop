@@ -29,7 +29,8 @@ bilimind-out/ds-final/
 
 One self-contained file. The Vue player is inlined as a single module script, and the course data is
 embedded in one `<script type="application/json">` tag. Nothing is fetched at start-up, so the page works from
-`file://`, inside WorkBuddy's Preview panel and from any static host. It shows:
+`file://` and from any static host, and is meant to open in WorkBuddy's Preview panel too. (A diagram that was
+not drawn at build time loads Mermaid from the internet when it is shown.) It shows:
 
 - the path: kept topics in order with "You are here", and cut topics struck through with the reason;
 - lessons whose blocks follow the lesson's archetype (below);

@@ -1,5 +1,9 @@
 # What the agents did: CSC2103 Data Structures final
 
+> This demo course was built by the app's pipeline (run from the command line) and then reviewed by our
+> team; every change after the unattended run is listed in [_notes](../_notes/ds-final.md). The review's
+> steps are logged under the agent names in `crew/log.jsonl`; its notes are marked "Team review" below.
+
 Built Sunday 11 October at 0:30 (Asia/Kuala_Lumpur) · 3 lessons · 6 agents · text-model cost $0.04 · wall time 19 min 39 s.
 
 > My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.
@@ -124,11 +128,11 @@ Rejected items (never shown to you):
 ## Decisions in the agents' own words
 
 - **Lead** (00:12): Kept binary_heaps_and_priority_queues, map_adt_and_hash_functions, binary_search_tree_operations (by marks per minute, heaviest deck first); cut counting_operations_big_o, big_o_omega_theta_bounds, arrays_vs_linked_lists, amortised_cost_of_append, load_factor_and_resizing, collision_resolution_strategies, bst_chain_from_sorted_inserts, avl_rotation_balancing, build_heap_and_heapsort, capstone_past_paper_under_time.
-- **Coder** (00:15): binary_heaps_and_priority_queues b3: the unattended run disabled it (empty reference solution, no tests) -> wrote the slide 6 sift-up loop as solution.js and 5 tests from the walkthrough, slide 7 and an in-place check; starter gets a TODO line
-- **Coder** (00:15): map_adt_and_hash_functions b7: test 'duplicate keys both stay in the chain' used three different keys (12, 19, 26), so it never tested duplicates -> call is now buildChains([12, 19, 12], 7)[5], expect [12, 19, 12]
-- **Lead** (00:24): Re-planned in path order (map ADT -> BST -> heaps, lecture order L2 -> L3 -> L4) so the plan days agree with 'Start the path' and the path's step numbers; the trade-off is that heaps (25% of marks) is learned on Tue 13 Oct and gets no spaced review before the exam.
-- **Coder** (00:26): binary_heaps_and_priority_queues b3: instructions and the first test name read '5 swaps with 9' (five swaps?) -> 'the key 5 swaps once with 9'; the starter's TODO line ran off the editor -> split over two lines
-- **Lead** (00:26): exam-map: assigned Q2c (separate chaining trace, 6 marks) to Hash tables, which teaches slide 9's chaining example and has the buildChains exercise; collision_resolution_strategies keeps no marks of its own.
+- **Team review** (00:15, Coder step): binary_heaps_and_priority_queues b3: the unattended run disabled it (empty reference solution, no tests) -> wrote the slide 6 sift-up loop as solution.js and 5 tests from the walkthrough, slide 7 and an in-place check; starter gets a TODO line
+- **Team review** (00:15, Coder step): map_adt_and_hash_functions b7: test 'duplicate keys both stay in the chain' used three different keys (12, 19, 26), so it never tested duplicates -> call is now buildChains([12, 19, 12], 7)[5], expect [12, 19, 12]
+- **Team review** (00:24): Re-planned in path order (map ADT -> BST -> heaps, lecture order L2 -> L3 -> L4) so the plan days agree with 'Start the path' and the path's step numbers; the trade-off is that heaps (25% of marks) is learned on Tue 13 Oct and gets no spaced review before the exam.
+- **Team review** (00:26, Coder step): binary_heaps_and_priority_queues b3: instructions and the first test name read '5 swaps with 9' (five swaps?) -> 'the key 5 swaps once with 9'; the starter's TODO line ran off the editor -> split over two lines
+- **Team review** (00:26): exam-map: assigned Q2c (separate chaining trace, 6 marks) to Hash tables, which teaches slide 9's chaining example and has the buildChains exercise; collision_resolution_strategies keeps no marks of its own.
 
 ## Timeline
 
@@ -173,10 +177,10 @@ Rejected items (never shown to you):
 | 00:15:08 | Lead | export | 7 files | 0 s |  |
 | 00:15:13 | Lead | build | index.html 1007 KB, 3 lessons | 6 s |  |
 | 00:15:20 | Coder | code-test binary_heaps_and_priority_queues | b3 self-marked | 0 s |  |
-| 00:15:46 | Coder | note binary_heaps_and_priority_queues | binary_heaps_and_priority_queues b3: the unattended run disabled it (empty reference solution, no tests) -> wrote the slide 6 sift-up loop as solution.js and 5 tests from the walkthrough, slide 7 and an in-place check; starter gets a TODO line | 0 s |  |
+| 00:15:46 | Team review (Coder step) | note binary_heaps_and_priority_queues | binary_heaps_and_priority_queues b3: the unattended run disabled it (empty reference solution, no tests) -> wrote the slide 6 sift-up loop as solution.js and 5 tests from the walkthrough, slide 7 and an in-place check; starter gets a TODO line | 0 s |  |
 | 00:15:46 | Coder | code-test binary_heaps_and_priority_queues | b3 reference 5/5, starter 1/5 | 0 s |  |
 | 00:15:55 | Coder | code-test map_adt_and_hash_functions | b7 reference 5/5, starter 0/5 | 0 s |  |
-| 00:15:56 | Coder | note map_adt_and_hash_functions | map_adt_and_hash_functions b7: test 'duplicate keys both stay in the chain' used three different keys (12, 19, 26), so it never tested duplicates -> call is now buildChains([12, 19, 12], 7)[5], expect [12, 19, 12] | 0 s |  |
+| 00:15:56 | Team review (Coder step) | note map_adt_and_hash_functions | map_adt_and_hash_functions b7: test 'duplicate keys both stay in the chain' used three different keys (12, 19, 26), so it never tested duplicates -> call is now buildChains([12, 19, 12], 7)[5], expect [12, 19, 12] | 0 s |  |
 | 00:15:56 | Coder | code-test map_adt_and_hash_functions | b7 reference 5/5, starter 0/5 | 0 s |  |
 | 00:15:57 | Coder | code-test binary_search_tree_operations | b4 reference 4/4, starter 0/4 | 0 s |  |
 | 00:17:55 | Lead | check binary_heaps_and_priority_queues | 27/27 checks | 0 s |  |
@@ -205,14 +209,14 @@ Rejected items (never shown to you):
 | 00:20:30 | Lead | build | index.html 1015 KB, 3 lessons | 0 s |  |
 | 00:22:02 | Checker | verdict map_adt_and_hash_functions | 1 applied, 1 excluded | 0 s |  |
 | 00:23:32 | Lead | plan | 3 lessons, 85/135 min, 3 reviews, 4 warnings | 0 s |  |
-| 00:24:07 | Lead | note | Re-planned in path order (map ADT -> BST -> heaps, lecture order L2 -> L3 -> L4) so the plan days agree with 'Start the path' and the path's step numbers; the trade-off is that heaps (25% of marks) is learned on Tue 13 Oct and gets no spaced review before the exam. | 0 s |  |
+| 00:24:07 | Team review | note | Re-planned in path order (map ADT -> BST -> heaps, lecture order L2 -> L3 -> L4) so the plan days agree with 'Start the path' and the path's step numbers; the trade-off is that heaps (25% of marks) is learned on Tue 13 Oct and gets no spaced review before the exam. | 0 s |  |
 | 00:26:03 | Coder | code-test binary_heaps_and_priority_queues | b3 reference 5/5, starter 1/5 | 0 s |  |
-| 00:26:03 | Coder | note binary_heaps_and_priority_queues | binary_heaps_and_priority_queues b3: instructions and the first test name read '5 swaps with 9' (five swaps?) -> 'the key 5 swaps once with 9'; the starter's TODO line ran off the editor -> split over two lines | 0 s |  |
+| 00:26:03 | Team review (Coder step) | note binary_heaps_and_priority_queues | binary_heaps_and_priority_queues b3: instructions and the first test name read '5 swaps with 9' (five swaps?) -> 'the key 5 swaps once with 9'; the starter's TODO line ran off the editor -> split over two lines | 0 s |  |
 | 00:26:04 | Coder | code-test binary_heaps_and_priority_queues | b3 reference 5/5, starter 1/5 | 0 s |  |
 | 00:26:04 | Lead | exam-map | 20 questions, 100 marks: binary_heaps_and_priority_queues 25%, map_adt_and_hash_functions 15%, binary_search_tree_operations 15% | 0 s |  |
 | 00:26:21 | Lead | exam-map | 20 questions, 100 marks: binary_heaps_and_priority_queues 25%, map_adt_and_hash_functions 21%, binary_search_tree_operations 15% | 0 s |  |
 | 00:26:21 | Lead | plan | 3 lessons, 85/135 min, 3 reviews, 4 warnings | 0 s |  |
-| 00:26:21 | Lead | note | exam-map: assigned Q2c (separate chaining trace, 6 marks) to Hash tables, which teaches slide 9's chaining example and has the buildChains exercise; collision_resolution_strategies keeps no marks of its own. | 0 s |  |
+| 00:26:21 | Team review | note | exam-map: assigned Q2c (separate chaining trace, 6 marks) to Hash tables, which teaches slide 9's chaining example and has the buildChains exercise; collision_resolution_strategies keeps no marks of its own. | 0 s |  |
 | 00:26:27 | Checker | evidence binary_heaps_and_priority_queues | 4 items -> crew/evidence/binary_heaps_and_priority_queues.md | 0 s |  |
 | 00:26:34 | Checker | verdict binary_heaps_and_priority_queues | 1 applied | 0 s |  |
 | 00:26:34 | Lead | check binary_heaps_and_priority_queues | 27/27 checks | 0 s |  |

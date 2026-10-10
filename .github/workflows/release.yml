@@ -49,8 +49,12 @@ jobs:
         working-directory: apps/desktop
         run: pnpm exec electron-builder --win portable nsis --x64 --publish never
 
+      # The body comes from .github/release-notes.md and replaces the body of an existing release on a re-tag
+      # (append_body: false), so re-tagging no longer stacks "Full Changelog" lines.
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: apps/desktop/release/*.exe
-          generate_release_notes: true
+          body_path: .github/release-notes.md
+          append_body: false
+          generate_release_notes: false

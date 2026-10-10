@@ -18,10 +18,10 @@ real today = 2026-10-11 (MYT). `run` has no `--start` flag; it already uses the 
 | Step | Wall | Cost (USD) |
 |---|---|---|
 | `run --no-cache --max-usd 0.15` (bundle, DeepSeek direct): goal, ingest, outline (83 s), plan, 6 drafts + repairs, fact-check, auto-verdicts, narrate (166 s), export, build | 477 s | 0.080966 |
-| Lead re-plan, 3 new drafts (drink_catalog, building_a_drink, malay_order_phrases), 1 `--only walkthrough` re-draft (shift_routines) | about 30 s (parallel) | 0.010650 |
+| Team re-plan (logged as Lead), 3 new drafts (drink_catalog, building_a_drink, malay_order_phrases), 1 `--only walkthrough` re-draft (shift_routines) | about 30 s (parallel) | 0.010650 |
 | Checker: fact-check + `verdict --auto` on the 3 new lessons, then hand rulings | about 5 s for the model calls | 0.002678 |
 | narrate (twice, en + ms), export, build | about 110 s | 0 |
-| **Course total** (crew/log.jsonl, = receipts `cost_usd`) | init 00:11:19 to final build 00:36:32 MYT = **25 min 12 s** | **0.094294** (cap 0.15) |
+| **Course total** (crew/log.jsonl, = receipts `cost_usd`) | init 00:11:19 to final build 00:36:32 MYT = **25 min 12 s** (REPORT.md and the README say 24 min 39 s: REPORT.md was written at 00:36:01, so its count stops at the step before, 00:35:58) | **0.094294** (cap 0.15) |
 
 Spend by command: outline 0.0121, draft 0.0733 (hygiene_rules alone: 0.040 over its draft and repair; the first draft took 187 s),
 fact-check 0.0036, verdict --auto 0.0052.
@@ -36,7 +36,7 @@ Plan: 7 study days x 45 min (Sun 11 to Sat 17 Oct), first shift Sun 18 Oct 09:00
 Order: food handler law, hygiene, allergens, opening/closing, menu codes, Malay order, building BS01. No plan warnings
 except "shift_routines sized 35 min, planned as 30".
 
-## Lead decisions after the run (all logged with `note`)
+## Team review decisions after the run (all logged with `note`, under the Lead's name)
 
 1. The unattended `run` kept 6 lessons in outline order, including the thin "Booking your MOH course" subtopic and a
    second dairy-scenario lesson, and CUT the BS01 build, the menu/sticker codes and the Malay order. Those three are on

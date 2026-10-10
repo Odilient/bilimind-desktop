@@ -11,9 +11,11 @@ Full status (WP7 + WP16): `skills/bilimind/STATUS.md`. This file stays out of th
 - **Rebuild:** `node skills/bilimind/scripts/zip-skill.mjs --team` syncs the member playbooks from
   `skills/bilimind/references/*.md` and the skill copy, then writes `skills/dist/bilimind-crew.zip`.
   Avatars: `node workbuddy/bilimind-crew/avatars/src/make-avatars.mjs`.
-- **Installed (G3 prep, real config):** copied to `C:/Users/User/.workbuddy-ai/plugins/marketplaces/my-experts/plugins/bilimind-crew`,
-  validate_expert.py OK, register_expert.py --session-id dormathon-build OK (marketplace.json entry +
-  .created-by-session); WorkBuddy adopted it into experts/custom/<user>/experts.json by itself. The skill is
-  also installed at `C:/Users/User/.workbuddy-ai/skills/bilimind` (install.ps1).
+- **Registered (10 October, real config):** copied to `C:/Users/User/.workbuddy-ai/plugins/marketplaces/my-experts/plugins/bilimind-crew`,
+  validate_expert.py OK, register_expert.py --session-id dormathon-build OK from our own terminal
+  (marketplace.json entry + .created-by-session); WorkBuddy adopted it into experts/custom/<user>/experts.json
+  by itself, so it shows in My Experts (the app has since replaced the marker with
+  .pending-preview-session). The skill is also installed at `C:/Users/User/.workbuddy-ai/skills/bilimind` (install.ps1).
 - **Re-copy after any rebuild:** run `--team`, then copy again and re-run register (it updates in place).
-- **Not yet run inside WorkBuddy:** parallel Agent spawns, TeamCreate + SendMessage to `team-lead`, present_files.
+- **Not yet run inside WorkBuddy:** no course has been built with the team inside WorkBuddy, so the parallel
+  Agent spawns, TeamCreate + SendMessage to `team-lead` and present_files are untested.

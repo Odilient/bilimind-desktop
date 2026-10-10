@@ -1,3 +1,5 @@
+> Superseded planning notes from the event; the current state is in the README and docs/workbuddy.md.
+
 # WorkBuddy integration research (for Dormathon, Track 2)
 
 Status: COMPLETE (first pass). Date: 2026-10-10. Author: research agent for team Opus Magnum (#58).

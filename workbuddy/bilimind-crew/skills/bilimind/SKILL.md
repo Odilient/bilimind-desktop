@@ -28,7 +28,7 @@ node "SKILL_DIR/scripts/bilimind.mjs" <command> --course "COURSE" --as "Lead" [f
   fails again, read `SKILL_DIR/references/troubleshooting.md`. Progress lines on stderr are noise.
 - COURSE is the absolute folder `init` printed. Always pass `--course` and `--as` (your label is `Lead`).
 - Below, `bm <command> [flags]` is shorthand for the full line above. Always type the full line.
-- Never run `bm run`: it is a developer harness that skips the crew.
+- `run` is the desktop app's fixed pipeline; inside WorkBuddy you are the Lead: drive the steps yourself, never call `run`.
 - **Timeouts.** The Bash tool kills a command after 120 s unless you pass a timeout, and you never see its
   JSON line. ALWAYS call `outline`, `draft`, `narrate`, `rewrite-item`, `verdict --auto` and `build` with the
   Bash tool's `timeout` set to `600000` (outline takes about 100 s, narrate 2-3 min). If one still times
@@ -56,8 +56,9 @@ task completed if it failed; leave it `in_progress` and say why in the final rep
 
 ## Step 1: understand the goal (task 1)
 
-1. `node "SKILL_DIR/scripts/bilimind.mjs" doctor --as "Lead"` (no `--course` yet). If `key` is false,
-   stop and give the user the one fix from troubleshooting.md ("missing key"). If `clock_skew_ms` (SKEW)
+1. `node "SKILL_DIR/scripts/bilimind.mjs" doctor --as "Lead"` (no `--course` yet). If it fails with
+   no key, stop and give the user the one fix from troubleshooting.md ("missing key"). With BiliMind free
+   (`provider` is `bilimind`, the default) `key` is false and no key is needed: carry on. If `clock_skew_ms` (SKEW)
    is more than 3600000 (1 h) either way, the PC clock is wrong and the real time is the local time plus SKEW. Get the
    real date once, with SKEW written out:
    `node -e "console.log(new Date(Date.now()+SKEW).toLocaleString('sv-SE',{timeZone:'Asia/Kuala_Lumpur'}))"`.

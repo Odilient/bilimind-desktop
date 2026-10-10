@@ -17,7 +17,7 @@ Real today is 2026-10-11 (Sunday) either way. The CLI `run` has no `--start` fla
 | Started (delete, then `run`) | 00:10:35 MYT, Sun 11 Oct 2026 |
 | `run` (bundled CLI, `--no-cache`, DeepSeek direct, `--max-usd 0.15`) | 272.7 s, $0.039347, exit 0, 0 failed steps |
 | Coder, Checker and lecturer pass, then narrate, export and build | 00:15 to 00:30 MYT |
-| Receipts `wall_ms` (init to last build) | 1,180,494 ms (19 min 40 s) |
+| Receipts `wall_ms` (init to last build) | 1,180,494 ms (19 min 40 s); REPORT.md and the README say 19 min 39 s because REPORT.md was written just before that last build |
 | Total text-model spend (crew/log.jsonl) | **$0.039922**: run $0.039347 + 2 x rewrite-item $0.000575 (cap $0.15) |
 | TTS | Edge TTS, free |
 
@@ -35,7 +35,7 @@ narrate (106 s); export; build.
 - Gate (`hackathon/runs/g2/shoot.mjs`, 8 page loads): **0 console errors, 0 page errors, 0 error boundaries, 0 horizontal overflow**.
   The only failed requests are 3 mp3 preloads aborted when the tab closes (a known effect of how the gate runs, not a bug in the page).
 
-## Plan (Lead decisions after the run)
+## Plan (team review decisions after the run, logged under the Lead's name)
 
 - The run kept map ADT, BST and heaps; it cut 10 topics (AVL and the other zero-mark topics are cut with "No marks in the past paper").
 - **Re-planned in path order** (Hash tables, Sun 11 -> BST, Mon 12 -> heaps, Tue 13). The player's "Start the path" and step

@@ -2,8 +2,9 @@
 
 BiliMind Desktop is an Electron app. You pick a folder, type one sentence and press Build. The app runs the
 BiliMind engine (`@bilimind/engine`, `runPipeline` in `packages/engine/src/run.ts`) on your own machine, in a
-separate worker process, with your own DeepSeek or OpenRouter key. There is no BiliMind server and no
-account. The finished course is a normal folder under `Documents\BiliMind\`.
+separate worker process. The text-model calls go to BiliMind free (our open-source proxy, no key, the
+default) or straight to DeepSeek or OpenRouter with your own key. There is no account. The finished course
+is a normal folder under `Documents\BiliMind\`.
 
 ## Inside the app
 
@@ -32,9 +33,9 @@ Renderer (Vue)  --window.bilimind-->  Main process  --utilityProcess.fork-->  Wo
 Every step appends one line to `crew/log.jsonl`, so `REPORT.md` and the course's receipts are computed from
 what actually ran.
 
-The same engine also runs as a CLI and as a WorkBuddy skill and Expert Team (see the README). There, agents
-make the Lead's and the Checker's judgement calls in a visible transcript; in the desktop app the engine
-makes them unattended.
+The same engine also runs as a CLI, which the WorkBuddy skill and Expert Team call (see the README). They
+are designed so that WorkBuddy's agents make the Lead's and the Checker's judgement calls in a visible
+transcript; in the desktop app the engine makes them unattended.
 
 ## The pipeline
 
@@ -99,9 +100,11 @@ desktop app runs:
 - The outline takes 109 to 117 s (one reasoning call). Narration takes about 100 s. Drafts take about 60 to
   170 s in parallel. Everything else takes about 1 s per step.
 
-The showcase courses in `showcase/courses/` were built with the agent workflow (agents making the Lead's and
-Checker's calls between steps), which takes longer: the Data Structures course (3 lessons, 6 agents) took
-19 min 39 s of wall time and $0.04 in text calls, according to its `REPORT.md`.
+The showcase courses in `showcase/courses/` each started as an unattended run of this pipeline, then our
+team reviewed them with an AI coding agent (re-planning, fixing exercises, correcting lesson text), which
+takes longer: the Data Structures course (3 lessons, 6 agents) took 19 min 39 s of wall time and $0.04 in
+text calls, according to its `REPORT.md`. Every change after the run is in
+[showcase/courses/_notes](../showcase/courses/_notes/).
 
 ## The offline player
 

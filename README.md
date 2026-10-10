@@ -9,7 +9,7 @@ lessons, quizzes checked against your own files, code exercises that run, a stud
 days, flashcards and a review calendar. It is free, needs no account and no key, the finished course
 works offline, and the code is open source.
 
-![BiliMind Desktop: your course, with the assistant answering from your files](docs/img/app-workspace.png)
+[![Watch the film](docs/img/film-preview.gif)](https://odilient.github.io/bilimind-desktop/vid/bilimind-desktop.mp4)
 
 ### [Download for Windows](https://github.com/Odilient/bilimind-desktop/releases/latest)
 
@@ -57,7 +57,7 @@ works offline, and the code is open source.
 | Way | For whom | How to start | Link |
 |---|---|---|---|
 | **BiliMind Desktop** (Windows app) | Everyone. This is the main way. | Download, drop your files, type one sentence | [Download](https://github.com/Odilient/bilimind-desktop/releases/latest) |
-| **Inside WorkBuddy** | WorkBuddy users | Install the BiliMind skill or the "BiliMind Crew" Expert Team (a Lead, Writers, a Coder and a Checker), then type the same sentence; WorkBuddy's agent runs the crew | [skills/bilimind](skills/bilimind/), [workbuddy/bilimind-crew](workbuddy/bilimind-crew/), [install steps](docs/DEVELOPERS.md#workbuddy-skill-and-expert-team) |
+| **Inside WorkBuddy** | WorkBuddy users | Install the BiliMind skill or the "BiliMind Crew" Expert Team (a Lead, Writers, a Coder and a Checker), then type the same sentence. It is designed so WorkBuddy's agent leads the crew and calls the same command line as below | [skills/bilimind](skills/bilimind/), [workbuddy/bilimind-crew](workbuddy/bilimind-crew/), [install steps](docs/DEVELOPERS.md#workbuddy-skill-and-expert-team) |
 | **Command line** | Power users, scripts, automation | One file, `bilimind.mjs`, with Node 22 or newer. Every step is its own command (`init`, `ingest`, `outline`, `exam-map`, `plan`, `draft`, `check`, `code-test`, `narrate`, `build` and more) | [apps/cli](apps/cli/), [bilimind.mjs](skills/bilimind/scripts/bilimind.mjs) |
 | **The course itself** | Anyone you share it with | Open `index.html` in any browser, offline, or put it online like our three demo courses. `deck.csv` goes into Anki, `reviews.ics` into your calendar, `plan.md` is the study plan | [The three demo courses](#made-for) |
 | **BiliMind free** (the AI service) | Nobody opens it | The app and the command line use it by default, so nobody needs a key. Open source; its key lives only on the server | [server/free-proxy](server/free-proxy/) |
@@ -124,13 +124,14 @@ described in [showcase/courses/_notes](showcase/courses/_notes/). That review is
 - **Free by default.** "BiliMind free" is the AI the app uses out of the box: no account, no key. The team
   pays for it; our runs cost between $0.016 and $0.094 a course. Its code is open
   ([server/free-proxy](server/free-proxy/)) and its AI key lives only on that server.
-- **Your files stay on your computer.** To write the course and to answer your questions, text from your
+- **Your course stays on your computer.** To write the course and to answer your questions, text from your
   files is sent to the AI (through BiliMind free, or straight to the provider if you use your own key).
   Narration text goes to Microsoft Edge's online voices. The course, your files and the report stay in
   your folder.
 - **Your own key, if you want.** DeepSeek or OpenRouter, in Settings. Then your text goes straight to that
   provider. The key is kept in `%USERPROFILE%\.bilimind\config.json` and never shown in the app.
-- **Spending limits.** Each course stops at $0.25 and each day at $2 by default.
+- **Spending limits.** Each course stops at $0.25 of AI cost and each day at $2 by default. The limits count
+  BiliMind free too, where the team pays; you pay nothing.
 
 ## Dormathon 2026 · Track 2
 
@@ -145,10 +146,10 @@ described in [showcase/courses/_notes](showcase/courses/_notes/). That review is
 | Criterion | What we built | Evidence |
 |---|---|---|
 | 1. Problem relevance | Two real bottlenecks: a student turning a pile of slides into a plan before an exam, and a shop training new crew every few weeks from its SOP. One sentence in, a checked course out in minutes, for cents | The [three demo courses](#made-for) and their sentences; market check: [workbuddy-market-validation.md](hackathon/proof/workbuddy-market-validation.md) |
-| 2. Autonomous workflow | A Lead reads the goal and files, weights the past paper, plans the days, keeps and cuts topics with a reason each (in the app by marks per minute; in WorkBuddy the agent decides); Writers work in parallel; a Coder and a Checker verify; failed checks trigger a re-draft, a lesson that fails twice is dropped and the run continues. No questions to the user | [run.ts](packages/engine/src/run.ts), [desktop-run-timings.json](hackathon/proof/desktop-run-timings.json), [crew/log.jsonl](showcase/courses/ds-final/crew/log.jsonl), [plan.md](showcase/courses/ds-final/plan.md) |
-| 3. WorkBuddy integration | BiliMind ships as a WorkBuddy skill: WorkBuddy's agent is the Lead, launches Writer sub-agents in parallel, runs the `bilimind` command line that enforces schemas, tests and quotes, previews with `present_files` and can publish with `workbuddy_sites_deploy`. Also an Expert Team validated with WorkBuddy's `validate_expert.py`. We used WorkBuddy for our first deck, market research and a comparison. The same engine also runs as the Windows app and the command line. The courses in this repo were built by the app and the command line, not inside WorkBuddy | [SKILL.md](skills/bilimind/SKILL.md), [bilimind-crew](workbuddy/bilimind-crew/), [EXPERT-TEAM.md](hackathon/EXPERT-TEAM.md), [docs/workbuddy.md](docs/workbuddy.md) (task links and screenshots) |
+| 2. Autonomous workflow | A Lead reads the goal and files, weights the past paper, plans the days, keeps and cuts topics with a reason each (in the app by marks per minute; in the WorkBuddy skill the agent is meant to decide, with our planning rules); Writers work in parallel; a Coder and a Checker verify; failed checks trigger a re-draft, a lesson that fails twice is dropped and the run continues. No questions to the user | [run.ts](packages/engine/src/run.ts), [desktop-run-timings.json](hackathon/proof/desktop-run-timings.json), [crew/log.jsonl](showcase/courses/ds-final/crew/log.jsonl), [plan.md](showcase/courses/ds-final/plan.md) |
+| 3. WorkBuddy integration | BiliMind ships as a WorkBuddy skill and as an Expert Team, "BiliMind Crew", which passes WorkBuddy's own `validate_expert.py` and is registered in My Experts on our laptop. How it is meant to run: WorkBuddy's agent is the Lead, launches Writer sub-agents in parallel, calls the `bilimind` command line (the same engine as the Windows app; it enforces schemas, tests and quotes), opens the course with `present_files` and publishes with `workbuddy_sites_deploy` only when asked. We used WorkBuddy itself for our first deck, market research and a comparison. The courses in this repo were built by the app and the command line, not inside WorkBuddy | [SKILL.md](skills/bilimind/SKILL.md), [bilimind-crew](workbuddy/bilimind-crew/), [EXPERT-TEAM.md](hackathon/EXPERT-TEAM.md), [docs/workbuddy.md](docs/workbuddy.md) (task links and screenshots) |
 | 4. Reliability and verification | Built-in checks on every lesson, answers re-solved against your files with word-for-word quotes, code run against tests, a report per course; 338 automated tests | [REPORT.md](showcase/courses/ds-final/REPORT.md), [rulings](showcase/courses/ds-final/crew/evidence/), [verdicts](showcase/courses/ds-final/crew/verdicts/), [verdict.ts](packages/engine/src/verdict.ts), [codework.ts](packages/engine/src/codework.ts) |
-| 5. Live execution | A packaged Windows app; one sentence runs end to end with no further input; a fresh install with no key built a course; three courses play on the website; the same engine works from WorkBuddy and the command line | [Download](https://github.com/Odilient/bilimind-desktop/releases/latest), [film](https://odilient.github.io/bilimind-desktop/vid/bilimind-desktop.mp4), [deck](https://odilient.github.io/bilimind-desktop/downloads/BiliMind-Desktop-Deck.pdf), [screenshots](docs/img/) |
+| 5. Live execution | A packaged Windows app; one sentence runs end to end with no further input; a fresh install with no key built a course; three courses play on the website; the same engine also runs from the command line, which the WorkBuddy skill calls | [Download](https://github.com/Odilient/bilimind-desktop/releases/latest), [film](https://odilient.github.io/bilimind-desktop/vid/bilimind-desktop.mp4), [deck](https://odilient.github.io/bilimind-desktop/downloads/BiliMind-Desktop-Deck.pdf), [screenshots](docs/img/) |
 
 **One sentence, end to end.** After "My Data Structures final is Wednesday 9am. The slides and last year's
 paper are in this folder. I have 45 minutes a day. Get me ready." the crew, with no further input:
@@ -165,7 +166,7 @@ costs: [desktop-run-timings.json](hackathon/proof/desktop-run-timings.json).
 | Slides Creation | Made our first pitch deck from a written brief, then corrected it slide by slide |
 | Deep Research | Checked demand on both halves of Track 2 (students, small businesses), competitors and risks |
 | Plain chat | Sent our student sentence to WorkBuddy without BiliMind, to see the gap |
-| Skills and Expert Teams | Shipped BiliMind as a skill and as the "BiliMind Crew" Expert Team |
+| Skills and Expert Teams | Shipped BiliMind as a skill and as the "BiliMind Crew" Expert Team, validated with WorkBuddy's own `validate_expert.py` |
 
 **Built at Dormathon and before.** BiliMind existed before Dormathon as a web app (bilimind.com). From it we
 reused the teaching approach: the lesson prompts and the rules that match each kind of knowledge to a
@@ -179,10 +180,12 @@ computer or phone, so you can try the three demo courses above. The command line
 we have tested it on Windows only.
 
 **Is it really free?** Yes. The app is free and open source, and BiliMind free pays for the AI. It has a
-rate limit; when it is busy the app says so, and you can wait or add your own key.
+rate limit and the daily limit above; when it is busy the app says so, and you can wait or add your own key.
 
 **Does it need the internet?** To build a course and to ask the assistant, yes: the AI and the narration
-voices are online. A finished course opens without the internet.
+voices are online. A finished course opens without the internet. Diagrams are drawn into the course when it is
+built; if that step fails, the course page loads the diagram library (Mermaid) from the internet, and offline
+it shows the diagram as text. The one diagram in our demo courses (Data Structures) is drawn in.
 
 **What files work?** PDF, Word (`.docx`), PowerPoint (`.pptx`), text and Markdown (`.txt`, `.md`) and web
 pages (`.html`). Save older `.doc` and `.ppt` files in the new format first. Scanned pages with no text

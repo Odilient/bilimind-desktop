@@ -20,7 +20,8 @@ tell them the one thing only they can do (a key, a permission).
 
 ## Keys and budget
 
-- **Missing key** (`doctor` says `key: false`). Stop and tell the user, in one message: "BiliMind
+- **Missing key** (`doctor` fails with "No API key found"; `key: false` with `provider: bilimind` is
+  normal, because BiliMind free needs no key). Stop and tell the user, in one message: "BiliMind
   needs a DeepSeek or OpenRouter key in `%USERPROFILE%\.bilimind\config.json`, e.g.
   `{"provider":"deepseek","keys":{"deepseek":"sk-..."}}`. Create it, then say continue." Never read,
   print, create or copy that file or any key yourself.

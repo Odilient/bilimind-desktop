@@ -21,9 +21,10 @@ flowchart LR
    your sentence (exam date and time, minutes a day, audience, language), weights each topic by the past
    paper's marks, keeps and cuts topics with one reason each, and plans the days you have. In the app and
    the CLI's `run`, keep and cut are computed (marks per minute over the days available,
-   `chooseLessons` in [packages/engine/src/run.ts](../packages/engine/src/run.ts)). Inside WorkBuddy the
-   Lead is WorkBuddy's own agent and decides with [references/planning.md](../skills/bilimind/references/planning.md).
-2. **Writers**, one per lesson, write in parallel (up to 4 at a time in the app, up to 6 in WorkBuddy). The
+   `chooseLessons` in [packages/engine/src/run.ts](../packages/engine/src/run.ts)). The WorkBuddy skill is
+   written so that WorkBuddy's own agent is the Lead and decides with
+   [references/planning.md](../skills/bilimind/references/planning.md).
+2. **Writers**, one per lesson, write in parallel (up to 4 at a time in the app; the WorkBuddy skill asks for up to 6). The
    kind of knowledge decides the lesson format: a procedure gets a walkthrough, a formula gets a worked
    example, a language gets speaking drills. A lesson that fails its checks is re-drafted once with the
    failures as notes. A draft that fails twice is dropped and the run goes on with the other lessons.
@@ -163,11 +164,13 @@ narration voices; `run` builds a whole course unattended. We have tested the CLI
 
 `skills/bilimind/` is a WorkBuddy skill and `workbuddy/bilimind-crew/` is an Expert Team ("BiliMind Crew":
 a Lead, Writers, a Coder and a Checker) validated with WorkBuddy's own `validate_expert.py` and registered
-with `register_expert.py`. WorkBuddy's agent acts as the Lead: it makes a nine-item task checklist, launches
-one Writer sub-agent per lesson in parallel, then the Coder and the Checker in parallel, runs the bundled
-`bilimind.mjs` for every step (the CLI enforces formats, schemas, tests and verbatim quotes), and ends with
+with `register_expert.py` on our laptop, where it shows in My Experts. How it is meant to run: WorkBuddy's
+agent acts as the Lead: it makes a nine-item task checklist, launches one Writer sub-agent per lesson in
+parallel, then the Coder and the Checker in parallel, runs the bundled `bilimind.mjs` for every step (the
+same engine as the desktop app; the CLI enforces formats, schemas, tests and verbatim quotes), and ends with
 `present_files`, which opens the course in WorkBuddy's Preview panel. It publishes with
-`workbuddy_sites_deploy` only when the user asks. The playbook: [skills/bilimind/SKILL.md](../skills/bilimind/SKILL.md).
+`workbuddy_sites_deploy` only when the user asks. The courses in this repo were built by the app and the
+CLI, not inside WorkBuddy. The playbook: [skills/bilimind/SKILL.md](../skills/bilimind/SKILL.md).
 
 Install the skill (Windows, PowerShell):
 

@@ -1,3 +1,5 @@
+> Superseded planning notes from the event; the current state is in the README and docs/workbuddy.md.
+
 # BiliMind for WorkBuddy: hackathon strategy and pitch
 
 Dormathon at Taylor's University. Track 2: "How can AI help students and small businesses solve real business problems and operate more effectively?" (earlier strategy notes for the WorkBuddy-skill version; the product is now BiliMind Desktop).

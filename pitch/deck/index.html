@@ -263,6 +263,10 @@ svg { display: block; }
 #s7 .card .ic svg { width: 26px; height: 26px; }
 #s7 .card h4 { margin: 0 0 12px; font: 700 34px/1 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
 #s7 .card p { margin: 0; font: 400 21px/1.4 var(--body); color: rgb(255 255 255 / 0.8); }
+#s7 .card.proof .hd { margin-bottom: 0; }
+#s7 .card .shot { flex: 1; min-height: 120px; margin: 16px 0 22px; border-radius: 14px; background-color: #fff; background-repeat: no-repeat; box-shadow: 0 0 0 1.5px rgb(255 255 255 / 0.3), 0 18px 36px -20px rgb(5 10 60 / 0.6); }
+#s7 .card .shot.deck { background-image: url(../../hackathon/proof/workbuddy-web-deck-task.jpg); background-size: 1366px auto; background-position: right -6px top -53px; }
+#s7 .card .shot.plain { background-image: url(../../hackathon/proof/workbuddy-web-plain-comparison.jpg); background-size: 986px auto; background-position: -321px -35px; }
 #s7 .card.white { background: #fff; color: var(--ink); box-shadow: 0 30px 60px -30px rgb(5 10 60 / 0.6); }
 #s7 .card.white .n { color: var(--text-3); }
 #s7 .card.white p { color: var(--text-2); }
@@ -461,7 +465,7 @@ svg { display: block; }
         <div class="tile"><b>3 <small>kept</small></b><span>Lessons (11 topics cut)</span></div>
         <div class="tile"><b>18.5 <small>min</small></b><span>Narration</span></div>
       </div>
-      <p class="small">Left: the live canvas replaying a recorded run. The Checker has just rejected a wrong answer key and rewritten it from the slides.</p>
+      <p class="small">Left: a replay of another recorded run on the same files, the first unattended pass of our Data Structures demo course, paused where its Checker rejected a wrong answer key and rewrote it from the slides. Right: app run 1 (README, Real runs).</p>
     </div>
   </div>
 </section>
@@ -485,9 +489,9 @@ svg { display: block; }
       <div class="num lime"><b>80/80</b><span>checks passed</span></div>
       <div class="num"><b>14/14</b><span>code tests (1 fixed by the Coder)</span></div>
       <div class="num"><b>3</b><span>wrong answers rejected and rewritten</span></div>
-      <div class="num"><b>$0.04</b><span>per course</span></div>
+      <div class="num"><b>$0.040</b><span>AI cost of this course</span></div>
     </div>
-    <p class="small meas">Data Structures course. Measured unattended runs: 268 s and 289 s, $0.046 and $0.047 per course.</p>
+    <p class="small meas">Data Structures demo course, after team review: 19 min 39 s. Unattended app runs on the same files: 3 min 23 s to 5 min 10 s, $0.016 to $0.049.</p>
   </div>
 </section>
 
@@ -533,13 +537,15 @@ svg { display: block; }
         <h4>Deep Research</h4>
         <p>Idea validated with WorkBuddy Deep Research.</p>
       </div>
-      <div class="card">
+      <div class="card proof">
         <div class="hd"><span class="n">02</span><span class="ic"><svg><use href="#i-slides"/></svg></span></div>
+        <div class="shot deck" role="img" aria-label="WorkBuddy Slides Creation task with the generated deck"></div>
         <h4>Slides Creation</h4>
         <p>Our first pitch deck: generated in WorkBuddy Slides Creation.</p>
       </div>
-      <div class="card">
+      <div class="card proof">
         <div class="hd"><span class="n">03</span><span class="ic"><svg><use href="#i-vs"/></svg></span></div>
+        <div class="shot plain" role="img" aria-label="Plain WorkBuddy answering the same student request"></div>
         <h4>Head to head</h4>
         <p>Plain WorkBuddy vs BiliMind on the same student request: a plan, but no slide citations, tested code, narration or exports.</p>
       </div>
@@ -557,7 +563,7 @@ svg { display: block; }
 <section class="slide" id="s8" data-n="8">
   <div class="slab ink full grain">
     <span class="eb dark"><span class="dot"><svg><use href="#i-lock"/></svg></span>Open source · AGPL-3.0</span>
-    <h2 class="h">Free. Open source.<br>Your files <span class="hchip"><svg><use href="#i-lock"/></svg></span> stay yours.</h2>
+    <h2 class="h">Free. Open source.<br>Your course <span class="hchip"><svg><use href="#i-lock"/></svg></span> stays on your PC.</h2>
     <img class="obj o1" src="img/obj-rocket.webp" alt="">
     <div class="rows">
       <div class="row"><span class="ic"><svg><use href="#i-download"/></svg></span><span class="k">Download for Windows</span><span class="v">github.com/Odilient/bilimind-desktop/releases</span></div>

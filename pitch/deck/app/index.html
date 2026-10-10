@@ -4,7 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BiliMind</title>
-  <!-- Deck copy of apps/desktop/dist/renderer: classic script (works from file://), mock data, deck-boot drives the state. -->
+  <!-- Deck copy of apps/desktop/dist/renderer: classic script (works from file://), mock data, deck-boot drives the state.
+       Deck-only patch in assets/app.js: the replay's finished card carries the course's own receipts (cost) and the
+       README "Real runs" wall time (ds-final 19 min 39 s, boba-day-one 24 min 39 s, bm-survival 30 min 1 s), so it
+       never mixes first-pass time and cost with the after-review checks. -->
   <script>
     window.__BM_BASE = new URL('./assets/app.js', location.href).href;
     // the mock opens course players from the repo's showcase folder (three levels up from pitch/deck/app/)
