@@ -1,0 +1,3 @@
+[
+  {"item": "q4", "verdict": "not_covered", "quote": "copy in the in-order successor (smallest key in the right subtree), then delete the successor, which has at most one child", "reason": "Slides describe the successor deletion step but not BST insertion or why it preserves the BST property."}
+]

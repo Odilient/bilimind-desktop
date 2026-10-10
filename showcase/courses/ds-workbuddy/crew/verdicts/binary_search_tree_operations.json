@@ -1,0 +1,32 @@
+[
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Two children: copy in the in-order successor (smallest key in the right subtree), then delete the successor, which has at most one child",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 39,
+    "round": 1,
+    "at": "2026-10-10T21:13:09.781Z"
+  },
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Inserting keys in sorted order (1, 2, 3, …) builds a chain: h = n − 1",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 40,
+    "round": 1,
+    "at": "2026-10-10T21:13:09.781Z"
+  },
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q4",
+    "verdict": "not_covered",
+    "quote": "copy in the in-order successor (smallest key in the right subtree), then delete the successor, which has at most one child",
+    "reason": "Slides describe the successor deletion step but not BST insertion or why it preserves the BST property.",
+    "chunk_id": 39,
+    "round": 1,
+    "at": "2026-10-10T21:16:08.257Z"
+  }
+]

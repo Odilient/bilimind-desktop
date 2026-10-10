@@ -169,8 +169,8 @@ agent acts as the Lead: it makes a nine-item task checklist, launches one Writer
 parallel, then the Coder and the Checker in parallel, runs the bundled `bilimind.mjs` for every step (the
 same engine as the desktop app; the CLI enforces formats, schemas, tests and verbatim quotes), and ends with
 `present_files`, which opens the course in WorkBuddy's Preview panel. It publishes with
-`workbuddy_sites_deploy` only when the user asks. The courses in this repo were built by the app and the
-CLI, not inside WorkBuddy. The playbook: [skills/bilimind/SKILL.md](../skills/bilimind/SKILL.md).
+`workbuddy_sites_deploy` only when the user asks. Three demo courses were built by the app and the CLI;
+`showcase/courses/ds-workbuddy/` was built inside WorkBuddy from one sentence ([how](../hackathon/proof/workbuddy-run/)). The playbook: [skills/bilimind/SKILL.md](../skills/bilimind/SKILL.md).
 
 Install the skill (Windows, PowerShell):
 

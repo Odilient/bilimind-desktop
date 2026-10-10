@@ -17,5 +17,6 @@ Full status (WP7 + WP16): `skills/bilimind/STATUS.md`. This file stays out of th
   by itself, so it shows in My Experts (the app has since replaced the marker with
   .pending-preview-session). The skill is also installed at `C:/Users/User/.workbuddy-ai/skills/bilimind` (install.ps1).
 - **Re-copy after any rebuild:** run `--team`, then copy again and re-run register (it updates in place).
-- **Not yet run inside WorkBuddy:** no course has been built with the team inside WorkBuddy, so the parallel
-  Agent spawns, TeamCreate + SendMessage to `team-lead` and present_files are untested.
+- **The skill has run inside WorkBuddy** (11 October, hackathon/proof/workbuddy-run/: parallel Agent spawns
+  and present_files worked). **The team itself has not:** no course has been built through the Expert Team, so TeamCreate + SendMessage to
+  `team-lead` are untested.

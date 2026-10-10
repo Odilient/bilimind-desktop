@@ -1,0 +1,113 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BiliMind//BiliMind Desktop//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Data structures final prep
+X-WR-TIMEZONE:Asia/Kuala_Lumpur
+BEGIN:VTIMEZONE
+TZID:Asia/Kuala_Lumpur
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+TZNAME:+08
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:ds-workbuddy-study-2026-10-11@bilimind
+DTSTAMP:20261010T211844Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261011T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261011T203000
+SUMMARY:Study: Arrays vs linked lists: linear containers
+DESCRIPTION:Data structures final prep. 30 minutes.\nLesson 1: Arrays vs li
+ nked lists: linear containers (30 min)\nOpen index.html in your course fol
+ der.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Arrays vs linked lists: linear containers
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-workbuddy-review-2026-10-12@bilimind
+DTSTAMP:20261010T211844Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T081000
+SUMMARY:Review: Arrays vs linked lists: linear containers
+DESCRIPTION:Spaced review for Data structures final prep\, Mon 12 Oct: 1 le
+ sson\, about 10 minutes.\nOpen index.html\, then Due today: it shows the c
+ ards that are due.\n- A dynamic array doubles its capacity whenever it is 
+ full. Explain why appending n eleme...\n- Compare a singly linked list wit
+ h a dynamic array in terms of (i) access by index\, (ii)...\n- You are wri
+ ting a function that will frequently insert new items at the front of a li
+ st...\n- Which of the following statements about a dynamic array are true?
+  Select all that apply.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Arrays vs linked lists: linear containers
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-workbuddy-study-2026-10-12@bilimind
+DTSTAMP:20261010T211844Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T203000
+SUMMARY:Study: Hash tables: from keys to buckets
+DESCRIPTION:Data structures final prep. 30 minutes.\nLesson 2: Hash tables:
+  from keys to buckets (30 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Hash tables: from keys to buckets
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-workbuddy-review-2026-10-13@bilimind
+DTSTAMP:20261010T211844Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T081000
+SUMMARY:Review: Arrays vs linked lists: linear containers\, Hash tables: fr
+ om keys to buckets
+DESCRIPTION:Spaced review for Data structures final prep\, Tue 13 Oct: 2 le
+ ssons\, about 10 minutes.\nOpen index.html\, then Due today: it shows the 
+ cards that are due.\n- A dynamic array doubles its capacity whenever it is
+  full. Explain why appending n eleme...\n- Compare a singly linked list wi
+ th a dynamic array in terms of (i) access by index\, (ii)...\n- You are wr
+ iting a function that will frequently insert new items at the front of a l
+ ist...\n- Which of the following statements about a dynamic array are true
+ ? Select all that apply.\n- A hash table uses linear probing with m = 10 a
+ nd h(k) = k mod 10. Keys 89\, 18\, 49\, 58\, ...\n- For linear probing\, t
+ he expected number of probes for an unsuccessful search is approxi...\n...
+  and 2 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Arrays vs linked lists: linear containers\, Hash tables
+ : from keys to buckets
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-workbuddy-study-2026-10-13@bilimind
+DTSTAMP:20261010T211844Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T210000
+SUMMARY:Study: Binary heaps\, priority queues and heapsort + Binary search 
+ trees: search\, insert and delete
+DESCRIPTION:Data structures final prep. 60 minutes.\nLesson 3: Binary heaps
+ \, priority queues and heapsort (30 min)\nLesson 4: Binary search trees: s
+ earch\, insert and delete (30 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Binary heaps\, priority queues and heapsort + Binary sea
+ rch trees: search\, insert and delete
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

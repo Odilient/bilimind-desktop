@@ -1,0 +1,4 @@
+[
+  {"item": "q2", "verdict": "supported", "quote": "O(1) amortised append", "reason": "Slide 15 directly states dynamic arrays have O(1) amortised append, confirming the answer's key claim."},
+  {"item": "q3", "verdict": "not_covered", "quote": "", "reason": "Slides cover access and insertion costs but say nothing about memory use or spare capacity waste."}
+]

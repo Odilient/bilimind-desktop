@@ -1,0 +1,22 @@
+[
+  {
+    "name": "cat maps to a bucket",
+    "call": "hashIndex('cat', 7)",
+    "expect": 3
+  },
+  {
+    "name": "dog maps to a different bucket",
+    "call": "hashIndex('dog', 7)",
+    "expect": 6
+  },
+  {
+    "name": "deterministic",
+    "call": "hashIndex('cat', 7)",
+    "expect": 3
+  },
+  {
+    "name": "modulo m",
+    "call": "hashIndex('zzzzzz', 5)",
+    "expect": 2
+  }
+]

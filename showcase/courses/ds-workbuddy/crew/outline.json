@@ -1,0 +1,338 @@
+{
+  "title": "Data structures final prep in 45-minute sessions",
+  "allows_code": true,
+  "code_language": "javascript",
+  "lessons": [
+    {
+      "key": "big_o_notation_analysis",
+      "title": "Big-O, Big-Omega and Big-Theta",
+      "summary": "You will be able to classify an algorithm by growth rate and count the basic operations a loop performs. Covers Big-O, Big-Omega and Big-Theta as in slide 5 of Lecture 1, worst-case reasoning, and the nested and doubling loops from slide 7. Prevents the classic mistake of measuring seconds instead of counting operations.",
+      "concept_key": "algorithm_growth_rates",
+      "track": "core",
+      "archetype": "quantitative",
+      "estimated_minutes": 25,
+      "section": "Analysis and linear structures",
+      "note": "Do the loop exercises by hand before you look at code. If you cannot trace a nested loop to O(n²), every operation and tree later in the course wobbles.",
+      "layer": 0,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "worked_example",
+        "playground",
+        "quiz"
+      ],
+      "index": 0,
+      "chunk_ids": [
+        7,
+        3,
+        6,
+        5,
+        4,
+        15
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "complexity_classes_cheat_sheet",
+      "title": "Complexity classes cheat sheet",
+      "summary": "You will be able to recall the standard complexity classes from O(1) to O(n!) and give an example of an algorithm in each. Covers the names, how doubling n changes each class, and which classes show up in the lecture examples. Prevents freezing on exam day when asked to order functions by growth.",
+      "concept_key": "algorithm_complexity_classes",
+      "track": "subtopic",
+      "archetype": "factual",
+      "estimated_minutes": 10,
+      "branch_of": "big_o_notation_analysis",
+      "layer": 0,
+      "position": 1,
+      "parent": 0,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 1,
+      "chunk_ids": [
+        11,
+        9,
+        39,
+        15,
+        21,
+        31
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "arrays_vs_linked_lists",
+      "title": "Arrays vs linked lists: linear containers",
+      "summary": "You will be able to implement a dynamic array and a singly linked list from the Lecture 1 code, and predict which operations are cheap in each. Covers capacity doubling, O(1) amortised append, O(1) pushFront for a linked list, and the O(n) shift that array insertion hides. Prevents quoting O(1) insertion for an array without mentioning the elements you have to move.",
+      "concept_key": "data_structures_linked_lists_vs_arrays",
+      "track": "core",
+      "archetype": "discriminative",
+      "estimated_minutes": 30,
+      "layer": 1,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "comparison",
+        "example",
+        "quiz"
+      ],
+      "index": 2,
+      "chunk_ids": [
+        15,
+        14,
+        11,
+        9,
+        12,
+        8
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "hash_tables_from_keys_to_buckets",
+      "title": "Hash tables: from keys to buckets",
+      "summary": "You will be able to trace insert, search and delete for a hash table that uses chaining or linear probing, and compute its load factor. Covers the dictionary ADT from slide 3 of Lecture 2, what makes a hash function good, and the m = 7 chaining and m = 10 probing worked examples from slides 9–11. Prevents choosing a hash function that ignores most buckets or pushing load factor past 0.75 in open addressing.",
+      "concept_key": "data_structures_hash_tables",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 40,
+      "section": "Hash tables and trees",
+      "layer": 2,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "explainer",
+        "diagram",
+        "analogy",
+        "quiz"
+      ],
+      "index": 3,
+      "chunk_ids": [
+        31,
+        21,
+        19,
+        28,
+        23,
+        29
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "chaining_vs_open_addressing",
+      "title": "Chaining vs open addressing",
+      "summary": "You will be able to compare separate chaining and open addressing on memory, load factor limits, and deletion behaviour using the Lecture 2 slide 13 table. Covers chains as lists outside the array versus probing inside the array, and why open addressing needs a lower load factor. Prevents treating the two collision strategies as interchangeable in a short-answer question.",
+      "concept_key": "data_structures_hash_collision_strategies",
+      "track": "subtopic",
+      "archetype": "discriminative",
+      "estimated_minutes": 15,
+      "branch_of": "hash_tables_from_keys_to_buckets",
+      "layer": 2,
+      "position": 1,
+      "parent": 3,
+      "planned_block_types": [
+        "comparison",
+        "example",
+        "quiz"
+      ],
+      "index": 4,
+      "chunk_ids": [
+        29,
+        31,
+        23,
+        28,
+        22,
+        26
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "Binary search trees: search, insert and delete",
+      "summary": "You will be able to search a BST iteratively, insert a key in the right leaf position, and delete a node in all three child cases. Covers tree vocabulary from slide 3 of Lecture 3, the search loop on slide 5, and the leaf, one-child and two-child deletion rules on slide 7. Prevents forgetting that inserting keys in sorted order builds a degenerate chain of height n − 1.",
+      "concept_key": "data_structures_binary_search_trees",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 35,
+      "note": "Draw every tree before you write a single line of code. The exam rewards tracing a deletion and a rotation on paper, not reciting an implementation from memory.",
+      "layer": 3,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 5,
+      "chunk_ids": [
+        39,
+        35,
+        37,
+        43,
+        45,
+        40
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "avl_trees_and_rotations",
+      "title": "AVL trees: rotations that guarantee balance",
+      "summary": "You will be able to compute a node's balance factor, spot when an insertion violates the |BF| ≤ 1 rule, and rebalance with left or right rotations. Covers the rotation diagram and code from slides 10–12 of Lecture 3, and why balance keeps height at O(log n). Prevents memorising LL, RR, LR and RL case names without seeing how a rotation preserves the in-order sequence.",
+      "concept_key": "data_structures_avl_trees",
+      "track": "core",
+      "archetype": "spatial",
+      "estimated_minutes": 30,
+      "layer": 4,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "diagram",
+        "walkthrough",
+        "quiz"
+      ],
+      "index": 6,
+      "chunk_ids": [
+        41,
+        45,
+        42,
+        44,
+        46,
+        37
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "avl_rotation_drill",
+      "title": "AVL rotation drill",
+      "summary": "You will be able to perform rotating and rebalancing steps quickly on a small tree diagram. Covers setting the parent and child pointers in a right rotation, then the mirror-image left rotation, and the two-step case where a rotation alone is not enough. Prevents losing marks on the exam by mixing up which subtree moves where.",
+      "concept_key": "data_structures_avl_rotation_cases",
+      "track": "subtopic",
+      "archetype": "procedural",
+      "estimated_minutes": 15,
+      "branch_of": "avl_trees_and_rotations",
+      "layer": 4,
+      "position": 1,
+      "parent": 6,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 7,
+      "chunk_ids": [
+        39,
+        43,
+        35,
+        37,
+        52,
+        41
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "binary_heaps_and_heapsort",
+      "title": "Binary heaps, priority queues and heapsort",
+      "summary": "You will be able to trace insert with sift-up and extract-min with sift-down on an array-backed heap, and explain why build-heap is O(n). Covers the complete-tree shape and array layout from slide 4 of Lecture 4, the sift code in slides 6–8, Floyd's bottom-up build, and the heapsort steps on slide 11. Prevents treating build-heap as n inserts, which gives O(n log n), not the O(n) of the bottom-up method.",
+      "concept_key": "data_structures_binary_heaps",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 35,
+      "layer": 5,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 8,
+      "chunk_ids": [
+        60,
+        50,
+        57,
+        51,
+        58,
+        59
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "heap_to_array_index_mapping",
+      "title": "Heap-to-array index mapping",
+      "summary": "You will be able to convert between a heap's tree positions and its array indices using parent = floor((i − 1) / 2). Covers zero-based indexing, where each level of the complete tree starts, and why the last leaf is heap.length − 1. Prevents the off-by-one errors that wreck sift-up and sift-down traces in the exam.",
+      "concept_key": "data_structures_heap_array_indexing",
+      "track": "subtopic",
+      "archetype": "quantitative",
+      "estimated_minutes": 15,
+      "branch_of": "binary_heaps_and_heapsort",
+      "layer": 5,
+      "position": 1,
+      "parent": 8,
+      "planned_block_types": [
+        "worked_example",
+        "playground",
+        "quiz"
+      ],
+      "index": 9,
+      "chunk_ids": [
+        51,
+        55,
+        52,
+        37,
+        60,
+        53
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "final_exam_dry_run",
+      "title": "Capstone: last year's paper in 45 minutes",
+      "summary": "You will sit a timed extract of last year's paper from C:/Demo/DS-WorkBuddy, then mark your answers against the lecture slides. Covers choosing a data structure for a scenario, tracing a hash probe or an AVL rotation, and writing O() justifications under time pressure. Prevents arriving Wednesday with only passive familiarity and no stamina for writing answers to time.",
+      "concept_key": "data_structures_exam_capstone",
+      "track": "core",
+      "archetype": "performance",
+      "estimated_minutes": 60,
+      "section": "Putting it together",
+      "note": "Run the timer for real, keep the slides closed until it stops, and mark yourself harshly. The gaps you find in that hour are exactly what to revise the night before.",
+      "layer": 6,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "project",
+        "checklist"
+      ],
+      "index": 10,
+      "chunk_ids": [
+        51,
+        31,
+        29,
+        55,
+        24,
+        22
+      ],
+      "thin": false,
+      "status": "stub"
+    }
+  ],
+  "further": [
+    {
+      "title": "DSA interview practice",
+      "topic": "Practising data structures and complexity analysis on coding-interview problems"
+    },
+    {
+      "title": "Graph algorithms next",
+      "topic": "Breadth-first search, depth-first search and shortest paths on graphs"
+    }
+  ],
+  "variety_violation": null,
+  "relabel_passes": 0,
+  "warnings": []
+}

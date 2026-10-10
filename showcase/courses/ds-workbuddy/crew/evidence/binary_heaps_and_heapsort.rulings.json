@@ -1,0 +1,3 @@
+[
+  {"item": "q5", "verdict": "supported", "quote": "The sum of all node heights is O(n), so build-heap is O(n) Inserting n keys one at a time is O(n log n) in the worst case", "reason": "Slide 10 states both complexities directly, confirming both parts of the answer."}
+]

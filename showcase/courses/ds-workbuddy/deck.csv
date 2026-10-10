@@ -1,0 +1,53 @@
+#separator:Comma
+#html:false
+#notetype:Basic
+#deck:Data structures final prep
+#columns:Front,Back,Tags
+#tags column:3
+"A dynamic array doubles its capacity whenever it is full. Explain why appending n elements to an initially empty dynamic array costs O(n) in total, and state the amortised cost of a single append.","Each append that does not trigger a copy costs O(1). When the array is full, a copy of all current elements is needed, costing O(k) for k elements. With doubling, the copies happen at sizes 1, 2, 4, 8, ... up to n/2. The sum of these copies is less than n, so total work for n appends is O(n). The amortised cost per append is O(1).
+O(1) amortised append",bilimind ds-workbuddy arrays_vs_linked_lists quiz
+"Compare a singly linked list with a dynamic array in terms of (i) access by index, (ii) insertion at the front, and (iii) memory use.",(i) Access by index: dynamic array is O(1) because elements are in contiguous memory; linked list is O(n) because you must walk from the head. (ii) Insertion at the front: linked list is O(1) by creating a new node and updating the head; dynamic array is O(n) because all elements must shift right. (iii) Memory use: dynamic array wastes space in spare capacity (up to half with doubling); linked list wastes space for a next reference per element.,bilimind ds-workbuddy arrays_vs_linked_lists quiz
+"You are writing a function that will frequently insert new items at the front of a list and occasionally read the third element. Which container should you choose, and why?
+a) Dynamic array, because reading the third element is O(1).
+b) Singly linked list, because insert at front is O(1) and reading the third element is O(1) once you have a reference.
+c) Singly linked list, because insert at front is O(1) and reading the third element is O(3) which is still constant time.
+d) Dynamic array, because insert at front is O(1) amortised.","Singly linked list, because insert at front is O(1) and reading the third element is O(3) which is still constant time.
+Insert at front is O(1) for a linked list. Reading the third element requires walking three nodes, which is O(3) = O(1) because 3 is a constant. Option a ignores the cost of front inserts; option b is wrong because reading by index is O(n) without a reference; option d is wrong because array insert at front is O(n).",bilimind ds-workbuddy arrays_vs_linked_lists quiz
+"Which of the following statements about a dynamic array are true? Select all that apply.
+a) Accessing element i is O(1) because the address is base + i × element_size.
+b) Inserting at the front is O(1) amortised.
+c) When the array is full, appending one element triggers a copy of all existing elements.
+d) With geometric growth (doubling), n appends cost O(n) total, so each append is O(1) amortised.","Accessing element i is O(1) because the address is base + i × element_size.; When the array is full, appending one element triggers a copy of all existing elements.; With geometric growth (doubling), n appends cost O(n) total, so each append is O(1) amortised.
+Option b is false: inserting at the front shifts every element right, which is O(n). Options a, c and d are stated on slides 8, 10 and 11 of your deck.",bilimind ds-workbuddy arrays_vs_linked_lists quiz
+"A hash table uses linear probing with m = 10 and h(k) = k mod 10. Keys 89, 18, 49, 58, 69 are inserted in that order. How many probes does inserting 69 take?
+a) 1
+b) 2
+c) 3
+d) 4","4
+69 hashes to 9, which is occupied, then 0 and 1 are occupied, so 69 lands in slot 2 after 4 probes.",bilimind ds-workbuddy hash_tables_from_keys_to_buckets quiz
+"For linear probing, the expected number of probes for an unsuccessful search is approximately ½(1 + 1/(1 − α)²). Compute this value for α = 0.8. Give your answer to one decimal place.","13 (± 0.1) probes
+With α = 0.8, the denominator (1−α)² is 0.04, so 1/0.04 = 25, giving (1+25)/2 = 13 probes.",bilimind ds-workbuddy hash_tables_from_keys_to_buckets quiz
+Explain what primary clustering is and why it occurs with linear probing. Then describe how double hashing reduces it.,"Primary clustering is the tendency of linear probing to form long contiguous runs of occupied slots. It occurs because when a collision happens, the probe sequence only moves to the next slot, so any key that hashes into the run extends it. Double hashing reduces it because the probe step size depends on a second hash function h₂(k), so keys that collide at the same slot take different probe paths and do not all pile up in the same run.",bilimind ds-workbuddy hash_tables_from_keys_to_buckets quiz
+"An open-addressing hash table uses linear probing. At load factor α = 0.5 the expected probes for an unsuccessful search are about 2.5, using ½(1 + 1/(1−α)²). At α = 0.9 the same formula gives about 50.5. By what factor does the probe count grow?
+a) about 5x
+b) about 10x
+c) about 20x
+d) about 50x","about 20x
+50.5 / 2.5 = 20.2, so the probe count grows about 20x. This is why slide 12 warns that open addressing degrades badly as α approaches 1.",bilimind ds-workbuddy hash_tables_from_keys_to_buckets quiz
+"Which of the following arrays represents a valid min-heap?
+a) [1, 3, 2, 5, 9, 8, 6]
+b) [1, 3, 2, 5, 0, 8, 6]
+c) [1, 2, 3, 4, 5, 6, 0]
+d) [1, 1, 2, 3, 5, 8, 13]","[1, 3, 2, 5, 9, 8, 6]
+In a min-heap every parent must be ≤ its children. Option a satisfies this for all parents; the others each have a parent greater than a child.",bilimind ds-workbuddy binary_heaps_and_heapsort quiz
+"In a min-heap stored as an array, what is the index of the parent of the element at index 9? (Use 0-based indexing.)","4
+The parent index is floor((i−1)/2), so for i=9 it is floor(8/2)=4.",bilimind ds-workbuddy binary_heaps_and_heapsort quiz
+"Explain why building a heap bottom-up from n unordered keys takes O(n) time, while inserting the n keys one at a time takes O(n log n) time in the worst case.","Bottom-up build sifts down each internal node; the sum of all node heights in a complete tree is O(n), so the total work is O(n). Repeated inserts each sift up O(log n) levels, so n inserts cost O(n log n) in the worst case.
+The sum of all node heights is O(n), so build-heap is O(n) Inserting n keys one at a time is O(n log n) in the worst case",bilimind ds-workbuddy binary_heaps_and_heapsort quiz
+"What is the worst-case height of a BST after inserting keys in sorted order (1, 2, 3, ..., n)?
+a) log₂ n
+b) n − 1
+c) n
+d) n / 2","n − 1
+Slide 8 states that inserting keys in sorted order builds a chain of height n − 1, making operations O(n).",bilimind ds-workbuddy binary_search_tree_operations quiz
+"Insert the keys 55, 30, 70, 20, 40, 60, 80, 35 in this order into an initially empty BST. Draw the final tree (describe it in text, e.g., 'root is 55, left child is 30, ...'). Then delete key 30 using the in-order successor and describe the resulting tree. Explain why the in-order successor method preserves the BST property.","After insertions: root is 55. 55.left = 30, 55.right = 70. 30.left = 20, 30.right = 40. 70.left = 60, 70.right = 80. 40.left = 35. After deleting 30: the in-order successor of 30 is 35 (smallest key in 30's right subtree). Copy 35 into node 30. Delete the original 35 node (leaf). Result: root 55, 55.left = 35, 35.left = 20, 35.right = 40 (no left child), 40.left = null, 55.right = 70, 70.left = 60, 70.right = 80. The successor is the smallest key larger than 30, so all keys in the left subtree of 30 are smaller than 35, and all keys in the right subtree of 30 are larger than 35 — the BST property holds. The successor has at most one child, so its deletion is straightforward.",bilimind ds-workbuddy binary_search_tree_operations quiz

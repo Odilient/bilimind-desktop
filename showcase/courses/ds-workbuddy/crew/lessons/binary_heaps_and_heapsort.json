@@ -1,0 +1,383 @@
+{
+  "key": "binary_heaps_and_heapsort",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Your final is Wednesday 9am, and last year's paper asks you to trace heaps by hand. The good news: a heap is the simplest tree there is, because it lives inside a flat array. The shape property from slide 4 of Lecture 4 says the tree is complete — every level full except the last, which fills from the left — and that shape is exactly what the array indices encode. The heap property (min-heap: every parent ≤ its children) is what lets you find the minimum instantly at index 0.\n\nYou already traced hash tables bucket by bucket; a heap trace is the same kind of mechanical work, but the rule is even stricter: after every insert or extract-min, the array must still be a complete tree with the heap property. Two operations do all the work — sift-up for insert (slide 6) and sift-down for extract-min (slide 8). Master those two loops and the whole node is yours.\n\nThe trap this node exists to prevent: treating build-heap as n inserts. Slide 10 shows the bottom-up method (Floyd, 1964) that runs in O(n), and the exam's Q3e asks you to explain the difference. You will trace it, then build it, then explain it."
+      },
+      "source_material_ids": [
+        51,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Trace insert and extract-min on the exact arrays from your slides, then run Floyd's build-heap. Do each step on paper; the array after each step is what the exam wants.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Insert 2 into [1, 3, 6, 5, 9, 8] (min-heap)",
+            "detail_markdown": "Push 2 to the end: index 6. Its parent is index 2 (value 6). 2 < 6, so swap → [1, 3, 2, 5, 9, 8, 6]. Now at index 2; parent is index 0 (value 1). 2 > 1, stop.",
+            "warning": "Forgetting to compare with the parent after the swap — you must move up one level each time.",
+            "check": "Array is [1, 3, 2, 5, 9, 8, 6]; every parent ≤ its children."
+          },
+          {
+            "n": 2,
+            "title": "Extract-min from [1, 3, 2, 5, 9, 8, 6]",
+            "detail_markdown": "Save root 1. Pop the last element (6) and put it at index 0 → [6, 3, 2, 5, 9, 8]. Sift down: children of index 0 are 3 and 2; the smaller is 2, swap → [2, 3, 6, 5, 9, 8]. Index 2 has one child, 8; 6 < 8, stop.",
+            "warning": "Swapping with the larger child instead of the smaller — always pick the smaller child in a min-heap.",
+            "check": "Final array [2, 3, 6, 5, 9, 8]; the minimum 2 is at the root."
+          },
+          {
+            "n": 3,
+            "title": "Build a min-heap from [9, 4, 7, 1, 2, 6] bottom-up",
+            "detail_markdown": "n = 6, so start at index ⌊6/2⌋−1 = 2. Sift-down at index 2: children 5 and 6 (values 2 and 6); smaller is 2, swap → [9, 4, 6, 1, 2, 7]. Next index 1: children 3 and 4 (values 1 and 2); smaller is 1, swap → [9, 1, 6, 4, 2, 7]. Next index 0: children 1 and 2 (values 1 and 6); smaller is 1, swap → [1, 9, 6, 4, 2, 7]; sift down again: children of index 1 are 3 and 4 (values 4 and 2); smaller is 2, swap → [1, 2, 6, 4, 9, 7].",
+            "warning": "Skipping the second sift-down after the root swap — the new root may need to travel more than one level.",
+            "check": "Final array [1, 2, 6, 4, 9, 7] is a min-heap."
+          },
+          {
+            "n": 4,
+            "title": "Heapsort: build a max-heap, then extract n−1 times",
+            "detail_markdown": "Build a max-heap (same bottom-up, but sift up the larger child). Then repeat n−1 times: swap root with the last element, shrink the heap by one, sift-down the new root. Each extraction puts the current maximum at the end, so the array sorts in place.",
+            "warning": "Forgetting to shrink the heap after each swap — the sorted tail must never be sifted again.",
+            "check": "After n−1 extractions the array is sorted ascending."
+          }
+        ]
+      },
+      "source_material_ids": [
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "checklist",
+      "payload": {
+        "title": "Heap trace checklist",
+        "items": [
+          {
+            "text": "Array is complete: no gaps before the last level",
+            "why": "The shape property must hold after every operation."
+          },
+          {
+            "text": "Every parent ≤ its children (min-heap)",
+            "why": "The heap property is what makes find-min O(1)."
+          },
+          {
+            "text": "Insert: new key placed at the end, then sifted up",
+            "why": "Adding at the end preserves the shape; sifting restores the heap property."
+          },
+          {
+            "text": "Extract-min: last element moved to root, then sifted down",
+            "why": "Moving the last leaf keeps the tree complete; sifting down restores order."
+          },
+          {
+            "text": "Sift-down always swaps with the smaller child (min-heap)",
+            "why": "Swapping with the larger child would violate the heap property."
+          },
+          {
+            "text": "Build-heap starts at index ⌊n/2⌋−1 and goes down to 0",
+            "why": "Leaves are already heaps; only internal nodes need sifting."
+          },
+          {
+            "text": "Heapsort swaps root with last, shrinks heap, sifts down",
+            "why": "Each extraction places the max at the end, sorting in place."
+          }
+        ],
+        "note": "Keep this open while you trace; tick each line only when the array on your paper satisfies it."
+      },
+      "source_material_ids": [
+        51,
+        53,
+        55,
+        57,
+        58
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Build-heap trace on [9, 4, 7, 1, 2, 6]",
+        "markdown": "Slide 10 shows the steps; here is the full working.\n\nn = 6, so the first internal node is at index ⌊6/2⌋−1 = 2.\n\n- i = 2 (value 7): children at 5 and 6 are 2 and 6; smaller is 2 → swap → [9, 4, 6, 1, 2, 7]\n- i = 1 (value 4): children at 3 and 4 are 1 and 2; smaller is 1 → swap → [9, 1, 6, 4, 2, 7]\n- i = 0 (value 9): children at 1 and 2 are 1 and 6; smaller is 1 → swap → [1, 9, 6, 4, 2, 7]; now sift down from index 1: children at 3 and 4 are 4 and 2; smaller is 2 → swap → [1, 2, 6, 4, 9, 7]\n\nFinal min-heap: [1, 2, 6, 4, 9, 7]. Each parent ≤ its children: 1 ≤ 2, 1 ≤ 6, 2 ≤ 4, 2 ≤ 9, 6 ≤ 7."
+      },
+      "source_material_ids": [
+        57
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "code",
+      "payload": {
+        "mode": "function",
+        "language": "javascript",
+        "starter_code": "function insert(heap, x) {\n  // push x to the end, then sift up\n}",
+        "instructions_markdown": "Write the `insert` function for a min-heap stored as an array. It takes the current heap array and a value x, pushes x to the end, and sifts it up until the heap property holds. Mutate the array in place; the function does not need to return anything. Example: `insert([1, 3, 6, 5, 9, 8], 2)` should leave the array as `[1, 3, 2, 5, 9, 8, 6]`.",
+        "tests": [
+          {
+            "name": "inserts into empty heap",
+            "call": "(() => { const h = []; insert(h, 5); return h; })()",
+            "expect": [
+              5
+            ]
+          },
+          {
+            "name": "inserts smaller than root",
+            "call": "(() => { const h = [3, 5]; insert(h, 1); return h; })()",
+            "expect": [
+              1,
+              5,
+              3
+            ]
+          },
+          {
+            "name": "inserts larger than root",
+            "call": "(() => { const h = [1, 3, 6, 5, 9, 8]; insert(h, 2); return h; })()",
+            "expect": [
+              1,
+              3,
+              2,
+              5,
+              9,
+              8,
+              6
+            ]
+          },
+          {
+            "name": "inserts equal to parent (no swap)",
+            "call": "(() => { const h = [2, 4]; insert(h, 2); return h; })()",
+            "expect": [
+              2,
+              4,
+              2
+            ]
+          }
+        ],
+        "hints": [
+          "Push x to the end, then set i to the last index.",
+          "While i > 0, compare with parent at Math.floor((i-1)/2).",
+          "If parent is greater, swap and move i to the parent; otherwise stop."
+        ]
+      },
+      "source_material_ids": [
+        53
+      ],
+      "assessments": [
+        {
+          "kind": "code",
+          "prompt": "Implement the insert function for a min-heap as described in the code block.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "reference_solution": "function insert(heap, x) {\n  heap.push(x);\n  let i = heap.length - 1;\n  while (i > 0) {\n    const p = Math.floor((i - 1) / 2);\n    if (heap[p] <= heap[i]) break;\n    [heap[p], heap[i]] = [heap[i], heap[p]];\n    i = p;\n  }\n}",
+            "tests": [
+              "inserts into empty heap",
+              "inserts smaller than root",
+              "inserts larger than root",
+              "inserts equal to parent (no swap)"
+            ]
+          },
+          "max_score": 10,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "flowchart TD\n  A[\"Array: [1, 3, 2, 5, 9, 8, 6]\"] --> B[\"Index 0: 1\"]\n  B --> C[\"Index 1: 3\"]\n  B --> D[\"Index 2: 2\"]\n  C --> E[\"Index 3: 5\"]\n  C --> F[\"Index 4: 9\"]\n  D --> G[\"Index 5: 8\"]\n  D --> H[\"Index 6: 6\"]",
+        "caption": "The min-heap from slide 7's insert walkthrough, shown as a tree with array indices.",
+        "alt_text": "A complete binary tree with root 1, children 3 and 2, grandchildren 5, 9, 8, 6, showing the array indices 0 to 6."
+      },
+      "source_material_ids": [
+        54
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Check yourself on the heap rules before the exam."
+      },
+      "source_material_ids": [
+        51,
+        57,
+        60
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "Which of the following arrays represents a valid min-heap?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "[1, 3, 2, 5, 9, 8, 6]"
+            },
+            {
+              "id": "b",
+              "text": "[1, 3, 2, 5, 0, 8, 6]"
+            },
+            {
+              "id": "c",
+              "text": "[1, 2, 3, 4, 5, 6, 0]"
+            },
+            {
+              "id": "d",
+              "text": "[1, 1, 2, 3, 5, 8, 13]"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "In a min-heap every parent must be ≤ its children. Option a satisfies this for all parents; the others each have a parent greater than a child.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            51
+          ],
+          "status": "not_covered",
+          "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "ordering",
+          "prompt": "Put the steps of Floyd's build-heap algorithm in the correct order.",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "b",
+              "text": "Set i = ⌊n/2⌋ − 1."
+            },
+            {
+              "id": "c",
+              "text": "While i ≥ 0, sift-down at index i."
+            },
+            {
+              "id": "d",
+              "text": "Decrement i by 1."
+            },
+            {
+              "id": "a",
+              "text": "Start with the array of n keys."
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Build-heap starts from the last internal node and sifts down each node, moving leftward to the root.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            57
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "for i from ⌊n/2⌋ − 1 down to 0, sift-down(i)"
+        },
+        {
+          "kind": "numeric",
+          "prompt": "In a min-heap stored as an array, what is the index of the parent of the element at index 9? (Use 0-based indexing.)",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "value": 4,
+            "tolerance": 0,
+            "work": "Math.floor((9-1)/2) = Math.floor(8/2) = 4"
+          },
+          "max_score": 1,
+          "explanation": "The parent index is floor((i−1)/2), so for i=9 it is floor(8/2)=4.",
+          "id": "q4",
+          "cite_chunk_ids": [
+            60
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Heap = complete binary tree + heap property, stored in an array"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Explain why building a heap bottom-up from n unordered keys takes O(n) time, while inserting the n keys one at a time takes O(n log n) time in the worst case.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Bottom-up build sifts down each internal node; the sum of all node heights in a complete tree is O(n), so the total work is O(n). Repeated inserts each sift up O(log n) levels, so n inserts cost O(n log n) in the worst case."
+          },
+          "rubric": [
+            {
+              "criterion": "States the bottom-up build's cost as the sum of node heights",
+              "weight": 0.4,
+              "excellent": "Explicitly says the sum of all node heights in a complete tree is O(n), and that most nodes are near the bottom so they sift down only a little.",
+              "acceptable": "Mentions that most nodes are near the bottom and sift down little, but does not connect to the sum of heights.",
+              "poor": "Does not mention the sum of heights or the position of most nodes."
+            },
+            {
+              "criterion": "States the per-insert cost and the total for n inserts",
+              "weight": 0.4,
+              "excellent": "Says each insert can sift up O(log n) levels, so n inserts cost O(n log n) in the worst case.",
+              "acceptable": "Says each insert is O(log n) but does not multiply by n.",
+              "poor": "Does not state the per-insert cost or the total."
+            },
+            {
+              "criterion": "Contrasts the two methods directly",
+              "weight": 0.2,
+              "excellent": "Explicitly contrasts bottom-up build with repeated inserts and explains why the former avoids the log factor.",
+              "acceptable": "Describes both methods but does not explicitly contrast their costs.",
+              "poor": "Describes only one method or confuses the two."
+            }
+          ],
+          "max_score": 5,
+          "id": "q5",
+          "status": "supported",
+          "reason": "Slide 10 states both complexities directly, confirming both parts of the answer.",
+          "quote": "The sum of all node heights is O(n), so build-heap is O(n) Inserting n keys one at a time is O(n log n) in the worst case",
+          "cite_chunk_ids": [
+            57
+          ],
+          "explanation": "The sum of all node heights is O(n), so build-heap is O(n) Inserting n keys one at a time is O(n log n) in the worst case"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.002134,
+  "repairs": [
+    "moved assessments out of a code payload to the block",
+    "cites: q2: cited chunk 51 (Slide 4), found by its question and answer",
+    "cites: q3: cited chunk 57 (Slide 10), found by its question and answer",
+    "cites: q4: cited chunk 60 (Slide 13), found by its question and answer",
+    "cites: b7: the quiz cited nothing; cited chunks 51, 57, 60 (its questions' sources)",
+    "check: q3: options were shown in the correct order; rotated them"
+  ]
+}

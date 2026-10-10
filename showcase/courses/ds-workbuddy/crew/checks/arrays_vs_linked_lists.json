@@ -1,0 +1,202 @@
+{
+  "lesson": "arrays_vs_linked_lists",
+  "round": 1,
+  "at": "2026-10-10T21:11:23.420Z",
+  "total": 26,
+  "passed": 25,
+  "failed": [
+    {
+      "rule": "Q11 code runs",
+      "block": 6,
+      "item": null,
+      "detail": "reference fails 'reverses three-node list': SyntaxError: Unexpected identifier 'n1'; reference fails 'single node': SyntaxError: Unexpected identifier 'n'; reference fails 'two nodes': SyntaxError: Unexpected identifier 'n'",
+      "suggestion": "Run `code-test --lesson arrays_vs_linked_lists --block 6 --dump`, fix solution.js / starter.js / tests.json in crew/code/arrays_vs_linked_lists-b6/, then `code-test --lesson arrays_vs_linked_lists --block 6 --apply`. If it cannot be fixed: `code-test --lesson arrays_vs_linked_lists --block 6 --disable --reason \"<why>\"`."
+    }
+  ],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "7 blocks and 5 items have unique ids"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "comparison payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code item valid",
+      "block": 6,
+      "item": "q1"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "multi_select item valid",
+      "block": 7,
+      "item": "q5"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "discriminative: has comparison, example"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "3 higher-order, 0 remember of 5"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 5 items (max 2)"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q6 multi_select",
+      "ok": true,
+      "detail": "4 options, 3 correct",
+      "block": 7,
+      "item": "q5"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q11 code runs",
+      "ok": false,
+      "detail": "reference fails 'reverses three-node list': SyntaxError: Unexpected identifier 'n1'; reference fails 'single node': SyntaxError: Unexpected identifier 'n'; reference fails 'two nodes': SyntaxError: Unexpected identifier 'n'",
+      "block": 6,
+      "suggestion": "Run `code-test --lesson arrays_vs_linked_lists --block 6 --dump`, fix solution.js / starter.js / tests.json in crew/code/arrays_vs_linked_lists-b6/, then `code-test --lesson arrays_vs_linked_lists --block 6 --apply`. If it cannot be fixed: `code-test --lesson arrays_vs_linked_lists --block 6 --disable --reason \"<why>\"`."
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "22 chunk citations on 7 blocks resolve, 8 slide/page mentions exist"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "2 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "796 teaching words for a 30-minute lesson (target about 900, minimum 450)"
+    },
+    {
+      "lesson": "arrays_vs_linked_lists",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

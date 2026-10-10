@@ -1,0 +1,152 @@
+{
+  "goal": {
+    "deadline": "2026-10-14",
+    "exam_at": "2026-10-14T09:00:00+08:00",
+    "minutes_per_day": 45,
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  "start": "2026-10-11",
+  "days": [
+    {
+      "date": "2026-10-11",
+      "lessons": [
+        "arrays_vs_linked_lists"
+      ],
+      "reviews": 0,
+      "minutes": 30
+    },
+    {
+      "date": "2026-10-12",
+      "lessons": [
+        "hash_tables_from_keys_to_buckets"
+      ],
+      "reviews": 1,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-13",
+      "lessons": [
+        "binary_heaps_and_heapsort",
+        "binary_search_tree_operations"
+      ],
+      "reviews": 2,
+      "minutes": 70
+    },
+    {
+      "date": "2026-10-14",
+      "lessons": [],
+      "reviews": 0,
+      "minutes": 0,
+      "exam": true,
+      "label": "Exam 09:00"
+    }
+  ],
+  "lessons": [
+    {
+      "key": "arrays_vs_linked_lists",
+      "title": "Arrays vs linked lists: linear containers",
+      "day": "2026-10-11",
+      "minutes": 30,
+      "weight": 0.16,
+      "order": 1
+    },
+    {
+      "key": "hash_tables_from_keys_to_buckets",
+      "title": "Hash tables: from keys to buckets",
+      "day": "2026-10-12",
+      "minutes": 30,
+      "weight": 0.3,
+      "order": 2
+    },
+    {
+      "key": "binary_heaps_and_heapsort",
+      "title": "Binary heaps, priority queues and heapsort",
+      "day": "2026-10-13",
+      "minutes": 30,
+      "weight": 0.27,
+      "order": 3
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "Binary search trees: search, insert and delete",
+      "day": "2026-10-13",
+      "minutes": 30,
+      "weight": 0.15,
+      "order": 4
+    }
+  ],
+  "cut": [
+    {
+      "key": "big_o_notation_analysis",
+      "title": "Big-O, Big-Omega and Big-Theta",
+      "reason": "Lowest weight at 9% of marks; 3 days allow 4 lessons; complexity analysis touched on within each data structure lesson",
+      "weight": 0.09
+    },
+    {
+      "key": "complexity_classes_cheat_sheet",
+      "title": "Complexity classes cheat sheet",
+      "reason": "No marks in past paper; parent big_o cut",
+      "weight": 0
+    },
+    {
+      "key": "chaining_vs_open_addressing",
+      "title": "Chaining vs open addressing",
+      "reason": "No marks in past paper; collision strategies covered within the hash tables lesson",
+      "weight": 0
+    },
+    {
+      "key": "avl_trees_and_rotations",
+      "title": "AVL trees: rotations that guarantee balance",
+      "reason": "No question in last year's paper; 3 days allow 4 lessons",
+      "weight": 0
+    },
+    {
+      "key": "avl_rotation_drill",
+      "title": "AVL rotation drill",
+      "reason": "No marks; parent avl_trees cut",
+      "weight": 0
+    },
+    {
+      "key": "heap_to_array_index_mapping",
+      "title": "Heap-to-array index mapping",
+      "reason": "Only 3% of marks; index arithmetic covered within the binary heaps lesson",
+      "weight": 0.03
+    },
+    {
+      "key": "final_exam_dry_run",
+      "title": "Capstone: last year's paper in 45 minutes",
+      "reason": "Capstone not on the exam; 3 days allow 4 focused lessons",
+      "weight": 0
+    }
+  ],
+  "capacity_min": 135,
+  "new_budget_min": 120,
+  "review_budget_min": 15,
+  "used_min": 120,
+  "reviews": 3,
+  "review_dates": {
+    "arrays_vs_linked_lists": [
+      "2026-10-12",
+      "2026-10-13"
+    ],
+    "hash_tables_from_keys_to_buckets": [
+      "2026-10-13"
+    ],
+    "binary_heaps_and_heapsort": [],
+    "binary_search_tree_operations": []
+  },
+  "assumptions": [
+    "Time zone not stated; using Asia/Kuala_Lumpur",
+    "Study starts today: 3 study days (Oct 11, 12, 13)"
+  ],
+  "warnings": [
+    "hash_tables_from_keys_to_buckets is sized at 40 min, more than 70% of a 45-minute day; planned as 30 min (split it into two lessons if it really needs more).",
+    "binary_heaps_and_heapsort is sized at 35 min, more than 70% of a 45-minute day; planned as 30 min (split it into two lessons if it really needs more).",
+    "binary_search_tree_operations is sized at 35 min, more than 70% of a 45-minute day; planned as 30 min (split it into two lessons if it really needs more).",
+    "2026-10-13 needs 70 min (lessons plus reviews), over the daily 45 min. Cut a lesson or move one with --order.",
+    "binary_heaps_and_heapsort is learned the day before the exam and gets no spaced review (it carries 27% of the marks); move it earlier with --order if it matters.",
+    "binary_search_tree_operations is learned the day before the exam and gets no spaced review (it carries 15% of the marks); move it earlier with --order if it matters.",
+    "hash_tables_from_keys_to_buckets carries the most marks (30%) but gets 1 review(s), fewer than arrays_vs_linked_lists; study it earlier with --order.",
+    "Variety (advice only, the Lead may keep this selection): `procedural` was used on 2 of 4 nodes (50%), above the 40% ceiling — at most 1 may carry it. you used: procedural×2, discriminative×1, conceptual×1. Re-examine every `procedural` node and ask what the learner actually has to be able to do at the end of it; several of them will turn out to be a different kind of knowledge."
+  ]
+}

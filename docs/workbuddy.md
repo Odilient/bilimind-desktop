@@ -7,7 +7,7 @@ that explanation, with links and screenshots.
 **To be clear about what was built where.** Our product is BiliMind Desktop, an open-source Electron app.
 The desktop app, the engine and the three showcase courses were built by our team with AI coding agents
 outside WorkBuddy. WorkBuddy was a work tool for us during Dormathon (the pitch deck, a comparison, reviews),
-and BiliMind also ships as a WorkBuddy skill and Expert Team, designed so WorkBuddy users can run it there.
+and BiliMind also ships as a WorkBuddy skill and Expert Team. On Sunday morning we ran it inside WorkBuddy desktop: one sentence, a full course, built by WorkBuddy's agent and its sub-agents (row f).
 
 ## Summary
 
@@ -18,6 +18,8 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team, designed so WorkBu
 | c | WorkBuddy desktop app | Studied its skill and Expert Team format and shipped BiliMind as a WorkBuddy skill and Expert Team, validated with WorkBuddy's own `validate_expert.py` | `skills/bilimind/`, `workbuddy/bilimind-crew/`, `hackathon/SPIKE.md`, `hackathon/EXPERT-TEAM.md` |
 | d | WorkBuddy web app, Deep Research | Market validation (Sunday 01:47 to 01:57 MYT): demand on both halves of Track 2 (students and small businesses), competitors and risks | Task https://www.workbuddy.ai/app/task/2108977764853211136, `hackathon/proof/workbuddy-market-validation.md`, `hackathon/proof/workbuddy-web-market-research.jpg` |
 | e | WorkBuddy web app, Slides Creation | A second deck run for the desktop app from our brief (its sandbox could not read the attached screenshots, so the final deck was built from the app's HTML) | Task https://www.workbuddy.ai/app/task/2108988088788561920 |
+| f | WorkBuddy desktop app, a Craft task with the BiliMind skill | One sentence ("Use the bilimind skill. My Data Structures final is Wednesday 9am..."): WorkBuddy's agent made a 9-step checklist, ran the Lead's steps, launched 4 Writer sub-agents at once, then the Coder and the Checker in parallel, and opened the course in its preview. 05:05 to 05:20 MYT, no further input. 4 lessons, 103/106 checks, 16/16 code tests | `hackathon/proof/workbuddy-run/README.md`, `hackathon/proof/workbuddy-run/session-tool-calls.json`, `showcase/courses/ds-workbuddy/` (https://odilient.github.io/bilimind-desktop/courses/ds-workbuddy/) |
+| g | WorkBuddy desktop app, the same sentence without naming the skill | WorkBuddy's agent did not pick the skill; it read the PDFs and wrote one static HTML study guide (no checks, no tested code, no narration). That is why the skill is called by name | `hackathon/proof/workbuddy-run/README.md` (last section) |
 
 ## (a) The first pitch deck, made in WorkBuddy
 
@@ -55,7 +57,8 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team, designed so WorkBu
     terminal, with `--session-id`), so it appears in "My Experts".
 - **Scenario (how it is meant to run):** a WorkBuddy user sets the workspace to their folder and types one
   sentence; WorkBuddy's agent leads the crew and calls the bundled CLI, the same engine as the desktop app.
-  The courses in this repo were built by the desktop app and the CLI, not inside WorkBuddy.
+  The three demo courses were built by the desktop app and the CLI; the fourth, `showcase/courses/ds-workbuddy/`,
+  was built inside WorkBuddy from one sentence (row f).
 - **When:** Saturday 10 October evening (spike) to about 23:55 (team registered).
 
 | WorkBuddy feature | How the skill is written to use it | Where in this repo |

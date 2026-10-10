@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "arrays_vs_linked_lists",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Linked lists: O(1) insert/delete at a known node, O(n) access by position",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 15,
+    "round": 1,
+    "at": "2026-10-10T21:13:10.293Z"
+  },
+  {
+    "lesson": "arrays_vs_linked_lists",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "Dynamic arrays: O(1) index access, O(1) amortised append, O(n) insert in the middle",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 15,
+    "round": 1,
+    "at": "2026-10-10T21:13:10.293Z"
+  },
+  {
+    "lesson": "arrays_vs_linked_lists",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "O(1) amortised append",
+    "reason": "Slide 15 directly states dynamic arrays have O(1) amortised append, confirming the answer's key claim.",
+    "chunk_id": 15,
+    "round": 1,
+    "at": "2026-10-10T21:16:08.284Z"
+  },
+  {
+    "lesson": "arrays_vs_linked_lists",
+    "item": "q3",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Slides cover access and insertion costs but say nothing about memory use or spare capacity waste.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T21:16:08.284Z"
+  }
+]

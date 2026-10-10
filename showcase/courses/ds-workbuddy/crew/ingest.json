@@ -1,0 +1,653 @@
+{
+  "files": [
+    {
+      "material_id": 1,
+      "name": "CSC2103-L01-analysis-arrays-linked-lists.pdf",
+      "path": "sources/CSC2103-L01-analysis-arrays-linked-lists.pdf",
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "kind": "pdf",
+      "role": "lecture",
+      "pages": 16,
+      "words": 1095,
+      "scanned_pages": [],
+      "landscape": true
+    },
+    {
+      "material_id": 2,
+      "name": "CSC2103-L02-hash-tables.pdf",
+      "path": "sources/CSC2103-L02-hash-tables.pdf",
+      "title": "Lecture 2 · Hash Tables",
+      "kind": "pdf",
+      "role": "lecture",
+      "pages": 16,
+      "words": 1100,
+      "scanned_pages": [],
+      "landscape": true
+    },
+    {
+      "material_id": 3,
+      "name": "CSC2103-L03-bst-and-avl-trees.pdf",
+      "path": "sources/CSC2103-L03-bst-and-avl-trees.pdf",
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "kind": "pdf",
+      "role": "lecture",
+      "pages": 15,
+      "words": 950,
+      "scanned_pages": [],
+      "landscape": true
+    },
+    {
+      "material_id": 4,
+      "name": "CSC2103-L04-binary-heaps.pdf",
+      "path": "sources/CSC2103-L04-binary-heaps.pdf",
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "kind": "pdf",
+      "role": "lecture",
+      "pages": 14,
+      "words": 922,
+      "scanned_pages": [],
+      "landscape": true
+    },
+    {
+      "material_id": 5,
+      "name": "past-paper.pdf",
+      "path": "sources/past-paper.pdf",
+      "title": "Sample Final Examination",
+      "kind": "pdf",
+      "role": "past_paper",
+      "pages": 2,
+      "words": 714,
+      "scanned_pages": [],
+      "landscape": false
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 1,
+      "locator": "Slide 1",
+      "page": 1,
+      "content": "CSC2103 Data Structures | Lecture 1\nAlgorithm Analysis, Arrays and Linked Lists\nSchool of Computing (demo) | Week 1\nSample lecture deck compiled from Wikipedia (CC BY-SA 4.0) for a demo.\nNot official material of any university. See LICENSE.md for sources and attribution.\nWikipedia articles used: Big O notation, Dynamic array, Linked list."
+    },
+    {
+      "id": 2,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 2,
+      "locator": "Slide 2",
+      "page": 2,
+      "content": "Learning outcomes\nDescribe the growth of running time using Big O notation\nRank common growth rates: O(1), O(log n), O(n), O(n log n), O(n²), O(2ⁿ)\nExplain why appending to a dynamic array is O(1) amortised\nCompare arrays and linked lists and choose the right one for a task"
+    },
+    {
+      "id": 3,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 3,
+      "locator": "Slide 3",
+      "page": 3,
+      "content": "Why analyse algorithms?\nRunning time grows with the input size n\nWe count basic operations, not seconds: the result does not depend on the machine\nWorst case: the most work for any input of size n (the usual guarantee)\nAverage case: expected work over a distribution of inputs\nWe care about behaviour for large n, so constants and small terms are ignored"
+    },
+    {
+      "id": 4,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 4,
+      "locator": "Slide 4",
+      "page": 4,
+      "content": "Big O notation\nDefinition: f(n) = O(g(n)) if there are constants c > 0 and n₀ such that |f(n)| ≤ c·g(n) for all n ≥ n₀\nBig O gives an upper bound on the growth rate of f\nDrop constant factors and lower-order terms:\n3n² + 5n + 2 = O(n²)\nProof: for n ≥ 1, 3n² + 5n + 2 ≤ 3n² + 5n² + 2n² = 10n², so c = 10, n₀ = 1 works"
+    },
+    {
+      "id": 5,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 5,
+      "locator": "Slide 5",
+      "page": 5,
+      "content": "Big Omega and Big Theta\nNotation Meaning Informally\nf(n) = O(g(n)) f grows no faster than g upper bound\nf(n) = Ω(g(n)) f grows at least as fast as g lower bound\nf(n) = Θ(g(n)) both O(g(n)) and Ω(g(n)) tight bound\n3n² + 5n + 2 is Θ(n²): it is both O(n²) and Ω(n²)\nIn practice people often write O when they mean the tight bound Θ"
+    },
+    {
+      "id": 6,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 6,
+      "locator": "Slide 6",
+      "page": 6,
+      "content": "Common growth rates\nOrder Name Example n = 1,000\nO(1) constant read a[i] 1\nO(log n) logarithmic binary search in a sorted array ≈ 10\nO(n) linear linear search 1,000\nO(n log n) linearithmic merge sort, heapsort ≈ 10,000\nO(n²) quadratic two nested loops over the input 1,000,000\nO(2ⁿ) exponential try every subset ≈ 10³⁰¹"
+    },
+    {
+      "id": 7,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 7,
+      "locator": "Slide 7",
+      "page": 7,
+      "content": "Analysing loops\n// Nested loops: n * n iterations -> O(n^2)\nfor (let i = 0; i < n; i++)\nfor (let j = 0; j < n; j++)\nsum += a[i] * a[j]; // O(1) work\n// Doubling counter: about log2(n) iterations -> O(log n)\nfor (let i = 1; i < n; i *= 2)\nsteps++;\nSequential blocks add: O(n) + O(n²) = O(n²)\nNested loops multiply their iteration counts"
+    },
+    {
+      "id": 8,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 8,
+      "locator": "Slide 8",
+      "page": 8,
+      "content": "Arrays (static)\nElements stored in one contiguous block of memory\nAddress of element i = base address + i × element size, so access by index is O(1)\nCapacity is fixed when the array is created\nInserting or deleting in the middle shifts the elements after it: O(n)\nGood cache locality: neighbours sit next to each other in memory"
+    },
+    {
+      "id": 9,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 9,
+      "locator": "Slide 9",
+      "page": 9,
+      "content": "Dynamic arrays\nA variable-size list built on a fixed-size array plus a capacity\nElements 0 .. size−1 are used; the rest of the capacity is reserved for growth\nWhen size = capacity, allocate a bigger array (for example double the capacity) and copy every\nelement across\nExamples: Java ArrayList , C++ std::vector , Python list , JavaScript arrays\nCommon growth factors are between 1.5 and 2"
+    },
+    {
+      "id": 10,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 10,
+      "locator": "Slide 10",
+      "page": 10,
+      "content": "Append with geometric growth\nfunction append(arr, x) {\nif (arr.size === arr.capacity) { // full: grow\nconst bigger = new Array(arr.capacity * 2);\nfor (let i = 0; i < arr.size; i++)\nbigger[i] = arr.data[i]; // copy: O(n)\narr.data = bigger;\narr.capacity *= 2;\n}\narr.data[arr.size++] = x; // usual case: O(1)\n}"
+    },
+    {
+      "id": 11,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 11,
+      "locator": "Slide 11",
+      "page": 11,
+      "content": "Amortised analysis of append\nOne append can cost O(n) (when it triggers a copy), but copies are rare\nWith doubling, n appends copy at most 1 + 2 + 4 + … + n/2 < n elements in total\nTotal work for n appends < n writes + n copies = O(n), so each append is O(1) amortised\nGrowing by a constant amount (for example +10 slots) instead gives O(n) per append on average\nand O(n²) in total\nTrade-off: a larger growth factor means fewer copies but more unused capacity"
+    },
+    {
+      "id": 12,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 12,
+      "locator": "Slide 12",
+      "page": 12,
+      "content": "Linked lists\nA sequence of nodes; each node stores a value and a reference (next) to the next node\nThe list is reached through its head; the last node's next is null\nVariants: singly linked, doubly linked (next and prev), circular\nInsert or delete at a known node: O(1), no shifting\nAccess the k-th element: O(n), must walk from the head\nCosts: extra memory for references, poor cache locality"
+    },
+    {
+      "id": 13,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 13,
+      "locator": "Slide 13",
+      "page": 13,
+      "content": "Linked list in JavaScript\nclass Node {\nconstructor(value, next = null) { this.value = value; this.next = next; }\n}\nfunction pushFront(list, value) { // O(1)\nlist.head = new Node(value, list.head);\n}\nfunction find(list, value) { // O(n)\nfor (let cur = list.head; cur !== null; cur = cur.next)\nif (cur.value === value) return cur;\nreturn null;\n}"
+    },
+    {
+      "id": 14,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 14,
+      "locator": "Slide 14",
+      "page": 14,
+      "content": "Linked list vs dynamic array\nOperation Linked list Dynamic array\nAccess by index Θ(n) Θ(1)\nInsert/delete at beginning Θ(1) Θ(n)\nInsert/delete at end Θ(1) when the last node is known, Θ(n) otherwise Θ(1) amortised\nInsert/delete in middle search time + Θ(1) Θ(n)\nWasted space Θ(n) (references) Θ(n) (spare capacity)\nDeleting the last node of a singly linked list still needs the node before it, so it is Θ(n) without a doubly linked list."
+    },
+    {
+      "id": 15,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 15,
+      "locator": "Slide 15",
+      "page": 15,
+      "content": "Summary and tutorial\nBig O describes growth for large n; drop constants and lower-order terms\nDynamic arrays: O(1) index access, O(1) amortised append, O(n) insert in the middle\nLinked lists: O(1) insert/delete at a known node, O(n) access by position\nTutorial 1: (1) Show that 5n² + 3n log n = O(n²) by giving c and n₀. (2) If a dynamic array triples its capacity instead of doubling, is\nappend still O(1) amortised? Why? (3) Write a function that returns the middle node of a singly linked list in one pass."
+    },
+    {
+      "id": 16,
+      "material_id": 1,
+      "title": "Lecture 1 · Algorithm Analysis, Arrays and Linked Lists",
+      "ordinal": 16,
+      "locator": "Slide 16",
+      "page": 16,
+      "content": "References and licence\nWikipedia, Big O notation, https://en.wikipedia.org/wiki/Big_O_notation (accessed 10 Oct 2026)\nWikipedia, Dynamic array, https://en.wikipedia.org/wiki/Dynamic_array (accessed 10 Oct 2026)\nWikipedia, Linked list, https://en.wikipedia.org/wiki/Linked_list (accessed 10 Oct 2026)\nText adapted and condensed from the articles above, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).\nThis deck is shared under the same licence. Code snippets written for this deck."
+    },
+    {
+      "id": 17,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 1,
+      "locator": "Slide 1",
+      "page": 1,
+      "content": "CSC2103 Data Structures | Lecture 2\nHash Tables\nSchool of Computing (demo) | Week 2\nSample lecture deck compiled from Wikipedia (CC BY-SA 4.0) for a demo.\nNot official material of any university. See LICENSE.md for sources and attribution.\nWikipedia articles used: Hash table, Hash function, Linear probing, Open addressing."
+    },
+    {
+      "id": 18,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 2,
+      "locator": "Slide 2",
+      "page": 2,
+      "content": "Learning outcomes\nExplain how a hash function maps keys to buckets\nResolve collisions with separate chaining and with open addressing\nTrace insertions with linear probing and count probes\nUse the load factor to decide when to resize a table"
+    },
+    {
+      "id": 19,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 3,
+      "locator": "Slide 3",
+      "page": 3,
+      "content": "The dictionary (map) ADT\nOperations: insert(key, value), search(key), delete(key)\nImplementation Search Insert\nUnsorted array O(n) O(1)\nSorted array O(log n) O(n)\nBalanced binary search tree O(log n) O(log n)\nHash table O(1) average O(1) average"
+    },
+    {
+      "id": 20,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 4,
+      "locator": "Slide 4",
+      "page": 4,
+      "content": "Hash table: the idea\nAn array of m buckets (slots)\nA hash function turns a key into an index: index = hash(key) mod m\nExample: m = 10, h(k) = k mod 10\n23 → bucket 3\n47 → bucket 7\n81 → bucket 1\nIf every key gets its own bucket, search is a single array access"
+    },
+    {
+      "id": 21,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 5,
+      "locator": "Slide 5",
+      "page": 5,
+      "content": "What makes a good hash function\nDeterministic: the same key always gives the same index\nUniform: spreads keys evenly over the buckets\nFast to compute, and uses the whole key\nDivision method: h(k) = k mod m; choose m prime, not close to a power of 2\nMultiplication method: h(k) = ⌊m · (kA mod 1)⌋ with 0 < A < 1 (Knuth suggests A ≈ (√5 − 1)/2 ≈\n0.618)\nStrings: polynomial hash, for example h = h · 31 + code(c) for each character"
+    },
+    {
+      "id": 22,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 6,
+      "locator": "Slide 6",
+      "page": 6,
+      "content": "Collisions\nA collision: two different keys hash to the same bucket\nUnavoidable when there are more possible keys than buckets (pigeonhole principle)\nLikely even when the table is mostly empty (the birthday problem)\nSo every hash table needs a collision resolution strategy:\nSeparate chaining: each bucket holds a list of entries\nOpen addressing: probe other slots in the same array"
+    },
+    {
+      "id": 23,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 7,
+      "locator": "Slide 7",
+      "page": 7,
+      "content": "Load factor\nLoad factor α = n / m (n entries, m buckets)\nAs α grows, collisions grow and operations slow down\nTypical thresholds: about 0.6 to 0.75 for open addressing; between 1 and 3 for separate chaining\nJava's HashMap resizes when α exceeds its default load factor of 0.75\nResize (rehash): allocate a bigger table (often double) and re-insert every entry: O(n), but O(1)\namortised per insert"
+    },
+    {
+      "id": 24,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 8,
+      "locator": "Slide 8",
+      "page": 8,
+      "content": "Separate chaining\nEach bucket points to a linked list (chain) of the entries that hash there\nInsert: hash, then add to the chain: O(1)\nSearch and delete: hash, then scan one chain: O(1 + α) expected\nα may exceed 1: chains simply get longer\nWorst case: every key lands in one chain, so search is O(n)"
+    },
+    {
+      "id": 25,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 9,
+      "locator": "Slide 9",
+      "page": 9,
+      "content": "Chaining example\nm = 7, h(k) = k mod 7\nInsert 50, 700, 76, 85, 92, 73, 101 (new\nentries go to the end of the chain)\n50 → 1, 700 → 0, 76 → 6, 85 → 1, 92 → 1,\n73 → 3, 101 → 3\nBucket Chain\n0 700\n1 50 → 85 → 92\n2 (empty)\n3 73 → 101\n4 (empty)\n5 (empty)\n6 76"
+    },
+    {
+      "id": 26,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 10,
+      "locator": "Slide 10",
+      "page": 10,
+      "content": "Open addressing\nEvery entry is stored in the bucket array itself; needs α ≤ 1\nOn a collision, follow a probe sequence h(k, 0), h(k, 1), h(k, 2), … until an empty slot\nLinear probing: h(k, i) = (h(k) + i) mod m\nQuadratic probing: h(k, i) = (h(k) + c₁i + c₂i²) mod m\nDouble hashing: h(k, i) = (h₁(k) + i · h₂(k)) mod m, where h₂(k) is never 0"
+    },
+    {
+      "id": 27,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 11,
+      "locator": "Slide 11",
+      "page": 11,
+      "content": "Linear probing example\nm = 10, h(k) = k mod 10\nInsert 89, 18, 49, 58, 69\n49 → 9 taken, try 0: 2 probes\n58 → 8, 9, 0 taken, try 1: 4 probes\n69 → 9, 0, 1 taken, try 2: 4 probes\nPrimary clustering: occupied runs grow and\nattract more collisions\nSlot Key\n0 49\n1 58\n2 69\n3 to 7 (empty)\n8 18\n9 89"
+    },
+    {
+      "id": 28,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 12,
+      "locator": "Slide 12",
+      "page": 12,
+      "content": "Expected probes with linear probing\nKnuth's estimates for a table with load factor α:\nsuccessful search ≈ ½ (1 + 1/(1 − α))\nunsuccessful search (or insert) ≈ ½ (1 + 1/(1 − α)²)\nLoad factor α Successful Unsuccessful\n0.50 1.5 2.5\n0.75 2.5 8.5\n0.90 5.5 50.5\nProbes explode as α approaches 1: keep α well below 1 with open addressing."
+    },
+    {
+      "id": 29,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 13,
+      "locator": "Slide 13",
+      "page": 13,
+      "content": "Chaining vs open addressing\nSeparate chaining Open addressing\nWhere entries live lists outside the array inside the array\nLoad factor can exceed 1 must stay below 1\nDeletion simple: remove from the\nlist\nneeds a tombstone (\"deleted\" marker) so probe sequences\nstay intact\nCache behaviour pointer chasing good (contiguous probes)\nAverage search / insert /\ndelete\nO(1) O(1)\nWorst case O(n) O(n)"
+    },
+    {
+      "id": 30,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 14,
+      "locator": "Slide 14",
+      "page": 14,
+      "content": "A chained hash map in JavaScript\nclass HashMap {\nconstructor(m = 8) { this.buckets = Array.from({ length: m }, () => []); this.size = 0; }\nindex(key) {\nlet h = 0;\nfor (const ch of String(key)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;\nreturn h % this.buckets.length;\n}\nget(key) {\nfor (const [k, v] of this.buckets[this.index(key)]) if (k === key) return v;\nreturn undefined;\n}\nset(key, value) {\nconst chain = this.buckets[this.index(key)];\nfor (const e of chain) if (e[0] === key) { e[1] = value; return; }\nchain.push([key, value]);\nif (++this.size / this.buckets.length > 0.75) this.resize();\n}\nresize() {\nconst entries = this.buckets.flat();\nthis.buckets = Array.from({ length: this.buckets.length * 2 }, () => []);\nfor (const [k, v] of entries) this.buckets[this.index(k)].push([k, v]);\n}\n}"
+    },
+    {
+      "id": 31,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 15,
+      "locator": "Slide 15",
+      "page": 15,
+      "content": "Summary and tutorial\nHash tables give O(1) average search, insert and delete; O(n) in the worst case\nCollisions: chaining (lists per bucket) or open addressing (probe the array)\nKeep the load factor low and resize by doubling\nTutorial 2: (1) Insert 10, 22, 31, 4, 15, 28, 17, 88, 59 into a table of size 11 with h(k) = k mod 11 using linear probing, then using\nchaining. (2) Why must h₂(k) never be 0 in double hashing? (3) Compute the expected unsuccessful-search probes for α = 0.8."
+    },
+    {
+      "id": 32,
+      "material_id": 2,
+      "title": "Lecture 2 · Hash Tables",
+      "ordinal": 16,
+      "locator": "Slide 16",
+      "page": 16,
+      "content": "References and licence\nWikipedia, Hash table, https://en.wikipedia.org/wiki/Hash_table (accessed 10 Oct 2026)\nWikipedia, Hash function, https://en.wikipedia.org/wiki/Hash_function (accessed 10 Oct 2026)\nWikipedia, Linear probing, https://en.wikipedia.org/wiki/Linear_probing (accessed 10 Oct 2026)\nWikipedia, Open addressing, https://en.wikipedia.org/wiki/Open_addressing (accessed 10 Oct\n2026)\nText adapted and condensed from the articles above, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).\nThis deck is shared under the same licence. Code snippets written for this deck."
+    },
+    {
+      "id": 33,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 1,
+      "locator": "Slide 1",
+      "page": 1,
+      "content": "CSC2103 Data Structures | Lecture 3\nBinary Search Trees and AVL Trees\nSchool of Computing (demo) | Week 3\nSample lecture deck compiled from Wikipedia (CC BY-SA 4.0) for a demo.\nNot official material of any university. See LICENSE.md for sources and attribution.\nWikipedia articles used: Binary search tree, Tree traversal, AVL tree, Tree rotation."
+    },
+    {
+      "id": 34,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 2,
+      "locator": "Slide 2",
+      "page": 2,
+      "content": "Learning outcomes\nUse tree vocabulary: root, leaf, depth, height\nSearch, insert and delete in a binary search tree (BST)\nProduce in-order, pre-order, post-order and level-order traversals\nExplain why a BST can degrade to O(n) and how AVL trees prevent it"
+    },
+    {
+      "id": 35,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 3,
+      "locator": "Slide 3",
+      "page": 3,
+      "content": "Tree vocabulary\nRoot: the top node; leaf: a node with no children\nParent / child, subtree: a node together with all its descendants\nDepth of a node: number of edges from the root\nHeight of a tree: number of edges on the longest root-to-leaf path\nBinary tree: every node has at most two children (left and right)"
+    },
+    {
+      "id": 36,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 4,
+      "locator": "Slide 4",
+      "page": 4,
+      "content": "The BST property\nFor every node: all keys in the left subtree are smaller, all keys in the right subtree are larger\n(We assume distinct keys)\nAn in-order traversal visits the keys in sorted order\n50\n/ \\\n30 70\n/ \\ / \\\n20 40 60 80 insert order: 50, 30, 70, 20, 40, 60, 80"
+    },
+    {
+      "id": 37,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 5,
+      "locator": "Slide 5",
+      "page": 5,
+      "content": "Searching a BST\nfunction search(node, key) {\nwhile (node !== null && key !== node.key)\nnode = key < node.key ? node.left : node.right;\nreturn node; // null when the key is absent\n}\nEach step goes one level down: cost is O(h), h = height\nInsert: search for the key, then attach a new leaf where the search fell off the tree"
+    },
+    {
+      "id": 38,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 6,
+      "locator": "Slide 6",
+      "page": 6,
+      "content": "Traversals of the example tree\nTraversal Order Result\nIn-order left, node, right 20 30 40 50 60 70 80\nPre-order node, left, right 50 30 20 40 70 60 80\nPost-order left, right, node 20 40 30 60 80 70 50\nLevel-order breadth-first, level by level 50 30 70 20 40 60 80\nPre-order copies a tree; post-order deletes or evaluates it; in-order lists a BST in sorted order."
+    },
+    {
+      "id": 39,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 7,
+      "locator": "Slide 7",
+      "page": 7,
+      "content": "Deleting from a BST\nLeaf: just remove it\nOne child: replace the node by its child\nTwo children: copy in the in-order successor (smallest key in the right subtree), then delete the\nsuccessor, which has at most one child\nThe in-order predecessor (largest key in the left subtree) works too\nExample: deleting 50 from the example tree puts 60 at the root"
+    },
+    {
+      "id": 40,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 8,
+      "locator": "Slide 8",
+      "page": 8,
+      "content": "Height decides the cost\nSearch, insert and delete are all O(h)\nBalanced tree: h = O(log n)\nInserting keys in sorted order (1, 2, 3, …) builds a chain: h = n − 1, so operations are O(n)\nOperation BST average BST worst case\nSearch O(log n) O(n)\nInsert O(log n) O(n)\nDelete O(log n) O(n)"
+    },
+    {
+      "id": 41,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 9,
+      "locator": "Slide 9",
+      "page": 9,
+      "content": "AVL trees\nNamed after Adelson-Velsky and Landis (1962): the first self-balancing BST\nBalance factor: BF(X) = height(right subtree of X) − height(left subtree of X)\nAVL invariant: BF ∈ {−1, 0, +1} for every node\nHeight stays below about 1.44 log₂ n, so every operation is O(log n) in the worst case\nAfter an insert or delete, nodes whose BF becomes ±2 are repaired with rotations"
+    },
+    {
+      "id": 42,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 10,
+      "locator": "Slide 10",
+      "page": 10,
+      "content": "Rotations\ny x\n/ \\ rotate right / \\\nx C ------------> A y\n/ \\ <------------ / \\\nA B rotate left B C\nA rotation changes the shape but keeps the in-order sequence A x B y C\nOnly a constant number of links change: O(1)"
+    },
+    {
+      "id": 43,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 11,
+      "locator": "Slide 11",
+      "page": 11,
+      "content": "The four imbalance cases\nCase Where the new key went Fix\nLeft-Left left subtree of the left child single right rotation\nRight-Right right subtree of the right child single left rotation\nLeft-Right right subtree of the left child left rotation on the child, then right rotation\nRight-Left left subtree of the right child right rotation on the child, then left rotation\nExample: inserting 30, 20, 10 gives BF(30) = −2 (Left-Left); one right rotation at 30 makes 20 the root."
+    },
+    {
+      "id": 44,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 12,
+      "locator": "Slide 12",
+      "page": 12,
+      "content": "Right rotation in code\nconst h = (n) => (n === null ? -1 : n.height);\nconst update = (n) => { n.height = 1 + Math.max(h(n.left), h(n.right)); };\nfunction rotateRight(y) {\nconst x = y.left;\ny.left = x.right; // subtree B moves across\nx.right = y;\nupdate(y); update(x); // y is now below x\nreturn x; // new root of this subtree\n}"
+    },
+    {
+      "id": 45,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 13,
+      "locator": "Slide 13",
+      "page": 13,
+      "content": "BST vs AVL\nPlain BST AVL tree\nSearch O(log n) average, O(n) worst O(log n) worst\nInsert O(log n) average, O(n) worst O(log n), at most one single or double rotation\nDelete O(log n) average, O(n) worst O(log n), may rotate at every level\nExtra data per node none height or balance factor\nCompared with red-black trees, AVL trees are more strictly balanced: faster lookups, more rotation work on updates."
+    },
+    {
+      "id": 46,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 14,
+      "locator": "Slide 14",
+      "page": 14,
+      "content": "Summary and tutorial\nBST operations cost O(h); h ranges from log n to n − 1\nIn-order traversal of a BST is sorted\nAVL trees keep |BF| ≤ 1 with rotations, guaranteeing O(log n)\nTutorial 3: (1) Insert 15, 10, 20, 8, 12, 25, 6 into an empty BST and list its pre-order traversal. (2) Delete 10 using the in-order\nsuccessor. (3) Insert 10, 20, 30, 25, 28 into an AVL tree and name each rotation."
+    },
+    {
+      "id": 47,
+      "material_id": 3,
+      "title": "Lecture 3 · Binary Search Trees and AVL Trees",
+      "ordinal": 15,
+      "locator": "Slide 15",
+      "page": 15,
+      "content": "References and licence\nWikipedia, Binary search tree, https://en.wikipedia.org/wiki/Binary_search_tree (accessed 10\nOct 2026)\nWikipedia, Tree traversal, https://en.wikipedia.org/wiki/Tree_traversal (accessed 10 Oct 2026)\nWikipedia, AVL tree, https://en.wikipedia.org/wiki/AVL_tree (accessed 10 Oct 2026)\nWikipedia, Tree rotation, https://en.wikipedia.org/wiki/Tree_rotation (accessed 10 Oct 2026)\nText adapted and condensed from the articles above, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).\nThis deck is shared under the same licence. Code snippets written for this deck."
+    },
+    {
+      "id": 48,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 1,
+      "locator": "Slide 1",
+      "page": 1,
+      "content": "CSC2103 Data Structures | Lecture 4\nBinary Heaps and Priority Queues\nSchool of Computing (demo) | Week 4\nSample lecture deck compiled from Wikipedia (CC BY-SA 4.0) for a demo.\nNot official material of any university. See LICENSE.md for sources and attribution.\nWikipedia articles used: Priority queue, Binary heap, Heapsort."
+    },
+    {
+      "id": 49,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 2,
+      "locator": "Slide 2",
+      "page": 2,
+      "content": "Learning outcomes\nDescribe the priority queue ADT and where it is used\nStore a binary heap in an array and navigate it with index formulas\nTrace insert (sift-up) and extract-min (sift-down)\nExplain why bottom-up build-heap is O(n), and how heapsort works"
+    },
+    {
+      "id": 50,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 3,
+      "locator": "Slide 3",
+      "page": 3,
+      "content": "Priority queues\nEach element has a priority; the element with the highest priority leaves first\nOperations: insert, peek (find-min or find-max), extract-min (or extract-max)\nApplications:\nCPU and job scheduling\nDijkstra's shortest paths and Prim's minimum spanning tree\nEvent-driven simulation\nHeapsort, and finding the k largest items in a stream"
+    },
+    {
+      "id": 51,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 4,
+      "locator": "Slide 4",
+      "page": 4,
+      "content": "Binary heap\nIntroduced by J. W. J. Williams in 1964 as the data structure for heapsort\nShape property: a complete binary tree: every level full except possibly the last, which fills from\nthe left\nHeap property:\nmin-heap: every parent ≤ its children, so the minimum is at the root\nmax-heap: every parent ≥ its children, so the maximum is at the root\nA heap is not sorted: siblings have no order between them"
+    },
+    {
+      "id": 52,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 5,
+      "locator": "Slide 5",
+      "page": 5,
+      "content": "Array representation\nStore the nodes level by level in an array\n(index 0 = root)\nFor the node at index i:\nleft child: 2i + 1\nright child: 2i + 2\nparent: ⌊(i − 1) / 2⌋\nNo pointers needed; the complete shape\nleaves no gaps\narray: [1, 3, 6, 5, 9, 8]\n1\n/ \\\n3 6\n/ \\ /\n5 9 8"
+    },
+    {
+      "id": 53,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 6,
+      "locator": "Slide 6",
+      "page": 6,
+      "content": "Insert: sift-up\nfunction insert(heap, x) {\nheap.push(x); // keep the shape: add at the end\nlet i = heap.length - 1;\nwhile (i > 0) {\nconst p = Math.floor((i - 1) / 2);\nif (heap[p] <= heap[i]) break; // heap property holds\n[heap[p], heap[i]] = [heap[i], heap[p]];\ni = p; // move up one level\n}\n}\nAt most one swap per level: O(log n) worst case (O(1) on average)"
+    },
+    {
+      "id": 54,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 7,
+      "locator": "Slide 7",
+      "page": 7,
+      "content": "Insert walkthrough\nStart: [1, 3, 6, 5, 9, 8]; insert 2\nPlace 2 at index 6; its parent is index 2 (value 6)\n2 < 6: swap → [1, 3, 2, 5, 9, 8, 6]\nNow at index 2; parent is index 0 (value 1); 2 > 1: stop\nResult: [1, 3, 2, 5, 9, 8, 6]"
+    },
+    {
+      "id": 55,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 8,
+      "locator": "Slide 8",
+      "page": 8,
+      "content": "Extract-min: sift-down\nfunction extractMin(heap) {\nconst min = heap[0];\nconst last = heap.pop();\nif (heap.length > 0) {\nheap[0] = last; // move the last leaf to the root\nlet i = 0;\nwhile (true) {\nconst l = 2 * i + 1, r = l + 1;\nlet s = i; // index of the smallest of i, l, r\nif (l < heap.length && heap[l] < heap[s]) s = l;\nif (r < heap.length && heap[r] < heap[s]) s = r;\nif (s === i) break;\n[heap[s], heap[i]] = [heap[i], heap[s]];\ni = s;\n}\n}\nreturn min;\n}"
+    },
+    {
+      "id": 56,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 9,
+      "locator": "Slide 9",
+      "page": 9,
+      "content": "Extract-min walkthrough\nStart: [1, 3, 2, 5, 9, 8, 6]; remove the root 1\nMove the last element (6) to the root → [6, 3, 2, 5, 9, 8]\nChildren of index 0 are 3 and 2; the smaller is 2: swap → [2, 3, 6, 5, 9, 8]\nIndex 2 has one child, 8; 6 < 8: stop\nResult: [2, 3, 6, 5, 9, 8], cost O(log n)"
+    },
+    {
+      "id": 57,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 10,
+      "locator": "Slide 10",
+      "page": 10,
+      "content": "Build-heap in O(n)\nBottom-up (Floyd, 1964): for i from ⌊n/2⌋ − 1 down to 0, sift-down(i)\nLeaves are already heaps; most nodes are near the bottom and sift down only a little\nThe sum of all node heights is O(n), so build-heap is O(n)\nInserting n keys one at a time is O(n log n) in the worst case\nExample (min-heap): [9, 4, 7, 1, 2, 6] → [9, 4, 6, 1, 2, 7] → [9, 1, 6, 4, 2, 7] → [1, 2, 6, 4, 9, 7]"
+    },
+    {
+      "id": 58,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 11,
+      "locator": "Slide 11",
+      "page": 11,
+      "content": "Heapsort\n1. Build a max-heap from the array: O(n)\n2. Repeat n − 1 times: swap the root with the last element of the heap, shrink the heap by one,\nsift-down the new root\nRuns in O(n log n) in every case\nSorts in place (O(1) extra memory) but is not stable"
+    },
+    {
+      "id": 59,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 12,
+      "locator": "Slide 12",
+      "page": 12,
+      "content": "Complexity summary\nOperation Binary heap Unsorted array Sorted array\nfind-min O(1) O(n) O(1)\ninsert O(log n) O(1) O(n)\nextract-min O(log n) O(n) O(1)*\ndecrease-key O(log n) O(1) O(n)\nbuild from n items O(n) O(1) O(n log n)\n* when the array is sorted in decreasing order so the minimum is removed from the end."
+    },
+    {
+      "id": 60,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 13,
+      "locator": "Slide 13",
+      "page": 13,
+      "content": "Summary and tutorial\nHeap = complete binary tree + heap property, stored in an array\ninsert and extract-min are O(log n); find-min is O(1); build-heap is O(n)\nHeapsort: O(n log n), in place, not stable\nTutorial 4: (1) Insert 20, 15, 30, 5, 10, 25 into an empty min-heap and show the array after each insert. (2) Perform two extract-min\noperations on the result. (3) Use a min-heap of size k to find the k largest numbers in a stream of n numbers. What is the running\ntime?"
+    },
+    {
+      "id": 61,
+      "material_id": 4,
+      "title": "Lecture 4 · Binary Heaps and Priority Queues",
+      "ordinal": 14,
+      "locator": "Slide 14",
+      "page": 14,
+      "content": "References and licence\nWikipedia, Priority queue, https://en.wikipedia.org/wiki/Priority_queue (accessed 10 Oct 2026)\nWikipedia, Binary heap, https://en.wikipedia.org/wiki/Binary_heap (accessed 10 Oct 2026)\nWikipedia, Heapsort, https://en.wikipedia.org/wiki/Heapsort (accessed 10 Oct 2026)\nText adapted and condensed from the articles above, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).\nThis deck is shared under the same licence. Code snippets written for this deck."
+    },
+    {
+      "id": 62,
+      "material_id": 5,
+      "title": "Sample Final Examination",
+      "ordinal": 1,
+      "locator": "Page 1",
+      "page": 1,
+      "content": "SCHOOL OF COMPUTING (DEMO)\nCSC2103 DATA STRUCTURES\nSAMPLE FINAL EXAMINATION (written for this demo)\nSample document. This paper was written for the BiliMind demo to play the role of a past-year paper. It is\nnot an examination of any real university. Shared under CC BY-SA 4.0 (see LICENSE.md).\nTime allowed: 2 hours Total marks: 100\nNumber of questions: FIVE (5) Weighting: 50% of the final grade\nINSTRUCTIONS TO CANDIDATES\n1. Answer ALL questions.\n2. Write your answers in the answer booklet provided.\n3. Code may be written in JavaScript or clear pseudocode.\n4. The marks for each part are shown in square brackets.\nQuestion 1 (15 marks): Algorithm analysis and arrays\n(a) Using the formal definition of Big O notation, show that f(n) = 4n² + 10n + 7\nis O(n²). State suitable values for the constants c and n₀.\n[5 marks]\n(b) State the time complexity of the code fragment below in Big O notation.\nJustify your answer.\nfor (let i = 1; i < n; i = i * 2)\nfor (let j = 0; j < n; j++)\ncount++;\n[4 marks]\n(c) A dynamic array doubles its capacity"
+    },
+    {
+      "id": 63,
+      "material_id": 5,
+      "title": "Sample Final Examination",
+      "ordinal": 2,
+      "locator": "Page 1",
+      "page": 1,
+      "content": "Justify your answer.\nfor (let i = 1; i < n; i = i * 2)\nfor (let j = 0; j < n; j++)\ncount++;\n[4 marks]\n(c) A dynamic array doubles its capacity\n\nwhenever it is full. Explain why\nappending n elements to an initially empty dynamic array costs O(n) in total,\nand state the amortised cost of a single append.\n[6 marks]\nQuestion 2 (30 marks): Hashing\n(a) Define the load factor α of a hash table. Explain why a hash table is resized\nwhen α exceeds a threshold, and describe what happens during a resize.\n[4 marks]\n(b) The keys 18, 41, 22, 44, 59, 32, 31, 73 are inserted, in this order, into an\ninitially empty hash table of size m = 13 using the hash function h(k) = k mod\n13 and linear probing. Show the final contents of the table and state the\nnumber of probes needed to insert 31 and to insert 73.\n[10 marks]\n(c) Repeat part (b) using separate chaining instead of linear probing. Draw the\nresulting table.\n[6 marks]"
+    },
+    {
+      "id": 64,
+      "material_id": 5,
+      "title": "Sample Final Examination",
+      "ordinal": 3,
+      "locator": "Page 2",
+      "page": 2,
+      "content": "(d) Explain what primary clustering is and why it occurs with linear probing.\nDescribe how double hashing reduces it.\n[5 marks]\n(e) With linear probing, the expected number of probes for an unsuccessful search\nis approximately ½(1 + 1/(1 − α)²). Calculate this value for α = 0.5 and α = 0.9,\nand use your answers to recommend a maximum load factor.\n[5 marks]\nQuestion 3 (30 marks): Heaps and priority queues\n(a) State the two properties that together define a binary min-heap. [4 marks]\n(b) A binary heap is stored in an array starting at index 0. Give the index of the\nparent, the left child and the right child of the node at index i.\n[3 marks]\n(c) Insert the keys 35, 33, 42, 10, 14, 19, 27, 44, 26, 31, in this order, into an\ninitially empty min-heap. Show the array after each insertion.\n[8 marks]\n(d) Perform one extract-min operation on the final heap from part (c). Show every\nswap and the final array.\n[6 marks]\n(e) Explain why building a heap bottom-up from n unordered keys takes O(n)\ntime, while inserting the n keys one at a time takes"
+    },
+    {
+      "id": 65,
+      "material_id": 5,
+      "title": "Sample Final Examination",
+      "ordinal": 4,
+      "locator": "Page 2",
+      "page": 2,
+      "content": "final array.\n[6 marks]\n(e) Explain why building a heap bottom-up from n unordered keys takes O(n)\ntime, while inserting the n keys one at a time takes\n\nO(n log n) time in the worst\ncase.\n[5 marks]\n(f) Name TWO applications of priority queues and explain briefly why a heap\nsuits each one.\n[4 marks]\nQuestion 4 (10 marks): Linked lists\n(a) Compare a singly linked list with a dynamic array in terms of (i) access by\nindex, (ii) insertion at the front and (iii) memory use.\n[6 marks]\n(b) Write a function reverse(head) that reverses a singly linked list in place\nand returns the new head. State its time complexity.\n[4 marks]\nQuestion 5 (15 marks): Binary search trees\n(a) Insert the keys 45, 25, 65, 15, 35, 55, 75, 30, in this order, into an initially\nempty binary search tree. Draw the final tree.\n[4 marks]\n(b) Give the in-order, pre-order and post-order traversals of the tree from part (a). [6 marks]\n(c) Delete the key 25 from the tree in part (a), using the in-order successor. Draw\nthe resulting tree.\n[3 marks]\n(d) State the worst-case height of a binary search tree with n nodes and give an\ninsertion order that produces it.\n[2 marks]\nEND OF QUESTION PAPER"
+    }
+  ],
+  "digest": "### Material #1 — \"Lecture 1 · Algorithm Analysis, Arrays and Linked Lists\" (slide deck)\n[Slide 1] CSC2103 Data Structures | Lecture 1 Algorithm Analysis, Arrays and Linked Lists School of Computing (demo) | Week 1 Sample lecture deck compiled from Wikipedia (CC…\n[Slide 3] Why analyse algorithms? Running time grows with the input size n We count basic operations, not seconds: the result does not depend on the machine Worst case: the…\n[Slide 5] Big Omega and Big Theta Notation Meaning Informally f(n) = O(g(n)) f grows no faster than g upper bound f(n) = Ω(g(n)) f grows at least as fast as g lower bound f(…\n[Slide 7] Analysing loops // Nested loops: n * n iterations -> O(n^2) for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) sum += a[i] * a[j]; // O(1) work // Doubling co…\n[Slide 9] Dynamic arrays A variable-size list built on a fixed-size array plus a capacity Elements 0 .. size−1 are used; the rest of the capacity is reserved for growth When…\n[Slide 11] Amortised analysis of append One append can cost O(n) (when it triggers a copy), but copies are rare With doubling, n appends copy at most 1 + 2 + 4 + … + n/2 < n…\n[Slide 13] Linked list in JavaScript class Node { constructor(value, next = null) { this.value = value; this.next = next; } } function pushFront(list, value) { // O(1) list.…\n[Slide 15] Summary and tutorial Big O describes growth for large n; drop constants and lower-order terms Dynamic arrays: O(1) index access, O(1) amortised append, O(n) inser…\n\n### Material #2 — \"Lecture 2 · Hash Tables\" (slide deck)\n[Slide 1] CSC2103 Data Structures | Lecture 2 Hash Tables School of Computing (demo) | Week 2 Sample lecture deck compiled from Wikipedia (CC BY-SA 4.0) for a demo. Not official…\n[Slide 3] The dictionary (map) ADT Operations: insert(key, value), search(key), delete(key) Implementation Search Insert Unsorted array O(n) O(1) Sorted array O(log n) O(n) Bala…\n[Slide 5] What makes a good hash function Deterministic: the same key always gives the same index Uniform: spreads keys evenly over the buckets Fast to compute, and uses the who…\n[Slide 7] Load factor Load factor α = n / m (n entries, m buckets) As α grows, collisions grow and operations slow down Typical thresholds: about 0.6 to 0.75 for open addressing…\n[Slide 9] Chaining example m = 7, h(k) = k mod 7 Insert 50, 700, 76, 85, 92, 73, 101 (new entries go to the end of the chain) 50 → 1, 700 → 0, 76 → 6, 85 → 1, 92 → 1, 73 → 3, 10…\n[Slide 11] Linear probing example m = 10, h(k) = k mod 10 Insert 89, 18, 49, 58, 69 49 → 9 taken, try 0: 2 probes 58 → 8, 9, 0 taken, try 1: 4 probes 69 → 9, 0, 1 taken, try 2:…\n[Slide 13] Chaining vs open addressing Separate chaining Open addressing Where entries live lists outside the array inside the array Load factor can exceed 1 must stay below 1 D…\n[Slide 15] Summary and tutorial Hash tables give O(1) average search, insert and delete; O(n) in the worst case Collisions: chaining (lists per bucket) or open addressing (probe…\n\n### Material #3 — \"Lecture 3 · Binary Search Trees and AVL Trees\" (slide deck)\n[Slide 1] CSC2103 Data Structures | Lecture 3 Binary Search Trees and AVL Trees School of Computing (demo) | Week 3 Sample lecture deck compiled from Wikipedia (CC BY-SA 4.0)…\n[Slide 3] Tree vocabulary Root: the top node; leaf: a node with no children Parent / child, subtree: a node together with all its descendants Depth of a node: number of edges…\n[Slide 5] Searching a BST function search(node, key) { while (node !== null && key !== node.key) node = key < node.key ? node.left : node.right; return node; // null when the…\n[Slide 7] Deleting from a BST Leaf: just remove it One child: replace the node by its child Two children: copy in the in-order successor (smallest key in the right subtree),…\n[Slide 8] Height decides the cost Search, insert and delete are all O(h) Balanced tree: h = O(log n) Inserting keys in sorted order (1, 2, 3, …) builds a chain: h = n − 1, so…\n[Slide 10] Rotations y x / \\ rotate right / \\ x C ------------> A y / \\ <------------ / \\ A B rotate left B C A rotation changes the shape but keeps the in-order sequence A x…\n[Slide 12] Right rotation in code const h = (n) => (n === null ? -1 : n.height); const update = (n) => { n.height = 1 + Math.max(h(n.left), h(n.right)); }; function rotateRig…\n[Slide 14] Summary and tutorial BST operations cost O(h); h ranges from log n to n − 1 In-order traversal of a BST is sorted AVL trees keep |BF| ≤ 1 with rotations, guarantee…\n\n### Material #4 — \"Lecture 4 · Binary Heaps and Priority Queues\" (slide deck)\n[Slide 1] CSC2103 Data Structures | Lecture 4 Binary Heaps and Priority Queues School of Computing (demo) | Week 4 Sample lecture deck compiled from Wikipedia (CC BY-SA 4.0)…\n[Slide 3] Priority queues Each element has a priority; the element with the highest priority leaves first Operations: insert, peek (find-min or find-max), extract-min (or ext…\n[Slide 4] Binary heap Introduced by J. W. J. Williams in 1964 as the data structure for heapsort Shape property: a complete binary tree: every level full except possibly the…\n[Slide 6] Insert: sift-up function insert(heap, x) { heap.push(x); // keep the shape: add at the end let i = heap.length - 1; while (i > 0) { const p = Math.floor((i - 1) / 2…\n[Slide 8] Extract-min: sift-down function extractMin(heap) { const min = heap[0]; const last = heap.pop(); if (heap.length > 0) { heap[0] = last; // move the last leaf to the…\n[Slide 10] Build-heap in O(n) Bottom-up (Floyd, 1964): for i from ⌊n/2⌋ − 1 down to 0, sift-down(i) Leaves are already heaps; most nodes are near the bottom and sift down onl…\n[Slide 11] Heapsort 1. Build a max-heap from the array: O(n) 2. Repeat n − 1 times: swap the root with the last element of the heap, shrink the heap by one, sift-down the new…\n[Slide 13] Summary and tutorial Heap = complete binary tree + heap property, stored in an array insert and extract-min are O(log n); find-min is O(1); build-heap is O(n) Heap…",
+  "thin_files": []
+}

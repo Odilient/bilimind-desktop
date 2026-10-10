@@ -1,0 +1,16 @@
+{
+  "sentence": "My Data Structures final is Wednesday 9am. The slides and last year's paper are in C:/Demo/DS-WorkBuddy. I have 45 minutes a day. Get me ready.",
+  "deadline": "2026-10-14",
+  "exam_time": "09:00",
+  "exam_at": "2026-10-14T09:00:00+08:00",
+  "timezone": "Asia/Kuala_Lumpur",
+  "minutes_per_day": 45,
+  "audience": "student",
+  "language": "en",
+  "code_language": "javascript",
+  "assumptions": [
+    "Time zone not stated; using Asia/Kuala_Lumpur",
+    "Study starts today: 3 study days (Oct 11, 12, 13)"
+  ],
+  "created_at": "2026-10-10T21:06:24.949Z"
+}

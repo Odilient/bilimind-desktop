@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "hash_tables_from_keys_to_buckets",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "69 → 9, 0, 1 taken, try 2: 4 probes",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 27,
+    "round": 1,
+    "at": "2026-10-10T21:13:10.620Z"
+  },
+  {
+    "lesson": "hash_tables_from_keys_to_buckets",
+    "item": "q2",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T21:13:10.620Z"
+  },
+  {
+    "lesson": "hash_tables_from_keys_to_buckets",
+    "item": "q5",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T21:13:10.620Z"
+  },
+  {
+    "lesson": "hash_tables_from_keys_to_buckets",
+    "item": "q3",
+    "verdict": "not_covered",
+    "quote": "Primary clustering: occupied runs grow and attract more collisions",
+    "reason": "Slides describe primary clustering but not double hashing's mechanism for reducing it.",
+    "chunk_id": 27,
+    "round": 1,
+    "at": "2026-10-10T21:16:08.301Z"
+  }
+]

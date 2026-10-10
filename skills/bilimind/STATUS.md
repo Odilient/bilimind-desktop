@@ -62,7 +62,9 @@ Owner lane: `skills/bilimind/` (SKILL.md, references/, install.ps1, scripts/zip-
 
 ## Stubbed / not verified
 
-- Nothing has been run inside WorkBuddy yet: the parallel Agent spawns, the TeamCreate/SendMessage
+- Run inside WorkBuddy on 11 October 2026 (05:05 to 05:20 MYT): the skill, the checklist, 4 parallel Writer
+  sub-agents, the Coder and Checker in parallel and present_files all worked; see
+  hackathon/proof/workbuddy-run/. Still untested from the list below: the TeamCreate/SendMessage
   relay, `${CODEBUDDY_SKILL_DIR}` substitution and `present_files` are all written to the documented
   behaviour (spike facts) but are untested. That is gate G3, a first real run inside WorkBuddy.
 - Open team questions (EXPERT-TEAM.md section 8): T2 (are repeated member names allowed? the lead

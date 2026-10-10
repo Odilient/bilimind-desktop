@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "binary_heaps_and_heapsort",
+    "item": "q2",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T21:13:12.671Z"
+  },
+  {
+    "lesson": "binary_heaps_and_heapsort",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "for i from ⌊n/2⌋ − 1 down to 0, sift-down(i)",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 57,
+    "round": 1,
+    "at": "2026-10-10T21:13:12.671Z"
+  },
+  {
+    "lesson": "binary_heaps_and_heapsort",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Heap = complete binary tree + heap property, stored in an array",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 60,
+    "round": 1,
+    "at": "2026-10-10T21:13:12.671Z"
+  },
+  {
+    "lesson": "binary_heaps_and_heapsort",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "The sum of all node heights is O(n), so build-heap is O(n) Inserting n keys one at a time is O(n log n) in the worst case",
+    "reason": "Slide 10 states both complexities directly, confirming both parts of the answer.",
+    "chunk_id": 57,
+    "round": 1,
+    "at": "2026-10-10T21:16:08.309Z"
+  }
+]

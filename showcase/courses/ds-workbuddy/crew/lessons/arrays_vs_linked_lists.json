@@ -1,0 +1,347 @@
+{
+  "key": "arrays_vs_linked_lists",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "comparison",
+      "payload": {
+        "intro": "Your lecture slides give you two ways to store a sequence of values: a dynamic array and a singly linked list. The whole skill of this lesson is knowing which one to reach for. The table below uses the exact operations from slide 14 of your deck.",
+        "axes": [
+          "Access by index",
+          "Insert at front",
+          "Insert at end",
+          "Insert in middle",
+          "Memory overhead"
+        ],
+        "items": [
+          {
+            "name": "Dynamic array",
+            "values": [
+              "Θ(1)",
+              "Θ(n)",
+              "Θ(1) amortised",
+              "Θ(n)",
+              "Θ(n) spare capacity"
+            ],
+            "best_for": "when you need fast random access by position and most inserts happen at the end."
+          },
+          {
+            "name": "Singly linked list",
+            "values": [
+              "Θ(n)",
+              "Θ(1)",
+              "Θ(1) if last node known, else Θ(n)",
+              "search time + Θ(1)",
+              "Θ(n) for references (next pointers)"
+            ],
+            "best_for": "when you insert or delete at the front frequently and rarely need to jump to an arbitrary position."
+          }
+        ]
+      },
+      "source_material_ids": [
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "example",
+      "payload": {
+        "title": "Tracing an append that triggers growth",
+        "markdown": "Your slide 10 shows the append function. Trace what happens when you start with an empty dynamic array of capacity 2 and append the values 10, 20, 30.\n\n**Initial state:** `data = [_, _]`, `size = 0`, `capacity = 2`\n\n1. **append(10):** size (0) < capacity (2) → no copy. `data[0] = 10`, size becomes 1. Array: `[10, _]`\n\n2. **append(20):** size (1) < capacity (2) → no copy. `data[1] = 20`, size becomes 2. Array: `[10, 20]`\n\n3. **append(30):** size (2) === capacity (2) → full. Allocate `bigger = new Array(4)` (capacity doubles to 4). Copy: `bigger[0]=10, bigger[1]=20`. `data = bigger`, `capacity = 4`. Then `data[2] = 30`, size becomes 3. Array: `[10, 20, 30, _]`\n\n**Key point:** the third append did O(1) work for the write plus O(n) work for the copy of 2 elements. The copy is the rare, expensive step that makes the amortised argument work."
+      },
+      "source_material_ids": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Your slides give you two containers, and the exam will ask you to pick the right one for the job. The decision comes down to three questions:\n\n**1. Do you need to jump to position k?**\nA dynamic array stores elements in one contiguous block (slide 8). Address of element i = base + i × element_size, so reading or writing `arr[5]` is one multiplication and one memory access: Θ(1). A linked list must walk from the head, following next pointers, until it reaches node k: Θ(n). If the operation is \"give me the 1000th element\", a dynamic array wins before the loop starts.\n\n**2. Where do inserts happen?**\n- **At the front:** A linked list creates a new node and points its next to the old head — that is two pointer assignments, Θ(1). A dynamic array must shift every existing element right by one slot, which is Θ(n).\n- **At the end:** A dynamic array writes to `data[size]` and increments size. Only when the array is full does it copy everything into a bigger array (slide 10). With doubling, that copy is rare enough that the average cost per append is Θ(1) amortised (slide 11). A singly linked list can only append in Θ(1) if you keep a reference to the last node; otherwise you must walk the whole list to find it.\n- **In the middle:** Both are slow. The array shifts elements (Θ(n)). The list must search for the position (Θ(n)) and then the insert itself is Θ(1).\n\n**3. How much memory can you waste?**\nA dynamic array reserves spare capacity that it may never fill — up to half the allocated space with doubling. A linked list stores one extra reference per element (the `next` pointer), which is Θ(n) overhead regardless of how full the list is. Neither is \"better\" here; the trade-off is which kind of waste your scenario tolerates.\n\nSlide 14 of your deck summarises every operation in one table. The exam question Q4a asks you to reproduce exactly this comparison for (i) access by index, (ii) insertion at the front, and (iii) memory use."
+      },
+      "source_material_ids": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "misconception",
+      "payload": {
+        "belief": "Inserting at the end of a dynamic array is always O(1) — the slides say so.",
+        "why_it_seems_right": "Slide 14 says 'Insert/delete at end: Θ(1) amortised'. It is easy to drop the word 'amortised' and remember only 'Θ(1)'.",
+        "what_is_true": "A single append is O(1) only when the array still has spare capacity. When the array is full, that one append triggers a copy of all n elements, making that single operation O(n). The 'amortised O(1)' means that across many appends the average cost is constant, not that every individual append is constant."
+      },
+      "source_material_ids": [
+        10,
+        11,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "example",
+      "payload": {
+        "title": "Tracing a linked list pushFront and find",
+        "markdown": "Your slide 13 gives the JavaScript code. Trace what happens when you start with an empty list and run:\n\n```javascript\nlet list = { head: null };\npushFront(list, 'B');\npushFront(list, 'A');\nfind(list, 'B');\n```\n\n**Step 1: pushFront(list, 'B')**\n`list.head = new Node('B', null)`\nState: `head → Node('B', null)`\n\n**Step 2: pushFront(list, 'A')**\n`list.head = new Node('A', list.head)` → `new Node('A', Node('B', null))`\nState: `head → Node('A') → Node('B') → null`\n\n**Step 3: find(list, 'B')**\nStart at head: cur = Node('A'), value is 'A' ≠ 'B', move to cur.next.\ncur = Node('B'), value is 'B' === 'B', return cur.\nThe function walked 2 nodes. In general, finding the k-th element from the head walks k nodes: Θ(n) in the worst case."
+      },
+      "source_material_ids": [
+        12,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "code",
+      "payload": {
+        "mode": "function",
+        "language": "javascript",
+        "starter_code": "class Node {\n  constructor(value, next = null) {\n    this.value = value;\n    this.next = next;\n  }\n}\n\nfunction reverse(head) {\n  // head is a Node or null\n  // TODO: reverse the list in place and return the new head\n}",
+        "instructions_markdown": "Write the function `reverse(head)` that reverses a singly linked list **in place** and returns the new head. The Node class is already defined as:\n```\nclass Node {\n  constructor(value, next = null) {\n    this.value = value;\n    this.next = next;\n  }\n}\n```\nYour function must work for a list of any length (including empty). Do not create new nodes — rewire the existing ones.\n\nExample: if `head` points to `1 → 2 → 3 → null`, after calling `reverse(head)` the list should be `3 → 2 → 1 → null` and the function returns the node with value 3.",
+        "tests": [
+          {
+            "name": "reverses three-node list",
+            "call": "(function() { var n1 = new Node(1, new Node(2, new Node(3))); var r = reverse(n1); return r.value === 3 && r.next.value === 2 && r.next.next.value === 1 && r.next.next.next === null; })()",
+            "expect": true
+          },
+          {
+            "name": "single node",
+            "call": "(function() { var n = new Node(42); var r = reverse(n); return r.value === 42 && r.next === null; })()",
+            "expect": true
+          },
+          {
+            "name": "empty list",
+            "call": "reverse(null)",
+            "expect": null
+          },
+          {
+            "name": "two nodes",
+            "call": "(function() { var n = new Node('a', new Node('b')); var r = reverse(n); return r.value === 'b' && r.next.value === 'a' && r.next.next === null; })()",
+            "expect": true
+          }
+        ],
+        "hints": [
+          "Keep three pointers: previous, current, and next. Walk through the list and reverse each node's next pointer.",
+          "Start with prev = null, curr = head. Before you change curr.next, save the next node in a temporary variable."
+        ]
+      },
+      "source_material_ids": [
+        12,
+        13
+      ],
+      "assessments": [
+        {
+          "kind": "code",
+          "prompt": "Write the reverse function as described above.",
+          "bloom": "create",
+          "grader": "deterministic",
+          "answer_key": {
+            "reference_solution": "class Node {\n  constructor(value, next = null) {\n    this.value = value;\n    this.next = next;\n  }\n}\n\nfunction reverse(head) {\n  let prev = null;\n  let curr = head;\n  while (curr !== null) {\n    let next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n  }\n  return prev;\n}",
+            "tests": [
+              "reverses three-node list",
+              "single node",
+              "empty list",
+              "two nodes"
+            ]
+          },
+          "max_score": 4,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Check your understanding with these exam-style questions."
+      },
+      "source_material_ids": [
+        15,
+        8
+      ],
+      "assessments": [
+        {
+          "kind": "short_answer",
+          "prompt": "A dynamic array doubles its capacity whenever it is full. Explain why appending n elements to an initially empty dynamic array costs O(n) in total, and state the amortised cost of a single append.",
+          "bloom": "apply",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Each append that does not trigger a copy costs O(1). When the array is full, a copy of all current elements is needed, costing O(k) for k elements. With doubling, the copies happen at sizes 1, 2, 4, 8, ... up to n/2. The sum of these copies is less than n, so total work for n appends is O(n). The amortised cost per append is O(1)."
+          },
+          "rubric": [
+            {
+              "criterion": "Explains why copies happen and how often",
+              "weight": 0.4,
+              "excellent": "States that a copy occurs when size == capacity, and that with doubling the copies happen at sizes 1, 2, 4, ... up to n/2.",
+              "acceptable": "Mentions that copies happen when the array is full but does not describe the doubling pattern or the sizes.",
+              "poor": "Does not mention when copies occur or says copies happen every append."
+            },
+            {
+              "criterion": "Sums the copy cost and concludes O(n) total",
+              "weight": 0.3,
+              "excellent": "Shows that 1 + 2 + 4 + ... + n/2 < n, so total copy cost is O(n).",
+              "acceptable": "States the total cost is O(n) without showing the sum or with an incorrect sum.",
+              "poor": "Claims the total cost is O(n log n) or O(n²)."
+            },
+            {
+              "criterion": "States amortised cost per append",
+              "weight": 0.3,
+              "excellent": "States that amortised cost per append is O(1) and explains that it is the average over n operations.",
+              "acceptable": "States O(1) amortised but does not explain what 'amortised' means.",
+              "poor": "States O(n) per append or does not mention amortised cost."
+            }
+          ],
+          "max_score": 6,
+          "id": "q2",
+          "status": "supported",
+          "reason": "Slide 15 directly states dynamic arrays have O(1) amortised append, confirming the answer's key claim.",
+          "quote": "O(1) amortised append",
+          "cite_chunk_ids": [
+            15
+          ],
+          "explanation": "O(1) amortised append"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Compare a singly linked list with a dynamic array in terms of (i) access by index, (ii) insertion at the front, and (iii) memory use.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "(i) Access by index: dynamic array is O(1) because elements are in contiguous memory; linked list is O(n) because you must walk from the head. (ii) Insertion at the front: linked list is O(1) by creating a new node and updating the head; dynamic array is O(n) because all elements must shift right. (iii) Memory use: dynamic array wastes space in spare capacity (up to half with doubling); linked list wastes space for a next reference per element."
+          },
+          "rubric": [
+            {
+              "criterion": "Access by index comparison",
+              "weight": 0.3,
+              "excellent": "States O(1) for array, O(n) for list, and gives a brief reason (contiguous memory vs walking pointers).",
+              "acceptable": "States correct complexities but gives no reason.",
+              "poor": "States wrong complexities or reverses them."
+            },
+            {
+              "criterion": "Insertion at front comparison",
+              "weight": 0.3,
+              "excellent": "States O(1) for list (new node, update head) and O(n) for array (shift all elements right).",
+              "acceptable": "States correct complexities but does not explain why.",
+              "poor": "States wrong complexities or says both are O(1)."
+            },
+            {
+              "criterion": "Memory use comparison",
+              "weight": 0.4,
+              "excellent": "Describes array waste as spare capacity (up to half) and list waste as per-element next reference overhead.",
+              "acceptable": "Mentions that both waste memory but does not specify the nature of the waste.",
+              "poor": "Says one wastes no memory or gives an incorrect description."
+            }
+          ],
+          "max_score": 6,
+          "id": "q3",
+          "status": "not_covered",
+          "reason": "Slides cover access and insertion costs but say nothing about memory use or spare capacity waste.",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "mcq",
+          "prompt": "You are writing a function that will frequently insert new items at the front of a list and occasionally read the third element. Which container should you choose, and why?",
+          "bloom": "evaluate",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dynamic array, because reading the third element is O(1)."
+            },
+            {
+              "id": "b",
+              "text": "Singly linked list, because insert at front is O(1) and reading the third element is O(1) once you have a reference."
+            },
+            {
+              "id": "c",
+              "text": "Singly linked list, because insert at front is O(1) and reading the third element is O(3) which is still constant time."
+            },
+            {
+              "id": "d",
+              "text": "Dynamic array, because insert at front is O(1) amortised."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "c"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Insert at front is O(1) for a linked list. Reading the third element requires walking three nodes, which is O(3) = O(1) because 3 is a constant. Option a ignores the cost of front inserts; option b is wrong because reading by index is O(n) without a reference; option d is wrong because array insert at front is O(n).",
+          "id": "q4",
+          "cite_chunk_ids": [
+            15
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Linked lists: O(1) insert/delete at a known node, O(n) access by position"
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "Which of the following statements about a dynamic array are true? Select all that apply.",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Accessing element i is O(1) because the address is base + i × element_size."
+            },
+            {
+              "id": "b",
+              "text": "Inserting at the front is O(1) amortised."
+            },
+            {
+              "id": "c",
+              "text": "When the array is full, appending one element triggers a copy of all existing elements."
+            },
+            {
+              "id": "d",
+              "text": "With geometric growth (doubling), n appends cost O(n) total, so each append is O(1) amortised."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "c",
+              "d"
+            ]
+          },
+          "max_score": 3,
+          "explanation": "Option b is false: inserting at the front shifts every element right, which is O(n). Options a, c and d are stated on slides 8, 10 and 11 of your deck.",
+          "id": "q5",
+          "cite_chunk_ids": [
+            15
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Dynamic arrays: O(1) index access, O(1) amortised append, O(n) insert in the middle"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.001596,
+  "repairs": [
+    "re-homed 1 question from narrative blocks into the quiz",
+    "cites: q4: cited chunk 15 (Slide 15), found by its question and answer",
+    "cites: q5: cited chunk 8 (Slide 8), found by its question and answer",
+    "cites: b7: the quiz cited nothing; cited chunks 15, 8 (its questions' sources)",
+    "code-test: applied crew/code/arrays_vs_linked_lists-b6 (reference 1/4, starter fails 3/4)",
+    "code-test: applied crew/code/arrays_vs_linked_lists-b6 (reference 1/4, starter fails 3/4)",
+    "code-test: applied crew/code/arrays_vs_linked_lists-b6 (reference 4/4, starter fails 3/4)"
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "version": 1,
+  "course_id": "ds-workbuddy",
+  "exam_at": "2026-10-14T09:00:00+08:00",
+  "updated_at": "2026-10-10T21:18:44.332Z",
+  "cards": [
+    {
+      "id": "arrays_vs_linked_lists/q2",
+      "lesson": "arrays_vs_linked_lists",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A dynamic array doubles its capacity whenever it is full. Explain why appending n elements to an initially empty dynamic array costs O(n) in total, and state the amortised cost of a single append.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "arrays_vs_linked_lists/q3",
+      "lesson": "arrays_vs_linked_lists",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Compare a singly linked list with a dynamic array in terms of (i) access by index, (ii) insertion at the front, and (iii) memory use.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "arrays_vs_linked_lists/q4",
+      "lesson": "arrays_vs_linked_lists",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You are writing a function that will frequently insert new items at the front of a list and occasionally read the third element. Which container should you choose, and why?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "arrays_vs_linked_lists/q5",
+      "lesson": "arrays_vs_linked_lists",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "Which of the following statements about a dynamic array are true? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hash_tables_from_keys_to_buckets/q1",
+      "lesson": "hash_tables_from_keys_to_buckets",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "A hash table uses linear probing with m = 10 and h(k) = k mod 10. Keys 89, 18, 49, 58, 69 are inserted in that order. How many probes does inserting 69 take?",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hash_tables_from_keys_to_buckets/q2",
+      "lesson": "hash_tables_from_keys_to_buckets",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "For linear probing, the expected number of probes for an unsuccessful search is approximately ½(1 + 1/(1 − α)²). Compute this value for α = 0.8. Give your answer to one decimal place.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hash_tables_from_keys_to_buckets/q3",
+      "lesson": "hash_tables_from_keys_to_buckets",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Explain what primary clustering is and why it occurs with linear probing. Then describe how double hashing reduces it.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hash_tables_from_keys_to_buckets/q5",
+      "lesson": "hash_tables_from_keys_to_buckets",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "An open-addressing hash table uses linear probing. At load factor α = 0.5 the expected probes for an unsuccessful search are about 2.5, using ½(1 + 1/(1−α)²). At α = 0.9 the same formula gives about 50.5. By what factor does the probe count grow?",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_heapsort/q2",
+      "lesson": "binary_heaps_and_heapsort",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Which of the following arrays represents a valid min-heap?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_heapsort/q3",
+      "lesson": "binary_heaps_and_heapsort",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Put the steps of Floyd's build-heap algorithm in the correct order.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_heapsort/q4",
+      "lesson": "binary_heaps_and_heapsort",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "In a min-heap stored as an array, what is the index of the parent of the element at index 9? (Use 0-based indexing.)",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_heapsort/q5",
+      "lesson": "binary_heaps_and_heapsort",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "Explain why building a heap bottom-up from n unordered keys takes O(n) time, while inserting the n keys one at a time takes O(n log n) time in the worst case.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_search_tree_operations/q2",
+      "lesson": "binary_search_tree_operations",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Arrange the steps for deleting a node with two children from a BST, using the in-order successor method.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_search_tree_operations/q3",
+      "lesson": "binary_search_tree_operations",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "What is the worst-case height of a BST after inserting keys in sorted order (1, 2, 3, ..., n)?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_search_tree_operations/q4",
+      "lesson": "binary_search_tree_operations",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "Insert the keys 55, 30, 70, 20, 40, 60, 80, 35 in this order into an initially empty BST. Draw the final tree (describe it in text, e.g., 'root is 55, left child is 30, ...'). Then delete key 30 using the in-order successor and describe the resulting tree. Explain why the in-order successor method preserves the BST property.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    }
+  ]
+}

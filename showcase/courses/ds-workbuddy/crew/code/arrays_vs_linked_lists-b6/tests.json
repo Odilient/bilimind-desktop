@@ -1,0 +1,22 @@
+[
+  {
+    "name": "reverses three-node list",
+    "call": "(function() { var n1 = new Node(1, new Node(2, new Node(3))); var r = reverse(n1); return r.value === 3 && r.next.value === 2 && r.next.next.value === 1 && r.next.next.next === null; })()",
+    "expect": true
+  },
+  {
+    "name": "single node",
+    "call": "(function() { var n = new Node(42); var r = reverse(n); return r.value === 42 && r.next === null; })()",
+    "expect": true
+  },
+  {
+    "name": "empty list",
+    "call": "reverse(null)",
+    "expect": null
+  },
+  {
+    "name": "two nodes",
+    "call": "(function() { var n = new Node('a', new Node('b')); var r = reverse(n); return r.value === 'b' && r.next.value === 'a' && r.next.next === null; })()",
+    "expect": true
+  }
+]

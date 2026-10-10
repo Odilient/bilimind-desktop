@@ -1,0 +1,10 @@
+[
+  "lessons/01-arrays_vs_linked_lists.md",
+  "lessons/02-hash_tables_from_keys_to_buckets.md",
+  "lessons/03-binary_heaps_and_heapsort.md",
+  "lessons/04-binary_search_tree_operations.md",
+  "lessons/README.md",
+  "deck.csv",
+  "reviews.ics",
+  "REPORT.md"
+]

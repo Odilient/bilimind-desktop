@@ -2,7 +2,7 @@
 //
 //   node site/scripts/assemble.mjs [--courses <dir>] [--dry]
 //
-// 1. Courses: for each slug (ds-final, boba-day-one, bm-survival) whose built course exists at
+// 1. Courses: for each slug (ds-final, boba-day-one, bm-survival, ds-workbuddy) whose built course exists at
 //    <courses>/<slug>/index.html (default showcase/courses), copies that folder into
 //    site/courses/<slug>/, replacing the placeholder page. The crew's cache (crew/cache/) is skipped.
 // 2. Skill: copies skills/dist/bilimind-skill.zip (made by skills/bilimind/scripts/zip-skill.mjs)
@@ -21,7 +21,7 @@ const argv = process.argv.slice(2);
 const dry = argv.includes('--dry');
 const cAt = argv.indexOf('--courses');
 const coursesSrc = cAt >= 0 ? resolve(argv[cAt + 1]) : join(repo, 'showcase', 'courses');
-const SLUGS = ['ds-final', 'boba-day-one', 'bm-survival'];
+const SLUGS = ['ds-final', 'boba-day-one', 'bm-survival', 'ds-workbuddy'];
 const out = { courses: {}, downloads: [], secrets: [] };
 
 // 1 · Courses

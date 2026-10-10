@@ -1,0 +1,22 @@
+[
+  {
+    "name": "search finds inserted key",
+    "call": "(function() { var root = insert(null, 50); root = insert(root, 30); root = insert(root, 70); return search(root, 30).key; })()",
+    "expect": 30
+  },
+  {
+    "name": "search returns null for absent key",
+    "call": "(function() { var root = insert(null, 50); root = insert(root, 30); return search(root, 40); })()",
+    "expect": null
+  },
+  {
+    "name": "delete leaf",
+    "call": "(function() { var root = insert(null, 50); root = insert(root, 30); root = insert(root, 70); root = deleteNode(root, 30); return search(root, 30); })()",
+    "expect": null
+  },
+  {
+    "name": "delete node with two children",
+    "call": "(function() { var root = insert(null, 50); root = insert(root, 30); root = insert(root, 70); root = insert(root, 20); root = insert(root, 40); root = insert(root, 60); root = insert(root, 80); root = deleteNode(root, 50); return root.key; })()",
+    "expect": 60
+  }
+]

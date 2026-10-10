@@ -1,0 +1,1 @@
+Write a function `hashIndex(key, m)` that computes the bucket index for a string key using the polynomial hash from slide 5: start h at 0, then for each character c in the key, set h = (h * 31 + charCode(c)) >>> 0 (unsigned 32-bit). Finally return h % m. Your function must be deterministic and use the whole key. Test it on 'cat' with m = 7 and on 'dog' with m = 7.

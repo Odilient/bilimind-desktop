@@ -1,0 +1,404 @@
+{
+  "key": "hash_tables_from_keys_to_buckets",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "You've seen arrays and linked lists store things in a straight line. A hash table throws away the line. It gives every key a number — the bucket — and drops the value into that bucket, so a search becomes one jump instead of a walk. That is the whole trick, and it is why the dictionary ADT on slide 3 of Lecture 2 lists hash tables as O(1) average for insert, search and delete.\n\nThe dictionary ADT has three operations: insert(key, value), search(key), delete(key). A hash table implements them with an array of m buckets and a hash function that maps a key to an index: index = hash(key) mod m. Slide 4 shows the simplest version: with m = 10 and h(k) = k mod 10, the key 23 lands in bucket 3, 47 in bucket 7, 81 in bucket 1. If every key lands in its own bucket, search is a single array access.\n\nThe catch: keys collide. Two different keys can map to the same bucket. The two ways to survive collisions are the two designs you must know for the exam:\n\n- **Separate chaining** (slide 9): each bucket holds a linked list. New entries go to the end of the chain. Load factor can exceed 1.\n- **Open addressing** (slide 10): every entry lives inside the bucket array itself. On a collision you follow a probe sequence until you find an empty slot. Load factor must stay below 1.\n\nWhat makes a hash function good (slide 5): deterministic — same key, same index; uniform — spreads keys evenly; fast and uses the whole key. The division method h(k) = k mod m works best when m is prime and not close to a power of 2. Strings use a polynomial hash: h = h · 31 + code(c) for each character.\n\nThe load factor α = n / m (slide 7) decides how fast operations run. As α grows, collisions grow. Open addressing slows down badly as α approaches 1 — slide 12 shows unsuccessful search taking 50.5 probes at α = 0.90. That is why tables resize: allocate a bigger table (often double) and re-insert every entry. Java's HashMap resizes when α exceeds 0.75. Chaining tolerates α between 1 and 3.\n\nYou already know how to trace a linked list; now you trace where each key lands and what happens when two land in the same place."
+      },
+      "source_material_ids": [
+        19,
+        20,
+        21,
+        23,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "flowchart TD\n  K[\"key: 85\"] --> H[\"hash: 85 mod 7 = 1\"]\n  H --> B[\"bucket 1\"]\n  B --> C[\"50 -> 85 -> 92\"]\n  K2[\"key: 73\"] --> H2[\"hash: 73 mod 7 = 3\"]\n  H2 --> B2[\"bucket 3\"]\n  B2 --> C2[\"73 -> 101\"]\n  K3[\"key: 700\"] --> H3[\"hash: 700 mod 7 = 0\"]\n  H3 --> B3[\"bucket 0\"]\n  B3 --> C3[\"700\"]",
+        "caption": "Chaining with m = 7, from slide 9. Each bucket holds a chain; new keys go to the end.",
+        "alt_text": "Flowchart showing three keys hashing to buckets 1, 3 and 0, with chains 50->85->92, 73->101 and 700."
+      },
+      "source_material_ids": [
+        25
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "analogy",
+      "payload": {
+        "markdown": "Think of a hash table as a coat check in a theatre. The attendant has m numbered hooks. When you hand over your coat, they compute a number from your name (the hash) and hang the coat on that hook. Later you say your name, they recompute the number, walk straight to the hook, and grab your coat. That is O(1) — no searching through a pile.\n\nWhen two people get the same hook number, the attendant has two options. Chaining: they put a rail next to the hook and hang both coats on it, one behind the other. Open addressing: they walk to the next empty hook and put the second coat there — but then when you come back, they have to check the first hook, then the next, then the next, until they find yours.\n\nThe load factor is how many coats per hook. If the theatre is nearly empty, the attendant almost always finds the right hook immediately. If it is packed, they spend all night walking down the row of hooks — that is the probe explosion.",
+        "breaks_down_when": "A real coat check attendant can remember where they put a coat that was moved to a different hook. A hash table cannot: the probe sequence is deterministic and the only memory is the array itself. Also, real names are not uniformly distributed, which is exactly why hash functions need to be uniform — the coat check does not have that problem."
+      },
+      "source_material_ids": [
+        31,
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Trace the linear probing example from slide 11: m = 10, h(k) = k mod 10, insert 89, 18, 49, 58, 69. This is the exact skill Q2b on last year's paper tests.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Insert 89",
+            "detail_markdown": "89 mod 10 = 9. Slot 9 is empty.",
+            "check": "Slot 9 holds 89."
+          },
+          {
+            "n": 2,
+            "title": "Insert 18",
+            "detail_markdown": "18 mod 10 = 8. Slot 8 is empty.",
+            "check": "Slot 8 holds 18."
+          },
+          {
+            "n": 3,
+            "title": "Insert 49 — first collision",
+            "detail_markdown": "49 mod 10 = 9, but slot 9 is taken. Probe i=1: slot 0 is empty. 2 probes total.",
+            "warning": "Remember to count the initial attempt as probe 1.",
+            "check": "Slot 0 holds 49."
+          },
+          {
+            "n": 4,
+            "title": "Insert 58 — a longer probe",
+            "detail_markdown": "58 mod 10 = 8, taken. i=1: slot 9 taken. i=2: slot 0 taken. i=3: slot 1 empty. 4 probes.",
+            "warning": "Do not skip a slot just because it holds a key that hashed elsewhere.",
+            "check": "Slot 1 holds 58."
+          },
+          {
+            "n": 5,
+            "title": "Insert 69",
+            "detail_markdown": "69 mod 10 = 9, taken. i=1: slot 0 taken. i=2: slot 1 taken. i=3: slot 2 empty. 4 probes.",
+            "check": "Slot 2 holds 69. Final table: 0:49, 1:58, 2:69, 8:18, 9:89."
+          }
+        ]
+      },
+      "source_material_ids": [
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "misconception",
+      "payload": {
+        "belief": "A good hash function just needs to be fast to compute — any function that turns a key into a number will do.",
+        "why_it_seems_right": "The hash function is just a calculation; the table does the real work. If the function is fast, the whole operation feels fast.",
+        "what_is_true": "Slide 5 requires a good hash function to be uniform — spread keys evenly over the buckets. If h(k) = k mod 10 and all your keys end in 0, every key lands in bucket 0 and the table degrades to a single linked list: O(n) search. A fast hash that ignores most buckets is worse than a slower one that spreads keys out."
+      },
+      "source_material_ids": [
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "example",
+      "payload": {
+        "title": "Chaining with m = 7 — slide 9 traced",
+        "markdown": "Insert 50, 700, 76, 85, 92, 73, 101 into a table with m = 7, h(k) = k mod 7. New entries go to the end of the chain.\n\n- 50 mod 7 = 1 → bucket 1: [50]\n- 700 mod 7 = 0 → bucket 0: [700]\n- 76 mod 7 = 6 → bucket 6: [76]\n- 85 mod 7 = 1 → bucket 1: [50, 85]\n- 92 mod 7 = 1 → bucket 1: [50, 85, 92]\n- 73 mod 7 = 3 → bucket 3: [73]\n- 101 mod 7 = 3 → bucket 3: [73, 101]\n\nFinal chains: bucket 0: 700; bucket 1: 50 → 85 → 92; bucket 3: 73 → 101; bucket 6: 76. Buckets 2, 4, 5 empty.\n\nSearch for 92: hash once, walk the chain — 3 comparisons. No probing, no tombstones."
+      },
+      "source_material_ids": [
+        25
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "comparison",
+      "payload": {
+        "intro": "Slide 13 lays out the two collision strategies side by side. The choice matters for deletion, load factor and cache behaviour.",
+        "axes": [
+          "Where entries live",
+          "Load factor",
+          "Deletion",
+          "Cache behaviour",
+          "Worst case"
+        ],
+        "items": [
+          {
+            "name": "Separate chaining",
+            "values": [
+              "lists outside the array",
+              "can exceed 1",
+              "simple: remove from the list",
+              "pointer chasing",
+              "O(n)"
+            ],
+            "best_for": "when you expect many collisions or need simple deletion without tombstones."
+          },
+          {
+            "name": "Open addressing",
+            "values": [
+              "inside the array",
+              "must stay below 1",
+              "needs a tombstone marker",
+              "good: contiguous probes",
+              "O(n)"
+            ],
+            "best_for": "when the table stays small and you want to avoid pointer chasing and memory overhead."
+          }
+        ]
+      },
+      "source_material_ids": [
+        29
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {
+        "intro": "Check the core mechanics before you move on."
+      },
+      "source_material_ids": [
+        27,
+        31
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "A hash table uses linear probing with m = 10 and h(k) = k mod 10. Keys 89, 18, 49, 58, 69 are inserted in that order. How many probes does inserting 69 take?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "1"
+            },
+            {
+              "id": "b",
+              "text": "2"
+            },
+            {
+              "id": "c",
+              "text": "3"
+            },
+            {
+              "id": "d",
+              "text": "4"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "d"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "69 hashes to 9, which is occupied, then 0 and 1 are occupied, so 69 lands in slot 2 after 4 probes.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            27
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "69 → 9, 0, 1 taken, try 2: 4 probes"
+        },
+        {
+          "kind": "numeric",
+          "prompt": "For linear probing, the expected number of probes for an unsuccessful search is approximately ½(1 + 1/(1 − α)²). Compute this value for α = 0.8. Give your answer to one decimal place.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "value": 13,
+            "tolerance": 0.1,
+            "unit": "probes",
+            "work": "1 - 0.8 = 0.2; 0.2^2 = 0.04; 1/0.04 = 25; 1 + 25 = 26; 26/2 = 13.0"
+          },
+          "max_score": 1,
+          "explanation": "With α = 0.8, the denominator (1−α)² is 0.04, so 1/0.04 = 25, giving (1+25)/2 = 13 probes.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            31
+          ],
+          "status": "not_covered",
+          "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Explain what primary clustering is and why it occurs with linear probing. Then describe how double hashing reduces it.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Primary clustering is the tendency of linear probing to form long contiguous runs of occupied slots. It occurs because when a collision happens, the probe sequence only moves to the next slot, so any key that hashes into the run extends it. Double hashing reduces it because the probe step size depends on a second hash function h₂(k), so keys that collide at the same slot take different probe paths and do not all pile up in the same run."
+          },
+          "rubric": [
+            {
+              "criterion": "Defines primary clustering as contiguous occupied runs",
+              "weight": 0.3,
+              "excellent": "States that primary clustering is the formation of long runs of occupied slots in the array.",
+              "acceptable": "Mentions clustering or runs but does not clearly tie it to contiguous occupied slots.",
+              "poor": "Does not define primary clustering or defines it incorrectly."
+            },
+            {
+              "criterion": "Explains why linear probing causes it",
+              "weight": 0.3,
+              "excellent": "Explains that linear probing only moves to the next slot, so any collision extends the run.",
+              "acceptable": "Mentions probing to the next slot but does not connect it to run growth.",
+              "poor": "Does not explain the mechanism."
+            },
+            {
+              "criterion": "Describes how double hashing reduces it",
+              "weight": 0.4,
+              "excellent": "States that double hashing uses a second hash function to vary the probe step, so colliding keys spread out instead of forming one run.",
+              "acceptable": "Mentions a second hash function but does not explain how it breaks up runs.",
+              "poor": "Does not describe double hashing or says it uses a fixed step."
+            }
+          ],
+          "max_score": 5,
+          "id": "q3",
+          "status": "not_covered",
+          "reason": "Slides describe primary clustering but not double hashing's mechanism for reducing it.",
+          "quote": "Primary clustering: occupied runs grow and attract more collisions",
+          "cite_chunk_ids": [
+            27
+          ],
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "mcq",
+          "prompt": "An open-addressing hash table uses linear probing. At load factor α = 0.5 the expected probes for an unsuccessful search are about 2.5, using ½(1 + 1/(1−α)²). At α = 0.9 the same formula gives about 50.5. By what factor does the probe count grow?",
+          "bloom": "analyze",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "about 5x"
+            },
+            {
+              "id": "b",
+              "text": "about 10x"
+            },
+            {
+              "id": "c",
+              "text": "about 20x"
+            },
+            {
+              "id": "d",
+              "text": "about 50x"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "c"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "50.5 / 2.5 = 20.2, so the probe count grows about 20x. This is why slide 12 warns that open addressing degrades badly as α approaches 1.",
+          "id": "q5",
+          "cite_chunk_ids": [
+            31
+          ],
+          "status": "not_covered",
+          "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+          "labels": [
+            "beyond_slides"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b9",
+      "type": "code",
+      "payload": {
+        "mode": "function",
+        "language": "javascript",
+        "starter_code": "function hashIndex(key, m) {\n  // Polynomial hash: h = h * 31 + charCode, then mod m\n  // TODO\n}",
+        "instructions_markdown": "Write a function `hashIndex(key, m)` that computes the bucket index for a string key using the polynomial hash from slide 5: start h at 0, then for each character c in the key, set h = (h * 31 + charCode(c)) >>> 0 (unsigned 32-bit). Finally return h % m. Your function must be deterministic and use the whole key. Test it on 'cat' with m = 7 and on 'dog' with m = 7.",
+        "tests": [
+          {
+            "name": "cat maps to a bucket",
+            "call": "hashIndex('cat', 7)",
+            "expect": 3
+          },
+          {
+            "name": "dog maps to a different bucket",
+            "call": "hashIndex('dog', 7)",
+            "expect": 6
+          },
+          {
+            "name": "deterministic",
+            "call": "hashIndex('cat', 7)",
+            "expect": 3
+          },
+          {
+            "name": "modulo m",
+            "call": "hashIndex('zzzzzz', 5)",
+            "expect": 2
+          }
+        ],
+        "hints": [
+          "Start with let h = 0; then loop over the string's characters.",
+          "For each character, do h = (h * 31 + ch.charCodeAt(0)) >>> 0.",
+          "After the loop, return h % m."
+        ]
+      },
+      "source_material_ids": [
+        21,
+        30
+      ],
+      "assessments": [
+        {
+          "kind": "code",
+          "prompt": "Implement the polynomial hash function as described in the code block. Your function must be deterministic and use the whole key.",
+          "bloom": "create",
+          "grader": "deterministic",
+          "answer_key": {
+            "reference_solution": "function hashIndex(key, m) {\n  let h = 0;\n  for (const ch of String(key)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;\n  return h % m;\n}",
+            "tests": [
+              "cat maps to a bucket",
+              "dog maps to a different bucket",
+              "deterministic",
+              "modulo m"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "The function applies the polynomial hash and reduces modulo m.",
+          "id": "q4"
+        }
+      ]
+    },
+    {
+      "id": "b10",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Look at the chaining example on slide 9. Why do you think the slide chose m = 7, a prime, rather than m = 8? What would happen to the distribution of these particular keys if m were 8?"
+      },
+      "source_material_ids": [
+        21,
+        25
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.002902,
+  "repairs": [
+    "moved assessments out of a code payload to the block",
+    "cites: b5: the prose names slide 5; cited chunk 21",
+    "cites: q1: cited chunk 27 (Slide 11), found by its question and answer",
+    "cites: q2: cited chunk 31 (Slide 15), found by its question and answer",
+    "cites: b3: the analogy cited nothing; cited chunks 31, 21 (best match for its text)",
+    "cites: b8: the quiz cited nothing; cited chunks 27, 31 (its questions' sources)",
+    "code-test: applied crew/code/hash_tables_from_keys_to_buckets-b9 (reference 4/4, starter fails 4/4)"
+  ]
+}

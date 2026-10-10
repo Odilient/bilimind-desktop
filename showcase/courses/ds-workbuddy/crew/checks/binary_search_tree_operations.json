@@ -1,0 +1,179 @@
+{
+  "lesson": "binary_search_tree_operations",
+  "round": 2,
+  "at": "2026-10-10T21:12:21.419Z",
+  "total": 23,
+  "passed": 22,
+  "failed": [
+    {
+      "rule": "Q11 code runs",
+      "block": 4,
+      "item": null,
+      "detail": "reference fails 'search finds inserted key': SyntaxError: Unexpected identifier 'root'; reference fails 'search returns null for absent key': SyntaxError: Unexpected identifier 'root'; reference fails 'delete leaf': SyntaxError: Unexpected identifier 'root'; reference fails 'delete node with two children': SyntaxError: Unexpected identifier 'root'",
+      "suggestion": "Run `code-test --lesson binary_search_tree_operations --block 4 --dump`, fix solution.js / starter.js / tests.json in crew/code/binary_search_tree_operations-b4/, then `code-test --lesson binary_search_tree_operations --block 4 --apply`. If it cannot be fixed: `code-test --lesson binary_search_tree_operations --block 4 --disable --reason \"<why>\"`."
+    }
+  ],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "6 blocks and 4 items have unique ids"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "checklist payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code item valid",
+      "block": 4,
+      "item": "q1"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "ordering item valid",
+      "block": 5,
+      "item": "q2"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 5,
+      "item": "q3"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 5,
+      "item": "q4"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "key_points payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "procedural: has walkthrough, checklist"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "3 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "2 higher-order, 1 remember of 4"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 4 items (max 1)"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 5,
+      "item": "q3"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q7 ordering",
+      "ok": true,
+      "detail": "3 steps, scrambled",
+      "block": 5,
+      "item": "q2"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 5,
+      "item": "q4"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q11 code runs",
+      "ok": false,
+      "detail": "reference fails 'search finds inserted key': SyntaxError: Unexpected identifier 'root'; reference fails 'search returns null for absent key': SyntaxError: Unexpected identifier 'root'; reference fails 'delete leaf': SyntaxError: Unexpected identifier 'root'; reference fails 'delete node with two children': SyntaxError: Unexpected identifier 'root'",
+      "block": 4,
+      "suggestion": "Run `code-test --lesson binary_search_tree_operations --block 4 --dump`, fix solution.js / starter.js / tests.json in crew/code/binary_search_tree_operations-b4/, then `code-test --lesson binary_search_tree_operations --block 4 --apply`. If it cannot be fixed: `code-test --lesson binary_search_tree_operations --block 4 --disable --reason \"<why>\"`."
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "16 chunk citations on 4 blocks resolve, 10 slide/page mentions exist"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "2 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "741 teaching words for a 35-minute lesson (target about 1050, minimum 525)"
+    },
+    {
+      "lesson": "binary_search_tree_operations",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

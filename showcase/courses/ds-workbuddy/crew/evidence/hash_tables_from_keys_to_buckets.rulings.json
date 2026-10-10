@@ -1,0 +1,3 @@
+[
+  {"item": "q3", "verdict": "not_covered", "quote": "Primary clustering: occupied runs grow and attract more collisions", "reason": "Slides describe primary clustering but not double hashing's mechanism for reducing it."}
+]
