@@ -13,7 +13,7 @@
 
 ## What WorkBuddy did, in order
 
-From WorkBuddy's session record (every tool call, in order: [session-tool-calls.json](session-tool-calls.json)):
+From WorkBuddy's session record. [session-tool-calls.json](session-tool-calls.json) has every tool call in order, with its input (the exact `bilimind` commands, the sub-agent prompts) and the start of its result; the home folder is shortened to `~`:
 
 | Time (MYT) | WorkBuddy tool | What happened |
 |---|---|---|
@@ -44,10 +44,11 @@ the run.
 | Narration | 23.2 min |
 | Anki cards | 13 |
 | AI cost of the CLI's calls (BiliMind free) | $0.0126 |
-| Wall time (crew log, `init` to `build`) | 13 min |
+| Wall time (crew log, `init` to `build`) | 12 min 58 s (REPORT.md's 12 min 20 s stops at the step before `build`) |
 
 ## For comparison: the same sentence without naming the skill
 
 Ten minutes earlier (04:56 MYT) we sent the same sentence without "Use the bilimind skill". WorkBuddy's agent did not
 pick the skill. It read the PDFs itself and wrote one static HTML study guide: no checks against the slides, no tested
 code, no narration, no exports. So in WorkBuddy, BiliMind is called by name (or by picking the BiliMind Crew expert).
+That session's tool calls and the page it wrote: [without-skill/](without-skill/).

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSC2103 Data Structures - Final Exam Study Guide</title>
+<style>
+  :root {
+    --bg: #fafbfc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1a202c;
+    --text-muted: #64748b;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --orange: #d97706;
+    --orange-light: #fef3c7;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.8rem;
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  h2 {
+    font-size: 1.4rem;
+    color: var(--text);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 8px;
+    margin-top: 36px;
+    margin-bottom: 16px;
+  }
+  h3 {
+    font-size: 1.15rem;
+    color: var(--text);
+    margin-top: 24px;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 1rem;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-orange { background: var(--orange-light); color: var(--orange); }
+  .badge-purple { background: var(--purple-light); color: var(--purple); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th {
+    background: #f1f5f9;
+    font-weight: 600;
+  }
+  tr:nth-child(even) td { background: #f8fafc; }
+  code {
+    font-family: "Fira Code", "Consolas", monospace;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  pre {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 12px 0;
+  }
+  pre code { background: none; padding: 0; }
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: var(--accent-light);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  .callout-warn {
+    border-left: 4px solid var(--orange);
+    background: var(--orange-light);
+  }
+  .callout-danger {
+    border-left: 4px solid var(--red);
+    background: var(--red-light);
+  }
+  .callout-success {
+    border-left: 4px solid var(--green);
+    background: var(--green-light);
+  }
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .day-card {
+    border-radius: 10px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+  }
+  .day-1 { border-left: 5px solid var(--accent); }
+  .day-2 { border-left: 5px solid var(--red); }
+  .day-3 { border-left: 5px solid var(--green); }
+  .day-4 { border-left: 5px solid var(--orange); }
+  .day-card h3 { margin-top: 0; }
+  .formula-box {
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .q-block {
+    margin: 20px 0;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .q-header {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .answer {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .marks {
+    float: right;
+    color: var(--red);
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  ul, ol { margin-left: 24px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .toc ol { margin-left: 20px; }
+  .priority-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .tag-high { background: var(--red-light); color: var(--red); }
+  .tag-med { background: var(--orange-light); color: var(--orange); }
+  .tag-low { background: var(--green-light); color: var(--green); }
+  .ascii-tree {
+    font-family: monospace;
+    white-space: pre;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    margin: 12px 0;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+  }
+  .num-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+</style>
+</head>
+<body>
+
+<h1>CSC2103 Data Structures<br>Final Exam Study Guide</h1>
+
+<div class="callout">
+  <strong>Exam:</strong> Wednesday 14 October 2026, 9:00 AM &nbsp;|&nbsp;
+  <strong>Duration:</strong> 2 hours &nbsp;|&nbsp;
+  <strong>Total:</strong> 100 marks (50% of final grade)<br>
+  <strong>Format:</strong> 5 questions, answer ALL. Code in JavaScript or pseudocode.
+</div>
+
+<div class="toc">
+  <h3 style="margin-top:0">Contents</h3>
+  <ol>
+    <li><a href="#schedule">3-Day Study Schedule</a></li>
+    <li><a href="#topic1">Topic 1: Algorithm Analysis, Arrays & Linked Lists</a> <span class="priority-tag tag-med">15 marks</span></li>
+    <li><a href="#topic2">Topic 2: Hash Tables</a> <span class="priority-tag tag-high">30 marks</span></li>
+    <li><a href="#topic3">Topic 3: BST & AVL Trees</a> <span class="priority-tag tag-med">15 marks</span></li>
+    <li><a href="#topic4">Topic 4: Binary Heaps</a> <span class="priority-tag tag-high">30 marks</span></li>
+    <li><a href="#solutions">Past Paper: Full Worked Solutions</a></li>
+    <li><a href="#quickref">Quick Reference Card (memorise these)</a></li>
+  </ol>
+</div>
+
+<!-- ============ SCHEDULE ============ -->
+<h2 id="schedule">1. Three-Day Study Schedule</h2>
+<p>You have 45 minutes per day for Sunday, Monday, and Tuesday, plus a quick review Wednesday morning before the 9 AM exam. Here's how to use every minute:</p>
+
+<div class="schedule-grid">
+
+  <div class="day-card day-1">
+    <h3>Day 1 &mdash; Sunday (45 min): Foundations + Heaps</h3>
+    <p><strong>Why:</strong> Big O and arrays are foundational; heaps are 30 marks. Knock out the biggest topic while you're fresh.</p>
+    <ol>
+      <li><strong>0&ndash;10 min:</strong> Skim Topic 1 cheat notes (below) &mdash; Big O definition, growth rate ranking, amortised append, array vs linked list table.</li>
+      <li><strong>10&ndash;40 min:</strong> Deep-dive Topic 4 (Heaps). Trace through the insert walkthrough and extract-min walkthrough by hand. Draw the array after each step.</li>
+      <li><strong>40&ndash;45 min:</strong> Attempt past paper Q3 parts (a)&ndash;(c) from memory. Check against solutions.</li>
+    </ol>
+  </div>
+
+  <div class="day-card day-2">
+    <h3>Day 2 &mdash; Monday (45 min): Hash Tables</h3>
+    <p><strong>Why:</strong> Hashing is 30 marks &mdash; it deserves a full session. This is where you win or lose the exam.</p>
+    <ol>
+      <li><strong>0&ndash;15 min:</strong> Read Topic 2 cheat notes. Memorise: load factor formula, linear probing probe sequence, Knuth's expected-probes formulas, chaining vs open addressing table.</li>
+      <li><strong>15&ndash;30 min:</strong> By hand, insert the keys from past paper Q2(b) into a size-13 table with linear probing. Then do it again with chaining. Verify against solutions.</li>
+      <li><strong>30&ndash;45 min:</strong> Attempt Q2(d) and Q2(e) &mdash; explain primary clustering and compute expected probes for &alpha; = 0.5 and 0.9.</li>
+    </ol>
+  </div>
+
+  <div class="day-card day-3">
+    <h3>Day 3 &mdash; Tuesday (45 min): BST/AVL + Full Paper</h3>
+    <p><strong>Why:</strong> Close the last topic, then simulate the exam.</p>
+    <ol>
+      <li><strong>0&ndash;15 min:</strong> Read Topic 3 cheat notes. By hand: insert 45,25,65,15,35,55,75,30 into a BST. Write all three traversals. Then delete 25 using the in-order successor.</li>
+      <li><strong>15&ndash;35 min:</strong> Full past paper, timed at 20 minutes. Don't look at solutions. Focus on Q1 and Q4 (the shorter questions you haven't practised yet).</li>
+      <li><strong>35&ndash;45 min:</strong> Mark yourself against the solutions. Note weak spots. Re-read those sections.</li>
+    </ol>
+  </div>
+
+  <div class="day-card day-4">
+    <h3>Day 4 &mdash; Wednesday 8:30 AM (15 min): Rapid Review</h3>
+    <ol>
+      <li><strong>5 min:</strong> Skim the Quick Reference Card (section 7 below). Memorise every formula.</li>
+      <li><strong>5 min:</strong> Re-read the linear probing and chaining tables from Q2 solutions.</li>
+      <li><strong>5 min:</strong> Re-read the heap insert and extract-min walkthroughs. You're ready. Go.</li>
+    </ol>
+  </div>
+
+</div>
+
+<!-- ============ TOPIC 1 ============ -->
+<h2 id="topic1">2. Algorithm Analysis, Arrays & Linked Lists <span class="badge badge-green">15 marks</span></h2>
+
+<div class="card">
+
+<h3>Big O Notation &mdash; Formal Definition</h3>
+<div class="formula-box">
+  f(n) = O(g(n)) &nbsp;iff&nbsp; &exist; c &gt; 0, n&#8320; &ge; 0 &nbsp;such that&nbsp; |f(n)| &le; c&middot;g(n) &nbsp;for all n &ge; n&#8320;
+</div>
+<p>This means <strong>g(n) is an upper bound</strong> on f's growth rate. In practice: drop constants and lower-order terms.</p>
+<p><strong>Example:</strong> 3n&sup2; + 5n + 2 = O(n&sup2;). Proof: for n &ge; 1, 3n&sup2; + 5n + 2 &le; 3n&sup2; + 5n&sup2; + 2n&sup2; = 10n&sup2;, so c = 10, n&#8320; = 1.</p>
+
+<div class="callout callout-warn">
+  <strong>Exam tip:</strong> To prove f(n) = O(g(n)), you must give specific values of c and n&#8320; and show the inequality holds. Don't just say "drop the constants."
+</div>
+
+<h3>Big Omega and Big Theta</h3>
+<table>
+  <tr><th>Notation</th><th>Meaning</th><th>Informally</th></tr>
+  <tr><td>f(n) = O(g(n))</td><td>f grows no faster than g</td><td>Upper bound</td></tr>
+  <tr><td>f(n) = &Omega;(g(n))</td><td>f grows at least as fast as g</td><td>Lower bound</td></tr>
+  <tr><td>f(n) = &Theta;(g(n))</td><td>Both O and &Omega;</td><td>Tight bound</td></tr>
+</table>
+
+<h3>Common Growth Rates (memorise!)</h3>
+<table>
+  <tr><th>Order</th><th>Name</th><th>Example</th><th>n=1000</th></tr>
+  <tr><td>O(1)</td><td>Constant</td><td>Read a[i]</td><td>1</td></tr>
+  <tr><td>O(log n)</td><td>Logarithmic</td><td>Binary search</td><td>&approx;10</td></tr>
+  <tr><td>O(n)</td><td>Linear</td><td>Linear search</td><td>1,000</td></tr>
+  <tr><td>O(n log n)</td><td>Linearithmic</td><td>Merge sort, heapsort</td><td>&approx;10,000</td></tr>
+  <tr><td>O(n&sup2;)</td><td>Quadratic</td><td>Two nested loops</td><td>1,000,000</td></tr>
+  <tr><td>O(2&#8319;)</td><td>Exponential</td><td>Try every subset</td><td>&approx;10&#179;&#8304;&#185;</td></tr>
+</table>
+
+<h3>Analysing Loops &mdash; Rules</h3>
+<ul>
+  <li><strong>Sequential blocks add:</strong> O(n) + O(n&sup2;) = O(n&sup2;) (take the dominant term)</li>
+  <li><strong>Nested loops multiply:</strong> n &times; n iterations &rarr; O(n&sup2;)</li>
+  <li><strong>Doubling counter:</strong> i = 1, 2, 4, 8, &hellip; &rarr; log&#8322;(n) iterations &rarr; O(log n)</li>
+</ul>
+
+<div class="callout">
+  <strong>Exam pattern:</strong> <code>for (i=1; i&lt;n; i*=2) for (j=0; j&lt;n; j++)</code> &rarr; outer loop O(log n) &times; inner loop O(n) = <strong>O(n log n)</strong>
+</div>
+
+<h3>Static Arrays</h3>
+<ul>
+  <li>Contiguous memory block; access by index is <strong>O(1)</strong> (address = base + i &times; element_size)</li>
+  <li>Fixed capacity; insert/delete in middle shifts elements: <strong>O(n)</strong></li>
+  <li>Good cache locality</li>
+</ul>
+
+<h3>Dynamic Arrays</h3>
+<ul>
+  <li>Built on a fixed array plus a capacity; grows when full (commonly doubles)</li>
+  <li><strong>Append is O(1) amortised:</strong> one append can cost O(n) (copy), but n appends copy at most 1+2+4+&hellip;+n/2 &lt; n elements total, so total work = O(n), per-append = O(1) amortised</li>
+  <li>Growing by a constant amount (e.g., +10) gives O(n) per append on average &mdash; avoid this</li>
+  <li><strong>Tripling</strong> instead of doubling: still O(1) amortised (geometric series argument)</li>
+</ul>
+
+<h3>Linked Lists</h3>
+<ul>
+  <li>Nodes with value + next reference; singly, doubly, or circular</li>
+  <li>Insert/delete at a known node: <strong>O(1)</strong></li>
+  <li>Access k-th element: <strong>O(n)</strong> (walk from head)</li>
+  <li>Deleting last node of a singly linked list: O(n) (need the node before it)</li>
+</ul>
+
+<h3>Linked List vs Dynamic Array &mdash; Key Table</h3>
+<table>
+  <tr><th>Operation</th><th>Linked List</th><th>Dynamic Array</th></tr>
+  <tr><td>Access by index</td><td>&Theta;(n)</td><td>&Theta;(1)</td></tr>
+  <tr><td>Insert/delete at beginning</td><td>&Theta;(1)</td><td>&Theta;(n)</td></tr>
+  <tr><td>Insert/delete at end</td><td>&Theta;(1) if tail known, else &Theta;(n)</td><td>&Theta;(1) amortised</td></tr>
+  <tr><td>Insert/delete in middle</td><td>search + &Theta;(1)</td><td>&Theta;(n)</td></tr>
+  <tr><td>Wasted space</td><td>&Theta;(n) references</td><td>&Theta;(n) spare capacity</td></tr>
+</table>
+
+<div class="callout callout-success">
+  <strong>Reverse a linked list (past paper Q4b):</strong> Walk the list with three pointers (prev, curr, next). Reverse each link. Time: O(n), Space: O(1).
+</div>
+
+<pre><code>function reverse(head) {
+  let prev = null, curr = head;
+  while (curr !== null) {
+    let next = curr.next;   // save next
+    curr.next = prev;       // reverse link
+    prev = curr;            // advance
+    curr = next;
+  }
+  return prev;              // new head
+}</code></pre>
+
+</div>
+
+<!-- ============ TOPIC 2 ============ -->
+<h2 id="topic2">3. Hash Tables <span class="badge badge-red">30 marks</span></h2>
+
+<div class="card">
+
+<div class="callout callout-danger">
+  <strong>This is the biggest topic on the exam (30 marks). Spend extra time here.</strong> You must be able to trace insertions with linear probing AND chaining by hand.
+</div>
+
+<h3>The Dictionary (Map) ADT</h3>
+<p>Operations: <code>insert(key, value)</code>, <code>search(key)</code>, <code>delete(key)</code></p>
+<table>
+  <tr><th>Implementation</th><th>Search</th><th>Insert</th></tr>
+  <tr><td>Unsorted array</td><td>O(n)</td><td>O(1)</td></tr>
+  <tr><td>Sorted array</td><td>O(log n)</td><td>O(n)</td></tr>
+  <tr><td>Balanced BST</td><td>O(log n)</td><td>O(log n)</td></tr>
+  <tr><td><strong>Hash table</strong></td><td><strong>O(1) avg</strong></td><td><strong>O(1) avg</strong></td></tr>
+</table>
+
+<h3>How It Works</h3>
+<ul>
+  <li>Array of <strong>m buckets</strong>; hash function maps key &rarr; index: <code>index = hash(key) mod m</code></li>
+  <li>If every key gets its own bucket, search is a single array access</li>
+  <li><strong>Collision</strong>: two different keys hash to the same bucket (unavoidable by pigeonhole principle)</li>
+</ul>
+
+<h3>Good Hash Function Properties</h3>
+<ul>
+  <li><strong>Deterministic:</strong> same key &rarr; same index, always</li>
+  <li><strong>Uniform:</strong> spreads keys evenly across buckets</li>
+  <li><strong>Fast</strong> to compute, uses the whole key</li>
+  <li>Division method: h(k) = k mod m (choose m prime, not close to power of 2)</li>
+  <li>Multiplication method: h(k) = &lfloor;m &middot; (kA mod 1)&rfloor; with A &approx; (&radic;5 &minus; 1)/2 &approx; 0.618</li>
+  <li>Strings: polynomial hash h = h &times; 31 + code(c) for each character</li>
+</ul>
+
+<h3>Load Factor</h3>
+<div class="formula-box">
+  &alpha; = n / m &nbsp; (n = number of entries, m = number of buckets)
+</div>
+<ul>
+  <li>As &alpha; grows, collisions grow and operations slow down</li>
+  <li>Typical thresholds: 0.6&ndash;0.75 for open addressing; 1&ndash;3 for chaining</li>
+  <li>Java HashMap resizes at &alpha; &gt; 0.75</li>
+  <li><strong>Resize (rehash):</strong> allocate bigger table (double), re-insert every entry: O(n), but O(1) amortised per insert</li>
+</ul>
+
+<h3>Collision Resolution: Separate Chaining</h3>
+<ul>
+  <li>Each bucket holds a linked list of entries that hash there</li>
+  <li>Insert: hash, add to chain: O(1)</li>
+  <li>Search/delete: hash, scan one chain: <strong>O(1 + &alpha;)</strong> expected</li>
+  <li>&alpha; may exceed 1 (chains get longer)</li>
+  <li>Worst case: all keys in one chain &rarr; O(n)</li>
+  <li>Deletion is simple (remove from list)</li>
+</ul>
+
+<h3>Collision Resolution: Open Addressing</h3>
+<ul>
+  <li>Every entry stored in the bucket array itself; needs &alpha; &le; 1</li>
+  <li>On collision, follow a <strong>probe sequence</strong> h(k, 0), h(k, 1), h(k, 2), &hellip; until empty slot</li>
+</ul>
+<table>
+  <tr><th>Method</th><th>Probe sequence</th></tr>
+  <tr><td>Linear probing</td><td>h(k, i) = (h(k) + i) mod m</td></tr>
+  <tr><td>Quadratic probing</td><td>h(k, i) = (h(k) + c&#8321;i + c&#8322;i&sup2;) mod m</td></tr>
+  <tr><td>Double hashing</td><td>h(k, i) = (h&#8321;(k) + i&middot;h&#8322;(k)) mod m, h&#8322;(k) &ne; 0</td></tr>
+</table>
+
+<div class="callout callout-warn">
+  <strong>Why h&#8322;(k) must never be 0:</strong> If h&#8322;(k) = 0, then h(k, i) = h&#8321;(k) for all i &mdash; the probe sequence never leaves the home bucket, so every collision becomes a permanent failure.
+</div>
+
+<h3>Linear Probing &mdash; Worked Example</h3>
+<p>m = 10, h(k) = k mod 10. Insert: 89, 18, 49, 58, 69</p>
+<pre><code>89 &rarr; slot 9 (empty, 1 probe)    [_, _, _, _, _, _, _, _, _, 89]
+18 &rarr; slot 8 (empty, 1 probe)    [_, _, _, _, _, _, _, _, 18, 89]
+49 &rarr; slot 9 taken, try 0: empty  [49, _, _, _, _, _, _, _, 18, 89]   2 probes
+58 &rarr; 8,9,0 taken, try 1: empty  [49, 58, _, _, _, _, _, _, 18, 89]  4 probes
+69 &rarr; 9,0,1 taken, try 2: empty  [49, 58, 69, _, _, _, _, _, 18, 89] 4 probes</code></pre>
+
+<div class="callout callout-danger">
+  <strong>Primary clustering:</strong> Linear probing creates contiguous runs of occupied slots. These runs grow and attract more collisions (any key that hashes into the run must scan through it). Double hashing reduces clustering because the probe step depends on the key, so different keys take different paths.
+</div>
+
+<h3>Knuth's Expected Probes (linear probing) &mdash; MEMORISE</h3>
+<div class="formula-box">
+  Successful search: &nbsp; &frac12;(1 + 1/(1 &minus; &alpha;))<br>
+  Unsuccessful search/insert: &nbsp; &frac12;(1 + 1/(1 &minus; &alpha;)&sup2;)
+</div>
+<table>
+  <tr><th>Load factor &alpha;</th><th>Successful</th><th>Unsuccessful</th></tr>
+  <tr><td>0.50</td><td>1.5</td><td>2.5</td></tr>
+  <tr><td>0.75</td><td>2.5</td><td>8.5</td></tr>
+  <tr><td>0.90</td><td>5.5</td><td>50.5</td></tr>
+</table>
+<p>Probes explode as &alpha; &rarr; 1. Keep &alpha; well below 1 for open addressing.</p>
+
+<h3>Chaining vs Open Addressing</h3>
+<table>
+  <tr><th></th><th>Separate chaining</th><th>Open addressing</th></tr>
+  <tr><td>Where entries live</td><td>Lists outside the array</td><td>Inside the array</td></tr>
+  <tr><td>Load factor</td><td>Can exceed 1</td><td>Must stay &lt; 1</td></tr>
+  <tr><td>Deletion</td><td>Simple: remove from list</td><td>Needs tombstone marker</td></tr>
+  <tr><td>Cache behaviour</td><td>Pointer chasing</td><td>Good (contiguous)</td></tr>
+  <tr><td>Average search/insert/delete</td><td>O(1)</td><td>O(1)</td></tr>
+  <tr><td>Worst case</td><td>O(n)</td><td>O(n)</td></tr>
+</table>
+
+</div>
+
+<!-- ============ TOPIC 3 ============ -->
+<h2 id="topic3">4. BST & AVL Trees <span class="badge badge-purple">15 marks</span></h2>
+
+<div class="card">
+
+<h3>Tree Vocabulary</h3>
+<ul>
+  <li><strong>Root:</strong> top node; <strong>Leaf:</strong> node with no children</li>
+  <li><strong>Depth of a node:</strong> number of edges from the root</li>
+  <li><strong>Height of a tree:</strong> number of edges on the longest root-to-leaf path</li>
+  <li><strong>Binary tree:</strong> every node has at most 2 children (left, right)</li>
+</ul>
+
+<h3>The BST Property</h3>
+<div class="formula-box">
+  For every node: all keys in the left subtree &lt; node key &lt; all keys in the right subtree
+</div>
+<p>An in-order traversal visits keys in sorted order.</p>
+
+<div class="ascii-tree">        50
+       /  \
+      30    70
+     / \   / \
+    20 40 60  80
+
+Insert order: 50, 30, 70, 20, 40, 60, 80</div>
+
+<h3>BST Operations &mdash; all cost O(h), where h = height</h3>
+<ul>
+  <li><strong>Search:</strong> compare key with node; go left if smaller, right if larger; O(h)</li>
+  <li><strong>Insert:</strong> search for the key, attach a new leaf where the search falls off; O(h)</li>
+  <li><strong>Delete:</strong> three cases (see below); O(h)</li>
+</ul>
+
+<h3>Deleting from a BST &mdash; Three Cases</h3>
+<ol>
+  <li><strong>Leaf:</strong> just remove it</li>
+  <li><strong>One child:</strong> replace the node by its child</li>
+  <li><strong>Two children:</strong> copy the in-order successor (smallest key in right subtree) into the node, then delete the successor (which has at most one child). The in-order predecessor (largest in left subtree) works too.</li>
+</ol>
+<div class="callout">
+  <strong>Example:</strong> Deleting 50 from the tree above: the in-order successor is 60 (smallest in right subtree). Put 60 at the root, then delete the original 60 node (it's a leaf).
+</div>
+
+<h3>Tree Traversals (memorise the order!)</h3>
+<table>
+  <tr><th>Traversal</th><th>Order</th><th>Result (tree above)</th></tr>
+  <tr><td><strong>In-order</strong></td><td>left, node, right</td><td>20 30 40 50 60 70 80</td></tr>
+  <tr><td><strong>Pre-order</strong></td><td>node, left, right</td><td>50 30 20 40 70 60 80</td></tr>
+  <tr><td><strong>Post-order</strong></td><td>left, right, node</td><td>20 40 30 60 80 70 50</td></tr>
+  <tr><td><strong>Level-order</strong></td><td>BFS, level by level</td><td>50 30 70 20 40 60 80</td></tr>
+</table>
+<ul>
+  <li>Pre-order copies a tree; post-order deletes/evaluates it; in-order sorts a BST</li>
+</ul>
+
+<h3>Why Plain BSTs Are Dangerous</h3>
+<ul>
+  <li>Balanced tree: h = O(log n) &rarr; all operations O(log n)</li>
+  <li>Inserting sorted keys (1, 2, 3, &hellip;) builds a chain: h = n&minus;1 &rarr; all operations O(n)</li>
+  <li><strong>Worst case: O(n) for search, insert, and delete</strong></li>
+</ul>
+
+<h3>AVL Trees &mdash; Self-Balancing</h3>
+<ul>
+  <li>Named after Adelson-Velsky and Landis (1962)</li>
+  <li><strong>Balance factor:</strong> BF(X) = height(right subtree) &minus; height(left subtree)</li>
+  <li><strong>AVL invariant:</strong> BF &isin; {&minus;1, 0, +1} for every node</li>
+  <li>Height stays below ~1.44 log&#8322; n, so every operation is <strong>O(log n) worst case</strong></li>
+</ul>
+
+<h3>Rotations</h3>
+<div class="ascii-tree">    y                    x
+   / \   rotate right  / \
+  x   C  --------->   A   y
+ / \    <---------       / \
+A   B   rotate left    B   C</div>
+<p>A rotation changes shape but keeps the in-order sequence (A, x, B, y, C). Only O(1) links change.</p>
+
+<h3>The Four Imbalance Cases (after insert)</h3>
+<table>
+  <tr><th>Case</th><th>Where new key went</th><th>Fix</th></tr>
+  <tr><td>Left-Left</td><td>Left subtree of left child</td><td>Single right rotation</td></tr>
+  <tr><td>Right-Right</td><td>Right subtree of right child</td><td>Single left rotation</td></tr>
+  <tr><td>Left-Right</td><td>Right subtree of left child</td><td>Left rotation on child, then right rotation</td></tr>
+  <tr><td>Right-Left</td><td>Left subtree of right child</td><td>Right rotation on child, then left rotation</td></tr>
+</table>
+<div class="callout">
+  <strong>Example:</strong> Insert 30, 20, 10 &rarr; BF(30) = &minus;2 (Left-Left) &rarr; one right rotation at 30 makes 20 the root.
+</div>
+
+<h3>BST vs AVL Comparison</h3>
+<table>
+  <tr><th></th><th>Plain BST</th><th>AVL tree</th></tr>
+  <tr><td>Search</td><td>O(log n) avg, O(n) worst</td><td>O(log n) worst</td></tr>
+  <tr><td>Insert</td><td>O(log n) avg, O(n) worst</td><td>O(log n), &le;1 rotation</td></tr>
+  <tr><td>Delete</td><td>O(log n) avg, O(n) worst</td><td>O(log n), may rotate at every level</td></tr>
+  <tr><td>Extra data per node</td><td>None</td><td>Height or balance factor</td></tr>
+</table>
+
+</div>
+
+<!-- ============ TOPIC 4 ============ -->
+<h2 id="topic4">5. Binary Heaps <span class="badge badge-red">30 marks</span></h2>
+
+<div class="card">
+
+<div class="callout callout-danger">
+  <strong>This is the other 30-mark topic.</strong> You must be able to trace insert (sift-up) and extract-min (sift-down) step by step. Practice by drawing the array after each operation.
+</div>
+
+<h3>Priority Queue ADT</h3>
+<p>Each element has a priority; highest priority leaves first. Operations: <code>insert</code>, <code>peek/find-min</code>, <code>extract-min</code>.</p>
+<p><strong>Applications:</strong> CPU/job scheduling, Dijkstra's shortest paths, Prim's MST, event-driven simulation, heapsort, top-k in a stream.</p>
+
+<h3>Binary Heap &mdash; Two Properties</h3>
+<ol>
+  <li><strong>Shape property:</strong> Complete binary tree &mdash; every level full except possibly the last, which fills left to right</li>
+  <li><strong>Heap property:</strong> Min-heap: every parent &le; its children (min at root). Max-heap: every parent &ge; its children (max at root).</li>
+</ol>
+<div class="callout callout-warn">
+  A heap is <strong>not sorted</strong>. Siblings have no ordering between them. Only the parent-child relationship is constrained.
+</div>
+
+<h3>Array Representation &mdash; Index Formulas (memorise!)</h3>
+<div class="formula-box">
+  Parent of i: &nbsp; &lfloor;(i &minus; 1) / 2&rfloor;<br>
+  Left child of i: &nbsp; 2i + 1<br>
+  Right child of i: &nbsp; 2i + 2
+</div>
+<p>Store nodes level by level; index 0 = root. No pointers needed because the complete shape leaves no gaps.</p>
+
+<div class="ascii-tree">  array: [1, 3, 6, 5, 9, 8]  (index 0 = root)
+
+         1
+        / \
+       3   6
+      / \  /
+     5  9 8</div>
+
+<h3>Insert: Sift-Up &mdash; O(log n)</h3>
+<ol>
+  <li>Add the new element at the <strong>end</strong> of the array (maintains shape)</li>
+  <li>Compare with parent; if smaller, <strong>swap</strong> (sift up)</li>
+  <li>Repeat until parent &le; element (or reach root)</li>
+</ol>
+<p>At most one swap per level: O(log n) worst case.</p>
+
+<h4>Insert walkthrough (insert 2 into [1, 3, 6, 5, 9, 8])</h4>
+<pre><code>Place 2 at index 6; parent is index 2 (value 6)
+2 &lt; 6: swap &rarr; [1, 3, 2, 5, 9, 8, 6]
+Now at index 2; parent is index 0 (value 1); 2 &gt; 1: stop
+Result: [1, 3, 2, 5, 9, 8, 6]</code></pre>
+
+<h3>Extract-Min: Sift-Down &mdash; O(log n)</h3>
+<ol>
+  <li>Save the root (it's the minimum)</li>
+  <li>Move the <strong>last element</strong> to the root (maintains shape)</li>
+  <li>Compare with children; swap with the <strong>smaller child</strong></li>
+  <li>Repeat until both children &ge; element (or it's a leaf)</li>
+</ol>
+
+<h4>Extract-min walkthrough (from [1, 3, 2, 5, 9, 8, 6])</h4>
+<pre><code>Remove root 1; move last (6) to root &rarr; [6, 3, 2, 5, 9, 8]
+Children of index 0: 3 and 2; smaller is 2: swap &rarr; [2, 3, 6, 5, 9, 8]
+Index 2 has one child (8); 6 &lt; 8: stop
+Result: [2, 3, 6, 5, 9, 8]   cost O(log n)</code></pre>
+
+<h3>Build-Heap (Bottom-Up, Floyd 1964) &mdash; O(n)</h3>
+<ul>
+  <li>For i from &lfloor;n/2&rfloor; &minus; 1 down to 0: sift-down(i)</li>
+  <li>Leaves are already heaps; most nodes are near the bottom and sift down only a little</li>
+  <li>The sum of all node heights is O(n), so build-heap is <strong>O(n)</strong></li>
+  <li>Inserting n keys one at a time is O(n log n) worst case &mdash; bottom-up is faster</li>
+</ul>
+
+<h3>Heapsort &mdash; O(n log n), in-place, not stable</h3>
+<ol>
+  <li>Build a max-heap from the array: O(n)</li>
+  <li>Repeat n&minus;1 times: swap root with last element, shrink heap by one, sift-down the new root</li>
+</ol>
+<p>O(n log n) in every case. Sorts in place (O(1) extra memory). Not stable.</p>
+
+<h3>Complexity Summary Table</h3>
+<table>
+  <tr><th>Operation</th><th>Binary heap</th><th>Unsorted array</th><th>Sorted array</th></tr>
+  <tr><td>find-min</td><td>O(1)</td><td>O(n)</td><td>O(1)</td></tr>
+  <tr><td>insert</td><td>O(log n)</td><td>O(1)</td><td>O(n)</td></tr>
+  <tr><td>extract-min</td><td>O(log n)</td><td>O(n)</td><td>O(1)*</td></tr>
+  <tr><td>decrease-key</td><td>O(log n)</td><td>O(1)</td><td>O(n)</td></tr>
+  <tr><td>build from n items</td><td>O(n)</td><td>O(1)</td><td>O(n log n)</td></tr>
+</table>
+<p><small>*when sorted in decreasing order so minimum is at the end.</small></p>
+
+</div>
+
+<!-- ============ PAST PAPER SOLUTIONS ============ -->
+<h2 id="solutions">6. Past Paper &mdash; Full Worked Solutions</h2>
+
+<div class="callout callout-danger">
+  The past paper has 5 questions worth 100 marks total. Below are complete worked solutions. <strong>Try each question yourself first</strong>, then check your answer.
+</div>
+
+<!-- Q1 -->
+<div class="q-block">
+  <div class="q-header">Question 1 (15 marks): Algorithm analysis and arrays <span class="marks">[15]</span></div>
+
+  <h4>(a) Show that f(n) = 4n&sup2; + 10n + 7 is O(n&sup2;). State c and n&#8320;. <span class="marks">[5]</span></h4>
+  <div class="answer">
+    <p>For n &ge; 1: 4n&sup2; + 10n + 7 &le; 4n&sup2; + 10n&sup2; + 7n&sup2; = 21n&sup2;.</p>
+    <p>So choose <strong>c = 21, n&#8320; = 1</strong>. For all n &ge; 1: |f(n)| &le; 21&middot;n&sup2; = c&middot;g(n). &check;</p>
+    <p><em>Alternatively:</em> c = 21, n&#8320; = 1. (Any valid c and n&#8320; with justification is acceptable.)</p>
+  </div>
+
+  <h4>(b) Time complexity of: <code>for (i=1; i&lt;n; i*=2) for (j=0; j&lt;n; j++) count++;</code> <span class="marks">[4]</span></h4>
+  <div class="answer">
+    <p>Outer loop: i doubles each iteration (1, 2, 4, &hellip;), so it runs <strong>log&#8322;(n)</strong> times = O(log n).</p>
+    <p>Inner loop: runs n times = O(n).</p>
+    <p>Nested loops multiply: <strong>O(n log n)</strong>.</p>
+    <p>Justification: total iterations = log&#8322;(n) &times; n = n&middot;log&#8322;(n).</p>
+  </div>
+
+  <h4>(c) Why does appending n elements to a dynamic array cost O(n) total? State amortised cost. <span class="marks">[6]</span></h4>
+  <div class="answer">
+    <p>With doubling, the copies happen at sizes 1, 2, 4, 8, &hellip;, n/2. Total copy work = 1 + 2 + 4 + &hellip; + n/2 = n &minus; 1 &lt; n.</p>
+    <p>Plus n actual writes (one per append). Total = n writes + n copies = <strong>O(n)</strong>.</p>
+    <p>Amortised cost per append = O(n) / n = <strong>O(1) amortised</strong>.</p>
+    <p>One append can cost O(n) (when it triggers a resize/copy), but copies are rare enough that the average is constant.</p>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-block">
+  <div class="q-header">Question 2 (30 marks): Hashing <span class="marks">[30]</span></div>
+
+  <h4>(a) Define load factor &alpha;. Why resize? What happens during resize? <span class="marks">[4]</span></h4>
+  <div class="answer">
+    <p><strong>&alpha; = n / m</strong>, where n = number of stored entries, m = number of buckets.</p>
+    <p>When &alpha; exceeds a threshold, collisions become frequent and operations slow down. Resizing allocates a bigger table (commonly double), re-inserts every entry (rehashing), which costs O(n) but is O(1) amortised per insert. The new load factor is halved.</p>
+  </div>
+
+  <h4>(b) Insert 18, 41, 22, 44, 59, 32, 31, 73 into table size 13, h(k) = k mod 13, linear probing. Show final table, probes for 31 and 73. <span class="marks">[10]</span></h4>
+  <div class="answer">
+    <pre><code>18 mod 13 = 5  &rarr; slot 5 (empty)      1 probe
+41 mod 13 = 2  &rarr; slot 2 (empty)      1 probe
+22 mod 13 = 9  &rarr; slot 9 (empty)      1 probe
+44 mod 13 = 5  &rarr; 5 taken, try 6     2 probes
+59 mod 13 = 7  &rarr; slot 7 (empty)      1 probe
+32 mod 13 = 6  &rarr; 6 taken, try 7 taken, try 8   3 probes
+31 mod 13 = 5  &rarr; 5,6,7 taken, try 8 taken, try 9 taken,
+                 try 10 (empty)                        <strong>5 probes</strong>
+73 mod 13 = 8  &rarr; 8 taken, 9 taken, 10 taken,
+                 11 (empty)                            <strong>4 probes</strong></code></pre>
+    <p><strong>Final table:</strong></p>
+    <table>
+      <tr><th>Slot</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr>
+      <tr><th>Key</th><td></td><td></td><td>41</td><td></td><td></td><td>18</td><td>44</td><td>59</td><td>32</td><td>22</td><td>31</td><td>73</td><td></td></tr>
+    </table>
+    <p><strong>Probes for 31: 5. Probes for 73: 4.</strong></p>
+  </div>
+
+  <h4>(c) Repeat (b) with separate chaining. Draw the table. <span class="marks">[6]</span></h4>
+  <div class="answer">
+    <pre><code>Bucket 2:  41
+Bucket 5:  18 &rarr; 44 &rarr; 31
+Bucket 6:  32
+Bucket 7:  59
+Bucket 8:  22 &rarr; 73
+Bucket 9:  (empty)
+(all others empty)</code></pre>
+    <p>Each key goes to its home bucket; collisions form chains. No probing needed.</p>
+  </div>
+
+  <h4>(d) What is primary clustering? Why does it occur with linear probing? How does double hashing reduce it? <span class="marks">[5]</span></h4>
+  <div class="answer">
+    <p><strong>Primary clustering</strong> is when linear probing creates long contiguous runs of occupied slots. These runs grow because any key that hashes into the run must scan through it, and if it lands inside, the run gets even longer.</p>
+    <p>It occurs because the probe step is always +1: all keys that collide follow the same linear path, so they pile up.</p>
+    <p><strong>Double hashing</strong> uses h(k, i) = (h&#8321;(k) + i&middot;h&#8322;(k)) mod m. The step size h&#8322;(k) depends on the key, so different keys take different paths through the table, reducing the formation of large clusters.</p>
+  </div>
+
+  <h4>(e) Expected unsuccessful-search probes for &alpha; = 0.5 and &alpha; = 0.9. Recommend max load factor. <span class="marks">[5]</span></h4>
+  <div class="answer">
+    <p>Formula: &frac12;(1 + 1/(1 &minus; &alpha;)&sup2;)</p>
+    <p><strong>&alpha; = 0.5:</strong> &frac12;(1 + 1/(0.5)&sup2;) = &frac12;(1 + 4) = &frac12;(5) = <strong>2.5 probes</strong></p>
+    <p><strong>&alpha; = 0.9:</strong> &frac12;(1 + 1/(0.1)&sup2;) = &frac12;(1 + 100) = &frac12;(101) = <strong>50.5 probes</strong></p>
+    <p><strong>Recommendation:</strong> Keep &alpha; &le; 0.75 (at &alpha; = 0.75, unsuccessful search &approx; 8.5 probes, which is acceptable). Above 0.75, probe counts grow rapidly toward the &alpha; = 0.9 case of 50.5.</p>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-block">
+  <div class="q-header">Question 3 (30 marks): Heaps and priority queues <span class="marks">[30]</span></div>
+
+  <h4>(a) State the two properties that define a binary min-heap. <span class="marks">[4]</span></h4>
+  <div class="answer">
+    <ol>
+      <li><strong>Shape property:</strong> Complete binary tree &mdash; every level is full except possibly the last, which fills from left to right.</li>
+      <li><strong>Heap (min) property:</strong> Every parent's key &le; the keys of its children, so the minimum is at the root.</li>
+    </ol>
+  </div>
+
+  <h4>(b) Index formulas for parent, left child, right child of node at index i. <span class="marks">[3]</span></h4>
+  <div class="answer">
+    <p>Parent: &lfloor;(i &minus; 1) / 2&rfloor; &nbsp;|&nbsp; Left child: 2i + 1 &nbsp;|&nbsp; Right child: 2i + 2</p>
+  </div>
+
+  <h4>(c) Insert 35, 33, 42, 10, 14, 19, 27, 44, 26, 31 into empty min-heap. Show array after each insertion. <span class="marks">[8]</span></h4>
+  <div class="answer">
+    <pre><code>Insert 35:  [35]
+Insert 33:  33 &lt; 35, swap       [33, 35]
+Insert 42:  42 &gt; 33, stop        [33, 35, 42]
+Insert 10:  10 &lt; 35, swap;
+            10 &lt; 33, swap        [10, 33, 42, 35]
+Insert 14:  14 &lt; 33, swap        [10, 14, 42, 35, 33]
+Insert 19:  19 &lt; 42, swap        [10, 14, 19, 35, 33, 42]
+Insert 27:  27 &gt; 14, stop        [10, 14, 19, 35, 33, 42, 27]
+Insert 44:  44 &gt; 35, stop         [10, 14, 19, 35, 33, 42, 27, 44]
+Insert 26:  26 &lt; 35, swap;
+            26 &gt; 14, stop         [10, 14, 19, 26, 33, 42, 27, 44, 35]
+Insert 31:  31 &lt; 33, swap;
+            31 &gt; 14, stop         [10, 14, 19, 26, 31, 42, 27, 44, 35, 33]</code></pre>
+    <p><strong>Final array: [10, 14, 19, 26, 31, 42, 27, 44, 35, 33]</strong></p>
+  </div>
+
+  <h4>(d) Perform one extract-min on the final heap from (c). Show every swap. <span class="marks">[6]</span></h4>
+  <div class="answer">
+    <pre><code>Extract 10 (root). Move last (33) to root:
+  [33, 14, 19, 26, 31, 42, 27, 44, 35]
+
+Children of index 0: 14 (idx 1) and 19 (idx 2). Smaller is 14.
+  33 &gt; 14: SWAP 33 and 14
+  [14, 33, 19, 26, 31, 42, 27, 44, 35]
+
+Children of index 1: 26 (idx 3) and 31 (idx 4). Smaller is 26.
+  33 &gt; 26: SWAP 33 and 26
+  [14, 26, 19, 33, 31, 42, 27, 44, 35]
+
+Children of index 3: 44 (idx 7) only. 33 &lt; 44: stop.
+
+Final array: [14, 26, 19, 33, 31, 42, 27, 44, 35]</code></pre>
+  </div>
+
+  <h4>(e) Why is bottom-up build-heap O(n) but inserting n keys one at a time O(n log n)? <span class="marks">[5]</span></h4>
+  <div class="answer">
+    <p><strong>Bottom-up (Floyd):</strong> Sift down from the last internal node (&lfloor;n/2&rfloor;&minus;1) to the root. Most nodes are near the bottom of the tree and have small heights, so they sift down only a little. The total work (sum of all node heights) is O(n).</p>
+    <p><strong>One-at-a-time insertion:</strong> Each insert does a sift-up that can cost O(log n). Over n inserts: n &times; O(log n) = <strong>O(n log n)</strong>.</p>
+    <p>The key difference: bottom-up exploits the fact that most nodes are leaves or near-leaves (height &le; 1), while one-at-a-time insertion treats every insert as potentially traversing the full height.</p>
+  </div>
+
+  <h4>(f) Name two applications of priority queues and why a heap suits each. <span class="marks">[4]</span></h4>
+  <div class="answer">
+    <ol>
+      <li><strong>Dijkstra's shortest path:</strong> Repeatedly extracts the vertex with minimum distance. A min-heap gives O(log n) extract-min and O(log n) insert/decrease-key, making the algorithm O((V+E) log V).</li>
+      <li><strong>CPU/job scheduling:</strong> The highest-priority job runs next. A heap gives O(1) peek at the top priority and O(log n) to insert a new job or extract the next one &mdash; efficient for a dynamic set of jobs.</li>
+    </ol>
+    <p><em>(Other valid answers: Prim's MST, event-driven simulation, top-k in a stream, heapsort.)</em></p>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-block">
+  <div class="q-header">Question 4 (10 marks): Linked lists <span class="marks">[10]</span></div>
+
+  <h4>(a) Compare singly linked list with dynamic array: (i) access by index, (ii) insertion at front, (iii) memory use. <span class="marks">[6]</span></h4>
+  <div class="answer">
+    <table>
+      <tr><th></th><th>Singly linked list</th><th>Dynamic array</th></tr>
+      <tr><td>(i) Access by index</td><td>&Theta;(n) &mdash; must walk from head</td><td>&Theta;(1) &mdash; direct address computation</td></tr>
+      <tr><td>(ii) Insert at front</td><td>&Theta;(1) &mdash; create node, point to old head</td><td>&Theta;(n) &mdash; must shift all elements right</td></tr>
+      <tr><td>(iii) Memory use</td><td>&Theta;(n) extra for next references per node; poor cache locality</td><td>&Theta;(n) spare capacity for growth; good cache locality (contiguous)</td></tr>
+    </table>
+  </div>
+
+  <h4>(b) Write reverse(head). State time complexity. <span class="marks">[4]</span></h4>
+  <div class="answer">
+    <pre><code>function reverse(head) {
+  let prev = null;
+  let curr = head;
+  while (curr !== null) {
+    let next = curr.next;   // save next node
+    curr.next = prev;       // reverse the link
+    prev = curr;            // advance prev
+    curr = next;            // advance curr
+  }
+  return prev;             // new head (old tail)
+}</code></pre>
+    <p><strong>Time complexity: O(n)</strong> &mdash; one pass through the list, O(1) work per node. <strong>Space: O(1)</strong> &mdash; only three pointers.</p>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-block">
+  <div class="q-header">Question 5 (15 marks): Binary search trees <span class="marks">[15]</span></div>
+
+  <h4>(a) Insert 45, 25, 65, 15, 35, 55, 75, 30 into empty BST. Draw final tree. <span class="marks">[4]</span></h4>
+  <div class="answer">
+    <div class="ascii-tree">         45
+        /  \
+       25    65
+      / \   / \
+    15  35 55  75
+       /
+      30</div>
+    <p>Insert order: 45(root), 25(left), 65(right), 15(left of 25), 35(right of 25), 55(left of 65), 75(right of 65), 30(left of 35).</p>
+  </div>
+
+  <h4>(b) In-order, pre-order, post-order traversals. <span class="marks">[6]</span></h4>
+  <div class="answer">
+    <table>
+      <tr><th>Traversal</th><th>Order</th><th>Result</th></tr>
+      <tr><td>In-order</td><td>L, N, R</td><td>15, 25, 30, 35, 45, 55, 65, 75</td></tr>
+      <tr><td>Pre-order</td><td>N, L, R</td><td>45, 25, 15, 35, 30, 65, 55, 75</td></tr>
+      <tr><td>Post-order</td><td>L, R, N</td><td>15, 30, 35, 25, 55, 75, 65, 45</td></tr>
+    </table>
+  </div>
+
+  <h4>(c) Delete 25 using in-order successor. Draw result. <span class="marks">[3]</span></div>
+  <div class="answer">
+    <p>Node 25 has two children (15 and 35). In-order successor = smallest key in right subtree of 25 = <strong>30</strong> (leftmost node in subtree rooted at 35).</p>
+    <p>Copy 30 into node 25's position. Delete the original 30 (it was a leaf).</p>
+    <div class="ascii-tree">         45
+        /  \
+       30    65
+      / \   / \
+    15  35 55  75</div>
+  </div>
+
+  <h4>(d) Worst-case height of a BST with n nodes. Give an example. <span class="marks">[2]</span></h4>
+  <div class="answer">
+    <p><strong>Worst-case height = n &minus; 1</strong> (a degenerate chain / linked list).</p>
+    <p>Example: insert keys in sorted order: 1, 2, 3, 4, &hellip;, n. Each key goes to the right of the previous, producing a chain of height n&minus;1. All operations become O(n).</p>
+    <p><em>(AVL trees prevent this by keeping |BF| &le; 1, guaranteeing height O(log n).)</em></p>
+  </div>
+</div>
+
+<!-- ============ QUICK REFERENCE ============ -->
+<h2 id="quickref">7. Quick Reference Card &mdash; Memorise These</h2>
+
+<div class="card">
+
+<h3>Formulas</h3>
+<table>
+  <tr><th>What</th><th>Formula</th></tr>
+  <tr><td>Big O definition</td><td>|f(n)| &le; c&middot;g(n) for all n &ge; n&#8320;</td></tr>
+  <tr><td>Load factor</td><td>&alpha; = n / m</td></tr>
+  <tr><td>Linear probing</td><td>h(k, i) = (h(k) + i) mod m</td></tr>
+  <tr><td>Double hashing</td><td>h(k, i) = (h&#8321;(k) + i&middot;h&#8322;(k)) mod m</td></tr>
+  <tr><td>Expected probes (success)</td><td>&frac12;(1 + 1/(1&minus;&alpha;))</td></tr>
+  <tr><td>Expected probes (fail)</td><td>&frac12;(1 + 1/(1&minus;&alpha;)&sup2;)</td></tr>
+  <tr><td>Heap: parent(i)</td><td>&lfloor;(i&minus;1)/2&rfloor;</td></tr>
+  <tr><td>Heap: left(i)</td><td>2i + 1</td></tr>
+  <tr><td>Heap: right(i)</td><td>2i + 2</td></tr>
+  <tr><td>AVL balance factor</td><td>BF = h(right) &minus; h(left), must be in {&minus;1,0,+1}</td></tr>
+</table>
+
+<h3>Complexity Cheat Sheet</h3>
+<table>
+  <tr><th>Structure</th><th>Search</th><th>Insert</th><th>Delete</th><th>Access[i]</th></tr>
+  <tr><td>Dynamic array</td><td>O(n)</td><td>O(1) amortised</td><td>O(n)</td><td>O(1)</td></tr>
+  <tr><td>Linked list</td><td>O(n)</td><td>O(1) at known node</td><td>O(1) at known node</td><td>O(n)</td></tr>
+  <tr><td>Hash table (avg)</td><td>O(1)</td><td>O(1)</td><td>O(1)</td><td>&mdash;</td></tr>
+  <tr><td>BST (avg / worst)</td><td>O(log n) / O(n)</td><td>O(log n) / O(n)</td><td>O(log n) / O(n)</td><td>&mdash;</td></tr>
+  <tr><td>AVL tree (worst)</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td><td>&mdash;</td></tr>
+  <tr><td>Binary heap</td><td>O(n) (general)</td><td>O(log n)</td><td>O(log n) extract-min</td><td>O(1) find-min</td></tr>
+</table>
+
+<h3>Traversal Orders (BST)</h3>
+<ul>
+  <li><strong>In-order</strong> (L,N,R): visits in sorted order</li>
+  <li><strong>Pre-order</strong> (N,L,R): copies a tree</li>
+  <li><strong>Post-order</strong> (L,R,N): deletes/evaluates a tree</li>
+  <li><strong>Level-order</strong>: BFS, level by level</li>
+</ul>
+
+<h3>AVL Rotation Cases</h3>
+<ul>
+  <li>Left-Left &rarr; single right rotation</li>
+  <li>Right-Right &rarr; single left rotation</li>
+  <li>Left-Right &rarr; left on child, then right</li>
+  <li>Right-Left &rarr; right on child, then left</li>
+</ul>
+
+<h3>Key Facts</h3>
+<ul>
+  <li>Dynamic array append: O(1) amortised (geometric growth)</li>
+  <li>Hash table: O(1) average, O(n) worst (all collide)</li>
+  <li>BST worst case: O(n) &mdash; sorted insertion creates a chain</li>
+  <li>AVL height bound: ~1.44 log&#8322; n</li>
+  <li>Heap insert/extract-min: O(log n); find-min: O(1); build-heap: O(n)</li>
+  <li>Heapsort: O(n log n), in-place, not stable</li>
+  <li>h&#8322;(k) must never be 0 in double hashing (else infinite loop on one bucket)</li>
+  <li>Tombstones needed for deletion in open addressing (keep probe sequences intact)</li>
+</ul>
+
+</div>
+
+<div class="callout callout-success" style="text-align:center; margin-top: 30px;">
+  <strong>You've got this.</strong> Focus on hashing and heaps (60% of marks). Trace by hand. Check your work. Good luck Wednesday.
+</div>
+
+</body>
+</html>

@@ -64,9 +64,8 @@ Owner lane: `skills/bilimind/` (SKILL.md, references/, install.ps1, scripts/zip-
 
 - Run inside WorkBuddy on 11 October 2026 (05:05 to 05:20 MYT): the skill, the checklist, 4 parallel Writer
   sub-agents, the Coder and Checker in parallel and present_files all worked; see
-  hackathon/proof/workbuddy-run/. Still untested from the list below: the TeamCreate/SendMessage
-  relay, `${CODEBUDDY_SKILL_DIR}` substitution and `present_files` are all written to the documented
-  behaviour (spike facts) but are untested. That is gate G3, a first real run inside WorkBuddy.
+  hackathon/proof/workbuddy-run/ (gate G3 passed). Still untested: the Expert Team's TeamCreate/SendMessage
+  relay. `${CODEBUDDY_SKILL_DIR}` substitution is not needed: install.ps1 writes the absolute path.
 - Open team questions (EXPERT-TEAM.md section 8): T2 (are repeated member names allowed? the lead
   already uses unique `-2`/`-3` names), T3 (does TeamCreate load cleanly?), T5 (does a preloaded skill
   substitute its folder? the lead has an `ls` fallback over both install locations).
