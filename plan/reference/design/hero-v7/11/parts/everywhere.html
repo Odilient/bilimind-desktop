@@ -1,0 +1,545 @@
+<style>
+/* ── Everywhere: the same lesson on the web, in the app, and inside a
+   Telegram chat — then every language it is taught in. Device contents
+   are sized in container units, so each mock scales as one picture. ──── */
+#everywhere { position: relative; padding: var(--sec-y) var(--pad-x); overflow: clip; }
+#everywhere .ev-head {
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: end; gap: 22px 6vw;
+}
+#everywhere .ev-head .eb { grid-column: 1 / -1; justify-self: start; }
+#everywhere .h2 { font-size: clamp(46px, 6vw, 108px); }
+#everywhere .h2 .hchip { position: relative; width: 0.74em; height: 0.74em; vertical-align: 0; box-shadow: 0 12px 24px -12px rgb(20 40 200 / 0.6); }
+#everywhere .h2 .hchip svg { position: absolute; inset: 27%; width: 46%; height: 46%; }
+#everywhere .ev-head .lede { justify-self: end; max-width: 470px; }
+#everywhere .ev-doors { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+#everywhere .ev-doors span {
+  display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 7px; border-radius: 99px;
+  background: #fff; box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px rgb(11 13 16 / 0.04);
+  font-size: 14px; font-weight: 600;
+}
+#everywhere .ev-doors i { width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; }
+#everywhere .ev-doors i svg { width: 13px; height: 13px; }
+
+/* ── The stage ── */
+#everywhere .ev-stage {
+  position: relative; margin-top: clamp(40px, 5vw, 80px);
+  height: clamp(520px, 46vw, 760px);
+}
+#everywhere .ev-glow {
+  position: absolute; left: 10%; right: 4%; top: 12%; bottom: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(50% 55% at 55% 55%, rgb(35 64 230 / 0.22), transparent 70%), radial-gradient(30% 40% at 85% 30%, rgb(198 242 78 / 0.35), transparent 70%);
+  filter: blur(30px);
+}
+
+/* Browser window. Reference width 760px: 1cqw ≈ 7.6px. */
+#everywhere .ev-dev { position: absolute; }
+#everywhere .ev-dev.d-win { left: 0; top: 4%; width: 58%; z-index: 1; }
+#everywhere .ev-dev.d-app { left: 56%; top: 16%; width: 20.5%; z-index: 3; }
+#everywhere .ev-dev.d-tg { left: 79%; top: 0; width: 20.5%; z-index: 4; }
+#everywhere .ev-win {
+  position: relative; width: 100%;
+  container-type: inline-size;
+  border-radius: 18px; background: #fff; overflow: hidden;
+  box-shadow: 0 0 0 1px rgb(11 13 16 / 0.06), 0 50px 90px -50px rgb(20 40 200 / 0.55), 0 20px 40px -26px rgb(11 13 16 / 0.35);
+}
+#everywhere .ev-chrome { height: 5.4cqw; display: flex; align-items: center; gap: 1.2cqw; padding: 0 1.8cqw; background: #F4F5F8; border-bottom: 1px solid var(--line); }
+#everywhere .ev-chrome .dots { display: flex; gap: 0.75cqw; }
+#everywhere .ev-chrome .dots i { width: 1.4cqw; height: 1.4cqw; border-radius: 50%; background: #D9DCE3; }
+#everywhere .ev-chrome .dots i:first-child { background: #FF8A72; }
+#everywhere .ev-chrome .dots i:nth-child(2) { background: #FFD166; }
+#everywhere .ev-chrome .dots i:nth-child(3) { background: #9BDB6B; }
+#everywhere .ev-url { flex: 1 1 auto; max-width: 52cqw; margin: 0 auto; height: 3.3cqw; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); display: flex; align-items: center; justify-content: center; gap: 0.7cqw; font-size: 1.45cqw; color: var(--text-2); }
+#everywhere .ev-url svg { width: 1.5cqw; height: 1.5cqw; color: var(--green); }
+#everywhere .ev-chrome .me { width: 2.9cqw; height: 2.9cqw; border-radius: 50%; background: var(--lime); }
+/* The real workspace: rail, top bar, sidebar, tabs, the reading column. */
+#everywhere .ev-app { display: grid; grid-template-columns: 5.2cqw minmax(0, 1fr); height: 55cqw; }
+#everywhere .ev-rail { display: flex; flex-direction: column; align-items: center; gap: 1.5cqw; padding: 1.4cqw 0; background: #F6F7FA; border-right: 1px solid var(--line); }
+#everywhere .ev-rail .mk { width: 3.2cqw; height: 3.2cqw; margin-bottom: 0.6cqw; }
+#everywhere .ev-rail i { width: 3.3cqw; height: 3.3cqw; border-radius: 1cqw; display: grid; place-items: center; color: var(--text-3); }
+#everywhere .ev-rail i.on { background: var(--lime-soft); color: var(--lime-ink); }
+#everywhere .ev-rail i svg { width: 1.8cqw; height: 1.8cqw; }
+#everywhere .ev-rail .gap { flex: 1; }
+#everywhere .ev-rail b { width: 3.2cqw; height: 3.2cqw; border-radius: 50%; background: #E3E6EC; color: var(--ink-3); display: grid; place-items: center; font-size: 1.1cqw; font-weight: 700; }
+#everywhere .ev-body { min-width: 0; display: flex; flex-direction: column; }
+#everywhere .ev-top { height: 5cqw; flex: none; display: flex; align-items: center; gap: 1cqw; padding: 0 1.6cqw; border-bottom: 1px solid var(--line); font-size: 1.3cqw; white-space: nowrap; }
+#everywhere .ev-top .pi { width: 1.8cqw; height: 1.8cqw; color: var(--text-3); flex: none; }
+#everywhere .ev-top .cr { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); }
+#everywhere .ev-top .cr em { font-style: normal; color: var(--text-3); margin: 0 0.3cqw; }
+#everywhere .ev-top .cr b { color: var(--ink); font-weight: 600; }
+#everywhere .ev-top .wr { margin-left: auto; height: 2.9cqw; padding: 0 1.2cqw; border-radius: 99px; background: #F1F2F5; display: inline-flex; align-items: center; gap: 0.7cqw; font-size: 1.15cqw; color: var(--text-2); }
+#everywhere .ev-top .wr i { width: 0.8cqw; height: 0.8cqw; border-radius: 50%; background: var(--text-3); }
+#everywhere .ev-top .bt { height: 2.9cqw; padding: 0 1.3cqw; border-radius: 99px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); display: inline-flex; align-items: center; font-size: 1.2cqw; font-weight: 600; }
+#everywhere .ev-top .bt.sq { padding: 0 0.9cqw; }
+#everywhere .ev-top .dt { width: 1.8cqw; height: 1.8cqw; color: var(--text-3); flex: none; }
+#everywhere .ev-cols { flex: 1; min-height: 0; display: grid; grid-template-columns: 23.5cqw minmax(0, 1fr); }
+#everywhere .ev-side { padding: 1.6cqw 1.2cqw; background: #F6F7FA; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 0.3cqw; overflow: hidden; }
+#everywhere .ev-sh { display: flex; align-items: center; justify-content: space-between; padding: 0 0.4cqw; }
+#everywhere .ev-sh b { font-size: 1.45cqw; font-weight: 600; }
+#everywhere .ev-sh span { height: 2.6cqw; padding: 0 1cqw; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); display: inline-flex; align-items: center; gap: 0.5cqw; font-size: 1.15cqw; font-weight: 600; color: var(--ink-3); }
+#everywhere .ev-sh span svg { width: 1.3cqw; height: 1.3cqw; }
+#everywhere .ev-seg { margin: 1cqw 0 0.6cqw; display: grid; grid-template-columns: repeat(3, 1fr); padding: 0.4cqw; border-radius: 99px; background: #EBEDF1; }
+#everywhere .ev-seg span { height: 2.6cqw; border-radius: 99px; display: grid; place-items: center; font-size: 1.15cqw; font-weight: 600; color: var(--text-2); }
+#everywhere .ev-seg span.on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgb(11 13 16 / 0.1); }
+#everywhere .ev-grp { margin: 0.9cqw 0 0.2cqw; padding: 0 0.6cqw; font-size: 1.02cqw; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); }
+#everywhere .ev-t { display: flex; align-items: center; gap: 0.8cqw; padding: 0.75cqw 0.7cqw; border-radius: 0.9cqw; font-size: 1.22cqw; line-height: 1.25; color: var(--ink-3); }
+#everywhere .ev-t .n { width: 1.9cqw; height: 1.9cqw; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 0.95cqw; font-weight: 700; color: var(--text-2); }
+#everywhere .ev-t .x { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#everywhere .ev-t .d { width: 0.8cqw; height: 0.8cqw; border-radius: 50%; background: #3DAA5C; flex: none; }
+#everywhere .ev-t .d.o { background: none; box-shadow: inset 0 0 0 1px #B9BEC9; }
+#everywhere .ev-t em { font-style: normal; font-size: 1cqw; color: var(--text-3); min-width: 2.2cqw; text-align: right; }
+#everywhere .ev-t.kid { padding-left: 3.4cqw; font-size: 1.12cqw; color: var(--text-2); }
+#everywhere .ev-t.now { background: var(--lime-soft); color: var(--lime-ink); font-weight: 600; }
+#everywhere .ev-t.now .n { background: var(--lime); color: var(--ink); }
+#everywhere .ev-main { min-width: 0; display: flex; flex-direction: column; }
+#everywhere .ev-tabs-d { height: 4cqw; flex: none; display: flex; align-items: flex-end; gap: 0.4cqw; padding: 0 1cqw; background: #F6F7FA; border-bottom: 1px solid var(--line); }
+#everywhere .ev-tabs-d span { height: 3.3cqw; padding: 0 1.4cqw; display: inline-flex; align-items: center; gap: 0.7cqw; font-size: 1.15cqw; color: var(--text-2); white-space: nowrap; border-radius: 1cqw 1cqw 0 0; }
+#everywhere .ev-tabs-d span svg { width: 1.3cqw; height: 1.3cqw; }
+#everywhere .ev-tabs-d span.on { background: #fff; color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--lime-2); }
+#everywhere .ev-tabs-d span.on i { width: 0.8cqw; height: 0.8cqw; border-radius: 50%; background: #3DAA5C; }
+#everywhere .ev-read { padding: 2cqw 2.8cqw; min-height: 0; overflow: hidden; }
+#everywhere .ev-crumb { font-size: 1.12cqw; color: var(--text-3); }
+#everywhere .ev-title { margin: 0.6cqw 0 0; font: 600 2.6cqw/1.12 var(--display); letter-spacing: -0.025em; }
+#everywhere .ev-pager { margin-top: 1.4cqw; display: flex; align-items: center; gap: 0.7cqw; padding-bottom: 1.3cqw; border-bottom: 1px solid var(--line); font-size: 1.2cqw; color: var(--text-2); }
+#everywhere .ev-pager .pg { color: var(--text-3); }
+#everywhere .ev-pager svg { width: 1.1cqw; height: 1.1cqw; color: var(--text-3); }
+#everywhere .ev-pager .ed { margin-left: auto; height: 2.9cqw; padding: 0 1.2cqw; border-radius: 99px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); display: inline-flex; align-items: center; gap: 0.5cqw; font-weight: 600; color: var(--ink-3); }
+#everywhere .ev-pager .mc { height: 2.9cqw; padding: 0 1.4cqw; border-radius: 99px; background: var(--ink); color: #fff; display: inline-flex; align-items: center; font-weight: 600; }
+#everywhere .ev-intro { margin: 1.4cqw 0 0; font-size: 1.38cqw; line-height: 1.55; color: var(--ink-3); }
+#everywhere .ev-table { margin-top: 1.6cqw; border-radius: 1.2cqw; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); font-size: 1.2cqw; }
+#everywhere .ev-tr { display: grid; grid-template-columns: 9cqw 1fr 1fr 8cqw; align-items: center; }
+#everywhere .ev-tr > span { padding: 0.9cqw 1.1cqw; min-width: 0; color: var(--ink-3); }
+#everywhere .ev-tr + .ev-tr { border-top: 1px solid var(--line); }
+#everywhere .ev-tr.th > span { color: var(--text-3); font-weight: 600; font-size: 1cqw; text-transform: uppercase; letter-spacing: 0.04em; }
+#everywhere .ev-name { font-weight: 600; color: var(--ink) !important; }
+#everywhere .ev-audio { margin-top: 1.6cqw; display: flex; align-items: center; gap: 1.2cqw; padding: 0.9cqw 1.4cqw 0.9cqw 0.9cqw; border-radius: 99px; background: var(--ink); color: #fff; font-size: 1.15cqw; }
+#everywhere .ev-audio .pb { width: 3.2cqw; height: 3.2cqw; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; }
+#everywhere .ev-audio .pb svg { width: 1.3cqw; height: 1.3cqw; }
+#everywhere .ev-audio b { font-weight: 600; white-space: nowrap; }
+#everywhere .ev-audio small { color: rgb(255 255 255 / 0.55); font-size: 1.05cqw; white-space: nowrap; }
+#everywhere .ev-wave { flex: 1 1 auto; display: flex; align-items: center; gap: 0.35cqw; height: 3cqw; min-width: 0; overflow: hidden; }
+#everywhere .ev-wave i { flex: 1 1 0; min-width: 0.25cqw; border-radius: 9px; background: rgb(255 255 255 / 0.25); height: 30%; }
+#everywhere .ev-wave i.on { background: var(--lime); }
+
+/* Phones. Reference width 280px: 1cqw ≈ 2.8px. */
+#everywhere .ev-phone {
+  position: relative; width: 100%; aspect-ratio: 280 / 586;
+  container-type: inline-size;
+  border-radius: 15% / 7.2%; background: #0B0D10;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06) inset, 0 60px 90px -40px rgb(11 13 16 / 0.6), 0 24px 40px -24px rgb(20 40 200 / 0.4);
+}
+#everywhere .ev-scr { position: absolute; inset: 2.6cqw; border-radius: 12.6cqw; overflow: hidden; background: #F4F5F8; }
+#everywhere .ev-island { position: absolute; left: 50%; top: 2.6cqw; width: 30cqw; height: 8.6cqw; margin-left: -15cqw; border-radius: 99px; background: #0B0D10; z-index: 9; }
+#everywhere .ev-status { height: 14cqw; display: flex; align-items: center; justify-content: space-between; padding: 2cqw 8cqw 0; font: 600 4.4cqw/1 var(--body); color: var(--ink); }
+#everywhere .ev-status .bt { display: flex; gap: 1.4cqw; align-items: center; }
+#everywhere .ev-status .bt i { width: 6.4cqw; height: 3.2cqw; border-radius: 1cqw; box-shadow: inset 0 0 0 0.5cqw currentColor; position: relative; }
+#everywhere .ev-status .bt i::after { content: ""; position: absolute; inset: 0.9cqw 1.6cqw 0.9cqw 0.9cqw; background: currentColor; border-radius: 0.4cqw; }
+#everywhere .ev-status .bt b { width: 4.4cqw; height: 3.2cqw; background: linear-gradient(90deg, currentColor 0 20%, transparent 20% 27%, currentColor 27% 47%, transparent 47% 54%, currentColor 54% 74%, transparent 74% 81%, currentColor 81%); -webkit-mask: linear-gradient(0deg, #000 100%, transparent 0); clip-path: polygon(0 100%, 100% 0, 100% 100%); }
+
+/* App phone: the real mobile Today. */
+#everywhere .ev-today { padding: 1cqw 5.4cqw 0; }
+#everywhere .ev-today .hd { display: flex; align-items: center; gap: 2.4cqw; }
+#everywhere .ev-today h4 { margin: 0 auto 0 0; font: 700 7.4cqw/1 var(--display); letter-spacing: -0.03em; }
+#everywhere .ev-today .ic { width: 7cqw; height: 7cqw; display: grid; place-items: center; color: var(--text-2); }
+#everywhere .ev-today .ic svg { width: 4.6cqw; height: 4.6cqw; }
+#everywhere .ev-today .av { width: 9cqw; height: 9cqw; border-radius: 50%; background: #E3E6EC; color: var(--ink-3); display: grid; place-items: center; font-size: 3.2cqw; font-weight: 700; }
+#everywhere .ev-new { margin-top: 4.4cqw; padding: 3.4cqw; border-radius: 5.4cqw; background: #EEF0F4; box-shadow: inset 0 0 0 1px var(--line); }
+#everywhere .ev-new .nh { display: flex; align-items: baseline; justify-content: space-between; padding: 0 0.6cqw; }
+#everywhere .ev-new .nh b { font-size: 3.9cqw; font-weight: 600; }
+#everywhere .ev-new .nh small { font-size: 3cqw; color: var(--text-3); }
+#everywhere .ev-new .nf { position: relative; margin-top: 2.4cqw; padding: 3.2cqw 3.2cqw 3cqw; border-radius: 4.4cqw; background: #fff; box-shadow: 0 1px 2px rgb(11 13 16 / 0.06); }
+#everywhere .ev-new .ph { font-size: 4cqw; color: var(--text-3); }
+#everywhere .ev-new .nc { margin-top: 3cqw; display: flex; gap: 1.6cqw; }
+#everywhere .ev-new .nc span { height: 7.4cqw; padding: 0 2.6cqw; border-radius: 99px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); display: inline-flex; align-items: center; gap: 1.2cqw; font-size: 3.1cqw; font-weight: 600; white-space: nowrap; }
+#everywhere .ev-new .nc svg { width: 3.2cqw; height: 3.2cqw; }
+#everywhere .ev-new .go { position: absolute; right: 3cqw; bottom: 3cqw; width: 9.4cqw; height: 9.4cqw; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; }
+#everywhere .ev-new .go svg { width: 4.4cqw; height: 4.4cqw; }
+#everywhere .ev-due { margin-top: 3.4cqw; border-radius: 6cqw; background: var(--ink); color: #fff; padding: 5cqw 5cqw 4.4cqw; position: relative; overflow: hidden; }
+#everywhere .ev-due::after { content: ""; position: absolute; right: -10cqw; top: -10cqw; width: 34cqw; height: 34cqw; border-radius: 50%; background: radial-gradient(circle, rgb(198 242 78 / 0.22), transparent 70%); }
+#everywhere .ev-due .k { font-size: 2.9cqw; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(255 255 255 / 0.5); }
+#everywhere .ev-due .tt { margin-top: 1.8cqw; font: 600 5.8cqw/1.15 var(--display); letter-spacing: -0.02em; }
+#everywhere .ev-due .mm { margin-top: 1.2cqw; font-size: 3.4cqw; color: rgb(255 255 255 / 0.55); }
+#everywhere .ev-due .rw { margin-top: 3.6cqw; display: flex; align-items: center; gap: 3cqw; }
+#everywhere .ev-due .go { height: 10cqw; padding: 0 4.4cqw; border-radius: 99px; background: var(--lime); color: var(--ink); display: inline-flex; align-items: center; gap: 1.6cqw; font-size: 4cqw; font-weight: 700; }
+#everywhere .ev-due .go svg { width: 3.6cqw; height: 3.6cqw; }
+#everywhere .ev-due .rw small { font-size: 3.4cqw; color: rgb(255 255 255 / 0.55); }
+#everywhere .ev-sec { margin: 4.6cqw 0 2.2cqw; font-size: 3.9cqw; font-weight: 600; color: var(--ink); }
+#everywhere .ev-row { display: flex; align-items: center; gap: 3cqw; padding: 3cqw; border-radius: 4.4cqw; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+#everywhere .ev-row + .ev-row { margin-top: 1.8cqw; }
+#everywhere .ev-row .no { width: 7.4cqw; height: 7.4cqw; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 3.2cqw; font-weight: 700; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.14); color: var(--text-2); }
+#everywhere .ev-row .no.on { background: var(--lime); box-shadow: none; color: var(--ink); }
+#everywhere .ev-row b { display: block; font-size: 3.7cqw; font-weight: 600; line-height: 1.2; }
+#everywhere .ev-row small { display: block; font-size: 3.1cqw; color: #9A6A00; margin-top: 0.6cqw; }
+#everywhere .ev-row + .ev-row small { color: var(--text-3); }
+#everywhere .ev-tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 15cqw; display: flex; align-items: flex-start; justify-content: space-around; padding-top: 2.4cqw; background: #fff; border-top: 1px solid var(--line); }
+#everywhere .ev-tabs span { display: grid; justify-items: center; gap: 0.6cqw; font-size: 2.8cqw; color: var(--text-3); }
+#everywhere .ev-tabs span.on { color: var(--ink); font-weight: 600; }
+#everywhere .ev-tabs svg { width: 5.2cqw; height: 5.2cqw; }
+#everywhere .ev-tabs .nw i { width: 7.6cqw; height: 6cqw; border-radius: 99px; background: var(--lime); color: var(--ink); display: grid; place-items: center; }
+#everywhere .ev-tabs .nw svg { width: 4cqw; height: 4cqw; }
+
+/* Telegram phone: a chat, a button, the Mini App sliding up. */
+#everywhere .tg .ev-scr { background: #DCE6F2; }
+#everywhere .tg-bg { position: absolute; inset: 0; opacity: .5; background-image: radial-gradient(rgb(35 64 230 / 0.16) 1.2px, transparent 1.6px); background-size: 7cqw 7cqw; }
+#everywhere .tg-top { position: relative; z-index: 2; display: flex; align-items: center; gap: 3cqw; padding: 1cqw 4.4cqw 3cqw; background: rgb(255 255 255 / 0.92); border-bottom: 1px solid var(--line); }
+#everywhere .tg-top .bk { width: 5cqw; height: 5cqw; color: var(--cobalt); transform: rotate(180deg); }
+#everywhere .tg-top svg.mk { width: 11cqw; height: 11cqw; flex: none; }
+#everywhere .tg-top b { display: block; font-size: 4.4cqw; font-weight: 600; line-height: 1.15; }
+#everywhere .tg-top small { display: block; font-size: 3.3cqw; color: var(--cobalt); }
+#everywhere .tg-chat { position: relative; z-index: 1; padding: 4cqw 4cqw 0; display: flex; flex-direction: column; gap: 2.6cqw; }
+#everywhere .tg-day { align-self: center; padding: 1cqw 3cqw; border-radius: 99px; background: rgb(11 13 16 / 0.18); color: #fff; font-size: 3.1cqw; font-weight: 600; }
+#everywhere .tg-msg { max-width: 86%; padding: 2.8cqw 3.6cqw; border-radius: 5cqw 5cqw 5cqw 1.4cqw; background: #fff; font-size: 3.8cqw; line-height: 1.4; box-shadow: 0 1px 1px rgb(11 13 16 / 0.08); }
+#everywhere .tg-msg.me { align-self: flex-end; border-radius: 5cqw 5cqw 1.4cqw 5cqw; background: #E2F7C9; }
+#everywhere .tg-msg time { display: block; text-align: right; font-size: 2.8cqw; color: var(--text-3); margin-top: 0.6cqw; }
+#everywhere .tg-card { margin-top: 2cqw; padding: 2.6cqw; border-radius: 3.4cqw; background: var(--canvas); border-left: 1cqw solid var(--cobalt); }
+#everywhere .tg-card b { display: block; font-size: 3.7cqw; font-weight: 600; line-height: 1.25; }
+#everywhere .tg-card small { display: block; font-size: 3.2cqw; color: var(--text-3); margin-top: 0.6cqw; }
+#everywhere .tg-btn { position: relative; max-width: 86%; margin-top: -1.2cqw; display: flex; align-items: center; justify-content: center; gap: 1.6cqw; height: 10cqw; border-radius: 3.4cqw; background: rgb(255 255 255 / 0.72); color: var(--cobalt); font-size: 3.9cqw; font-weight: 600; overflow: hidden; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+#everywhere .tg-btn svg { width: 3.6cqw; height: 3.6cqw; }
+#everywhere .tg-tap { position: absolute; left: 50%; top: 50%; width: 9cqw; height: 9cqw; margin: -4.5cqw 0 0 -4.5cqw; border-radius: 50%; background: rgb(35 64 230 / 0.35); opacity: 0; }
+#everywhere .tg-typing { align-self: flex-start; display: flex; gap: 1.2cqw; padding: 3.4cqw 4cqw; border-radius: 5cqw 5cqw 5cqw 1.4cqw; background: #fff; }
+#everywhere .tg-typing i { width: 1.8cqw; height: 1.8cqw; border-radius: 50%; background: var(--text-3); animation: everywhere-blink 1s ease-in-out infinite; }
+#everywhere .tg-typing i:nth-child(2) { animation-delay: .15s; } #everywhere .tg-typing i:nth-child(3) { animation-delay: .3s; }
+#everywhere .tg-input { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: center; gap: 2.4cqw; padding: 2.6cqw 4cqw 6cqw; background: rgb(255 255 255 / 0.95); }
+#everywhere .tg-input span { flex: 1 1 auto; height: 9.6cqw; border-radius: 99px; background: #F1F2F5; font-size: 3.6cqw; color: var(--text-3); display: flex; align-items: center; padding: 0 4cqw; }
+#everywhere .tg-input i { width: 9.6cqw; height: 9.6cqw; border-radius: 50%; background: var(--cobalt); color: #fff; display: grid; place-items: center; flex: none; }
+#everywhere .tg-input i svg { width: 4.4cqw; height: 4.4cqw; }
+#everywhere .tg-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; top: 12cqw; z-index: 5;
+  border-radius: 8cqw 8cqw 0 0; background: #fff; box-shadow: 0 -20px 40px -20px rgb(11 13 16 / 0.4);
+  padding-top: 2.4cqw; transform: translateY(102%); overflow: hidden;
+}
+#everywhere .tg-sheet .grab { width: 10cqw; height: 1.3cqw; border-radius: 9px; background: #D5D8E0; margin: 0 auto 2.4cqw; }
+#everywhere .tg-sheet .sh { display: flex; align-items: center; justify-content: space-between; padding: 0 4cqw 2.4cqw; font-size: 4cqw; border-bottom: 1px solid var(--line); }
+#everywhere .tg-sheet .sh b { font-weight: 600; }
+#everywhere .tg-sheet .sh .x { width: 7cqw; height: 7cqw; border-radius: 50%; background: #F1F2F5; color: var(--text-2); display: grid; place-items: center; }
+#everywhere .tg-sheet .sh .x svg { width: 3.2cqw; height: 3.2cqw; }
+#everywhere .mb-top { display: flex; align-items: center; gap: 2.4cqw; padding: 2.6cqw 4cqw; border-bottom: 1px solid var(--line); }
+#everywhere .mb-top .bk { width: 4.6cqw; height: 4.6cqw; color: var(--ink-3); flex: none; }
+#everywhere .mb-top b { flex: 1; min-width: 0; font-size: 3.8cqw; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#everywhere .mb-top .sq { height: 6.4cqw; padding: 0 1.8cqw; border-radius: 1.8cqw; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); display: grid; place-items: center; font-size: 3cqw; font-weight: 600; }
+#everywhere .mb-top .sr { width: 4.4cqw; height: 4.4cqw; color: var(--text-2); }
+#everywhere .mb-read { padding: 0 5cqw; }
+#everywhere .tg-ok { margin-top: 3cqw; display: flex; align-items: center; gap: 2cqw; padding: 2cqw 2.8cqw; border-radius: 4cqw; background: var(--lime-soft); color: var(--lime-ink); font-size: 3.1cqw; font-weight: 600; line-height: 1.25; }
+#everywhere .tg-ok i { width: 5.4cqw; height: 5.4cqw; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; }
+#everywhere .tg-ok i svg { width: 2.8cqw; height: 2.8cqw; }
+#everywhere .tg-sheet .tg-st { margin-top: 3.6cqw; font-size: 3.1cqw; color: var(--text-3); }
+#everywhere .tg-sheet h5 { margin: 1.2cqw 0 0; font: 600 6.2cqw/1.12 var(--display); letter-spacing: -0.025em; }
+#everywhere .mb-pg { margin-top: 3cqw; padding-bottom: 3cqw; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 1.4cqw; font-size: 3.2cqw; color: var(--text-2); }
+#everywhere .mb-pg .pg { color: var(--text-3); }
+#everywhere .mb-pg svg { width: 3cqw; height: 3cqw; color: var(--text-3); }
+#everywhere .mb-pg .mc { margin-left: auto; height: 8cqw; padding: 0 3.4cqw; border-radius: 99px; background: var(--ink); color: #fff; display: inline-flex; align-items: center; font-size: 3.2cqw; font-weight: 600; }
+#everywhere .tg-rows { margin-top: 3cqw; display: grid; gap: 1.6cqw; }
+#everywhere .tg-rows div { display: flex; align-items: center; justify-content: space-between; padding: 2.4cqw 3cqw; border-radius: 3cqw; box-shadow: inset 0 0 0 1px var(--line); font-size: 3.4cqw; }
+#everywhere .tg-rows b { font-weight: 600; }
+#everywhere .tg-rows em { font-style: normal; color: var(--text-2); }
+#everywhere .mb-tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 15cqw; display: flex; align-items: flex-start; justify-content: space-around; padding-top: 2.4cqw; background: #fff; border-top: 1px solid var(--line); }
+#everywhere .mb-tabs span { display: grid; justify-items: center; gap: 0.6cqw; font-size: 2.7cqw; color: var(--text-3); }
+#everywhere .mb-tabs span.on { color: var(--ink); font-weight: 600; }
+#everywhere .mb-tabs svg { width: 5cqw; height: 5cqw; }
+
+/* Floating captions on the devices. */
+#everywhere .ev-tag {
+  position: absolute; z-index: 6; display: inline-flex; align-items: center; gap: 9px;
+  height: 40px; padding: 0 16px 0 6px; border-radius: 99px; background: #fff; color: var(--ink);
+  box-shadow: 0 14px 30px -12px rgb(11 13 16 / 0.35), inset 0 0 0 1px var(--line);
+  font-size: 14px; font-weight: 600; white-space: nowrap;
+}
+#everywhere .ev-tag i { width: 28px; height: 28px; border-radius: 50%; background: var(--cobalt); color: #fff; display: grid; place-items: center; }
+#everywhere .ev-tag i svg { width: 14px; height: 14px; }
+#everywhere .ev-tag.lime i { background: var(--lime); color: var(--ink); }
+#everywhere .ev-tag.ink i { background: var(--ink); color: var(--lime); }
+#everywhere .ev-tag.g1 { left: 28px; bottom: -20px; }
+#everywhere .ev-tag.g2 { left: -54px; bottom: -44px; }
+#everywhere .ev-tag.g3 { right: -10px; bottom: -18px; }
+
+/* ── Languages ── */
+#everywhere .ev-lang {
+  margin-top: clamp(44px, 5vw, 84px); display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: center; gap: 24px 5vw; padding-top: clamp(28px, 3vw, 44px); border-top: 1.5px solid rgb(11 13 16 / 0.1);
+}
+#everywhere .ev-say { margin: 0; font: 700 clamp(36px, 4.3vw, 76px)/1 var(--display); letter-spacing: -0.04em; text-transform: uppercase; display: flex; align-items: center; flex-wrap: wrap; gap: 0 0.28em; }
+#everywhere .ev-slot {
+  position: relative; display: inline-block; height: 1.16em; overflow: hidden; vertical-align: bottom;
+  padding: 0 0.32em; border-radius: 0.24em; background: var(--cobalt); color: #fff; text-transform: none;
+  font-family: var(--display), "Noto Sans", "Noto Sans CJK JP", "Noto Sans Arabic", "Noto Sans Devanagari", "Noto Sans Thai", system-ui, sans-serif;
+  letter-spacing: -0.03em; box-sizing: border-box;
+  box-shadow: 0 16px 30px -16px rgb(20 40 200 / 0.7);
+}
+#everywhere .ev-slot span { display: block; height: 1.16em; line-height: 1.16em; white-space: nowrap; text-align: center; }
+#everywhere .ev-slot .in { display: block; position: relative; height: auto; }
+#everywhere .ev-slot .in span { width: max-content; margin: 0 auto; }
+#everywhere .ev-sub { margin: 16px 0 0; font-size: 15.5px; color: var(--text-2); max-width: 470px; }
+#everywhere .ev-sub b { color: var(--ink); font-weight: 600; }
+#everywhere .ev-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+#everywhere .ev-chips span {
+  height: 38px; padding: 0 15px; border-radius: 99px; display: inline-flex; align-items: center;
+  background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-size: 14.5px; font-weight: 500; color: var(--ink-3);
+  font-family: var(--body), "Noto Sans", "Noto Sans CJK JP", "Noto Sans Arabic", "Noto Sans Devanagari", "Noto Sans Thai", sans-serif;
+  transition: background-color .35s, color .35s, transform .35s, box-shadow .35s;
+}
+#everywhere .ev-chips span.on { background: var(--lime); color: var(--ink); box-shadow: 0 10px 20px -12px rgb(100 140 10 / 0.8); transform: translateY(-2px); }
+
+@media (max-width: 1100px) {
+  #everywhere .ev-head { grid-template-columns: minmax(0, 1fr); }
+  #everywhere .ev-head .lede { justify-self: start; }
+  #everywhere .ev-stage { height: auto; aspect-ratio: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #everywhere .ev-dev { position: relative; left: auto !important; top: auto !important; width: 100% !important; }
+  #everywhere .ev-dev.d-win { grid-column: 1 / -1; }
+  #everywhere .ev-dev.d-app, #everywhere .ev-dev.d-tg { max-width: 300px; justify-self: center; }
+  #everywhere .ev-tag { display: none; }
+  #everywhere .ev-glow { display: none; }
+  #everywhere .ev-lang { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  #everywhere .ev-phone { border-radius: 14cqw; }
+  #everywhere .ev-chips span { height: 32px; padding: 0 12px; font-size: 13px; }
+  #everywhere .ev-chips { gap: 6px; }
+}
+
+/* A generated object in the gap between the heading and its paragraph. */
+#everywhere .sec-obj { position: absolute; z-index: 1; width: clamp(110px, 10vw, 180px); height: auto; left: 41%; top: calc(var(--sec-y) - 10px); transform: rotate(8deg); pointer-events: none; filter: drop-shadow(0 22px 28px rgb(11 13 16 / 0.2)); }
+@media (max-width: 1100px) { #everywhere .sec-obj { left: auto; right: var(--pad-x); top: calc(var(--sec-y) - 50px); width: 96px; } }
+@media (max-width: 900px) { #everywhere .sec-obj { width: 74px; right: 10px; top: calc(var(--sec-y) - 30px); } }
+</style>
+
+<section id="everywhere" aria-labelledby="everywhere-h">
+  <img class="sec-obj" src="img/11/obj-globe.webp" alt="" aria-hidden="true" loading="lazy">
+  <div class="ev-head">
+    <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-globe"/></svg></span>Web · iOS · Android · Telegram</span>
+    <h2 class="h2" id="everywhere-h">Wherever <span class="hchip cobalt" aria-hidden="true"><svg><use href="#i-phone"/></svg></span><span class="cob">you</span> are.</h2>
+    <p class="lede"><b>Same course, every door.</b> On the web, in installable iOS and Android apps — and inside Telegram as a Mini App: it opens from a chat and signs you in silently. No registration form at all.</p>
+    <div class="ev-doors" aria-hidden="true">
+      <span><i><svg><use href="#i-globe"/></svg></i>The web</span>
+      <span><i><svg><use href="#i-phone"/></svg></i>iOS &amp; Android</span>
+      <span><i><svg><use href="#i-send"/></svg></i>Inside Telegram</span>
+    </div>
+  </div>
+
+  <div class="ev-stage" aria-hidden="true">
+    <div class="ev-glow"></div>
+
+    <!-- The web: the lesson page. -->
+    <div class="ev-dev d-win" data-depth="0.3">
+    <div class="ev-win">
+      <div class="ev-chrome"><span class="dots"><i></i><i></i><i></i></span><span class="ev-url"><svg><use href="#i-check"/></svg>bilimind.com/you/espresso-at-home</span><span class="me"></span></div>
+      <div class="ev-app">
+        <div class="ev-rail"><svg class="mk"><use href="#mark"/></svg><i><svg><use href="#i-search"/></svg></i><i><svg><use href="#i-home"/></svg></i><i class="on"><svg><use href="#i-book"/></svg></i><i><svg><use href="#i-file"/></svg></i><i><svg><use href="#i-plus"/></svg></i><span class="gap"></span><i><svg><use href="#i-bell"/></svg></i><b>DL</b></div>
+        <div class="ev-body">
+          <div class="ev-top"><svg class="pi"><use href="#i-panel"/></svg><span class="cr">Dialling in espresso at home <em>/</em> <b>Recognising sour, sweet &amp; bitter</b></span><span class="wr"><i></i>12 of 62 lessons written</span><span class="bt">Share</span><span class="bt sq">Aa</span><svg class="dt"><use href="#i-dots"/></svg></div>
+          <div class="ev-cols">
+            <div class="ev-side">
+              <div class="ev-sh"><b>Course</b><span><svg><use href="#i-fork"/></svg>Map</span></div>
+              <div class="ev-seg"><span class="on">Lessons</span><span>Plan</span><span>Files</span></div>
+              <div class="ev-grp">Extraction fundamentals</div>
+              <div class="ev-t done"><span class="n">1</span><span class="x">The five variables that make espresso</span><i class="d"></i><em>4</em></div>
+              <div class="ev-t now"><span class="n">2</span><span class="x">Recognising sour, sweet &amp; bitter</span><i class="d"></i><em>35m</em></div>
+              <div class="ev-t kid"><span class="x">Tasting side by side</span><i class="d"></i></div>
+              <div class="ev-t kid"><span class="x">The sweet window</span><i class="d o"></i></div>
+              <div class="ev-t"><span class="n">3</span><span class="x">Choosing beans and freshness</span><i class="d o"></i><em>3</em></div>
+              <div class="ev-t"><span class="n">4</span><span class="x">Grind size as the lever</span><i class="d o"></i><em>4</em></div>
+              <div class="ev-grp">Puck preparation</div>
+              <div class="ev-t"><span class="n">5</span><span class="x">A level, clump-free bed</span><i class="d o"></i><em>3</em></div>
+              <div class="ev-t"><span class="n">6</span><span class="x">Brew ratio: dose &amp; yield</span><i class="d o"></i><em>4</em></div>
+            </div>
+            <div class="ev-main">
+              <div class="ev-tabs-d"><span><svg><use href="#i-fork"/></svg>Roadmap</span><span class="on"><i></i>Recognising sour, sweet…</span></div>
+              <div class="ev-read">
+                <div class="ev-crumb">Step 2 · 35 min · then “Choosing beans and freshness”</div>
+                <h4 class="ev-title">Recognising sour, sweet, and bitter in a shot</h4>
+                <div class="ev-pager"><span class="pg">2/7</span>Comparison<svg><use href="#i-down"/></svg><span class="ed"><svg><use href="#i-pencil"/></svg>Edit</span><span class="mc">Mark complete</span></div>
+                <p class="ev-intro">Sour and bitter both taste “off”, but they sit on opposite sides of the sweet window — and the fix for one is the opposite of the fix for the other.</p>
+                <div class="ev-table">
+                  <div class="ev-tr th"><span></span><span>Dominant taste</span><span>Mouthfeel</span><span>Grind move</span></div>
+                  <div class="ev-tr"><span class="ev-name">Sour</span><span>Sharp, lemony, thin</span><span>Thin, watery</span><span>Finer</span></div>
+                  <div class="ev-tr"><span class="ev-name">Balanced</span><span>Sweet, syrupy, clean</span><span>Coating, full</span><span>Keep</span></div>
+                  <div class="ev-tr"><span class="ev-name">Bitter</span><span>Ash, harsh roast</span><span>Drying</span><span>Coarser</span></div>
+                </div>
+                <div class="ev-audio"><span class="pb"><svg><use href="#i-pause"/></svg></span><span><b>Listening</b><br><small>Narrated · 29 voices</small></span><span class="ev-wave w-web"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="ev-tag g1 ink"><i><svg><use href="#i-globe"/></svg></i>Full-featured in any browser</span>
+    </div>
+
+    <!-- The app: today. -->
+    <div class="ev-dev d-app" data-depth="0.7">
+    <div class="ev-phone app">
+      <div class="ev-scr">
+        <div class="ev-island"></div>
+        <div class="ev-status"><span>9:41</span><span class="bt"><b></b><i></i></span></div>
+        <div class="ev-today">
+          <div class="hd"><h4>Today</h4><span class="ic"><svg><use href="#i-search"/></svg></span><span class="ic"><svg><use href="#i-bell"/></svg></span><span class="av">DL</span></div>
+          <div class="ev-new">
+            <div class="nh"><b>Learn something new</b><small>Planning is free</small></div>
+            <div class="nf"><span class="ph">What do you want to learn?</span><div class="nc"><span><svg><use href="#i-clip"/></svg>Drop files</span><span><svg><use href="#i-file"/></svg>Paste notes</span></div><i class="go"><svg><use href="#i-arrow-up"/></svg></i></div>
+          </div>
+          <div class="ev-due">
+            <span class="k">Pick up where you left off</span>
+            <div class="tt">Recognising sour, sweet &amp; bitter</div>
+            <div class="mm">Dialling in espresso at home</div>
+            <div class="rw"><span class="go">Resume<svg><use href="#i-arrow"/></svg></span><small>35 min</small></div>
+          </div>
+          <div class="ev-sec">Your plan</div>
+          <div class="ev-row"><span class="no on">1</span><span><b>Recognising sour, sweet &amp; bitter</b><small>35 min · planned for today</small></span></div>
+          <div class="ev-row"><span class="no">2</span><span><b>Choosing beans and freshness</b><small>30 min · planned for Thu</small></span></div>
+        </div>
+        <div class="ev-tabs"><span class="on"><svg><use href="#i-home"/></svg>Today</span><span><svg><use href="#i-book"/></svg>Courses</span><span><svg><use href="#i-file"/></svg>Files</span><span class="nw"><i><svg><use href="#i-plus"/></svg></i>New</span></div>
+      </div>
+    </div>
+    <span class="ev-tag g2"><i><svg><use href="#i-phone"/></svg></i>Installable on iOS &amp; Android</span>
+    </div>
+
+    <!-- Telegram: a chat, a button, the Mini App. -->
+    <div class="ev-dev d-tg" data-depth="1.05">
+    <div class="ev-phone tg">
+      <div class="ev-scr">
+        <div class="tg-bg"></div>
+        <div class="ev-island"></div>
+        <div class="ev-status" style="position:relative;z-index:2;background:rgb(255 255 255 / 0.92)"><span>9:41</span><span class="bt"><b></b><i></i></span></div>
+        <div class="tg-top"><svg class="bk"><use href="#i-arrow"/></svg><svg class="mk"><use href="#mark"/></svg><span><b>BiliMind</b><small>bot</small></span></div>
+        <div class="tg-chat">
+          <span class="tg-day">Today</span>
+          <div class="tg-msg me">What’s on today?<time>08:02</time></div>
+          <div class="tg-typing"><i></i><i></i><i></i></div>
+          <div class="tg-msg bot">Morning! Today’s lesson is ready.<div class="tg-card"><b>Recognising sour, sweet &amp; bitter</b><small>Step 2 of 11 · 35 min</small></div><time>08:02</time></div>
+          <div class="tg-btn">Open lesson<svg><use href="#i-arrow"/></svg><span class="tg-tap"></span></div>
+        </div>
+        <div class="tg-input"><span>Message</span><i><svg><use href="#i-send"/></svg></i></div>
+        <div class="tg-sheet">
+          <div class="grab"></div>
+          <div class="sh"><span class="x"><svg><use href="#i-x"/></svg></span><b>BiliMind</b><span class="x"><svg><use href="#i-dots"/></svg></span></div>
+          <div class="mb-top"><svg class="bk"><use href="#i-back"/></svg><b>Dialling in espr…</b><span class="sq">Aa</span><svg class="sr"><use href="#i-search"/></svg></div>
+          <div class="mb-read">
+            <div class="tg-ok"><i><svg><use href="#i-check"/></svg></i>Signed in through Telegram — no form</div>
+            <div class="tg-st">Step 2 · 35 min</div>
+            <h5>Recognising sour, sweet, and bitter in a shot</h5>
+            <div class="mb-pg"><span class="pg">2/7</span>Comparison<svg><use href="#i-down"/></svg><span class="mc">Mark complete</span></div>
+            <div class="tg-rows">
+              <div><b>Sour</b><em>Finer</em></div>
+              <div><b>Balanced</b><em>Keep</em></div>
+              <div><b>Bitter</b><em>Coarser</em></div>
+            </div>
+          </div>
+          <div class="mb-tabs"><span class="on"><svg><use href="#i-book"/></svg>Study</span><span><svg><use href="#i-fork"/></svg>Map</span><span><svg><use href="#i-cal"/></svg>Plan</span><span><svg><use href="#i-file"/></svg>Files</span><span><svg><use href="#i-plus"/></svg>Ask</span></div>
+        </div>
+      </div>
+    </div>
+    <span class="ev-tag g3 lime"><i><svg><use href="#i-send"/></svg></i>A Mini App, opened from a chat</span>
+    </div>
+  </div>
+
+  <div class="ev-lang">
+    <div>
+      <p class="ev-say"><span>Taught in</span><span class="ev-slot" aria-hidden="true"><span class="in"></span></span></p>
+      <p class="ev-sub"><b>Generated, taught, narrated and role-played in your language</b> — not translated into it. 20 languages, 29 narration voices.</p>
+    </div>
+    <div class="ev-chips" role="list" aria-label="Languages"></div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const sec = document.getElementById('everywhere');
+  if (!sec) return;
+  const STILL = document.documentElement.classList.contains('still');
+  const LANGS = ['English', 'Русский', 'Oʻzbek', 'Français', 'Deutsch', 'Español', 'Italiano', 'Português',
+    'Nederlands', 'Polski', 'Türkçe', 'العربية', 'हिन्दी', '日本語', '한국어', '中文',
+    'Bahasa Melayu', 'Bahasa Indonesia', 'Tiếng Việt', 'ไทย'];
+
+  /* ── Language chips + the slot ─────────────────────────────────── */
+  const chipsEl = sec.querySelector('.ev-chips');
+  chipsEl.innerHTML = LANGS.map((l) => `<span role="listitem">${l}</span>`).join('');
+  const chips = [...chipsEl.children];
+  const slot = sec.querySelector('.ev-slot'), slotIn = slot.querySelector('.in');
+  // Size the slot to the widest name so the sentence never jumps.
+  slotIn.innerHTML = LANGS.map((l) => `<span>${l}</span>`).join('');
+  // The slot hugs the current word and eases to the next one's width.
+  const wordW = (i) => slotIn.children[i].getBoundingClientRect().width + parseFloat(getComputedStyle(slot).paddingLeft) * 2 + 2;
+
+  /* ── Waveforms ─────────────────────────────────────────────────── */
+  const waves = [...sec.querySelectorAll('.ev-wave')].map((w) => {
+    const n = w.classList.contains('w-web') ? 46 : 14;
+    w.innerHTML = '<i></i>'.repeat(n);
+    const bars = [...w.children];
+    bars.forEach((b, k) => { b.style.height = (24 + 70 * Math.abs(Math.sin(k * 1.7) * Math.cos(k * 0.45))).toFixed(0) + '%'; });
+    return { bars, p: 0.32 };
+  });
+  const paintWaves = () => waves.forEach((w) => { const on = Math.floor(w.p * w.bars.length); w.bars.forEach((b, k) => b.classList.toggle('on', k < on)); });
+
+  let li = LANGS.indexOf('Italiano');
+  const showLang = (i, animate) => {
+    chips.forEach((c, k) => c.classList.toggle('on', k === i));
+    if (!animate) { gsap.set(slotIn, { yPercent: -(i / LANGS.length) * 100 }); gsap.set(slot, { width: wordW(i) }); return; }
+    gsap.to(slotIn, { yPercent: -(i / LANGS.length) * 100, duration: 0.7, ease: 'power3.inOut' });
+    gsap.to(slot, { width: wordW(i), duration: 0.7, ease: 'power3.inOut' });
+  };
+
+  const fit = () => showLang(li, false);
+  fit();
+  if (document.fonts) { document.fonts.ready.then(fit); document.fonts.addEventListener('loadingdone', fit); }
+  addEventListener('resize', fit);
+  paintWaves();
+
+  /* ── Telegram: typing → the lesson → tap → the Mini App ────────── */
+  const tg = sec.querySelector('.ev-phone.tg');
+  const typing = tg.querySelector('.tg-typing'), bot = tg.querySelector('.tg-msg.bot'), btn = tg.querySelector('.tg-btn');
+  const tap = tg.querySelector('.tg-tap'), sheet = tg.querySelector('.tg-sheet'), ok = tg.querySelector('.tg-ok');
+
+  if (STILL) {
+    typing.style.display = 'none';
+    return;
+  }
+
+  const tgTL = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 0.4 });
+  tgTL.set(sheet, { y: 0, yPercent: 102 })
+    .set([bot, btn], { opacity: 0, y: 10, scale: 0.96 })
+    .set(typing, { display: 'flex', opacity: 1 })
+    .to({}, { duration: 1.2 })
+    .set(typing, { display: 'none' })
+    .to(bot, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.8)', transformOrigin: '0% 100%' })
+    .to(btn, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.8)' }, '-=0.15')
+    .to({}, { duration: 1.1 })
+    .fromTo(tap, { scale: 0.2, opacity: 0.9 }, { scale: 6, opacity: 0, duration: 0.6, ease: 'power2.out' })
+    .to(btn, { scale: 0.96, duration: 0.12, yoyo: true, repeat: 1 }, '<')
+    .to(sheet, { yPercent: 0, duration: 0.65, ease: 'power3.out' }, '-=0.25')
+    .fromTo(ok, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(2)' }, '-=0.1')
+    .to({}, { duration: 3.2 })
+    .to(sheet, { yPercent: 102, duration: 0.5, ease: 'power2.in' })
+    .to([bot, btn], { opacity: 0, duration: 0.3 });
+
+  /* ── The app and the web: audio playing, a review that waits ───── */
+  const waveTL = gsap.timeline({ paused: true, repeat: -1 });
+  waveTL.fromTo(waves, { p: 0.12 }, { p: 0.95, duration: 14, ease: 'none', onUpdate: paintWaves });
+
+  const langTL = gsap.timeline({ paused: true, repeat: -1 });
+  langTL.to({}, { duration: 1.7 }).add(() => { li = (li + 1) % LANGS.length; showLang(li, true); });
+
+  /* ── Entrance and parallax ─────────────────────────────────────── */
+  gsap.from(sec.querySelectorAll('.ev-head > *'), {
+    y: 26, opacity: 0, duration: 0.85, stagger: 0.07, ease: 'power3.out',
+    scrollTrigger: { trigger: sec, start: 'top 80%', once: true },
+  });
+  const wide = matchMedia('(min-width: 1101px)');
+  if (wide.matches) {
+    sec.querySelectorAll('[data-depth]').forEach((el) => {
+      const d = +el.dataset.depth;
+      gsap.fromTo(el, { y: 90 * d, rotate: d > 1 ? 3 : d > 0.5 ? -2 : 0 }, {
+        y: -50 * d, rotate: 0, ease: 'none',
+        scrollTrigger: { trigger: sec.querySelector('.ev-stage'), start: 'top bottom', end: 'bottom top', scrub: 0.8 },
+      });
+    });
+    gsap.from(sec.querySelectorAll('.ev-tag'), { scale: 0.6, opacity: 0, duration: 0.6, stagger: 0.12, ease: 'back.out(2)', scrollTrigger: { trigger: sec.querySelector('.ev-stage'), start: 'top 70%', once: true } });
+  }
+
+  let active = false;
+  const run = () => {
+    const on = active && !document.hidden;
+    [tgTL, waveTL, langTL].forEach((t) => (on ? t.play() : t.pause()));
+  };
+  ScrollTrigger.create({ trigger: sec, start: 'top 85%', end: 'bottom 5%', onToggle: (s) => { active = s.isActive; run(); } });
+  document.addEventListener('visibilitychange', run);
+})();
+</script>

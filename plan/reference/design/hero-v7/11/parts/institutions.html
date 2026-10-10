@@ -1,0 +1,259 @@
+<style>
+/* ── Institutions: the real Settings → "Your team" screen (members with
+   initials, role badges, "Invited", the invite form, the role menu and
+   its toast), and beside it a quiz item that keeps every attempt. ──── */
+#institutions { padding-block: calc(var(--sec-y) * 0.5); }
+#institutions .in-slab {
+  display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: center; gap: clamp(32px, 4vw, 72px);
+  padding: clamp(40px, 5vw, 88px) var(--pad-x);
+  box-shadow: 0 30px 60px -40px rgb(11 13 16 / 0.25), inset 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+/* A faint dotted canvas behind the board, like the app's workspace. */
+#institutions .in-slab::before {
+  content: ""; position: absolute; inset: 0 0 0 46%; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(rgb(11 13 16 / 0.12) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(80% 80% at 60% 50%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(80% 80% at 60% 50%, #000 30%, transparent 80%);
+}
+#institutions .in-copy { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+#institutions .in-copy .eb { background: var(--canvas); }
+#institutions .h2 { font-size: clamp(40px, 4.5vw, 80px); }
+#institutions .h2 .hchip { position: relative; width: 0.74em; height: 0.74em; vertical-align: 0; }
+#institutions .h2 .hchip svg { position: absolute; inset: 27%; width: 46%; height: 46%; }
+#institutions .in-facts { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; max-width: 520px; }
+#institutions .in-facts li {
+  display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 12px;
+  border-radius: 18px; background: var(--canvas); box-shadow: inset 0 0 0 1px var(--line);
+  font-size: 15.5px; font-weight: 600;
+}
+#institutions .in-facts .ic { width: 34px; height: 34px; border-radius: 11px; background: var(--ink); color: var(--lime); display: grid; place-items: center; flex: none; }
+#institutions .in-facts .ic svg { width: 16px; height: 16px; }
+#institutions .in-facts b { margin-left: auto; font-weight: 600; font-size: 13.5px; color: var(--cobalt); background: var(--cobalt-soft); padding: 4px 10px; border-radius: 99px; white-space: nowrap; }
+#institutions .in-copy .pill { align-self: flex-start; margin-top: 6px; height: 52px; padding: 0 24px; }
+
+/* The board: Settings → Your team, in the app's frame. */
+#institutions .in-board { position: relative; min-width: 0; padding: 0 0 178px; }
+#institutions .in-win {
+  position: relative; border-radius: 22px; background: #fff; overflow: hidden;
+  display: grid; grid-template-columns: 52px minmax(0, 1fr); height: 520px;
+  box-shadow: 0 0 0 1px rgb(11 13 16 / 0.07), 0 40px 70px -40px rgb(20 40 200 / 0.4), 0 12px 30px -20px rgb(11 13 16 / 0.25);
+}
+#institutions .in-rail { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 14px 0; background: #F6F7FA; border-right: 1px solid var(--line); }
+#institutions .in-rail .mk { width: 26px; height: 26px; margin-bottom: 4px; }
+#institutions .in-rail i { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: var(--text-3); }
+#institutions .in-rail i svg { width: 15px; height: 15px; }
+#institutions .in-rail .gap { flex: 1; }
+#institutions .in-rail b { width: 28px; height: 28px; border-radius: 50%; background: var(--lime-soft); color: var(--lime-ink); display: grid; place-items: center; font-size: 10px; font-weight: 700; }
+#institutions .in-page { min-width: 0; padding: 22px 22px 0; display: flex; flex-direction: column; }
+#institutions .in-ph b { display: block; font: 600 22px/1.1 var(--display); letter-spacing: -0.025em; }
+#institutions .in-ph span { display: block; margin-top: 3px; font-size: 12.5px; color: var(--text-3); }
+#institutions .in-cols { margin-top: 18px; flex: 1; min-height: 0; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 20px; }
+#institutions .in-nav { display: flex; flex-direction: column; gap: 2px; }
+#institutions .in-acc { display: flex; align-items: center; gap: 8px; padding: 8px; margin-bottom: 8px; border-radius: 12px; background: #F6F7FA; box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
+#institutions .in-acc span { min-width: 0; }
+#institutions .in-acc b { display: block; font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#institutions .in-acc small { display: block; font-size: 10px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#institutions .in-nav > span { display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 9px; border-radius: 9px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
+#institutions .in-nav > span svg { width: 13px; height: 13px; flex: none; }
+#institutions .in-nav > span.on { background: var(--lime-soft); color: var(--lime-ink); font-weight: 600; }
+#institutions .in-av { width: 30px; height: 30px; border-radius: 50%; flex: none; display: grid; place-items: center; background: #EEF0F4; color: var(--ink-3); font-size: 10.5px; font-weight: 700; }
+#institutions .in-team { min-width: 0; display: flex; flex-direction: column; }
+#institutions .in-team > b { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+#institutions .in-team > span { margin-top: 2px; font-size: 12px; color: var(--text-3); }
+#institutions .in-team > span em { font-style: normal; color: var(--ink-3); font-weight: 500; }
+#institutions .in-list { margin-top: 12px; border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+#institutions .in-m { display: flex; align-items: center; gap: 10px; padding: 9px 10px 9px 11px; border-top: 1px solid var(--line); background: #fff; }
+#institutions .in-m:first-child { border-top: 0; }
+#institutions .in-mx { min-width: 0; flex: 1; }
+#institutions .in-mx b { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+#institutions .in-mx b small { font-weight: 400; color: var(--text-3); font-size: 11.5px; }
+#institutions .in-mx > span { display: block; font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#institutions .in-role { flex: none; height: 21px; padding: 0 8px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; background: #F1F2F5; color: var(--text-2); }
+#institutions .in-role.own { background: var(--lime-soft); color: var(--lime-ink); box-shadow: inset 0 0 0 1px #DCEFA6; }
+#institutions .in-inv { height: 18px; padding: 0 7px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 10px; font-weight: 600; background: #FFF1D6; color: #8A5A00; }
+#institutions .in-more { width: 24px; height: 24px; flex: none; border-radius: 7px; display: grid; place-items: center; color: var(--text-3); position: relative; }
+#institutions .in-more svg { width: 13px; height: 13px; }
+#institutions .in-more.on { background: #F1F2F5; color: var(--ink); }
+#institutions .in-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 5; min-width: 150px; padding: 4px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 14px 30px -12px rgb(11 13 16 / 0.3); opacity: 0; transform: translateY(-4px) scale(.97); transform-origin: 100% 0; pointer-events: none; }
+#institutions .in-menu span { display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 8px; border-radius: 8px; font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+#institutions .in-menu span svg { width: 12px; height: 12px; color: var(--text-3); }
+#institutions .in-menu span.hl { background: #F1F2F5; color: var(--ink); }
+#institutions .in-menu span.rm { color: #C2391C; }
+#institutions .in-inviter { margin-top: 12px; padding: 12px; border-radius: 14px; background: #F6F7FA; box-shadow: inset 0 0 0 1px var(--line); }
+#institutions .in-inviter > b { display: block; font-size: 12.5px; font-weight: 600; }
+#institutions .in-if { margin-top: 8px; display: flex; gap: 6px; }
+#institutions .in-email { flex: 1; min-width: 0; height: 32px; padding: 0 10px; border-radius: 9px; background: #fff; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); display: flex; align-items: center; font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; }
+#institutions .in-email.focus { box-shadow: inset 0 0 0 1.5px var(--lime-2), 0 0 0 3px rgb(198 242 78 / 0.28); }
+#institutions .in-email .ph { color: var(--text-3); }
+#institutions .in-caret { display: inline-block; width: 1.5px; height: 1.1em; margin-left: 1px; background: var(--ink); opacity: 0; }
+#institutions .in-email.focus .in-caret { opacity: 1; animation: institutions-blink 1s steps(1) infinite; }
+@keyframes institutions-blink { 50% { opacity: 0; } }
+#institutions .in-sel { flex: none; height: 32px; padding: 0 9px 0 11px; border-radius: 9px; background: #fff; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
+#institutions .in-sel svg { width: 11px; height: 11px; color: var(--text-3); }
+#institutions .in-btn { flex: none; height: 32px; padding: 0 14px; border-radius: 99px; background: var(--ink); color: #fff; display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; }
+#institutions .in-toast { position: absolute; left: 50%; top: 14px; z-index: 6; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 8px; border-radius: 99px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; box-shadow: 0 14px 30px -12px rgb(11 13 16 / 0.5); transform: translateX(-50%); opacity: 0; }
+#institutions .in-toast i { width: 22px; height: 22px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; }
+#institutions .in-toast i svg { width: 11px; height: 11px; }
+
+/* Every attempt kept: the quiz item's header and its latest result. */
+#institutions .in-attempts {
+  position: absolute; right: -18px; bottom: 0; width: min(330px, 70%); z-index: 4;
+  border-radius: 20px; background: #fff; padding: 13px 14px 14px; display: grid; gap: 9px;
+  box-shadow: 0 0 0 1px rgb(11 13 16 / 0.07), 0 30px 50px -24px rgb(11 13 16 / 0.4);
+}
+#institutions .at-h { display: flex; align-items: center; gap: 5px; }
+#institutions .at-h .ck { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1px #CDE79A; color: var(--lime-ink); flex: none; }
+#institutions .at-h .ck svg { width: 10px; height: 10px; }
+#institutions .at-h .tp { height: 20px; padding: 0 8px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; box-shadow: inset 0 0 0 1px var(--line); color: var(--text-2); white-space: nowrap; }
+#institutions .at-h .tp.ai { background: var(--lime-soft); color: var(--lime-ink); box-shadow: inset 0 0 0 1px #DCEFA6; }
+#institutions .at-h .n { margin-left: auto; font-size: 11px; color: var(--text-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+#institutions .at-q { margin: 0; font-size: 12.5px; font-weight: 500; line-height: 1.4; }
+#institutions .at-r { border-radius: 12px; background: #F4FAE4; box-shadow: inset 0 0 0 1px #D6EBA4; padding: 9px 10px; display: flex; align-items: center; gap: 10px; }
+#institutions .at-r > div { flex: 1; min-width: 0; }
+#institutions .at-r b { display: block; font-size: 12px; font-weight: 600; color: #3D5A06; }
+#institutions .at-r span { display: block; font-size: 10.5px; color: #6B7F3A; font-variant-numeric: tabular-nums; }
+#institutions .at-r.no { background: #FFF6E0; box-shadow: inset 0 0 0 1px #F3DE9E; }
+#institutions .at-r.no b { color: #8A5A00; }
+#institutions .at-r.no span { color: #A07A2A; }
+#institutions .at-r.no .val { stroke: #D9961E; }
+#institutions .at-ring { width: 34px; height: 34px; position: relative; flex: none; }
+#institutions .at-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+#institutions .at-ring .trk { fill: none; stroke: rgb(11 13 16 / 0.08); stroke-width: 4; }
+#institutions .at-ring .val { fill: none; stroke: #6E9612; stroke-width: 4; stroke-linecap: round; }
+#institutions .at-ring em { position: absolute; inset: 0; display: grid; place-items: center; font-style: normal; font-size: 9.5px; font-weight: 700; }
+#institutions .at-f { display: flex; align-items: center; gap: 8px; }
+#institutions .at-f .rt { height: 26px; padding: 0 10px 0 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 5px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); font-size: 11px; font-weight: 500; }
+#institutions .at-f .rt svg { width: 11px; height: 11px; }
+#institutions .at-f small { font-size: 10.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 1100px) {
+  #institutions .in-slab { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  #institutions .in-slab { padding: 34px 14px 14px; }
+  #institutions .in-copy { padding-inline: 6px; }
+  #institutions .in-win { grid-template-columns: minmax(0, 1fr); height: 560px; border-radius: 18px; }
+  #institutions .in-rail, #institutions .in-nav, #institutions .in-ph span { display: none; }
+  #institutions .in-page { padding: 16px 12px 0; }
+  #institutions .in-cols { grid-template-columns: minmax(0, 1fr); margin-top: 12px; }
+  #institutions .in-mx > span { display: none; }
+  #institutions .in-sel { display: none; }
+  #institutions .in-attempts { position: relative; right: auto; width: auto; margin: 12px 0 0; }
+  #institutions .in-board { padding-bottom: 0; }
+}
+</style>
+
+<section id="institutions" aria-labelledby="inst-h">
+  <div class="slab white in-slab">
+    <div class="in-copy">
+      <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-school"/></svg></span>For schools, bootcamps &amp; teams</span>
+      <h2 class="h2" id="inst-h">One teacher tries it. The whole <span class="hchip cobalt" aria-hidden="true"><svg><use href="#i-school"/></svg></span><span class="cob">center</span> follows.</h2>
+      <p class="lede">Every account is already an organization — owner, admin, instructor, learner. When you grow, you add seats, not a new product.</p>
+      <ul class="in-facts">
+        <li><span class="ic" aria-hidden="true"><svg><use href="#i-user"/></svg></span>Roles &amp; seats<b>built in</b></li>
+        <li><span class="ic" aria-hidden="true"><svg><use href="#i-check"/></svg></span>Progress you can prove<b>every attempt kept</b></li>
+      </ul>
+      <a class="pill dark" href="https://bilimind.com/for-institutions">For institutions<span class="arr" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a>
+    </div>
+
+    <div class="in-board" aria-hidden="true">
+      <div class="in-win">
+        <div class="in-rail"><svg class="mk"><use href="#mark"/></svg><i><svg><use href="#i-search"/></svg></i><i><svg><use href="#i-home"/></svg></i><i><svg><use href="#i-book"/></svg></i><i><svg><use href="#i-file"/></svg></i><i><svg><use href="#i-plus"/></svg></i><span class="gap"></span><i><svg><use href="#i-bell"/></svg></i><b>NR</b></div>
+        <div class="in-page">
+          <div class="in-ph"><b>Settings</b><span>Your account, plan, keys and team.</span></div>
+          <div class="in-cols">
+            <div class="in-nav">
+              <div class="in-acc"><span class="in-av">NR</span><span><b>Nodira Rashidova</b><small>nodira@lingua.uz</small></span></div>
+              <span><svg><use href="#i-user"/></svg>Profile</span>
+              <span><svg><use href="#i-cards"/></svg>Plan &amp; billing</span>
+              <span><svg><use href="#i-link"/></svg>API keys</span>
+              <span class="on"><svg><use href="#i-school"/></svg>Your team</span>
+            </div>
+            <div class="in-team">
+              <b>Your team</b>
+              <span>Everyone working inside <em>Lingua Centre</em>.</span>
+              <div class="in-list">
+                <div class="in-m"><span class="in-av">NR</span><span class="in-mx"><b>Nodira Rashidova <small>· you</small></b><span>nodira@lingua.uz</span></span><span class="in-role own">Owner</span><span class="in-more"><svg><use href="#i-dots"/></svg></span></div>
+                <div class="in-m"><span class="in-av">JA</span><span class="in-mx"><b>Jamshid Aliev</b><span>jamshid@lingua.uz</span></span><span class="in-role">Admin</span><span class="in-more"><svg><use href="#i-dots"/></svg></span></div>
+                <div class="in-m" data-m="promote"><span class="in-av">MY</span><span class="in-mx"><b>Malika Yusupova</b><span>malika@lingua.uz</span></span><span class="in-role">Member</span><span class="in-more"><svg><use href="#i-dots"/></svg><span class="in-menu"><span class="hl"><svg><use href="#i-user"/></svg>Make admin</span><span><svg><use href="#i-user"/></svg>Make owner</span><span class="rm"><svg><use href="#i-x"/></svg>Remove</span></span></span></div>
+                <div class="in-m"><span class="in-av">DT</span><span class="in-mx"><b>Dilnoza Tursunova</b><span>dilnoza@lingua.uz</span></span><span class="in-role">Member</span><span class="in-more"><svg><use href="#i-dots"/></svg></span></div>
+                <div class="in-m" data-m="new"><span class="in-av">S</span><span class="in-mx"><b>sardor@lingua.uz <span class="in-inv">Invited</span></b><span>Waiting to join</span></span><span class="in-role">Member</span><span class="in-more"><svg><use href="#i-dots"/></svg></span></div>
+              </div>
+              <div class="in-inviter">
+                <b>Invite someone</b>
+                <div class="in-if"><span class="in-email"><span class="in-typed"><span class="ph">name@example.com</span></span><i class="in-caret"></i></span><span class="in-sel">Member<svg><use href="#i-down"/></svg></span><span class="in-btn">Invite</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="in-toast"><i><svg><use href="#i-check"/></svg></i><span>Invited sardor@lingua.uz.</span></span>
+      </div>
+      <div class="in-attempts">
+        <div class="at-h"><span class="ck"><svg><use href="#i-check"/></svg></span><span class="tp">Short answer</span><span class="tp ai">Marked by AI</span><span class="n">3 attempts</span></div>
+        <p class="at-q">Why does a 1:2 ratio taste sweeter than 1:3 with the same beans?</p>
+        <div class="at-r"><div><b>Passed</b><span>80 / 100 · pass mark 70</span></div><span class="at-ring"><svg viewBox="0 0 34 34"><circle class="trk" cx="17" cy="17" r="13"/><circle class="val" cx="17" cy="17" r="13" pathLength="100" stroke-dasharray="80 100"/></svg><em>80%</em></span></div>
+        <div class="at-f"><span class="rt"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Try a different answer</span><small>every attempt kept</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(() => {
+  'use strict';
+  const sec = document.getElementById('institutions');
+  if (!sec || !window.gsap) return;
+  const STILL = document.documentElement.classList.contains('still');
+  const q = (s, r = sec) => r.querySelector(s);
+  const win = q('.in-win'), email = q('.in-email'), typed = q('.in-typed'), btn = q('.in-btn'), toast = q('.in-toast'), toastTx = q('.in-toast > span');
+  const fresh = q('[data-m="new"]'), promo = q('[data-m="promote"]'), more = q('.in-more', promo), menu = q('.in-menu', promo), role = q('.in-role', promo);
+  const ring = q('.at-ring .val'), pct = q('.at-ring em'), atN = q('.at-h .n'), atR = q('.at-r'), atB = q('.at-r b'), atS = q('.at-r div span');
+  const EMAIL = 'sardor@lingua.uz';
+  if (STILL) { gsap.set(toast, { autoAlpha: 0 }); return; }
+
+  const press = (el) => gsap.timeline().to(el, { scale: 0.92, duration: 0.1, ease: 'power2.in' }).to(el, { scale: 1, duration: 0.3, ease: 'back.out(3)' });
+  const showToast = (tl, text, at) => tl
+    .call(() => { toastTx.textContent = text; }, null, at)
+    .fromTo(toast, { autoAlpha: 0, y: -12 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'back.out(2)', immediateRender: false }, at)
+    .to(toast, { autoAlpha: 0, y: -8, duration: 0.3 }, at + 2.1);
+  let reset;
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.4, paused: true });
+  const o = { n: 0 }, sc = { v: 0 };
+  tl.call(reset = () => {
+    gsap.set(fresh, { display: 'none' }); typed.innerHTML = '<span class="ph">name@example.com</span>'; email.classList.remove('focus');
+    role.textContent = 'Member'; more.classList.remove('on'); gsap.set(menu, { opacity: 0, y: -4, scale: 0.97 });
+    gsap.set(toast, { autoAlpha: 0 }); ring.setAttribute('stroke-dasharray', '55 100'); pct.textContent = '55%'; atN.textContent = '2 attempts'; atR.classList.add('no'); atB.textContent = 'Not yet'; atS.textContent = '55 / 100 · pass mark 70';
+  }, null, 0)
+    // Invite someone.
+    .call(() => { email.classList.add('focus'); typed.textContent = ''; }, null, 0.6)
+    .to(o, { n: EMAIL.length, duration: 1.3, ease: 'none', onUpdate: () => { typed.textContent = EMAIL.slice(0, Math.round(o.n)); } }, 0.7)
+    .call(() => email.classList.remove('focus'), null, 2.2)
+    .add(press(btn), 2.3)
+    .call(() => { typed.innerHTML = '<span class="ph">name@example.com</span>'; gsap.set(fresh, { display: 'flex' }); }, null, 2.55)
+    .from(fresh, { height: 0, opacity: 0, paddingTop: 0, paddingBottom: 0, duration: 0.45, ease: 'power3.out', immediateRender: false }, 2.55);
+  showToast(tl, 'Invited sardor@lingua.uz.', 2.6);
+  // Make someone an admin, from the row's menu.
+  tl.call(() => more.classList.add('on'), null, 5.1)
+    .to(menu, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: 'power2.out' }, 5.1)
+    .add(press(q('.hl', menu)), 5.9)
+    .to(menu, { opacity: 0, y: -4, scale: 0.97, duration: 0.2 }, 6.1)
+    .call(() => { more.classList.remove('on'); role.textContent = 'Admin'; }, null, 6.15)
+    .fromTo(role, { scale: 0.7 }, { scale: 1, duration: 0.4, ease: 'back.out(3)', immediateRender: false }, 6.15);
+  showToast(tl, 'Malika Yusupova is now admin.', 6.2);
+  // And a learner's third try lands.
+  tl.call(() => { atN.textContent = '3 attempts'; }, null, 7.6)
+    .call(() => { atR.classList.remove('no'); atB.textContent = 'Passed'; atS.textContent = '80 / 100 · pass mark 70'; }, null, 8.3)
+    .fromTo(sc, { v: 55 }, { v: 80, duration: 1.1, ease: 'power2.out', immediateRender: false, onUpdate: () => { ring.setAttribute('stroke-dasharray', `${sc.v.toFixed(1)} 100`); pct.textContent = Math.round(sc.v) + '%'; } }, 7.6)
+    .to({}, { duration: 2.4 }, 8.7);
+
+  gsap.from(sec.querySelectorAll('.in-copy > *'), { y: 26, opacity: 0, duration: 0.85, stagger: 0.07, ease: 'power3.out', scrollTrigger: { trigger: sec, start: 'top 80%', once: true } });
+  gsap.from([win, q('.in-attempts')], { y: 40, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out', scrollTrigger: { trigger: win, start: 'top 85%', once: true } });
+  reset();
+  let on = false;
+  const sync = () => (on && !document.hidden ? tl.play() : tl.pause());
+  ScrollTrigger.create({ trigger: win, start: 'top 85%', end: 'bottom top', onToggle: (s) => { on = s.isActive; sync(); } });
+  document.addEventListener('visibilitychange', sync);
+})();
+</script>

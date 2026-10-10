@@ -1,0 +1,515 @@
+<style>
+/* ── #checks — three ways the product marks your work ────────────────
+   Each card holds a slice of the real lesson reader with the real block
+   in it: the short-answer item and its AttemptResult (rubric rows,
+   weights, the ring), the code exercise pane (dark sandbox, Cases and
+   Console tabs, "Run 3 checks", "2/3 passing · 41ms"), and SpeakingBlock
+   (phrase, translation, phonetic, Speak → Stop → Checking, a score pill,
+   word-level marks and a tip). The markup is the resolved state; the
+   script rewinds it and plays the loop while the section is on screen. */
+#checks { padding-block: calc(var(--sec-y) / 2); }
+#checks .ck-slab { padding: clamp(40px, 5vw, 84px) var(--pad-x) clamp(28px, 3.6vw, 60px); overflow: hidden; }
+#checks .ck-slab::before {
+  content: ""; position: absolute; inset: -30% -10% auto auto; width: 60%; aspect-ratio: 1; z-index: -1;
+  background: radial-gradient(closest-side, rgb(35 64 230 / 0.42), transparent 70%);
+  pointer-events: none;
+}
+#checks .ck-slab::after {
+  content: ""; position: absolute; left: -10%; bottom: -40%; width: 50%; aspect-ratio: 1; z-index: -1;
+  background: radial-gradient(closest-side, rgb(198 242 78 / 0.10), transparent 70%);
+  pointer-events: none;
+}
+#checks .ck-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 24px 56px; align-items: end; }
+#checks .ck-titles { display: grid; gap: 22px; justify-items: start; }
+#checks .ck-side { display: grid; gap: 18px; padding-bottom: 10px; }
+#checks .ck-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+#checks .ck-facts li {
+  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px 0 6px; border-radius: 99px;
+  background: rgb(255 255 255 / 0.07); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
+  font-size: 13.5px; font-weight: 500; color: rgb(255 255 255 / 0.85);
+}
+#checks .ck-facts b { min-width: 24px; height: 24px; padding: 0 6px; border-radius: 99px; background: var(--lime); color: var(--ink); display: grid; place-items: center; font: 700 12.5px/1 var(--display); }
+
+#checks .ck-row { margin-top: clamp(36px, 4.4vw, 64px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.4vw, 20px); }
+#checks .ck-card {
+  position: relative; display: flex; flex-direction: column;
+  border-radius: var(--r-md); padding: 22px 22px 22px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.025));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09);
+}
+#checks .ck-k { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: rgb(255 255 255 / 0.6); }
+#checks .ck-k .n { font: 700 13px/1 var(--display); color: var(--lime); }
+#checks .ck-k .ic { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: rgb(255 255 255 / 0.08); color: #fff; }
+#checks .ck-k .ic svg { width: 14px; height: 14px; }
+#checks .ck-card h3 { margin: 14px 0 18px; min-height: 2.16em; font: 600 clamp(22px, 1.9vw, 28px)/1.08 var(--display); letter-spacing: -0.03em; color: #fff; text-wrap: balance; }
+
+/* ── The lesson reader, one slice per card ── */
+#checks .ck-win {
+  position: relative; flex: 1 1 auto; min-height: 596px;
+  background: #fff; color: var(--ink); border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 50px -30px rgb(0 0 0 / 0.8);
+  display: flex; flex-direction: column;
+  font-size: 13px;
+}
+/* The pager row that sits over every lesson: "6/8 Check yourself ▾ … Mark complete". */
+#checks .rd-bar {
+  display: flex; align-items: center; gap: 6px; height: 46px; padding: 0 10px 0 14px; flex: none;
+  border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--text-2); white-space: nowrap;
+}
+#checks .rd-bar .pg { color: var(--text-3); font-variant-numeric: tabular-nums; }
+#checks .rd-bar svg { width: 11px; height: 11px; color: var(--text-3); }
+#checks .rd-bar .mc { margin-left: auto; height: 28px; padding: 0 12px; border-radius: 99px; background: var(--ink); color: #fff; display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; }
+#checks .rd-bar .more { width: 26px; height: 26px; display: grid; place-items: center; color: var(--text-3); }
+#checks .rd-bar .more svg { width: 14px; height: 14px; }
+#checks .rd-body { padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 10px; min-height: 0; flex: 1; background: #FBFBFD; }
+/* BlockShell's eyebrow: a dot (lime for a task) and the label. */
+#checks .bk-eb { display: flex; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); }
+#checks .bk-eb i { width: 5px; height: 5px; border-radius: 50%; background: var(--lime-2); flex: none; }
+#checks .bk-eb .bd { height: 18px; padding: 0 7px; border-radius: 99px; display: inline-flex; align-items: center; background: #F1F2F5; color: var(--text-2); font-size: 10px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+#checks .bk-eb .lang { margin-left: auto; height: 20px; padding: 0 7px; border-radius: 6px; display: inline-flex; align-items: center; box-shadow: inset 0 0 0 1px var(--line); background: #fff; color: var(--ink-3); font-size: 10px; font-weight: 700; letter-spacing: 0.04em; }
+/* A pill as the app draws it. */
+#checks .tp { height: 20px; padding: 0 8px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; box-shadow: inset 0 0 0 1px var(--line); color: var(--text-2); background: #fff; white-space: nowrap; }
+#checks .tp.ai { background: var(--lime-soft); color: var(--lime-ink); box-shadow: inset 0 0 0 1px #DCEFA6; }
+
+/* (a) Short answer → AttemptResult */
+#checks .aq { border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px rgb(11 13 16 / 0.03); padding: 12px 12px 12px; display: flex; flex-direction: column; gap: 9px; }
+#checks .aq-h { display: flex; align-items: center; gap: 5px; }
+#checks .aq-h .num { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.14); font: 600 10.5px/1 var(--body); color: var(--text-3); flex: none; }
+#checks .aq-h .num svg { width: 10px; height: 10px; display: none; color: var(--lime-ink); }
+#checks .aq.done .aq-h .num { box-shadow: inset 0 0 0 1px #CDE79A; }
+#checks .aq.done .aq-h .num b { display: none; }
+#checks .aq.done .aq-h .num svg { display: block; }
+#checks .aq-h .att { margin-left: auto; font-size: 11px; color: var(--text-3); white-space: nowrap; }
+#checks .aq-q { margin: 0; font: 500 14px/1.38 var(--body); letter-spacing: -0.005em; color: var(--ink); }
+#checks .aq-form { overflow: hidden; display: grid; gap: 7px; }
+#checks .aq-ans { position: relative; min-height: 84px; border-radius: 10px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); background: #fff; padding: 9px 11px; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); }
+#checks .aq-ans.focus { box-shadow: inset 0 0 0 1.5px var(--lime-2), 0 0 0 3px rgb(198 242 78 / 0.28); }
+#checks .aq-ans .ph { color: var(--text-3); }
+#checks .w-caret { display: inline-block; width: 1.5px; height: 1.05em; margin-left: 1px; vertical-align: -0.15em; background: var(--ink); opacity: 0; }
+#checks .w-caret.on { animation: checks-blink 1s steps(1) infinite; opacity: 1; }
+@keyframes checks-blink { 50% { opacity: 0; } }
+#checks .aq-wc { font-size: 10.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+#checks .aq-act { display: flex; align-items: center; gap: 8px; }
+#checks .aq-sub { height: 30px; padding: 0 14px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; background: #C9CCD3; color: #fff; transition: background .2s; }
+#checks .aq-sub.on { background: var(--ink); }
+#checks .aq-sub .spin { width: 11px; height: 11px; border-radius: 50%; border: 2px solid rgb(255 255 255 / 0.35); border-top-color: #fff; display: none; animation: checks-spin .7s linear infinite; }
+#checks .aq-sub.busy .spin { display: block; }
+#checks .aq-hint { font-size: 11px; color: var(--text-3); }
+@keyframes checks-spin { to { transform: rotate(360deg); } }
+/* AttemptResult. */
+#checks .res { overflow: hidden; }
+#checks .res-in { border-radius: 12px; background: #F4FAE4; box-shadow: inset 0 0 0 1px #D6EBA4; padding: 10px 11px 11px; display: grid; gap: 7px; }
+#checks .res-top { display: flex; align-items: flex-start; gap: 10px; }
+#checks .res-top > div { flex: 1; min-width: 0; }
+#checks .res-ok { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #3D5A06; }
+#checks .res-ok svg { width: 14px; height: 14px; }
+#checks .res-sc { margin-top: 2px; font-size: 11px; color: #6B7F3A; font-variant-numeric: tabular-nums; }
+#checks .ring { width: 40px; height: 40px; flex: none; position: relative; }
+#checks .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+#checks .ring .trk { fill: none; stroke: rgb(11 13 16 / 0.08); stroke-width: 4; }
+#checks .ring .val { fill: none; stroke: #6E9612; stroke-width: 4; stroke-linecap: round; }
+#checks .ring b { position: absolute; inset: 0; display: grid; place-items: center; font: 700 10.5px/1 var(--body); color: var(--ink); }
+#checks .res-fb { margin: 0; font-size: 11.5px; line-height: 1.5; color: #4B5A2C; }
+#checks .res-rk { font-size: 10.5px; color: #7D8B5C; margin-top: 2px; }
+#checks .crit { display: grid; gap: 4px; }
+#checks .crit-h { display: flex; align-items: baseline; gap: 5px; font-size: 11.5px; color: var(--ink-2); min-width: 0; }
+#checks .crit-h span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+#checks .crit-h small { color: #8C9775; font-size: 10px; white-space: nowrap; }
+#checks .crit-h em { margin-left: auto; font-style: normal; font-size: 10.5px; color: #6B7F3A; font-variant-numeric: tabular-nums; }
+#checks .crit i { display: block; height: 3px; border-radius: 3px; background: rgb(11 13 16 / 0.08); overflow: hidden; }
+#checks .crit i b { display: block; height: 100%; width: calc(var(--p) * 100%); border-radius: inherit; background: #6E9612; transform-origin: left; }
+#checks .crit.mid i b { background: #D9961E; }
+#checks .retry { margin-top: 8px; justify-self: start; height: 28px; padding: 0 11px 0 9px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; background: #fff; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); font-size: 11.5px; font-weight: 500; color: var(--ink-2); }
+#checks .retry svg { width: 12px; height: 12px; }
+
+/* (b) The code exercise pane */
+#checks .ex-task { border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); padding: 11px 12px; display: grid; gap: 9px; }
+#checks .ex-task p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--ink-2); }
+#checks .ex-task p code { font: 500 12px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; padding: 1px 5px; border-radius: 5px; background: #F1F2F5; }
+#checks .sb { border-radius: 12px; overflow: hidden; background: #121419; color: #D5D8E0; display: flex; flex-direction: column; }
+#checks .sb-h { display: flex; align-items: center; gap: 7px; padding: 9px 10px 8px; border-bottom: 1px solid rgb(255 255 255 / 0.07); font-size: 11.5px; white-space: nowrap; }
+#checks .sb-h .gl { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; background: #1E2A44; color: #8FD1FF; font: 700 8.5px/1 var(--body); letter-spacing: 0.02em; flex: none; }
+#checks .sb-h b { font-weight: 600; color: #fff; font-size: 12px; }
+#checks .sb-h .mt { color: #6B7280; font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; }
+#checks .sb-h .rs { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #8A90A0; }
+#checks .sb-h .rs i { width: 6px; height: 6px; border-radius: 50%; background: #6B7280; }
+#checks .sb-h .rs.ready i { background: #8DD35F; }
+#checks .sb-ed { margin: 0; padding: 9px 0; font: 500 12px/1.75 ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; overflow: hidden; }
+#checks .sb-ed .ln { display: block; padding-right: 10px; white-space: pre; }
+#checks .sb-ed .ln > i { display: inline-block; width: 30px; text-align: right; padding-right: 12px; color: #4B505C; font-style: normal; }
+#checks .sb-ed .fix { display: block; overflow: hidden; }
+#checks .sb-ed .fix.lit .ln { background: rgb(198 242 78 / 0.10); box-shadow: inset 2px 0 0 var(--lime); }
+#checks .k { color: #F38BB0; } #checks .f { color: #8FD1FF; } #checks .s { color: #C6F24E; } #checks .b { color: #FFC66D; } #checks .o { color: #8A90A0; } #checks .dc { color: #6B7280; font-style: italic; }
+#checks .sb-tabs { display: flex; gap: 2px; padding: 0 8px; border-top: 1px solid rgb(255 255 255 / 0.07); border-bottom: 1px solid rgb(255 255 255 / 0.07); }
+#checks .sb-tabs span { padding: 8px 8px 7px; font-size: 11px; color: #7C8290; border-bottom: 2px solid transparent; }
+#checks .sb-tabs span.on { color: #fff; border-bottom-color: var(--lime); }
+#checks .sb-cases { margin: 0; padding: 4px 10px; list-style: none; min-height: 118px; }
+#checks .sb-cases li { display: flex; gap: 8px; padding: 6px 0; border-top: 1px solid rgb(255 255 255 / 0.06); }
+#checks .sb-cases li:first-child { border-top: 0; }
+#checks .sb-cases .mk { width: 13px; height: 13px; margin-top: 1px; flex: none; display: grid; place-items: center; }
+#checks .sb-cases .mk::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #3A3F4B; }
+#checks .sb-cases .mk svg { width: 12px; height: 12px; display: none; }
+#checks .sb-cases li[data-s="pass"] .mk::before, #checks .sb-cases li[data-s="fail"] .mk::before, #checks .sb-cases li[data-s="run"] .mk::before { display: none; }
+#checks .sb-cases li[data-s="pass"] .mk .y { display: block; color: #8DD35F; }
+#checks .sb-cases li[data-s="fail"] .mk .x { display: block; color: #FF7A5C; }
+#checks .sb-cases li[data-s="run"] .mk { border-radius: 50%; border: 1.5px solid #3A3F4B; border-top-color: var(--lime); animation: checks-spin .7s linear infinite; }
+#checks .sb-cases .nm { font-size: 11.5px; color: #C9CDD6; line-height: 1.35; }
+#checks .sb-cases .dt { display: block; margin-top: 2px; font: 500 10.5px/1.4 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #6B7280; }
+#checks .sb-cases li[data-s="fail"] .dt { color: #FF9D85; }
+#checks .sb-foot { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-top: 1px solid rgb(255 255 255 / 0.07); background: #0E1014; white-space: nowrap; }
+#checks .sb-run { height: 28px; padding: 0 11px 0 9px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: var(--lime); color: var(--ink); font-size: 11.5px; font-weight: 700; flex: none; }
+#checks .sb-run svg { width: 10px; height: 10px; }
+#checks .sb-st { font: 500 10.5px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #6B7280; overflow: hidden; text-overflow: ellipsis; }
+#checks .sb-st.bad { color: #FF7A5C; } #checks .sb-st.good { color: #8DD35F; } #checks .sb-st.dim { color: #9BA1AE; }
+#checks .sb-kb { margin-left: auto; font: 500 10px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #4B505C; }
+
+/* (c) SpeakingBlock */
+#checks .sp-in { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--text-2); }
+#checks .sp-it { border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px rgb(11 13 16 / 0.04); padding: 11px 12px; }
+#checks .sp-it.next { opacity: 0.55; }
+#checks .sp-top { display: flex; align-items: flex-start; gap: 8px; }
+#checks .sp-top > div { flex: 1; min-width: 0; }
+#checks .sp-ph { margin: 0; font-size: 14px; font-weight: 500; line-height: 1.35; color: var(--ink); }
+#checks .sp-tr { margin: 2px 0 0; font-size: 11.5px; color: var(--text-2); }
+#checks .sp-pn { margin: 2px 0 0; font-size: 11px; color: var(--text-3); font-style: italic; }
+#checks .sp-bt { display: flex; align-items: center; gap: 4px; flex: none; }
+#checks .sp-play { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: var(--text-2); }
+#checks .sp-play svg { width: 12px; height: 12px; }
+#checks .sp-spk { position: relative; height: 28px; padding: 0 10px 0 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 5px; background: #fff; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.14); font-size: 11.5px; font-weight: 600; color: var(--ink); }
+#checks .sp-spk svg { width: 12px; height: 12px; }
+#checks .sp-spk .x { display: none; }
+#checks .sp-spk .spin { width: 11px; height: 11px; border-radius: 50%; border: 2px solid rgb(255 255 255 / 0.35); border-top-color: #fff; display: none; animation: checks-spin .7s linear infinite; }
+#checks .sp-spk.rec, #checks .sp-spk.chk { background: var(--ink); color: #fff; box-shadow: none; }
+#checks .sp-spk.rec .m { display: none; } #checks .sp-spk.rec .x { display: block; }
+#checks .sp-spk.chk .m { display: none; } #checks .sp-spk.chk .spin { display: block; }
+#checks .sp-spk::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 0 rgb(35 64 230 / 0.45); opacity: 0; }
+#checks .sp-spk.rec::after { animation: checks-ping 1.3s ease-out infinite; }
+@keyframes checks-ping { 0% { box-shadow: 0 0 0 0 rgb(198 242 78 / 0.7); opacity: 1; } 100% { box-shadow: 0 0 0 10px rgb(198 242 78 / 0); opacity: 1; } }
+#checks .sp-wave { height: 0; overflow: hidden; display: flex; align-items: center; gap: 2px; }
+#checks .sp-wave i { flex: 1; height: 70%; max-width: 4px; border-radius: 3px; background: var(--ink); transform: scaleY(0.15); }
+#checks .sp-it.rec .sp-wave { height: 26px; margin-top: 8px; }
+#checks .sp-it.rec .sp-wave i { animation: checks-bar .8s ease-in-out infinite alternate; }
+@keyframes checks-bar { 0% { transform: scaleY(0.15); } 60% { transform: scaleY(var(--h, .7)); } 100% { transform: scaleY(0.3); } }
+#checks .sp-res { overflow: hidden; }
+#checks .sp-res-in { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 7px; }
+#checks .sp-sc { display: flex; align-items: center; gap: 7px; min-width: 0; }
+#checks .sp-sc .pct { height: 19px; padding: 0 7px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 700; background: #FFF1D6; color: #8A5A00; flex: none; }
+#checks .sp-sc .pct.hi { background: var(--lime-soft); color: var(--lime-ink); }
+#checks .sp-sc .hd { font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#checks .sp-ws { display: flex; flex-wrap: wrap; gap: 2px 7px; }
+#checks .sp-ws span { font-size: 13.5px; color: #4E7A12; }
+#checks .sp-ws span.bad { color: var(--text-3); text-decoration: underline wavy var(--coral); text-underline-offset: 3px; text-decoration-thickness: 1.2px; }
+#checks .sp-tip { margin: 0; display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; line-height: 1.5; color: var(--text-2); }
+#checks .sp-tip svg { width: 12px; height: 12px; flex: none; margin-top: 2px; color: var(--cobalt); }
+#checks .sp-tip b { color: var(--ink); font-weight: 600; }
+
+/* Reduced motion: the marked attempt, without the form it replaced. */
+html.still #checks .aq-form { display: none; }
+
+@media (max-width: 1240px) {
+  #checks .sb-ed { font-size: 11.5px; }
+  #checks .crit-h small { display: none; }
+}
+@media (max-width: 1080px) {
+  #checks .ck-head { grid-template-columns: minmax(0, 1fr); }
+  #checks .ck-row { grid-template-columns: minmax(0, 1fr); max-width: 620px; }
+  #checks .ck-card h3 { min-height: 0; }
+  /* One column: each window holds its tallest moment, so the loop never moves the page. */
+  #checks [data-card="write"] .ck-win { min-height: 640px; }
+  #checks [data-card="code"] .ck-win { min-height: 600px; }
+  #checks [data-card="talk"] .ck-win { min-height: 540px; }
+}
+@media (max-width: 900px) {
+  #checks .ck-slab { padding: 34px 14px 14px; }
+  #checks .ck-titles, #checks .ck-side { padding-inline: 6px; }
+  #checks .ck-card { padding: 18px 12px 12px; }
+  #checks .ck-card h3 { margin: 12px 0 14px; padding-inline: 4px; }
+  #checks .ck-k { padding-inline: 4px; }
+  #checks .rd-bar .lbl, #checks .sb-kb { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #checks .sp-it.rec .sp-wave i, #checks .sp-spk.rec::after, #checks .w-caret.on, #checks .sb-cases li[data-s="run"] .mk, #checks .spin { animation: none; }
+}
+
+/* A generated object breaking out of the slab's top edge (page.js drifts it). */
+#checks { position: relative; overflow-x: clip; }
+#checks .sec-obj { position: absolute; z-index: 3; width: clamp(96px, 8.6vw, 150px); height: auto; right: calc(var(--gut) + 2.5%); top: calc(var(--sec-y) / 2 - clamp(64px, 5.6vw, 104px)); transform: rotate(12deg); pointer-events: none; filter: drop-shadow(0 24px 30px rgb(0 0 0 / 0.35)); }
+@media (max-width: 900px) { #checks .sec-obj { width: 70px; right: 14px; top: calc(var(--sec-y) / 2 - 44px); } }
+</style>
+
+<section id="checks" aria-labelledby="checks-h">
+  <img class="sec-obj" src="img/11/obj-check.webp" alt="" aria-hidden="true" loading="lazy">
+  <div class="slab ink ck-slab">
+    <header class="ck-head">
+      <div class="ck-titles">
+        <span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-check"/></svg></span>Checked, not just shown</span>
+        <h2 class="h2" id="checks-h">Practice that <span class="hchip" aria-hidden="true"><svg><use href="#i-check"/></svg></span> <span class="lime">checks your work.</span></h2>
+      </div>
+      <div class="ck-side">
+        <p class="lede">A chat tells you “great answer!” every time. Here a written answer is marked against a rubric written first, code runs against real tests, and a speaking drill hears what actually came out of your mouth.</p>
+        <ul class="ck-facts">
+          <li><b>9</b>question types, all graded</li>
+          <li><b>4</b>live code runtimes</li>
+        </ul>
+      </div>
+    </header>
+
+    <div class="ck-row">
+      <!-- (a) You write: a short-answer item, then its AttemptResult. -->
+      <article class="ck-card" data-card="write">
+        <div class="ck-k"><span class="n">01</span><span class="ic" aria-hidden="true"><svg><use href="#i-pencil"/></svg></span>You write · rubric grading</div>
+        <h3>A rubric marks it, line by line.</h3>
+        <div class="ck-win" aria-label="A short-answer question in a lesson, marked against its rubric">
+          <div class="rd-bar"><span class="pg">7/8</span><span class="lbl">Check yourself</span><svg aria-hidden="true"><use href="#i-down"/></svg><span class="mc">Mark complete</span><span class="more" aria-hidden="true"><svg><use href="#i-dots"/></svg></span></div>
+          <div class="rd-body">
+            <div class="bk-eb"><i></i>Check yourself</div>
+            <div class="aq">
+              <div class="aq-h"><span class="num"><b>2</b><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="tp">Short answer</span><span class="tp ai">Marked by AI</span><span class="att">1 attempt</span></div>
+              <p class="aq-q">Your shot tastes sharp and sour. What went wrong, and what would you change?</p>
+              <div class="aq-form">
+                <div class="aq-ans"><span class="w-typed">Sour means the water rushed through before the sweetness dissolved. More contact fixes it: grind finer. Bitter is the opposite — go coarser.</span><i class="w-caret" aria-hidden="true"></i></div>
+                <span class="aq-wc">24 words</span>
+                <div class="aq-act"><span class="aq-sub on"><span class="spin" aria-hidden="true"></span><span class="sl">Submit</span></span><span class="aq-hint"></span></div>
+              </div>
+              <div class="res">
+                <div class="res-in">
+                  <div class="res-top">
+                    <div>
+                      <div class="res-ok"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12.3l2.7 2.7L16 9.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Passed</div>
+                      <div class="res-sc"><span class="r-num">80</span> / 100 · pass mark 70</div>
+                    </div>
+                    <span class="ring" aria-hidden="true"><svg viewBox="0 0 40 40"><circle class="trk" cx="20" cy="20" r="16"/><circle class="val" cx="20" cy="20" r="16" pathLength="100" stroke-dasharray="80 100"/></svg><b class="r-pct">80%</b></span>
+                  </div>
+                  <p class="res-fb">You tied the sourness to the water leaving too soon and named the right lever. You didn’t say why a finer grind slows it down.</p>
+                  <div class="res-rk">Rubric</div>
+                  <div class="crit"><div class="crit-h"><span>Explains the cause</span><small>· weight 0.5</small><em>90%</em></div><i><b style="--p:.9"></b></i></div>
+                  <div class="crit mid"><div class="crit-h"><span>Proposes a specific fix</span><small>· weight 0.5</small><em>70%</em></div><i><b style="--p:.7"></b></i></div>
+                </div>
+                <span class="retry"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Try a different answer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- (b) You code: the exercise pane, run in the browser against its cases. -->
+      <article class="ck-card" data-card="code">
+        <div class="ck-k"><span class="n">02</span><span class="ic" aria-hidden="true"><svg><use href="#i-code"/></svg></span>You code · it runs it</div>
+        <h3>It runs your code. The tests decide.</h3>
+        <div class="ck-win" aria-label="A code exercise in a lesson, run against its cases">
+          <div class="rd-bar"><span class="pg">5/8</span><span class="lbl">Exercise</span><svg aria-hidden="true"><use href="#i-down"/></svg><span class="mc">Mark complete</span><span class="more" aria-hidden="true"><svg><use href="#i-dots"/></svg></span></div>
+          <div class="rd-body">
+            <div class="bk-eb"><i></i>Exercise<span class="bd">3 checks</span><span class="lang">PYTHON</span></div>
+            <div class="ex-task">
+              <p><code>total()</code> must refuse a negative price. Make all three cases pass.</p>
+              <div class="sb">
+                <div class="sb-h"><span class="gl" aria-hidden="true">PY</span><b>Write the function</b><span class="mt">python · sandbox · 5s</span><span class="rs ready"><i></i>ready</span></div>
+<pre class="sb-ed" aria-label="The function under test"><span class="ln"><i>1</i><span class="k">def</span> <span class="f">total</span><span class="o">(</span>prices<span class="o">):</span></span><span class="ln"><i>2</i>    <span class="dc">"""Sum a cart."""</span></span><span class="fix lit"><span class="ln"><i>3</i>    <span class="k">if</span> <span class="b">any</span><span class="o">(</span>p <span class="o">&lt;</span> <span class="b">0</span> <span class="k">for</span> p <span class="k">in</span> prices<span class="o">):</span></span><span class="ln"><i>4</i>        <span class="k">raise</span> <span class="b">ValueError</span><span class="o">(</span><span class="s">"negative"</span><span class="o">)</span></span></span><span class="ln"><i class="n5">5</i>    <span class="k">return</span> <span class="b">sum</span><span class="o">(</span>prices<span class="o">)</span></span></pre>
+                <div class="sb-tabs" aria-hidden="true"><span class="on">Cases</span><span>Console</span></div>
+                <ul class="sb-cases">
+                  <li data-s="pass"><span class="mk"><svg class="y" aria-hidden="true"><use href="#i-check"/></svg><svg class="x" aria-hidden="true"><use href="#i-x"/></svg></span><span class="nm">returns the right total<span class="dt">input [3, 1, 5] → 9</span></span></li>
+                  <li data-s="pass"><span class="mk"><svg class="y" aria-hidden="true"><use href="#i-check"/></svg><svg class="x" aria-hidden="true"><use href="#i-x"/></svg></span><span class="nm">handles an empty cart<span class="dt">input [] → 0</span></span></li>
+                  <li data-s="pass"><span class="mk"><svg class="y" aria-hidden="true"><use href="#i-check"/></svg><svg class="x" aria-hidden="true"><use href="#i-x"/></svg></span><span class="nm">rejects a negative price<span class="dt" data-ok="input [3, -1, 5] → ValueError" data-bad="expected ValueError · received 7">input [3, -1, 5] → ValueError</span></span></li>
+                </ul>
+                <div class="sb-foot"><span class="sb-run" data-press="code"><svg aria-hidden="true"><use href="#i-play"/></svg><span class="rl">Run again</span></span><span class="sb-st good">3/3 passing · 38ms</span><span class="sb-kb" aria-hidden="true">⌘↵ to run</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- (c) You talk: SpeakingBlock. -->
+      <article class="ck-card" data-card="talk">
+        <div class="ck-k"><span class="n">03</span><span class="ic" aria-hidden="true"><svg><use href="#i-mic"/></svg></span>You talk · it talks back</div>
+        <h3>It hears you, and coaches the slip.</h3>
+        <div class="ck-win" aria-label="A speaking drill in Spanish, marked word by word">
+          <div class="rd-bar"><span class="pg">4/7</span><span class="lbl">Say it</span><svg aria-hidden="true"><use href="#i-down"/></svg><span class="mc">Mark complete</span><span class="more" aria-hidden="true"><svg><use href="#i-dots"/></svg></span></div>
+          <div class="rd-body">
+            <div class="bk-eb"><i></i>Say it</div>
+            <p class="sp-in">At the ticket desk in Madrid. Say each one out loud.</p>
+            <div class="sp-it" data-item="1">
+              <div class="sp-top">
+                <div>
+                  <p class="sp-ph">¿Dónde está la estación de tren?</p>
+                  <p class="sp-tr">Where is the train station?</p>
+                  <p class="sp-pn">/ˈdon.de esˈta la es.taˈθjon de tren/</p>
+                </div>
+                <div class="sp-bt"><span class="sp-play" aria-hidden="true"><svg><use href="#i-play"/></svg></span><span class="sp-spk"><svg class="m" aria-hidden="true"><use href="#i-mic"/></svg><svg class="x" aria-hidden="true"><use href="#i-x"/></svg><span class="spin" aria-hidden="true"></span><span class="sl">Speak</span></span></div>
+              </div>
+              <div class="sp-wave" aria-hidden="true"></div>
+              <div class="sp-res">
+                <div class="sp-res-in">
+                  <div class="sp-sc"><span class="pct hi">100%</span><span class="hd">heard: “dónde está la estación de tren”</span></div>
+                  <div class="sp-ws"><span>¿Dónde</span><span class="w2">está</span><span>la</span><span>estación</span><span>de</span><span>tren?</span></div>
+                  <p class="sp-tip"><svg aria-hidden="true"><use href="#i-spark"/></svg><span class="sp-say">That’s the one: <b>es-TÁ</b>, “is”. Next phrase.</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="sp-it next" aria-hidden="true">
+              <div class="sp-top">
+                <div>
+                  <p class="sp-ph">Un billete para Toledo, por favor.</p>
+                  <p class="sp-tr">A ticket to Toledo, please.</p>
+                </div>
+                <div class="sp-bt"><span class="sp-play"><svg><use href="#i-play"/></svg></span><span class="sp-spk"><svg class="m"><use href="#i-mic"/></svg><span class="sl">Speak</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  'use strict';
+  const sec = document.getElementById('checks');
+  if (!sec || !window.gsap) return;
+  const STILL = document.documentElement.classList.contains('still');
+  const q = (s, r = sec) => r.querySelector(s);
+  const qa = (s, r = sec) => [...r.querySelectorAll(s)];
+
+  /* The listening wave: bars with their own height and phase. */
+  const wave = q('.sp-wave');
+  for (let i = 0; i < 34; i++) {
+    const b = document.createElement('i');
+    const h = 0.35 + Math.abs(Math.sin(i * 1.7) * 0.45) + (i % 5 === 0 ? 0.2 : 0);
+    b.style.setProperty('--h', Math.min(1, h).toFixed(2));
+    b.style.animationDelay = (-(i * 137) % 800) + 'ms';
+    b.style.animationDuration = (650 + (i * 53) % 400) + 'ms';
+    wave.appendChild(b);
+  }
+  if (STILL) return;   // the markup is already the resolved state
+
+  let resetW, resetC, resetT;
+  const press = (el) => gsap.timeline().to(el, { scale: 0.9, duration: 0.1, ease: 'power2.in' }).to(el, { scale: 1, duration: 0.3, ease: 'back.out(3)' });
+  const words = (s) => (s.trim() ? s.trim().split(/\s+/).length : 0);
+
+  /* ── (a) Write → AttemptResult ─────────────────────────────────── */
+  const W = q('[data-card="write"]');
+  const aq = q('.aq', W), typed = q('.w-typed', W), caret = q('.w-caret', W), ans = q('.aq-ans', W);
+  const ANSWER = typed.textContent;
+  const wc = q('.aq-wc', W), sub = q('.aq-sub', W), subL = q('.aq-sub .sl', W), hint = q('.aq-hint', W);
+  const form = q('.aq-form', W), res = q('.res', W), att = q('.att', W);
+  const ring = q('.ring .val', W), pct = q('.r-pct', W), num = q('.r-num', W);
+  const bars = qa('.crit b', W), crits = qa('.crit', W), fb = q('.res-fb', W), top = q('.res-top', W), rk = q('.res-rk', W), retry = q('.retry', W);
+  function writeTL() {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.6, paused: true });
+    const o = { n: 0 }, sc = { v: 0 };
+    tl.call(resetW = () => {
+      typed.innerHTML = '<span class="ph">Answer in two to four sentences.</span>'; caret.classList.remove('on'); ans.classList.remove('focus');
+      wc.textContent = '0 words'; sub.className = 'aq-sub'; subL.textContent = 'Submit'; hint.textContent = 'Answer to enable submission.';
+      aq.classList.remove('done'); att.textContent = 'No attempts yet';
+      gsap.set(form, { height: 'auto', autoAlpha: 1 }); gsap.set(res, { height: 0, autoAlpha: 0 });
+      gsap.set([top, fb, rk, ...crits, retry], { autoAlpha: 0, y: 6 }); gsap.set(bars, { scaleX: 0 });
+      ring.setAttribute('stroke-dasharray', '0 100'); pct.textContent = '0%'; num.textContent = '0';
+    }, null, 0)
+      .call(() => { ans.classList.add('focus'); caret.classList.add('on'); typed.textContent = ''; }, null, 0.5)
+      .to(o, { n: ANSWER.length, duration: 3.4, ease: 'none', onUpdate: () => {
+        const t = ANSWER.slice(0, Math.round(o.n));
+        typed.textContent = t; const n = words(t);
+        wc.textContent = n + (n === 1 ? ' word' : ' words');
+        if (n && !sub.classList.contains('on')) { sub.classList.add('on'); hint.textContent = ''; }
+      } }, 0.6)
+      .call(() => { caret.classList.remove('on'); ans.classList.remove('focus'); })
+      .add(press(sub), '+=0.35')
+      .call(() => { sub.classList.add('busy'); subL.textContent = 'Marking…'; })
+      .to(form, { height: 0, autoAlpha: 0, duration: 0.5, ease: 'power3.inOut' }, '+=1.1')
+      .call(() => { aq.classList.add('done'); att.textContent = '1 attempt'; }, null, '<')
+      .to(res, { height: 'auto', autoAlpha: 1, duration: 0.55, ease: 'power3.inOut' }, '<')
+      .to(top, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power3.out' }, '<0.25')
+      .fromTo(sc, { v: 0 }, { v: 80, duration: 1.2, ease: 'power2.out', onUpdate: () => { ring.setAttribute('stroke-dasharray', `${sc.v.toFixed(1)} 100`); pct.textContent = Math.round(sc.v) + '%'; num.textContent = Math.round(sc.v); } }, '<')
+      .to(fb, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power3.out' }, '<0.3')
+      .to(rk, { autoAlpha: 1, y: 0, duration: 0.3 }, '<0.2')
+      .to(crits, { autoAlpha: 1, y: 0, duration: 0.35, stagger: 0.3, ease: 'power3.out' }, '<0.1')
+      .to(bars, { scaleX: 1, duration: 0.7, stagger: 0.3, ease: 'power3.out' }, '<0.1')
+      .to(retry, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power3.out' }, '+=0.1')
+      .to({}, { duration: 3.6 })
+      .to(aq, { autoAlpha: 0, duration: 0.35 })
+      .set(aq, { autoAlpha: 1 });
+    return tl;
+  }
+
+  /* ── (b) Code ───────────────────────────────────────────────────── */
+  const C = q('[data-card="code"]');
+  const fix = q('.fix', C), cases = qa('.sb-cases li', C), st = q('.sb-st', C), rl = q('.rl', C), run = q('[data-press="code"]', C);
+  const badDt = q('.dt[data-bad]', C), n5 = q('.n5', C);
+  const setS = (i, s) => { cases[i].dataset.s = s; };
+  const status = (t, c) => { st.textContent = t; st.className = 'sb-st' + (c ? ' ' + c : ''); };
+  function codeTL() {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.6, paused: true });
+    tl.call(resetC = () => {
+      gsap.set(fix, { height: 0 }); fix.classList.remove('lit'); n5.textContent = '3';
+      cases.forEach((t, i) => setS(i, 'idle')); badDt.textContent = badDt.dataset.ok;
+      rl.textContent = 'Run 3 checks'; status('3 checks ready');
+    }, null, 0)
+      .add(press(run), 0.8)
+      .call(() => { rl.textContent = 'Running'; setS(0, 'run'); status('running case 1 of 3…', 'dim'); }, null, 1.0)
+      .call(() => { setS(0, 'pass'); setS(1, 'run'); status('running case 2 of 3…', 'dim'); }, null, 1.45)
+      .call(() => { setS(1, 'pass'); setS(2, 'run'); status('running case 3 of 3…', 'dim'); }, null, 1.8)
+      .call(() => { setS(2, 'fail'); badDt.textContent = badDt.dataset.bad; rl.textContent = 'Run again'; status('2/3 passing · 41ms', 'bad'); }, null, 2.2)
+      .fromTo(cases[2], { x: 7 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)', immediateRender: false }, 2.2)
+      // The fix: two lines arrive, lit.
+      .call(() => { n5.textContent = '5'; fix.classList.add('lit'); }, null, 3.9)
+      .to(fix, { height: 'auto', duration: 0.55, ease: 'power3.inOut' }, 3.9)
+      .add(press(run), 5.0)
+      .call(() => { rl.textContent = 'Running'; cases.forEach((t, i) => setS(i, i ? 'idle' : 'run')); badDt.textContent = badDt.dataset.ok; status('running case 1 of 3…', 'dim'); }, null, 5.2)
+      .call(() => { setS(0, 'pass'); setS(1, 'run'); status('running case 2 of 3…', 'dim'); }, null, 5.55)
+      .call(() => { setS(1, 'pass'); setS(2, 'run'); status('running case 3 of 3…', 'dim'); }, null, 5.85)
+      .call(() => { setS(2, 'pass'); rl.textContent = 'Run again'; status('3/3 passing · 38ms', 'good'); }, null, 6.2)
+      .fromTo(st, { scale: 0.86 }, { scale: 1, duration: 0.5, ease: 'back.out(3)', immediateRender: false, transformOrigin: '0 50%' }, 6.2)
+      .call(() => fix.classList.remove('lit'), null, 7.4)
+      .to({}, { duration: 2.2 }, 7.4);
+    return tl;
+  }
+
+  /* ── (c) Talk ───────────────────────────────────────────────────── */
+  const T = q('[data-card="talk"]');
+  const item = q('.sp-it[data-item="1"]', T), spk = q('.sp-spk', item), sl = q('.sp-spk .sl', item);
+  const sres = q('.sp-res', T), spct = q('.pct', T), heard = q('.hd', T), ws = qa('.sp-ws span', T), w2 = q('.sp-ws .w2', T), say = q('.sp-say', T), tip = q('.sp-tip', T);
+  const SAY1 = 'Stress the end: <b>es-TÁ</b>. With the stress on “es” it comes out as <i>esta</i> — “this”.', SAY2 = say.innerHTML;
+  const mode = (m) => { spk.classList.remove('rec', 'chk'); item.classList.remove('rec'); if (m) { spk.classList.add(m); if (m === 'rec') item.classList.add('rec'); } sl.textContent = m === 'rec' ? 'Stop' : m === 'chk' ? 'Checking' : 'Speak'; };
+  function talkTL() {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.6, paused: true });
+    tl.call(resetT = () => {
+      mode(null); gsap.set(sres, { height: 0, autoAlpha: 0 });
+      spct.textContent = '62%'; spct.classList.remove('hi'); heard.textContent = 'heard: “dónde esta la estación de tren”';
+      w2.textContent = 'esta'; w2.classList.add('bad'); say.innerHTML = SAY1;
+      gsap.set(ws, { autoAlpha: 1 }); gsap.set(tip, { autoAlpha: 1 });
+    }, null, 0)
+      .add(press(spk), 0.6)
+      .call(() => mode('rec'), null, 0.7)
+      .call(() => mode('chk'), null, 2.7)
+      .call(() => mode(null), null, 3.4)
+      .to(sres, { height: 'auto', autoAlpha: 1, duration: 0.5, ease: 'power3.inOut' }, 3.4)
+      .from(ws, { autoAlpha: 0, y: 5, duration: 0.3, stagger: 0.07, ease: 'power3.out', immediateRender: false }, 3.6)
+      .fromTo(w2, { scale: 1 }, { scale: 1.14, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, 4.2)
+      .from(tip, { autoAlpha: 0, y: 6, duration: 0.4, ease: 'power3.out', immediateRender: false }, 4.5)
+      // Try 2.
+      .add(press(spk), 7.2)
+      .call(() => mode('rec'), null, 7.3)
+      .to([ws, tip], { autoAlpha: 0.3, duration: 0.3 }, 7.3)
+      .call(() => mode('chk'), null, 9.0)
+      .call(() => {
+        mode(null);
+        spct.textContent = '100%'; spct.classList.add('hi'); heard.textContent = 'heard: “dónde está la estación de tren”';
+        w2.textContent = 'está'; w2.classList.remove('bad'); say.innerHTML = SAY2;
+      }, null, 9.6)
+      .to([ws, tip], { autoAlpha: 1, duration: 0.3, stagger: 0.04 }, 9.6)
+      .fromTo(spct, { scale: 0.7 }, { scale: 1, duration: 0.45, ease: 'back.out(3)', immediateRender: false }, 9.6)
+      .to({}, { duration: 2.6 }, 9.8);
+    return tl;
+  }
+
+  const tls = [writeTL(), codeTL(), talkTL()];
+  // Entrance: the cards rise in once.
+  gsap.from(qa('.ck-card', sec), { y: 40, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', scrollTrigger: { trigger: q('.ck-row'), start: 'top 85%', once: true } });
+  let on = false;
+  const sync = () => tls.forEach((t) => (on && !document.hidden ? t.play() : t.pause()));
+  ScrollTrigger.create({ trigger: q('.ck-row'), start: 'top 80%', end: 'bottom top', onToggle: (s) => { on = s.isActive; sync(); } });
+  document.addEventListener('visibilitychange', sync);
+  // Show the start state now, so the first frame on screen is the beginning.
+  resetW(); resetC(); resetT();
+})();
+</script>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Part harness</title>
+<!--
+  Loads one part on its own, with the page's tokens, sprite and libraries:
+    /hero-v7/11/parts/_harness.html?part=formats
+  Spacer blocks above and below make ScrollTrigger behave as it will in the page.
+  Add &still to check the reduced-motion resolved state.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../base.css">
+<style>.hz-spacer { height: 70vh; display: grid; place-items: center; color: #8B909C; font: 500 14px/1 Inter, sans-serif; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
+</head>
+<body>
+<div id="sprite"></div>
+<div class="hz-spacer">↓ part below</div>
+<div id="mount"></div>
+<div class="hz-spacer">↑ part above</div>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search);
+  if (q.has('still') || matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('still');
+  gsap.registerPlugin(ScrollTrigger);
+  document.getElementById('sprite').innerHTML = await (await fetch('../sprite.html')).text();
+  const html = await (await fetch(q.get('part') + '.html')).text();
+  const mount = document.getElementById('mount');
+  mount.innerHTML = html;
+  // innerHTML does not run scripts: re-create them in order.
+  for (const old of [...mount.querySelectorAll('script')]) {
+    const s = document.createElement('script');
+    [...old.attributes].forEach((a) => s.setAttribute(a.name, a.value));
+    s.textContent = old.textContent;
+    old.replaceWith(s);
+  }
+  if (q.has('top')) { const el = mount.querySelector('section'); if (el) el.scrollIntoView(); }
+  ScrollTrigger.refresh();
+})();
+</script>
+</body>
+</html>

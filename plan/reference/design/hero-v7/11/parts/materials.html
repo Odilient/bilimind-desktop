@@ -1,0 +1,422 @@
+<style>
+/* ── Materials: files orbit a drop zone; one at a time is pulled in, read,
+   split into passages, and the passages land on the course path. ──────── */
+#materials { padding-block: calc(var(--sec-y) * 0.5); }
+#materials .mt-slab {
+  display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center; gap: clamp(24px, 3vw, 56px);
+  padding: clamp(40px, 5vw, 84px) var(--pad-x);
+  overflow: hidden;
+  box-shadow: 0 40px 80px -40px rgb(20 40 200 / 0.55);
+}
+/* The hero's light: two soft diagonal streaks and grain. */
+#materials .mt-light { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: -1; }
+#materials .mt-light::before, #materials .mt-light::after {
+  content: ""; position: absolute; top: -40%; bottom: -40%; width: 22%; transform: rotate(28deg);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.09) 45%, rgb(255 255 255 / 0.14) 50%, rgb(255 255 255 / 0.09) 55%, transparent);
+  filter: blur(18px);
+}
+#materials .mt-light::before { left: 48%; }
+#materials .mt-light::after { left: 70%; width: 10%; opacity: .7; }
+#materials .mt-light .mt-grain {
+  position: absolute; inset: 0; opacity: .14; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+#materials .mt-copy { display: flex; flex-direction: column; gap: 22px; min-width: 0; position: relative; z-index: 2; }
+#materials .h2 { font-size: clamp(46px, 5.6vw, 100px); }
+#materials .h2 .hchip { position: relative; width: 0.74em; height: 0.74em; vertical-align: 0; box-shadow: 0 12px 24px -12px rgb(5 10 60 / 0.6); }
+#materials .h2 .hchip svg { position: absolute; inset: 27%; width: 46%; height: 46%; }
+#materials .mt-fine { margin: 0; display: flex; align-items: flex-start; gap: 10px; max-width: 460px; font-size: 14.5px; line-height: 1.5; color: rgb(255 255 255 / 0.62); }
+#materials .mt-fine i { width: 22px; height: 22px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; margin-top: 1px; }
+#materials .mt-fine i svg { width: 11px; height: 11px; }
+
+/* The stage. */
+#materials .mt-stage {
+  position: relative; height: clamp(520px, 45vw, 680px); min-width: 0;
+  perspective: 1200px;
+}
+#materials .mt-card {
+  position: absolute; left: 0; top: 0; z-index: 1;
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 52px; padding: 0 16px 0 7px; border-radius: 16px;
+  background: #fff; color: var(--ink); white-space: nowrap;
+  box-shadow: 0 18px 30px -16px rgb(3 8 60 / 0.6), 0 0 0 1px rgb(255 255 255 / 0.4);
+  will-change: transform, filter, opacity;
+  transform-origin: 50% 50%;
+}
+#materials .mt-badge { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; flex: none; font: 700 10px/1 var(--display); letter-spacing: 0.02em; }
+#materials .mt-badge svg { width: 18px; height: 18px; }
+#materials .mt-card b { font: 600 14px/1.1 var(--body); display: block; }
+#materials .mt-card small { display: block; margin-top: 2px; font-size: 11px; color: var(--text-3); }
+#materials .k-coral { background: #FFE6E0; color: #D23B1F; }
+#materials .k-cob { background: var(--cobalt-soft); color: var(--cobalt); }
+#materials .k-lime { background: var(--lime); color: var(--ink); }
+#materials .k-ink { background: var(--ink); color: var(--lime); }
+#materials .k-grey { background: #EEF0F4; color: var(--ink-3); }
+
+/* The drop zone: the real "Your files" page (DropBar + material rows),
+   in a window. Fixed height: rows arrive on top and older ones slide
+   under the edge, so the zone never resizes. */
+#materials .mt-zone {
+  position: absolute; left: 50%; top: 40%; z-index: 92;
+  width: min(430px, 82%); transform: translate(-50%, -50%);
+  border-radius: 22px; background: #fff; color: var(--ink); text-align: left;
+  padding: 18px 16px 0; height: 392px; overflow: hidden;
+  box-shadow: 0 40px 70px -30px rgb(3 8 60 / 0.75), 0 0 0 8px rgb(255 255 255 / 0.12);
+  display: flex; flex-direction: column;
+}
+#materials .mt-wk { font-size: 11.5px; color: var(--text-3); }
+#materials .mt-wt { margin: 2px 0 0; font: 600 22px/1.1 var(--display); letter-spacing: -0.025em; }
+#materials .mt-ws { margin: 4px 0 0; font-size: 12px; line-height: 1.4; color: var(--text-2); }
+#materials .mt-drop {
+  margin-top: 12px; position: relative; border-radius: 14px; padding: 14px 12px 12px; text-align: center;
+  background: #F4F5F8; box-shadow: inset 0 0 0 1.5px rgb(11 13 16 / 0.10);
+  transition: background-color .3s, box-shadow .3s; flex: none;
+}
+#materials .mt-drop::before { content: ""; position: absolute; inset: 4px; border-radius: 11px; border: 1.5px dashed rgb(11 13 16 / 0.16); pointer-events: none; transition: border-color .3s; }
+#materials .mt-zone.hot .mt-drop { background: var(--cobalt-soft); }
+#materials .mt-zone.hot .mt-drop::before { border-color: var(--cobalt); }
+#materials .mt-up { width: 20px; height: 20px; margin: 0 auto; color: var(--text-2); display: grid; place-items: center; }
+#materials .mt-up svg { width: 16px; height: 16px; }
+#materials .mt-zt { margin: 5px 0 0; font-size: 13px; font-weight: 600; }
+#materials .mt-zs { margin: 3px auto 0; max-width: 300px; font-size: 10.5px; line-height: 1.4; color: var(--text-3); }
+#materials .mt-entry { margin-top: 8px; display: flex; gap: 6px; flex: none; }
+#materials .mt-entry span { flex: 1; min-width: 0; height: 32px; border-radius: 99px; padding: 0 12px; display: flex; align-items: center; gap: 7px; background: #F4F5F8; box-shadow: inset 0 0 0 1px var(--line); font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; }
+#materials .mt-entry span svg { width: 12px; height: 12px; flex: none; }
+#materials .mt-entry b { height: 32px; padding: 0 12px; border-radius: 99px; display: inline-flex; align-items: center; gap: 5px; box-shadow: inset 0 0 0 1px var(--line); font-size: 11.5px; font-weight: 600; color: var(--text-3); white-space: nowrap; }
+#materials .mt-entry b svg { width: 11px; height: 11px; }
+#materials .mt-rows { margin-top: 12px; flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+#materials .mt-row { flex: none; display: flex; gap: 10px; padding: 10px 2px; border-top: 1px solid var(--line); }
+#materials .mt-row:first-child { border-top: 0; }
+#materials .mt-gl { width: 30px; height: 30px; border-radius: 9px; background: #F1F2F5; color: var(--text-2); display: grid; place-items: center; flex: none; }
+#materials .mt-gl svg { width: 15px; height: 15px; }
+#materials .mt-rx { min-width: 0; flex: 1; }
+#materials .mt-rt { display: flex; align-items: center; gap: 6px; min-width: 0; }
+#materials .mt-rt b { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+#materials .mt-bd { flex: none; height: 18px; padding: 0 7px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; white-space: nowrap; box-shadow: inset 0 0 0 1px var(--line); color: var(--text-2); }
+#materials .mt-bd i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+#materials .mt-bd.q { color: var(--text-3); }
+#materials .mt-bd.p { background: var(--lime-soft); color: var(--lime-ink); box-shadow: inset 0 0 0 1px #DCEFA6; }
+#materials .mt-bd.p i { width: 8px; height: 8px; background: none; border: 1.5px solid #B9D77A; border-top-color: var(--lime-ink); animation: materials-spin .7s linear infinite; }
+#materials .mt-bd.r { background: #F1F2F5; color: var(--text-2); box-shadow: none; }
+#materials .mt-bd.r i { background: #3DAA5C; }
+@keyframes materials-spin { to { transform: rotate(360deg); } }
+#materials .mt-rm { margin-top: 3px; font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+#materials .mt-rm svg { width: 11px; height: 11px; display: inline-block; vertical-align: -1px; margin-right: 3px; }
+#materials .mt-sh { margin-top: 6px; height: 3px; border-radius: 3px; background: #EBEDF1; overflow: hidden; position: relative; }
+#materials .mt-sh::after { content: ""; position: absolute; inset: 0; width: 40%; border-radius: inherit; background: #CFE88A; animation: materials-sh 1.1s ease-in-out infinite; }
+@keyframes materials-sh { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
+
+/* Passages in flight. */
+#materials .mt-pass {
+  position: absolute; left: 0; top: 0; z-index: 100;
+  display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px 0 6px;
+  border-radius: 99px; background: var(--lime); color: var(--ink); white-space: nowrap;
+  font: 600 12.5px/1 var(--body); box-shadow: 0 12px 22px -10px rgb(60 90 0 / 0.6);
+  opacity: 0; pointer-events: none;
+}
+#materials .mt-pass i { width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; flex: none; }
+#materials .mt-pass i svg { width: 10px; height: 10px; }
+
+/* The course the passages land in: the roadmap's ink milestones on a
+   spine; a lesson that now quotes your file wears "Grounded in N of your
+   materials", the line BlockShell prints under a block. */
+#materials .mt-path {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
+}
+#materials .mt-path::before { content: ""; position: absolute; left: 3%; right: 3%; bottom: 25px; height: 2px; border-radius: 2px; background: rgb(255 255 255 / 0.28); }
+#materials .mt-node { position: relative; flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: stretch; gap: 7px; }
+#materials .mt-dot {
+  position: relative; min-height: 50px; padding: 8px 9px; border-radius: 12px; display: flex; align-items: flex-start; gap: 7px;
+  background: var(--ink); color: #fff; box-shadow: 0 10px 22px -12px rgb(0 0 0 / 0.6);
+  transition: box-shadow .35s;
+}
+#materials .mt-dot .no { width: 18px; height: 18px; border-radius: 50%; flex: none; background: rgb(255 255 255 / 0.14); display: grid; place-items: center; font: 700 9.5px/1 var(--body); }
+#materials .mt-nl { font-size: 11.5px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#materials .mt-node.lit .mt-dot { box-shadow: 0 0 0 2px var(--lime), 0 10px 22px -12px rgb(60 90 0 / 0.7); }
+#materials .mt-node.lit .mt-dot .no { background: var(--lime); color: var(--ink); }
+#materials .mt-ct {
+  position: absolute; left: 0; bottom: calc(100% + 6px); height: 22px; padding: 0 8px 0 6px; border-radius: 99px;
+  display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+  background: var(--lime); color: var(--ink); font-size: 10.5px; font-weight: 600;
+  box-shadow: 0 6px 14px -6px rgb(40 60 0 / 0.6); opacity: 0; transform: translateY(4px) scale(.7); transform-origin: 0 100%;
+  transition: opacity .3s, transform .35s cubic-bezier(.2, .9, .3, 1.5);
+}
+#materials .mt-ct svg { width: 11px; height: 11px; }
+#materials .mt-node.lit .mt-ct { opacity: 1; transform: none; }
+#materials .mt-tick { height: 12px; display: grid; place-items: center; }
+#materials .mt-tick::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #1A2CB5; box-shadow: 0 0 0 3px rgb(255 255 255 / 0.25); transition: background-color .3s; }
+#materials .mt-node.lit .mt-tick::before { background: var(--lime); }
+
+@media (max-width: 1100px) {
+  #materials .mt-slab { grid-template-columns: minmax(0, 1fr); }
+  #materials .mt-stage { height: clamp(500px, 80vw, 620px); }
+}
+@media (max-width: 600px) {
+  #materials .mt-stage { height: 540px; margin-inline: -8px; }
+  #materials .mt-card { height: 42px; padding: 0 12px 0 5px; gap: 8px; border-radius: 13px; }
+  #materials .mt-card .mt-badge { width: 32px; height: 32px; border-radius: 9px; }
+  #materials .mt-card .mt-badge svg { width: 15px; height: 15px; }
+  #materials .mt-card b { font-size: 12.5px; }
+  #materials .mt-card small { display: none; }
+  #materials .mt-zone { width: 88%; padding: 14px 12px 0; border-radius: 20px; top: 36%; height: 352px; }
+  #materials .mt-ws, #materials .mt-zs { display: none; }
+  #materials .mt-nl { display: none; }
+  #materials .mt-dot { min-height: 0; justify-content: center; padding: 7px 0; }
+  #materials .mt-ct { font-size: 0; gap: 0; padding: 0 5px; height: 20px; }
+  #materials .mt-ct b { font-size: 10.5px; }
+  #materials .mt-pass { font-size: 11.5px; height: 28px; }
+}
+
+/* A generated object breaking out of the slab's top edge. */
+#materials { position: relative; overflow-x: clip; }
+#materials .sec-obj { position: absolute; z-index: 3; width: clamp(120px, 11vw, 200px); height: auto; left: calc(var(--gut) + 3%); top: calc(var(--sec-y) * 0.5 - clamp(60px, 5.4vw, 100px)); transform: rotate(-12deg); pointer-events: none; filter: drop-shadow(0 26px 30px rgb(5 10 60 / 0.35)); }
+@media (max-width: 900px) { #materials .sec-obj { width: 84px; left: auto; right: 12px; top: calc(var(--sec-y) * 0.5 - 40px); } }
+</style>
+
+<section id="materials" aria-labelledby="materials-h">
+  <img class="sec-obj" src="img/11/obj-docs.webp" alt="" aria-hidden="true" loading="lazy">
+  <div class="slab cobalt mt-slab">
+    <div class="mt-light" aria-hidden="true"><span class="mt-grain"></span></div>
+    <div class="mt-copy">
+      <span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-clip"/></svg></span>Your own material</span>
+      <h2 class="h2" id="materials-h">Drop <span class="hchip" aria-hidden="true"><svg><use href="#i-file"/></svg></span>anything <span class="lime">in.</span></h2>
+      <p class="lede"><b>It actually teaches from it.</b> A semester of slides, the company handbook, lecture subtitles, a stack of links — BiliMind pulls them apart and weaves the passages that matter into your lessons. You study the syllabus you’ll be examined on, not a generic internet average.</p>
+      <p class="mt-fine"><i aria-hidden="true"><svg><use href="#i-check"/></svg></i>Sources are verified before you see them. Dead links don’t ship. Made-up citations don’t exist here.</p>
+    </div>
+
+    <div class="mt-stage" aria-hidden="true">
+      <div class="mt-zone">
+        <span class="mt-wk">Notes, slides and links</span>
+        <p class="mt-wt">Your files</p>
+        <p class="mt-ws">Add your own notes and BiliMind will teach from them, quoting them back to you.</p>
+        <div class="mt-drop"><span class="mt-up"><svg><use href="#i-arrow-up"/></svg></span><p class="mt-zt">Drop it here, or click to browse</p><p class="mt-zs">PDF, Word, PowerPoint, EPUB, subtitles, text, Markdown, CSV, JSON and HTML.</p></div>
+        <div class="mt-entry"><span><svg><use href="#i-pencil"/></svg>…or paste a link, or type a note</span><b><svg><use href="#i-plus"/></svg>Add note</b></div>
+        <div class="mt-rows"></div>
+      </div>
+      <div class="mt-path">
+        <div class="mt-node" data-i="1"><span class="mt-ct"><svg><use href="#i-file"/></svg><b>1</b>&nbsp;<em>file</em></span><span class="mt-dot"><span class="no">1</span><span class="mt-nl">The five variables</span></span><span class="mt-tick"></span></div>
+        <div class="mt-node" data-i="2"><span class="mt-ct"><svg><use href="#i-file"/></svg><b>1</b>&nbsp;<em>file</em></span><span class="mt-dot"><span class="no">2</span><span class="mt-nl">Sour, sweet &amp; bitter</span></span><span class="mt-tick"></span></div>
+        <div class="mt-node" data-i="3"><span class="mt-ct"><svg><use href="#i-file"/></svg><b>1</b>&nbsp;<em>file</em></span><span class="mt-dot"><span class="no">3</span><span class="mt-nl">Beans and freshness</span></span><span class="mt-tick"></span></div>
+        <div class="mt-node" data-i="4"><span class="mt-ct"><svg><use href="#i-file"/></svg><b>1</b>&nbsp;<em>file</em></span><span class="mt-dot"><span class="no">4</span><span class="mt-nl">Grind size as the lever</span></span><span class="mt-tick"></span></div>
+        <div class="mt-node" data-i="5"><span class="mt-ct"><svg><use href="#i-file"/></svg><b>1</b>&nbsp;<em>file</em></span><span class="mt-dot"><span class="no">5</span><span class="mt-nl">A level, clump-free bed</span></span><span class="mt-tick"></span></div>
+        <div class="mt-node" data-i="6"><span class="mt-ct"><svg><use href="#i-file"/></svg><b>1</b>&nbsp;<em>file</em></span><span class="mt-dot"><span class="no">6</span><span class="mt-nl">Brew ratio: dose &amp; yield</span></span><span class="mt-tick"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const sec = document.getElementById('materials');
+  if (!sec) return;
+  const STILL = document.documentElement.classList.contains('still');
+  const stage = sec.querySelector('.mt-stage'), zone = sec.querySelector('.mt-zone');
+  const rowsEl = zone.querySelector('.mt-rows'), dropEl = zone.querySelector('.mt-drop');
+  const nodes = [...sec.querySelectorAll('.mt-node')];
+
+  // The eleven kinds BiliMind reads (MATERIAL_KINDS), as cards in orbit.
+  const KINDS = [
+    { k: 'PDF', ext: '.pdf', tone: 'k-coral', badge: 'PDF' },
+    { k: 'PowerPoint', ext: '.pptx · .key', tone: 'k-cob', badge: 'PPT' },
+    { k: 'Video', ext: 'YouTube, lectures', tone: 'k-ink', icon: 'i-video' },
+    { k: 'Word', ext: '.docx', tone: 'k-cob', badge: 'DOC' },
+    { k: 'Web pages', ext: 'any link', tone: 'k-lime', icon: 'i-globe' },
+    { k: 'EPUB', ext: 'whole books', tone: 'k-grey', icon: 'i-book' },
+    { k: 'Spreadsheets', ext: '.csv · .xlsx', tone: 'k-lime', icon: 'i-table' },
+    { k: 'Subtitles', ext: '.srt · .vtt', tone: 'k-grey', badge: 'SRT' },
+    { k: 'Images', ext: 'photos, scans', tone: 'k-coral', icon: 'i-image' },
+    { k: 'Zip', ext: 'a whole folder', tone: 'k-ink', badge: 'ZIP' },
+    { k: 'Raw notes', ext: 'pasted text', tone: 'k-grey', icon: 'i-pencil' },
+  ];
+  const badge = (d) => `<span class="mt-badge ${d.tone}">${d.icon ? `<svg><use href="#${d.icon}"/></svg>` : d.badge}</span>`;
+  const cards = KINDS.map((d, i) => {
+    const el = document.createElement('div');
+    el.className = 'mt-card';
+    el.innerHTML = `${badge(d)}<span><b>${d.k}</b><small>${d.ext}</small></span>`;
+    stage.appendChild(el);
+    return { el, d, a: (i / KINDS.length) * Math.PI * 2, busy: false };
+  });
+
+  // What gets dropped in, in turn: the file, how it is read, and where the passages land.
+  const DROPS = [
+    { card: 0, name: 'barista-course-notes.pdf', label: 'PDF', icon: 'i-file', size: '12 pages · 2.4 MB', meta: '2.4 MB · 12 pages', of: 12, read: (n) => `Reading page ${n} of 12…`, done: '12 pages · 3 passages worth teaching',
+      passages: [['Grind size vs contact time', 4], ['The 1:2 ratio, page 7', 6], ['Channelling: causes', 5]] },
+    { card: 2, name: 'Puck prep — a lecture', label: 'Video', icon: 'i-play', size: '48 min · YouTube', meta: 'YouTube · 48 min', of: 48, read: (n) => `Reading the subtitles · ${n} of 48 min`, done: '48 min · 2 passages worth teaching',
+      passages: [['Levelling the bed, 12:40', 5], ['Why grind first, 31:05', 4]] },
+    { card: 1, name: 'week-3-slides.pptx', label: 'Slide deck', icon: 'i-cards', size: '31 slides · 6.1 MB', meta: '31 slides', of: 31, read: (n) => `Reading slide ${n} of 31…`, done: '31 slides · 2 passages worth teaching',
+      passages: [['Roast date, not best-before', 3], ['Sour means stopped too soon', 2]] },
+  ];
+
+  /* ── Orbit geometry ─────────────────────────────────────────────── */
+  let W = 0, H = 0, cx = 0, cy = 0, rx = 0, ry = 0;
+  const measure = () => {
+    W = stage.clientWidth; H = stage.clientHeight;
+    cx = W / 2;
+    // On a phone the ring is wider than the screen: cards swing in from the edges and pass under the zone.
+    if (W < 520) { cy = H * 0.37; rx = W * 0.6; ry = H * 0.355; }
+    else { cy = H * 0.4; rx = W * 0.42; ry = H * 0.29; }
+  };
+  // Depth from the angle: front (bottom of the ellipse) is big and sharp, back is small and soft.
+  const pose = (a) => {
+    const s = Math.sin(a), c = Math.cos(a);
+    const depth = (s + 1) / 2;                     // 0 back … 1 front
+    return {
+      x: cx + c * rx, y: cy + s * ry,
+      s: 0.72 + depth * 0.36, z: s > 0 ? 70 + Math.round(depth * 20) : 10 + Math.round(depth * 20),
+      blur: (1 - depth) * 1.6, o: 0.55 + depth * 0.45, ry: -c * 18,
+    };
+  };
+  const put = (o, p) => {
+    o.el.style.transform = `translate3d(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px, 0) translate(-50%, -50%) rotateY(${p.ry.toFixed(1)}deg) scale(${p.s.toFixed(3)})`;
+    o.el.style.zIndex = p.z;
+    o.el.style.filter = p.blur > 0.15 ? `blur(${p.blur.toFixed(2)}px)` : 'none';
+    o.el.style.opacity = p.o.toFixed(3);
+  };
+  measure();
+  addEventListener('resize', measure);
+
+  let spin = 0;
+  const layout = () => cards.forEach((o) => { if (!o.busy) put(o, pose(o.a + spin)); });
+  layout();
+
+  /* ── Zone states ────────────────────────────────────────────────── */
+  const zoneIdle = () => { zone.classList.remove('hot'); };
+  // A material row as the library draws it: glyph, title, format badge, status badge, then a stage line or the facts.
+  const ROW_STATE = { q: '<i></i>Queued', p: '<i></i>Processing', r: '<i></i>Ready' };
+  const rowMeta = (drop) => `${drop.size} · <svg><use href="#i-book"/></svg>Used by a course`;
+  const zoneFile = (drop, state = 'q') => {
+    const row = document.createElement('div');
+    row.className = 'mt-row';
+    row.innerHTML = `<span class="mt-gl"><svg><use href="#${drop.icon}"/></svg></span><span class="mt-rx"><span class="mt-rt"><b>${drop.name}</b><span class="mt-bd">${drop.label}</span><span class="mt-bd ${state}">${ROW_STATE[state]}</span></span>`
+      + (state === 'r' ? `<span class="mt-rm" style="display:block">${rowMeta(drop)}</span>` : `<span class="mt-rm" style="display:block">Queued — waiting its turn</span>`) + '</span>';
+    rowsEl.prepend(row);
+    [...rowsEl.children].slice(3).forEach((x) => x.remove());
+    return row;
+  };
+  const rowState = (row, drop, state) => {
+    const bd = row.querySelectorAll('.mt-bd')[1], rm = row.querySelector('.mt-rm');
+    bd.className = 'mt-bd ' + state; bd.innerHTML = ROW_STATE[state];
+    const sh = row.querySelector('.mt-sh');
+    if (state === 'p') { rm.textContent = 'Reading it now'; if (!sh) rm.insertAdjacentHTML('beforebegin', '<span class="mt-sh" style="display:block"></span>'); }
+    if (state === 'r') { if (sh) sh.remove(); rm.innerHTML = rowMeta(drop); }
+  };
+
+  const lit = new Map();
+  const light = (i) => {
+    const n = nodes[i - 1];
+    lit.set(i, (lit.get(i) || 0) + 1);
+    n.classList.add('lit');
+    n.querySelector('.mt-ct b').textContent = lit.get(i);
+    n.querySelector('.mt-ct em').textContent = lit.get(i) === 1 ? 'file' : 'files';
+    gsap.fromTo(n.querySelector('.mt-dot'), { scale: 1.35 }, { scale: 1, duration: 0.6, ease: 'back.out(3)' });
+  };
+  const unlightAll = () => { lit.clear(); nodes.forEach((n) => n.classList.remove('lit')); };
+
+  const rel = (el) => {
+    const s = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
+    return { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2, w: r.width, h: r.height };
+  };
+
+  if (STILL) {
+    [...DROPS].reverse().forEach((d) => { zoneFile(d, 'r'); d.passages.forEach(([, i]) => light(i)); });
+    return;
+  }
+
+  /* ── One drop, as a timeline ────────────────────────────────────── */
+  function dropTL(drop) {
+    const o = cards[drop.card];
+    const tl = gsap.timeline();
+    let row = null;
+    const from = { ...pose(o.a + spin) };
+    const fly = { t: 0 };
+    tl.add(() => { o.busy = true; zone.classList.add('hot'); })
+      // Lifted out of the orbit, pulled into the zone.
+      .to(fly, {
+        t: 1, duration: 0.95, ease: 'power3.inOut',
+        onStart: () => { Object.assign(from, pose(o.a + spin)); },
+        onUpdate: () => {
+          const z = rel(dropEl), t = fly.t;
+          const arc = Math.sin(t * Math.PI) * -60;
+          put(o, { x: from.x + (z.x - from.x) * t, y: from.y + (z.y - from.y) * t + arc, s: from.s + (0.92 - from.s) * t, z: 99, blur: from.blur * (1 - t), o: 1, ry: from.ry * (1 - t) });
+        },
+      })
+      .add(() => { o.el.style.opacity = 0; row = zoneFile(drop); })
+      .fromTo(dropEl, { scale: 0.96 }, { scale: 1, duration: 0.45, ease: 'back.out(2.5)' })
+      .add(() => { gsap.from(row, { height: 0, opacity: 0, paddingTop: 0, paddingBottom: 0, duration: 0.4, ease: 'power3.out' }); }, '<');
+    // Reading: Queued, then Processing with its moving line, then Ready.
+    tl.add(() => rowState(row, drop, 'p'), '+=0.55')
+      .add(() => { zone.classList.remove('hot'); rowState(row, drop, 'r'); }, '+=1.6');
+    // Split into passages, which fly to their lessons.
+    const chips = drop.passages.map(([t]) => {
+      const c = document.createElement('div');
+      c.className = 'mt-pass';
+      c.innerHTML = `<i><svg><use href="#i-spark"/></svg></i>“${t}”`;
+      stage.appendChild(c);
+      return c;
+    });
+    tl.add(() => {
+      const z = rel(zone), n = chips.length;
+      chips.forEach((c, k) => {
+        const w = c.offsetWidth;
+        // A short stack under the zone, each passage nudged off-centre.
+        const fx = z.x - w / 2 + (k - (n - 1) / 2) * Math.min(46, W * 0.06);
+        const fy = z.y + z.h / 2 + 16 + k * 40;
+        gsap.fromTo(c, { x: z.x - w / 2, y: z.y, opacity: 0, scale: 0.6 }, { x: fx, y: fy, opacity: 1, scale: 1, duration: 0.55, delay: k * 0.12, ease: 'back.out(1.8)' });
+      });
+    }, '+=0.2');
+    tl.to({}, { duration: 1.0 });
+    drop.passages.forEach(([, i], k) => {
+      tl.add(() => {
+        const c = chips[k], d = rel(nodes[i - 1].querySelector('.mt-dot'));
+        gsap.to(c, {
+          x: d.x - c.offsetWidth / 2, y: d.y - c.offsetHeight / 2, scale: 0.35, duration: 0.7, ease: 'power3.in',
+          onComplete: () => { gsap.to(c, { opacity: 0, duration: 0.15, onComplete: () => c.remove() }); light(i); },
+        });
+      }, k === 0 ? '>' : '<0.18');
+    });
+    tl.to({}, { duration: 1.3 })
+      // The file goes back into orbit; the zone empties.
+      .add(() => {
+        zoneIdle();
+        o.busy = false;
+        gsap.fromTo(o.el, { opacity: 0 }, { opacity: pose(o.a + spin).o, duration: 0.6 });
+      })
+      .to({}, { duration: 0.6 });
+    return tl;
+  }
+
+  let loop = null, k = 0, running = false;
+  const next = () => {
+    if (!running) return;
+    if (k > 0 && k % DROPS.length === 0) { unlightAll(); rowsEl.innerHTML = ''; }
+    loop = dropTL(DROPS[k % DROPS.length]);
+    k++;
+    loop.eventCallback('onComplete', next);
+  };
+
+  gsap.ticker.add((time, dt) => {
+    if (!running) return;
+    spin += Math.min(dt, 50) / 1000 * 0.16;
+    layout();
+  });
+
+  gsap.from(sec.querySelectorAll('.mt-copy > *'), {
+    y: 26, opacity: 0, duration: 0.85, stagger: 0.07, ease: 'power3.out',
+    scrollTrigger: { trigger: sec, start: 'top 80%', once: true },
+  });
+  gsap.from(zone, { scale: 0.85, opacity: 0, duration: 0.9, ease: 'back.out(1.6)', scrollTrigger: { trigger: stage, start: 'top 85%', once: true } });
+
+  let active = false;
+  const run = () => {
+    const on = active && !document.hidden;
+    if (on === running) return;
+    running = on;
+    if (on) { if (loop) loop.resume(); else next(); }
+    else if (loop) loop.pause();
+  };
+  ScrollTrigger.create({ trigger: stage, start: 'top 90%', end: 'bottom 5%', onToggle: (s) => { active = s.isActive; run(); } });
+  document.addEventListener('visibilitychange', run);
+})();
+</script>

@@ -1,0 +1,359 @@
+<style>
+/* ── #plan — the plan that slides, the review that comes back ────────
+   Both cards are the real screens. Left: the course's Plan tab
+   (PlanPanel — "This week" and "Sessions" tiles, one row per session
+   with its weekday and date, "Moved forward · was 3d ago", and the amber
+   "3 sessions slipped — no problem." note). Days go by untouched, and on
+   the fourth the rows re-date themselves forward, nothing dropped.
+   Right: the review flow (DueCard → the review Card with the four recall
+   buttons → "All caught up"). Every class here is pl-prefixed: the page
+   has global .fin / .done / .no rules of its own. */
+#plan { padding: calc(var(--sec-y) / 2) calc(var(--gut) + var(--pad-x)); }
+#plan .pl-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 24px 56px; align-items: end; }
+#plan .pl-titles { display: grid; gap: 22px; justify-items: start; }
+#plan .pl-head .lede { padding-bottom: 10px; }
+
+#plan .pl-row { margin-top: clamp(36px, 4.4vw, 64px); display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(12px, 1.4vw, 20px); align-items: stretch; }
+#plan .pl-card { position: relative; border-radius: var(--r-card); padding: clamp(20px, 2vw, 30px); min-width: 0; display: flex; flex-direction: column; }
+#plan .pl-cal { background: #fff; box-shadow: 0 1px 2px rgb(11 13 16 / 0.04), 0 30px 60px -40px rgb(11 13 16 / 0.35); }
+#plan .pl-k { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: var(--text-3); }
+#plan .pl-k .pl-n { font: 700 13px/1 var(--display); color: var(--cobalt); }
+#plan .pl-card h3 { margin: 10px 0 0; font: 600 clamp(22px, 1.9vw, 30px)/1.08 var(--display); letter-spacing: -0.03em; text-wrap: balance; }
+
+/* Around the window: the course, the budget, and the days going by. */
+#plan .pl-top { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#plan .pl-course { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 13px 0 6px; border-radius: 99px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; flex: none; }
+#plan .pl-course i { width: 24px; height: 24px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; }
+#plan .pl-course svg { width: 12px; height: 12px; }
+#plan .pl-chip { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px 0 10px; border-radius: 99px; background: #F3F4F7; font-size: 13px; font-weight: 500; color: var(--text-2); white-space: nowrap; flex: none; }
+#plan .pl-chip svg { width: 14px; height: 14px; color: var(--cobalt); flex: none; }
+#plan .pl-chip b { color: var(--ink); font-weight: 600; }
+#plan .pl-clock { margin-left: auto; background: var(--cobalt-soft); color: var(--cobalt); }
+#plan .pl-clock b { color: var(--cobalt); display: inline-block; min-width: 5.6em; }
+
+/* The window: the Plan tab, at the width the phone gives it. */
+/* Fixed height: when the note arrives the list scrolls under the edge, the page never moves. */
+#plan .pl-win { margin-top: 16px; flex: none; height: 594px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.09); overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+#plan .pl-wbar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px 0 14px; border-bottom: 1px solid var(--line); background: #F6F7FA; font-size: 12.5px; color: var(--text-2); white-space: nowrap; }
+#plan .pl-wbar svg { width: 15px; height: 15px; color: var(--text-3); flex: none; }
+#plan .pl-wbar b { color: var(--ink); font-weight: 600; }
+#plan .pl-wbar .sl { color: var(--text-3); }
+#plan .pl-seg { margin-left: auto; display: inline-flex; padding: 3px; border-radius: 99px; background: #EBEDF1; gap: 2px; }
+#plan .pl-seg span { height: 24px; padding: 0 11px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 11.5px; font-weight: 600; color: var(--text-2); }
+#plan .pl-seg span.on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgb(11 13 16 / 0.1); }
+#plan .pl-body { padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 12px; min-height: 0; -webkit-mask-image: linear-gradient(#000 calc(100% - 46px), transparent); mask-image: linear-gradient(#000 calc(100% - 46px), transparent); }
+#plan .pl-body > * { flex: none; }
+#plan .pl-h { margin: 0; font: 600 22px/1.1 var(--display); letter-spacing: -0.025em; }
+#plan .pl-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#plan .pl-stat { border-radius: 12px; box-shadow: inset 0 0 0 1px var(--line); padding: 9px 12px 10px; }
+#plan .pl-stat small { display: block; font-size: 11px; color: var(--text-3); }
+#plan .pl-stat b { font: 600 19px/1.2 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+#plan .pl-stat span { font-size: 12px; color: var(--text-3); }
+#plan .pl-slip { overflow: hidden; }
+#plan .pl-slip-in { border-radius: 12px; background: #FFF4D6; box-shadow: inset 0 0 0 1px #F3DE9E; padding: 10px 12px; }
+#plan .pl-slip-in b { display: block; font-size: 13px; font-weight: 600; color: #7A5200; }
+#plan .pl-slip-in span { display: block; margin-top: 2px; font-size: 12px; line-height: 1.45; color: #946A12; }
+#plan .pl-list { margin: 0; padding: 0; list-style: none; }
+#plan .pl-r { display: grid; grid-template-columns: 34px minmax(0, 1fr) 22px; gap: 12px; align-items: center; padding: 9px 2px; border-top: 1px solid var(--line); }
+#plan .pl-r:first-child { border-top: 0; }
+#plan .pl-d { text-align: center; line-height: 1.1; }
+#plan .pl-d small { display: block; font-size: 10px; color: var(--text-3); }
+#plan .pl-d b { position: relative; display: block; height: 1.25em; overflow: hidden; font: 600 14px/1.25 var(--display); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+#plan .pl-d b i { position: absolute; inset: 0; font-style: normal; }
+#plan .pl-t { min-width: 0; }
+#plan .pl-t b { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#plan .pl-t span { display: block; margin-top: 1px; font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#plan .pl-r.pl-now .pl-t span { color: var(--lime-ink); font-weight: 500; }
+#plan .pl-r.pl-moved .pl-t span { color: #9A6A00; }
+#plan .pl-r.pl-late .pl-t span { color: var(--text-3); }
+#plan .pl-r.pl-late .pl-t b { color: var(--text-2); }
+#plan .pl-r.pl-done .pl-t b { color: var(--text-3); text-decoration: line-through; text-decoration-color: rgb(11 13 16 / 0.25); }
+#plan .pl-ck { width: 20px; height: 20px; border-radius: 6px; box-shadow: inset 0 0 0 1.5px rgb(11 13 16 / 0.16); display: grid; place-items: center; color: transparent; }
+#plan .pl-ck svg { width: 12px; height: 12px; }
+#plan .pl-r.pl-done .pl-ck { background: var(--lime); box-shadow: none; color: var(--ink); }
+
+/* Card 2: the review flow, on cobalt. */
+#plan .pl-rev { background: var(--cobalt-grad); color: #fff; overflow: hidden; box-shadow: 0 30px 60px -34px rgb(20 40 200 / 0.55); }
+#plan .pl-rev .pl-k { color: rgb(255 255 255 / 0.6); }
+#plan .pl-rev .pl-k .pl-n { color: var(--lime); }
+#plan .pl-stage { position: relative; margin-top: 18px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+/* DueCard */
+#plan .pl-due { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 12px; border-radius: 16px; background: var(--lime-soft); box-shadow: inset 0 0 0 1px #D6EBA4; color: var(--lime-ink); }
+#plan .pl-due .ic { width: 40px; height: 40px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; box-shadow: 0 1px 2px rgb(11 13 16 / 0.08); }
+#plan .pl-due .ic svg { width: 18px; height: 18px; }
+#plan .pl-due > div { flex: 1; min-width: 0; }
+#plan .pl-due b { display: block; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+#plan .pl-due span { display: block; margin-top: 1px; font-size: 12px; line-height: 1.35; color: rgb(78 106 8 / 0.75); }
+#plan .pl-due .go { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 99px; background: var(--ink); color: #fff; font-size: 12.5px; font-weight: 600; }
+#plan .pl-due .go svg { width: 12px; height: 12px; }
+/* The review card */
+#plan .pl-rc { position: relative; flex: 1; min-height: 330px; }
+#plan .pl-c { position: absolute; top: 0; left: 0; right: 0; border-radius: 18px; background: #fff; color: var(--ink); box-shadow: 0 24px 40px -26px rgb(5 10 60 / 0.7); display: flex; flex-direction: column; overflow: hidden; }
+#plan .pl-c-top { padding: 16px 16px 14px; }
+#plan .pl-c-meta { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--text-3); }
+#plan .pl-c-meta .of { text-transform: uppercase; }
+#plan .pl-c-co { margin: 10px 0 0; font-size: 12px; color: var(--text-2); }
+#plan .pl-c h4 { margin: 3px 0 0; font: 600 21px/1.2 var(--display); letter-spacing: -0.025em; }
+#plan .pl-c p.sm { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--text-2); }
+#plan .pl-c .open { margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--cobalt); }
+#plan .pl-c .open svg { width: 13px; height: 13px; }
+#plan .pl-c-ask { border-top: 1px solid var(--line); padding: 12px 14px 14px; }
+#plan .pl-c-ask > p { margin: 0 0 9px; font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
+#plan .pl-rb { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+#plan .pl-rb span { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 9px 4px; border-radius: 12px; text-align: center; box-shadow: inset 0 0 0 1px var(--c, var(--line)); background: #fff; transition: opacity .2s; }
+#plan .pl-rb span b { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
+#plan .pl-rb span small { font-size: 10px; line-height: 1.2; opacity: 0.7; }
+#plan .pl-rb .ag { --c: #FFC9BB; color: #C2391C; }
+#plan .pl-rb .hd { --c: #F3DE9E; color: #8A5A00; }
+#plan .pl-rb .gd { --c: transparent; background: var(--ink); color: #fff; }
+#plan .pl-rb .ez { --c: #D6EBA4; background: var(--lime-soft); color: var(--lime-ink); }
+#plan .pl-rb.pick span { opacity: 0.45; }
+#plan .pl-rb.pick span.on { opacity: 1; }
+/* All caught up */
+#plan .pl-caught { position: absolute; top: 0; left: 0; right: 0; min-height: 300px; border-radius: 18px; background: #fff; color: var(--ink); display: grid; place-content: center; justify-items: center; gap: 8px; padding: 20px; text-align: center; }
+#plan .pl-caught .ok { width: 48px; height: 48px; border-radius: 16px; background: var(--lime-soft); color: var(--lime-ink); display: grid; place-items: center; }
+#plan .pl-caught .ok svg { width: 22px; height: 22px; }
+#plan .pl-caught b { font: 600 20px/1.2 var(--display); letter-spacing: -0.02em; }
+#plan .pl-caught span { max-width: 260px; font-size: 13px; line-height: 1.5; color: var(--text-2); }
+#plan .pl-caught em { font-style: normal; margin-top: 4px; display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 11px; border-radius: 99px; background: #F3F4F7; font-size: 11.5px; font-weight: 600; color: var(--ink-3); }
+#plan .pl-caught em svg { width: 12px; height: 12px; color: #E0761A; }
+
+@media (max-width: 1180px) {
+  #plan .pl-row { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
+}
+@media (max-width: 900px) {
+  #plan { padding-inline: calc(var(--gut) + 10px); }
+  #plan .pl-head { grid-template-columns: minmax(0, 1fr); }
+  #plan .pl-card { padding: 18px 12px 12px; }
+  #plan .pl-k, #plan .pl-card h3, #plan .pl-top { padding-inline: 6px; }
+  #plan .pl-clock { margin-left: 0; }
+  #plan .pl-wbar .crumb { display: none; }
+  #plan .pl-body { padding: 14px 12px 10px; }
+  #plan .pl-rb { grid-template-columns: 1fr 1fr; }
+  #plan .pl-rc { min-height: 400px; }
+  #plan .pl-due span { display: none; }
+}
+
+/* A generated object in the gap between the heading and its paragraph. */
+#plan { position: relative; overflow-x: clip; }
+#plan .sec-obj { position: absolute; z-index: 1; width: clamp(110px, 10.5vw, 190px); height: auto; left: 45%; top: calc(var(--sec-y) / 2 - 18px); transform: rotate(-9deg); pointer-events: none; filter: drop-shadow(0 22px 28px rgb(11 13 16 / 0.18)); }
+@media (max-width: 1100px) { #plan .sec-obj { left: auto; right: calc(var(--gut) + 2%); top: calc(var(--sec-y) / 2 - 40px); width: 96px; } }
+@media (max-width: 900px) { #plan .sec-obj { width: 76px; right: 12px; top: calc(var(--sec-y) / 2 - 22px); } }
+</style>
+
+<section id="plan" aria-labelledby="plan-h">
+  <img class="sec-obj" src="img/11/obj-calendar.webp" alt="" aria-hidden="true" loading="lazy">
+  <header class="pl-head">
+    <div class="pl-titles">
+      <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-cal"/></svg></span>For the four months after the excitement</span>
+      <h2 class="h2" id="plan-h">A plan that <span class="hchip ink" aria-hidden="true"><svg><use href="#i-cal"/></svg></span> <span class="cob">bends.</span></h2>
+    </div>
+    <p class="lede">Life happens. <b>Miss three days and the plan just… slides</b> — no red, no backlog, no guilt. And review lands right before you’d forget, so what you learned in week one is still there in week four.</p>
+  </header>
+
+  <div class="pl-row">
+    <!-- The course's Plan tab. -->
+    <article class="pl-card pl-cal" aria-labelledby="plan-cal-h">
+      <div class="pl-k"><span class="pl-n">01</span>The plan</div>
+      <h3 id="plan-cal-h">Miss three days? It slides.</h3>
+      <div class="pl-top" aria-hidden="true">
+        <span class="pl-course"><i><svg><use href="#i-path"/></svg></i>Italian by June</span>
+        <span class="pl-chip"><svg><use href="#i-time"/></svg><b>3 hrs</b> a week</span>
+        <span class="pl-chip pl-clock"><svg><use href="#i-cal"/></svg>Today is <b class="pl-today">Fri 1 May</b></span>
+      </div>
+      <div class="pl-win" aria-label="The course's Plan tab: three missed sessions moved forward, nothing dropped">
+        <div class="pl-wbar"><svg aria-hidden="true"><use href="#i-panel"/></svg><span class="crumb"><span class="sl">Italian by June /</span> <b>Plan</b></span><span class="pl-seg" aria-hidden="true"><span>Lessons</span><span class="on">Plan</span><span>Files</span></span></div>
+        <div class="pl-body">
+          <h4 class="pl-h">Your plan</h4>
+          <div class="pl-stats">
+            <div class="pl-stat"><small>This week</small><b class="pl-wk">0h 14m</b><span>/3h</span></div>
+            <div class="pl-stat"><small>Sessions</small><b class="pl-ss">1</b><span>/15</span></div>
+          </div>
+          <div class="pl-slip" role="status"><div class="pl-slip-in"><b>3 sessions slipped — no problem.</b><span>Your plan shifted 3 days so you keep 3 hrs a week. Nothing was dropped.</span></div></div>
+          <ol class="pl-list">
+            <li class="pl-r pl-done"><span class="pl-d"><small>Mon</small><b><i>27</i></b></span><span class="pl-t"><b>Sounds and greetings</b><span>Done · 14 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+            <li class="pl-r" data-i="0"><span class="pl-d"><small>Tue</small><b><i>28</i></b></span><span class="pl-t"><b>The rolled R</b><span>10 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+            <li class="pl-r" data-i="1"><span class="pl-d"><small>Wed</small><b><i>29</i></b></span><span class="pl-t"><b>Ordering politely: vorrei, not voglio</b><span>18 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+            <li class="pl-r" data-i="2"><span class="pl-d"><small>Thu</small><b><i>30</i></b></span><span class="pl-t"><b>Present tense: the regulars</b><span>16 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+            <li class="pl-r" data-i="3"><span class="pl-d"><small>Sat</small><b><i>2</i></b></span><span class="pl-t"><b>Flashcard drill</b><span>8 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+            <li class="pl-r" data-i="4"><span class="pl-d"><small>Mon</small><b><i>4</i></b></span><span class="pl-t"><b>Asking the way</b><span>15 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+            <li class="pl-r" data-i="5"><span class="pl-d"><small>Tue</small><b><i>5</i></b></span><span class="pl-t"><b>Tu or Lei?</b><span>9 min</span></span><span class="pl-ck"><svg aria-hidden="true"><use href="#i-check"/></svg></span></li>
+          </ol>
+        </div>
+      </div>
+    </article>
+
+    <!-- The review flow. -->
+    <article class="pl-card pl-rev" aria-labelledby="plan-rev-h">
+      <div class="pl-k"><span class="pl-n">02</span>Spaced review</div>
+      <h3 id="plan-rev-h">Back right before you’d forget it.</h3>
+      <div class="pl-stage">
+        <div class="pl-due">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div><b>2 lessons to review today</b><span>A quick pass to keep earlier lessons from slipping. About 6 min.</span></div>
+          <span class="go">Start<svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </div>
+        <div class="pl-rc">
+          <div class="pl-c" data-c="1">
+            <div class="pl-c-top">
+              <div class="pl-c-meta"><span class="of">2 of 2</span><span>waited 1 day</span></div>
+              <p class="pl-c-co">Italian by June</p>
+              <h4>Ordering politely: vorrei, not voglio</h4>
+              <p class="sm">Vorrei softens the ask — “I would like”. Voglio is the blunt “I want” a child says at the counter.</p>
+              <span class="open"><svg aria-hidden="true"><use href="#i-book"/></svg>Open the lesson</span>
+            </div>
+            <div class="pl-c-ask">
+              <p>How well did you remember this?</p>
+              <div class="pl-rb"><span class="ag"><b>Again</b><small>Blanked on it</small></span><span class="hd"><b>Hard</b><small>Came back slowly</small></span><span class="gd"><b>Good</b><small>Remembered it</small></span><span class="ez"><b>Easy</b><small>Knew it cold</small></span></div>
+            </div>
+          </div>
+          <div class="pl-c" data-c="0">
+            <div class="pl-c-top">
+              <div class="pl-c-meta"><span class="of">1 of 2</span><span>6 days since you learned it</span></div>
+              <p class="pl-c-co">Italian by June</p>
+              <h4>Sounds and greetings</h4>
+              <p class="sm">Ciao for friends, buongiorno for the barista — and the five vowels that never change their sound.</p>
+              <span class="open"><svg aria-hidden="true"><use href="#i-book"/></svg>Open the lesson</span>
+            </div>
+            <div class="pl-c-ask">
+              <p>How well did you remember this?</p>
+              <div class="pl-rb"><span class="ag"><b>Again</b><small>Blanked on it</small></span><span class="hd"><b>Hard</b><small>Came back slowly</small></span><span class="gd"><b>Good</b><small>Remembered it</small></span><span class="ez"><b>Easy</b><small>Knew it cold</small></span></div>
+            </div>
+          </div>
+          <div class="pl-caught">
+            <span class="ok" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+            <b>All caught up</b>
+            <span>You brought back 2 lessons. That’s the part that makes it last.</span>
+            <em><svg aria-hidden="true"><use href="#i-flame"/></svg>4 days in a row</em>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+(() => {
+  'use strict';
+  const sec = document.getElementById('plan');
+  if (!sec || !window.gsap) return;
+  const STILL = document.documentElement.classList.contains('still');
+  const q = (s, r = sec) => r.querySelector(s);
+  const qa = (s, r = sec) => [...r.querySelectorAll(s)];
+
+  /* ── Card 1: the Plan tab ───────────────────────────────────────── */
+  // Six open sessions. Before: their own dates. After three untouched days
+  // (Tue, Wed, Thu), every one moves to the next study day on or after Fri 1.
+  const rows = qa('.pl-r[data-i]');
+  const BEFORE = [['Tue', '28'], ['Wed', '29'], ['Thu', '30'], ['Sat', '2'], ['Mon', '4'], ['Tue', '5']];
+  const AFTER = [['Fri', '1'], ['Sat', '2'], ['Mon', '4'], ['Tue', '5'], ['Wed', '6'], ['Fri', '8']];
+  const MIN = ['10 min', '18 min', '16 min', '8 min', '15 min', '9 min'];
+  const DAYS = ['Tue 28 Apr', 'Wed 29 Apr', 'Thu 30 Apr', 'Fri 1 May'];
+  const today = q('.pl-today'), slip = q('.pl-slip'), wk = q('.pl-wk'), ss = q('.pl-ss');
+  const sub = (r) => q('.pl-t span', r);
+  const dayCell = (r) => q('.pl-d', r);
+  const setDate = (r, [w, d]) => { q('small', dayCell(r)).textContent = w; q('b i', dayCell(r)).textContent = d; };
+  function resolved() {
+    rows.forEach((r, i) => {
+      setDate(r, AFTER[i]); r.className = 'pl-r' + (i === 0 ? ' pl-now' : '') + (i < 3 ? ' pl-moved' : '');
+      sub(r).textContent = i === 0 ? 'Today · 10 min · moved from Tue' : i < 3 ? 'Moved forward · was 3d ago' : MIN[i];
+    });
+    rows[0].classList.add('pl-done'); sub(rows[0]).textContent = 'Done · 10 min';
+    today.textContent = DAYS[3]; wk.textContent = '0h 24m'; ss.textContent = '2';
+  }
+  if (STILL) { resolved(); }
+
+  /* A date that rolls to its new value. */
+  function roll(r, to, delay) {
+    const b = q('b', dayCell(r)), old = q('i', b);
+    const nu = document.createElement('i'); nu.textContent = to[1];
+    b.appendChild(nu);
+    const tl = gsap.timeline({ delay, onComplete: () => { old.remove(); q('small', dayCell(r)).textContent = to[0]; } });
+    tl.fromTo(old, { yPercent: 0 }, { yPercent: -100, duration: 0.45, ease: 'power3.inOut' }, 0)
+      .fromTo(nu, { yPercent: 100 }, { yPercent: 0, duration: 0.45, ease: 'power3.inOut' }, 0)
+      .to(q('small', dayCell(r)), { opacity: 0, duration: 0.15, yoyo: true, repeat: 1 }, 0.1);
+    return tl;
+  }
+
+  let resetP;
+  function planTL() {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.4, paused: true });
+    tl.call(resetP = () => {
+      rows.forEach((r, i) => {
+        qa('.pl-d b i', r).slice(1).forEach((x) => x.remove()); gsap.set(q('.pl-d b i', r), { yPercent: 0 });
+        setDate(r, BEFORE[i]); r.className = 'pl-r' + (i === 0 ? ' pl-now' : ''); sub(r).textContent = i === 0 ? 'Today · 10 min' : MIN[i];
+      });
+      today.textContent = DAYS[0]; wk.textContent = '0h 14m'; ss.textContent = '1';
+      gsap.set(slip, { height: 0, autoAlpha: 0 });
+    }, null, 0);
+    // Days go by. Nothing is ticked.
+    [1, 2].forEach((d) => {
+      tl.call(() => {
+        today.textContent = DAYS[d];
+        rows.forEach((r, i) => {
+          if (i < d) { r.className = 'pl-r pl-late'; sub(r).textContent = 'Not yet · ' + MIN[i]; }
+          if (i === d) { r.className = 'pl-r pl-now'; sub(r).textContent = 'Today · ' + MIN[i]; }
+        });
+      }, null, 1.4 * d)
+        .fromTo(today, { y: 6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power3.out', immediateRender: false }, 1.4 * d);
+    });
+    // Day four: the plan re-flows from today, and says so.
+    tl.call(() => { today.textContent = DAYS[3]; rows.forEach((r) => { r.className = 'pl-r pl-late'; }); }, null, 4.2)
+      .fromTo(today, { y: 6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power3.out', immediateRender: false }, 4.2)
+      .to(slip, { height: 'auto', autoAlpha: 1, duration: 0.5, ease: 'power3.inOut' }, 4.75);
+    rows.forEach((r, i) => {
+      tl.add(() => {
+        roll(r, AFTER[i], 0);
+        r.className = 'pl-r' + (i === 0 ? ' pl-now' : '') + (i < 3 ? ' pl-moved' : '');
+        sub(r).textContent = i === 0 ? 'Today · 10 min · moved from Tue' : i < 3 ? 'Moved forward · was 3d ago' : MIN[i];
+      }, 5.15 + i * 0.12)
+        .fromTo(r, { backgroundColor: 'rgba(198,242,78,0)' }, { backgroundColor: 'rgba(198,242,78,0.22)', duration: 0.25, yoyo: true, repeat: 1, immediateRender: false }, 5.15 + i * 0.12);
+    });
+    // And today's session gets done.
+    tl.call(() => { rows[0].classList.add('pl-done'); sub(rows[0]).textContent = 'Done · 10 min'; wk.textContent = '0h 24m'; ss.textContent = '2'; }, null, 7.6)
+      .fromTo(q('.pl-ck', rows[0]), { scale: 0.6 }, { scale: 1, duration: 0.45, ease: 'back.out(3)', immediateRender: false }, 7.6)
+      .to({}, { duration: 3 }, 7.8);
+    return tl;
+  }
+
+  /* ── Card 2: review ─────────────────────────────────────────────── */
+  const due = q('.pl-due'), go = q('.pl-due .go'), c0 = q('.pl-c[data-c="0"]'), c1 = q('.pl-c[data-c="1"]'), done = q('.pl-caught');
+  const press = (el) => gsap.timeline().to(el, { scale: 0.92, duration: 0.1, ease: 'power2.in' }).to(el, { scale: 1, duration: 0.3, ease: 'back.out(3)' });
+  const pick = (card, cls) => { const rb = q('.pl-rb', card); rb.classList.add('pick'); qa('span', rb).forEach((s) => s.classList.toggle('on', s.classList.contains(cls))); };
+  if (STILL) { gsap.set([c0, c1], { autoAlpha: 0 }); return; }
+  let resetR;
+  function reviewTL() {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.4, paused: true });
+    tl.call(resetR = () => {
+      qa('.pl-rb').forEach((rb) => { rb.classList.remove('pick'); qa('span', rb).forEach((s) => s.classList.remove('on')); });
+      gsap.set([c0, c1], { autoAlpha: 0, y: 26, x: 0, rotate: 0 }); gsap.set(done, { autoAlpha: 0, scale: 0.96 });
+      gsap.set(due, { autoAlpha: 1, y: 0 });
+    }, null, 0)
+      .add(press(go), 0.9)
+      .to(c0, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 1.1)
+      .set(c1, { autoAlpha: 1, y: 10 }, 1.3)
+      // Card one: "Good".
+      .add(() => pick(c0, 'gd'), 3.2)
+      .add(press(q('.pl-rb .gd', c0)), 3.2)
+      .to(c0, { x: -40, rotate: -4, autoAlpha: 0, duration: 0.45, ease: 'power2.in' }, 3.8)
+      .to(c1, { y: 0, duration: 0.4, ease: 'power3.out' }, 3.95)
+      // Card two: "Easy".
+      .add(() => pick(c1, 'ez'), 5.8)
+      .add(press(q('.pl-rb .ez', c1)), 5.8)
+      .to(c1, { x: -40, rotate: -4, autoAlpha: 0, duration: 0.45, ease: 'power2.in' }, 6.4)
+      .to(done, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, 6.6)
+      .to(due, { autoAlpha: 0.45, duration: 0.4 }, 6.6)
+      .to({}, { duration: 2.6 }, 7.1);
+    return tl;
+  }
+
+  if (STILL) return;
+  const tls = [planTL(), reviewTL()];
+  resetP(); resetR();
+  gsap.from(qa('.pl-card', sec), { y: 40, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', scrollTrigger: { trigger: q('.pl-row'), start: 'top 85%', once: true } });
+  let on = false;
+  const sync = () => tls.forEach((t) => (on && !document.hidden ? t.play() : t.pause()));
+  ScrollTrigger.create({ trigger: q('.pl-row'), start: 'top 80%', end: 'bottom top', onToggle: (s) => { on = s.isActive; sync(); } });
+  document.addEventListener('visibilitychange', sync);
+})();
+</script>

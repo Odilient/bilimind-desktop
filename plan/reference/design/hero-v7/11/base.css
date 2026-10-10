@@ -1,0 +1,127 @@
+/* ════════════════════════════════════════════════════════════════════
+   11 "Cobalt landing" — shared tokens and the few global patterns every
+   section uses. build.py inlines this file into the page; the harness
+   (parts/_harness.html) links it so a part can be checked on its own.
+   Parts never add global rules: every selector in a part starts with
+   its section id.
+   ════════════════════════════════════════════════════════════════════ */
+:root {
+  --page: #ECEEF2;
+  --canvas: #F6F7FA;
+  --white: #FFFFFF;
+  --cobalt: #2340E6;
+  --cobalt-2: #1B33CF;
+  --cobalt-3: #3253F4;
+  --navy: #0D1660;
+  --cobalt-soft: #EEF1FE;
+  --lime: #C6F24E;
+  --lime-2: #B4E03A;
+  --lime-soft: #EEF9CF;
+  --lime-ink: #4E6A08;
+  --ink: #0B0D10;
+  --ink-2: #1A1D23;
+  --ink-3: #2A2E37;
+  --text-2: #565B68;
+  --text-3: #8B909C;
+  --line: rgb(11 13 16 / 0.08);
+  --green: #12A150;
+  --coral: #FF5A3C;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, sans-serif;
+  --gut: 20px;                                /* slab inset from the viewport edge */
+  --pad-x: clamp(20px, 4.2vw, 76px);          /* content inset inside a section */
+  --sec-y: clamp(88px, 10.5vw, 168px);        /* vertical rhythm between sections */
+  --r-card: 36px;
+  --r-md: 28px;
+  --r-sm: 18px;
+  --cobalt-grad:
+    radial-gradient(70% 90% at 82% 18%, rgb(120 150 255 / 0.40), transparent 60%),
+    radial-gradient(60% 70% at 10% 110%, rgb(10 20 120 / 0.55), transparent 70%),
+    linear-gradient(118deg, #1B33CF 0%, #2442EA 38%, #2D4CF2 56%, #2340E6 72%, #1A2FC4 100%);
+}
+@media (max-width: 900px) {
+  :root { --gut: 10px; --r-card: 28px; --r-md: 22px; --r-sm: 16px; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 400 16px/1.5 var(--body);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; }
+img, svg, video, canvas { display: block; max-width: 100%; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2.5px solid var(--lime); outline-offset: 3px; }
+
+/* ── Global patterns a part may use ─────────────────────────────────── */
+
+/* A slab: a full-width rounded card inset by the gutter, like the hero. */
+.slab { margin-inline: var(--gut); border-radius: var(--r-card); position: relative; isolation: isolate; }
+.slab.cobalt { background: var(--cobalt-grad); color: #fff; }
+.slab.ink { background: var(--ink); color: #fff; }
+.slab.white { background: #fff; color: var(--ink); }
+.slab.lime { background: var(--lime); color: var(--ink); }
+
+/* Eyebrow pill. Light by default; .on-dark for cobalt/ink slabs. */
+.eb {
+  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; justify-self: start;
+  height: 34px; padding: 0 14px 0 8px; border-radius: 99px;
+  background: #fff; box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px rgb(11 13 16 / 0.04);
+  font-size: 13.5px; font-weight: 500; color: var(--ink-3); white-space: nowrap;
+}
+.eb .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; }
+.eb .dot svg { width: 11px; height: 11px; }
+.eb.on-dark { background: rgb(255 255 255 / 0.10); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); color: rgb(255 255 255 / 0.92); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+
+/* The display heading: uppercase grotesk, tight, with inline chips. */
+.h2 {
+  margin: 0; font: 700 clamp(44px, 6.1vw, 108px)/0.9 var(--display);
+  letter-spacing: -0.045em; text-transform: uppercase; text-wrap: balance;
+}
+.h2 .lime { color: var(--lime); }
+.h2 .cob { color: var(--cobalt); }
+.h2 .dim { color: var(--text-3); }
+/* A round chip sitting inline in a heading, cap-height tall. */
+.hchip {
+  display: inline-grid; place-items: center; vertical-align: 0;
+  width: 0.74em; height: 0.74em; border-radius: 50%; margin: 0 0.04em;
+  background: var(--lime); color: var(--ink);
+}
+/* An in-flow svg would set the chip's baseline at its own bottom edge and drop the chip
+   below the caps; keep it out of flow. */
+.hchip { position: relative; }
+.hchip svg { position: absolute; inset: 27%; width: 46%; height: 46%; }
+.hchip.ink { background: var(--ink); color: #fff; }
+.hchip.cobalt { background: var(--cobalt); color: #fff; }
+.hchip.white { background: #fff; color: var(--cobalt); }
+.hchip.pill { width: auto; padding: 0 0.28em; border-radius: 99px; font-size: 0.5em; height: 1.5em; letter-spacing: -0.02em; }
+
+.lede { margin: 0; max-width: 560px; font-size: clamp(16.5px, 1.3vw, 19.5px); line-height: 1.5; color: var(--text-2); text-wrap: pretty; }
+.on-dark .lede, .slab.cobalt .lede, .slab.ink .lede { color: rgb(255 255 255 / 0.72); }
+.lede b { color: var(--ink); font-weight: 600; }
+.slab.cobalt .lede b, .slab.ink .lede b { color: #fff; }
+
+/* Pills (buttons/links). */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; padding: 0 22px; border-radius: 99px; border: 1px solid transparent;
+  font-size: 15px; font-weight: 600; white-space: nowrap;
+  transition: transform .15s, background .2s, box-shadow .2s;
+}
+.pill:active { transform: scale(.97); }
+.pill.dark { background: var(--ink); color: #fff; }
+.pill.dark:hover { background: #22262E; }
+.pill.light { background: #fff; border-color: rgb(11 13 16 / 0.1); box-shadow: 0 1px 2px rgb(11 13 16 / 0.05); }
+.pill.light:hover { box-shadow: 0 4px 14px rgb(11 13 16 / 0.08); }
+.pill.lime { background: var(--lime); color: var(--ink); }
+.pill.lime:hover { background: #D2F86A; }
+.pill .arr { width: 30px; height: 30px; margin-right: -12px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; }
+.pill.lime .arr { background: var(--ink); color: var(--lime); }
+.pill .arr svg { width: 14px; height: 14px; }
+
+/* Reveal hook: parts may add [data-rv] and animate it themselves; the
+   page never hides content before JS runs. */

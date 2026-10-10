@@ -1,0 +1,162 @@
+<style>
+/* ── Numbers: six true counts on a lime slab, rolled in like an odometer ── */
+#numbers { padding-block: calc(var(--sec-y) * 0.5); }
+#numbers .nm-slab {
+  overflow: hidden;
+  padding: clamp(36px, 4.6vw, 80px) var(--pad-x) clamp(24px, 3vw, 48px);
+}
+/* The hero's glassy streak, once, when the counting lands. */
+#numbers .nm-sheen {
+  position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: 0;
+}
+#numbers .nm-sheen i {
+  position: absolute; top: -50%; bottom: -50%; left: -30%; width: 16%;
+  transform: rotate(24deg); opacity: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+  filter: blur(14px);
+}
+#numbers .nm-head {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: end; gap: 24px 6vw;
+}
+#numbers .nm-head .eb { grid-column: 1 / -1; justify-self: start; background: rgb(255 255 255 / 0.55); box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.08); }
+#numbers .nm-head .eb .dot { background: var(--ink); color: var(--lime); }
+#numbers .h2 { font-size: clamp(44px, 5.6vw, 98px); }
+#numbers .h2 .hchip { position: relative; width: 0.74em; height: 0.74em; vertical-align: 0; box-shadow: 0 10px 20px -12px rgb(11 13 16 / 0.5); }
+/* An in-flow svg would set the chip's baseline at its own bottom and sink it; out of flow, the chip sits on the baseline. */
+#numbers .h2 .hchip svg { position: absolute; inset: 27%; width: 46%; height: 46%; }
+#numbers .nm-head .lede { color: rgb(11 13 16 / 0.7); justify-self: end; max-width: 440px; }
+#numbers .nm-head .lede b { color: var(--ink); }
+
+#numbers .nm-grid {
+  position: relative; z-index: 1;
+  list-style: none; margin: clamp(32px, 4vw, 64px) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1.5px solid rgb(11 13 16 / 0.85);
+}
+#numbers .nm-cell {
+  position: relative; padding: clamp(16px, 1.6vw, 26px) clamp(16px, 2vw, 32px) clamp(18px, 2vw, 30px) 0;
+  border-bottom: 1.5px solid rgb(11 13 16 / 0.16);
+  display: flex; flex-direction: column;
+  transition: background-color .3s;
+}
+#numbers .nm-cell + .nm-cell { padding-left: clamp(16px, 2vw, 32px); }
+#numbers .nm-cell:nth-child(3n + 1) { padding-left: 0; }
+#numbers .nm-cell:not(:nth-child(3n + 1))::before {
+  content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 1.5px; background: rgb(11 13 16 / 0.16);
+}
+#numbers .nm-cell:nth-last-child(-n + 3) { border-bottom: 0; }
+#numbers .nm-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+#numbers .nm-idx { font: 600 13px/1 var(--display); color: rgb(11 13 16 / 0.5); letter-spacing: 0; }
+#numbers .nm-ic {
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: var(--ink); color: var(--lime);
+  transition: transform .45s cubic-bezier(.2, .9, .25, 1.3), background-color .3s, color .3s;
+}
+#numbers .nm-ic svg { width: 20px; height: 20px; }
+#numbers .nm-cell:hover .nm-ic { transform: rotate(-14deg) scale(1.1); background: var(--cobalt); color: #fff; }
+
+#numbers .nm-num {
+  display: flex; margin: clamp(10px, 1.4vw, 22px) 0 0 -0.04em;
+  font: 700 clamp(84px, 9.2vw, 168px)/1 var(--display); letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  height: 0.86em; overflow: hidden;            /* trims the em box to the numerals */
+}
+#numbers .nm-d { display: block; height: 0.86em; overflow: hidden; padding: 0 0.02em; }
+#numbers .nm-d + .nm-d { margin-left: -0.09em; }
+#numbers .nm-strip { display: flex; flex-direction: column; will-change: transform; }
+#numbers .nm-strip span { display: block; height: 0.86em; line-height: 0.86em; margin-top: -0.01em; }
+#numbers .nm-label { margin-top: clamp(10px, 1vw, 16px); font: 600 clamp(17px, 1.45vw, 22px)/1.2 var(--display); letter-spacing: -0.02em; }
+#numbers .nm-note { margin-top: 6px; max-width: 340px; font-size: 14.5px; line-height: 1.45; color: rgb(11 13 16 / 0.62); }
+
+@media (max-width: 900px) {
+  #numbers .nm-head { grid-template-columns: minmax(0, 1fr); }
+  #numbers .nm-head .lede { justify-self: start; }
+  #numbers .nm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #numbers .nm-cell, #numbers .nm-cell + .nm-cell { padding: 18px 12px 22px 14px; }
+  #numbers .nm-cell:nth-child(3n + 1) { padding-left: 14px; }
+  #numbers .nm-cell:nth-child(2n + 1) { padding-left: 0; }
+  #numbers .nm-cell::before { display: none; }
+  #numbers .nm-cell:nth-child(2n)::before { display: block !important; content: ""; position: absolute; left: 0; top: 16%; bottom: 16%; width: 1.5px; background: rgb(11 13 16 / 0.16); }
+  #numbers .nm-cell:nth-last-child(-n + 3) { border-bottom: 1.5px solid rgb(11 13 16 / 0.16); }
+  #numbers .nm-cell:nth-last-child(-n + 2) { border-bottom: 0; }
+  #numbers .nm-num { font-size: clamp(70px, 22vw, 96px); }
+  #numbers .nm-ic { width: 36px; height: 36px; }
+  #numbers .nm-ic svg { width: 17px; height: 17px; }
+  #numbers .nm-note { font-size: 13px; }
+}
+</style>
+
+<section id="numbers" aria-labelledby="numbers-h">
+  <div class="slab lime nm-slab">
+    <div class="nm-sheen" aria-hidden="true"><i></i></div>
+    <div class="nm-head">
+      <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>What’s in the box</span>
+      <h2 class="h2" id="numbers-h">Six numbers.<br>No <span class="hchip ink" aria-hidden="true"><svg><use href="#i-x"/></svg></span>adjectives.</h2>
+      <p class="lede"><b>The breadth, stated once.</b> Every format, voice and language below is in the product today — the first one is counted straight from the lesson renderer.</p>
+    </div>
+    <ul class="nm-grid">
+      <li class="nm-cell" data-n="27"><div class="nm-top"><span class="nm-idx">01</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-cards"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">27 </span>lesson formats</p><p class="nm-note">From speaking drills to code the tests mark.</p></li>
+      <li class="nm-cell" data-n="11"><div class="nm-top"><span class="nm-idx">02</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-bulb"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">11 </span>kinds of knowledge</p><p class="nm-note">Each lesson is sorted first, then taught to fit.</p></li>
+      <li class="nm-cell" data-n="9"><div class="nm-top"><span class="nm-idx">03</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-quiz"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">9 </span>question types, all graded</p><p class="nm-note">Your 3,5 counts the same as 3.5.</p></li>
+      <li class="nm-cell" data-n="4"><div class="nm-top"><span class="nm-idx">04</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-code"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">4 </span>live code runtimes</p><p class="nm-note">Write it in the browser. The tests decide.</p></li>
+      <li class="nm-cell" data-n="29"><div class="nm-top"><span class="nm-idx">05</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-speaker"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">29 </span>narration voices</p><p class="nm-note">Lessons read aloud, for the commute and the washing-up.</p></li>
+      <li class="nm-cell" data-n="20"><div class="nm-top"><span class="nm-idx">06</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-globe"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">20 </span>languages</p><p class="nm-note">Taught in yours — not translated into it.</p></li>
+    </ul>
+  </div>
+</section>
+
+<script>
+(() => {
+  const sec = document.getElementById('numbers');
+  if (!sec) return;
+  const STILL = document.documentElement.classList.contains('still');
+  const LAPS = 2;                       // full turns each wheel makes before it lands
+  const ROWS = 10 * (LAPS + 1);
+
+  // Build one wheel per digit: 0–9, LAPS+1 times over.
+  const cells = [...sec.querySelectorAll('.nm-cell')];
+  const wheels = [];
+  cells.forEach((cell, i) => {
+    const num = cell.querySelector('.nm-num');
+    const digits = String(cell.dataset.n).split('').map(Number);
+    num.innerHTML = digits.map(() => {
+      let s = '';
+      for (let r = 0; r < ROWS; r++) s += `<span>${r % 10}</span>`;
+      return `<span class="nm-d"><span class="nm-strip">${s}</span></span>`;
+    }).join('');
+    [...num.querySelectorAll('.nm-strip')].forEach((strip, k) => {
+      // Later digits spin one lap further, so a number settles left to right.
+      const lap = Math.min(LAPS, k + 1);
+      wheels.push({ strip, cell: i, k, row: lap * 10 + digits[k] });
+    });
+  });
+  const at = (row) => -(row / ROWS) * 100;
+
+  if (STILL) { wheels.forEach((w) => gsap.set(w.strip, { yPercent: at(w.row) })); return; }
+
+  wheels.forEach((w) => gsap.set(w.strip, { yPercent: 0 }));
+  const roll = () => {
+    const tl = gsap.timeline();
+    wheels.forEach((w) => {
+      tl.fromTo(w.strip, { yPercent: 0 }, { yPercent: at(w.row), duration: 1.5 + w.k * 0.35, ease: 'power4.out' }, w.cell * 0.11);
+    });
+    tl.fromTo(sec.querySelectorAll('.nm-ic'), { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: 0.6, stagger: 0.08, ease: 'back.out(2.2)' }, 0.2)
+      .fromTo(sec.querySelectorAll('.nm-label, .nm-note'), { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power3.out' }, 0.3)
+      .fromTo(sec.querySelector('.nm-sheen i'), { xPercent: 0, opacity: 0 }, { xPercent: 900, duration: 1.4, ease: 'power2.inOut', keyframes: { opacity: [0, 1, 1, 0] } }, 1.4);
+    return tl;
+  };
+  gsap.from(sec.querySelectorAll('.nm-head > *'), {
+    y: 26, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: sec, start: 'top 82%', once: true },
+  });
+  let tl = null;
+  ScrollTrigger.create({
+    trigger: sec.querySelector('.nm-grid'), start: 'top 85%',
+    onEnter: () => { if (!tl) tl = roll(); },
+    // Coming back down from above replays it; scrolling up past it leaves it alone.
+    onLeaveBack: () => { if (tl) { tl.kill(); tl = null; } wheels.forEach((w) => gsap.set(w.strip, { yPercent: 0 })); },
+  });
+})();
+</script>
