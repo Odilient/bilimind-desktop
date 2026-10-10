@@ -200,4 +200,4 @@ Which other U1 modules do international degree students take? :: Kursus Integrit
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Survival Malay.*
+*Made with BiliMind from your own files. Course: Survival Malay.*

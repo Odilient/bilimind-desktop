@@ -410,4 +410,4 @@ Answer from section 10 of the SOP. The source column matters as much as the rule
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Mutiara Tea Bar crew day-one.*
+*Made with BiliMind from your own files. Course: Mutiara Tea Bar crew day-one.*

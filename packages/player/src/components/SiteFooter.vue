@@ -21,6 +21,6 @@ const made = computed(() => fmtLongDate(props.course.built_at, props.course.goal
       </a>
     </div>
     <div class="huge" aria-hidden="true"><span>{{ first }}</span> {{ rest }}</div>
-    <div class="made"><span>BiliMind × WorkBuddy · made for you on {{ made }}</span><button type="button" @click="emit('reset')">Start over (clear my progress)</button></div>
+    <div class="made"><span>BiliMind · made for you on {{ made }}</span><button type="button" @click="emit('reset')">Start over (clear my progress)</button></div>
   </footer>
 </template>

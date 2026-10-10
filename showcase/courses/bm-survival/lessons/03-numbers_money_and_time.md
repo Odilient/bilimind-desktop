@@ -370,4 +370,4 @@ It is 9 pm at the mamak near Taylor's. You order roti canai and teh tarik. The w
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Survival Malay.*
+*Made with BiliMind from your own files. Course: Survival Malay.*

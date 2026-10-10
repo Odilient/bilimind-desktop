@@ -416,4 +416,4 @@ Answer from the slides, not from memory of a different tree.
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: CSC2103 Data Structures final.*
+*Made with BiliMind from your own files. Course: CSC2103 Data Structures final.*

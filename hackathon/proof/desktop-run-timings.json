@@ -1,0 +1,969 @@
+{
+ "note": "Measured by driving BiliMind Desktop headless (BILIMIND_E2E=1) through its UI on 2026-10-11, DeepSeek key, narration on, folder C:\\Demo\\DS-Final (4 lecture PDFs + past paper). Times are wall clock; per-step ms and cost come from the course log.",
+ "runs": [
+  {
+   "run": "Real run 1 (dev build)",
+   "course": "C:\\Demo\\BiliMind-out\\ds-final",
+   "status": "done",
+   "secondsClickToDone": 209.5,
+   "card": {
+    "title": "Data Structures exam-ready by",
+    "lessons": 3,
+    "narrationMin": 18.5,
+    "checks": {
+     "passed": 91,
+     "total": 91
+    },
+    "rejected": 0,
+    "codeTests": {
+     "passed": 8,
+     "total": 8
+    },
+    "costUsd": 0.03556,
+    "engineWallMs": 203426,
+    "titleNote": "Title cut by a bug in the short-title rule (fixed after this run; the course was rebuilt offline and is now titled \"Data Structures exam-ready\")."
+   },
+   "plan": {
+    "keep": [
+     {
+      "title": "Heaps: a tree that lives in an array",
+      "day": 1
+     },
+     {
+      "title": "Dynamic arrays against linked lists",
+      "day": 2
+     },
+     {
+      "title": "Binary search trees and the height tax",
+      "day": 3
+     }
+    ],
+    "cut": 11
+   },
+   "steps": [
+    {
+     "atS": 0.2,
+     "agent": "Lead",
+     "step": "goal",
+     "ok": true,
+     "ms": 17,
+     "costUsd": 0
+    },
+    {
+     "atS": 1.7,
+     "agent": "Lead",
+     "step": "ingest",
+     "ok": true,
+     "ms": 1553,
+     "costUsd": 0
+    },
+    {
+     "atS": 81.8,
+     "agent": "Lead",
+     "step": "outline",
+     "ok": true,
+     "ms": 80089,
+     "costUsd": 0.011456
+    },
+    {
+     "atS": 81.9,
+     "agent": "Lead",
+     "step": "exam-map",
+     "ok": true,
+     "ms": 49,
+     "costUsd": 0
+    },
+    {
+     "atS": 81.9,
+     "agent": "Lead",
+     "step": "note",
+     "ok": true,
+     "ms": 1,
+     "costUsd": 0
+    },
+    {
+     "atS": 81.9,
+     "agent": "Lead",
+     "step": "plan",
+     "ok": true,
+     "ms": 13,
+     "costUsd": 0
+    },
+    {
+     "atS": 101.4,
+     "agent": "Writer · Dynamic arrays against linked lists",
+     "step": "draft",
+     "ok": true,
+     "ms": 19494,
+     "costUsd": 0.003192
+    },
+    {
+     "atS": 101.8,
+     "agent": "Writer · Dynamic arrays against linked lists",
+     "step": "check",
+     "ok": true,
+     "ms": 345,
+     "costUsd": 0
+    },
+    {
+     "atS": 108.3,
+     "agent": "Writer · Binary search trees and the height tax",
+     "step": "draft",
+     "ok": true,
+     "ms": 26331,
+     "costUsd": 0.004608
+    },
+    {
+     "atS": 108.4,
+     "agent": "Writer · Binary search trees and the height tax",
+     "step": "check",
+     "ok": true,
+     "ms": 64,
+     "costUsd": 0
+    },
+    {
+     "atS": 109.1,
+     "agent": "Writer · Heaps: a tree that lives in an array",
+     "step": "draft",
+     "ok": true,
+     "ms": 27150,
+     "costUsd": 0.005016
+    },
+    {
+     "atS": 109.1,
+     "agent": "Writer · Heaps: a tree that lives in an array",
+     "step": "check",
+     "ok": true,
+     "ms": 37,
+     "costUsd": 0
+    },
+    {
+     "atS": 123.3,
+     "agent": "Writer · Dynamic arrays against linked lists",
+     "step": "draft",
+     "ok": true,
+     "ms": 21505,
+     "costUsd": 0.003329
+    },
+    {
+     "atS": 123.4,
+     "agent": "Writer · Dynamic arrays against linked lists",
+     "step": "check",
+     "ok": true,
+     "ms": 49,
+     "costUsd": 0
+    },
+    {
+     "atS": 133.3,
+     "agent": "Writer · Heaps: a tree that lives in an array",
+     "step": "draft",
+     "ok": true,
+     "ms": 24195,
+     "costUsd": 0.003981
+    },
+    {
+     "atS": 133.3,
+     "agent": "Writer · Heaps: a tree that lives in an array",
+     "step": "check",
+     "ok": true,
+     "ms": 43,
+     "costUsd": 0
+    },
+    {
+     "atS": 133.4,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 13,
+     "costUsd": 0
+    },
+    {
+     "atS": 133.4,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 14,
+     "costUsd": 0
+    },
+    {
+     "atS": 133.4,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 5,
+     "costUsd": 0
+    },
+    {
+     "atS": 133.5,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 18,
+     "costUsd": 0
+    },
+    {
+     "atS": 134.9,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1455,
+     "costUsd": 0.000645
+    },
+    {
+     "atS": 134.9,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 34,
+     "costUsd": 0
+    },
+    {
+     "atS": 137,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 2059,
+     "costUsd": 0.000687
+    },
+    {
+     "atS": 137,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 9,
+     "costUsd": 0
+    },
+    {
+     "atS": 138.4,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1431,
+     "costUsd": 0.000501
+    },
+    {
+     "atS": 138.4,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 25,
+     "costUsd": 0
+    },
+    {
+     "atS": 140.9,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 2434,
+     "costUsd": 0.000709
+    },
+    {
+     "atS": 141,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 11,
+     "costUsd": 0
+    },
+    {
+     "atS": 144.9,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 3987,
+     "costUsd": 0.001104
+    },
+    {
+     "atS": 144.9,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 44,
+     "costUsd": 0
+    },
+    {
+     "atS": 146.3,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 1363,
+     "costUsd": 0.000332
+    },
+    {
+     "atS": 146.3,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0
+    },
+    {
+     "atS": 202.7,
+     "agent": "Lead",
+     "step": "narrate",
+     "ok": true,
+     "ms": 56475,
+     "costUsd": 0
+    },
+    {
+     "atS": 202.8,
+     "agent": "Lead",
+     "step": "export",
+     "ok": true,
+     "ms": 63,
+     "costUsd": 0
+    },
+    {
+     "atS": 209.4,
+     "agent": "Lead",
+     "step": "build",
+     "ok": true,
+     "ms": 6593,
+     "costUsd": 0
+    }
+   ]
+  },
+  {
+   "run": "Real run 2 (dev build, screenshots)",
+   "course": "C:\\Demo\\BiliMind-out\\ds-final-2",
+   "status": "done",
+   "secondsClickToDone": 286.5,
+   "card": {
+    "title": "Data Structures",
+    "lessons": 3,
+    "narrationMin": 32,
+    "checks": {
+     "passed": 98,
+     "total": 100
+    },
+    "rejected": 0,
+    "codeTests": {
+     "passed": 4,
+     "total": 4
+    },
+    "costUsd": 0.048923,
+    "engineWallMs": 282352
+   },
+   "plan": {
+    "keep": [
+     {
+      "title": "Binary heaps and priority queues: sift-up, sift-down",
+      "day": 1
+     },
+     {
+      "title": "Hash tables: buckets, load factor and collisions",
+      "day": 2
+     },
+     {
+      "title": "Binary search trees: search, insert and delete",
+      "day": 3
+     }
+    ],
+    "cut": 10
+   },
+   "steps": [
+    {
+     "atS": 0,
+     "agent": "Lead",
+     "step": "goal",
+     "ok": true,
+     "ms": 5,
+     "costUsd": 0
+    },
+    {
+     "atS": 0.7,
+     "agent": "Lead",
+     "step": "ingest",
+     "ok": true,
+     "ms": 612,
+     "costUsd": 0
+    },
+    {
+     "atS": 115.9,
+     "agent": "Lead",
+     "step": "outline",
+     "ok": true,
+     "ms": 115215,
+     "costUsd": 0.015739
+    },
+    {
+     "atS": 115.9,
+     "agent": "Lead",
+     "step": "exam-map",
+     "ok": true,
+     "ms": 31,
+     "costUsd": 0
+    },
+    {
+     "atS": 115.9,
+     "agent": "Lead",
+     "step": "note",
+     "ok": true,
+     "ms": 0,
+     "costUsd": 0
+    },
+    {
+     "atS": 116,
+     "agent": "Lead",
+     "step": "plan",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0
+    },
+    {
+     "atS": 134.2,
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "step": "draft",
+     "ok": true,
+     "ms": 18172,
+     "costUsd": 0.002723
+    },
+    {
+     "atS": 134.4,
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "step": "check",
+     "ok": true,
+     "ms": 236,
+     "costUsd": 0
+    },
+    {
+     "atS": 138.7,
+     "agent": "Writer · Hash tables: buckets, load factor and collisions",
+     "step": "draft",
+     "ok": true,
+     "ms": 22737,
+     "costUsd": 0.004239
+    },
+    {
+     "atS": 138.7,
+     "agent": "Writer · Hash tables: buckets, load factor and collisions",
+     "step": "check",
+     "ok": true,
+     "ms": 55,
+     "costUsd": 0
+    },
+    {
+     "atS": 140.7,
+     "agent": "Writer · Binary heaps and priority queues: sift-up, sift-down",
+     "step": "draft",
+     "ok": true,
+     "ms": 24747,
+     "costUsd": 0.00422
+    },
+    {
+     "atS": 142.8,
+     "agent": "Writer · Binary heaps and priority queues: sift-up, sift-down",
+     "step": "check",
+     "ok": true,
+     "ms": 2173,
+     "costUsd": 0
+    },
+    {
+     "atS": 165.4,
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "step": "draft",
+     "ok": true,
+     "ms": 31010,
+     "costUsd": 0.004857
+    },
+    {
+     "atS": 165.4,
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "step": "check",
+     "ok": true,
+     "ms": 23,
+     "costUsd": 0
+    },
+    {
+     "atS": 178.2,
+     "agent": "Writer · Binary heaps and priority queues: sift-up, sift-down",
+     "step": "draft",
+     "ok": true,
+     "ms": 35304,
+     "costUsd": 0.005425
+    },
+    {
+     "atS": 178.2,
+     "agent": "Writer · Binary heaps and priority queues: sift-up, sift-down",
+     "step": "check",
+     "ok": true,
+     "ms": 22,
+     "costUsd": 0
+    },
+    {
+     "atS": 180,
+     "agent": "Writer · Hash tables: buckets, load factor and collisions",
+     "step": "draft",
+     "ok": true,
+     "ms": 41302,
+     "costUsd": 0.007417
+    },
+    {
+     "atS": 180.1,
+     "agent": "Writer · Hash tables: buckets, load factor and collisions",
+     "step": "check",
+     "ok": true,
+     "ms": 30,
+     "costUsd": 0
+    },
+    {
+     "atS": 180.1,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0
+    },
+    {
+     "atS": 180.1,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0
+    },
+    {
+     "atS": 180.1,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 11,
+     "costUsd": 0
+    },
+    {
+     "atS": 180.1,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 17,
+     "costUsd": 0
+    },
+    {
+     "atS": 180.1,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 4,
+     "costUsd": 0
+    },
+    {
+     "atS": 183.1,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 2939,
+     "costUsd": 0.001323
+    },
+    {
+     "atS": 183.1,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 23,
+     "costUsd": 0
+    },
+    {
+     "atS": 184.9,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 1765,
+     "costUsd": 0.000509
+    },
+    {
+     "atS": 184.9,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0
+    },
+    {
+     "atS": 186,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1136,
+     "costUsd": 0.000624
+    },
+    {
+     "atS": 186,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 11,
+     "costUsd": 0
+    },
+    {
+     "atS": 187.3,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 1261,
+     "costUsd": 0.000377
+    },
+    {
+     "atS": 187.3,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0
+    },
+    {
+     "atS": 188.7,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1383,
+     "costUsd": 0.000559
+    },
+    {
+     "atS": 188.7,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 11,
+     "costUsd": 0
+    },
+    {
+     "atS": 192.4,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 3768,
+     "costUsd": 0.000911
+    },
+    {
+     "atS": 192.4,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0
+    },
+    {
+     "atS": 282.3,
+     "agent": "Lead",
+     "step": "narrate",
+     "ok": true,
+     "ms": 89830,
+     "costUsd": 0
+    },
+    {
+     "atS": 282.3,
+     "agent": "Lead",
+     "step": "export",
+     "ok": true,
+     "ms": 57,
+     "costUsd": 0
+    },
+    {
+     "atS": 286.5,
+     "agent": "Lead",
+     "step": "build",
+     "ok": true,
+     "ms": 4201,
+     "costUsd": 0
+    }
+   ]
+  },
+  {
+   "run": "Real run 3 (packaged app)",
+   "course": "C:\\Demo\\BiliMind-out\\ds-final-3",
+   "status": "done",
+   "secondsClickToDone": 222.6,
+   "card": {
+    "title": "Data Structures",
+    "lessons": 3,
+    "narrationMin": 24.4,
+    "checks": {
+     "passed": 79,
+     "total": 80
+    },
+    "rejected": 2,
+    "codeTests": {
+     "passed": 13,
+     "total": 13
+    },
+    "costUsd": 0.032165,
+    "engineWallMs": 217496
+   },
+   "plan": {
+    "keep": [
+     {
+      "title": "Hash tables: buckets, hashing and load factor",
+      "day": 1
+     },
+     {
+      "title": "Binary heaps: sift-up, sift-down and priority queues",
+      "day": 2
+     },
+     {
+      "title": "Binary search trees: search, insert and delete",
+      "day": 3
+     }
+    ],
+    "cut": 10
+   },
+   "steps": [
+    {
+     "atS": 0,
+     "agent": "Lead",
+     "step": "goal",
+     "ok": true,
+     "ms": 5,
+     "costUsd": 0
+    },
+    {
+     "atS": 0.4,
+     "agent": "Lead",
+     "step": "ingest",
+     "ok": true,
+     "ms": 400,
+     "costUsd": 0
+    },
+    {
+     "atS": 92.1,
+     "agent": "Lead",
+     "step": "outline",
+     "ok": true,
+     "ms": 91721,
+     "costUsd": 0.012699
+    },
+    {
+     "atS": 92.2,
+     "agent": "Lead",
+     "step": "exam-map",
+     "ok": true,
+     "ms": 29,
+     "costUsd": 0
+    },
+    {
+     "atS": 92.2,
+     "agent": "Lead",
+     "step": "note",
+     "ok": true,
+     "ms": 0,
+     "costUsd": 0
+    },
+    {
+     "atS": 92.2,
+     "agent": "Lead",
+     "step": "plan",
+     "ok": true,
+     "ms": 10,
+     "costUsd": 0
+    },
+    {
+     "atS": 110.3,
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "step": "draft",
+     "ok": true,
+     "ms": 18033,
+     "costUsd": 0.002716
+    },
+    {
+     "atS": 110.4,
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "step": "check",
+     "ok": true,
+     "ms": 108,
+     "costUsd": 0
+    },
+    {
+     "atS": 117.4,
+     "agent": "Writer · Hash tables: buckets, hashing and load factor",
+     "step": "draft",
+     "ok": true,
+     "ms": 25162,
+     "costUsd": 0.004589
+    },
+    {
+     "atS": 117.4,
+     "agent": "Writer · Hash tables: buckets, hashing and load factor",
+     "step": "check",
+     "ok": true,
+     "ms": 80,
+     "costUsd": 0
+    },
+    {
+     "atS": 126.8,
+     "agent": "Writer · Binary heaps: sift-up, sift-down and priority queues",
+     "step": "draft",
+     "ok": true,
+     "ms": 34053,
+     "costUsd": 0.006003
+    },
+    {
+     "atS": 126.8,
+     "agent": "Writer · Binary heaps: sift-up, sift-down and priority queues",
+     "step": "check",
+     "ok": true,
+     "ms": 66,
+     "costUsd": 0
+    },
+    {
+     "atS": 135.9,
+     "agent": "Writer · Hash tables: buckets, hashing and load factor",
+     "step": "draft",
+     "ok": true,
+     "ms": 18420,
+     "costUsd": 0.002641
+    },
+    {
+     "atS": 135.9,
+     "agent": "Writer · Hash tables: buckets, hashing and load factor",
+     "step": "check",
+     "ok": true,
+     "ms": 24,
+     "costUsd": 0
+    },
+    {
+     "atS": 135.9,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0
+    },
+    {
+     "atS": 135.9,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 16,
+     "costUsd": 0
+    },
+    {
+     "atS": 136,
+     "agent": "Coder",
+     "step": "code-test",
+     "ok": true,
+     "ms": 18,
+     "costUsd": 0
+    },
+    {
+     "atS": 137.8,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1840,
+     "costUsd": 0.000801
+    },
+    {
+     "atS": 137.8,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 21,
+     "costUsd": 0
+    },
+    {
+     "atS": 137.8,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0
+    },
+    {
+     "atS": 137.8,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 5,
+     "costUsd": 0
+    },
+    {
+     "atS": 139.3,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1516,
+     "costUsd": 0.000743
+    },
+    {
+     "atS": 139.4,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 24,
+     "costUsd": 0
+    },
+    {
+     "atS": 142.7,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 3334,
+     "costUsd": 0.001226
+    },
+    {
+     "atS": 142.7,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0
+    },
+    {
+     "atS": 144.5,
+     "agent": "Checker",
+     "step": "fact-check",
+     "ok": true,
+     "ms": 1841,
+     "costUsd": 0.000512
+    },
+    {
+     "atS": 144.6,
+     "agent": "Checker",
+     "step": "check",
+     "ok": true,
+     "ms": 19,
+     "costUsd": 0
+    },
+    {
+     "atS": 145.7,
+     "agent": "Checker",
+     "step": "verdict",
+     "ok": true,
+     "ms": 1163,
+     "costUsd": 0.000235
+    },
+    {
+     "atS": 145.7,
+     "agent": "Checker",
+     "step": "evidence",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0
+    },
+    {
+     "atS": 217.4,
+     "agent": "Lead",
+     "step": "narrate",
+     "ok": true,
+     "ms": 71694,
+     "costUsd": 0
+    },
+    {
+     "atS": 217.5,
+     "agent": "Lead",
+     "step": "export",
+     "ok": true,
+     "ms": 63,
+     "costUsd": 0
+    },
+    {
+     "atS": 222.6,
+     "agent": "Lead",
+     "step": "build",
+     "ok": true,
+     "ms": 5085,
+     "costUsd": 0
+    }
+   ]
+  }
+ ]
+}

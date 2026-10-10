@@ -1,6 +1,6 @@
 # WorkBuddy integration research (for Dormathon, Track 2)
 
-Status: COMPLETE (first pass). Date: 2026-10-10. Author: research agent for the Odilov team.
+Status: COMPLETE (first pass). Date: 2026-10-10. Author: research agent for team Opus Magnum (#58).
 Legend: VERIFIED = seen in an official doc / package / repo / live API (URL given). INFERRED = our reasoning, or a third-party claim not confirmed by an official source.
 WorkBuddy itself is NOT installed on this machine yet, so nothing below was tested hands-on. Items marked "check on day 1" must be confirmed on the demo laptop.
 
@@ -310,7 +310,7 @@ description: >-
   by a deadline, staff onboarding, SOPs or training material, or asks for flashcards, quizzes or a study plan from files.
 description_en: Build a source-grounded interactive course, quizzes, Anki deck and study plan from your own files.
 version: 0.1.0
-author: BiliMind (Odilov team)
+author: BiliMind (team Opus Magnum)
 ---
 
 # BiliMind: your files -> a course you own

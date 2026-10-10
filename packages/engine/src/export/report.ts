@@ -57,7 +57,7 @@ export const report: Report = ({ course, log }) => {
   L.push(`| Anki cards | ${countCards(course.lessons)} |`);
   L.push(`| Study minutes | ${course.lessons.reduce((s, l) => s + l.minutes, 0)} |`);
   L.push(`| Text-model cost | ${usd(cost)} |`);
-  L.push(`| WorkBuddy credits | ${course.receipts?.credits ?? 'read them from WorkBuddy'} |`);
+  if (course.receipts?.credits != null) L.push(`| WorkBuddy credits | ${course.receipts.credits} |`);
   L.push(`| Wall time | ${duration(wall)} |`, '');
 
   L.push('## The plan', '');
@@ -143,6 +143,6 @@ export const report: Report = ({ course, log }) => {
   L.push('');
   const failed = log.filter((e: LogEvent) => !e.ok);
   if (failed.length) L.push('## Failures and retries', '', ...failed.map(e => `- ${zoned(new Date(e.ts), tz).time} ${e.agent} \`${e.cmd}\`: ${e.result ?? 'error'}`), '');
-  L.push('---', '', '*Every number above is recomputed from `crew/log.jsonl` and the course files. Made with BiliMind for WorkBuddy.*');
+  L.push('---', '', '*Every number above is recomputed from `crew/log.jsonl` and the course files. Made with BiliMind.*');
   return L.join('\n') + '\n';
 };

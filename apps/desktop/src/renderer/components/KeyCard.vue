@@ -55,7 +55,7 @@ async function test(afterSave = false) {
     </div>
     <div v-if="saved?.set" class="have"><Icon name="i-lock" /> {{ NAMES[provider] }} key saved <code>••••{{ saved.last4 }}</code></div>
     <div class="row">
-      <input v-model="value" class="field" type="password" autocomplete="off" spellcheck="false" :placeholder="saved?.set ? 'Paste a new key to replace it' : `Paste your ${NAMES[provider]} key`" @keydown.enter="save" />
+      <input v-model="value" class="field" type="password" autocomplete="off" spellcheck="false" :placeholder="saved?.set ? 'Paste a new key' : `Paste your ${NAMES[provider]} key`" @keydown.enter="save" />
       <button class="pill dark" :disabled="busy || !value.trim()" @click="save">Save</button>
       <button class="pill light" :disabled="busy || !saved?.set" @click="test()">Test</button>
     </div>

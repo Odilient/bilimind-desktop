@@ -156,7 +156,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
               </span>
               <span v-if="r.files.length > filesShown.length" class="lf more">+{{ r.files.length - filesShown.length }} more</span>
             </div>
-            <p v-if="r.nodes.lead.state === 'working'" class="now">{{ r.nodes.lead.now }}<span class="dots"><i></i><i></i><i></i></span></p>
+            <p v-if="r.nodes.lead.state === 'working'" class="now"><span class="nt">{{ r.nodes.lead.now }}</span><span class="dots"><i></i><i></i><i></i></span></p>
             <p v-else-if="r.plan" class="last"><b>{{ r.plan.keep.length }}</b> kept · <b>{{ r.plan.cut.length }}</b> cut</p>
             <p v-else-if="r.nodes.lead.last" class="last">{{ r.nodes.lead.last }}</p>
           </article>
@@ -172,7 +172,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
                 <span class="st dotonly" :title="stateLabel(w)"><i></i></span>
               </header>
               <p class="lt" :title="w.title">{{ w.title }}</p>
-              <p v-if="w.state === 'working'" class="now">{{ w.now }} · {{ fmtClock(stepMs(w)) }}<span class="dots"><i></i><i></i><i></i></span></p>
+              <p v-if="w.state === 'working'" class="now"><span class="nt">{{ w.now.replace(' after the checks', '') }}</span><span class="nc">{{ fmtClock(stepMs(w)) }}</span><span class="dots"><i></i><i></i><i></i></span></p>
               <div v-if="!compact" class="strip" :class="w.state">
                 <span :class="{ on: w.drafts > 0 || w.open > 0, run: w.open > 0 && !w.checks }">Write</span>
                 <span :class="{ on: !!w.checks, bad: w.checks && w.checks.passed < w.checks.total }">Check</span>
@@ -193,7 +193,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
             <header><span class="ri"><Icon name="i-code" /></span><b>Coder</b><span class="st"><i></i>{{ stateLabel(r.nodes.coder) }}</span></header>
             <p class="job">{{ JOB.coder }}</p>
             <div v-if="r.nodes.coder.tests.total" class="big"><b>{{ r.nodes.coder.tests.passed }}</b>/{{ r.nodes.coder.tests.total }} <span>tests pass</span></div>
-            <p v-if="r.nodes.coder.state === 'working'" class="now">{{ r.nodes.coder.now }}<span class="dots"><i></i><i></i><i></i></span></p>
+            <p v-if="r.nodes.coder.state === 'working'" class="now"><span class="nt">{{ r.nodes.coder.now }}</span><span class="dots"><i></i><i></i><i></i></span></p>
           </article>
           <article :ref="bind('checker')" class="node checker" :class="[r.nodes.checker.state, { alarm: r.moment && now - r.moment.at < 5200 }]">
             <header><span class="ri"><Icon name="i-scales" /></span><b>Checker</b><span class="st"><i></i>{{ stateLabel(r.nodes.checker) }}</span></header>
@@ -206,7 +206,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
               </div>
             </Transition>
             <p v-if="r.nodes.checker.rejected && !(r.moment && now - r.moment.at < 5200)" class="last rejc"><b>{{ r.nodes.checker.rejected }}</b> rejected and rewritten</p>
-            <p v-if="r.nodes.checker.state === 'working'" class="now">{{ r.nodes.checker.now }}<span class="dots"><i></i><i></i><i></i></span></p>
+            <p v-if="r.nodes.checker.state === 'working'" class="now"><span class="nt">{{ r.nodes.checker.now }}</span><span class="dots"><i></i><i></i><i></i></span></p>
           </article>
         </div>
 
@@ -221,7 +221,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
           <article :ref="bind('packager')" class="node packager" :class="r.nodes.packager.state">
             <header><span class="ri"><Icon name="i-rocket" /></span><b>Packager</b><span class="st"><i></i>{{ stateLabel(r.nodes.packager) }}</span></header>
             <p class="job">{{ JOB.packager }}</p>
-            <p v-if="r.nodes.packager.state === 'working'" class="now">{{ r.nodes.packager.now }}<span class="dots"><i></i><i></i><i></i></span></p>
+            <p v-if="r.nodes.packager.state === 'working'" class="now"><span class="nt">{{ r.nodes.packager.now }}</span><span class="dots"><i></i><i></i><i></i></span></p>
             <p v-else-if="r.nodes.packager.last" class="last">{{ r.nodes.packager.last }}</p>
           </article>
         </div>
@@ -334,6 +334,8 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
 .st { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px 0 7px; border-radius: 99px; background: var(--page); font-size: 11px; font-weight: 600; color: var(--text-3); white-space: nowrap; }
 .st i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .6; }
 .job { margin: 0; font-size: 12px; line-height: 1.35; color: var(--text-2); }
+.now .nt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.now .nc { flex: none; font-variant-numeric: tabular-nums; color: var(--text-3); font-weight: 500; }
 .now { margin: 0; font-size: 12px; font-weight: 600; color: var(--cobalt-2); display: flex; align-items: center; gap: 4px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .last { margin: 0; font-size: 12px; line-height: 1.35; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .dots { display: inline-flex; gap: 2px; margin-left: 2px; }

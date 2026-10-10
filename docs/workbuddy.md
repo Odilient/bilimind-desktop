@@ -16,7 +16,8 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
 | a | WorkBuddy web app, Slides Creation | Generated our pitch deck from a written brief and screenshots, then reviewed and corrected it slide by slide | Task https://www.workbuddy.ai/app/task/2108960359124951040, `hackathon/proof/workbuddy-web-deck-task.jpg`, `hackathon/proof/workbuddy-web-deck-slide5-review.jpg`, `pitch/BiliMind-Dormathon-Deck.pdf` |
 | b | WorkBuddy web app, plain chat | Sent our student request to plain WorkBuddy to see what a general agent does without BiliMind | Task https://www.workbuddy.ai/app/task/2108963860471234560, `hackathon/proof/workbuddy-web-plain-comparison.jpg` |
 | c | WorkBuddy desktop app | Studied its skill and Expert Team format and shipped BiliMind as a WorkBuddy skill and Expert Team, validated with WorkBuddy's own `validate_expert.py` | `skills/bilimind/`, `workbuddy/bilimind-crew/`, `hackathon/SPIKE.md`, `hackathon/EXPERT-TEAM.md` |
-| d | WorkBuddy (Sunday) | Documentation review and an app review | See [More WorkBuddy work on Sunday](#more-workbuddy-work-on-sunday) |
+| d | WorkBuddy web app, Deep Research | Market validation (Sunday 01:47 to 01:57 MYT): demand on both halves of Track 2 (students and small businesses), competitors and risks | Task https://www.workbuddy.ai/app/task/2108977764853211136, `hackathon/proof/workbuddy-market-validation.md`, `hackathon/proof/workbuddy-web-market-research.jpg` |
+| e | WorkBuddy (Sunday) | Documentation review and an app review | See [More WorkBuddy work on Sunday](#more-workbuddy-work-on-sunday) |
 
 ## (a) The pitch deck, made in WorkBuddy
 

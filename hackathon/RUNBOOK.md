@@ -236,7 +236,7 @@ timestamped record.
 
 Spare answers (only if asked):
 
-- "Tests?" core 55, engine 172, player 72, CLI 12, skill 12, all passing at the last integration gate.
+- "Tests?" core 55, engine 195, player 73, CLI 12, skill 12, all passing at the last integration gate.
 - "Slow?" The long steps are the outline (109-117 s) and narration (about 100 s); lessons are written in
   parallel.
 - "Is turning lecturer slides into a course allowed?" Same as making your own notes for personal study, kept

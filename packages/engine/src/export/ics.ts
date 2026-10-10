@@ -7,7 +7,7 @@ import { DEFAULT_TIMEZONE, shortDay, tzOffsetMinutes, zoned, zonedToDate } from 
 
 export const STUDY_TIME = '20:00';          // evening study block (local)
 export const REVIEW_TIME = '08:00';         // morning spaced review (local; review/state.json first due is 08:00 too)
-const PRODID = '-//BiliMind//BiliMind for WorkBuddy//EN';
+const PRODID = '-//BiliMind//BiliMind Desktop//EN';
 
 /** RFC 5545 TEXT escaping. */
 export const icsText = (s: string): string => s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');

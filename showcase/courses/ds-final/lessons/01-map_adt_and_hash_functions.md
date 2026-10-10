@@ -429,4 +429,4 @@ One trace, one explanation, one trade-off. Answer from the slides, not from memo
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: CSC2103 Data Structures final.*
+*Made with BiliMind from your own files. Course: CSC2103 Data Structures final.*

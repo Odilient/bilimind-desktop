@@ -312,4 +312,4 @@ It is 18:40, the queue is eight deep, and you are alone on the POS while the bar
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Mutiara Tea Bar crew day-one.*
+*Made with BiliMind from your own files. Course: Mutiara Tea Bar crew day-one.*

@@ -86,7 +86,7 @@ describe('callJson request shape', () => {
     expect(b.provider).toEqual({ require_parameters: true, max_price: { prompt: 0.2, completion: 0.4 }, allow_fallbacks: true });
     expect(b.usage).toEqual({ include: true });
     expect(b.reasoning).toEqual({ enabled: true });
-    expect((calls[0]!.init.headers as Record<string, string>)['X-Title']).toBe('BiliMind for WorkBuddy');
+    expect((calls[0]!.init.headers as Record<string, string>)['X-Title']).toBe('BiliMind Desktop');
     expect(r.cost_usd).toBe(0.000012);
   });
 

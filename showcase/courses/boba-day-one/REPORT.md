@@ -22,7 +22,6 @@ Built Sunday 11 October at 0:36 (Asia/Kuala_Lumpur) · 7 lessons · 11 agents ·
 | Anki cards | 64 |
 | Study minutes | 175 |
 | Text-model cost | $0.09 |
-| WorkBuddy credits | read them from WorkBuddy |
 | Wall time | 24 min 39 s |
 
 ## The plan
@@ -246,4 +245,4 @@ No `code-test` runs were logged.
 
 ---
 
-*Every number above is recomputed from `crew/log.jsonl` and the course files. Made with BiliMind for WorkBuddy.*
+*Every number above is recomputed from `crew/log.jsonl` and the course files. Made with BiliMind.*

@@ -466,4 +466,4 @@ Deliverables:
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Mutiara Tea Bar crew day-one.*
+*Made with BiliMind from your own files. Course: Mutiara Tea Bar crew day-one.*

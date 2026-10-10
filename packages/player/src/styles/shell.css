@@ -7,7 +7,7 @@
 .tb .made { display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 11px 0 5px; border-radius: 99px; background: var(--ink); color: #fff; font: 600 12px/1 var(--body); }
 .tb .made i { width: 18px; height: 18px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; }
 .tb .grow { flex: 1; }
-@media (max-width: 520px) { .tb { gap: 8px; } .tb .made .long { display: none; } }   /* "Made with WorkBuddy" -> "WorkBuddy" */
+@media (max-width: 520px) { .tb { gap: 8px; } .tb .made .long { display: none; } }   /* "Works offline" -> "offline" */
 /* progress ring: conic arc masked to a ring; the % label is a sibling, not a child */
 .ringp { --p: .12; width: 36px; height: 36px; border-radius: 50%; background: conic-gradient(var(--lime-2) calc(var(--p) * 1turn), var(--fill-2) 0); -webkit-mask: radial-gradient(closest-side, transparent 70%, #000 71%); mask: radial-gradient(closest-side, transparent 70%, #000 71%); }
 

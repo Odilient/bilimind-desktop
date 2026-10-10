@@ -131,6 +131,7 @@ describe('short display title and clock (G2 review)', () => {
     expect(shortTitle('Data Structures exam prep from your CSC2103 slides')).toBe('Data Structures exam prep');
     expect(shortTitle('Data Structures: final exam preparation for CSC2103')).toBe('Data Structures');
     expect(shortTitle('Hash tables')).toBe('Hash tables');
+    expect(shortTitle('Data Structures exam-ready by Wednesday 9am')).toBe('Data Structures exam-ready');
     for (const t of ['An Introduction to the Theory of Computation and Complexity', 'Mutiara Tea Bar day-one onboarding for new baristas and counter staff'])
       expect(shortTitle(t).length).toBeLessThanOrEqual(32);
   });

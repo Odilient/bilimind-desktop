@@ -251,4 +251,4 @@ Answer from the order the customer actually spoke, not from what you expect them
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Mutiara Tea Bar crew day-one.*
+*Made with BiliMind from your own files. Course: Mutiara Tea Bar crew day-one.*

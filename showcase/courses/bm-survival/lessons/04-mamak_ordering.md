@@ -367,4 +367,4 @@ It is your third day in Malaysia. You are at the mamak two streets from Taylor's
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Survival Malay.*
+*Made with BiliMind from your own files. Course: Survival Malay.*

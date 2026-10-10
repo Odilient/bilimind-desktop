@@ -157,3 +157,17 @@ export function fmtDate(iso: string): string {
 export const ROLE_LABEL: Record<string, string> = {
   lecture: 'Lecture', past_paper: 'Past paper', sop: 'SOP', notes: 'Notes', other: 'File',
 };
+
+/** A free progress line from the run, in plain words; null = keep it out of the feed (model stats, per-check
+ * details, internal keys). Only the lines that say something a learner cares about get through. */
+export function sayLine(text: string, titles?: Map<string, string>): string | null {
+  const t = text.trim();
+  let m: RegExpExecArray | null;
+  if ((m = /^Lead: ingest: (.+?) · (\d+) (slides?|pages?) · (\d+) words/.exec(t))) return `Read ${m[1]}: ${m[2]} ${m[3]}, ${m[4]} words`;
+  if ((m = /^Lead: outline: planning ([\d-]+) topics from (\d+) files/.exec(t))) return `Looking for ${m[1].replace('-', ' to ')} topics across your ${m[2]} files`;
+  if ((m = /^Lead: narrate: (\S+): (\d+) sentences/.exec(t))) {
+    const title = titles?.get(m[1]) ?? m[1].replace(/_/g, ' ');
+    return `Recording “${title}”: ${m[2]} sentences`;
+  }
+  return null;
+}

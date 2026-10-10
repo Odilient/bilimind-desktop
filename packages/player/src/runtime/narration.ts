@@ -182,7 +182,7 @@ function setMediaSession(): void {
   try {
     const ms = (navigator as Navigator & { mediaSession?: MediaSession }).mediaSession;
     if (!ms || typeof MediaMetadata === 'undefined') return;
-    ms.metadata = new MediaMetadata({ title: voice.title || 'BiliMind', artist: 'BiliMind × WorkBuddy' });
+    ms.metadata = new MediaMetadata({ title: voice.title || 'BiliMind', artist: 'BiliMind' });
     ms.setActionHandler('play', () => void play());
     ms.setActionHandler('pause', () => pause());
   } catch { /* optional */ }

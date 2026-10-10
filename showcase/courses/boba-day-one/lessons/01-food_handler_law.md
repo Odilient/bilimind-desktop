@@ -294,4 +294,4 @@ Answer from the reg. 2 definition and the duties in regs. 30 and 31.
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Mutiara Tea Bar crew day-one.*
+*Made with BiliMind from your own files. Course: Mutiara Tea Bar crew day-one.*

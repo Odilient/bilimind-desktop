@@ -1,7 +1,7 @@
 // The whole app state: one reactive object and a tiny screen machine (home -> building -> finished -> course).
 import { reactive } from 'vue';
 import type { CourseCard, FolderFile, RunEvent, Settings } from './env';
-import { roleOf, sayStep, doingNow, type Role } from './words';
+import { roleOf, sayStep, sayLine, doingNow, type Role } from './words';
 
 export type Screen = 'home' | 'building' | 'finished' | 'course';
 export type NodeState = 'waiting' | 'working' | 'done' | 'failed' | 'skipped';
@@ -109,7 +109,7 @@ export function applyEvent(e: RunEvent) {
   if (!r || e.runId !== r.runId) return;
   switch (e.type) {
     case 'started': r.course = e.course; break;
-    case 'line': push(r, 'lead', e.text); break;
+    case 'line': push(r, 'lead', sayLine(e.text, new Map((r.plan?.keep ?? []).map((k) => [k.key, k.title])))); break;
     case 'plan': {
       r.plan = { keep: [...e.keep].sort((a, b) => (a.day ?? 99) - (b.day ?? 99)), cut: e.cut };
       for (const k of r.plan.keep) {

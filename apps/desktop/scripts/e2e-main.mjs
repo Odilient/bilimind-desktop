@@ -176,9 +176,12 @@ try {
   console.error('ERROR', e.message);
 } finally {
   try { ws?.close(); } catch { /* ignore */ }
+  // the portable exe is a launcher that starts the real app as a child: kill the whole tree first
+  if (process.platform === 'win32' && child.exitCode === null) {
+    await new Promise(r => spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' }).on('exit', r));
+  }
   child.kill();
   await new Promise(r => setTimeout(r, 800));
-  if (child.exitCode === null) spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' });
   rmSync(home, { recursive: true, force: true });
   rmSync(outRoot, { recursive: true, force: true });
 }

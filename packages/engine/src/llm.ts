@@ -369,7 +369,7 @@ function withoutKeys(body: Record<string, unknown>, drop: Set<string>): Record<s
 
 function headers(cfg: EngineConfig): Record<string, string> {
   const h: Record<string, string> = { Authorization: `Bearer ${cfg.apiKey}`, 'Content-Type': 'application/json' };
-  if (cfg.provider === 'openrouter') { h['HTTP-Referer'] = 'https://bilimind.com'; h['X-Title'] = 'BiliMind for WorkBuddy'; }
+  if (cfg.provider === 'openrouter') { h['HTTP-Referer'] = 'https://bilimind.com'; h['X-Title'] = 'BiliMind Desktop'; }
   return h;
 }
 

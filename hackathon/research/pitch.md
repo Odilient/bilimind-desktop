@@ -1,7 +1,7 @@
 # BiliMind for WorkBuddy: hackathon strategy and pitch
 
 Dormathon at Taylor's University. Track 2: WorkBuddy, agentic solutions.
-Team: the Odilovs (four people). Oybek is a student in Malaysia.
+Team: Opus Magnum (#58), Taylor's University branch: Oybek Odilov, Abdugaffor Odilov, Ramil Khutlimuratov and Gameel Al-Bazeeli.
 Status: complete (2026-10-10). Sections: 0 bet, 1 problem evidence, 2 competitor gap,
 3 judging criteria, 4 pitch + demo scripts, 5 showcase courses, 6 name and tagline, 7 Q&A,
 8 risks, 9 sources.

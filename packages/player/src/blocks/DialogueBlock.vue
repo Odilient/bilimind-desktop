@@ -2,7 +2,7 @@
 // Dialogue (WP5c, offline role-play): the scene, who you are, the goal, the partner's opening line (voiced
 // when the course has the clip). The learner answers in writing after saying it aloud; each hint phrase
 // lights up when a reply covers it. The goal counts as met when every hint is covered or the learner says so.
-// For a live partner, the learner can hand the scene to WorkBuddy.
+// For a live partner, the learner can hand the scene to any AI chat.
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { fieldSentences, normaliseAnswer } from '@bilimind/core';
 import type { Course, CourseLesson } from '@bilimind/core';
@@ -111,7 +111,7 @@ async function copyPrompt() {
       <p v-if="met" class="wt-all"><Ico name="check" />Goal reached{{ selfMet && nCovered < hints.length ? ' (your call)' : '' }}.</p>
       <button v-else-if="replies.length" type="button" class="btn ghost sm" @click="claim">I reached the goal</button>
       <button type="button" class="btn soft sm dl-live" @click="copyPrompt">
-        <Ico :name="copied ? 'check' : 'copy'" />{{ copied ? 'Copied: paste it into WorkBuddy' : 'Practise live with WorkBuddy' }}
+        <Ico :name="copied ? 'check' : 'copy'" />{{ copied ? 'Copied: paste it into any AI chat' : 'Practise live with an AI chat' }}
       </button>
     </div>
   </TaskShell>

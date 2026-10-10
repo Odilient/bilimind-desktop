@@ -145,6 +145,6 @@ export const toMarkdown: ToMarkdown = (lesson: CourseLesson, course: Course) => 
     for (const a of b.assessments) parts.push(itemMd(course, a, qn++));
     for (const c of b.cites) parts.push(citeCallout(course, c));
   }
-  parts.push('---', `*Made with BiliMind for WorkBuddy from your own files. Course: ${course.title}.*`);
+  parts.push('---', `*Made with BiliMind from your own files. Course: ${course.title}.*`);
   return parts.join('\n\n') + '\n';
 };

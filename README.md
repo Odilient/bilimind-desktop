@@ -91,6 +91,10 @@ Only numbers we measured on our own runs.
 
 - Unattended pipeline (DeepSeek direct, sample Data Structures folder): 268 s and 289 s, $0.046 and $0.047
   in text-model calls. About 4.5 to 5 minutes and about $0.05 per course; narration adds a little time.
+- The desktop app itself, three runs clicked through its own window (DeepSeek, narration on, the same
+  sample folder; two in the dev build, one in the packaged exe): 3 min 23 s, 4 min 42 s and 3 min 37 s,
+  $0.036, $0.049 and $0.032, checks 91/91, 98/100 and 79/80. Every step's time and cost:
+  [hackathon/proof/desktop-run-timings.json](hackathon/proof/desktop-run-timings.json).
 - Showcase courses, built with the agent workflow (a Lead, one Writer per lesson in parallel, a Coder and a
   Checker), from each course's `REPORT.md` in `showcase/courses/`:
 
@@ -102,7 +106,7 @@ Only numbers we measured on our own runs.
 
   An example rejection from the Data Structures course: the answer key said 49 goes to slot 9; the Checker
   quoted slide 11 ("49 → 9 taken, try 0: 2 probes"), rejected it and rewrote the question.
-- Tests: core 55, engine 172 (2 live-voice tests skipped), player 72, CLI 12, skill 12, all passing at the
+- Tests: core 55, engine 195 (2 live-voice tests skipped), player 73, CLI 12, skill 12, all passing at the
   last integration gate.
 
 ## Develop and build
@@ -157,11 +161,11 @@ The same engine ships in two more forms. They are extras; the desktop app is the
 - **Track 2:** How can AI help students and small businesses solve real business problems and operate more
   effectively? BiliMind Desktop covers both halves: a student preparing for an exam from their own slides,
   and a small business onboarding new staff from its own SOP.
-- **How we used WorkBuddy:** the pitch deck was made in WorkBuddy's Slides Creation, we compared plain
-  WorkBuddy on the same student request, and we shipped BiliMind as a WorkBuddy skill and Expert Team too.
+- **How we used WorkBuddy:** the pitch deck was made in WorkBuddy's Slides Creation, we checked the market
+  with WorkBuddy's Deep Research, we compared plain WorkBuddy on the same student request, and we shipped BiliMind as a WorkBuddy skill and Expert Team too.
   Details, links and screenshots: [docs/workbuddy.md](docs/workbuddy.md).
-- **Built at Dormathon vs. before:** BiliMind already existed as a web app (Laravel + Nuxt) by the same
-  team. From it we reused the pedagogy: the lesson prompts and the rules that map each kind of knowledge to
+- **Built at Dormathon vs. before:** BiliMind already existed before Dormathon as a web app (Laravel +
+  Nuxt) that Oybek and Abdugaffor Odilov work on. From it we reused the pedagogy: the lesson prompts and the rules that map each kind of knowledge to
   its lesson formats. The Node engine, the Checker and Coder loops, the past-paper planner, the offline
   player, the exports, the WorkBuddy skill and team, and the desktop app were built during Dormathon
   (10-11 October 2026), with AI coding agents.

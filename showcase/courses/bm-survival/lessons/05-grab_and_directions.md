@@ -403,4 +403,4 @@ Deliverables:
 
 ---
 
-*Made with BiliMind for WorkBuddy from your own files. Course: Survival Malay.*
+*Made with BiliMind from your own files. Course: Survival Malay.*

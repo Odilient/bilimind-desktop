@@ -67,7 +67,7 @@ export function fixQuizIntros(l: CourseLesson): CourseLesson {
 
 /** Display titles longer than this wrap to 4-5 hero lines and push the plan strip below the fold (G2 review). */
 export const TITLE_MAX = 32;
-const TITLE_TAIL_STOP = new Set(['and', 'or', 'of', 'the', 'a', 'an', 'for', 'to', 'in', 'on', 'with', 'from', '&', '-', '–', '—', ':']);
+const TITLE_TAIL_STOP = new Set(['and', 'or', 'of', 'the', 'a', 'an', 'for', 'to', 'in', 'on', 'with', 'from', 'by', 'before', 'until', 'at', '&', '-', '–', '—', ':']);
 /** A short display title (<= 32 characters): drops 'from your ... slides' tails, then the part after a colon or dash,
  * then whole words from the end. 'Data Structures exam prep from your CSC2103 slides' -> 'Data Structures exam prep'. */
 export function shortTitle(title: string, max = TITLE_MAX): string {
@@ -75,6 +75,8 @@ export function shortTitle(title: string, max = TITLE_MAX): string {
   if (t.length <= max) return t;
   const steps: ((x: string) => string)[] = [
     x => x.replace(/\s*\([^)]*\)\s*/g, ' ').trim(),
+    // 'exam-ready by Wednesday 9am': the date already sits in the hero chips and lede
+    x => x.replace(/\s+(?:by|before|until|on)\s+(?:mon|tue|wed|thu|fri|sat|sun|tomorrow|next|this|\d).*$/i, '').trim(),
     x => x.replace(/\s+(?:from|using|based on|built from|made from|with|for)\s+(?:your|my|the|these|our)\b.*$/i, '').trim(),
     x => { const m = /^(.{8,}?)\s*(?::|\s[-–—]\s|\|)\s*.+$/.exec(x); return m ? m[1]!.trim() : x; },
   ];
