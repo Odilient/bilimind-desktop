@@ -119058,7 +119058,7 @@ function courseLede(crew, lessons, checked) {
     const { date: date5, hm } = localOf(g3.exam_at, crew.timezone);
     parts.push(`Exam ${longDay(date5)} at ${clockText(hm)}.`);
   } else if (g3.deadline) parts.push(`Ready by ${longDay(g3.deadline)}.`);
-  parts.push(`${n3} lesson${n3 === 1 ? "" : "s"}, ${g3.minutes_per_day} min a day${checked && checked.n > 0 ? `, ${checked.n === checked.of ? "every" : `${checked.n} of ${checked.of}`} auto-marked answer${checked.of === 1 ? "" : "s"} checked against your files.` : "."}`);
+  parts.push(`${n3} lesson${n3 === 1 ? "" : "s"}, ${g3.minutes_per_day} min a day${checked && checked.n > 0 ? `, ${checked.n === checked.of ? checked.of === 1 ? "the auto-marked answer" : "every auto-marked answer" : `${checked.n} of ${checked.of} auto-marked answers`} checked against your files.` : "."}`);
   const lede = parts.join(" ");
   return lede.length > 140 ? lede.slice(0, 139) + "\u2026" : lede;
 }

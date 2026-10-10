@@ -2,7 +2,7 @@
   "schema": "bilimind.course/1",
   "id": "boba-day-one",
   "title": "Mutiara Tea Bar crew day-one",
-  "lede": "Exam Sunday 18 October at 9:00. 7 lessons, 45 min a day, every auto-marked answers checked against your files.",
+  "lede": "Exam Sunday 18 October at 9:00. 7 lessons, 45 min a day, every auto-marked answer checked against your files.",
   "skin": "lime",
   "object": "img/obj-check.webp",
   "chips": [
@@ -11,7 +11,7 @@
     "i-steps"
   ],
   "language": "en",
-  "built_at": "2026-10-11T00:44:35+08:00",
+  "built_at": "2026-10-11T00:48:37+08:00",
   "allows_code": false,
   "code_language": null,
   "goal": {
@@ -17265,7 +17265,7 @@
     "minutes": 175,
     "cost_usd": 0.094294,
     "credits": null,
-    "wall_ms": 1512440,
+    "wall_ms": 1996087,
     "log": [
       {
         "t": "00:11:19",
@@ -18013,6 +18013,12 @@
       },
       {
         "t": "00:36:31",
+        "agent": "Lead",
+        "action": "build",
+        "result": "index.html 1173 KB, 7 lessons"
+      },
+      {
+        "t": "00:44:35",
         "agent": "Lead",
         "action": "build",
         "result": "index.html 1173 KB, 7 lessons"

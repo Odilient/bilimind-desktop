@@ -59,7 +59,7 @@ function hearPlan() {
 
 const objSrc = computed(() => c.value.object || 'img/obj-book.webp');
 const objOk = ref(true);
-const slidesy = computed(() => c.value.sources.some(s => s.role === 'lecture' || s.kind === 'pdf' || s.kind === 'pptx'));
+const slidesy = computed(() => c.value.sources.some(s => s.role === 'lecture' || s.kind === 'pptx'));
 const tags = computed(() => [
   { cls: 't1', icon: 'i-file', text: slidesy.value ? 'Grounded in your slides' : 'Grounded in your files' },
   { cls: 't2', icon: c.value.allows_code ? 'i-code' : 'i-speaker', text: c.value.allows_code ? 'Code that runs' : 'Read out loud' },

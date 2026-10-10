@@ -43,8 +43,8 @@ const extras = computed(() => {
 const ledeText = computed(() => {
   const x = r.value;
   const total = x.quiz_items ?? x.quiz_checked;
-  if (!x.quiz_checked) return `WorkBuddy split the work across ${x.agents} agents and ran ${x.checks.run} checks on the lessons.`;
-  return `WorkBuddy split the work across ${x.agents} agents. The Checker re-solved ${x.quiz_checked === total ? 'every auto-marked answer' : `${x.quiz_checked} of ${total} auto-marked answers`} and checked ${x.quiz_checked === 1 ? 'it' : 'them'} against the page ${x.quiz_checked === 1 ? 'it came' : 'they came'} from.`;
+  if (!x.quiz_checked) return `The crew split the work across ${x.agents} agents and ran ${x.checks.run} checks on the lessons.`;
+  return `The crew split the work across ${x.agents} agents. The Checker re-solved ${x.quiz_checked === total ? 'every auto-marked answer' : `${x.quiz_checked} of ${total} auto-marked answers`} and checked ${x.quiz_checked === 1 ? 'it' : 'them'} against the page ${x.quiz_checked === 1 ? 'it came' : 'they came'} from.`;
 });
 function fmtWall(ms: number): string { const s = Math.round(ms / 1000); return s >= 60 ? `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, '0')}s` : `${s}s`; }
 const open = ref(false);

@@ -96,7 +96,7 @@ function courseLede(crew: Crew, lessons: CourseLesson[], checked?: { n: number; 
   } else if (g.deadline) parts.push(`Ready by ${longDay(g.deadline)}.`);
   // G2 review: only claim checking that happened (receipts: items ruled on by the Checker)
   parts.push(`${n} lesson${n === 1 ? '' : 's'}, ${g.minutes_per_day} min a day${checked && checked.n > 0
-    ? `, ${checked.n === checked.of ? 'every' : `${checked.n} of ${checked.of}`} auto-marked answer${checked.of === 1 ? '' : 's'} checked against your files.` : '.'}`);
+    ? `, ${checked.n === checked.of ? (checked.of === 1 ? 'the auto-marked answer' : 'every auto-marked answer') : `${checked.n} of ${checked.of} auto-marked answers`} checked against your files.` : '.'}`);
   const lede = parts.join(' ');
   return lede.length > 140 ? lede.slice(0, 139) + '…' : lede;
 }

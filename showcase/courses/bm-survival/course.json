@@ -2,7 +2,7 @@
   "schema": "bilimind.course/1",
   "id": "bm-survival",
   "title": "Survival Malay",
-  "lede": "Exam Sunday 25 October at 9:00. 8 lessons, 20 min a day, every auto-marked answers checked against your files.",
+  "lede": "Exam Sunday 25 October at 9:00. 8 lessons, 20 min a day, every auto-marked answer checked against your files.",
   "skin": "cobalt",
   "object": "img/obj-book.webp",
   "chips": [
@@ -11,7 +11,7 @@
     "i-steps"
   ],
   "language": "en",
-  "built_at": "2026-10-11T00:44:35+08:00",
+  "built_at": "2026-10-11T00:48:38+08:00",
   "allows_code": false,
   "code_language": null,
   "attribution": "`malay-survival-phrasebook.md` is adapted from:",
@@ -19364,7 +19364,7 @@
     "minutes": 115,
     "cost_usd": 0.055227,
     "credits": null,
-    "wall_ms": 1907927,
+    "wall_ms": 1993392,
     "log": [
       {
         "t": "00:11:22",
@@ -20100,6 +20100,12 @@
       },
       {
         "t": "00:43:10",
+        "agent": "Lead",
+        "action": "build",
+        "result": "index.html 1188 KB, 8 lessons"
+      },
+      {
+        "t": "00:44:36",
         "agent": "Lead",
         "action": "build",
         "result": "index.html 1188 KB, 8 lessons"
