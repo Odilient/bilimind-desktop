@@ -19,6 +19,10 @@ help students and small businesses solve real business problems and operate more
 - **Windows (installer or portable):** https://github.com/Odilient/bilimind-desktop/releases/latest
 - **Website:** https://odilient.github.io/bilimind-desktop/
 - **Source:** https://github.com/Odilient/bilimind-desktop
+- **Try courses it made, no install** (they play in the browser, with narration):
+  [Data Structures final](https://odilient.github.io/bilimind-desktop/courses/ds-final/) ·
+  [Boba shop: day one for new crew](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/) ·
+  [Survival Malay](https://odilient.github.io/bilimind-desktop/courses/bm-survival/)
 
 No account, no login, no server of ours. You bring a DeepSeek or OpenRouter key (see [Bring your own key](#bring-your-own-key)).
 
@@ -161,7 +165,7 @@ The same engine ships in two more forms. They are extras; the desktop app is the
 - **Track 2:** How can AI help students and small businesses solve real business problems and operate more
   effectively? BiliMind Desktop covers both halves: a student preparing for an exam from their own slides,
   and a small business onboarding new staff from its own SOP.
-- **How we used WorkBuddy:** the pitch deck was made in WorkBuddy's Slides Creation, we checked the market
+- **How we used WorkBuddy:** the first pitch deck was made in WorkBuddy's Slides Creation, we checked the market
   with WorkBuddy's Deep Research, we compared plain WorkBuddy on the same student request, and we shipped BiliMind as a WorkBuddy skill and Expert Team too.
   Details, links and screenshots: [docs/workbuddy.md](docs/workbuddy.md).
 - **Built at Dormathon vs. before:** BiliMind already existed before Dormathon as a web app (Laravel +

@@ -48,3 +48,6 @@ The owner asked to change the browser tab title: `<title>` and the meta descript
 
 ## Owner-approved header change (03:15)
 No sign-in: the "Sign in" pill, its phone menu item and the footer item became GitHub links (pill with the GitHub mark and a live star count from api.github.com). "Start free" became "Download" (header, pricing card, footer). Nothing below the header changed.
+
+## Owner-approved link change (03:25)
+"For institutions" (section pill and footer) now opens the real shop course `courses/boba-day-one/`, so visitors who will not install the exe still see real output. Link targets only.
