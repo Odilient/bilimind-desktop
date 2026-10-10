@@ -45,3 +45,6 @@ Not changed on purpose: line 4060 `bilimind.com/you/espresso-at-home` is visible
 
 ## Owner-approved change (02:35)
 The owner asked to change the browser tab title: `<title>` and the meta description (head only, not visible on the page) now name BiliMind Desktop instead of the design draft name "Landing 11 Cobalt landing". Everything else stays exact; only link targets differ.
+
+## Owner-approved header change (03:15)
+No sign-in: the "Sign in" pill, its phone menu item and the footer item became GitHub links (pill with the GitHub mark and a live star count from api.github.com). "Start free" became "Download" (header, pricing card, footer). Nothing below the header changed.
