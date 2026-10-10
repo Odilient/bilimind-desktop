@@ -157,6 +157,10 @@ export function fmtDate(iso: string): string {
 /** Titles never break at a hyphen ("crew day-" / "one"): U+2011 is a non-breaking hyphen. */
 export const nbHyphen = (s: string): string => s.replace(/-/g, '\u2011');
 
+/** Files dropped or chosen one by one are copied into a staging folder (main/inbox.ts INBOX_DIR); the screen names
+ * them by count ("3 files"), never by that temp path. */
+export const isStaged = (path: string): boolean => /[\\/]bilimind-inbox[\\/]/i.test(path);
+
 export const ROLE_LABEL: Record<string, string> = {
   lecture: 'Lecture', past_paper: 'Past paper', sop: 'SOP', notes: 'Notes', other: 'File',
 };

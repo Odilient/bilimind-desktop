@@ -17,6 +17,8 @@ import LessonToc from '../components/LessonToc.vue';
 import BlockFrame from '../components/BlockFrame.vue';
 import FinishCard from '../components/FinishCard.vue';
 import NarrationDock from '../components/NarrationDock.vue';
+import AppLessonHead from '../components/AppLessonHead.vue';
+import { appMode } from '../runtime/app.ts';
 
 const props = defineProps<{ course: Course; lessonId: string }>();
 const lesson = computed<CourseLesson | undefined>(() => lessonById(props.course, props.lessonId));
@@ -108,10 +110,11 @@ onBeforeUnmount(() => { stopWrap?.(); io?.disconnect(); window.removeEventListen
   <div v-if="lesson" :key="lesson.id" class="view lesson" data-view="lesson" :data-lesson="lesson.id">
     <LessonBar :lesson="lesson" :step="step.step" :seen="seen.size" :total="lesson.blocks.length" :current-index="currentIndex" :done="done" :passed="passed"
                @complete="complete()" @jump="jump" />
-    <LessonHead :course="course" :lesson="lesson" :step="step.step" :of="step.of" />
+    <LessonHead v-if="!appMode" :course="course" :lesson="lesson" :step="step.step" :of="step.of" />
     <div class="l-wrap">
       <LessonToc :lesson="lesson" :seen="seen" :passed="passed" :current-index="currentIndex" :speaking="speaking" @jump="jump" />
       <main ref="col" class="l-col" :class="{ listening }" @click="onColClick">
+        <AppLessonHead v-if="appMode" :lesson="lesson" :step="step.step" :of="step.of" />
         <p class="lede l-lede">{{ firstSentence(lesson.summary) }}</p>
         <aside v-if="topic?.note" class="callout note"><span class="ci"><svg aria-hidden="true"><use href="#i-spark" /></svg></span><div><div class="ce">Mentor note</div><p>{{ topic.note }}</p></div></aside>
         <aside v-if="lesson.thin" class="callout warn"><span class="ci"><svg aria-hidden="true"><use href="#i-warning" /></svg></span><div><div class="ce">Thin sources</div><p>Your files say little about this topic, so parts of this lesson go beyond them. Those answers carry a "beyond your slides" label.</p></div></aside>

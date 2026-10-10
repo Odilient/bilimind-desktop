@@ -8,8 +8,8 @@ last year's paper, types "My Data Structures final is Wednesday 9am, I have 45 m
 study plan sized to those days, lessons weighted by the past paper's marks, code exercises that run, quizzes
 whose answers were re-checked against the slides, narration, an Anki deck and a review calendar. A small
 business does the same with its SOP: a bubble-tea shop that hires new crew every few weeks turns its
-operations manual into a day-one course with a pass mark. Everything runs on your machine with your own AI
-key, and everything it makes lands in a normal folder you own.
+operations manual into a day-one course with a pass mark. Everything runs on your machine, the AI is free to
+start (or use your own key), and everything it makes lands in a normal folder you own.
 
 Built by team **Opus Magnum (#58), Taylor's University branch**, for **Dormathon 2026, Track 2**: "How can AI
 help students and small businesses solve real business problems and operate more effectively?"
@@ -24,7 +24,8 @@ help students and small businesses solve real business problems and operate more
   [Boba shop: day one for new crew](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/) ·
   [Survival Malay](https://odilient.github.io/bilimind-desktop/courses/bm-survival/)
 
-No account, no login, no server of ours. You bring a DeepSeek or OpenRouter key (see [Bring your own key](#bring-your-own-key)).
+No account, no login. The AI is free out of the box (BiliMind free, no key); you can switch to your own
+DeepSeek or OpenRouter key (see [AI: free, or your own key](#ai-free-or-your-own-key)).
 
 ## Screenshots
 
@@ -68,11 +69,18 @@ flowchart LR
 
 More detail: [docs/how-it-works.md](docs/how-it-works.md). Output format: [docs/course-format.md](docs/course-format.md).
 
-## Bring your own key
+## AI: free, or your own key
 
-Text generation uses your own key for **DeepSeek** (direct API) or **OpenRouter**; paste it into the app's
-settings. Narration needs no key. Measured cost: **about $0.05 per course** (two unattended runs on the
-sample Data Structures folder: $0.046 and $0.047, 268 s and 289 s).
+**BiliMind free** is the default: a fresh install writes courses with no key at all. The app talks to
+`https://desktop-api.bilimind.com/v1`, an OpenAI-compatible service run by the team; the service's own
+OpenRouter key lives only on that server, never in the app, this repo or your computer. The app sends no
+`Authorization` header, only `X-BiliMind-Client: desktop/<version>`. The service is rate-limited; when it is
+busy or paused the app says so and suggests adding your own key.
+
+Your own key is optional: **DeepSeek** (direct API) or **OpenRouter**; pick it in Settings and paste the key.
+Then text goes straight to that provider, not through BiliMind. Narration needs no key. Measured cost:
+**about $0.05 per course** (two unattended runs on the sample Data Structures folder: $0.046 and $0.047,
+268 s and 289 s), paid by the team on BiliMind free and by you with your own key.
 
 The key is stored in `%USERPROFILE%\.bilimind\config.json`, the same file the CLI and the WorkBuddy skill
 read. It never reaches the app's window, and the app never logs it.
@@ -84,10 +92,13 @@ read. It never reaches the app's window, and the app never logs it.
 }
 ```
 
+`"provider"` is `"bilimind"` (free, no key), `"deepseek"` or `"openrouter"`. With no provider and no key the
+app and the CLI use `"bilimind"`; with a key and no provider they use that key's pool.
+
 Optional fields: `models`, `caps` (`{"run_usd": 0.25, "day_usd": 2}` by default) and `reserve_usd` (a
-balance floor; set it to `0` for normal use). Environment variables `DEEPSEEK_API_KEY`,
-`OPENROUTER_API_KEY` and `BILIMIND_PROVIDER` also work. Never commit a key: `.env` and `.env.*` are
-git-ignored.
+balance floor; set it to `0` for normal use; BiliMind free has none). Environment variables `DEEPSEEK_API_KEY`,
+`OPENROUTER_API_KEY` and `BILIMIND_PROVIDER` also work; `BILIMIND_FREE_URL` (or `"free_base_url"`) points
+BiliMind free at another server, for tests. Never commit a key: `.env` and `.env.*` are git-ignored.
 
 ## Measured so far
 

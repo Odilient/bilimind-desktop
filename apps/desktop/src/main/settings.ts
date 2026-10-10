@@ -2,20 +2,28 @@
 // WorkBuddy skill read ({"provider","keys":{deepseek,openrouter},"models":{...}}); desktop-only fields go under
 // "desktop": {narrate, outRoot}. Writes merge: unknown fields are kept. A key is never logged or returned
 // (only `set` and the last 4 characters).
+// Providers: 'bilimind' (BiliMind free: the owner's proxy, no key on this computer, the default on a fresh install),
+// 'deepseek' and 'openrouter' (the user's own key).
 import { app, net } from 'electron';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { PRESETS, findEnvLocal, parseDotenv } from '@bilimind/engine/config';
+import { PRESETS, findEnvLocal, freeBaseUrl, needsKey, parseDotenv } from '@bilimind/engine/config';
 import { parseBalance } from '@bilimind/engine/ledger';
 import type { ProviderId, Settings, SettingsPatch } from '../shared/contract.ts';
 
-const PROVIDERS: ProviderId[] = ['deepseek', 'openrouter'];
-const isProvider = (v: unknown): v is ProviderId => v === 'deepseek' || v === 'openrouter';
+const PROVIDERS: ProviderId[] = ['bilimind', 'deepseek', 'openrouter'];
+const KEYED: ProviderId[] = ['deepseek', 'openrouter'];
+const isProvider = (v: unknown): v is ProviderId => v === 'bilimind' || v === 'deepseek' || v === 'openrouter';
+
+/** X-BiliMind-Client for every request this app sends to the free service (main, and the course worker via env). */
+export const CLIENT_ID = `desktop/${app.getVersion()}`;
+process.env.BILIMIND_CLIENT = CLIENT_ID;
 
 interface ConfigFile {
   provider?: string;
   keys?: Partial<Record<ProviderId, string>>;
+  free_base_url?: string;
   desktop?: { narrate?: boolean; outRoot?: string };
   [k: string]: unknown;
 }
@@ -45,6 +53,7 @@ function writeConfig(c: ConfigFile): void {
 
 /** The key for a provider: config.json, then the environment, then .env.local (dev). Never leaves main. */
 function keyFor(p: ProviderId, c: ConfigFile = readConfig()): string {
+  if (!needsKey(p)) return '';
   const u = c.keys?.[p];
   if (typeof u === 'string' && u.trim()) return u.trim();
   const envName = PRESETS[p].keyEnv;
@@ -67,11 +76,12 @@ export function getSettings(): Settings {
   const c = readConfig();
   const keys = {} as Settings['keys'];
   for (const p of PROVIDERS) {
+    if (!needsKey(p)) { keys[p] = { set: true }; continue; }   // BiliMind free: nothing to set, always ready
     const k = keyFor(p, c);
     keys[p] = k ? { set: true, last4: k.slice(-4) } : { set: false };
   }
-  let provider: ProviderId = isProvider(c.provider) ? c.provider : 'deepseek';
-  if (!keys[provider].set) { const other = PROVIDERS.find(p => keys[p].set); if (other && !isProvider(c.provider)) provider = other; }
+  // the engine's rule (loadConfig): the named provider; else the pool of a key that exists; else BiliMind free
+  const provider: ProviderId = isProvider(c.provider) ? c.provider : KEYED.find(p => keys[p].set) ?? 'bilimind';
   return {
     provider,
     keys,
@@ -89,6 +99,7 @@ export function saveSettings(p: SettingsPatch): Settings {
   }
   if (p.key) {
     if (!isProvider(p.key.provider)) throw new Error('Unknown AI provider.');
+    if (!needsKey(p.key.provider)) throw new Error('BiliMind free needs no key.');
     const v = String(p.key.value ?? '').trim();
     const keys = { ...(c.keys && typeof c.keys === 'object' ? c.keys : {}) };
     if (v) keys[p.key.provider] = v; else delete keys[p.key.provider];
@@ -108,9 +119,28 @@ export function saveSettings(p: SettingsPatch): Settings {
   return getSettings();
 }
 
+/** BiliMind free: GET <free base>/health (no key, X-BiliMind-Client), { ok: true } when the service is up. */
+async function testFree(): Promise<{ ok: boolean; note?: string; error?: string }> {
+  const url = freeBaseUrl(process.env, readConfig().free_base_url) + '/health';
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 10_000);
+  const down = 'The free BiliMind service is unavailable right now. Try again later, or use your own DeepSeek or OpenRouter key.';
+  try {
+    const res = await net.fetch(url, { headers: { 'X-BiliMind-Client': CLIENT_ID }, signal: ctl.signal });
+    if (res.status === 429) return { ok: false, error: 'The free BiliMind service is busy. Wait a minute.' };
+    if (!res.ok) return { ok: false, error: down };
+    const body = (await res.json().catch(() => null)) as { ok?: unknown } | null;
+    return body?.ok === true ? { ok: true, note: 'Free, no key needed' } : { ok: false, error: down };
+  } catch (e) {
+    const aborted = (e as Error)?.name === 'AbortError';
+    return { ok: false, error: aborted ? 'The free BiliMind service did not answer in 10 seconds. Check the internet connection.' : 'Could not reach the free BiliMind service. Check the internet connection.' };
+  } finally { clearTimeout(timer); }
+}
+
 /** Balance check against the provider's balance endpoint (Chromium network stack: system certificates). */
-export async function testKey(provider: ProviderId): Promise<{ ok: boolean; balance?: string; error?: string }> {
+export async function testKey(provider: ProviderId): Promise<{ ok: boolean; balance?: string; note?: string; error?: string }> {
   if (!isProvider(provider)) return { ok: false, error: 'Unknown AI provider.' };
+  if (!needsKey(provider)) return testFree();
   const key = keyFor(provider);
   const label = provider === 'deepseek' ? 'DeepSeek' : 'OpenRouter';
   if (!key) return { ok: false, error: `No ${label} key saved yet.` };

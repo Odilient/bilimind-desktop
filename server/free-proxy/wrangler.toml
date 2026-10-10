@@ -1,0 +1,15 @@
+# BiliMind free (Cloudflare Worker). Deploy: npx wrangler deploy. Key: npx wrangler secret put OPENROUTER_API_KEY.
+name = "bilimind-free"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+routes = [{ pattern = "desktop-api.bilimind.com", custom_domain = true }]
+
+[vars]
+DISABLED = "0"
+
+# 120 requests a minute per IP: a course build makes about 20 to 40 calls in a few minutes
+[[ratelimits]]
+name = "PER_IP"
+namespace_id = "5801"
+simple = { limit = 120, period = 60 }

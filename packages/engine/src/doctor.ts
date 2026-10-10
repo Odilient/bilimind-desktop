@@ -2,7 +2,7 @@
 // Owner: WP6. Never prints, logs or returns the key. Network probes time out after 6 s each and run in parallel.
 import { BilimindError } from './contracts.ts';
 import type { Doctor, DoctorData, EngineConfig } from './contracts.ts';
-import { loadConfig } from './config.ts';
+import { clientHeader, loadConfig } from './config.ts';
 import { balance, spentToday } from './ledger.ts';
 
 const EDGE_URL = 'https://speech.platform.bing.com/';
@@ -26,16 +26,31 @@ export async function probeClock(url: string, timeoutMs = 6000): Promise<{ reach
 
 const errMsg = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
+/** BiliMind free: GET <base>/health with X-BiliMind-Client and no Authorization; true when it answers { ok: true }. */
+export async function probeFreeService(baseUrl: string, timeoutMs = 6000): Promise<boolean> {
+  try {
+    const r = await fetch(baseUrl + '/health', { headers: { 'X-BiliMind-Client': clientHeader() }, signal: AbortSignal.timeout(timeoutMs) });
+    if (!r.ok) return false;
+    const body = await r.json() as { ok?: unknown };
+    return body?.ok === true;
+  } catch {
+    return false;
+  }
+}
+
 export const doctor: Doctor = async () => {
   const warnings: string[] = [];
   let cfg: EngineConfig | null = null;
   try { cfg = loadConfig(); } catch (e) { warnings.push(`config: ${errMsg(e)}`); }
   const key = !!cfg && cfg.keySource !== 'none' && !!cfg.apiKey;
+  const free = cfg?.provider === 'bilimind';   // BiliMind free: no key needed, health check instead of a balance
 
-  const [edge, bal] = await Promise.all([
+  const [edge, bal, freeUp] = await Promise.all([
     probeClock(EDGE_URL),
-    key && cfg ? balance(cfg).catch(e => { warnings.push(`balance: ${errMsg(e)}`); return { usd: null, provider: cfg!.provider }; }) : Promise.resolve(null),
+    key && cfg && !free ? balance(cfg).catch(e => { warnings.push(`balance: ${errMsg(e)}`); return { usd: null, provider: cfg!.provider }; }) : Promise.resolve(null),
+    free && cfg ? probeFreeService(cfg.baseUrl) : Promise.resolve(null),
   ]);
+  if (freeUp === false) warnings.push('The free BiliMind service did not answer its health check; try again in a minute, or add your own DeepSeek or OpenRouter key.');
   let skew = edge.skew_ms;
   if (skew === null) skew = (await probeClock(FALLBACK_CLOCK_URL)).skew_ms;
 
@@ -49,7 +64,7 @@ export const doctor: Doctor = async () => {
   if (!edge.reachable) warnings.push('Edge TTS is unreachable: narration will be skipped (the course still builds).');
   if (key && bal && bal.usd === null) warnings.push('Balance check failed (offline?); the ledger caps still apply.');
 
-  const data: DoctorData & { key_source: string; demo_day: boolean; warnings: string[] } = {
+  const data: DoctorData & { key_source: string; demo_day: boolean; free_service?: boolean; warnings: string[] } = {
     node: process.versions.node,
     provider: cfg?.provider ?? null,
     key,
@@ -60,9 +75,10 @@ export const doctor: Doctor = async () => {
     edge_tts: edge.reachable,
     key_source: cfg?.keySource ?? 'none',
     demo_day: cfg?.demoDay ?? false,
+    ...(free ? { free_service: freeUp === true } : {}),
     warnings,
   };
-  if (!key) {
+  if (!key && !free) {
     const why = warnings.find(w => w.startsWith('config:'));
     throw new BilimindError(`No API key found for DeepSeek or OpenRouter${why ? ` (${why})` : ''}.`,
       'Write %USERPROFILE%\\.bilimind\\config.json as {"provider":"deepseek","keys":{"deepseek":"<key>"}} (or set DEEPSEEK_API_KEY) and restart WorkBuddy. Never paste the key into chat.');

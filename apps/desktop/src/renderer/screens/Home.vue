@@ -6,7 +6,7 @@ import KeyCard from '../components/KeyCard.vue';
 import { state, startRun, openCourse } from '../store';
 import { OBJ, objectFor } from '../images';
 import { mockPrimeExample } from '../mock';
-import { ROLE_LABEL, fmtDate, nbHyphen } from '../words';
+import { ROLE_LABEL, fmtDate, isStaged, nbHyphen } from '../words';
 import type { FolderFile } from '../env';
 
 const PLACEHOLDER = "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.";
@@ -26,6 +26,13 @@ const hasKey = computed(() => {
 });
 const ready = computed(() => state.draft.sentence.trim().length > 8 && !!state.draft.src);
 const folderName = computed(() => state.draft.src.split(/[\\/]/).filter(Boolean).pop() ?? '');
+// files dropped or chosen one by one sit in a staging folder: name them by count, not by that temp path
+const staged = computed(() => isStaged(state.draft.src));
+const nFiles = computed(() => state.draft.files.length);
+const srcTitle = computed(() => !staged.value ? folderName.value
+  : nFiles.value === 1 ? state.draft.files[0]!.name : `${nFiles.value} files`);
+const srcSub = computed(() => staged.value ? (nFiles.value === 1 ? 'Only this file goes in' : 'Only these files go in')
+  : `${nFiles.value} ${nFiles.value === 1 ? 'file' : 'files'}`);
 
 function grow() {
   const el = ta.value; if (!el) return;
@@ -47,15 +54,19 @@ async function setFolder(path: string | null) {
   try {
     const r = await window.bilimind.inspectFolder(path);
     state.draft.files = r.files;
-    if (!r.files.length) err.value = 'No files BiliMind can read in that folder (PDF, Word, PowerPoint, text).';
+    if (!r.files.length) err.value = isStaged(path) ? 'BiliMind cannot read those files. Use PDF, Word, PowerPoint or text.'
+      : 'No files BiliMind can read in that folder (PDF, Word, PowerPoint, text).';
   } catch (e) { err.value = (e as Error).message; state.draft.files = []; }
 }
-async function pick() { setFolder(await window.bilimind.pickFolder()); }
-function onDrop(e: DragEvent) {
-  over.value = false;
-  const f = e.dataTransfer?.files?.[0] as (File & { path?: string }) | undefined;
-  if (f?.path) setFolder(f.path); else pick();
+async function pick() {
+  try { await setFolder(await window.bilimind.pickFolder()); } catch (e) { err.value = (e as Error).message; }
 }
+async function pickFiles() {
+  try { await setFolder(await window.bilimind.pickFiles()); } catch (e) { err.value = (e as Error).message; }
+}
+// the preload already told main every dropped path; pickFolder() answers with the dropped folder, or a staging
+// folder holding just the dropped files, without a dialog
+function onDrop() { over.value = false; void pick(); }
 function clearFolder() { state.draft.src = ''; state.draft.files = []; err.value = ''; }
 async function build() {
   if (!ready.value || busy.value) return;
@@ -78,7 +89,7 @@ function size(b: number) { return b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Ma
       <div class="left">
         <span class="eb on-dark"><span class="dot"><Icon name="i-spark" /></span>Open source · runs on your computer</span>
         <h1 class="disp">Your files in,<br /><span class="hchip"><Icon name="i-arrow" /></span> a course <span class="lime">out.</span></h1>
-        <p class="lede">Drop a folder of slides, past papers or your shop's SOP and say what you need in one sentence. A crew of six writes the lessons, runs the code, checks every answer against your files and records the voice.</p>
+        <p class="lede">Drop in your slides, past papers or your shop's SOP and say what you need in one sentence. A crew of six writes the lessons, runs the code, checks every answer against your files and records the voice.</p>
         <div class="ex">
           <span class="ex-l">Try one</span>
           <button v-for="x in EXAMPLES" :key="x.tag" class="exchip" :class="{ on: state.draft.sentence === x.text }" @click="useExample(x.text)">
@@ -93,17 +104,21 @@ function size(b: number) { return b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Ma
 
         <div class="lbl"><span class="n">2</span> Your files</div>
         <div v-if="!state.draft.src" class="drop" :class="{ over }" role="button" tabindex="0"
-             @click="pick" @keydown.enter="pick" @dragover.prevent="over = true" @dragleave="over = false" @drop.prevent="onDrop">
+             @click="pick" @keydown.enter.self="pick" @dragover.prevent="over = true" @dragleave="over = false" @drop.prevent="onDrop">
           <span class="up"><Icon name="i-arrow-up" /></span>
-          <b>Drag a folder here or click to choose</b>
-          <span>Slides, past papers, notes, an SOP: PDF, Word, PowerPoint, text</span>
+          <b>Drop your files or a folder</b>
+          <span class="kinds">Slides, past papers, notes, an SOP: PDF, Word, PowerPoint, text</span>
+          <span class="picks">
+            <button class="pill sm light" @click.stop="pickFiles"><Icon name="i-file" />Choose files</button>
+            <button class="pill sm light" @click.stop="pick"><Icon name="i-folder" />Choose a folder</button>
+          </span>
         </div>
         <div v-else class="folder" @dragover.prevent="over = true" @dragleave="over = false" @drop.prevent="onDrop" :class="{ over }">
           <div class="fhead">
-            <span class="fi"><Icon name="i-folder" /></span>
-            <div class="fname"><b>{{ folderName }}</b><span>{{ state.draft.files.length }} {{ state.draft.files.length === 1 ? 'file' : 'files' }}</span></div>
-            <button class="pill sm light" @click="pick">Change</button>
-            <button class="iconbtn" aria-label="Remove folder" @click="clearFolder"><Icon name="i-x" /></button>
+            <span class="fi"><Icon :name="staged ? 'i-file' : 'i-folder'" /></span>
+            <div class="fname"><b>{{ srcTitle }}</b><span>{{ srcSub }}</span></div>
+            <button class="pill sm light" @click="staged ? pickFiles() : pick()">Change</button>
+            <button class="iconbtn" :aria-label="staged ? 'Remove files' : 'Remove folder'" @click="clearFolder"><Icon name="i-x" /></button>
           </div>
           <div class="files">
             <span v-for="f in state.draft.files" :key="f.path" class="file" :title="`${f.name} · ${size(f.bytes)}`">
@@ -117,7 +132,7 @@ function size(b: number) { return b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Ma
 
         <KeyCard v-if="state.settings && !hasKey" inline class="kc" />
         <div v-else class="go">
-          <span class="hint">{{ ready ? 'About 5 minutes. You can watch the crew work.' : !state.draft.src ? 'Pick a folder to start.' : 'Say what you need in a sentence.' }}</span>
+          <span class="hint">{{ ready ? 'About 5 minutes. You can watch the crew work.' : !state.draft.src ? 'Add your files to start.' : 'Say what you need in a sentence.' }}</span>
           <button class="pill lime big" :disabled="!ready || busy" @click="build">Build my course <span class="arr"><Icon name="i-arrow" /></span></button>
         </div>
       </div>
@@ -192,7 +207,10 @@ textarea:focus { border-color: var(--cobalt); background: #fff; box-shadow: 0 0 
 }
 .drop:hover, .drop.over { background: #E2E7FD; border-color: var(--cobalt); }
 .drop b { font-size: 14.5px; }
-.drop span:last-child { font-size: 12.5px; color: var(--text-2); }
+.drop .kinds { font-size: 12.5px; color: var(--text-2); }
+.picks { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }
+.picks .pill { gap: 6px; }
+.picks .ico { width: 14px; height: 14px; color: var(--cobalt); }
 .up { width: 36px; height: 36px; border-radius: 50%; background: var(--cobalt); color: #fff; display: grid; place-items: center; margin-bottom: 4px; }
 .up .ico { width: 17px; height: 17px; }
 .folder { border-radius: 18px; background: var(--canvas); box-shadow: inset 0 0 0 1px var(--line); padding: 10px; display: grid; gap: 10px; }

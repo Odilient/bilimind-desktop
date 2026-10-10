@@ -104,6 +104,36 @@ describe('callJson request shape', () => {
     expect((e as BilimindError).hint).toMatch(/config\.json/);
     expect(calls).toHaveLength(0);
   });
+
+  it('BiliMind free: OpenRouter body, no Authorization, X-BiliMind-Client, no balance read, OpenRouter cost', async () => {
+    setEngineConfig(fakeConfig(dir, { provider: 'bilimind', baseUrl: 'http://127.0.0.1:9/v1', apiKey: '', keySource: 'none', demoDay: false,
+      models: { fast: 'deepseek/deepseek-v4-flash', reasoning: 'deepseek/deepseek-v4-pro' } }));
+    const calls = mockFetch([reply('{"title":"x","items":["a","b"]}', { usage: { prompt_tokens: 10, completion_tokens: 5, cost: 0.0000123 } })]);
+    const r = await callJson(fakeCtx(dir), { stage: 'expand', system: 's', user: 'u', schema });
+    expect(calls).toHaveLength(1);                       // no balance request before the call
+    expect(calls[0]!.url).toBe('http://127.0.0.1:9/v1/chat/completions');
+    const h = calls[0]!.init.headers as Record<string, string>;
+    expect(h.Authorization).toBeUndefined();
+    expect(h['X-BiliMind-Client']).toMatch(/^(engine|desktop)\//);
+    const b = calls[0]!.body;
+    expect(b.usage).toEqual({ include: true });
+    expect(b.provider).toEqual({ require_parameters: true, max_price: { prompt: 0.2, completion: 0.4 }, allow_fallbacks: true });
+    expect(b.thinking).toBeUndefined();
+    expect(r.provider).toBe('bilimind');
+    expect(r.cost_usd).toBe(0.000012);
+  });
+
+  it('BiliMind free: 403/429/503 read as plain service messages, never "key rejected"', async () => {
+    setEngineConfig(fakeConfig(dir, { provider: 'bilimind', baseUrl: 'http://127.0.0.1:9/v1', apiKey: '', keySource: 'none',
+      models: { fast: 'deepseek/deepseek-v4-flash', reasoning: 'deepseek/deepseek-v4-pro' } }));
+    mockFetch([reply('Client not allowed', { status: 403 })]);
+    const e403 = (await callJson(fakeCtx(dir), { stage: 'expand', system: 's', user: 'u' }).catch(x => x)) as Error;
+    expect(e403.message).toMatch(/free BiliMind service refused the request \(Client not allowed\)/);
+    expect(e403.message).not.toMatch(/key was rejected/);
+    mockFetch([reply('slow down', { status: 503 }), reply('slow down', { status: 503 }), reply('slow down', { status: 503 })]);
+    const e503 = (await callJson(fakeCtx(dir), { stage: 'expand', system: 's', user: 'u' }).catch(x => x)) as Error;
+    expect(e503.message).toBe('The free BiliMind service is unavailable right now. Add your own DeepSeek or OpenRouter key in Settings.');
+  });
 });
 
 describe('callJson retries and repairs', () => {

@@ -1,4 +1,5 @@
 // Global spend ledger %USERPROFILE%/.bilimind/ledger.jsonl; caps $0.25/run, $2/day, provider reserve floor.
+// BiliMind free ('bilimind') has no balance and no reserve: only the run/day caps (and --max-usd) apply.
 // Owner: WP1. Keep the export names and types (src/contracts.ts); replace the stubs in place.
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -55,10 +56,10 @@ export function resetBalanceCache(): void {
   balanceCache.at = 0; balanceCache.provider = null; balanceCache.usd = null; balanceCache.spentSince = 0;
 }
 
-/** Live balance: DeepSeek GET /user/balance, OpenRouter GET /api/v1/credits. null when unreachable. */
+/** Live balance: DeepSeek GET /user/balance, OpenRouter GET /api/v1/credits. null when unreachable or BiliMind free. */
 export const balance: Balance = async cfg => {
   const provider = cfg.provider;
-  if (!cfg.apiKey) return { usd: null, provider };
+  if (!cfg.apiKey || provider === 'bilimind') return { usd: null, provider };
   const url = cfg.baseUrl + PRESETS[provider].balancePath;
   try {
     const res = await fetch(url, { headers: { Authorization: `Bearer ${cfg.apiKey}` }, signal: AbortSignal.timeout(8000) });
@@ -113,7 +114,7 @@ export const checkBudget: CheckBudget = async (ctx, cfg, estimateUsd) => {
     throw new BilimindError(`Today's model spend is ${usd(today)}; the next call (~${usd(est)}) would cross the ${usd(cfg.caps.dayUsd)} daily cap.`,
       'Wait until tomorrow (UTC), or raise BILIMIND_DAY_CAP_USD deliberately.');
   }
-  if (cfg.demoDay) return;
+  if (cfg.demoDay || cfg.provider === 'bilimind') return;   // the free service has no balance to read or protect
   const live = await liveBalance(cfg);
   if (live === null) {
     ctx.progress(`ledger: ${providerLabel(cfg.provider)} balance unavailable; continuing on the run and day caps only`);

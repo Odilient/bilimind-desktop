@@ -5,7 +5,7 @@ import { basename, dirname, extname, isAbsolute, join, relative, resolve } from 
 import { pathToFileURL } from 'node:url';
 import { listSourceFiles } from '@bilimind/engine/course';
 import { roleScores } from '@bilimind/engine/ingest/roles';
-import type { CourseCard, FolderFile } from '../shared/contract.ts';
+import type { CourseCard, CourseOutline, FolderFile, OutlineLesson } from '../shared/contract.ts';
 import { readCard } from '../shared/cards.ts';
 import { getSettings } from './settings.ts';
 
@@ -125,4 +125,71 @@ export function inspectFolder(path: string): { path: string; files: FolderFile[]
     return { name, path: abs, ext, bytes, role: guessRole(name, ext, abs) };
   });
   return { path: dir, files };
+}
+
+// ---------- the course workspace outline ----------
+interface CourseJsonLesson { id?: unknown; title?: unknown; day?: unknown; minutes?: unknown; narration?: { duration_ms?: unknown } | null }
+interface CourseJsonFile { title?: string; goal?: { sentence?: string }; lessons?: CourseJsonLesson[]; plan?: { days?: { date?: string; lessons?: string[] }[] } }
+
+/** Files under <course>/sources (recursive, at most 200), rel to the course folder with forward slashes. */
+function courseSources(dir: string): CourseOutline['sources'] {
+  const root = join(dir, 'sources');
+  const out: CourseOutline['sources'] = [];
+  const walk = (d: string, depth: number) => {
+    let ents;
+    try { ents = readdirSync(d, { withFileTypes: true }); } catch { return; }
+    for (const e of ents.sort((a, b) => a.name.localeCompare(b.name))) {
+      if (out.length >= 200 || e.name.startsWith('.')) continue;
+      const abs = join(d, e.name);
+      if (e.isDirectory()) { if (depth < 4) walk(abs, depth + 1); continue; }
+      if (!e.isFile()) continue;
+      let bytes = 0;
+      try { bytes = statSync(abs).size; } catch { /* gone */ }
+      out.push({ name: e.name, rel: relative(dir, abs).split('\\').join('/'), bytes });
+    }
+  };
+  walk(root, 0);
+  return out;
+}
+
+/**
+ * The course workspace outline: lessons from <course>/course.json in course order, each with its player route
+ * (`#/l/<id>`, packages/player/src/router.ts lessonHref), its study-plan day (1-based index into plan.days) and
+ * its study minutes (narration length when the lesson has no minutes); plus the learner's files in <course>/sources.
+ * A course that is still building has no course.json yet: it gets its card title/sentence and no lessons.
+ */
+export async function courseOutline(id: string): Promise<CourseOutline> {
+  const dir = checkCourseId(id);
+  let c: CourseJsonFile | null = null;
+  try { c = JSON.parse(readFileSync(join(dir, 'course.json'), 'utf8').replace(/^\uFEFF/, '')) as CourseJsonFile; } catch { c = null; }
+  const card = c ? null : readCard(dir, liveStatus(dir));
+  const dayOf = new Map<string, number>();
+  const days = Array.isArray(c?.plan?.days) ? c!.plan!.days! : [];
+  days.forEach((d, i) => {
+    for (const l of Array.isArray(d?.lessons) ? d.lessons : []) if (typeof l === 'string' && !dayOf.has(l)) dayOf.set(l, i + 1);
+  });
+  const dateDay = new Map<string, number>();
+  days.forEach((d, i) => { if (typeof d?.date === 'string' && !dateDay.has(d.date)) dateDay.set(d.date, i + 1); });
+  const lessons: OutlineLesson[] = [];
+  for (const l of Array.isArray(c?.lessons) ? c!.lessons! : []) {
+    if (!l || typeof l.id !== 'string' || !l.id) continue;
+    const lesson: OutlineLesson = {
+      id: l.id,
+      title: typeof l.title === 'string' && l.title.trim() ? l.title.trim() : l.id.replace(/[_-]+/g, ' '),
+      route: `#/l/${encodeURIComponent(l.id)}`,
+    };
+    const day = dayOf.get(l.id) ?? (typeof l.day === 'number' ? l.day : typeof l.day === 'string' ? dateDay.get(l.day) : undefined);
+    if (day !== undefined && Number.isFinite(day)) lesson.day = day;
+    const narrMs = Number(l.narration?.duration_ms);
+    const minutes = typeof l.minutes === 'number' && l.minutes > 0 ? l.minutes : narrMs > 0 ? Math.max(1, Math.round(narrMs / 60_000)) : undefined;
+    if (minutes !== undefined) lesson.minutes = minutes;
+    lessons.push(lesson);
+  }
+  return {
+    id: dir,
+    title: (typeof c?.title === 'string' && c.title.trim()) || card?.title || basename(dir),
+    sentence: (typeof c?.goal?.sentence === 'string' ? c.goal.sentence : '') || card?.sentence || '',
+    lessons,
+    sources: courseSources(dir),
+  };
 }

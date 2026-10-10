@@ -8,6 +8,7 @@ import { partIcon, partLabel } from '../runtime/model.ts';
 import { prefs } from '../runtime/progress.ts';
 import { setTextSize, toggleNight, toggleStage } from '../runtime/ui.ts';
 import { homeHref } from '../router.ts';
+import { appMode } from '../runtime/app.ts';
 
 const props = defineProps<{ lesson: CourseLesson; step: number; seen: number; total: number; currentIndex: number; done: boolean; passed: Set<string> }>();
 const emit = defineEmits<{ complete: []; jump: [blockId: string] }>();
@@ -25,7 +26,7 @@ function jump(id: string) { menu.value = ''; emit('jump', id); }
 
 <template>
   <header class="tb" :class="{ scrolled, away: away && !menu }">
-    <a class="pill light sm back" :href="homeHref(`at=${encodeURIComponent(lesson.id)}`)" aria-label="Back to the path"><svg aria-hidden="true"><use href="#i-back" /></svg><span class="back-label">Path</span></a>
+    <a v-if="!appMode" class="pill light sm back" :href="homeHref(`at=${encodeURIComponent(lesson.id)}`)" aria-label="Back to the path"><svg aria-hidden="true"><use href="#i-back" /></svg><span class="back-label">Path</span></a>
     <span class="crumb">Step {{ step }} · {{ lesson.title }}</span>
     <span class="grow"></span>
     <span class="track" role="progressbar" :aria-valuenow="seen" :aria-valuemax="total" aria-label="Parts seen"><i :style="{ width: (pct * 100).toFixed(1) + '%' }"></i></span>

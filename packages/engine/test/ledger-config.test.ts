@@ -88,7 +88,7 @@ describe('config', () => {
     expect(c.baseUrl).toBe('https://api.deepseek.com');
     expect(c.models).toEqual({ fast: 'deepseek-flash', reasoning: 'deepseek-v4-pro' });
     expect(c.caps).toEqual({ runUsd: 0.25, dayUsd: 2 });
-    expect(c.reserveUsd).toEqual({ deepseek: 3, openrouter: 4 });
+    expect(c.reserveUsd).toEqual({ deepseek: 3, openrouter: 4, bilimind: 0 });
     expect(c.ledgerPath).toBe(join(dir, 'home', '.bilimind', 'ledger.jsonl'));
     expect(c.demoDay).toBe(false);
   });
@@ -121,10 +121,28 @@ describe('config', () => {
     expect(parseDotenv('A=1\nexport B = "two"\n#C=3\nD=x # y')).toEqual({ A: '1', B: 'two', D: 'x' });
   });
 
-  it('no key anywhere -> keySource none', () => {
+  it('no key anywhere and no provider named -> BiliMind free (no key), its URL overridable', () => {
     const c = loadConfig({ env: base() });
+    expect(c.provider).toBe('bilimind');
     expect(c.apiKey).toBe('');
     expect(c.keySource).toBe('none');
+    expect(c.baseUrl).toBe('https://desktop-api.bilimind.com/v1');
+    expect(c.models).toEqual({ fast: 'deepseek/deepseek-v4-flash', reasoning: 'deepseek/deepseek-v4-pro' });
+    expect(loadConfig({ env: { ...base(), BILIMIND_FREE_URL: 'http://127.0.0.1:8787/v1/' } }).baseUrl).toBe('http://127.0.0.1:8787/v1');
+    writeUser({ free_base_url: 'http://127.0.0.1:8788/v1' });
+    expect(loadConfig({ env: base() }).baseUrl).toBe('http://127.0.0.1:8788/v1');
+  });
+
+  it('a configured provider keeps the old behaviour; provider "bilimind" never takes a key', () => {
+    writeUser({ provider: 'deepseek' });
+    expect(loadConfig({ env: base() }).provider).toBe('deepseek');            // named but no key: still deepseek
+    writeUser({ provider: 'bilimind', keys: { deepseek: 'sk-user' } });
+    const b = loadConfig({ env: { ...base(), BILIMIND_BASE_URL: 'http://elsewhere' } });
+    expect(b.provider).toBe('bilimind');
+    expect(b.apiKey).toBe('');
+    expect(b.baseUrl).toBe('https://desktop-api.bilimind.com/v1');
+    writeUser({ keys: { openrouter: 'sk-or' } });
+    expect(loadConfig({ env: base() }).provider).toBe('openrouter');          // a key and no provider: that key's pool
   });
 
   it('redact hides keys and bearer tokens', () => {

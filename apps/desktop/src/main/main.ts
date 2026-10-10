@@ -1,10 +1,12 @@
 // BiliMind Desktop: Electron main process. Window, IPC (CONTRACT.md), runs, settings.
 // Test mode: BILIMIND_E2E=1 creates windows with show:false and opens --remote-debugging-port=$BILIMIND_CDP_PORT.
 import { BrowserWindow, Menu, app, dialog, ipcMain, shell, type IpcMainInvokeEvent } from 'electron';
-import { existsSync, statSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { IPC, type ProviderId, type SettingsPatch } from '../shared/contract.ts';
-import { getCourse, inspectFolder, listCourses, openFile, playerUrl, removeCourse, reveal } from './courses.ts';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { IPC, type AssistantAsk, type ProviderId, type SettingsPatch } from '../shared/contract.ts';
+import { askAssistant, cancelAssistant } from './assistant.ts';
+import { courseOutline, getCourse, inspectFolder, listCourses, openFile, playerUrl, removeCourse, reveal } from './courses.ts';
+import { pickDropped, pickFilesDialog, rememberDrop } from './inbox.ts';
 import { cancelRun, killAllRuns, resourcesDir, startRun } from './runs.ts';
 import { getSettings, saveSettings, testKey } from './settings.ts';
 
@@ -19,7 +21,6 @@ if (E2E) {
 app.setAppUserModelId('ai.bilimind.desktop');
 
 let win: BrowserWindow | null = null;
-let lastDrop: { path: string; at: number } | null = null;
 
 function rendererEntry(): { url?: string; file?: string } {
   const dev = process.env.BILIMIND_RENDERER_URL;   // scripts/dev.mjs (vite dev server)
@@ -100,19 +101,17 @@ function registerIpc(): void {
   handle(IPC.settingsGet, () => getSettings());
   handle(IPC.settingsSave, (p: SettingsPatch) => saveSettings(p ?? {}));
   handle(IPC.settingsTestKey, (p: ProviderId) => testKey(p));
-  ipcMain.on(IPC.dropped, (_e, p: unknown) => { if (typeof p === 'string' && p) lastDrop = { path: p, at: Date.now() }; });
+  ipcMain.on(IPC.dropped, (_e, p: unknown) => rememberDrop(p));
   handle(IPC.pickFolder, async () => {
-    // a folder (or a file in it) dropped on the page in the last few seconds answers this call without a dialog
-    if (lastDrop && Date.now() - lastDrop.at < 5000) {
-      const p = lastDrop.path;
-      lastDrop = null;
-      try { return statSync(p).isDirectory() ? p : dirname(p); } catch { /* gone: fall through to the dialog */ }
-    }
+    // files or a folder dropped on the page in the last few seconds answer this call without a dialog
+    const dropped = await pickDropped();
+    if (dropped) return dropped;
     if (E2E) return process.env.BILIMIND_E2E_PICK || null;   // never a native dialog on the owner's screen in tests
     const opts: Electron.OpenDialogOptions = { title: 'Choose the folder with your files', properties: ['openDirectory'] };
     const r = win ? await dialog.showOpenDialog(win, opts) : await dialog.showOpenDialog(opts);
     return r.canceled || !r.filePaths[0] ? null : r.filePaths[0];
   });
+  handle(IPC.pickFiles, () => (E2E ? Promise.resolve(process.env.BILIMIND_E2E_PICK || null) : pickFilesDialog(win)));
   handle(IPC.inspectFolder, (p: string) => inspectFolder(p));
   handle(IPC.coursesList, () => listCourses());
   handle(IPC.coursesGet, (id: string) => getCourse(id));
@@ -120,6 +119,9 @@ function registerIpc(): void {
   handle(IPC.coursesReveal, (id: string) => reveal(id));
   handle(IPC.coursesOpenFile, (id: string, rel: string) => openFile(id, rel));
   handle(IPC.coursesRemove, (id: string) => removeCourse(id));
+  handle(IPC.coursesOutline, (id: string) => courseOutline(id));
+  handle(IPC.assistantAsk, (o: AssistantAsk) => askAssistant(o, ev => { if (win && !win.isDestroyed()) win.webContents.send(IPC.assistantEvent, ev); }));
+  handle(IPC.assistantCancel, (id: string) => cancelAssistant(id));
   handle(IPC.runStart, (o: { src: string; sentence: string }) => startRun(o));
   handle(IPC.runCancel, (id: string) => cancelRun(id));
   handle(IPC.openExternal, async (url: string) => {

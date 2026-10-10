@@ -55,11 +55,12 @@ export interface CoursePaths {
 }
 
 // ---------- config.ts ----------
-export type ProviderId = 'deepseek' | 'openrouter';
+/** 'bilimind' = BiliMind free: the owner's key-less OpenAI-compatible proxy (OpenRouter shape, no Authorization header). */
+export type ProviderId = 'deepseek' | 'openrouter' | 'bilimind';
 export interface EngineConfig {
   provider: ProviderId;
-  baseUrl: string;                // 'https://api.deepseek.com' | 'https://openrouter.ai/api/v1'
-  apiKey: string;                 // NEVER printed, logged or written
+  baseUrl: string;                // 'https://api.deepseek.com' | 'https://openrouter.ai/api/v1' | 'https://desktop-api.bilimind.com/v1'
+  apiKey: string;                 // NEVER printed, logged or written; always '' for 'bilimind' (no key)
   keySource: 'env' | 'env.local' | 'user-config' | 'none';
   models: { fast: string; reasoning: string };   // deepseek: deepseek-flash / deepseek-v4-pro; openrouter: deepseek/deepseek-v4-flash
   userDir: string;                // %USERPROFILE%\.bilimind

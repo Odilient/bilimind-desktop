@@ -17,7 +17,7 @@ export function fakeConfig(dir: string, over: Partial<EngineConfig> = {}): Engin
   return {
     provider: 'deepseek', baseUrl: 'https://api.deepseek.com', apiKey: 'sk-test-0000', keySource: 'env',
     models: { fast: 'deepseek-flash', reasoning: 'deepseek-v4-pro' }, userDir: dir, ledgerPath: join(dir, 'ledger.jsonl'),
-    caps: { runUsd: 0.25, dayUsd: 2 }, reserveUsd: { deepseek: 3, openrouter: 4 }, demoDay: true, ...over,
+    caps: { runUsd: 0.25, dayUsd: 2 }, reserveUsd: { deepseek: 3, openrouter: 4, bilimind: 0 }, demoDay: true, ...over,
   };
 }
 

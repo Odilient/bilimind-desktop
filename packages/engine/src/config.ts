@@ -6,7 +6,10 @@
 //   2. environment variables (DEEPSEEK_API_KEY / OPENROUTER_API_KEY)
 //   3. bilimind-desktop/.env.local in dev (found by walking up from cwd, repoRoot or this file)
 // WorkBuddy's shell has no env vars, so (1) is the robust path on the demo laptop.
-// Provider: BILIMIND_PROVIDER (demo-day fallback switch) > config.json "provider" > deepseek when its key exists > openrouter.
+// Provider: BILIMIND_PROVIDER (demo-day fallback switch) > config.json "provider" > deepseek when its key exists >
+// openrouter when its key exists > 'bilimind' (BiliMind free, no key) when nothing names a provider and no key is set.
+// 'bilimind' is the owner's OpenAI-compatible proxy: no key on this computer, no Authorization header, every request
+// carries X-BiliMind-Client. Its URL: BILIMIND_FREE_URL > config.json "free_base_url" > FREE_BASE_URL.
 import { existsSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -24,6 +27,11 @@ export interface ProviderPreset {
 }
 
 export const PRESETS: Record<ProviderId, ProviderPreset> = {
+  bilimind: {
+    // keyEnv '' = no key needed. Same model ids as OpenRouter (the proxy forwards the OpenRouter body as is).
+    id: 'bilimind', baseUrl: 'https://desktop-api.bilimind.com/v1', keyEnv: '',
+    fast: 'deepseek/deepseek-v4-flash', smart: 'deepseek/deepseek-v4-pro', balancePath: '/health',
+  },
   deepseek: {
     id: 'deepseek', baseUrl: 'https://api.deepseek.com', keyEnv: 'DEEPSEEK_API_KEY',
     fast: 'deepseek-flash', smart: 'deepseek-v4-pro', balancePath: '/user/balance',
@@ -34,8 +42,32 @@ export const PRESETS: Record<ProviderId, ProviderPreset> = {
   },
 };
 
-/** PLAN §6.2: demo-day reserve locked in each pool (DeepSeek $3.00, OpenRouter $4.00). */
-export const DEFAULT_RESERVE_USD: Record<ProviderId, number> = { deepseek: 3, openrouter: 4 };
+/** PLAN §6.2: demo-day reserve locked in each pool (DeepSeek $3.00, OpenRouter $4.00). BiliMind free: no balance, 0. */
+export const DEFAULT_RESERVE_USD: Record<ProviderId, number> = { deepseek: 3, openrouter: 4, bilimind: 0 };
+
+/** The free service's default URL (overridable with BILIMIND_FREE_URL or config.json "free_base_url", for tests). */
+export const FREE_BASE_URL = PRESETS.bilimind.baseUrl;
+/** Sent as `X-BiliMind-Client: engine/<version>` when no BILIMIND_CLIENT (the desktop sets desktop/<app version>). */
+export const ENGINE_VERSION = '0.1.0';
+
+/** Providers that need the user's own key ('bilimind' never does). */
+export function needsKey(p: ProviderId): boolean {
+  return PRESETS[p].keyEnv !== '';
+}
+
+/** Base URL of the free service: BILIMIND_FREE_URL > config.json free_base_url > FREE_BASE_URL. No trailing slash. */
+export function freeBaseUrl(env: Record<string, string | undefined> = process.env, fileUrl?: unknown): string {
+  const fromEnv = env.BILIMIND_FREE_URL?.trim();
+  const fromFile = typeof fileUrl === 'string' ? fileUrl.trim() : '';
+  return (fromEnv || fromFile || FREE_BASE_URL).replace(/\/+$/, '');
+}
+
+/** Value of the X-BiliMind-Client header: BILIMIND_CLIENT ("desktop/<v>" or "engine/<v>") or engine/<ENGINE_VERSION>. */
+export function clientHeader(env: Record<string, string | undefined> = process.env): string {
+  const v = env.BILIMIND_CLIENT?.trim();
+  return v && /^(desktop|engine)\/[\w.+-]{1,40}$/.test(v) ? v : `engine/${ENGINE_VERSION}`;
+}
+
 /** PLAN §6.3: $0.25 per course run, $2.00 per day. */
 export const DEFAULT_CAPS = { runUsd: 0.25, dayUsd: 2 };
 
@@ -47,6 +79,7 @@ interface UserConfigFile {
   reserve_usd?: Partial<Record<ProviderId, number>> | number;
   demo_day?: boolean;
   base_url?: string;
+  free_base_url?: string;
 }
 
 /** Parse a dotenv file (KEY=value, # comments, optional quotes). Never logs values. */
@@ -94,7 +127,7 @@ function readUserConfig(userDir: string): UserConfigFile {
 }
 
 function isProvider(v: unknown): v is ProviderId {
-  return v === 'deepseek' || v === 'openrouter';
+  return v === 'deepseek' || v === 'openrouter' || v === 'bilimind';
 }
 
 function num(v: string | number | undefined | null): number | undefined {
@@ -103,9 +136,9 @@ function num(v: string | number | undefined | null): number | undefined {
   return Number.isFinite(n) ? n : undefined;
 }
 
-/** A model id fits a provider: DeepSeek direct ids have no slash, OpenRouter ids always do. */
+/** A model id fits a provider: DeepSeek direct ids have no slash, OpenRouter (and BiliMind free) ids always do. */
 export function modelFitsProvider(model: string, provider: ProviderId): boolean {
-  return provider === 'openrouter' ? model.includes('/') : !model.includes('/');
+  return provider === 'deepseek' ? !model.includes('/') : model.includes('/');
 }
 
 export const loadConfig: LoadConfig = (opts = {}) => {
@@ -121,6 +154,7 @@ export const loadConfig: LoadConfig = (opts = {}) => {
   const pick = (name: string): string | undefined => env[name] || local[name] || undefined;
 
   const keyFor = (p: ProviderId): { key: string; source: EngineConfig['keySource'] } => {
+    if (!needsKey(p)) return { key: '', source: 'none' };     // BiliMind free: never a key, never sent
     const u = user.keys?.[p];
     if (u && u.trim()) return { key: u.trim(), source: 'user-config' };
     const e = env[PRESETS[p].keyEnv];
@@ -133,10 +167,10 @@ export const loadConfig: LoadConfig = (opts = {}) => {
   const forced = pick('BILIMIND_PROVIDER');
   let provider: ProviderId;
   if (isProvider(forced)) provider = forced;
-  else if (isProvider(user.provider) && keyFor(user.provider).key) provider = user.provider;
+  else if (isProvider(user.provider) && (!needsKey(user.provider) || keyFor(user.provider).key)) provider = user.provider;
   else if (keyFor('deepseek').key) provider = 'deepseek';
   else if (keyFor('openrouter').key) provider = 'openrouter';
-  else provider = isProvider(user.provider) ? user.provider : 'deepseek';
+  else provider = isProvider(user.provider) ? user.provider : 'bilimind';   // fresh install: the free service
 
   const preset = PRESETS[provider];
   const { key, source } = keyFor(provider);
@@ -152,12 +186,15 @@ export const loadConfig: LoadConfig = (opts = {}) => {
   const reserveUsd: Record<ProviderId, number> = {
     deepseek: reserveAll ?? (typeof userReserve === 'number' ? userReserve : num(userReserve?.deepseek)) ?? DEFAULT_RESERVE_USD.deepseek,
     openrouter: reserveAll ?? (typeof userReserve === 'number' ? userReserve : num(userReserve?.openrouter)) ?? DEFAULT_RESERVE_USD.openrouter,
+    bilimind: 0,   // no balance to protect: the free service has its own limits server-side
   };
 
   const demoFlag = pick('BILIMIND_DEMO_DAY');
   return {
     provider,
-    baseUrl: (pick('BILIMIND_BASE_URL') ?? user.base_url ?? preset.baseUrl).replace(/\/+$/, ''),
+    baseUrl: provider === 'bilimind'
+      ? freeBaseUrl({ BILIMIND_FREE_URL: pick('BILIMIND_FREE_URL') }, user.free_base_url)
+      : (pick('BILIMIND_BASE_URL') ?? user.base_url ?? preset.baseUrl).replace(/\/+$/, ''),
     apiKey: key,
     keySource: source,
     models: { fast, reasoning },
@@ -172,13 +209,14 @@ export const loadConfig: LoadConfig = (opts = {}) => {
   };
 };
 
-/** Human label for messages: "DeepSeek" / "OpenRouter". */
+/** Human label for messages: "DeepSeek" / "OpenRouter" / "BiliMind free". */
 export function providerLabel(p: ProviderId): string {
-  return p === 'deepseek' ? 'DeepSeek' : 'OpenRouter';
+  return p === 'deepseek' ? 'DeepSeek' : p === 'openrouter' ? 'OpenRouter' : 'BiliMind free';
 }
 
 /** Where the key should go, for hints (never the key itself). */
 export function keyHint(p: ProviderId): string {
+  if (!needsKey(p)) return 'BiliMind free needs no key. To use your own, put it in %USERPROFILE%\\.bilimind\\config.json as {"provider":"deepseek","keys":{"deepseek":"..."}}.';
   return `Put the key in %USERPROFILE%\\.bilimind\\config.json as {"provider":"${p}","keys":{"${p}":"..."}} (or set ${PRESETS[p].keyEnv}).`;
 }
 

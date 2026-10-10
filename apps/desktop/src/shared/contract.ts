@@ -1,9 +1,10 @@
 // The main <-> renderer contract (apps/desktop/CONTRACT.md), as types. Imported by main, preload, worker and renderer.
-export type ProviderId = 'deepseek' | 'openrouter';
+/** 'bilimind' = BiliMind free (no key, the default on a fresh install); 'deepseek' / 'openrouter' = the user's own key. */
+export type ProviderId = 'bilimind' | 'deepseek' | 'openrouter';
 
 export interface Settings {
   provider: ProviderId;
-  keys: Record<ProviderId, { set: boolean; last4?: string }>;   // the key itself never reaches the renderer
+  keys: Record<ProviderId, { set: boolean; last4?: string }>;   // the key itself never reaches the renderer; bilimind is always { set: true }
   narrate: boolean;                                            // Edge TTS narration (free)
   outRoot: string;                                             // default <Documents>/BiliMind
   version: string;
@@ -37,15 +38,36 @@ export type RunEvent =
   | { runId: string; type: 'done'; course: string; card: CourseCard }
   | { runId: string; type: 'error'; message: string };
 
+/** One lesson as the course workspace lists it (from <course>/course.json). route = the player's hash route, e.g. '#/l/<id>'. */
+export interface OutlineLesson { id: string; title: string; day?: number; minutes?: number; route: string }
+export interface CourseOutline {
+  id: string; title: string; sentence: string;
+  lessons: OutlineLesson[];
+  sources: { name: string; rel: string; bytes: number }[];     // the learner's files in <course>/sources (rel to the course folder)
+}
+export type AssistantScope = 'lesson' | 'course' | 'files';
+export interface AssistantAsk {
+  courseId: string; lessonId?: string | null; scope: AssistantScope; question: string;
+  history: { role: 'user' | 'assistant'; text: string }[];
+}
+export interface AssistantCite { n: number; file: string; locator?: string; quote: string }
+export type AssistantEvent =
+  | { askId: string; type: 'delta'; text: string }
+  | { askId: string; type: 'done'; text: string; cites: AssistantCite[]; costUsd: number; model: string }
+  | { askId: string; type: 'error'; message: string };
+
 export interface BilimindApi {
   settings: {
     get(): Promise<Settings>;
     save(p: SettingsPatch): Promise<Settings>;
-    testKey(provider: ProviderId): Promise<{ ok: boolean; balance?: string; error?: string }>;
+    testKey(provider: ProviderId): Promise<{ ok: boolean; balance?: string; note?: string; error?: string }>;
   };
   pickFolder(): Promise<string | null>;
+  /** File dialog (multi-select): copies the chosen files into a fresh staging folder and returns that folder. */
+  pickFiles(): Promise<string | null>;
   inspectFolder(path: string): Promise<{ path: string; files: FolderFile[] }>;
   courses: {
+    outline(id: string): Promise<CourseOutline>;
     list(): Promise<CourseCard[]>;
     get(id: string): Promise<CourseCard | null>;
     playerUrl(id: string): Promise<string>;
@@ -58,6 +80,11 @@ export interface BilimindApi {
     cancel(runId: string): Promise<void>;
     onEvent(cb: (e: RunEvent) => void): () => void;
   };
+  assistant: {
+    ask(o: AssistantAsk): Promise<{ askId: string }>;
+    cancel(askId: string): Promise<void>;
+    onEvent(cb: (e: AssistantEvent) => void): () => void;
+  };
   openExternal(url: string): Promise<void>;
   platform: string;
 }
@@ -68,7 +95,12 @@ export const IPC = {
   settingsSave: 'bm:settings:save',
   settingsTestKey: 'bm:settings:testKey',
   pickFolder: 'bm:pickFolder',
+  pickFiles: 'bm:pickFiles',
   inspectFolder: 'bm:inspectFolder',
+  coursesOutline: 'bm:courses:outline',
+  assistantAsk: 'bm:assistant:ask',
+  assistantCancel: 'bm:assistant:cancel',
+  assistantEvent: 'bm:assistant:event',
   coursesList: 'bm:courses:list',
   coursesGet: 'bm:courses:get',
   coursesPlayerUrl: 'bm:courses:playerUrl',
@@ -79,7 +111,7 @@ export const IPC = {
   runCancel: 'bm:run:cancel',
   runEvent: 'bm:run:event',
   openExternal: 'bm:openExternal',
-  dropped: 'bm:dropped',            // preload -> main: path of a file/folder dropped on the page (see preload)
+  dropped: 'bm:dropped',            // preload -> main: paths of the files/folders dropped on the page (see preload)
 } as const;
 
 /** Messages between main and the run worker (utilityProcess). */

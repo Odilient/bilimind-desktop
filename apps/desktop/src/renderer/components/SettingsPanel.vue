@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Settings slide-over: key, narration, output folder, about.
+// Settings slide-over: AI (BiliMind free or your own key), narration, output folder, about.
 import { computed } from 'vue';
 import Icon from './Icon.vue';
 import KeyCard from './KeyCard.vue';
@@ -44,7 +44,7 @@ const close = () => { state.settingsOpen = false; };
           <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#mark" /></svg>
           <div>
             <b class="nm">BiliMind Desktop <span>v{{ s.version }}</span></b>
-            <p>Open source under AGPL-3.0. Your files, your key, your computer: no account and no server.</p>
+            <p>Open source under AGPL-3.0. No account. Your courses are folders on this computer. Free AI to start, or your own key.</p>
             <p class="team">Made by team Opus Magnum: Oybek Odilov, Abdugaffor Odilov, Ramil Khutlimuratov, Gameel Al-Bazeeli. Dormathon 2026.</p>
             <button class="pill sm lime" @click="openGh">Source on GitHub <Icon name="i-ext" /></button>
           </div>

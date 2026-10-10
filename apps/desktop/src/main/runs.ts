@@ -6,7 +6,7 @@ import { join, resolve } from 'node:path';
 import type { RunEvent, WorkerStart } from '../shared/contract.ts';
 import { IPC } from '../shared/contract.ts';
 import { liveRuns } from './courses.ts';
-import { getSettings } from './settings.ts';
+import { CLIENT_ID, getSettings } from './settings.ts';
 
 interface Run { id: string; proc: UtilityProcess; course?: string; finished: boolean }
 const runs = new Map<string, Run>();
@@ -44,6 +44,8 @@ export function startRun(o: { src: string; sentence: string }): { runId: string 
   if (!src || !existsSync(src) || !statSync(src).isDirectory()) throw new Error('Pick the folder with your files first.');
   if (!sentence) throw new Error('Write one sentence about what you need.');
   const s = getSettings();
+  // the chosen provider when it is ready (BiliMind free always is), else the other own-key pool; never a silent
+  // switch to BiliMind free when the learner picked their own key
   const provider = s.keys[s.provider].set ? s.provider : (['deepseek', 'openrouter'] as const).find(p => s.keys[p].set);
   if (!provider) throw new Error('Add your AI key in Settings first.');
   mkdirSync(s.outRoot, { recursive: true });
@@ -57,6 +59,7 @@ export function startRun(o: { src: string; sentence: string }): { runId: string 
   if (existsSync(template)) env.BILIMIND_TEMPLATE = template;
   if (existsSync(join(assets, 'obj-book.webp'))) env.BILIMIND_ASSETS = assets;
   env.BILIMIND_PROVIDER = provider;
+  env.BILIMIND_CLIENT = CLIENT_ID;   // X-BiliMind-Client on the free service
   delete env.ELECTRON_RUN_AS_NODE;
 
   const proc = utilityProcess.fork(workerPath(), [], {

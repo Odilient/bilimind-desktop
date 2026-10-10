@@ -9,11 +9,13 @@
 // - Transport errors, 429 and 5xx back off and retry (3 HTTP attempts in all); any other 4xx stops at once.
 // - Reasoning/thinking only when req.reasoning (outline/relabel). DeepSeek direct: thinking {type}, cost from the
 //   price table below. OpenRouter: usage.include, provider {require_parameters, max_price}, reasoning {enabled}.
+// - BiliMind free ('bilimind'): the OpenRouter body to the owner's proxy, NO Authorization header, X-BiliMind-Client
+//   on every request, OpenRouter prices (the owner pays; the cost is still shown and capped per run).
 // - Ledger check before every HTTP attempt, ledger record + ctx.spend after every billed reply, cache by
 //   sha256(provider:model:mode + messages) unless ctx.noCache. A cache hit costs $0.
 import { BilimindError } from './contracts.ts';
 import type { CallJson, Ctx, EngineConfig, LlmRequest, LlmResult, ProviderId } from './contracts.ts';
-import { keyHint, loadConfig, providerLabel, redact } from './config.ts';
+import { clientHeader, keyHint, loadConfig, needsKey, providerLabel, redact } from './config.ts';
 import { checkBudget, recordSpend, round6 } from './ledger.ts';
 import { cacheGet, cacheKey, cacheSet } from './cache.ts';
 import { coursePaths } from './course.ts';
@@ -61,10 +63,10 @@ export interface RawUsage {
   completion_tokens_details?: { reasoning_tokens?: number };
 }
 
-/** Cost of one reply. OpenRouter: its own usage.cost when present. */
+/** Cost of one reply. OpenRouter and BiliMind free (an OpenRouter pass-through): its own usage.cost when present. */
 export function costOf(provider: ProviderId, model: string, u: RawUsage, at: Date | null): number {
   const pt = u.prompt_tokens ?? 0, ct = u.completion_tokens ?? 0;
-  if (provider === 'openrouter') {
+  if (provider === 'openrouter' || provider === 'bilimind') {
     if (typeof u.cost === 'number') return u.cost;
     const p = OPENROUTER_PRICES[model] ?? UNKNOWN_PRICE;
     return (pt * p.in + ct * p.out) / 1e6;
@@ -367,13 +369,37 @@ function withoutKeys(body: Record<string, unknown>, drop: Set<string>): Record<s
   return Object.fromEntries(Object.entries(body).filter(([k]) => !drop.has(k)));
 }
 
-function headers(cfg: EngineConfig): Record<string, string> {
-  const h: Record<string, string> = { Authorization: `Bearer ${cfg.apiKey}`, 'Content-Type': 'application/json' };
+/**
+ * Request headers for a provider. BiliMind free: NO Authorization header (there is no key on this computer), and
+ * X-BiliMind-Client: desktop/<version> | engine/<version> on every request. Exported for the desktop assistant.
+ */
+export function providerHeaders(cfg: EngineConfig): Record<string, string> {
+  const h: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (cfg.provider === 'bilimind') { h['X-BiliMind-Client'] = clientHeader(); return h; }
+  h.Authorization = `Bearer ${cfg.apiKey}`;
   if (cfg.provider === 'openrouter') { h['HTTP-Referer'] = 'https://bilimind.com'; h['X-Title'] = 'BiliMind Desktop'; }
   return h;
 }
 
+/** The `{ error: { message } }` text of an error body, if any (redacted, short). */
+function errorMessage(detail: string): string {
+  try {
+    const m = (JSON.parse(detail) as { error?: { message?: unknown } })?.error?.message;
+    return typeof m === 'string' ? redact(m).replace(/\s+/g, ' ').trim().slice(0, 160) : '';
+  } catch { return ''; }
+}
+
+/** Plain learner-facing messages for the free service. Never "your key was rejected": there is no key. */
+export function freeServiceFailure(status: number, detail: string): BilimindError {
+  if (status === 429) return new BilimindError('The free BiliMind service is busy. Wait a minute, or add your own key in Settings.');
+  if (status >= 500 || status === 402) return new BilimindError('The free BiliMind service is unavailable right now. Add your own DeepSeek or OpenRouter key in Settings.');
+  const said = errorMessage(detail);
+  if (status === 413) return new BilimindError(`The free BiliMind service could not take a request this big${said ? ` (${said})` : ''}. Use fewer or smaller files, or add your own key in Settings.`);
+  return new BilimindError(`The free BiliMind service refused the request (${said || `HTTP ${status}`}). Try again, or add your own DeepSeek or OpenRouter key in Settings.`);
+}
+
 function httpFailure(cfg: EngineConfig, status: number, detail: string): BilimindError {
+  if (cfg.provider === 'bilimind') return freeServiceFailure(status, detail);
   const who = providerLabel(cfg.provider);
   if (status === 401 || status === 403) return new BilimindError(`Your ${who} key was rejected (${status}).`, keyHint(cfg.provider));
   if (status === 402) return new BilimindError(`The ${who} balance is empty (402).`, cfg.provider === 'deepseek'
@@ -399,7 +425,7 @@ function checkAll(data: Record<string, unknown>, req: LlmRequest): string[] {
 export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest): Promise<LlmResult<T>> => {
   const cfg = activeConfig();
   const who = providerLabel(cfg.provider);
-  if (!cfg.apiKey) throw new BilimindError(`No ${who} API key found.`, keyHint(cfg.provider));
+  if (!cfg.apiKey && needsKey(cfg.provider)) throw new BilimindError(`No ${who} API key found.`, keyHint(cfg.provider));
   const model = req.model ?? ctx.model ?? cfg.models.fast;
   guardExpensive(cfg, model);
   const thinking = req.reasoning === true;
@@ -439,7 +465,7 @@ export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest)
 
     let res: Response;
     try {
-      res = await fetch(url, { method: 'POST', headers: headers(cfg), body: JSON.stringify(withoutKeys(requestBody(cfg, model, messages, req, thinking), dropped)),
+      res = await fetch(url, { method: 'POST', headers: providerHeaders(cfg), body: JSON.stringify(withoutKeys(requestBody(cfg, model, messages, req, thinking), dropped)),
         signal: AbortSignal.timeout(timeoutMs) });
     } catch (e) {
       lastFailure = new BilimindError(FAILURE.transport, `${who} did not answer (${redact((e as Error).message).slice(0, 120)}). Run the command again.`);

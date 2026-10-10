@@ -1,0 +1,37 @@
+/* App mode (index.html?app=1, the desktop workspace): no site chrome; a white page with one pinned lesson strip.
+   Every rule is scoped to html[data-app] or to the app-only .a-head / .a-home, so the published site is untouched. */
+html[data-app] body { background: var(--surface); }
+html[data-app] { --pad-x: clamp(20px, 3vw, 40px); }
+
+/* the lesson strip: always there, solid, a hairline under it (no frosted hide-on-scroll) */
+html[data-app] .tb { height: 52px; padding: 0 clamp(16px, 2.4vw, 28px); background: rgb(255 255 255 / 0.94); box-shadow: 0 1px 0 var(--line);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+html[data-app] .tb.away { transform: none; }
+html[data-app] .tb .crumb { display: block; font-size: 13px; }
+html[data-app] .tb .mc-label { display: inline; }
+html[data-app] .tb .pill.mc { width: auto; padding: 0 16px; }
+@media (max-width: 560px) { html[data-app] .tb .crumb { display: none; } }
+html[data-app] .bf { scroll-margin-top: 72px; }
+html[data-app] .toc { top: 76px; }
+
+/* the compact head */
+.a-head { margin: 0; }
+.a-head .ctx { margin: 0; font: 500 12.5px/1.4 var(--body); color: var(--text-3); }
+.a-head h1 { margin: 8px 0 0; font: 700 clamp(24px, 2.4vw, 30px)/1.12 var(--display); letter-spacing: -0.025em; color: var(--ink); text-wrap: balance; }
+.a-head .facts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+.a-head .facts > span { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border-radius: 99px; background: var(--page); font: 500 12.5px/1 var(--body); color: var(--text-2); }
+.a-head .facts svg { width: 13px; height: 13px; flex: none; }
+.a-head .listen { display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px 0 10px; border: 0; border-radius: 99px; background: var(--ink); color: #fff; font: 600 12.5px/1 var(--body); cursor: pointer; }
+.a-head .listen.on { background: var(--lime); color: var(--ink); }
+.a-head .listen small { font-weight: 500; opacity: .7; font-variant-numeric: tabular-nums; }
+html[data-app] .l-wrap { margin-top: 28px; padding-inline: var(--pad-x); }
+.l-col > .a-head + .l-lede { margin-top: -8px; }
+html[data-app] .l-col { row-gap: clamp(24px, 2.6vw, 36px); }
+
+/* course path (#/ in app mode): the plan, today and the path, no hero or footer */
+.a-home { max-width: 1180px; margin: 0 auto; padding: 26px var(--pad-x) 0; }
+.a-home .ctx { margin: 0; font: 500 12.5px/1.4 var(--body); color: var(--text-3); }
+.a-home h1 { margin: 8px 0 0; font: 700 clamp(24px, 2.4vw, 30px)/1.12 var(--display); letter-spacing: -0.025em; text-wrap: balance; }
+html[data-app] .view.home { padding-bottom: 48px; }
+html[data-app] .c-plan { margin: 18px calc(var(--pad-x) - 4px) 0; }
+html[data-app] .due { padding-inline: var(--pad-x); }
