@@ -1,0 +1,87 @@
+{
+  "name": "bilimind-crew",
+  "version": "0.3.0",
+  "description": "A study and training crew that reads your slides, past paper or SOP, plans the days you have, writes interactive lessons in parallel, tests every code exercise and checks every answer against your own files.",
+  "author": { "name": "BiliMind team" },
+  "license": "MIT",
+  "keywords": ["exam", "revision", "course", "onboarding", "SOP", "flashcards", "quiz", "study plan"],
+  "agents": [
+    "./agents/bilimind-crew-team-lead.md",
+    "./agents/bilimind-writer.md",
+    "./agents/bilimind-coder.md",
+    "./agents/bilimind-checker.md"
+  ],
+  "skills": ["./skills/bilimind"],
+  "expertType": "team",
+  "agentName": "bilimind-crew-team-lead",
+  "teamInfo": {
+    "leadAgent": "bilimind-crew-team-lead",
+    "memberAgents": ["bilimind-writer", "bilimind-coder", "bilimind-checker"]
+  },
+  "displayName": { "en": "BiliMind Crew", "zh": "BiliMind 课程团" },
+  "profession": { "en": "BiliMind Crew", "zh": "BiliMind 课程团" },
+  "displayDescription": {
+    "en": "One sentence in, a course out. Reads your slides, past paper or SOP, plans the days you have, writes interactive lessons in parallel, tests every code exercise and checks every answer against your own files.",
+    "zh": "读懂课件、往年试卷或操作手册，按剩余天数规划学习，并行编写互动课程，测试每道代码题，逐题对照原文核查"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "09-OperationsHR",
+  "defaultInitPrompt": {
+    "en": "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.",
+    "zh": "我的数据结构期末考试在周三上午9点。课件和去年的试卷都在这个文件夹里。我每天有45分钟。帮我做好准备。"
+  },
+  "plugin": "bilimind-crew",
+  "tags": [
+    { "en": "Exam prep", "zh": "备考复习" },
+    { "en": "Staff training", "zh": "员工培训" },
+    { "en": "Checked against your slides", "zh": "对照课件核查" }
+  ],
+  "quickPrompts": [
+    {
+      "en": "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.",
+      "zh": "我的数据结构期末考试在周三上午9点。课件和去年的试卷都在这个文件夹里。我每天有45分钟。帮我做好准备。"
+    },
+    {
+      "en": "We hire new crew every few weeks. Turn our SOP folder into a day-one course they must pass before their first shift.",
+      "zh": "我们每隔几周就招新员工。把这个文件夹里的操作手册做成第一次上班前必须通过的入职第一天课程。"
+    },
+    {
+      "en": "I'm an international student with zero Malay. Make me a survival course for my first month from the notes in this folder: 20 minutes a day.",
+      "zh": "我是零基础的国际学生。用这个文件夹里的笔记给我做一个第一个月用的马来语生存课程，每天20分钟。"
+    }
+  ],
+  "members": [
+    {
+      "id": "bilimind-crew-team-lead",
+      "name": { "en": "Dean Bilim", "zh": "毕立明" },
+      "displayName": { "en": "Dean Bilim", "zh": "毕立明" },
+      "profession": { "en": "Exam Strategist", "zh": "备考总策划" },
+      "avatar": "avatars/bilimind-crew-team-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "bilimind-writer",
+      "name": { "en": "Paige Turner", "zh": "许成章" },
+      "displayName": { "en": "Paige Turner", "zh": "许成章" },
+      "profession": { "en": "Lesson Writer", "zh": "课程撰稿人" },
+      "avatar": "avatars/bilimind-writer.png",
+      "role": "member"
+    },
+    {
+      "id": "bilimind-coder",
+      "name": { "en": "Ada Passmore", "zh": "寇测通" },
+      "displayName": { "en": "Ada Passmore", "zh": "寇测通" },
+      "profession": { "en": "Exercise Tester", "zh": "练习题测试师" },
+      "avatar": "avatars/bilimind-coder.png",
+      "role": "member"
+    },
+    {
+      "id": "bilimind-checker",
+      "name": { "en": "Vera Citewell", "zh": "严引证" },
+      "displayName": { "en": "Vera Citewell", "zh": "严引证" },
+      "profession": { "en": "Slide Fact-Checker", "zh": "课件核查员" },
+      "avatar": "avatars/bilimind-checker.png",
+      "role": "member"
+    }
+  ]
+}

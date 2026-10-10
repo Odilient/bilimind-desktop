@@ -168,6 +168,11 @@ export const ReceiptsSchema = z.object({
   tests: z.object({ run: z.number().int(), passed: z.number().int() }),   // code tests against reference solutions
   code_fixed: z.number().int().min(0),          // exercises the Coder fixed
   quiz_checked: z.number().int().min(0),        // items the Checker ruled on
+  quiz_items: z.number().int().min(0).optional(),   // G2: auto-marked items the Checker could rule on ("N of M checked")
+  cut_steps: z.number().int().min(0).optional(),    // G2: path steps cut (course.path[].cut), not plan.cut subtopics
+  blocks: z.number().int().min(0).optional(),       // G2: lesson parts, questions and code exercises (final reply)
+  items: z.number().int().min(0).optional(),
+  code_exercises: z.number().int().min(0).optional(),
   rejected: z.number().int().min(0),            // contradicted items
   rewritten: z.number().int().min(0),
   labels: z.object({ beyond_slides: z.number().int().min(0) }),

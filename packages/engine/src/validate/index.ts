@@ -1,8 +1,8 @@
-// `check`: Q1-Q17 (engine-port §5.2) as pure functions + node:vm code harness + playground + mermaid + citations + thin. Split into files freely.
-// Owner: WP3. Keep the export names and types (src/contracts.ts); replace the stubs in place.
-import type { CheckFn, RunJsTests, IsSafeFormula, IsPlausibleMermaid } from '../contracts.ts';
-
-export const check: CheckFn = async () => { throw new Error('not implemented: check'); };
-export const runJsTests: RunJsTests = () => { throw new Error('not implemented: runJsTests'); };
-export const isSafeFormula: IsSafeFormula = () => { throw new Error('not implemented: isSafeFormula'); };
-export const isPlausibleMermaid: IsPlausibleMermaid = () => { throw new Error('not implemented: isPlausibleMermaid'); };
+// `check`: Q0-Q17 (engine-port §5.2) as pure functions + node:vm code harness + playground + mermaid + citations + thin.
+// Owner: WP3. Only the contract names are exported here (the engine index re-exports this file); helpers stay internal.
+// Files: check.ts (command + checkLesson), rules.ts (Q0-Q17), fix.ts (deterministic repairs), code.ts (Q11 per block,
+// shared with code-test), harness.ts (runJsTests), playground.ts (isSafeFormula + 28-point sweep), mermaid.ts, lesson.ts.
+export { check } from './check.ts';
+export { runJsTests } from './harness.ts';
+export { isSafeFormula } from './playground.ts';
+export { isPlausibleMermaid } from './mermaid.ts';

@@ -73,7 +73,7 @@ export type LoadConfig = (opts?: { env?: Record<string, string | undefined>; rep
 
 // ---------- llm.ts ----------
 export interface LlmRequest {
-  stage: 'outline' | 'relabel' | 'expand' | 'expand_block' | 'higher_order' | 'rewrite_item' | 'explain' | 'probe';
+  stage: 'outline' | 'relabel' | 'expand' | 'expand_block' | 'higher_order' | 'rewrite_item' | 'explain' | 'probe' | 'auto_check' | 'fact_check';
   system: string;
   user: string;
   schema?: Record<string, unknown>;          // JSON-schema subset (required/types/enums/min/max) checked with one corrective turn
@@ -112,7 +112,7 @@ export type CacheSet = (course: string, key: string, value: unknown) => void;
 export type AppendLog = (course: string, event: LogEvent) => void;
 export type ReadLog = (course: string) => LogEvent[];
 /** `note --text`: a decision line that appears in REPORT.md and the receipts' per-agent log. */
-export type Note = (ctx: Ctx, opts: { text: string }) => Promise<Record<string, never>>;
+export type Note = (ctx: Ctx, opts: { text: string }) => Promise<{ text?: string }>;
 
 // ---------- course.ts (folder, init, goal, status) ----------
 export type CoursePathsFn = (course: string) => CoursePaths;

@@ -1,0 +1,65 @@
+/* Cite chip + popover, completion overlay, confetti, phone fixes (player-proto.html). */
+.cite { display: inline-flex; align-items: center; gap: 5px; height: 22px; margin-left: 4px; padding: 0 8px 0 3px; border-radius: 99px; vertical-align: 0.12em; background: var(--cobalt-soft); color: var(--cobalt); font: 600 11.5px/1 var(--body); white-space: nowrap; transition: box-shadow var(--d-fast); }
+.cite i { width: 16px; height: 16px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.cite i svg { width: 9px; height: 9px; }
+.cite:hover, .cite[aria-expanded="true"] { box-shadow: inset 0 0 0 1.5px var(--cobalt); }
+.on-dark .cite, .fc-back .cite, .slab .cite { background: rgb(255 255 255 / 0.14); color: #fff; }
+.on-dark .cite i, .fc-back .cite i, .slab .cite i { background: rgb(255 255 255 / 0.2); color: #fff; }
+.cite-pop { position: absolute; z-index: var(--z-popover); width: min(320px, calc(100vw - 32px)); padding: 14px 16px 12px; border-radius: 16px; background: var(--surface); box-shadow: var(--sh-popover); animation: pop .22s var(--ease-pop-2); }
+.cite-pop .hd { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; }
+.cite-pop .hd i { width: 28px; height: 28px; border-radius: 8px; background: var(--cobalt-soft); color: var(--cobalt); display: grid; place-items: center; font: 700 8.5px/1 var(--display); }
+.cite-pop .hd b { font: 600 13.5px/1.25 var(--body); color: var(--ink); }
+.cite-pop .hd small { display: block; font: 500 12px/1.2 var(--body); color: var(--text-3); }
+.cite-pop blockquote { margin: 12px 0 10px; padding: 0 0 0 12px; border-left: 3px solid var(--lime-2); font: 400 14px/1.55 var(--body); color: var(--ink-3); }
+.cite-pop blockquote mark { background: var(--lime-soft); color: var(--ink); border-radius: 3px; padding: 0 2px; }
+
+.done-ov { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 24px var(--gut); background: var(--backdrop); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.done-slab { position: relative; isolation: isolate; width: min(1100px, 100%); min-height: min(680px, calc(100svh - 48px)); display: grid; grid-template-columns: minmax(0, 58%) minmax(0, 42%); border-radius: var(--r-card); background: var(--cobalt-grad); color: #fff; box-shadow: var(--sh-dialog); animation: pop .42s var(--ease-pop-2); }
+.done-slab .copy { padding: clamp(32px, 5vw, 72px) 20px clamp(32px, 5vw, 64px) clamp(28px, 4vw, 64px); display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+.done-slab .glow { position: absolute; right: 6%; top: 4%; width: 46%; aspect-ratio: 1; border-radius: 50%; background: var(--lime-glow); filter: blur(24px); opacity: .7; z-index: -1; }
+.done-slab .trophy { position: absolute; right: 6%; top: -14%; width: min(34vw, 420px); filter: var(--drop-obj); animation: trophy .9s var(--ease-pop) both, drift 6s ease-in-out .9s infinite alternate; }
+@keyframes trophy { from { transform: translateY(-70px) rotate(-14deg) scale(.82); opacity: 0; } to { transform: rotate(8deg); opacity: 1; } }
+.confetti { position: fixed; inset: 0; z-index: var(--z-confetti); pointer-events: none; overflow: hidden; }
+.confetti i { position: absolute; width: 8px; height: 8px; border-radius: 2px; will-change: transform, opacity; }
+.confetti i.strip { width: 4px; height: 12px; }
+@media (max-width: 900px) { .done-slab { grid-template-columns: minmax(0, 1fr); } .done-slab .trophy { width: 150px; top: -54px; right: 16px; } .done-slab .copy { padding-top: 96px; } }
+
+@media (max-width: 900px) {
+  .c-hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .c-hero .copy { padding: 28px 18px 8px; }
+  .c-hero .stage { height: 270px; }
+  /* centred without `translate`: the drift animation animates translate and would undo a -50% centring (G2: 55px overflow at 390) */
+  .c-hero .obj { position: absolute; left: calc(50% - 130px); top: 0; width: 260px; }
+  .c-hero .ftag.t3 { display: none; }   /* the exam day is in the plan strip right below */
+  .c-hero .ftag { height: 34px; font-size: 12.5px; padding: 0 13px 0 5px; }
+  .c-hero .ftag i { width: 24px; height: 24px; }
+  .c-hero .ftag.t1 { left: auto; right: 10px; top: 48%; } .c-hero .ftag.t2 { right: auto; left: 10px; top: 6%; } .c-hero .ftag.t3 { right: auto; left: 14px; bottom: 9%; }
+  .c-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .c-stats li:nth-child(odd) { padding-left: 0; box-shadow: none; }
+  .c-acts .pill.lg { width: 100%; justify-content: space-between; }
+  .c-plan { margin-inline: var(--gut); margin-top: -40px; }
+  .p-board { padding: 16px 12px 60px 16px; }
+  .p-board::before, .p-run { left: 29px; }            /* rail 13px inside the 16px padding */
+  .p-row { grid-template-columns: minmax(0, 1fr); row-gap: 7px; padding-left: 30px; }
+  .p-topic::before { content: ""; position: absolute; left: -17px; top: 50%; width: 15px; border-top: 2px solid var(--rule-strong); }
+  .p-topic { order: -1; }
+  .p-l, .p-r { justify-items: start; padding-left: 16px; }
+  .p-l:empty, .p-r:empty { display: none; }
+  .p-wires { display: none; }   /* no Bézier ties on phones: each hanging item gets a short dotted stub to the rail */
+  .p-l > *, .p-r > * { position: relative; }
+  .p-l > *::before, .p-r > *::before { content: ""; position: absolute; left: -31px; top: 50%; width: 25px; border-top: 2px dotted var(--mute); }
+  .p-sec, .p-fin { justify-self: start; margin-left: 30px; }
+  .l-wrap { padding-inline: calc(var(--gut) + 6px); }
+  .blk.card { padding: 16px 16px 18px; }
+  .dock { width: calc(100vw - 2 * var(--gut)); gap: 8px; padding-right: 10px; }
+  .dock .who { display: none; }
+}
+@media (max-width: 420px) {
+  .dock .fw { display: none; }
+  .dock .tm .total { display: none; }   /* "1:24" only */
+  .display { overflow-wrap: anywhere; }
+}
+
+
+/* G2 review: the citation popover is centred on phones */
+@media (max-width: 600px) { .cite-pop { left: 16px !important; right: 16px; width: auto; } }

@@ -52,6 +52,13 @@ and 7, and none said it would win. Their shared complaints, and what this plan d
   (implementation, slides, docs) must be delivered **using WorkBuddy**; all course generation in the demo runs
   in WorkBuddy and spends WorkBuddy credits (the account has ~2,350 credits). Slides and docs are produced
   with WorkBuddy (web app at workbuddy.ai/app, driven by the orchestrator through Chrome).
+- **Organiser clarification (WhatsApp, 17:11 MYT):** "Integration isn't required: WorkBuddy doesn't have to be
+  directly built into your final solution. Show your proof: provide proof that you utilized the platform during
+  your project. Explain the scenario: in your presentation, clearly explain how, where, and in what scenario you
+  used WorkBuddy." → We exceed this (BiliMind runs inside WorkBuddy). Collect PROOF deliberately into
+  `hackathon/proof/`: screenshots of the crew run (plan checklist, parallel sub-agent cards, Checker rejection,
+  Preview), WorkBuddy credit-usage page, the slides/docs tasks in WorkBuddy, the sites deploy. One slide titled
+  "How, where and when we used WorkBuddy".
 - **Telegram is CUT** (owner's decision). Delete WP10, every Telegram beat, `due --format telegram`, the
   Assistant reply path. The review loop stays as: `review/state.json` (FSRS) → `reviews.ics` + the player's
   "Due today" list. A WorkBuddy Automation that rebuilds a "today's review" page is P2.

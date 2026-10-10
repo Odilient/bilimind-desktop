@@ -1,0 +1,35 @@
+// Inline icon set for the reading/visual blocks (same 2px stroke family as the landing sprite,
+// paths copied from hackathon/research/player-proto.html). Inlined per use so a block never depends on
+// the shell's sprite being on the page. Every string here is a constant written by us (safe for v-html).
+export const ICONS: Record<string, string> = {
+  'i-spark': '<path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z" fill="currentColor"/>',
+  'i-book': '<path d="M3.5 5.5c3-1 6-1 8.5.6 2.5-1.6 5.5-1.6 8.5-.6v13c-3-1-6-1-8.5.6-2.5-1.6-5.5-1.6-8.5-.6z M12 6.1v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+  'i-play': '<path d="M6 3.8v16.4a1 1 0 0 0 1.5.86l13.6-8.2a1 1 0 0 0 0-1.72L7.5 2.94A1 1 0 0 0 6 3.8z" fill="currentColor"/>',
+  'i-pause': '<g fill="currentColor"><rect x="6" y="4" width="4.2" height="16" rx="1.3"/><rect x="13.8" y="4" width="4.2" height="16" rx="1.3"/></g>',
+  'i-arrow': '<path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  'i-down': '<path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  'i-chev': '<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  'i-x': '<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+  'i-check': '<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  'i-pencil': '<path d="M15.5 4.5l4 4L8 20H4v-4zM13 7l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+  'i-flow': '<g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3.5" width="7" height="5" rx="1.5"/><rect x="14" y="15.5" width="7" height="5" rx="1.5"/><path d="M6.5 8.5v4.5h11v2.5"/></g>',
+  'i-sliders': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></g>',
+  'i-steps': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/></g><g fill="currentColor"><circle cx="4.5" cy="6" r="1.6"/><circle cx="4.5" cy="12" r="1.6"/><circle cx="4.5" cy="18" r="1.6"/></g>',
+  'i-list': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.5l1.6 1.6 3-3M3.5 13.5l1.6 1.6 3-3M11 7h9.5M11 14h9.5M11 20h9.5"/></g>',
+  'i-time': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g>',
+  'i-speaker': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12.5 5v14l-5-4.5H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g>',
+  'i-scales': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 7h14M5 7l-2.5 6a2.8 2.8 0 0 0 5 0zM19 7l-2.5 6a2.8 2.8 0 0 0 5 0z"/></g>',
+  'i-warning': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5" stroke-linecap="round"/></g><circle cx="12" cy="17.3" r="1.2" fill="currentColor"/>',
+  'i-bulb': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V17.5h5.2V15.8c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></g>',
+  'i-target': '<g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></g><circle cx="12" cy="12" r="1.6" fill="currentColor"/>',
+  'i-table': '<g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 10h18M3 15h18M9.5 4.5v15"/></g>',
+  'i-file': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 2.8h8l4.5 4.5v13a1.2 1.2 0 0 1-1.2 1.2H6a1.2 1.2 0 0 1-1.2-1.2V4A1.2 1.2 0 0 1 6 2.8z"/><path d="M14 2.8v4.5h4.5"/></g>',
+  'i-search': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></g>',
+  'i-ext': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4h7v7M20 4l-9 9"/><path d="M18 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/></g>',
+  'i-refresh': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 0 1 13-5.1L20 9.5"/><path d="M20 4v5.5h-5.5"/><path d="M19.5 12a7.5 7.5 0 0 1-13 5.1L4 14.5"/><path d="M4 20v-5.5h5.5"/></g>',
+  'i-expand': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></g>',
+  'i-quote': '<path d="M5 18.5c-1-1.3-1.5-2.8-1.5-4.5 0-3.6 2.3-6.7 6-8.5l.9 1.4C8 8.4 6.9 10 6.8 11.6c.3-.1.7-.2 1.1-.2 1.8 0 3.1 1.4 3.1 3.3S9.6 18.5 7.6 18.5H5zm9.5 0c-1-1.3-1.5-2.8-1.5-4.5 0-3.6 2.3-6.7 6-8.5l.9 1.4c-2.4 1.5-3.5 3.1-3.6 4.7.3-.1.7-.2 1.1-.2 1.8 0 3.1 1.4 3.1 3.3s-1.4 3.8-3.4 3.8h-2.6z" fill="currentColor"/>',
+  'i-eye': '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>',
+};
+
+export const iconSvg = (name: string): string => ICONS[name] ?? ICONS['i-spark']!;

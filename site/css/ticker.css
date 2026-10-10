@@ -1,0 +1,42 @@
+/* ── Ticker: what people type, rolling past in two directions ─────────
+   Scroll speeds it up and leans it; scrolling back up turns it round. */
+#ticker {
+  position: relative; overflow: hidden;
+  padding: clamp(18px, 2.4vw, 40px) 0 clamp(16px, 2.2vw, 36px);
+  display: grid; gap: clamp(6px, 0.9vw, 14px);
+  user-select: none;
+}
+#ticker .tk-row { position: relative; overflow: hidden; }
+#ticker .tk-track {
+  display: flex; width: max-content; will-change: transform;
+}
+#ticker .tk-set { display: flex; align-items: center; flex: none; }
+#ticker .tk-item {
+  display: inline-flex; align-items: center; flex: none;
+  font: 700 clamp(40px, 5.7vw, 96px)/1 var(--display);
+  letter-spacing: -0.045em; text-transform: uppercase; white-space: nowrap;
+  padding-right: 0.32em;
+}
+#ticker .tk-chip {
+  display: inline-grid; place-items: center; flex: none;
+  width: 0.78em; height: 0.78em; border-radius: 50%; margin-right: 0.32em;
+  font-size: clamp(40px, 5.7vw, 96px);
+  box-shadow: 0 10px 22px -12px rgb(11 13 16 / 0.45);
+}
+#ticker .tk-chip svg { width: 44%; height: 44%; }
+#ticker .tk-chip.c-lime { background: var(--lime); color: var(--ink); }
+#ticker .tk-chip.c-cob { background: var(--cobalt); color: #fff; }
+#ticker .tk-chip.c-ink { background: var(--ink); color: var(--lime); }
+#ticker .tk-chip.c-white { background: #fff; color: var(--cobalt); box-shadow: inset 0 0 0 1px var(--line), 0 10px 22px -14px rgb(11 13 16 / 0.35); }
+
+#ticker .r1 .tk-item { color: var(--ink); }
+/* The second row is drawn, not filled — it reads as the echo of the first. */
+#ticker .r2 .tk-item {
+  color: transparent;
+  -webkit-text-stroke: clamp(1.2px, 0.11vw, 2px) var(--cobalt);
+}
+#ticker .r2 .tk-item.fill { color: var(--cobalt); -webkit-text-stroke: 0; }
+
+@media (max-width: 900px) {
+  #ticker { padding: 26px 0 22px; gap: 4px; }
+}

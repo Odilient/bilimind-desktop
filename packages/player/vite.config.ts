@@ -1,6 +1,7 @@
 // One file:// safe HTML template: dist/player.html. Everything (JS, CSS, fonts, sprite) is inlined by
 // vite-plugin-singlefile; the JS is one IIFE (no import(), no module workers). `bilimind build` replaces the
 // __BM_COURSE__ placeholder inside <script id="bm-course" type="application/json"> with the course JSON.
+// public/img/obj-*.webp (the 3D objects) is copied to dist/img/; the engine copies it next to index.html.
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -9,6 +10,9 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 export default defineConfig({
   plugins: [vue(), viteSingleFile()],
   base: './',
+  resolve: {
+    alias: [{ find: /^@fonts\//, replacement: fileURLToPath(new URL('./node_modules/@fontsource/', import.meta.url)) }],
+  },
   build: {
     target: 'es2020',
     outDir: 'dist',

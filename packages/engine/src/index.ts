@@ -25,3 +25,9 @@ export * from './review.ts';
 export * from './export/index.ts';
 export * from './build.ts';
 export * from './run.ts';
+
+// G2 review: the unattended Checker passes (verdict --auto, fact-check) and grounding helpers
+export { autoCheck, factCheck, agrees, replaceOnce } from './autocheck.ts';
+export type { AutoCheckData, FactCheckData } from './autocheck.ts';
+export { isFrontMatter, slideMentions, resolveMentions, refineLessonChunks } from './sources.ts';
+export { clockSkewMs, skewedNow } from './clock.ts';

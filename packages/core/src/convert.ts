@@ -111,7 +111,8 @@ function normaliseItem(a: Raw, id: string, o: FromSaasOptions): Raw {
   const cites: Cite[] = Array.isArray(a.cites) ? [...(a.cites as Cite[])] : [];
   if (Array.isArray(a.cite_chunk_ids) && o.resolveCite) {
     for (const cid of a.cite_chunk_ids) {
-      const c = typeof cid === 'number' ? o.resolveCite(cid, typeof a.explanation === 'string' ? a.explanation : undefined) : null;
+      const q = typeof a.quote === 'string' && a.quote.trim() ? a.quote : typeof a.explanation === 'string' ? a.explanation : undefined;
+      const c = typeof cid === 'number' ? o.resolveCite(cid, q) : null;
       if (c) cites.push(c);
     }
   }

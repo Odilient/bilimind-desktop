@@ -1,0 +1,87 @@
+/* ── Numbers: six true counts on a lime slab, rolled in like an odometer ── */
+#numbers { padding-block: calc(var(--sec-y) * 0.5); }
+#numbers .nm-slab {
+  overflow: hidden;
+  padding: clamp(36px, 4.6vw, 80px) var(--pad-x) clamp(24px, 3vw, 48px);
+}
+/* The hero's glassy streak, once, when the counting lands. */
+#numbers .nm-sheen {
+  position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: 0;
+}
+#numbers .nm-sheen i {
+  position: absolute; top: -50%; bottom: -50%; left: -30%; width: 16%;
+  transform: rotate(24deg); opacity: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+  filter: blur(14px);
+}
+#numbers .nm-head {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: end; gap: 24px 6vw;
+}
+#numbers .nm-head .eb { grid-column: 1 / -1; justify-self: start; background: rgb(255 255 255 / 0.55); box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.08); }
+#numbers .nm-head .eb .dot { background: var(--ink); color: var(--lime); }
+#numbers .h2 { font-size: clamp(44px, 5.6vw, 98px); }
+#numbers .h2 .hchip { position: relative; width: 0.74em; height: 0.74em; vertical-align: 0; box-shadow: 0 10px 20px -12px rgb(11 13 16 / 0.5); }
+/* An in-flow svg would set the chip's baseline at its own bottom and sink it; out of flow, the chip sits on the baseline. */
+#numbers .h2 .hchip svg { position: absolute; inset: 27%; width: 46%; height: 46%; }
+#numbers .nm-head .lede { color: rgb(11 13 16 / 0.7); justify-self: end; max-width: 440px; }
+#numbers .nm-head .lede b { color: var(--ink); }
+
+#numbers .nm-grid {
+  position: relative; z-index: 1;
+  list-style: none; margin: clamp(32px, 4vw, 64px) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1.5px solid rgb(11 13 16 / 0.85);
+}
+#numbers .nm-cell {
+  position: relative; padding: clamp(16px, 1.6vw, 26px) clamp(16px, 2vw, 32px) clamp(18px, 2vw, 30px) 0;
+  border-bottom: 1.5px solid rgb(11 13 16 / 0.16);
+  display: flex; flex-direction: column;
+  transition: background-color .3s;
+}
+#numbers .nm-cell + .nm-cell { padding-left: clamp(16px, 2vw, 32px); }
+#numbers .nm-cell:nth-child(3n + 1) { padding-left: 0; }
+#numbers .nm-cell:not(:nth-child(3n + 1))::before {
+  content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 1.5px; background: rgb(11 13 16 / 0.16);
+}
+#numbers .nm-cell:nth-last-child(-n + 3) { border-bottom: 0; }
+#numbers .nm-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+#numbers .nm-idx { font: 600 13px/1 var(--display); color: rgb(11 13 16 / 0.5); letter-spacing: 0; }
+#numbers .nm-ic {
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: var(--ink); color: var(--lime);
+  transition: transform .45s cubic-bezier(.2, .9, .25, 1.3), background-color .3s, color .3s;
+}
+#numbers .nm-ic svg { width: 20px; height: 20px; }
+#numbers .nm-cell:hover .nm-ic { transform: rotate(-14deg) scale(1.1); background: var(--cobalt); color: #fff; }
+
+#numbers .nm-num {
+  display: flex; margin: clamp(10px, 1.4vw, 22px) 0 0 -0.04em;
+  font: 700 clamp(84px, 9.2vw, 168px)/1 var(--display); letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  height: 0.86em; overflow: hidden;            /* trims the em box to the numerals */
+}
+#numbers .nm-d { display: block; height: 0.86em; overflow: hidden; padding: 0 0.02em; }
+#numbers .nm-d + .nm-d { margin-left: -0.09em; }
+#numbers .nm-strip { display: flex; flex-direction: column; will-change: transform; }
+#numbers .nm-strip span { display: block; height: 0.86em; line-height: 0.86em; margin-top: -0.01em; }
+#numbers .nm-label { margin-top: clamp(10px, 1vw, 16px); font: 600 clamp(17px, 1.45vw, 22px)/1.2 var(--display); letter-spacing: -0.02em; }
+#numbers .nm-note { margin-top: 6px; max-width: 340px; font-size: 14.5px; line-height: 1.45; color: rgb(11 13 16 / 0.62); }
+
+@media (max-width: 900px) {
+  #numbers .nm-head { grid-template-columns: minmax(0, 1fr); }
+  #numbers .nm-head .lede { justify-self: start; }
+  #numbers .nm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #numbers .nm-cell, #numbers .nm-cell + .nm-cell { padding: 18px 12px 22px 14px; }
+  #numbers .nm-cell:nth-child(3n + 1) { padding-left: 14px; }
+  #numbers .nm-cell:nth-child(2n + 1) { padding-left: 0; }
+  #numbers .nm-cell::before { display: none; }
+  #numbers .nm-cell:nth-child(2n)::before { display: block !important; content: ""; position: absolute; left: 0; top: 16%; bottom: 16%; width: 1.5px; background: rgb(11 13 16 / 0.16); }
+  #numbers .nm-cell:nth-last-child(-n + 3) { border-bottom: 1.5px solid rgb(11 13 16 / 0.16); }
+  #numbers .nm-cell:nth-last-child(-n + 2) { border-bottom: 0; }
+  #numbers .nm-num { font-size: clamp(70px, 22vw, 96px); }
+  #numbers .nm-ic { width: 36px; height: 36px; }
+  #numbers .nm-ic svg { width: 17px; height: 17px; }
+  #numbers .nm-note { font-size: 13px; }
+}

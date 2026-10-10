@@ -76,3 +76,17 @@ in the draft payloads · `initReview` (called by `export`, idempotent) -> `revie
 - `CoursePaths.narrationJson` (`crew/narration.json`), `ReadNarration` + `readNarration` export (done), `AudioClip` reshaped
   (`kind`, string `block` id, `duration_ms`), `CheckData.total`, JSDoc rules above. core: `Assessment.quote/reason/replaces`,
   `blockNumber`, `DROPPED_STATUSES`, `NarrationIndex`, `narrationMatches`, `excludedItems`, `resolveCite(chunkId, quote?)`.
+
+## WP6 additions (no signature changed)
+
+- `init` copies only readable files (pdf, pptx, docx, md, txt, html), skips `LICENSE*.md`, `STATUS.md`, dotfiles, Office lock
+  files and `bilimind-out/`, flattens sub-folders into `sources/`, refuses more than 80 files, and returns the course as an
+  absolute path with forward slashes. `setGoal` merges `--assume` lines into the ones already in crew/goal.json; with a
+  deadline but no time it assumes 09:00 and records that assumption. `status` also returns `next` (the command to run next).
+- `doctor` returns `key_source`, `demo_day` and `warnings` besides `DoctorData`; it throws when no key is found or when the
+  balance is under the provider reserve (unless BILIMIND_DEMO_DAY=1).
+- run.ts also exports `summarize(cmd, data)` (the one-line `result` every log line carries, used by the CLI too),
+  `logStep(course, event)` (appendLog that never throws), `parseSentence`, `chooseLessons` and `runPipeline(opts)` (`run`
+  with `concurrency`, `maxLessons`, `repairRounds`, `narrate`, `template`, `model`, `maxUsd`; the CLI's `run` calls it).
+- The CLI sets BILIMIND_TEMPLATE / BILIMIND_ASSETS (when unset) to the skill's templates/player.html and assets/ (or the
+  repo's packages/player/dist and public/img) before calling any engine function.

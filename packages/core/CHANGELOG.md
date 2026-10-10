@@ -15,3 +15,8 @@ After gate G0 every change to core needs a line here and must keep `fixtures/cou
   + optional `discover`; timeline events optional `turning`; path topics optional `summary`; sources optional `short`;
   goal optional `timezone`; validateCourse checks review cards name real lessons/items/blocks. gradeCode returns
   'self' for grader 'self' (disabled exercise). Player renders the original course object (zod strips unknown keys).
+- 0.1.2 (WP4, 2026-10-10): fromSaasLesson passes the Checker's verbatim `quote` (falling back to `explanation`) to
+  resolveCite for item cites, so a paraphrased explanation never becomes the chip's quote. No shape change.
+- 0.1.3 (G2 review fixes, 2026-10-10): receipts gain OPTIONAL `quiz_items` (auto-marked items the Checker could rule
+  on, for "N of M checked"), `cut_steps` (path steps cut, counted from course.path), `blocks`, `items` and
+  `code_exercises` (counts for the final reply). Backward compatible: all optional, the fixture is unchanged.

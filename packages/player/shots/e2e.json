@@ -1,0 +1,206 @@
+{
+  "at": "2026-10-10T02:03:40.609Z",
+  "passed": 39,
+  "failed": 0,
+  "results": [
+    {
+      "name": "home: title",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: plan days",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: exam countdown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: milestones",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: you are here",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: ties drawn",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: due today section",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: receipts steps",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: sources",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: downloads",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home 1440: no horizontal overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: per-agent log",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "path: brief popover on a node",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "home: Hear the plan plays",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "due today: review cards listed on a review day",
+      "ok": true,
+      "detail": "6 shown of 12"
+    },
+    {
+      "name": "skin ink: hero has the skin",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "skin lime: hero has the skin",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lesson: every block rendered",
+      "ok": true,
+      "detail": "11"
+    },
+    {
+      "name": "lesson: narration cues found as sentence spans",
+      "ok": true,
+      "detail": "36/36"
+    },
+    {
+      "name": "dock: audio plays, a sentence is lit",
+      "ok": true,
+      "detail": "title.0"
+    },
+    {
+      "name": "dock: play button pressed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dock: tap a sentence to listen from there",
+      "ok": true,
+      "detail": "b1.1"
+    },
+    {
+      "name": "dock: the lit sentence advances with the audio",
+      "ok": true,
+      "detail": "b1.1 -> b1.2"
+    },
+    {
+      "name": "cite: popover shows the quote",
+      "ok": true,
+      "detail": "A hash function maps each key to one of m slots."
+    },
+    {
+      "name": "cite: links sources/<file>#page=N",
+      "ok": true,
+      "detail": "sources/sample-lecture-04-hashing.pdf#page=3"
+    },
+    {
+      "name": "complete: back on the path, milestone done",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "complete: Continue offered on the path",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "progress: stored under bm:<courseId>:progress",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "progress: survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "progress: ring shows progress",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "stage: P turns stage mode on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "stage home 1280: no horizontal overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "stage lesson 1280: no horizontal overflow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "stage: P again turns it off",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "course complete: PATH DONE overlay",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "course complete: finish pill lit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "390 home: no horizontal overflow",
+      "ok": true,
+      "detail": "0px"
+    },
+    {
+      "name": "390 lesson: no horizontal overflow",
+      "ok": true,
+      "detail": "0px"
+    },
+    {
+      "name": "zero console errors",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "Tracking Prevention blocked access to storage for https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js."
+  ]
+}

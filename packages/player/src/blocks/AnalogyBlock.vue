@@ -1,13 +1,30 @@
 <script setup lang="ts">
-// STUB (WP0). Owner: WP5b (reading/visual) or WP5c (interactive), see PLAN.md 5.2. Props are fixed: {block, lesson, course}.
-import type { Course, CourseLesson } from "@bilimind/core";
-import type { BlockOf } from "./types.ts";
-defineProps<{ block: BlockOf<"analogy">; lesson: CourseLesson; course: Course }>();
+// Analogy (player-design §5.2): the comparison in prose, then a `tip` callout "Where the analogy breaks".
+import { computed, ref } from 'vue';
+import type { Course, CourseLesson } from '@bilimind/core';
+import type { BlockOf } from './types.ts';
+import BlockHead from './reading/BlockHead.vue';
+import CiteChips from './reading/CiteChips.vue';
+import Icon from './reading/Icon.vue';
+import { renderMarkdown } from './reading/markdown.ts';
+import { useCues } from './reading/cues.ts';
+import './reading/reading.css';
+
+const props = defineProps<{ block: BlockOf<'analogy'>; lesson: CourseLesson; course: Course }>();
+const root = ref<HTMLElement | null>(null);
+useCues(root, () => props.block);
+const body = computed(() => renderMarkdown(props.block.payload?.markdown ?? ''));
+const breaks = computed(() => renderMarkdown(props.block.payload?.breaks_down_when ?? ''));
 </script>
 
 <template>
-  <section class="blk" :data-block="block.id" data-type="analogy">
-    <h3 v-if="block.title" class="blk-t">{{ block.title }}</h3>
-    <pre class="stub">analogy: {{ Object.keys(block.payload).join(", ") }}<template v-if="block.assessments.length"> · {{ block.assessments.length }} items</template></pre>
+  <section ref="root" class="blk card blk-analogy" :data-block="block.id" data-type="analogy">
+    <BlockHead type="analogy" :title="block.title" />
+    <div class="prose an-body" data-field="markdown" v-html="body" />
+    <aside v-if="block.payload?.breaks_down_when" class="callout tip">
+      <span class="ci"><Icon name="i-warning" /></span>
+      <div><div class="ce">Where the analogy breaks</div><div class="prose" data-field="breaks_down_when" v-html="breaks" /></div>
+    </aside>
+    <CiteChips :cites="block.cites" :course="course" />
   </section>
 </template>

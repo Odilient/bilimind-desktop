@@ -8,9 +8,10 @@
     "bilimind": "./src/main.ts"
   },
   "scripts": {
-    "start": "tsx src/main.ts",
+    "start": "node src/main.ts",
     "bundle": "node scripts/bundle.mjs",
-    "test": "vitest run --passWithNoTests",
+    "verify-bundle": "node scripts/verify-bundle.mjs",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

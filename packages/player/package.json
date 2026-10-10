@@ -8,13 +8,17 @@
     "dev": "vite",
     "build": "vite build",
     "demo": "node scripts/paste-fixture.mjs",
-    "build:demo": "vite build && node scripts/paste-fixture.mjs",
+    "build:demo": "vite build && node scripts/paste-fixture.mjs && node scripts/fake-audio.mjs",
     "smoke": "node scripts/smoke.mjs",
     "test": "vitest run --passWithNoTests",
-    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "e2e": "node scripts/e2e.mjs",
+    "shots": "node scripts/shots.mjs"
   },
   "dependencies": {
     "@bilimind/core": "workspace:*",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
     "marked": "18.1.0",
     "vue": "3.5.43"
   },
