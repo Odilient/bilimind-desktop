@@ -115,7 +115,7 @@ narrated in English and Malay. 7 lessons, 231 of 231 checks passed, nine cents."
 
 **[2:25] Slide: how and where we used WorkBuddy**
 
-"How we used WorkBuddy: our pitch deck was made in WorkBuddy's Slides Creation, we compared plain WorkBuddy
+"How we used WorkBuddy: our first pitch deck was made in WorkBuddy's Slides Creation, we compared plain WorkBuddy
 on this same student request, and we shipped BiliMind as a WorkBuddy skill and Expert Team too, so a
 WorkBuddy user gets this course from one sentence."
 
@@ -209,7 +209,7 @@ tested: small businesses pay for team features (who finished onboarding, scores,
 course packs.
 
 **8. How did you use WorkBuddy?**
-Three ways: the pitch deck was generated in WorkBuddy's Slides Creation; we compared plain WorkBuddy on the
+Three ways: the first version of our pitch deck was generated in WorkBuddy's Slides Creation; we compared plain WorkBuddy on the
 same student request; and we shipped BiliMind as a WorkBuddy skill and Expert Team, validated with
 WorkBuddy's own validator. The desktop app itself we built with AI coding agents outside WorkBuddy. Links and
 screenshots: `docs/workbuddy.md`.

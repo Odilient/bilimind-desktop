@@ -42,7 +42,7 @@ function onGraded(id: string, r: GradeResult) {
 <template>
   <TaskShell :block="block" :passed="allPassed">
     <template #actions>
-      <span v-if="checkedCount" class="tag quiet opt-long">Answers checked against your slides</span>
+      <span v-if="checkedCount" class="tag quiet opt-long">Answers checked against your files</span>
       <span v-if="items.length > 1" class="tag num" :class="{ ok: passedIds.size === items.length }" :key="passedIds.size">
         {{ passedIds.size }}/{{ items.length }} passed
       </span>

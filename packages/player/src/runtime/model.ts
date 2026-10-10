@@ -3,6 +3,15 @@
 import { BLOCK_META, LEARNER_TAG } from '@bilimind/core';
 import type { Cite, Course, CourseBlock, CourseLesson, CourseSource, FsrsState, PathTopic } from '@bilimind/core';
 
+/** Is the goal an exam? A past paper says yes; staff onboarding (an SOP) and a goal with no exam in its sentence say
+ *  no, so the shell says "Ready by" instead of "Exam" for them. */
+export function isExamGoal(c: Course): boolean {
+  if (c.sources.some(s => s.role === 'past_paper')) return true;
+  if (c.goal.audience === 'staff' || c.sources.some(s => s.role === 'sop')) return false;
+  if (c.goal.assumptions.some(a => /no exam in the sentence/i.test(a))) return false;
+  return /(exams?|finals?|mid-?terms?|tests?|quiz|paper)/i.test(c.goal.sentence);
+}
+
 export const lessonById = (c: Course, id: string | null | undefined): CourseLesson | undefined =>
   id ? c.lessons.find(l => l.id === id) : undefined;
 

@@ -182,9 +182,12 @@ export function buildPlan(inp: PlanInput): PlanResult {
     const w = weightOf(l.key);
     const f = examMap ? foldedInto(examMap, l.key) : null;
     // G2 review: a subtopic whose questions are counted in its parent never gets "No marks in the past paper"
-    const reason = (given && !(f && /no marks/i.test(given)) ? given : '') || (f ? `Its exam questions (${f.questions.join(', ')}) are counted in ${byKey.get(f.into)?.title ?? 'its parent topic'}${keep.includes(f.into) ? ', which is kept and covers them' : ''}.`
-      : w === 0 ? 'No marks in the past paper, and the days are better spent on topics that carry them.'
-      : 'Not kept: there is no time for it before the exam.');
+    const into = f ? (byKey.get(f.into)?.title ?? f.into).split(':')[0]!.trim() : '';
+    const reason = (given && !(f && /no marks/i.test(given)) ? given : '') || (f ? (keep.includes(f.into)
+        ? `Its exam questions (${f.questions.join(', ')}) are taught inside "${into}".`
+        : `Its exam questions (${f.questions.join(', ')}) belong to "${into}", which did not fit your days either.`)
+      : w === 0 ? 'No marks in the past paper, so its minutes went to topics that score.'
+      : 'Did not fit the days you have.');
     cut.push({ key: l.key, title: l.title, reason, weight: w });
   }
 

@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import Icon from '../components/Icon.vue';
 import { state, go, openCourse } from '../store';
 import { OBJ } from '../images';
-import { fmtCost, fmtDuration } from '../words';
+import { fmtCost, fmtDuration, nbHyphen } from '../words';
 
 const c = computed(() => state.course!);
 const run = computed(() => state.run);
@@ -39,7 +39,7 @@ const open = (rel: string) => window.bilimind.courses.openFile(c.value.id, rel);
       <div class="head">
         <span class="eb on-dark"><span class="dot"><Icon name="i-check" /></span>Finished{{ wall ? ` in ${fmtDuration(wall)}` : '' }}</span>
         <h1 class="disp">Your course <br />is <span class="hchip"><Icon name="i-check" /></span> <span class="lime">ready.</span></h1>
-        <p class="ttl">{{ c.title }}</p>
+        <p class="ttl">{{ nbHyphen(c.title) }}</p>
         <p class="lede">{{ c.lessons }} {{ c.lessons === 1 ? 'lesson' : 'lessons' }} from your own files, every auto-marked answer checked against them. It is a folder on this computer and works offline.</p>
       </div>
       <ul class="rc">

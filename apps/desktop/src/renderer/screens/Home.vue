@@ -6,7 +6,7 @@ import KeyCard from '../components/KeyCard.vue';
 import { state, startRun, openCourse } from '../store';
 import { OBJ, objectFor } from '../images';
 import { mockPrimeExample } from '../mock';
-import { ROLE_LABEL, fmtDate } from '../words';
+import { ROLE_LABEL, fmtDate, nbHyphen } from '../words';
 import type { FolderFile } from '../env';
 
 const PLACEHOLDER = "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.";
@@ -64,7 +64,6 @@ async function build() {
   busy.value = false;
 }
 function fileIcon(f: FolderFile) {
-  if (f.role === 'past_paper') return 'i-quiz';
   if (f.role === 'sop') return 'i-list';
   if (/pptx?|key/.test(f.ext)) return 'i-image';
   return 'i-file';
@@ -90,7 +89,7 @@ function size(b: number) { return b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Ma
 
       <div class="composer">
         <label class="lbl" for="sentence"><span class="n">1</span> What do you need?</label>
-        <textarea id="sentence" ref="ta" v-model="state.draft.sentence" rows="3" :placeholder="PLACEHOLDER" @input="grow"></textarea>
+        <textarea id="sentence" ref="ta" v-model="state.draft.sentence" rows="3" :placeholder="`e.g. ${PLACEHOLDER}`" @input="grow"></textarea>
 
         <div class="lbl"><span class="n">2</span> Your files</div>
         <div v-if="!state.draft.src" class="drop" :class="{ over }" role="button" tabindex="0"
@@ -134,7 +133,7 @@ function size(b: number) { return b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Ma
           <div class="art"><img :src="objectFor(c)" alt="" /></div>
           <div class="body">
             <span class="date">{{ fmtDate(c.createdAt) }}<template v-if="c.status !== 'ready'"> · {{ c.status === 'building' ? 'building' : 'stopped' }}</template></span>
-            <b class="title">{{ c.title }}</b>
+            <b class="title">{{ nbHyphen(c.title) }}</b>
             <div class="meta">
               <span><Icon name="i-book" />{{ c.lessons }} {{ c.lessons === 1 ? 'lesson' : 'lessons' }}</span>
               <span v-if="c.checks" class="ok"><Icon name="i-check" />{{ c.checks.passed }}/{{ c.checks.total }} checks</span>
@@ -185,7 +184,7 @@ textarea {
   resize: none; border: 1px solid var(--line-2); border-radius: 18px; padding: 14px 16px; min-height: 92px; max-height: 220px;
   font-size: 15.5px; line-height: 1.5; outline: none; background: var(--canvas); overflow-y: auto; scrollbar-width: thin; transition: border-color .15s, box-shadow .15s, background .15s;
 }
-textarea::placeholder { color: var(--text-3); }
+textarea::placeholder { color: var(--text-3); opacity: 1; font-weight: 400; }
 textarea:focus { border-color: var(--cobalt); background: #fff; box-shadow: 0 0 0 4px rgb(35 64 230 / 0.12); }
 .drop {
   display: grid; justify-items: center; gap: 4px; text-align: center; padding: 18px 16px; border-radius: 18px; cursor: pointer;

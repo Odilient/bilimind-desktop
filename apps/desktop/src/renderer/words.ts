@@ -154,6 +154,9 @@ export function fmtDate(iso: string): string {
   const d = new Date(iso);
   return Number.isNaN(+d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
+/** Titles never break at a hyphen ("crew day-" / "one"): U+2011 is a non-breaking hyphen. */
+export const nbHyphen = (s: string): string => s.replace(/-/g, '\u2011');
+
 export const ROLE_LABEL: Record<string, string> = {
   lecture: 'Lecture', past_paper: 'Past paper', sop: 'SOP', notes: 'Notes', other: 'File',
 };

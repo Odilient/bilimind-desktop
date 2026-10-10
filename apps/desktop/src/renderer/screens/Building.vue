@@ -152,7 +152,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
             <p class="job">{{ JOB.lead }}</p>
             <div class="lfiles">
               <span v-for="(f, i) in filesShown" :key="f.path" class="lf" :class="{ scan: r.phase === 0 && r.nodes.lead.state === 'working' }" :style="{ animationDelay: `${i * 0.25}s` }">
-                <Icon :name="f.role === 'past_paper' ? 'i-quiz' : 'i-file'" />{{ f.name }}
+                <Icon name="i-file" /><span class="lfn">{{ f.name }}</span><em v-if="f.role === 'past_paper'" class="pp">Past paper</em>
               </span>
               <span v-if="r.files.length > filesShown.length" class="lf more">+{{ r.files.length - filesShown.length }} more</span>
             </div>
@@ -175,7 +175,7 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
               <p v-if="w.state === 'working'" class="now"><span class="nt">{{ w.now.replace(' after the checks', '') }}</span><span class="nc">{{ fmtClock(stepMs(w)) }}</span><span class="dots"><i></i><i></i><i></i></span></p>
               <div v-if="!compact" class="strip" :class="w.state">
                 <span :class="{ on: w.drafts > 0 || w.open > 0, run: w.open > 0 && !w.checks }">Write</span>
-                <span :class="{ on: !!w.checks, bad: w.checks && w.checks.passed < w.checks.total }">Check</span>
+                <span :class="{ on: !!w.checks, bad: w.checks && w.checks.passed < w.checks.total && w.state === 'working' && !w.final }">Check</span>
                 <span :class="{ on: w.checks && w.checks.passed === w.checks.total, pass: w.checks && w.checks.passed === w.checks.total }">Pass</span>
               </div>
               <p v-if="w.state !== 'working' && w.checks" class="last chk" :class="{ full: w.checks.passed === w.checks.total }"><Icon name="i-check" />{{ w.checks.passed }}/{{ w.checks.total }} checks</p>
@@ -373,6 +373,10 @@ const filesShown = computed(() => r.value.files.slice(0, 5));
 .lf { position: relative; overflow: hidden; display: block; line-height: 24px; height: 24px; padding: 0 8px; border-radius: 8px; background: rgb(255 255 255 / 0.1); font-size: 11.5px; white-space: nowrap; text-overflow: ellipsis; }
 .lf .ico { width: 12px; height: 12px; color: var(--lime); display: inline-block; vertical-align: -2px; margin-right: 6px; }
 .lf.more { color: rgb(255 255 255 / 0.65); }
+.lf:has(.pp) { display: flex; align-items: center; }
+.lf:has(.pp) .ico { flex: none; }
+.lfn { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.lf .pp { flex: none; line-height: 15px; font-style: normal; margin-left: 6px; padding: 1px 6px; border-radius: 99px; background: var(--lime); color: var(--ink); font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; vertical-align: 1px; }
 .lf.scan::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgb(198 242 78 / 0.35), transparent); transform: translateX(-100%); animation: scan 1.8s infinite; animation-delay: inherit; }
 @keyframes scan { to { transform: translateX(100%); } }
 

@@ -16,8 +16,9 @@ export interface CrewNode {
   tests: { passed: number; total: number };
   testsBy: Record<string, { passed: number; total: number }>;
   drafts: number;
-  /** writer: checks passed of total on the last check */
+  /** writer: checks passed of total on the last check (the Checker's own re-check of the lesson replaces it: final) */
   checks?: { passed: number; total: number };
+  final?: boolean;
   minutes?: number;
 }
 export interface FeedItem { id: number; at: number; role: Role; text: string; ms?: number; ok: boolean; tone?: 'reject' | 'rewrite' | 'plan' }
@@ -125,7 +126,8 @@ export function applyEvent(e: RunEvent) {
       const n = nodeFor(r, e.agent, e.cmd, e.lesson);
       n.open++; n.state = 'working'; n.startedAt = Date.now();
       n.now = doingNow(e.cmd, n.role === 'writer' ? undefined : lessonTitle(r, e.lesson, e.agent));
-      if (n.role === 'writer') n.now = e.cmd === 'draft' ? (n.steps ? 'Rewriting after the checks' : 'Writing the lesson') : 'Checking the lesson';
+      // a Writer only re-drafts after a check sent the lesson back; a retry after a bad reply is still "Writing"
+      if (n.role === 'writer') n.now = e.cmd === 'draft' ? (n.checks && n.checks.passed < n.checks.total ? 'Rewriting after the checks' : 'Writing the lesson') : 'Checking the lesson';
       r.phase = Math.max(r.phase, PHASE[e.cmd] ?? r.phase);
       break;
     }
@@ -139,9 +141,11 @@ export function applyEvent(e: RunEvent) {
       const text = sayStep(e.cmd, e.result, e.ok, title, e.error);
       if (text) n.last = text;
       const res = e.result ?? '';
-      if (e.cmd === 'check' && n.role === 'writer') {
+      if (e.cmd === 'check' && (n.role === 'writer' || n.role === 'checker')) {
         const m = /(\d+)\/(\d+) checks/.exec(res);
-        if (m) n.checks = { passed: +m[1], total: +m[2] };
+        // the Checker's re-check is the lesson's final score: show it on that lesson's Writer card
+        const w = n.role === 'writer' ? n : e.lesson ? r.nodes[`w:${e.lesson}`] : undefined;
+        if (m && w && !(n.role === 'writer' && w.final)) { w.checks = { passed: +m[1], total: +m[2] }; if (n.role === 'checker') w.final = true; }
       }
       if (e.cmd === 'code-test') {
         const ex = `${e.lesson ?? ''}:${/^(b\d+)/.exec(res)?.[1] ?? ''}`;

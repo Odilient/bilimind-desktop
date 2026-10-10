@@ -5,6 +5,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Course, PlanDay } from '@bilimind/core';
 import { countdownText, dayParts, examInfo, now, ymdIn } from '../runtime/time.ts';
 import { isDone } from '../runtime/progress.ts';
+import { isExamGoal } from '../runtime/model.ts';
 
 const props = defineProps<{ course: Course }>();
 const tz = computed(() => props.course.goal.timezone);
@@ -16,6 +17,7 @@ onBeforeUnmount(() => clearInterval(timer));
 const today = computed(() => ymdIn(tickNow.value, tz.value));
 const exam = computed(() => examInfo(props.course.goal.exam_at, tz.value));
 const left = computed(() => countdownText(props.course.goal.exam_at, tickNow.value));
+const isExam = computed(() => isExamGoal(props.course));
 
 interface DayView { d: PlanDay; cls: string[]; name: string; date: number; dots: { cls: string }[]; cap: string; tag: string }
 const days = computed<DayView[]>(() => props.course.plan.days.map(d => {
@@ -28,7 +30,7 @@ const days = computed<DayView[]>(() => props.course.plan.days.map(d => {
   if (d.reviews > 0) dots.push({ cls: 'rv' });
   let cap = '';
   // G2: one time format (the countdown's), and the day's minutes already include its reviews
-  if (d.exam) cap = exam.value ? `Exam · ${exam.value.time}` : d.label || 'Exam';
+  if (d.exam) cap = !isExam.value ? 'Goal day' : exam.value ? `Exam · ${exam.value.time}` : d.label || 'Exam';
   else if (n && doneN === n) cap = `${n} lesson${n > 1 ? 's' : ''} · done`;
   else if (n) cap = `${n} lesson${n > 1 ? 's' : ''} · ${d.minutes} min`;
   else if (d.reviews) cap = `Review · ${d.reviews} lesson${d.reviews > 1 ? 's' : ''} · ${d.minutes} min`;
@@ -36,7 +38,7 @@ const days = computed<DayView[]>(() => props.course.plan.days.map(d => {
   const missed = past && n > 0 && doneN < n && !d.exam;
   if (missed) cap = `${n - doneN} still to do`;
   const cls = [isToday ? 'today' : '', d.exam ? 'exam' : '', past ? 'past' : '', missed ? 'missed' : ''].filter(Boolean);
-  return { d, cls, name: p.weekday, date: p.day, dots, cap, tag: d.exam ? 'Exam' : isToday ? 'Today' : '' };
+  return { d, cls, name: p.weekday, date: p.day, dots, cap, tag: d.exam ? (isExam.value ? 'Exam' : 'Ready by') : isToday ? 'Today' : '' };
 }));
 
 const ics = computed(() => props.course.exports.find(e => e.kind === 'ics'));
@@ -46,7 +48,7 @@ const anki = computed(() => props.course.exports.find(e => e.kind === 'apkg') ??
 <template>
   <div class="c-plan" role="list" aria-label="Your study plan">
     <div v-if="exam && left" class="count rise" role="listitem" style="--i:0">
-      <span class="dn"><svg aria-hidden="true"><use href="#i-timer" /></svg>Exam in</span>
+      <span class="dn"><svg aria-hidden="true"><use href="#i-timer" /></svg>{{ isExam ? 'Exam in' : 'Ready in' }}</span>
       <span class="dd" data-countdown>{{ left }}</span>
       <span class="cap">{{ exam.weekdayLong }} {{ exam.day }}, {{ exam.time }}</span>
     </div>

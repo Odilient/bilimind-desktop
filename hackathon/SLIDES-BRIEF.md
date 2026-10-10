@@ -47,7 +47,7 @@ screenshots `docs/img/app-home.png`, `app-building.png`, `app-finished.png` and 
    and Malay." / "7 lessons · 231/231 checks passed · 64 Anki cards · $0.09".
 
 7. **How we used WorkBuddy.** Headline: "WHERE WORKBUDDY CAME IN." Four short items: "Idea validated with WorkBuddy Deep Research:
-   22.2% staff attrition in Malaysian retail and hospitality (Aon 2025); 51% of students deterred by AI errors (HEPI 2026)" / "This deck: made in
+   22.2% staff attrition in Malaysian retail and hospitality (Aon 2025); 51% of students deterred by AI errors (HEPI 2026)" / "Our first pitch deck: made in
    WorkBuddy Slides Creation" / "Plain WorkBuddy vs BiliMind on the same student request: a plan, but no
    slide citations, tested code, narration or exports" / "BiliMind also ships as a WorkBuddy skill and
    Expert Team, validated with WorkBuddy's own validator". Small line: "The desktop app was built by our

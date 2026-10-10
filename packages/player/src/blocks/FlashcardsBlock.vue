@@ -11,6 +11,7 @@ import { isPassedStored, markPassed, previewIntervals, rate, RATINGS } from '../
 import type { Rating } from '../assessments/store.ts';
 import TaskShell from '../assessments/ui/TaskShell.vue';
 import CiteChip from '../components/CiteChip.vue';
+import { isExamGoal } from '../runtime/model.ts';
 import Ico from '../assessments/ui/Ico.vue';
 
 const props = defineProps<{ block: BlockOf<'flashcards'>; lesson: CourseLesson; course: Course }>();
@@ -117,7 +118,7 @@ function dotClass(i: number) {
       <div v-else class="fc-end">
         <span class="fe-ic"><Ico name="check" /></span>
         <p class="fe-h">Deck done · {{ remembered }} remembered, {{ again }} to see again</p>
-        <p class="fe-s">They come back before your exam, spaced out so you remember them on the day. Also in your Anki deck.</p>
+        <p class="fe-s">They come back before your {{ isExamGoal(course) ? 'exam' : 'ready-by date' }}, spaced out so you remember them on the day. Also in your Anki deck.</p>
         <button type="button" class="btn ghost sm" @click="restart"><Ico name="refresh" />Go through again</button>
       </div>
 

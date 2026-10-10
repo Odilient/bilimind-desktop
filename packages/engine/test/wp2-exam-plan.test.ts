@@ -160,7 +160,7 @@ describe('plan: 3 days x 45 min before a Wednesday 9am exam', () => {
   it('cut reasons: the Lead\'s, else derived from the marks', () => {
     expect(p.cut).toEqual([
       { key: 'avl', title: 'AVL rotations', reason: 'No marks in the past paper.', weight: 0 },
-      { key: 'capstone', title: 'Capstone drill', reason: 'Not kept: there is no time for it before the exam.', weight: 0.1 },
+      { key: 'capstone', title: 'Capstone drill', reason: 'Did not fit the days you have.', weight: 0.1 },
     ]);
     expect(p.warnings).toContain('Cut lesson capstone carries 10% of the past paper\'s marks.');
     expect(p.warnings).toContain('bst is thin in your sources: expect "Beyond your slides" labels in it.');

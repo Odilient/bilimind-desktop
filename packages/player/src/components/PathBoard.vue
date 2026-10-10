@@ -5,7 +5,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { BLOCK_META, MARK } from '@bilimind/core';
 import type { Course, PathItem, PathTopic } from '@bilimind/core';
-import { currentLesson, keptStep, keptTopics, lessonById, lessonOrder, nextLesson } from '../runtime/model.ts';
+import { currentLesson, isExamGoal, keptStep, keptTopics, lessonById, lessonOrder, nextLesson } from '../runtime/model.ts';
 import { isDone, setDone } from '../runtime/progress.ts';
 import { examInfo, fmtMinutes } from '../runtime/time.ts';
 import { go, lessonHref, route } from '../router.ts';
@@ -271,10 +271,10 @@ defineExpose({ redraw: draw });
         </template>
       </ol>
       <button type="button" class="p-fin" :class="{ lit: allDone }" @click="onFinish">
-        <span class="ck"><svg class="ico" style="width:12px;height:12px" aria-hidden="true"><use :href="allDone ? '#i-check' : '#i-flame'" /></svg></span>{{ exam ? `Exam · ${exam.weekday} ${exam.day}` : 'Path done' }}
+        <span class="ck"><svg class="ico" style="width:12px;height:12px" aria-hidden="true"><use :href="allDone ? '#i-check' : '#i-flame'" /></svg></span>{{ exam ? `${isExamGoal(c) ? 'Exam' : 'Ready by'} · ${exam.weekday} ${exam.day}` : 'Path done' }}
       </button>
       <div v-if="c.further.length" class="p-further">
-        <em>After the exam</em>
+        <em>{{ isExamGoal(c) ? 'After the exam' : 'After that' }}</em>
         <span v-for="f in c.further" :key="f.title" class="p-sub" :title="f.topic"><span class="mk any"></span>{{ f.title }}</span>
       </div>
 

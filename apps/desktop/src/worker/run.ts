@@ -31,7 +31,7 @@ let rest = '';
 let tail: NodeJS.Timeout | null = null;
 let planSent = false;
 
-interface LogLine { agent?: string; cmd?: string; lesson?: string; ok?: boolean; ms?: number; cost_usd?: number; result?: string }
+interface LogLine { agent?: string; cmd?: string; lesson?: string; args?: string; ok?: boolean; ms?: number; cost_usd?: number; result?: string }
 
 function drainLog(): void {
   if (!course) return;
@@ -55,8 +55,10 @@ function drainLog(): void {
     if (!e.cmd || e.cmd === 'init') continue;
     const ok = e.ok !== false;
     const text = e.result ? learnerWords(redact(String(e.result))) : undefined;
+    // log lines carry the lesson in args (`--lesson <key>`): the Checker's steps need it to reach the right card
+    const lesson = e.lesson ?? /--lesson\s+(\S+)/.exec(e.args ?? '')?.[1];
     send({
-      type: 'step-end', agent: e.agent ?? 'Lead', cmd: e.cmd, ...(e.lesson ? { lesson: e.lesson } : {}), ok,
+      type: 'step-end', agent: e.agent ?? 'Lead', cmd: e.cmd, ...(lesson ? { lesson } : {}), ok,
       ms: Number(e.ms) || 0, costUsd: Number(e.cost_usd) || 0,
       ...(ok ? { result: text } : { error: text }),
     });

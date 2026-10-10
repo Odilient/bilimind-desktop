@@ -53,7 +53,7 @@ describe('plan (G2 review)', () => {
     expect(foldedInto(EXAM, 'probing')).toEqual({ into: 'hash', questions: ['Q2a'] });
     const p = buildPlan({ goal: GOAL, outline: OUTLINE, examMap: EXAM, keep: ['hash', 'heaps'], cut: { probing: 'No marks in the past paper.' }, start: '2026-10-11' });
     const probing = p.cut.find(c => c.key === 'probing')!;
-    expect(probing.reason).toMatch(/Its exam questions \(Q2a\) are counted in Hash tables, which is kept/);
+    expect(probing.reason).toMatch(/Its exam questions \(Q2a\) are taught inside "Hash tables"\./);
     expect(p.cut.find(c => c.key === 'avl')!.reason).toMatch(/No marks/);
     const md = planMarkdown(p, OUTLINE, EXAM, GOAL);
     expect(md).toContain('| Linear probing | — | counted in Hash tables (Q2a) | — |');

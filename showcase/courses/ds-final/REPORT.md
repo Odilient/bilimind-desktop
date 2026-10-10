@@ -57,16 +57,16 @@ Kept, in order:
 
 Cut:
 
-- **Counting operations to get Big-O from real code**: Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 30 min did not fit the days left.
-- **Big-O, Omega and Theta: which bound?**: Its exam questions (Q1a) are counted in its parent Counting operations to get Big-O from real code.
-- **Dynamic arrays vs linked lists: layout and cost**: Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 10% in 30 min did not fit the days left.
-- **Why n appends cost O(n) in total**: Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 6% in 20 min plus its parent topic did not fit the days left.
-- **Load factor and when to resize**: Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 20 min did not fit the days left.
+- **Counting operations to get Big-O from real code**: Did not fit your days: 9% of the marks for 30 min (Binary heaps gives 25% for the same time).
+- **Big-O, Omega and Theta: which bound?**: Its exam questions (Q1a) belong to "Counting operations to get Big-O from real code", which did not fit your days either.
+- **Dynamic arrays vs linked lists: layout and cost**: Did not fit your days: 10% of the marks for 30 min (Binary heaps gives 25% for the same time).
+- **Why n appends cost O(n) in total**: Did not fit your days: 6% of the marks for 20 min plus its parent lesson (Binary heaps gives 25% for 30 min).
+- **Load factor and when to resize**: Did not fit your days: 9% of the marks for 20 min (Binary heaps gives 25% for 30 min).
 - **Chaining vs open addressing for collisions**: Its chaining question (Q2c) is practised in Hash tables (the slide 9 chaining example and the buildChains exercise), so it adds no marks of its own.
-- **Sorted inserts turn a BST into a chain**: No marks in the past paper; the minutes went to topics that carry them.
-- **AVL rotations: keeping height at log n**: No marks in the past paper; the minutes went to topics that carry them.
-- **Build-heap in O(n), then heapsort**: Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 5% in 25 min did not fit the days left.
-- **Capstone: last year's paper under the clock**: A full timed paper does not fit the days left; the lessons rehearse each question type instead.
+- **Sorted inserts turn a BST into a chain**: No marks in the past paper, so its minutes went to topics that score.
+- **AVL rotations: keeping height at log n**: No marks in the past paper, so its minutes went to topics that score.
+- **Build-heap in O(n), then heapsort**: Did not fit your days: 5% of the marks for 25 min (Binary heaps gives 25% for 30 min).
+- **Capstone: last year's paper under the clock**: A full timed practice paper did not fit your days; each lesson rehearses its own question types instead.
 
 Warnings:
 

@@ -3,7 +3,7 @@
 // (course.review.cards) is overridden by the learner's own FSRS state in localStorage bm:<id>:fsrs.
 import { computed } from 'vue';
 import type { Course, FsrsState } from '@bilimind/core';
-import { dueRows, nextReview } from '../runtime/model.ts';
+import { dueRows, isExamGoal, nextReview } from '../runtime/model.ts';
 import { readJson, storageKey } from '../runtime/progress.ts';
 import { dayParts, now, ymdIn } from '../runtime/time.ts';
 import { lessonHref } from '../router.ts';
@@ -30,7 +30,7 @@ const has = computed(() => (props.course.review?.cards?.length ?? 0) > 0);
       <div>
         <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-bell" /></svg></span>Due today</span>
         <h3 id="due-h">{{ rows.length ? `${rows.length} card${rows.length > 1 ? 's' : ''} to review` : 'Nothing due today' }}</h3>
-        <p>Spaced out backwards from your exam, so every card comes back before it. Answer them in the lesson; the schedule moves with you.</p>
+        <p>Spaced out backwards from your {{ isExamGoal(course) ? 'exam' : 'ready-by date' }}, so every card comes back before it. Answer them in the lesson; the schedule moves with you.</p>
       </div>
       <div>
         <ul v-if="rows.length" class="due-list">

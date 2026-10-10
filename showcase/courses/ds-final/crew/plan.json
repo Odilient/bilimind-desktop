@@ -70,31 +70,31 @@
     {
       "key": "counting_operations_big_o",
       "title": "Counting operations to get Big-O from real code",
-      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 30 min did not fit the days left.",
+      "reason": "Did not fit your days: 9% of the marks for 30 min (Binary heaps gives 25% for the same time).",
       "weight": 0.09
     },
     {
       "key": "big_o_omega_theta_bounds",
       "title": "Big-O, Omega and Theta: which bound?",
-      "reason": "Its exam questions (Q1a) are counted in its parent Counting operations to get Big-O from real code.",
+      "reason": "Its exam questions (Q1a) belong to \"Counting operations to get Big-O from real code\", which did not fit your days either.",
       "weight": 0
     },
     {
       "key": "arrays_vs_linked_lists",
       "title": "Dynamic arrays vs linked lists: layout and cost",
-      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 10% in 30 min did not fit the days left.",
+      "reason": "Did not fit your days: 10% of the marks for 30 min (Binary heaps gives 25% for the same time).",
       "weight": 0.1
     },
     {
       "key": "amortised_cost_of_append",
       "title": "Why n appends cost O(n) in total",
-      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 6% in 20 min plus its parent topic did not fit the days left.",
+      "reason": "Did not fit your days: 6% of the marks for 20 min plus its parent lesson (Binary heaps gives 25% for 30 min).",
       "weight": 0.06
     },
     {
       "key": "load_factor_and_resizing",
       "title": "Load factor and when to resize",
-      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 20 min did not fit the days left.",
+      "reason": "Did not fit your days: 9% of the marks for 20 min (Binary heaps gives 25% for 30 min).",
       "weight": 0.09
     },
     {
@@ -106,25 +106,25 @@
     {
       "key": "bst_chain_from_sorted_inserts",
       "title": "Sorted inserts turn a BST into a chain",
-      "reason": "No marks in the past paper; the minutes went to topics that carry them.",
+      "reason": "No marks in the past paper, so its minutes went to topics that score.",
       "weight": 0
     },
     {
       "key": "avl_rotation_balancing",
       "title": "AVL rotations: keeping height at log n",
-      "reason": "No marks in the past paper; the minutes went to topics that carry them.",
+      "reason": "No marks in the past paper, so its minutes went to topics that score.",
       "weight": 0
     },
     {
       "key": "build_heap_and_heapsort",
       "title": "Build-heap in O(n), then heapsort",
-      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 5% in 25 min did not fit the days left.",
+      "reason": "Did not fit your days: 5% of the marks for 25 min (Binary heaps gives 25% for 30 min).",
       "weight": 0.05
     },
     {
       "key": "capstone_past_paper_under_time",
       "title": "Capstone: last year's paper under the clock",
-      "reason": "A full timed paper does not fit the days left; the lessons rehearse each question type instead.",
+      "reason": "A full timed practice paper did not fit your days; each lesson rehearses its own question types instead.",
       "weight": 0
     }
   ],

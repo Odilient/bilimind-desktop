@@ -3,7 +3,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Course } from '@bilimind/core';
 import { examInfo } from '../runtime/time.ts';
-import { lessonOrder, questionCount } from '../runtime/model.ts';
+import { isExamGoal, lessonOrder, questionCount } from '../runtime/model.ts';
 import { confetti } from '../runtime/motion.ts';
 
 const props = defineProps<{ course: Course }>();
@@ -39,7 +39,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKey));
       <div class="copy">
         <span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-check" /></svg></span>{{ course.title }} · every step</span>
         <h2 id="done-h" class="display hero">Path <span class="hchip" aria-hidden="true"><svg><use href="#i-check" /></svg></span> <span class="lime">done.</span></h2>
-        <p class="lede">{{ exam ? `You're ready for ${exam.weekdayLong}. Your cards keep coming back until the exam.` : 'You walked the whole line. Your cards keep coming back so it sticks.' }}</p>
+        <p class="lede">{{ exam ? `You're ready for ${exam.weekdayLong}. Your cards keep coming back until ${isExamGoal(props.course) ? 'the exam' : 'then'}.` : 'You walked the whole line. Your cards keep coming back so it sticks.' }}</p>
         <ul class="c-stats"><li v-for="s in stats" :key="s.l"><b>{{ s.n }}</b><span>{{ s.l }}</span></li></ul>
         <div class="acts">
           <a class="pill lime lg" href="#/" @click="emit('close')">Review your cards<span class="arr"><svg aria-hidden="true"><use href="#i-arrow" /></svg></span></a>

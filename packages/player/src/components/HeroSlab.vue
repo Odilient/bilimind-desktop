@@ -5,7 +5,7 @@
 import { computed, ref } from 'vue';
 import type { Course } from '@bilimind/core';
 import { builtWhen, countdownChip, examInfo, fmtClock, fmtMinutes, now, ymdIn } from '../runtime/time.ts';
-import { currentLesson, lessonOrder, questionCount, stepLabel, totalMinutes } from '../runtime/model.ts';
+import { currentLesson, isExamGoal, lessonOrder, questionCount, stepLabel, totalMinutes } from '../runtime/model.ts';
 import { isDone, progress } from '../runtime/progress.ts';
 import { lessonHref } from '../router.ts';
 import { loadNarration, toggle, voice } from '../runtime/narration.ts';
@@ -59,11 +59,13 @@ function hearPlan() {
 
 const objSrc = computed(() => c.value.object || 'img/obj-book.webp');
 const objOk = ref(true);
-const slidesy = computed(() => c.value.sources.some(s => s.role === 'lecture' || s.kind === 'pptx'));
+const due = computed(() => (isExamGoal(c.value) ? 'Exam' : 'Ready by'));
+// the engine's lede opens "Exam Sunday 18 October at 9:00."; a non-exam goal (onboarding, a language month) reads "Ready by"
+const lede = computed(() => (isExamGoal(c.value) ? c.value.lede : c.value.lede.replace(/^Exam (.+?) at [^.]*\d\./, 'Ready by $1.')));
 const tags = computed(() => [
-  { cls: 't1', icon: 'i-file', text: slidesy.value ? 'Grounded in your slides' : 'Grounded in your files' },
+  { cls: 't1', icon: 'i-file', text: 'Grounded in your files' },
   { cls: 't2', icon: c.value.allows_code ? 'i-code' : 'i-speaker', text: c.value.allows_code ? 'Code that runs' : 'Read out loud' },
-  { cls: 't3', icon: 'i-cal', text: exam.value ? `Exam · ${exam.value.weekday} ${exam.value.day}` : `${lessons.value.length} lessons` },
+  { cls: 't3', icon: 'i-cal', text: exam.value ? `${due.value} · ${exam.value.weekday} ${exam.value.day}` : `${lessons.value.length} lessons` },
 ]);
 const eyebrow = computed(() => {
   const f = c.value.receipts.files;
@@ -80,7 +82,7 @@ const eyebrow = computed(() => {
       <h1 id="bm-title" class="display hero rise" :class="{ long, xlong }" style="--i:1">
         {{ firstWord }}{{ ' ' }}<span class="hchip" aria-hidden="true"><svg><use :href="'#' + chipIcon" /></svg></span>{{ middle ? ' ' + middle : '' }}{{ lastWord ? ' ' : '' }}<span v-if="lastWord" class="lime">{{ lastWord }}</span>{{ chip ? ' ' : '' }}<span v-if="chip" class="hchip pill">{{ chip }}</span>
       </h1>
-      <p class="lede rise" style="--i:2">{{ c.lede }}</p>
+      <p class="lede rise" style="--i:2">{{ lede }}</p>
       <ul class="c-stats rise" style="--i:3">
         <li v-for="s in stats" :key="s.l"><b>{{ s.n }}</b><span>{{ s.l }}</span></li>
       </ul>

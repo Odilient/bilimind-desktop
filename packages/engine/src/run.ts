@@ -279,6 +279,9 @@ export function chooseLessons(topics: OutlineData['topics'], weights: ExamMapDat
   const keptRate = (k: string) => (share.get(k) ?? 0) / minutesOf(k);
   const best = [...keep].sort((a, b) => keptRate(b) - keptRate(a))[0];
   const titleOf = (k: string) => byKey.get(k)?.title ?? k;
+  // plain-English reasons: the short title is the part before a colon ("Binary heaps: sift-up..." -> "Binary heaps")
+  const shortOf = (k: string) => { const t = titleOf(k); const h = t.split(':')[0]!.trim(); return h.length >= 3 ? h : t; };
+  const pctOf = (x: number) => `${Math.round(x * 100)}%`;
   const folded = new Map<string, string[]>();
   for (const q of ctx?.examMap?.questions ?? []) {
     const from = (q as { folded_from?: string }).folded_from;
@@ -290,11 +293,15 @@ export function chooseLessons(topics: OutlineData['topics'], weights: ExamMapDat
     const s = share.get(t.key) ?? 0;
     const parentKept = t.parent && keep.includes(t.parent);
     const fq = folded.get(t.key);
+    const mins = minutesOf(t.key);
+    const withParent = t.parent && !parentKept ? ' plus its parent lesson' : '';
     cut[t.key] = fq?.length && t.parent
-      ? `Its exam questions (${fq.join(', ')}) are counted in ${parentKept ? 'the lesson' : 'its parent'} ${titleOf(t.parent)}${parentKept ? ', which covers them' : ''}.`
-      : weights && s === 0 ? (t.archetype === 'performance' ? 'A full timed paper does not fit the days left; the lessons rehearse each question type instead.' : `No marks in the past paper; the minutes went to topics that carry them.`)
-      : best ? `Cut for ${titleOf(best)} (${Math.round((share.get(best) ?? 0) * 100)}% of marks in ${minutesOf(best)} min): ${Math.round(s * 100)}% in ${minutesOf(t.key)} min${t.parent && !parentKept ? ` plus its parent topic` : ''} did not fit the days left.`
-      : 'It did not fit the days left before the exam.';
+      ? (parentKept
+        ? `Its exam questions (${fq.join(', ')}) are taught inside "${shortOf(t.parent)}".`
+        : `Its exam questions (${fq.join(', ')}) belong to "${shortOf(t.parent)}", which did not fit your days either.`)
+      : weights && s === 0 ? (t.archetype === 'performance' ? 'A full timed practice paper did not fit your days; each lesson rehearses its own question types instead.' : 'No marks in the past paper, so its minutes went to topics that score.')
+      : best && weights ? `Did not fit your days: ${pctOf(s)} of the marks for ${mins} min${withParent} (${shortOf(best)} gives ${pctOf(share.get(best) ?? 0)} for ${minutesOf(best) === mins && !withParent ? 'the same time' : `${minutesOf(best)} min`}).`
+      : 'Did not fit the days you have.';
   }
   const order = studyOrder(keep, topics, share, deck);
   return { keep: order, cut, order };
