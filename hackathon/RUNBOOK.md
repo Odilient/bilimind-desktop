@@ -6,7 +6,7 @@ Oybek, Ulugbek, Sharif and Abdugaffor Odilov.
 - Phase 1 (local branch): 3:00 live presentation + 2:00 Q&A.
 - Phase 2 (top 18, global video call): 4:00 demo + 3:00 Q&A.
 - Public repo: https://gitlab.com/avinmaster/bilimind-workbuddy
-- Deployed site: {{DEPLOYED_URL}}
+- Deployed site: https://bilimind-workbuddy-55b817.gitlab.io/
 
 Rules for everyone on stage:
 
@@ -50,7 +50,7 @@ WorkBuddy
 
 Edge (one window, these tabs in this order)
 
-- [ ] Tab 1: the deployed site {{DEPLOYED_URL}}.
+- [ ] Tab 1: the deployed site https://bilimind-workbuddy-55b817.gitlab.io/.
 - [ ] Tab 2: the Data Structures showcase course on the site.
 - [ ] Tab 3: the Mutiara Tea Bar day-one course (English and Malay narration) on the site.
 - [ ] Tab 4: the Bahasa Melayu Survival Kit course on the site (Q&A only).
@@ -293,7 +293,7 @@ Spare answers (only if asked):
 
 | Placeholder | Where to read it |
 |---|---|
-| `{{DEPLOYED_URL}}` | the site deploy result |
+| `https://bilimind-workbuddy-55b817.gitlab.io/` | the site deploy result |
 | `{{DRIVER_NAME}}`, `{{TIMER_NAME}}` | team decision |
 | `{{CREDITS_BEFORE}}`, `{{CREDITS_PER_RUN}}` | WorkBuddy credit page, before and after the morning run |
 | `{{CREW_WALL_TIME}}` | morning run `REPORT.md`, "Wall time" |

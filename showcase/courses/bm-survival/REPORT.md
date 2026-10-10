@@ -1,6 +1,6 @@
 # What the agents did: Survival Malay
 
-Built Sunday 11 October at 0:38 (Asia/Kuala_Lumpur) · 8 lessons · 13 agents · text-model cost $0.06 · wall time 23 min 50 s.
+Built Sunday 11 October at 0:41 (Asia/Kuala_Lumpur) · 8 lessons · 13 agents · text-model cost $0.06 · wall time 30 min 1 s.
 
 > I'm an international student at Taylor's with zero Malay. Make me a survival course for my first month (mamak, Grab, campus) that also starts me on Bahasa Melayu Komunikasi. I have 20 minutes a day for 2 weeks.
 
@@ -23,7 +23,7 @@ Built Sunday 11 October at 0:38 (Asia/Kuala_Lumpur) · 8 lessons · 13 agents ·
 | Study minutes | 115 |
 | Text-model cost | $0.06 |
 | WorkBuddy credits | read them from WorkBuddy |
-| Wall time | 23 min 50 s |
+| Wall time | 30 min 1 s |
 
 ## The plan
 
@@ -71,7 +71,7 @@ Warnings:
 
 | Agent | Steps | Failed | Cost | Time |
 |---|---|---|---|---|
-| Lead | 47 (init, goal, ingest, outline, note, plan, narrate, export, build, check) | 0 | $0.02 | 6 min 0 s |
+| Lead | 52 (init, goal, ingest, outline, note, plan, narrate, export, build, check) | 0 | $0.02 | 6 min 1 s |
 | Writer · How Malay sounds and how it is spelled | 4 (draft, check) | 0 | $0.0054 | 33 s |
 | Writer · Numbers, money and telling the time | 2 (draft, check) | 0 | $0.0034 | 20 s |
 | Writer · Greeting people, introducing yourself, what to call them | 2 (draft, check) | 0 | $0.0036 | 24 s |
@@ -139,6 +139,9 @@ No `code-test` runs were logged.
 ## Decisions in the agents' own words
 
 - **Lead** (00:13): Kept malay_sounds, greetings_and_address, greeting_etiquette, numbers_money_and_time (by marks per minute, heaviest deck first); cut sentence_patterns, little_words_in_speech, mamak_ordering, grab_and_directions, emergency_phrases, campus_and_classroom, bmk_module_context, capstone_a_day_in_malay.
+- **Lead** (00:41): Goal corrected by hand: the sentence says 2 weeks, the unattended run read it as 7 days; deadline set to Sun 25 Oct 2026 (14 study days), code language none.
+- **Lead** (00:41): Re-planned by hand: kept mamak, Grab and campus (the three things the sentence names) plus BMK 2 and the capstone; cut the Assalamualaikum side lesson (already drafted), sentence patterns, little words and emergency phrases. 5 new lessons drafted.
+- **Lead** (00:41): Lecturer review of all 8 lessons: about 90 hand edits (wrong claims about the phrasebook's dagger mark, wrong walkthrough order in the Grab lesson, BMK facts tightened to the Taylor's note, pak cik spelling, phonetics, a wrong scenario key, wrong citations); edited items re-ruled by the Checker with verbatim quotes.
 
 ## Timeline
 
@@ -259,6 +262,11 @@ No `code-test` runs were logged.
 | 00:35:03 | Lead | check bmk_module_context | 22/22 checks | 0 s |  |
 | 00:35:12 | Lead | export | 12 files | 0 s |  |
 | 00:35:13 | Lead | build | index.html 1186 KB, 8 lessons | 0 s |  |
+| 00:38:42 | Lead | export | 12 files | 1 s |  |
+| 00:38:44 | Lead | build | index.html 1186 KB, 8 lessons | 1 s |  |
+| 00:41:22 | Lead | note | Goal corrected by hand: the sentence says 2 weeks, the unattended run read it as 7 days; deadline set to Sun 25 Oct 2026 (14 study days), code language none. | 0 s |  |
+| 00:41:23 | Lead | note | Re-planned by hand: kept mamak, Grab and campus (the three things the sentence names) plus BMK 2 and the capstone; cut the Assalamualaikum side lesson (already drafted), sentence patterns, little words and emergency phrases. 5 new lessons drafted. | 0 s |  |
+| 00:41:23 | Lead | note | Lecturer review of all 8 lessons: about 90 hand edits (wrong claims about the phrasebook's dagger mark, wrong walkthrough order in the Grab lesson, BMK facts tightened to the Taylor's note, pak cik spelling, phonetics, a wrong scenario key, wrong citations); edited items re-ruled by the Checker with verbatim quotes. | 0 s |  |
 
 ---
 

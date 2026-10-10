@@ -15,7 +15,7 @@ Built by team **Opus Magnum (#58), Taylor's University branch**, for **Dormathon
 agentic solutions**.
 
 - Repository: https://gitlab.com/avinmaster/bilimind-workbuddy
-- Deployed site: {{DEPLOYED_LINK}}
+- Deployed site: https://bilimind-workbuddy-55b817.gitlab.io/
 - Slides (PDF): {{SLIDES_PDF_LINK}}
 - How, where and when we used WorkBuddy: [docs/workbuddy.md](docs/workbuddy.md)
 

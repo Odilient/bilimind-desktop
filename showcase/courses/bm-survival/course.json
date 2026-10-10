@@ -11,9 +11,10 @@
     "i-steps"
   ],
   "language": "en",
-  "built_at": "2026-10-11T00:38:43+08:00",
+  "built_at": "2026-10-11T00:44:35+08:00",
   "allows_code": false,
   "code_language": null,
+  "attribution": "`malay-survival-phrasebook.md` is adapted from:",
   "goal": {
     "sentence": "I'm an international student at Taylor's with zero Malay. Make me a survival course for my first month (mamak, Grab, campus) that also starts me on Bahasa Melayu Komunikasi. I have 20 minutes a day for 2 weeks.",
     "exam_at": "2026-10-25T09:00:00+08:00",
@@ -19363,7 +19364,7 @@
     "minutes": 115,
     "cost_usd": 0.055227,
     "credits": null,
-    "wall_ms": 1639897,
+    "wall_ms": 1907927,
     "log": [
       {
         "t": "00:11:22",
@@ -20060,6 +20061,48 @@
         "agent": "Lead",
         "action": "export",
         "result": "12 files"
+      },
+      {
+        "t": "00:38:44",
+        "agent": "Lead",
+        "action": "build",
+        "result": "index.html 1186 KB, 8 lessons"
+      },
+      {
+        "t": "00:41:22",
+        "agent": "Lead",
+        "action": "note",
+        "result": "Goal corrected by hand: the sentence says 2 weeks, the unattended run read it as 7 days; deadline set to Sun 25 Oct 2026 (14 study days), code language none."
+      },
+      {
+        "t": "00:41:23",
+        "agent": "Lead",
+        "action": "note",
+        "result": "Re-planned by hand: kept mamak, Grab and campus (the three things the sentence names) plus BMK 2 and the capstone; cut the Assalamualaikum side lesson (already drafted), sentence patterns, little words and emergency phrases. 5 new lessons drafted."
+      },
+      {
+        "t": "00:41:23",
+        "agent": "Lead",
+        "action": "note",
+        "result": "Lecturer review of all 8 lessons: about 90 hand edits (wrong claims about the phrasebook's dagger mark, wrong walkthrough order in the Grab lesson, BMK facts tightened to the Taylor's note, pak cik spelling, phonetics, a wrong scenario key, wrong citations); edited items re-ruled by the Checker with verbatim quotes."
+      },
+      {
+        "t": "00:41:24",
+        "agent": "Lead",
+        "action": "export",
+        "result": "12 files"
+      },
+      {
+        "t": "00:41:24",
+        "agent": "Lead",
+        "action": "build",
+        "result": "index.html 1187 KB, 8 lessons"
+      },
+      {
+        "t": "00:43:10",
+        "agent": "Lead",
+        "action": "build",
+        "result": "index.html 1188 KB, 8 lessons"
       }
     ],
     "excluded": [
@@ -20121,7 +20164,8 @@
       "kind": "md",
       "role": "lecture",
       "pages": 1,
-      "cited": 13
+      "cited": 13,
+      "license": "Our own text; facts from the cited Taylor's page"
     },
     {
       "id": "s2",
@@ -20130,7 +20174,8 @@
       "kind": "md",
       "role": "lecture",
       "pages": 11,
-      "cited": 138
+      "cited": 138,
+      "license": "CC BY-SA 4.0 (adapted from Wikivoyage)"
     }
   ],
   "exports": [
@@ -20161,7 +20206,7 @@
     }
   ],
   "review": {
-    "generated_at": "2026-10-11T00:38:42+08:00",
+    "generated_at": "2026-10-11T00:41:24+08:00",
     "cards": [
       {
         "id": "malay_sounds/b3/c0",
