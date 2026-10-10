@@ -34,6 +34,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # pnpm may skip electron's postinstall; electron-builder.yml points electronDist at node_modules/electron/dist
+      - name: Download Electron
+        working-directory: apps/desktop
+        run: node node_modules/electron/install.js
+
       - name: Build the course player
         run: pnpm --filter @bilimind/player build
 
