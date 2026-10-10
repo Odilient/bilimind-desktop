@@ -55,14 +55,14 @@ What the agents decide and what our code enforces is described in [how-it-works.
 |---|---|---|
 | Sat 10 Oct, evening | Spike: read WorkBuddy's tool list, skills folder and Expert Team format on this machine; drafted the Expert Team package and validated it with WorkBuddy's own validator; checked the bundled Node and Python | `hackathon/SPIKE.md`, `hackathon/EXPERT-TEAM.md` |
 | {{TIME}} | First run of the `bilimind` skill inside WorkBuddy with the hero sentence (gate G3) | {{SCREENSHOT: task checklist, parallel Writer cards, Preview}} |
-| {{TIME}} | Expert Team "BiliMind Crew" registered and run from "My Experts" | {{SCREENSHOT: member cards}} |
-| {{TIME}} | Showcase courses run (Data Structures final, Boba Shop: Day One, Bahasa Melayu survival) | {{SCREENSHOT or REPORT.md links}} |
+| Sat 10 Oct, ~23:55 | Expert Team "BiliMind Crew" registered into WorkBuddy (My Experts) with WorkBuddy's own `validate_expert.py` / `register_expert.py`; skill installed into its skills folder | `workbuddy/bilimind-crew/`, `skills/bilimind/` |
+| Sun 11 Oct, 00:00-00:40 | Showcase courses (Data Structures final, Mutiara Tea Bar day one, Bahasa Melayu survival) generated with the same CLI and crew playbook, run by our build agents outside WorkBuddy | `showcase/courses/*/REPORT.md` |
 | {{TIME}} | Same sentence in WorkBuddy without the skill, for comparison | {{SCREENSHOT}} |
-| {{TIME}} | Slides and docs made in WorkBuddy | {{LINK to the WorkBuddy task / exported PDF}} |
-| {{TIME}} | Site published | https://bilimind-workbuddy-55b817.gitlab.io/ |
+| Sun 11 Oct, 00:38 | Pitch deck generated in the WorkBuddy web app (Slides Creation, model Hy4 preview) from our brief + 5 screenshots | https://www.workbuddy.ai/app/task/2108960359124951040 |
+| Sun 11 Oct, 00:41 | Site published (GitLab Pages) | https://bilimind-workbuddy-55b817.gitlab.io/ |
 | Sun 11 Oct, 10:00-13:00 | Live demo: WorkBuddy on the projector for the whole pitch | - |
 
-Screenshots of each step go in `hackathon/proof/` {{CONFIRM: folder and file names}}.
+Screenshots of each step go in `hackathon/proof/`.
 
 ## What a judge sees in WorkBuddy during a run
 
