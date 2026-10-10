@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "course_id": "ds-final",
+  "exam_at": "2026-10-14T09:00:00+08:00",
+  "updated_at": "2026-10-10T16:30:21.510Z",
+  "cards": [
+    {
+      "id": "map_adt_and_hash_functions/q5",
+      "lesson": "map_adt_and_hash_functions",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "Keys 24, 34, 50, 44, 89, 99 are inserted in that order into an initially empty table of size m = 10 using h(k) = k mod 10 and linear probing, probing h(k), h(k)+1, h(k)+2 and wrapping past 9 back to 0. Put the keys in the order of the slots they end up in, from slot 0 upward.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "map_adt_and_hash_functions/q6",
+      "lesson": "map_adt_and_hash_functions",
+      "kind": "item",
+      "item": "q6",
+      "prompt": "Explain what primary clustering is and why linear probing produces it. Then state one way double hashing reduces it.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "map_adt_and_hash_functions/q4",
+      "lesson": "map_adt_and_hash_functions",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A hash table uses separate chaining with m = 8 buckets and holds n = 20 entries. A classmate says the table is over-full and must be resized before any more inserts. Which statement is correct?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "map_adt_and_hash_functions/q7",
+      "lesson": "map_adt_and_hash_functions",
+      "kind": "item",
+      "item": "q7",
+      "prompt": "Slide 9 inserts 50, 700, 76, 85, 92, 73, 101 into a chained table with m = 7 and h(k) = k mod 7, adding each new entry at the end of its chain. A search for 57, which is not in the table, compares 57 with every key in its chain. How many key comparisons does it make? Give your answer in comparisons.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_search_tree_operations/q2",
+      "lesson": "binary_search_tree_operations",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Insert 50, 30, 70, 20, 40, 60, 80 into an empty BST, then delete 30 using the in-order successor. Put the stages in the order they happen.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_search_tree_operations/q3",
+      "lesson": "binary_search_tree_operations",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "In the deletion rule on slide 7, a node with two children is replaced by its in-order ____, which is the smallest key in its right subtree.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_search_tree_operations/q4",
+      "lesson": "binary_search_tree_operations",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A BST holds n nodes. State its worst-case height and describe an insertion order that produces it. Explain in two or three sentences why that order is the worst.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_priority_queues/q6",
+      "lesson": "binary_heaps_and_priority_queues",
+      "kind": "item",
+      "item": "q6",
+      "prompt": "A min-heap is stored as `[6, 15, 8, 20, 19, 25, 11]`. Insert the key 4 and put the arrays below in the order they occur, starting from the state before the insert.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_priority_queues/q3",
+      "lesson": "binary_heaps_and_priority_queues",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A min-heap is stored in an array with 14 elements, using the slide's 0-based indexing. During one `extract-min`, after the last leaf is moved to the root, how many array elements does the sift-down loop examine in total across all its iterations — counting each child index that is compared against the current node? Give the maximum possible number for a heap of this size, as a whole number. Give your answer in child comparisons.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_priority_queues/q4",
+      "lesson": "binary_heaps_and_priority_queues",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "Slide 3 of Lecture 4 lists CPU and job scheduling and Dijkstra's shortest paths as applications of priority queues. Choose one of those two and explain why a binary heap suits it specifically — refer to the operation the application performs most often and the heap's cost for that operation compared with the alternatives on slide 12.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "binary_heaps_and_priority_queues/q5",
+      "lesson": "binary_heaps_and_priority_queues",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "In a binary min-heap stored in an array with index 0 as the root, the parent of the node at index i is at index ____.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    }
+  ]
+}

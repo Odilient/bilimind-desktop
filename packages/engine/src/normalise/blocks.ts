@@ -85,8 +85,24 @@ function codeTests(v: unknown): { name: string; call: string; expect: unknown }[
   return uniqueNames(out);
 }
 
+/**
+ * G2 review: a "Done looks like ..." line the model writes in prose contradicted its own tests (insert 49 "returns 2
+ * at index 0" while the test expects 4 probes at index 2). The line is rebuilt from the first test, so it cannot.
+ */
+const DONE_LINE = /^[ \t>*_-]*(?:\*\*|__)?\s*done looks like\b.*$/gim;
+export function doneFromTests(instructions: string, tests: { call: string; expect: unknown }[]): string {
+  if (!DONE_LINE.test(instructions)) return instructions;
+  DONE_LINE.lastIndex = 0;
+  const t = tests[0];
+  if (!t) return instructions.replace(DONE_LINE, '').replace(/\n{3,}/g, '\n\n').trim();
+  let shown: string;
+  try { shown = JSON.stringify(t.expect) ?? String(t.expect); } catch { shown = String(t.expect); }
+  return instructions.replace(DONE_LINE, `**Done looks like:** \`${t.call}\` returns \`${cap(shown, 160)}\`.`);
+}
+
 function code(p: Raw): PayloadResult {
-  const instructions = text(p, 'instructions_markdown');
+  const instructions0 = text(p, 'instructions_markdown');
+  const instructions = instructions0 === null ? null : doneFromTests(instructions0, codeTests(p.tests));
   const language = codeLanguageOf(p);
   if (instructions === null) return { payload: null, why: 'a code block had no instructions' };
   if (language === null) return { payload: null, why: `a code block in ${text(p, 'language') ?? 'an unknown language'} was dropped (the sandbox runs javascript only)` };
@@ -108,6 +124,14 @@ function code(p: Raw): PayloadResult {
       symptom_markdown: mode === 'debug' ? symptom : null,
     }),
   };
+}
+
+/** G2 review: "Four items. Two of them ..." goes stale when an item is excluded: count sentences are dropped. */
+const COUNT_SENTENCE = /\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(items?|questions?|of them|of these)\b/i;
+export function quizIntro(intro: string | null): string | null {
+  if (!intro || !COUNT_SENTENCE.test(intro)) return intro;
+  const kept = intro.split(/(?<=[.!?])\s+/).filter(sn => !COUNT_SENTENCE.test(sn)).join(' ').trim();
+  return kept || null;
 }
 
 function walkthrough(p: Raw): PayloadResult {
@@ -147,6 +171,13 @@ function diagram(p: Raw): PayloadResult {
     alt_text: textOf(p, 'alt_text', 'alt') ?? caption ?? 'A diagram of the mechanism this lesson explains.' }) };
 }
 
+/** G2 review: the player prints "<name> is best for <best_for>": "You cannot predict n" -> "you cannot predict n" (acronyms kept). */
+export function bestFor(v: string | null): string | null {
+  if (!v) return v;
+  const t = v.replace(/^best for:?\s*/i, '');
+  return /^[A-Z][a-z'’]*(\s|$|,)/.test(t) && !/^I(\s|')/.test(t) ? t[0]!.toLowerCase() + t.slice(1) : t;
+}
+
 function comparison(p: Raw): PayloadResult {
   const axes = stringList(p.axes, 6);
   if (axes.length < 2 || !Array.isArray(p.items)) return { payload: null, why: 'a comparison needs at least 2 axes and a list of items' };
@@ -158,7 +189,7 @@ function comparison(p: Raw): PayloadResult {
     let values = stringList(row.values, axes.length);
     if (!values.length) continue;
     values = [...values.slice(0, axes.length), ...Array(Math.max(0, axes.length - values.length)).fill('—')];
-    items.push(compact({ name, values, best_for: textOf(row, 'best_for', 'use_when') }));
+    items.push(compact({ name, values, best_for: bestFor(textOf(row, 'best_for', 'use_when')) }));
     if (items.length >= 5) break;
   }
   return items.length < 2 ? { payload: null, why: 'a comparison had fewer than 2 usable items' }
@@ -370,7 +401,7 @@ export function normalisePayload(type: EnabledBlockType, payload: unknown, ctx: 
     case 'playground': return playground(p);
     case 'speaking': return speaking(p, ctx);
     case 'dialogue': return dialogue(p, ctx);
-    case 'quiz': return { payload: compact({ intro: text(p, 'intro') }) };
+    case 'quiz': return { payload: compact({ intro: quizIntro(text(p, 'intro')) }) };
     case 'audio': return audio(p, ctx);
     case 'reflection': return need(p, 'prompt', () => ({ prompt: text(p, 'prompt')! }), 'a reflection had no prompt');
   }

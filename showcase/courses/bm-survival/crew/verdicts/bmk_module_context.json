@@ -1,0 +1,32 @@
+[
+  {
+    "lesson": "bmk_module_context",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "(module code **MPU31002**, 2 credits) as one of their MPU modules",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.466Z"
+  },
+  {
+    "lesson": "bmk_module_context",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "International students on Taylor's University degree programmes take **Bahasa Melayu Komunikasi 2**",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.466Z"
+  },
+  {
+    "lesson": "bmk_module_context",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "MPU modules (Mata Pelajaran Pengajian Umum) are the compulsory general studies modules of Malaysian higher education.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.466Z"
+  }
+]

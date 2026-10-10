@@ -1,0 +1,354 @@
+{
+  "key": "food_handler_law",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "The SOP folder tells you how Mutiara makes drinks. It does not tell you who the law counts as a food handler, or what you must have done before your first shift. Those come from the Food Hygiene Regulations 2009, P.U.(A) 95/2009, made under the Food Act 1983.\n\nRegulation 2 defines a food handler as anyone who is directly involved in preparing food, comes into contact with food or food-contact surfaces, or handles packaged or unpackaged food or appliances in food premises. Your one-page summary puts it plainly: crew who scoop pearls, pour milk, seal cups or wash shakers are food handlers. That is the whole bar team, including whoever is on the sealer and whoever is at the sink.\n\nThe word doing the work is *contact*. You do not have to cook anything to be covered. Touching a shaker, a sealing head, a scoop or a cup rim is contact with a food-contact surface. Handling a sealed cup or a bag of dry pearls is handling packaged or unpackaged food. The definition is about what you touch, not about your job title.\n\nOnce you are a food handler, regs. 30 and 31(1) attach duties before your first shift. You attend food handler training and get a Certificate of Food Handlers Training from an institution specified by the Director, MOH-recognised. You go for a medical check and vaccination by a registered medical practitioner — in practice, the anti-typhoid injection. The owner must not let you work without training, medical examination and vaccination, and must keep those records for inspection.\n\nReg. 31(2) covers illness: if you have, carry, or may have a food-borne disease, do not enter the food premises or handle food, report it to management immediately, and stay off work until a registered medical practitioner certifies you cured and fit to work.\n\nThe penalties are real. Most food-handler offences under regs. 30, 31 and 33–38 carry a fine of up to RM 10,000 or imprisonment of up to 2 years. The clothing offence under reg. 32 carries a fine of up to RM 1,000. The summary is not legal advice and the regulations may have been amended since 2009 — check the current text with the Food Safety and Quality Division, MOH."
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "reference_table",
+      "payload": {
+        "title": "FHR 2009: who is covered and what is required, by regulation",
+        "columns": [
+          "Regulation",
+          "What it says",
+          "What it means behind the Mutiara bar"
+        ],
+        "rows": [
+          [
+            "Reg. 2",
+            "A food handler is anyone directly involved in preparing food, in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances in food premises.",
+            "Scooping pearls, pouring milk, sealing cups and washing shakers all make you a food handler."
+          ],
+          [
+            "Reg. 30",
+            "Food handler training duty: attend training and obtain a Certificate of Food Handlers Training from an institution specified by the Director (MOH-recognised).",
+            "You cannot start your first shift without the certificate."
+          ],
+          [
+            "Reg. 31(1)",
+            "Medical examination and vaccination by a registered medical practitioner; the owner must not allow you to work without training, medical examination and vaccination, and must keep the records.",
+            "In practice this is the anti-typhoid injection, and the shop keeps the paperwork."
+          ],
+          [
+            "Reg. 31(2)",
+            "If you have, carry, or may have a food-borne disease: do not enter the food premises or handle food; report immediately; stay off until a registered medical practitioner certifies you cured and fit.",
+            "A stomach bug is a call to your supervisor, not a shift."
+          ],
+          [
+            "Reg. 32",
+            "Clean, suitable clothing that cannot contaminate food: light-coloured overall or apron, head cover, footwear; worn only in the food premises and kept in a cupboard or locker when not in use.",
+            "Apron and head cover on before you touch the bar; off before you leave."
+          ],
+          [
+            "Reg. 33",
+            "Personal hygiene: keep yourself clean, fingernails short and clean; remove overall, apron or head cover before going to the toilet; wash hands before starting work, immediately after the toilet, and after handling raw food or contaminated material; no jewellery, watches or pins.",
+            "No rings or watches on shift. Wash hands at the start, after the toilet, after raw food."
+          ],
+          [
+            "Reg. 36",
+            "Do not handle unwrapped food with bare hands, and stop customers doing so; never use your breath to open a bag or wrapper; keep hot food above 60 °C.",
+            "Tongs or a scoop for unwrapped food. Never blow into a bag, wrapper or cup to open it."
+          ],
+          [
+            "Penalties",
+            "Most food-handler offences (regs. 30, 31, 33–38): fine up to RM 10,000 or imprisonment up to 2 years. Clothing offence (reg. 32): fine up to RM 1,000.",
+            "The certificate is not paperwork for its own sake."
+          ]
+        ],
+        "note": "Sorted by regulation number, the way you will look it up when a question comes up mid-shift. The one-page summary in the SOP folder is a plain-English summary, not legal advice, and the regulations may have been amended since 2009 — confirm the current text with the Food Safety and Quality Division, MOH."
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "Under reg. 2, who is a food handler?",
+            "back": "Anyone directly involved in preparing food, in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances in food premises."
+          },
+          {
+            "front": "Does washing shakers make you a food handler?",
+            "back": "Yes. A shaker is a food-contact surface, so contact with it falls inside reg. 2."
+          },
+          {
+            "front": "Which regulation imposes the training duty?",
+            "back": "Reg. 30 — attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the Director."
+          },
+          {
+            "front": "What does reg. 31(1) require before you start work?",
+            "back": "Medical examination and vaccination by a registered medical practitioner — in practice the anti-typhoid injection. The owner must not let you work without training, medical examination and vaccination, and must keep the records."
+          },
+          {
+            "front": "You have a stomach bug on a shift day. What does reg. 31(2) say?",
+            "back": "Do not enter the food premises or handle food, report to management immediately, and stay off until a registered medical practitioner certifies you cured and fit to work."
+          },
+          {
+            "front": "What clothing does reg. 32 require?",
+            "back": "Clean, suitable clothing that cannot contaminate food: a clean light-coloured overall or apron, a head cover and footwear, worn only in the food premises and kept in a cupboard or locker when not in use."
+          },
+          {
+            "front": "Name three hand-washing moments reg. 33 requires.",
+            "back": "Before starting work, immediately after the toilet, and after handling raw food or contaminated material."
+          },
+          {
+            "front": "What jewellery does reg. 33 allow on shift?",
+            "back": "None. No jewellery, watches, pins or other accessories."
+          },
+          {
+            "front": "Penalty for most food-handler offences (regs. 30, 31, 33–38)?",
+            "back": "Fine up to RM 10,000 or imprisonment up to 2 years."
+          },
+          {
+            "front": "Penalty for the clothing offence under reg. 32?",
+            "back": "Fine up to RM 1,000."
+          }
+        ]
+      },
+      "source_material_ids": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Four Mutiara roles, checked against reg. 2",
+        "markdown": "**Role A — pearl station.** You scoop cooked pearls from the warmer into cups. You are directly involved in preparing food and you contact the pearls and the scoop. Food handler under reg. 2. Reg. 30 and 31(1) apply before your first shift.\n\n**Role B — sealer and cup runner.** You take the filled cup, wipe the rim and run the sealer. You never touch the drink itself, but you contact the cup rim and the sealing head — both food-contact surfaces — and you handle the packaged cup. Food handler under reg. 2. Same duties.\n\n**Role C — shaker wash-up.** You rinse and sanitise shakers between orders. You contact a food-contact surface. Food handler under reg. 2. Same duties.\n\n**Role D — cashier.** You take payment and hand over the sealed cup. Handing over a sealed cup is handling packaged food, and the cashier also answers allergen questions and prints the sticker. Food handler under reg. 2. Same duties — the summary's definition includes anyone who handles packaged or unpackaged food in food premises.\n\nWhat the four cases have in common: the test is contact, not cooking. If the answer to \"do I touch food or something food touches?\" is yes, regs. 30 and 31(1) apply to you."
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "misconception",
+      "payload": {
+        "belief": "The SOP folder is the only rule that applies behind the bar — if I follow the SOP, I am compliant.",
+        "why_it_seems_right": "The SOP is what you are trained on, it is written for this shop, and it covers the drinks, the cleaning and the closing routine. It reads like the complete rulebook because it is the only document anyone hands you.",
+        "what_is_true": "The SOP is the shop's operating procedure. The Food Hygiene Regulations 2009 sit above it as law, and they impose duties the SOP may not repeat — reg. 30 training and the Certificate of Food Handlers Training, reg. 31(1) medical examination and vaccination, reg. 31(2) staying off work when ill, reg. 32 clothing, reg. 33 personal hygiene. The difference it predicts: a shop with a perfect SOP and an untrained, unvaccinated crew member is still in breach, and most food-handler offences carry a fine of up to RM 10,000 or imprisonment up to 2 years."
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "Reg. 2 defines a food handler by contact: preparing food, touching food or food-contact surfaces, or handling packaged or unpackaged food or appliances in food premises.",
+          "Scooping pearls, pouring milk, sealing cups and washing shakers all fall inside the reg. 2 definition — the whole bar team, not just whoever cooks.",
+          "Reg. 30 requires food handler training and a Certificate of Food Handlers Training from an institution specified by the Director.",
+          "Reg. 31(1) requires medical examination and vaccination by a registered medical practitioner, and the owner must not let you work without all three and must keep the records.",
+          "Reg. 31(2) requires you to stay out of the premises and report immediately if you have, carry, or may have a food-borne disease, until a registered medical practitioner certifies you fit.",
+          "Most food-handler offences under regs. 30, 31 and 33–38 carry a fine up to RM 10,000 or imprisonment up to 2 years; the reg. 32 clothing offence carries a fine up to RM 1,000."
+        ]
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from the reg. 2 definition and the duties in regs. 30 and 31."
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "A new crew member at Mutiara spends the whole shift at the sealer: they take the filled cup, wipe the rim, run the sealing head and pass the sealed cup to the counter. They never touch the drink itself. Under reg. 2 of the Food Hygiene Regulations 2009, what is their status?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Not a food handler, because they never touch the drink or any unwrapped food."
+            },
+            {
+              "id": "b",
+              "text": "A food handler, because they contact food-contact surfaces and handle packaged food."
+            },
+            {
+              "id": "c",
+              "text": "A food handler only once they have attended the MOH food handler course."
+            },
+            {
+              "id": "d",
+              "text": "Not a food handler, because sealing is packaging, and reg. 2 covers only preparation."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Reg. 2 covers anyone in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances. The cup rim and sealing head are food-contact surfaces and the sealed cup is packaged food, so the sealer is a food handler. Training is a duty that follows from being a food handler, not the thing that makes you one.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            1
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Anyone who is directly involved in preparing food, comes into contact with food or food-contact surfaces, or handles packaged or unpackaged food or appliances in food premises."
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "A crew member tells you they have been vomiting since last night and their shift starts in two hours. Which of the following does reg. 31(2) require of them? (Select all that apply.)",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Do not enter the food premises or handle food."
+            },
+            {
+              "id": "b",
+              "text": "Report the health condition to the management immediately."
+            },
+            {
+              "id": "c",
+              "text": "Stay off work until a registered medical practitioner certifies them cured and fit to work."
+            },
+            {
+              "id": "d",
+              "text": "Come in but work only at the sink, away from unwrapped food."
+            },
+            {
+              "id": "e",
+              "text": "Come in and wear a face mask for the whole shift."
+            },
+            {
+              "id": "f",
+              "text": "Come in and take the anti-typhoid injection before starting."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Reg. 31(2) is a stay-away rule: no entry to the premises, no handling food, immediate report to management, and no return until a registered medical practitioner certifies them cured and fit. Working at the sink still means handling food-contact surfaces, and a mask or an injection does not satisfy the regulation.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            2
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "If you have, carry, or may have a food-borne disease: do not enter the food premises or handle food."
+        },
+        {
+          "kind": "cloze",
+          "prompt": "Under reg. 30, a food handler must attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the ____.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "Director",
+              "Director (MOH)",
+              "Director of the Ministry of Health",
+              "Director, Ministry of Health Malaysia"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Reg. 30 ties the certificate to an institution specified by the Director — the MOH-recognised training route. That is the certificate the shop must be able to show.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            2
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Training: attend food handler training and get a Certificate of Food Handlers Training from an institution specified by the Director (MOH-recognised)."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A new hire says: \"I only wash shakers and wipe the counter, so the food handler rules are not about me.\" Using the reg. 2 definition and the duties in regs. 30 and 31(1), explain in two to four sentences why they are wrong and what they must have done before their first shift.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Reg. 2 defines a food handler as anyone directly involved in preparing food, in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances in food premises. A shaker is a food-contact surface, so washing shakers falls inside the definition. Because they are a food handler, reg. 30 requires them to attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the Director, and reg. 31(1) requires medical examination and vaccination by a registered medical practitioner (in practice the anti-typhoid injection). The owner must not let them work without all three, and must keep the records for inspection."
+          },
+          "rubric": [
+            {
+              "criterion": "Applies the reg. 2 contact test to the shaker and counter work",
+              "weight": 0.4,
+              "excellent": "States that a shaker is a food-contact surface and that contact with it puts the worker inside the reg. 2 definition, quoting at least two of the four reg. 2 limbs.",
+              "acceptable": "Says the worker is a food handler and mentions contact with food-contact surfaces, without naming the shaker or the full definition.",
+              "poor": "Agrees the worker is outside the rules, or says only that everyone in a food shop is a food handler without giving the contact reason."
+            },
+            {
+              "criterion": "Names the pre-shift duties from regs. 30 and 31(1)",
+              "weight": 0.4,
+              "excellent": "Names both the Certificate of Food Handlers Training from an institution specified by the Director and the medical examination and vaccination by a registered medical practitioner, adding the anti-typhoid injection as the practical form.",
+              "acceptable": "Names training and the medical check but misses the certificate, the vaccination, or the registered-practitioner requirement.",
+              "poor": "Names only one duty, or describes the SOP folder's routine instead of the regulation's requirements."
+            },
+            {
+              "criterion": "States who is barred from letting the worker start",
+              "weight": 0.2,
+              "excellent": "States that the owner must not let the worker work without training, medical examination and vaccination, and must keep those records for inspection.",
+              "acceptable": "Says the shop must keep the records, without stating the owner's duty not to allow work.",
+              "poor": "Says nothing about the owner's duty or the records."
+            }
+          ],
+          "max_score": 4,
+          "id": "q4",
+          "status": "supported",
+          "reason": "The summary names washing shakers as food-handler work; regs. 30 and 31(1) then require training, medical check and vaccination.",
+          "quote": "Bubble-tea crew who scoop pearls, pour milk, seal cups or wash shakers are food handlers.",
+          "cite_chunk_ids": [
+            1
+          ],
+          "explanation": "Bubble-tea crew who scoop pearls, pour milk, seal cups or wash shakers are food handlers."
+        }
+      ]
+    }
+  ],
+  "attempts": 2,
+  "cost_usd": 0.005562,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Fix these check failures: Q6 multi_select (b7): Use 4-6 options with 2-3 correct ids, and say \"(Select all that apply.)\" in the prompt.\"",
+    "cites: q1: cited chunk 12 (5. Closing checklist (21:30 to 22:30)), found by its question and answer",
+    "cites: q2: cited chunk 1 (Page 1), found by its question and answer",
+    "cites: q3: cited chunk 2 (Page 1), found by its question and answer"
+  ]
+}

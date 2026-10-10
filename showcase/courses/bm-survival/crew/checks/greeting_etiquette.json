@@ -1,0 +1,184 @@
+{
+  "lesson": "greeting_etiquette",
+  "round": 2,
+  "at": "2026-10-10T16:13:58.964Z",
+  "total": 25,
+  "passed": 25,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "8 blocks and 4 items have unique ids"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "diagram payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "analogy payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "scenario payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "key_points payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 8
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "conceptual: has explainer, diagram, analogy"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "3 higher-order, 0 remember of 4"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 4 items (max 1)"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "4 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "4 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q13 diagram",
+      "ok": true,
+      "detail": "plausible Mermaid (13 lines)",
+      "block": 2
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "16 chunk citations on 8 blocks resolve"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "1 auto-marked item each cite a slide"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "1626 teaching words for a 15-minute lesson (target about 450, minimum 225)"
+    },
+    {
+      "lesson": "greeting_etiquette",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

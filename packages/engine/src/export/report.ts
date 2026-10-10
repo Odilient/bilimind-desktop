@@ -3,7 +3,7 @@
 // Owner: WP4.
 import type { CourseAssessment, LogEvent } from '@bilimind/core';
 import type { Report } from '../contracts.ts';
-import { tallyChecks, tallyCode, tallyVerdicts, totalCost, wallMs, countCards } from './receipts.ts';
+import { agentIdentity, tallyChecks, tallyCode, tallyVerdicts, totalCost, wallMs, countCards } from './receipts.ts';
 import { DEFAULT_TIMEZONE, clockText, localOf, longDay, zoned } from './time.ts';
 
 const cell = (s: unknown) => String(s ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
@@ -29,6 +29,8 @@ export const report: Report = ({ course, log }) => {
   const unchecked = items.filter(a => !a.verdict || a.verdict === 'unchecked' || a.verdict === 'pending');
   const excluded = course.receipts?.excluded ?? [];
   const agents = [...new Set(log.map(e => e.agent).filter(Boolean))];
+  // same count as the receipts slab: one identity per role (and per lesson for Writers)
+  const agentCount = new Set(agents.map(a => agentIdentity(a, course.lessons))).size;
   const built = zoned(new Date(course.built_at), tz);
   const lessonTitle = new Map(course.lessons.map(l => [l.id, l.title]));
   const narrationMin = Math.round((course.lessons.reduce((s, l) => s + (l.narration?.duration_ms ?? 0), 0) + (course.narration?.duration_ms ?? 0)) / 6000) / 10;
@@ -37,14 +39,14 @@ export const report: Report = ({ course, log }) => {
 
   const L: string[] = [];
   L.push(`# What the agents did: ${course.title}`, '');
-  L.push(`Built ${longDay(built.date)} at ${clockText(built.hm)} (${tz}) · ${course.lessons.length} lessons · ${agents.length} agents · text-model cost ${usd(cost)} · wall time ${duration(wall)}.`, '');
+  L.push(`Built ${longDay(built.date)} at ${clockText(built.hm)} (${tz}) · ${course.lessons.length} lessons · ${agentCount} agents · text-model cost ${usd(cost)} · wall time ${duration(wall)}.`, '');
   L.push(`> ${course.goal.sentence || course.lede}`, '');
 
   L.push('## In numbers', '', '| What | Count |', '|---|---|');
   L.push(`| Files read | ${files} (${pages} pages) |`);
   L.push(`| Topics on the path | ${course.path.length} (${course.path.filter(t => t.cut).length} cut) |`);
   L.push(`| Lessons written | ${course.lessons.length} |`);
-  L.push(`| Agents | ${agents.length} (${agents.join(', ') || 'none logged'}) |`);
+  L.push(`| Agents | ${agentCount} (${agents.join(', ') || 'none logged'}) |`);
   L.push(`| Checks | ${checks.passed}/${checks.run} passed, ${checks.repaired} repaired, ${checks.flagged} still flagged |`);
   L.push(`| Code tests (reference solutions) | ${code.passed}/${code.run} passed, ${code.fixed} exercise${code.fixed === 1 ? '' : 's'} fixed by the Coder${code.disabled ? `, ${code.disabled} self-marked` : ''} |`);
   L.push(`| Quiz answers checked against your files | ${verdicts.applied} rulings, ${verdicts.refused} quote${verdicts.refused === 1 ? '' : 's'} refused as not verbatim |`);
@@ -66,7 +68,12 @@ export const report: Report = ({ course, log }) => {
   if (course.goal.assumptions.length) L.push('Assumptions the Lead made (it never asks):', '', ...course.goal.assumptions.map(a => `- ${a}`), '');
   if (course.plan.weights.length) {
     L.push('| Topic | Marks on the past paper | Share | Questions |', '|---|---|---|---|',
-      ...course.plan.weights.map(w => `| ${cell(w.title)} | ${w.marks} | ${Math.round(w.share * 100)}% | ${cell(w.questions.join(', '))} |`), '');
+      ...course.plan.weights.map(w => {
+        const into = (w as { counted_in?: string }).counted_in;
+        const parent = into ? course.plan.weights.find(x => x.key === into)?.title ?? into : null;
+        return parent ? `| ${cell(w.title)} | — | counted in ${cell(parent)} (${cell(w.questions.join(', '))}) | — |`
+          : `| ${cell(w.title)} | ${w.marks} | ${Math.round(w.share * 100)}% | ${cell(w.questions.join(', '))} |`;
+      }), '');
   }
   L.push('Kept, in order:', '', ...course.lessons.map(l => `${l.n}. ${l.title} (${l.minutes} min${l.day ? `, ${l.day}` : ''})`), '');
   if (course.plan.cut.length) L.push('Cut:', '', ...course.plan.cut.map(c => `- **${c.title}**: ${c.reason}`), '');

@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "food_handler_law",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "Anyone who is directly involved in preparing food, comes into contact with food or food-contact surfaces, or handles packaged or unpackaged food or appliances in food premises.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:16:17.123Z"
+  },
+  {
+    "lesson": "food_handler_law",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "If you have, carry, or may have a food-borne disease: do not enter the food premises or handle food.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 2,
+    "round": 1,
+    "at": "2026-10-10T16:16:17.123Z"
+  },
+  {
+    "lesson": "food_handler_law",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Training: attend food handler training and get a Certificate of Food Handlers Training from an institution specified by the Director (MOH-recognised).",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 2,
+    "round": 1,
+    "at": "2026-10-10T16:16:17.123Z"
+  },
+  {
+    "lesson": "food_handler_law",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Bubble-tea crew who scoop pearls, pour milk, seal cups or wash shakers are food handlers.",
+    "reason": "The summary names washing shakers as food-handler work; regs. 30 and 31(1) then require training, medical check and vaccination.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:26:04.082Z"
+  }
+]

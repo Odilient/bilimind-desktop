@@ -1,0 +1,178 @@
+{
+  "lesson": "food_handler_law",
+  "round": 5,
+  "at": "2026-10-10T16:26:33.869Z",
+  "total": 24,
+  "passed": 24,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "7 blocks and 4 items have unique ids"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reference_table payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "flashcards payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "key_points payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "multi_select item valid",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "factual: has flashcards, reference_table"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "2 higher-order, 1 remember of 4"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 4 items (max 1)"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q6 multi_select",
+      "ok": true,
+      "detail": "6 options, 3 correct",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 4 accepted answers",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "25 chunk citations on 7 blocks resolve"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "902 teaching words for a 20-minute lesson (target about 600, minimum 300)"
+    },
+    {
+      "lesson": "food_handler_law",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

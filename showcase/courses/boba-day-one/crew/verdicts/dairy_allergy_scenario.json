@@ -1,0 +1,22 @@
+[
+  {
+    "lesson": "dairy_allergy_scenario",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "No, the classic milk tea contains milk protein. The fruit teas (FT01, FT02, FT03) have no milk in the recipe.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 24,
+    "round": 1,
+    "at": "2026-10-10T16:16:26.348Z"
+  },
+  {
+    "lesson": "dairy_allergy_scenario",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Our creamer's label lists: glucose syrup, vegetable oil, sodium caseinate (milk), emulsifier (soy lecithin).",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 21,
+    "round": 1,
+    "at": "2026-10-10T16:16:26.348Z"
+  }
+]

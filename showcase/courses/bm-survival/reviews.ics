@@ -1,0 +1,353 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BiliMind//BiliMind for WorkBuddy//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Survival Malay
+X-WR-TIMEZONE:Asia/Kuala_Lumpur
+BEGIN:VTIMEZONE
+TZID:Asia/Kuala_Lumpur
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+TZNAME:+08
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-11@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261011T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261011T201500
+SUMMARY:Study: How Malay sounds and how it is spelled
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 1: How Malay sounds and how
+  it is spelled (15 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: How Malay sounds and how it is spelled
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-12@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T081000
+SUMMARY:Review: How Malay sounds and how it is spelled
+DESCRIPTION:Spaced review for Survival Malay\, Mon 12 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- Malay **c** — as in *cakap*\n- Malay **g** — as in *gula*\n-
+  Malay **ng** vs **ngg**\n- Word-final **-a**\n- Word-final **-k**\n- Mala
+ y **e** — two values\n... and 10 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: How Malay sounds and how it is spelled
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-12@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T201500
+SUMMARY:Study: Greeting people\, introducing yourself\, what to call them
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 2: Greeting people\, introd
+ ucing yourself\, what to call them (15 min)\nOpen index.html in your cours
+ e folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Greeting people\, introducing yourself\, what to call th
+ em
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-13@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T081000
+SUMMARY:Review: Greeting people\, introducing yourself\, what to call them
+DESCRIPTION:Spaced review for Survival Malay\, Tue 13 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- You are at the campus faculty office. The person behind the coun
+ ter is a woman you woul...\n- It is 4 pm. Your Grab driver is a man in his
+  thirties. You want to greet him as you get...\n- A classmate in your tuto
+ rial group\, your own age\, has just introduced himself and used ...\n- Yo
+ u are squeezing past a group of people blocking the walkway at the mamak. 
+ What do you...
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Greeting people\, introducing yourself\, what to call t
+ hem
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-13@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T201500
+SUMMARY:Study: Numbers\, money and telling the time
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 3: Numbers\, money and tell
+ ing the time (15 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Numbers\, money and telling the time
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-14@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261014T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261014T081000
+SUMMARY:Review: Numbers\, money and telling the time
+DESCRIPTION:Spaced review for Survival Malay\, Wed 14 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- 11\n- 20\n- 100\n- 1000\n- 45\n- zero inside a phone number\n...
+  and 10 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Numbers\, money and telling the time
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-14@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261014T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261014T201500
+SUMMARY:Study: Ordering at the mamak: drinks\, food\, paying
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 4: Ordering at the mamak: d
+ rinks\, food\, paying (15 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Ordering at the mamak: drinks\, food\, paying
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-15@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261015T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261015T081000
+SUMMARY:Review: Ordering at the mamak: drinks\, food\, paying
+DESCRIPTION:Spaced review for Survival Malay\, Thu 15 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- You want a cold drink with no milk and no sugar. Select all the 
+ orders that get you exa...\n- A friend orders "teh" at a mamak and is surp
+ rised that the tea is sweet and milky. Usin...\n- You have ordered your ro
+ ti canai and want to take it home rather than eat at the table....
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Ordering at the mamak: drinks\, food\, paying
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-15@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261015T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261015T201500
+SUMMARY:Study: Grab\, directions and getting to campus
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 5: Grab\, directions and ge
+ tting to campus (15 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Grab\, directions and getting to campus
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-16@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261016T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261016T081000
+SUMMARY:Review: Grab\, directions and getting to campus
+DESCRIPTION:Spaced review for Survival Malay\, Fri 16 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- Put these moments of a Grab ride in the order you perform them\,
+  from booking to getting...\n- The app says your Grab has arrived. You are
+  at the main entrance and cannot see the car...\n- Your Grab driver is app
+ roaching a junction on the campus road and asks which way to go....\n- You
+  are standing at the main entrance and the driver cannot see you. You tell
+  him where...
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Grab\, directions and getting to campus
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-16@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261016T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261016T201500
+SUMMARY:Study: On campus and in your BMK class
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 6: On campus and in your BM
+ K class (15 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: On campus and in your BMK class
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-17@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261017T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261017T081000
+SUMMARY:Review: On campus and in your BMK class
+DESCRIPTION:Spaced review for Survival Malay\, Sat 17 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- I'm an international student.\n- I don't understand.\n- Can you 
+ repeat that?\n- Can you speak a bit slower?\n- I'm sorry. (polite)\n- Wher
+ e is the library?\n... and 9 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: On campus and in your BMK class
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-17@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261017T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261017T201500
+SUMMARY:Study: What BMK 2 at Taylor's actually is
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 7: What BMK 2 at Taylor's a
+ ctually is (10 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: What BMK 2 at Taylor's actually is
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-18@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261018T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261018T083500
+SUMMARY:Review: How Malay sounds and how it is spelled\, Greeting people\, 
+ introducing yourself\, what to call them\, Numbers\, money and telling the
+  time\, Ordering at the mamak: drinks\, food\, paying\, Grab\, directions 
+ and getting to campus\, On campus and in your BMK class\, What BMK 2 at Ta
+ ylor's actually is
+DESCRIPTION:Spaced review for Survival Malay\, Sun 18 Oct: 7 lessons\, abou
+ t 35 minutes.\nOpen index.html\, then Due today: it shows the cards that a
+ re due.\n- Malay **c** — as in *cakap*\n- Malay **g** — as in *gula*\n
+ - Malay **ng** vs **ngg**\n- Word-final **-a**\n- Word-final **-k**\n- Mal
+ ay **e** — two values\n... and 63 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: How Malay sounds and how it is spelled\, Greeting peopl
+ e\, introducing yourself\, what to call them\, Numbers\, money and telling
+  the time\, Ordering at the mamak: drinks\, food\, paying\, Grab\, directi
+ ons and getting to campus\, On campus and in your BMK class\, What BMK 2 a
+ t Taylor's actually is
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-study-2026-10-19@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261019T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261019T201500
+SUMMARY:Study: Capstone: a full day in Malay
+DESCRIPTION:Survival Malay. 15 minutes.\nLesson 8: Capstone: a full day in 
+ Malay (15 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Capstone: a full day in Malay
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-20@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261020T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261020T081000
+SUMMARY:Review: Capstone: a full day in Malay
+DESCRIPTION:Spaced review for Survival Malay\, Tue 20 Oct: 1 lesson\, about
+  10 minutes.\nOpen index.html\, then Due today: it shows the cards that ar
+ e due.\n- At the mamak\, the waiter asks *Makan?* after taking your drink 
+ order. What is the waite...\n- Which of these lines from your phrasebook a
+ re used in the mamak scene of this capstone?...\n- You have finished eatin
+ g at the mamak and want the bill. You get the waiter's attention...\n- You
+  ran the day and abandoned *Boleh saya duduk di sini?* for English on camp
+ us. Explai...
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Capstone: a full day in Malay
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-22@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261022T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261022T084000
+SUMMARY:Review: How Malay sounds and how it is spelled\, Greeting people\, 
+ introducing yourself\, what to call them\, Numbers\, money and telling the
+  time\, Ordering at the mamak: drinks\, food\, paying\, Grab\, directions 
+ and getting to campus\, On campus and in your BMK class\, What BMK 2 at Ta
+ ylor's actually is\, Capstone: a full day in Malay
+DESCRIPTION:Spaced review for Survival Malay\, Thu 22 Oct: 8 lessons\, abou
+ t 40 minutes.\nOpen index.html\, then Due today: it shows the cards that a
+ re due.\n- Malay **c** — as in *cakap*\n- Malay **g** — as in *gula*\n
+ - Malay **ng** vs **ngg**\n- Word-final **-a**\n- Word-final **-k**\n- Mal
+ ay **e** — two values\n... and 67 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: How Malay sounds and how it is spelled\, Greeting peopl
+ e\, introducing yourself\, what to call them\, Numbers\, money and telling
+  the time\, Ordering at the mamak: drinks\, food\, paying\, Grab\, directi
+ ons and getting to campus\, On campus and in your BMK class\, What BMK 2 a
+ t Taylor's actually is\, Capstone: a full day in Malay
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bm-survival-review-2026-10-24@bilimind
+DTSTAMP:20261010T163842Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261024T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261024T084000
+SUMMARY:Review: How Malay sounds and how it is spelled\, Greeting people\, 
+ introducing yourself\, what to call them\, Numbers\, money and telling the
+  time\, Ordering at the mamak: drinks\, food\, paying\, Grab\, directions 
+ and getting to campus\, On campus and in your BMK class\, What BMK 2 at Ta
+ ylor's actually is\, Capstone: a full day in Malay
+DESCRIPTION:Spaced review for Survival Malay\, Sat 24 Oct: 8 lessons\, abou
+ t 40 minutes.\nOpen index.html\, then Due today: it shows the cards that a
+ re due.\n- Malay **c** — as in *cakap*\n- Malay **g** — as in *gula*\n
+ - Malay **ng** vs **ngg**\n- Word-final **-a**\n- Word-final **-k**\n- Mal
+ ay **e** — two values\n... and 67 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: How Malay sounds and how it is spelled\, Greeting peopl
+ e\, introducing yourself\, what to call them\, Numbers\, money and telling
+  the time\, Ordering at the mamak: drinks\, food\, paying\, Grab\, directi
+ ons and getting to campus\, On campus and in your BMK class\, What BMK 2 a
+ t Taylor's actually is\, Capstone: a full day in Malay
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -324,3 +324,10 @@
 .c-hero .display.hero.xlong { font-size: clamp(36px, 4.2vw, 64px); max-width: 16ch; }
 /* lesson lede: at most three lines under the head */
 .l-lede { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+/* small type: nothing under the 11px eyebrow minimum (html prefix outranks the block-scoped rules loaded later) */
+html .bmx .cs-h .gl, html .cs-h .gl, html .blk .kt-chip i, html .day .tg, html .p-grp em,
+html .blk .cmp tr.win td.k::after, html .cmp tr.win td.k::after { font-size: 11px; }
+/* "You are here" sits on the milestone's top edge instead of over its title */
+.p-mid .token { top: -26px; }
+@media (max-width: 900px) { .p-mid .token { top: -22px; } }
+.p-row:has(.token) { margin-top: 20px; }

@@ -222,7 +222,10 @@ export function chooseLessons(topics: OutlineData['topics'], weights: ExamMapDat
       return !p.warnings.some(w => /over the daily|more than the whole/i.test(w));
     } catch { return false; }
   };
-  const minutesOf = (k: string) => Math.max(1, byKey.get(k)?.minutes ?? 15);
+  // the plan clamps a lesson to ~70% of a day (plan.ts); rank with the minutes the plan will really use
+  const dayCap = Math.max(10, Math.round((g.minutes_per_day * 0.7) / 5) * 5);
+  const minutesOf = (k: string) => Math.max(1, Math.min(byKey.get(k)?.minutes ?? 15, dayCap));
+  const keptRateOf = (k: string) => (share.get(k) ?? 0) / minutesOf(k);
   const keep: string[] = [];
   const closure = (k: string): string[] => {
     const t = byKey.get(k);
@@ -242,11 +245,33 @@ export function chooseLessons(topics: OutlineData['topics'], weights: ExamMapDat
     if (!pick) break;
     keep.push(...pick.add);
   }
+  // 1b. G2 review: never cut a topic the paper weights >= 10% when time allows. Swap out the lightest kept topics
+  // (under 10%, not a parent of another kept topic) while that makes the heavy one fit and raises the kept marks.
+  const marksOf = (ks: string[]) => ks.reduce((s, k) => s + (share.get(k) ?? 0), 0);
+  for (const t of [...topics].filter(t => (share.get(t.key) ?? 0) >= 0.1 && !keep.includes(t.key)).sort((a, b) => (share.get(b.key) ?? 0) - (share.get(a.key) ?? 0))) {
+    const add = closure(t.key);
+    if (keep.length + add.length <= maxLessons && fits([...keep, ...add])) { keep.push(...add); continue; }
+    const light = keep.filter(k => (share.get(k) ?? 0) < 0.1 && !keep.some(o => byKey.get(o)?.parent === k))
+      .sort((a, b) => keptRateOf(a) - keptRateOf(b));
+    const drop: string[] = [];
+    for (const k of light) {
+      drop.push(k);
+      const rest = keep.filter(x => !drop.includes(x));
+      if (marksOf(drop) >= marksOf(add)) break;
+      if (rest.length + add.length <= maxLessons && fits([...rest, ...add])) {
+        keep.splice(0, keep.length, ...rest, ...add);
+        break;
+      }
+    }
+  }
   // 2. no past paper (or nothing fitted): core topics in outline order while they fit
   if (!keep.length) for (const t of topics) { if (keep.length < Math.min(2, topics.length) || (keep.length < maxLessons && fits([...keep, t.key]))) keep.push(t.key); }
-  // 3. leftover minutes: zero-mark topics that still fit (core first)
+  // 3. leftover minutes. With a past paper only the timed-paper capstone is worth them (a zero-mark topic is not on
+  // the exam; the minutes go to spaced reviews instead); without one, core topics in outline order while they fit.
+  const foldedSubs = new Set((ctx?.examMap?.questions ?? []).map(q => (q as { folded_from?: string }).folded_from).filter(Boolean));
   for (const t of [...topics].sort((a, b) => (a.track === 'core' ? 0 : 1) - (b.track === 'core' ? 0 : 1))) {
     if (keep.includes(t.key) || keep.length >= maxLessons) continue;
+    if (weights && t.archetype !== 'performance' && !foldedSubs.has(t.key)) continue;
     const add = closure(t.key);
     if (keep.length + add.length <= maxLessons && fits([...keep, ...add])) keep.push(...add);
   }
@@ -308,7 +333,7 @@ async function pool<T>(items: T[], limit: number, fn: (t: T) => Promise<void>): 
 export async function runPipeline(o: RunOptions): Promise<RunData> {
   const t0 = Date.now();
   // G2: the PC clock may be hours off; plan, report, log and .ics dates use the server time
-  const now = o.now ?? skewedNow(await clockSkewMs());
+  const now = o.now ?? skewedNow(await clockSkewMs(o.course));
   const progress = o.progress ?? ((l: string) => process.stderr.write(l + '\n'));
   const steps: RunStep[] = [];
   const warnings: string[] = [];

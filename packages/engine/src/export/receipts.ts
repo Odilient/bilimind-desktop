@@ -4,7 +4,7 @@
 import type { CourseLesson, LogEvent, Receipts } from '@bilimind/core';
 import type { CheckData, CodeTestData, ComputeReceipts, VerdictData } from '../contracts.ts';
 import { DEFAULT_TIMEZONE, zoned } from './time.ts';
-import { quizCard } from './anki-csv.ts';
+import { deckRows } from './anki-csv.ts';
 
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 const okEvents = (log: LogEvent[], cmd: string) => log.filter(e => e.ok && e.cmd === cmd);
@@ -118,16 +118,9 @@ export function agentIdentity(agent: string, lessons: readonly CourseLesson[]): 
   return `writer:${hit?.id ?? rest}`;
 }
 
-/** Flashcards + cloze items (what goes into deck.csv). */
+/** The number of rows in deck.csv (flashcards, cloze items, quiz items with a short answer; deduped). */
 export function countCards(lessons: readonly CourseLesson[]): number {
-  let n = 0;
-  for (const l of lessons) for (const b of l.blocks) {
-    if (b.type === 'flashcards') n += (b.payload as { cards?: unknown[] }).cards?.length ?? 0;
-    n += b.assessments.filter(a => a.kind === 'cloze').length;
-  }
-  // same as deck.csv: plus every quiz item with a short checkable answer (G2 review)
-  for (const l of lessons) for (const b of l.blocks) n += b.assessments.filter(a => a.kind !== 'cloze' && quizCard(a)).length;
-  return n;
+  return deckRows({ lessons: lessons as CourseLesson[] }).length;
 }
 
 export const computeReceipts: ComputeReceipts = ({ course, log, files, excluded }) => {

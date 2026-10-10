@@ -1,0 +1,1338 @@
+{
+  "version": 1,
+  "course_id": "boba-day-one",
+  "exam_at": "2026-10-18T09:00:00+08:00",
+  "updated_at": "2026-10-10T16:36:00.908Z",
+  "cards": [
+    {
+      "id": "food_handler_law/b3/c0",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 0,
+      "prompt": "Under reg. 2, who is a food handler?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c1",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 1,
+      "prompt": "Does washing shakers make you a food handler?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c2",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 2,
+      "prompt": "Which regulation imposes the training duty?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c3",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 3,
+      "prompt": "What does reg. 31(1) require before you start work?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c4",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 4,
+      "prompt": "You have a stomach bug on a shift day. What does reg. 31(2) say?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c5",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 5,
+      "prompt": "What clothing does reg. 32 require?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c6",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 6,
+      "prompt": "Name three hand-washing moments reg. 33 requires.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c7",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 7,
+      "prompt": "What jewellery does reg. 33 allow on shift?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c8",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 8,
+      "prompt": "Penalty for most food-handler offences (regs. 30, 31, 33–38)?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/b3/c9",
+      "lesson": "food_handler_law",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 9,
+      "prompt": "Penalty for the clothing offence under reg. 32?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/q1",
+      "lesson": "food_handler_law",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "A new crew member at Mutiara spends the whole shift at the sealer: they take the filled cup, wipe the rim, run the sealing head and pass the sealed cup to the counter. They never touch the drink itself. Under reg. 2 of the Food Hygiene Regulations 2009, what is their status?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/q2",
+      "lesson": "food_handler_law",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A crew member tells you they have been vomiting since last night and their shift starts in two hours. Which of the following does reg. 31(2) require of them? (Select all that apply.)",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/q3",
+      "lesson": "food_handler_law",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Under reg. 30, a food handler must attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the ____.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "food_handler_law/q4",
+      "lesson": "food_handler_law",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A new hire says: \"I only wash shakers and wipe the counter, so the food handler rules are not about me.\" Using the reg. 2 definition and the duties in regs. 30 and 31(1), explain in two to four sentences why they are wrong and what they must have done before their first shift.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hygiene_rules/q1",
+      "lesson": "hygiene_rules",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "Put the steps of the twenty-second handwash in the order you perform them at the bar sink.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hygiene_rules/q2",
+      "lesson": "hygiene_rules",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Under section 10, a cut must be covered with a ____ waterproof plaster and then a glove worn over it.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hygiene_rules/q3",
+      "lesson": "hygiene_rules",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A crew member's hands look clean and smell of soap after a quick rinse. Why does the SOP still require a counted twenty seconds?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hygiene_rules/q4",
+      "lesson": "hygiene_rules",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A crew member says they will wash their hands after touching money only when the queue is quiet, because washing mid-queue slows service. Using section 10, explain in 2–4 sentences what is wrong with that plan and name the source of the money rule.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hygiene_rules/q5",
+      "lesson": "hygiene_rules",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "A crew member is behind the bar mid-shift. According to section 10 of the SOP, which of these send them back to the sink to wash their hands? (Select all that apply.)",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "hygiene_rules/q6",
+      "lesson": "hygiene_rules",
+      "kind": "item",
+      "item": "q6",
+      "prompt": "A new crew member says they do not need to take off their apron before going to the toilet because they will wash their hands afterwards anyway. Explain in 2–4 sentences why the SOP still requires the apron and cap to come off first, and name the source of that rule.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "allergens/q1",
+      "lesson": "allergens",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "A customer says her son is allergic to milk. Which of the following are true statements you could make at the counter? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "allergens/q2",
+      "lesson": "allergens",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A customer points at the brown sugar syrup bottle and asks whether it contains milk or caffeine. Using the recipe and the allergen rules, write the two-sentence answer you would give, and state what you would do if the customer then told you they have a milk allergy.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "allergens/q3",
+      "lesson": "allergens",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A customer at the counter declares a milk allergy and orders a fruit tea. Put the steps into the order they happen.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "allergens/q4",
+      "lesson": "allergens",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A customer's face and lips begin to swell minutes after drinking a milk tea, and she says her throat feels tight. What do you do first?",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "shift_routines/q6",
+      "lesson": "shift_routines",
+      "kind": "item",
+      "item": "q6",
+      "prompt": "Put these opening-checklist steps into the order section 4 of the SOP lists them.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "shift_routines/q2",
+      "lesson": "shift_routines",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "It is 21:20. A customer orders a classic milk tea. You have half a pot of cooked pearls. What does the SOP require you to do with the pearls that are still in the pot at closing time?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "shift_routines/q3",
+      "lesson": "shift_routines",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "The closing checklist says to put all food away or cover it before sweeping and mopping. Explain why the order matters, and name one other closing step whose timing is forced by a temperature or a cut-off.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "shift_routines/q4",
+      "lesson": "shift_routines",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You arrive for the opening shift at 09:30. The chiller thermometer reads 6 °C and the freezer reads -18 °C. What do you do?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c0",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 0,
+      "prompt": "BS01 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c1",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 1,
+      "prompt": "BS02 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c2",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 2,
+      "prompt": "CT01 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c3",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 3,
+      "prompt": "CT02 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c4",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 4,
+      "prompt": "TH01 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c5",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 5,
+      "prompt": "MT01 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c6",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 6,
+      "prompt": "FT01 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c7",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 7,
+      "prompt": "FT02 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c8",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 8,
+      "prompt": "FT03 — drink, regular price, large price",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c9",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 9,
+      "prompt": "Which drinks use brown sugar syrup?",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c10",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 10,
+      "prompt": "Sweetness pumps — 100% regular and large",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c11",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 11,
+      "prompt": "Sweetness pumps — 50% regular and large",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c12",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 12,
+      "prompt": "Sticker codes for ice",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c13",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 13,
+      "prompt": "Normal ice weight — regular and large",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c14",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 14,
+      "prompt": "Add-on prices",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/b3/c15",
+      "lesson": "drink_catalog",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 15,
+      "prompt": "Which add-ons carry milk or egg?",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/q1",
+      "lesson": "drink_catalog",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "A customer orders a large BS01 at 100% sweetness. The SOP says one pump is 10 ml, so you draw ____ pumps of brown sugar syrup.",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/q2",
+      "lesson": "drink_catalog",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A customer with a milk allergy wants a cold drink with pearls. Which of these can you serve without changing the recipe? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/q3",
+      "lesson": "drink_catalog",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A sticker reads `CT02-R 75% RI`. What do you charge and what goes in the cup?",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "drink_catalog/q4",
+      "lesson": "drink_catalog",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A customer says `kurang manis sikit` for a large BS01, then asks why the drink still looks dark. Explain what you set and what you tell them.",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c0",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 0,
+      "prompt": "manis biasa",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c1",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 1,
+      "prompt": "kurang manis sikit",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c2",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 2,
+      "prompt": "kurang manis",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c3",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 3,
+      "prompt": "sikit manis",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c4",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 4,
+      "prompt": "tak nak gula / kosong",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c5",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 5,
+      "prompt": "kurang ais",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c6",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 6,
+      "prompt": "tak nak ais",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c7",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 7,
+      "prompt": "ais biasa",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c8",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 8,
+      "prompt": "panas",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c9",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 9,
+      "prompt": "bungkus / tapau",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c10",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 10,
+      "prompt": "minum sini",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/b3/c11",
+      "lesson": "malay_order_phrases",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 11,
+      "prompt": "BS01 or BS02 at 0%",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/q1",
+      "lesson": "malay_order_phrases",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "A customer says \"Teh susu kurang manis, kurang ais, satu.\" The sticker you write is CT01-R ____ LI.",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/q2",
+      "lesson": "malay_order_phrases",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A customer says \"BS01 besar, kosong, bungkus.\" What do you do?",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/q3",
+      "lesson": "malay_order_phrases",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "You only caught the words \"teh susu\" before the customer walked off. What is the risk of writing the sticker now?",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_order_phrases/q4",
+      "lesson": "malay_order_phrases",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A customer says \"Teh susu sikit manis, tak nak ais, tapau.\" Write the sticker you would produce and explain each part of it.",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "building_a_drink/q1",
+      "lesson": "building_a_drink",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "Put the BS01 build steps in the order the SOP requires. The order is forced: some steps destroy earlier ones if reversed.",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "building_a_drink/q2",
+      "lesson": "building_a_drink",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A sticker reads `BS01-L 75% LI OAT`. You have the warm syrup in the cup and the stripes are on the wall. You reach for the ice scoop. What is the correct next action?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "building_a_drink/q3",
+      "lesson": "building_a_drink",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A new crew member builds a BS01-L 75% LI OAT in 75 seconds. When they hold the cup up to the light, the inside wall is clean — no brown streaks. Name the two steps most likely to have caused this and explain what each one does to the syrup.",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "building_a_drink/q4",
+      "lesson": "building_a_drink",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You have sealed a BS01 and inverted it over the sink for two seconds. A thin drip runs down the side of the cup. What does the SOP say this indicates, and what should you do?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    }
+  ]
+}

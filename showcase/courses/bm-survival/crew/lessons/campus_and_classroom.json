@@ -1,0 +1,397 @@
+{
+  "key": "campus_and_classroom",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "On the Grab ride in you learned to say *Saya nak pergi ke Taylor's*. That gets you to the gate. It does not get you through a lecture.\n\nThe gap is not vocabulary. It is that a BMK class moves at the speed of the room, and if you never say anything, the tutor will keep going and you will sit through the whole class understanding nothing. Three phrases stop that:\n\n- **Saya tak faham.** — I don't understand.\n- **Boleh ulang?** — Can you repeat that?\n- **Boleh cakap perlahan sikit?** — Can you speak a bit slower?\n\nYour phrasebook lists all three in its basics table, and they are the ones that keep a class from running past you. A tutor who hears *Saya tak faham* will rephrase. A tutor who hears nothing assumes you followed.\n\nTwo habits make these work. First, **Minta maaf** before the request — it is more polite than plain *maaf*, and you are interrupting. Second, say the phrase even when you half-understood. Half-understanding is the state you are trying to escape, and it looks identical to full understanding from the front of the room.\n\nFor the lecturer, one sentence carries the whole introduction: **Saya pelajar antarabangsa.** Add where you are from and what you study and you are done — *Saya dari Uzbekistan. Saya belajar sains komputer.*\n\nFor buildings, the pattern is **Di mana** plus the place. *Di mana perpustakaan?* works for the library, the admin office, the toilet. For class timing, **Bila kelas mula?**\n\nAnd when a word goes past you, do not nod. Ask **Apa maksud \"tugasan\"?** — *tugasan* is assignment, and it will appear on every brief you get this semester."
+      },
+      "source_material_ids": [
+        7,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "Listen to each line, then say it twice. These are the five utterances that get you through a BMK session. Say them slowly and clearly — nobody expects speed from you yet.",
+        "language": "ms",
+        "items": [
+          {
+            "text": "Saya pelajar antarabangsa.",
+            "translation": "I'm an international student.",
+            "phonetic": "SAH-yah pe-LAH-jar an-ta-ra-BANG-sa",
+            "audio": "audio/e5bcb66a6af7ab3f.mp3"
+          },
+          {
+            "text": "Saya tak faham.",
+            "translation": "I don't understand.",
+            "phonetic": "SAH-yah tah fah-HAHM",
+            "audio": "audio/f3b4093684178005.mp3"
+          },
+          {
+            "text": "Boleh ulang?",
+            "translation": "Can you repeat that?",
+            "phonetic": "BO-leh OO-lang",
+            "audio": "audio/9ee244e91ff9b0aa.mp3"
+          },
+          {
+            "text": "Boleh cakap perlahan sikit?",
+            "translation": "Can you speak a bit slower?",
+            "phonetic": "BO-leh CHA-kap per-LAH-han SEE-kit",
+            "audio": "audio/91902c1c592c9647.mp3"
+          },
+          {
+            "text": "Minta maaf.",
+            "translation": "I'm sorry. (more polite than maaf)",
+            "phonetic": "MIN-ta MAH-af",
+            "audio": "audio/d73b8d04bd8c9a4e.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, native speaker",
+        "voice": "ms-MY-YasminNeural"
+      },
+      "source_material_ids": [
+        7,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "I'm an international student.",
+            "back": "Saya pelajar antarabangsa."
+          },
+          {
+            "front": "I don't understand.",
+            "back": "Saya tak faham."
+          },
+          {
+            "front": "Can you repeat that?",
+            "back": "Boleh ulang?"
+          },
+          {
+            "front": "Can you speak a bit slower?",
+            "back": "Boleh cakap perlahan sikit?"
+          },
+          {
+            "front": "I'm sorry. (polite)",
+            "back": "Minta maaf."
+          },
+          {
+            "front": "Where is the library?",
+            "back": "Di mana perpustakaan?"
+          },
+          {
+            "front": "When does the class start?",
+            "back": "Bila kelas mula?"
+          },
+          {
+            "front": "What does \"tugasan\" mean?",
+            "back": "Apa maksud \"tugasan\"?"
+          },
+          {
+            "front": "May I sit here?",
+            "back": "Boleh saya duduk di sini?"
+          },
+          {
+            "front": "lecturer",
+            "back": "pensyarah"
+          },
+          {
+            "front": "assignment / quiz / exam",
+            "back": "tugasan / kuiz / peperiksaan"
+          },
+          {
+            "front": "library",
+            "back": "perpustakaan"
+          }
+        ]
+      },
+      "source_material_ids": [
+        13,
+        7
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "dialogue",
+      "payload": {
+        "scenario_markdown": "It is the first week of your BMK class. The tutor has just explained the assessment structure at speed, in Malay, and you caught about a third of it. Class is still running. You need to stop it from running past you — without derailing the whole room.",
+        "language": "ms",
+        "ai_role": "pensyarah (BMK tutor)",
+        "learner_role": "pelajar antarabangsa",
+        "goal": "Get the tutor to slow down or repeat, and find out what one word you missed means — using Malay, in front of the class.",
+        "opening_line": "Baik, semua faham? Tugasan pertama perlu dihantar minggu depan.",
+        "hints": [
+          "Minta maaf. Saya tak faham.",
+          "Boleh ulang?",
+          "Boleh cakap perlahan sikit?",
+          "Apa maksud \"tugasan\"?",
+          "Saya pelajar antarabangsa."
+        ],
+        "opening_audio": "audio/9c9ec1e3e7afc15a.mp3"
+      },
+      "source_material_ids": [
+        7,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "How to actually do this in the room. The order matters: you apologise, you name the problem, you make one specific request. Do not stack three requests at once — you will get three answers at speed and be back where you started.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Open with Minta maaf",
+            "detail_markdown": "Raise your hand slightly and say **Minta maaf.** Your phrasebook marks this as more polite than plain *maaf* — you are interrupting a class, so use the polite one.",
+            "warning": "Do not start with *Saya tak faham* alone. Without the apology it reads as a flat statement of fact rather than a request for help.",
+            "check": "The tutor's eyes are on you and they have stopped talking."
+          },
+          {
+            "n": 2,
+            "title": "Name the problem in one sentence",
+            "detail_markdown": "Say **Saya tak faham.** Nothing else. This is the single most useful sentence in the room and it is complete on its own.",
+            "warning": "Do not add an explanation in English. The moment you switch to English the tutor may switch too, and you lose the practice.",
+            "check": "The tutor acknowledges you — usually a nod, or *oh, tak faham*."
+          },
+          {
+            "n": 3,
+            "title": "Make one specific request",
+            "detail_markdown": "Pick exactly one: **Boleh ulang?** if you missed the content, or **Boleh cakap perlahan sikit?** if you heard it but could not keep up. Say it once and stop.",
+            "warning": "Asking both in a row gets you a fast repeat, which is the original problem.",
+            "check": "The tutor repeats or slows down, and you catch more the second time."
+          },
+          {
+            "n": 4,
+            "title": "Ask about the one word you missed",
+            "detail_markdown": "If a single word is the blocker, name it: **Apa maksud \"tugasan\"?** The pattern is *Apa maksud* plus the word. *Tugasan* means assignment — your phrasebook lists it alongside *kuiz* and *peperiksaan*.",
+            "warning": "Substituting an English word for the Malay one defeats the exercise. Ask about the Malay word you heard.",
+            "check": "You can say what the word means in English without looking it up."
+          },
+          {
+            "n": 5,
+            "title": "Close with Terima kasih",
+            "detail_markdown": "Say **Terima kasih** when you have your answer. It tells the tutor the problem is solved and the class can move on.",
+            "warning": "Do not just go quiet: without the thank-you the tutor cannot tell whether you got what you needed.",
+            "check": "The tutor moves on and you are not dreading the next session."
+          }
+        ]
+      },
+      "source_material_ids": [
+        7,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "example",
+      "payload": {
+        "title": "Two students, same lecture, different outcome",
+        "markdown": "The tutor says, at speed: *Tugasan kumpulan perlu dihantar sebelum kelas minggu depan.*\n\n**Student A** catches *tugasan*, *kumpulan*, *kelas*, *minggu depan* — enough to guess there is a group assignment due next week. She nods. She does not know whether it is before the class or after, does not know the group, and does not know what *dihantar* means. She finds out on the due date that it had to be submitted online by 5pm on Sunday.\n\n**Student B** raises a hand and says:\n\n> Minta maaf. Saya tak faham. Boleh cakap perlahan sikit?\n\nThe tutor repeats it slower. B still misses *dihantar*. So:\n\n> Apa maksud \"dihantar\"?\n\nThe tutor says *submit* and adds, in English, that it goes through the portal. B writes it down.\n\nSame class. A leaves with a guess. B leaves with a deadline, a meaning and a submission method — and the tutor now knows B's name and that B asks."
+      },
+      "source_material_ids": [
+        7,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "misconception",
+      "payload": {
+        "belief": "If I say *Saya tak faham* in class, the tutor will think I am not trying and mark me down.",
+        "why_it_seems_right": "Everyone else in the room seems to be nodding, and saying you are lost out loud feels like admitting you should not be there.",
+        "what_is_true": "A tutor cannot teach someone who has silently stopped following, and *Saya tak faham* is a request, not a confession — the phrasebook puts it in the same list as *Boleh ulang?* and *Boleh cakap perlahan sikit?*, all of which are things you say to get help. The tutor's problem is not that you are lost; it is that they cannot see it. Nodding through a session produces a learner who fails the quiz and never gave the tutor a chance to fix it."
+      },
+      "source_material_ids": [
+        7
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {
+        "intro": "Check what you can produce, not what you can recognise."
+      },
+      "source_material_ids": [
+        6,
+        13
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "You are in the BMK class and the tutor has just explained the assessment structure in Malay. You caught the first sentence and nothing after it. Which line do you say first?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Saya tak faham."
+            },
+            {
+              "id": "b",
+              "text": "Minta maaf."
+            },
+            {
+              "id": "c",
+              "text": "Boleh ulang?"
+            },
+            {
+              "id": "d",
+              "text": "Apa maksud \"tugasan\"?"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "You are interrupting a class, so the apology comes first — the phrasebook marks Minta maaf as more polite than plain maaf. Saya tak faham names the problem but arrives without the courtesy that makes the interruption land well.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            7
+          ],
+          "status": "contradicted",
+          "reason": "The line that gets the content said again is Boleh ulang?; Minta maaf is only an apology.",
+          "quote": "Boleh ulang? † | Can you repeat that?"
+        },
+        {
+          "id": "q4",
+          "kind": "mcq",
+          "prompt": "You are in a BMK class. The tutor has just explained the assessment structure in Malay; you caught the first sentence and nothing after it. You want the tutor to say it again. Which line asks for exactly that?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "max_score": 100,
+          "options": [
+            {
+              "id": "a",
+              "text": "Saya tak faham."
+            },
+            {
+              "id": "b",
+              "text": "Minta maaf."
+            },
+            {
+              "id": "c",
+              "text": "Boleh ulang?"
+            },
+            {
+              "id": "d",
+              "text": "Apa maksud \"tugasan\"?"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "c"
+            ]
+          },
+          "explanation": "*Boleh ulang?* asks the tutor to repeat what was said. *Minta maaf* is the polite apology you can put in front of it, *Saya tak faham* only says you did not understand, and *Apa maksud* asks what one word means.",
+          "replaces": "q1",
+          "labels": [
+            "rewritten"
+          ],
+          "status": "supported",
+          "cite_chunk_ids": [
+            7
+          ],
+          "reason": "The phrasebook gives Boleh ulang? as Can you repeat that?, the request the prompt asks for.",
+          "quote": "Boleh ulang? † | Can you repeat that?"
+        },
+        {
+          "kind": "cloze",
+          "prompt": "You heard the word *tugasan* but do not know it. You ask the tutor: Apa ____ \"tugasan\"?",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "maksud"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "Apa maksud plus the word is the phrasebook's pattern for asking what a word means, listed on campus as Apa maksud \"tugasan\"?",
+          "id": "q2",
+          "cite_chunk_ids": [
+            13
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Apa maksud \"tugasan\"? | What does \"tugasan\" mean?"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A classmate tells you that saying *Saya tak faham* in a BMK session is a bad idea because the tutor will think you are not paying attention. Using the phrases from this lesson, explain what you would say instead of staying silent, and what each phrase does for you.",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Minta maaf first, because you are interrupting class and the phrasebook marks it as the polite form. Then Saya tak faham to name the problem in one sentence. Then exactly one specific request — Boleh ulang? if the content was missed, or Boleh cakap perlahan sikit? if it was too fast. If a single word is the blocker, Apa maksud \"tugasan\"? to pin it down. Staying silent means the tutor cannot see the problem and will keep going."
+          },
+          "rubric": [
+            {
+              "criterion": "Names the phrases in the order they are actually said",
+              "weight": 0.35,
+              "excellent": "Puts Minta maaf before Saya tak faham, and places one specific request after it.",
+              "acceptable": "Lists the right phrases but in an order that would be awkward to say aloud.",
+              "poor": "Names only Saya tak faham, or invents phrases not in the source."
+            },
+            {
+              "criterion": "Distinguishes Boleh ulang from Boleh cakap perlahan sikit",
+              "weight": 0.35,
+              "excellent": "Says Boleh ulang is for content missed and Boleh cakap perlahan sikit is for speech that was too fast.",
+              "acceptable": "Uses one of the two correctly and treats the other as interchangeable.",
+              "poor": "Treats both as the same request or gets the meanings the wrong way round."
+            },
+            {
+              "criterion": "Answers the classmate's claim rather than restating it",
+              "weight": 0.3,
+              "excellent": "States that a tutor cannot fix a problem they cannot see, and ties that to what silence costs.",
+              "acceptable": "Disagrees with the classmate but gives only a general reason.",
+              "poor": "Agrees with the classmate or ignores the claim."
+            }
+          ],
+          "max_score": 10,
+          "id": "q3",
+          "cite_chunk_ids": [
+            7
+          ],
+          "status": "not_covered",
+          "reason": "The phrases are in the phrasebook; the order of saying them in class is the lesson's advice, not the source's.",
+          "quote": "Boleh cakap perlahan sikit? † | Can you speak a bit slower?",
+          "labels": [
+            "beyond_slides"
+          ]
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.004322,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Spoken-language course: explanations in English, phrases in Malay. Use only Malay words and phrases that appear in the source excerpts, spelled exactly as there; never invent new Malay sentences. The \"",
+    "moved source_material_ids out of a explainer payload to the block",
+    "moved source_material_ids out of a walkthrough payload to the block",
+    "moved source_material_ids out of a example payload to the block",
+    "moved source_material_ids out of a misconception payload to the block",
+    "moved assessments out of a quiz payload to the block",
+    "cites: q1: cited chunk 6 (2. Greetings and basics), found by its question and answer",
+    "cites: q2: cited chunk 13 (7. On campus †), found by its question and answer",
+    "cites: b8: the quiz cited nothing; cited chunks 6, 13 (its questions' sources)",
+    "checker: q1 contradicted on re-solving: Re-solved from the slides: the answer is c) Boleh ulang?, but the key said b) Minta maaf..",
+    "checker: rewrote q1 as q4 (c) Boleh ulang? is the correct answer when the question is re-solved; the key said b) Minta maaf.. Write a replacement whose key is right.)",
+    "checker: q1 contradicted by chunk 7: The line that gets the content said again is Boleh ulang?; Minta maaf is only an apology."
+  ]
+}

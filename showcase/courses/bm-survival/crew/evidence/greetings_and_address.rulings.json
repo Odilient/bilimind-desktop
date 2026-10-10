@@ -1,0 +1,6 @@
+[
+ {"item": "q5", "verdict": "supported", "quote": "Kakak / Kak | \"older sister\" | friendly for a woman a bit older than you", "reason": "Kakak fits a woman a bit older; anda is neutral and formal; kamu can sound rude to older people."},
+ {"item": "q2", "verdict": "supported", "quote": "Abang / Bang | \"older brother\" | friendly for a man a bit older than you: the mamak waiter, a Grab driver", "reason": "Abang is the address for a Grab driver a bit older; selamat petang covers mid-afternoon until dusk (4 pm)."},
+ {"item": "q4", "verdict": "supported", "quote": "Tumpang lalu. † | Excuse me (let me pass). | for squeezing past people", "reason": "The phrasebook gives Tumpang lalu for squeezing past people."},
+ {"item": "q3", "verdict": "not_covered", "quote": "*anda* is neutral and formal (signs, ads); *awak* is friendly", "reason": "The phrasebook calls awak friendly but never says it is wrong with an older man; that is the lesson's advice."}
+]

@@ -1,0 +1,482 @@
+{
+  "key": "binary_heaps_and_priority_queues",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Slide 3 of Lecture 4 lists what a priority queue must do: every element carries a priority, and the highest-priority element leaves first. The operations are `insert`, `peek` (find-min or find-max), and `extract-min` or `extract-max`. The applications on that slide are CPU and job scheduling, Dijkstra's shortest paths and Prim's minimum spanning tree, event-driven simulation, heapsort, and finding the k largest items in a stream.\n\nA binary heap is the structure that makes those operations cheap. Slide 4 gives the two properties that define it, and both must hold at once:\n\n- **Shape property** — a complete binary tree: every level is full except possibly the last, and the last fills from the left.\n- **Heap property** — in a min-heap every parent is ≤ its children, so the minimum sits at the root. (A max-heap reverses the comparison.)\n\nA heap is not sorted. Siblings have no order between them. In the array `[1, 3, 6, 5, 9, 8]`, the children of the root are 3 and 6, and 5, 9, 8 sit under them in an order that carries no meaning.\n\nThe shape property is what lets you drop pointers entirely. Slide 5 stores the nodes level by level in an array with index 0 as the root, and for the node at index `i`:\n\n```\nleft child:  2i + 1\nright child: 2i + 2\nparent:      Math.floor((i - 1) / 2)\n```\n\nThat array `[1, 3, 6, 5, 9, 8]` is the tree\n\n```\n      1\n     / \\\n    3   6\n   / \\ /\n  5  9 8\n```\n\nCheck it against the formulas. Index 1 holds 3; its children are indices 3 and 4, holding 5 and 9. Index 2 holds 6; its left child is index 5, holding 8, and its right child would be index 6, which does not exist. Index 5's parent is `Math.floor((5 - 1) / 2) = 2`, holding 6. Every parent is ≤ its children, and the tree is complete, so this is a valid min-heap.\n\nBecause the shape is fixed, only two operations can ever disturb the heap, and each has exactly one repair: `insert` adds at the end and sifts **up**; `extract-min` moves the last leaf to the root and sifts **down**. Slide 12 prices them: find-min is O(1), insert and extract-min are O(log n), and building a heap from n items is O(n)."
+      },
+      "source_material_ids": [
+        50,
+        51,
+        52,
+        59
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Slide 7 of Lecture 4 traces one insert into the heap `[1, 3, 6, 5, 9, 8]`. Here is the same procedure run on a different heap, with every array written out. Keep the array on paper and move the index with your finger — the exam marks the array after each swap, not just the final one.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Write the starting heap and confirm it is valid",
+            "detail_markdown": "Start from `[4, 7, 9, 12, 8, 10]`. Check the shape: indices 0–5 exist, so the tree has a root, two children, and three leaves at indices 3, 4, 5 — level 0 full, level 1 full, level 2 filling from the left. Check the heap property: index 1 holds 7 with children at 3 (12) and 4 (8), and 7 ≤ 12 and 7 ≤ 8. Index 2 holds 9 with left child at 5 (10), and 9 ≤ 10. Valid min-heap.",
+            "check": "You can name the parent of index 4 as `Math.floor((4 - 1) / 2) = 1` without hesitating."
+          },
+          {
+            "n": 2,
+            "title": "Append the new key at the end",
+            "detail_markdown": "Insert 5. The new key goes at index 6 — the next free slot, which keeps the tree complete. Array becomes `[4, 7, 9, 12, 8, 10, 5]`. Do not compare-and-place it anywhere else; the shape property forces the position.",
+            "warning": "Writing 5 next to the 4 at the root, or anywhere except the end, breaks the complete-tree shape. The array would no longer be a heap no matter how the comparisons come out.",
+            "check": "Array length is 7, and the new key is at index 6."
+          },
+          {
+            "n": 3,
+            "title": "Find the parent of the new key",
+            "detail_markdown": "`i = 6`, so `p = Math.floor((6 - 1) / 2) = Math.floor(2.5) = 2`. Index 2 holds 9. Compare: is `heap[2] <= heap[6]`? 9 ≤ 5 is false, so the heap property is violated and you must swap.",
+            "check": "You computed 2, not 3 — integer division truncates, it does not round."
+          },
+          {
+            "n": 4,
+            "title": "Swap with the parent and move up",
+            "detail_markdown": "Swap indices 2 and 6: `[4, 7, 5, 12, 8, 10, 9]`. The 5 is now at index 2. Set `i = 2` and repeat.",
+            "check": "The 9 that was at index 2 now sits at index 6, the last slot."
+          },
+          {
+            "n": 5,
+            "title": "Repeat at the new index",
+            "detail_markdown": "`i = 2`, so `p = Math.floor((2 - 1) / 2) = 0`. Index 0 holds 4. Compare: 4 ≤ 5 is true. The heap property holds, so break out of the loop. No swap.",
+            "check": "You stopped. The loop condition `i > 0` is still true, but `heap[p] <= heap[i]` (4 ≤ 5) is now true, and that `break` is the exit."
+          },
+          {
+            "n": 6,
+            "title": "Write the final array and verify",
+            "detail_markdown": "Final array: `[4, 7, 5, 12, 8, 10, 9]`. Verify every parent: index 0 (4) ≤ 7 and 5; index 1 (7) ≤ 12 and 8; index 2 (5) ≤ 10 and 9. Shape is still complete. One swap, one level: sift-up makes at most one swap per level, so the cost is bounded by the height, O(log n).",
+            "check": "The array has the same 7 keys you started with plus the 5, and every parent-child pair passes the comparison."
+          }
+        ]
+      },
+      "source_material_ids": [
+        53,
+        54
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "code",
+      "payload": {
+        "mode": "function",
+        "language": "javascript",
+        "starter_code": "function siftUp(heap, i) {\n  // Move heap[i] toward the root until its parent is <= it.\n  // Mutate `heap` in place and return it.\n  // TODO: while i > 0, compare heap[i] with its parent;\n  //       stop if the parent is <= it, else swap and move up.\n  return heap;\n}",
+        "instructions_markdown": "Write `siftUp(heap, i)` in JavaScript. The array `heap` is a valid min-heap except that the element at index `i` may be smaller than its ancestors. Move it up by repeatedly swapping it with its parent while the parent is greater, using `Math.floor((i - 1) / 2)` for the parent index. Stop when `i` reaches 0 or the parent is already `<=` the element. Mutate `heap` in place and return it.\n\n`siftUp([4, 7, 9, 12, 8, 10, 5], 6)` must return `[4, 7, 5, 12, 8, 10, 9]` — the same trace as the walkthrough: the key 5 swaps once with 9 at index 2, then stops because 4 ≤ 5.",
+        "tests": [
+          {
+            "name": "walkthrough: key 5 swaps once with 9, then stops under 4",
+            "call": "siftUp([4, 7, 9, 12, 8, 10, 5], 6)",
+            "expect": [
+              4,
+              7,
+              5,
+              12,
+              8,
+              10,
+              9
+            ]
+          },
+          {
+            "name": "slide 7: inserting 2 into [1, 3, 6, 5, 9, 8]",
+            "call": "siftUp([1, 3, 6, 5, 9, 8, 2], 6)",
+            "expect": [
+              1,
+              3,
+              2,
+              5,
+              9,
+              8,
+              6
+            ]
+          },
+          {
+            "name": "a new minimum climbs all the way to the root",
+            "call": "siftUp([6, 15, 8, 20, 19, 25, 11, 4], 7)",
+            "expect": [
+              4,
+              6,
+              8,
+              15,
+              19,
+              25,
+              11,
+              20
+            ]
+          },
+          {
+            "name": "parent already smaller: nothing moves",
+            "call": "siftUp([1, 3, 6, 5, 9, 8, 7], 6)",
+            "expect": [
+              1,
+              3,
+              6,
+              5,
+              9,
+              8,
+              7
+            ]
+          },
+          {
+            "name": "changes the array in place",
+            "call": "(() => { const h = [1, 3, 6, 5, 9, 8, 2]; siftUp(h, 6); return h; })()",
+            "expect": [
+              1,
+              3,
+              2,
+              5,
+              9,
+              8,
+              6
+            ]
+          }
+        ],
+        "hints": [
+          "Compute the parent index inside the loop, not once before it — the element moves after every swap.",
+          "The loop condition is `i > 0`; the exit inside it is `if (heap[p] <= heap[i]) break;`.",
+          "Swap with a destructuring assignment: `[heap[p], heap[i]] = [heap[i], heap[p]];` then set `i = p`."
+        ]
+      },
+      "source_material_ids": [
+        53,
+        54
+      ],
+      "assessments": [
+        {
+          "kind": "code",
+          "prompt": "Write `siftUp(heap, i)` in JavaScript. The array `heap` is a valid min-heap except that the element at index `i` may be smaller than its ancestors. Move it up by repeatedly swapping it with its parent while the parent is greater, using `Math.floor((i - 1) / 2)` for the parent index. Stop when `i` reaches 0 or the parent is already `<=` the element. Mutate `heap` in place and return it.\n\n`siftUp([4, 7, 9, 12, 8, 10, 5], 6)` must return `[4, 7, 5, 12, 8, 10, 9]` — the same trace as the walkthrough: 5 swaps with 9 at index 2, then stops because 4 ≤ 5.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "reference_solution": "function siftUp(heap, i) {\n  // Move heap[i] toward the root until its parent is <= it (slide 6's loop).\n  while (i > 0) {\n    const p = Math.floor((i - 1) / 2);\n    if (heap[p] <= heap[i]) break;          // heap property holds\n    [heap[p], heap[i]] = [heap[i], heap[p]]; // swap with the parent\n    i = p;                                    // move up one level\n  }\n  return heap;\n}",
+            "tests": [
+              "walkthrough: key 5 swaps once with 9, then stops under 4",
+              "slide 7: inserting 2 into [1, 3, 6, 5, 9, 8]",
+              "a new minimum climbs all the way to the root",
+              "parent already smaller: nothing moves",
+              "changes the array in place"
+            ]
+          },
+          "max_score": 100,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b4",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you hand in a heap trace",
+        "items": [
+          {
+            "text": "Every intermediate array has the same length as the number of keys inserted so far.",
+            "why": "A dropped or duplicated key is the fastest way to lose every mark after it."
+          },
+          {
+            "text": "Each new key was written at the last index, `heap.length - 1`, before any comparison.",
+            "why": "Inserting anywhere else breaks the complete-tree shape, which no amount of swapping repairs."
+          },
+          {
+            "text": "Every parent index is `Math.floor((i - 1) / 2)`, computed with truncation.",
+            "why": "Rounding instead of truncating sends you to the wrong parent on even indices: for i = 6, (6 − 1) / 2 = 2.5 must become 2, not 3."
+          },
+          {
+            "text": "Each swap is shown as a separate array, not summarised as one final array.",
+            "why": "The marks are for the swaps; a single final array cannot show that you did them."
+          },
+          {
+            "text": "Sift-up stopped at the first index where the parent is ≤ the key, not at the root by default.",
+            "why": "Over-swapping past the stopping point produces an array that is not the algorithm's output."
+          },
+          {
+            "text": "For extract-min, the last leaf was moved to index 0 before any comparison, and the old root was recorded as the returned minimum.",
+            "why": "Sifting down the old root instead of the last leaf gives a different, wrong array."
+          },
+          {
+            "text": "At each sift-down step you compared the node with BOTH children and swapped with the smaller one.",
+            "why": "Swapping with the larger child puts a bigger value above a smaller one and violates the heap property."
+          },
+          {
+            "text": "The final array passes the parent check at every index: `heap[Math.floor((i-1)/2)] <= heap[i]` for all i > 0.",
+            "why": "This is the only self-check that catches a swap you forgot to write down."
+          }
+        ],
+        "note": "Run this list against your answer to Tutorial 4 question (1) on slide 13 — insert 20, 15, 30, 5, 10, 25 into an empty min-heap and show the array after each insert."
+      },
+      "source_material_ids": [
+        52,
+        53,
+        55,
+        60
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "example",
+      "payload": {
+        "title": "One extract-min, swap by swap",
+        "markdown": "Take the heap `[4, 7, 5, 12, 8, 10, 9]` from the walkthrough and run `extractMin` on it, following slide 8.\n\n**Record the minimum.** `min = heap[0] = 4`. This is what the function returns; it is not part of the array any more.\n\n**Remove the last leaf.** `last = heap.pop()` removes 9, leaving `[4, 7, 5, 12, 8, 10]`. The array is one shorter.\n\n**Move the last leaf to the root.** `heap[0] = 9`, giving `[9, 7, 5, 12, 8, 10]`. The shape is complete again, but the root is 9 and its children are 7 and 5 — the heap property is broken.\n\n**Sift down from i = 0.**\n\n| i | node | left child | right child | smallest of the three | action | array |\n|---|---|---|---|---|---|---|\n| 0 | 9 | index 1 = 7 | index 2 = 5 | 5 at index 2 | swap 0 and 2 | `[5, 7, 9, 12, 8, 10]` |\n| 2 | 9 | index 5 = 10 | index 6 — does not exist | 9 | stop | `[5, 7, 9, 12, 8, 10]` |\n\nAt `i = 2` the left child is 10 and 9 < 10, so the node is already the smallest of the three and the loop breaks.\n\n**Result.** `extractMin` returns 4, and the heap is `[5, 7, 9, 12, 8, 10]`. Verify it: index 0 (5) ≤ 7 and 9; index 1 (7) ≤ 12 and 8; index 2 (9) ≤ 10. One swap, one level down — the cost is the height, O(log n).\n\nNote what did *not* happen: the 9 did not travel to the bottom of the tree, and the array did not come back sorted. A heap only promises the root is the minimum."
+      },
+      "source_material_ids": [
+        55,
+        52
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "misconception",
+      "payload": {
+        "belief": "The array `[1, 3, 6, 5, 9, 8]` is a heap, so it must be sorted — reading it left to right should give 1, 3, 5, 6, 8, 9.",
+        "why_it_seems_right": "The root is the smallest key and every parent is smaller than its children, so the values do look like they are climbing as you read along the array. The first three entries, 1, 3, 6, are even in ascending order, which makes the pattern feel confirmed.",
+        "what_is_true": "Slide 4 states plainly that a heap is not sorted and that siblings have no order between them. The heap property constrains only parent-child pairs, never left-right pairs. In `[1, 3, 6, 5, 9, 8]` the children of 3 are 5 and 9, and nothing requires 5 to come first — `[1, 3, 6, 9, 5, 8]` is an equally valid heap with the same keys. The difference predicts real behaviour: `find-min` is O(1) because the minimum is pinned at index 0, but finding the second-smallest key requires scanning the children of the root, and printing the heap in order requires heapsort — the O(n log n) procedure on slide 11 — not a single pass."
+      },
+      "source_material_ids": [
+        51,
+        58
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer them without looking back at the walkthrough."
+      },
+      "source_material_ids": [
+        59,
+        55,
+        52
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "A min-heap is stored as `[6, 15, 8, 20, 19, 25, 11]`. Insert the key 4 and put the arrays below in the order they occur, starting from the state before the insert.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "[6, 15, 4, 20, 19, 25, 11, 8]"
+            },
+            {
+              "id": "b",
+              "text": "[6, 15, 8, 20, 19, 25, 11]"
+            },
+            {
+              "id": "c",
+              "text": "[4, 15, 6, 20, 19, 25, 11, 8]"
+            },
+            {
+              "id": "d",
+              "text": "[6, 15, 8, 20, 19, 25, 11, 4]"
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "b",
+              "d",
+              "a",
+              "c"
+            ]
+          },
+          "max_score": 4,
+          "explanation": "The key is appended at index 7, keeping the shape: `[6, 15, 8, 20, 19, 25, 11, 4]`. Its parent is `Math.floor((7-1)/2) = 3`, holding 20, and 20 > 4, so they swap: `[6, 15, 8, 4, 19, 25, 11, 20]` — wait, index 3 holds 20 and index 7 holds 4, so the swap gives `[6, 15, 8, 4, 19, 25, 11, 20]`. Recomputing: the parent of index 7 is index 3, so the array after the first swap is `[6, 15, 8, 4, 19, 25, 11, 20]`. That is not among the options, so the option set is wrong and this item is dropped.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            52
+          ],
+          "status": "contradicted",
+          "reason": "By slide 5 the parent of index 7 is index 3 (key 20), not index 2; the accepted arrays move 4 to index 2 and swap with 8.",
+          "quote": "parent: ⌊(i − 1) / 2⌋"
+        },
+        {
+          "id": "q6",
+          "kind": "ordering",
+          "prompt": "A min-heap is stored as `[6, 15, 8, 20, 19, 25, 11]`. Insert the key 4 and put the arrays below in the order they occur, starting from the state before the insert.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "max_score": 4,
+          "options": [
+            {
+              "id": "a",
+              "text": "[6, 15, 8, 4, 19, 25, 11, 20]"
+            },
+            {
+              "id": "b",
+              "text": "[6, 15, 8, 20, 19, 25, 11]"
+            },
+            {
+              "id": "c",
+              "text": "[4, 6, 8, 15, 19, 25, 11, 20]"
+            },
+            {
+              "id": "d",
+              "text": "[6, 15, 8, 20, 19, 25, 11, 4]"
+            },
+            {
+              "id": "e",
+              "text": "[6, 4, 8, 15, 19, 25, 11, 20]"
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "b",
+              "d",
+              "a",
+              "e",
+              "c"
+            ]
+          },
+          "explanation": "4 is appended at index 7. Its parent is ⌊(7 − 1) / 2⌋ = 3, holding 20: swap. At index 3 the parent is ⌊(3 − 1) / 2⌋ = 1, holding 15: swap. At index 1 the parent is index 0, holding 6: swap. 4 is now the root, after three swaps, one per level.",
+          "replaces": "q2",
+          "labels": [
+            "rewritten"
+          ],
+          "status": "supported",
+          "cite_chunk_ids": [
+            52
+          ],
+          "reason": "Slide 5's parent formula takes index 7 to 3, then 1, then 0; with 4 smaller than 20, 15 and 6 that gives the keyed arrays.",
+          "quote": "parent: ⌊(i − 1) / 2⌋"
+        },
+        {
+          "kind": "numeric",
+          "prompt": "A min-heap is stored in an array with 14 elements, using the slide's 0-based indexing. During one `extract-min`, after the last leaf is moved to the root, how many array elements does the sift-down loop examine in total across all its iterations — counting each child index that is compared against the current node? Give the maximum possible number for a heap of this size, as a whole number. Give your answer in child comparisons.",
+          "bloom": "analyze",
+          "grader": "deterministic",
+          "answer_key": {
+            "value": 6,
+            "tolerance": 0,
+            "unit": "child comparisons",
+            "work": "A heap of 14 elements has height Math.floor(log2(14)) = 3, so sift-down can descend at most 3 levels. Each level compares the node against up to 2 children: 3 levels x 2 comparisons = 6."
+          },
+          "max_score": 4,
+          "explanation": "Sift-down descends at most one level per iteration and the tree of 14 nodes is 3 levels deep below the root, so the loop runs at most 3 times; each iteration inspects a left child and a right child, giving at most 6 child comparisons.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            55
+          ],
+          "status": "supported",
+          "reason": "Each sift-down level compares the left and right child; with slide 5's indices a 14-key heap has at most 3 such levels, so 6.",
+          "quote": "if (l < heap.length && heap[l] < heap[s]) s = l; if (r < heap.length && heap[r] < heap[s]) s = r;"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Slide 3 of Lecture 4 lists CPU and job scheduling and Dijkstra's shortest paths as applications of priority queues. Choose one of those two and explain why a binary heap suits it specifically — refer to the operation the application performs most often and the heap's cost for that operation compared with the alternatives on slide 12.",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Dijkstra's algorithm repeatedly removes the unsettled vertex with the smallest tentative distance, which is exactly extract-min, and relaxes edges, which lowers tentative distances — a decrease-key. A binary heap does both in O(log n), while an unsorted array does extract-min in O(n) and a sorted array does decrease-key in O(n). So the two operations the algorithm repeats most are cheap on a heap and slow on at least one of them on either array."
+          },
+          "rubric": [
+            {
+              "criterion": "Names the dominant operation the chosen application performs",
+              "weight": 0.35,
+              "excellent": "States that Dijkstra repeatedly extracts the minimum-distance vertex, or that a scheduler repeatedly extracts the highest-priority job.",
+              "acceptable": "Names extract-min or insert as the operation, without tying it to what the application does with the result.",
+              "poor": "Describes the application in general terms with no operation named."
+            },
+            {
+              "criterion": "Gives the heap's cost for that operation and one rival's cost from slide 12",
+              "weight": 0.4,
+              "excellent": "Cites O(log n) for the heap operation and contrasts it with a named alternative, e.g. O(n) extract-min on an unsorted array.",
+              "acceptable": "Gives O(log n) for the heap but names no comparison structure or gives its cost incorrectly.",
+              "poor": "Claims the heap is fast with no complexity figure at all."
+            },
+            {
+              "criterion": "Connects the cost to the application's overall running time",
+              "weight": 0.25,
+              "excellent": "States that per-edge or per-job heap operations give an overall bound such as O(E log V) or O(n log n) for the schedule.",
+              "acceptable": "Says the total work is the number of operations times the per-operation cost, without a concrete bound.",
+              "poor": "Stops at the per-operation cost with no statement about the whole run."
+            }
+          ],
+          "max_score": 6,
+          "id": "q4",
+          "status": "supported",
+          "reason": "Slide 12 gives the heap O(log n) for extract-min and decrease-key against O(n) for the unsorted and sorted arrays respectively.",
+          "quote": "extract-min O(log n) O(n) O(1)* decrease-key O(log n) O(1) O(n)",
+          "cite_chunk_ids": [
+            59
+          ],
+          "explanation": "Slide 12: a binary heap does extract-min and decrease-key in O(log n), while an unsorted array needs O(n) for extract-min and a sorted array O(n) for decrease-key."
+        },
+        {
+          "kind": "cloze",
+          "prompt": "In a binary min-heap stored in an array with index 0 as the root, the parent of the node at index i is at index ____.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "Math.floor((i - 1) / 2)",
+              "Math.floor((i-1)/2)",
+              "floor((i - 1) / 2)",
+              "floor((i-1)/2)",
+              "⌊(i − 1) / 2⌋",
+              "⌊(i-1)/2⌋"
+            ]
+          },
+          "max_score": 3,
+          "explanation": "Slide 5 gives the parent of index i as floor((i - 1) / 2); the floor is what makes it correct for even indices, where the division does not come out whole (index 6: (6 − 1) / 2 = 2.5, floor 2).",
+          "id": "q5",
+          "cite_chunk_ids": [
+            52
+          ],
+          "status": "supported",
+          "reason": "Slide 5 states the parent index formula exactly.",
+          "quote": "parent: ⌊(i − 1) / 2⌋"
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Take the heap `[2, 8, 5, 12, 9, 6]`. Without running anything, predict the array after inserting 1, then after one extract-min on the original heap. Write both predictions down before you check them — which of the two traces did you get wrong, and which step in it slipped?"
+      },
+      "source_material_ids": [
+        53,
+        55
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 2,
+  "cost_usd": 0.007818,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Fix these check failures: Q11 code runs (b4): Run `code-test --lesson binary_heaps_and_priority_queues --block 4 --dump`, fix solution.js / starter.js / tests.json in crew/code/binary_heaps_and_priori\"",
+    "dropped analogy: an analogy without `breaks_down_when` was dropped",
+    "added the missing code item (it has no reference solution yet: the Coder must write one)",
+    "cites: q2: cited chunk 59 (Slide 12), found by its question and answer",
+    "cites: q3: cited chunk 55 (Slide 8), found by its question and answer",
+    "cites: q5: cited chunk 52 (Slide 5), found by its question and answer",
+    "cites: b7: the quiz cited nothing; cited chunks 59, 55, 52 (its questions' sources)",
+    "check: q3: the prompt now names the unit (child comparisons)",
+    "code-test: disabled b3 (self-marked): Reference solution passed 0/4 tests in the unattended run.",
+    "code-test: applied crew/code/binary_heaps_and_priority_queues-b3 (reference 5/5, starter fails 4/5)",
+    "lecturer: b2 step 6 said \"Two swaps, two levels\"; the trace makes one swap (9 <-> 5) -> \"One swap, one level\"",
+    "lecturer: b2 step 5 check called the stopping comparison \"failed\"; 4 <= 5 is true and triggers the break",
+    "lecturer: b4 checklist said rounding fails on odd indices; (i - 1) / 2 is fractional for even i, so it fails on even indices",
+    "lecturer: q5 explanation said odd indices (it is even ones); accepted answers no longer include (i - 1) / 2 without the floor, which is not an index for even i",
+    "lecturer: b6 misconception offered [1, 6, 3, 5, 9, 8] as a valid heap, but 6 > 5 breaks the heap property -> [1, 3, 6, 9, 5, 8] (siblings 5 and 9 swapped)",
+    "lecturer: q4 reference answer ended with an O(V^2) -> O(E log V) claim that no slide makes -> replaced with the slide 12 comparison it already argues",
+    "checker: q2 contradicted by chunk 52: By slide 5 the parent of index 7 is index 3 (key 20), not index 2; the accepted arrays move 4 to index 2 and swap with 8.",
+    "checker: rewrote q2 as q6 (By slide 5 the parent of index 7 is index 3 (key 20), not index 2; the accepted arrays move 4 to index 2 and swap with 8.)",
+    "lecturer: q6 (the Checker's rewrite of q2) asked for the parent of index 6, the same fact as q5, and the quiz lost the insert trace that last year's Q3c asks for -> q6 is the q2 trace again with the arrays recomputed from slide 5's parent formula (7 -> 3 -> 1 -> 0); key b, d, a, e, c; pending for the Checker",
+    "code-test: applied crew/code/binary_heaps_and_priority_queues-b3 (reference 5/5, starter fails 4/5)",
+    "lecturer: q4 had no explanation, so the Checker quote became its \"why\" -> explanation written from slide 12"
+  ]
+}

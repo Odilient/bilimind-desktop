@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "drink_catalog",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "100% (normal) | manis biasa, normal sugar | 4 | 6",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 18,
+    "round": 1,
+    "at": "2026-10-10T16:24:20.531Z"
+  },
+  {
+    "lesson": "drink_catalog",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "FT01 | Passion Fruit Green Tea | RM 8.90 | RM 10.90 | No milk in recipe; caffeine",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 19,
+    "round": 1,
+    "at": "2026-10-10T16:24:20.531Z"
+  },
+  {
+    "lesson": "drink_catalog",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "One pump = 10 ml. Brown sugar drinks use brown sugar syrup; all other drinks use fructose syrup with the same pump counts.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 18,
+    "round": 1,
+    "at": "2026-10-10T16:24:20.531Z"
+  },
+  {
+    "lesson": "drink_catalog",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "75% | kurang manis sikit | 3 | 5",
+    "reason": "Section 7 maps kurang manis sikit to 75%, 5 pumps for large, and sets the 25% brown sugar minimum for the stripes.",
+    "chunk_id": 18,
+    "round": 1,
+    "at": "2026-10-10T16:26:06.282Z"
+  }
+]

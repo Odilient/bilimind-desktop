@@ -1,0 +1,293 @@
+{
+  "key": "bmk_module_context",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "misconception",
+      "payload": {
+        "belief": "My phrasebook is my BMK 2 syllabus — if I learn the phrases, I've covered the module.",
+        "why_it_seems_right": "The phrasebook is where the Malay actually is, and you can hold it in your hand. BMK 2 is a class you sit in, so the two feel like the same thing at different levels of detail.",
+        "what_is_true": "BMK 2 is an assessed module with its own code, credit value and category; the phrasebook is unassessed practice that supports it. The difference predicts which one shows up on your transcript: the phrasebook never does, and skipping the module's own requirements costs you credits regardless of how well you order at a mamak."
+      },
+      "source_material_ids": [
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "explainer",
+      "payload": {
+        "markdown": "BMK 2 is not a phrasebook. It is a module on your degree record, and it has a code, a credit value and a category, the same way your programme's other modules do.\n\n**Module code: MPU31002.** That is the code to look for when you register and on your timetable. Learn it as a string, not as a description.\n\n**2 credits.** It carries two credits toward your degree. Two credits sounds small, which is exactly why it is easy to treat as optional. It is not optional: MPU modules are compulsory, and Taylor's says students must take all the MPU modules listed under each category.\n\n**It sits in the MPU group.** MPU (*Mata Pelajaran Pengajian Umum*) modules are the compulsory general-studies modules of Malaysian higher education, taken alongside your programme. They are not a Taylor's invention and not a language-school add-on: they are a national requirement that Taylor's delivers.\n\n**Taylor's groups MPU modules into categories U1 to U4.** For international degree students, BMK 2 sits in U1, next to *Kursus Integriti dan Antirasuah* and *Citra Malaysia*. Malaysian students take different U1 modules instead of BMK 2, so your BMK class is made up of international students like you.\n\nThe practical consequence: BMK 2 is assessed. Your phrasebook is not. Use the phrasebook to survive the mamak, the Grab and the campus — and use it to arrive at BMK 2 already able to say something. Then let the module itself tell you what it assesses.\n\nModule name, code, credits and category are as listed on Taylor's MPU page on 10 October 2026; check that page for the current list."
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "reference_table",
+      "payload": {
+        "title": "BMK 2 and the MPU requirement — the facts you need cold",
+        "columns": [
+          "Item",
+          "Value",
+          "What it means for you"
+        ],
+        "rows": [
+          [
+            "Module name",
+            "Bahasa Melayu Komunikasi 2",
+            "The full name to use on any form; BMK 2 is the everyday short form"
+          ],
+          [
+            "Module code",
+            "MPU31002",
+            "The code to look for when you register"
+          ],
+          [
+            "Credit value",
+            "2 credits",
+            "Counts toward your degree; small, but not zero"
+          ],
+          [
+            "Category",
+            "U1",
+            "The Taylor's general-studies category this module sits in"
+          ],
+          [
+            "Group",
+            "MPU (Mata Pelajaran Pengajian Umum)",
+            "The compulsory general-studies modules of Malaysian higher education"
+          ],
+          [
+            "Next to it in U1",
+            "Kursus Integriti dan Antirasuah, Citra Malaysia",
+            "The other U1 modules for international degree students"
+          ],
+          [
+            "Who takes it",
+            "International students on Taylor's degree programmes",
+            "Malaysian students take different U1 modules instead"
+          ],
+          [
+            "Assessed?",
+            "Yes — it is a module",
+            "Your phrasebook is practice and is never assessed"
+          ],
+          [
+            "Phrasebook status",
+            "Companion practice only",
+            "Supports the module; does not replace it"
+          ]
+        ],
+        "note": "As listed on Taylor's MPU page on 10 October 2026; check that page for the current list."
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "Full module name",
+            "back": "Bahasa Melayu Komunikasi 2"
+          },
+          {
+            "front": "Module code",
+            "back": "MPU31002"
+          },
+          {
+            "front": "Credit value",
+            "back": "2 credits"
+          },
+          {
+            "front": "Taylor's category",
+            "back": "U1"
+          },
+          {
+            "front": "What MPU stands for",
+            "back": "Mata Pelajaran Pengajian Umum: the compulsory general-studies modules of Malaysian higher education"
+          },
+          {
+            "front": "Is BMK 2 assessed?",
+            "back": "Yes — it is a module with a code and credits"
+          },
+          {
+            "front": "What is the phrasebook, relative to BMK 2?",
+            "back": "Companion practice only; it is never assessed"
+          },
+          {
+            "front": "Which other U1 modules do international degree students take?",
+            "back": "Kursus Integriti dan Antirasuah and Citra Malaysia"
+          }
+        ]
+      },
+      "source_material_ids": [
+        1
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "Bahasa Melayu Komunikasi 2 is a module on your degree record, not a phrasebook or a club.",
+          "Its module code is MPU31002.",
+          "It carries 2 credits, so it counts toward the degree even though the number is small.",
+          "It is an MPU module: MPU modules are the compulsory general-studies modules of Malaysian higher education.",
+          "For international degree students at Taylor's it sits in category U1; Malaysian students take different U1 modules instead.",
+          "The module is assessed; your phrasebook is unassessed practice that supports it.",
+          "Learning phrases helps you in class, but it does not stand in for completing the module."
+        ]
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Where on your own registration or timetable does MPU31002 appear, and what does the entry next to it say? Find it before your next BMK 2 class."
+      },
+      "source_material_ids": [
+        1
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        1
+      ],
+      "assessments": [
+        {
+          "kind": "cloze",
+          "prompt": "The module code for Bahasa Melayu Komunikasi 2 at Taylor's is ____.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "MPU31002"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "MPU31002 is the module code for Bahasa Melayu Komunikasi 2, as listed on Taylor's MPU page.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            1
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "(module code **MPU31002**, 2 credits) as one of their MPU modules"
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "Which of the following statements about Bahasa Melayu Komunikasi 2 are correct? Select all that apply.",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "It carries 2 credits toward the degree."
+            },
+            {
+              "id": "b",
+              "text": "It is part of the MPU general-studies requirement."
+            },
+            {
+              "id": "c",
+              "text": "It sits in the U1 category at Taylor's."
+            },
+            {
+              "id": "d",
+              "text": "It is an unassessed companion to a phrasebook."
+            },
+            {
+              "id": "e",
+              "text": "It is an elective that students choose instead of a core paper."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "BMK 2 is a 2-credit, assessed MPU module in the U1 category. The phrasebook is the unassessed companion, and the module is a requirement rather than an elective.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            1
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "International students on Taylor's University degree programmes take **Bahasa Melayu Komunikasi 2**"
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A friend tells you they skipped BMK 2 all semester because they already speak enough Malay to order food. What does the module structure say about that plan?",
+          "bloom": "analyze",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "It works, because BMK 2 only checks whether you can speak Malay."
+            },
+            {
+              "id": "b",
+              "text": "It fails, because BMK 2 is an assessed 2-credit module and speaking Malay is not the same as completing it."
+            },
+            {
+              "id": "c",
+              "text": "It works, because the phrasebook is the assessed part and the module is optional."
+            },
+            {
+              "id": "d",
+              "text": "It fails, but only because BMK 2 is a 4-credit core paper with a heavier weight."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "BMK 2 is an assessed, credit-bearing module, so conversational ability does not substitute for completing it. It carries 2 credits, not 4, and the phrasebook is not assessed.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            1
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "MPU modules (Mata Pelajaran Pengajian Umum) are the compulsory general studies modules of Malaysian higher education."
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.001499,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Use only the facts in the BMK note (module name, code MPU31002, 2 credits, category U1, who takes it). Do not invent syllabus content, assessment weights or class times.\"",
+    "re-homed 3 questions from narrative blocks into a quiz",
+    "cites: q1: cited chunk 1 (Note: Bahasa Melayu Komunikasi 2 at Taylor's University), found by its question and answer",
+    "cites: q2: cited chunk 1 (Note: Bahasa Melayu Komunikasi 2 at Taylor's University), found by its question and answer",
+    "cites: q3: cited chunk 1 (Note: Bahasa Melayu Komunikasi 2 at Taylor's University), found by its question and answer",
+    "cites: b6: the reflection cited nothing; cited chunk 13 (best match for its text)",
+    "cites: b7: the quiz cited nothing; cited chunk 1 (its questions' sources)"
+  ]
+}

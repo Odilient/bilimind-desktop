@@ -10,7 +10,7 @@ import type { PlanData, PlanFn, ReadPlan } from './contracts.ts';
 import { BilimindError } from './contracts.ts';
 import { coursePaths, readJsonOrNull, writeJson, writeText } from './course.ts';
 import { readOutline } from './outline.ts';
-import { readExamMap } from './exam.ts';
+import { foldedInto, readExamMap } from './exam.ts';
 import { goalDefaults } from './prompts/context.ts';
 
 export const PLAN_NEW_SHARE = 0.6;
@@ -55,6 +55,36 @@ export function partitionByMinutes(m: number[], k: number): number[][] {
   return out;
 }
 
+/**
+ * Default study order of the kept lessons: families (a topic plus its kept subtopics) ranked by their past-paper
+ * share, descending; a subtopic always follows its parent; outline order breaks ties and orders a family inside.
+ * Without a past paper this is the outline order.
+ */
+export function defaultStudyOrder(keep: string[], outline: OutlineResult, examMap: ExamMap | null): string[] {
+  const nodes = outline.lessons.filter(l => keep.includes(l.key));
+  const idx = new Map(outline.lessons.map((l, i) => [l.key, i]));
+  if (!examMap) return nodes.map(l => l.key);
+  const share = new Map(examMap.weights.map(w => [w.key, w.share]));
+  const kept = new Set(nodes.map(l => l.key));
+  // root of a node among the kept lessons (follow branch_of while the parent is kept; guard cycles)
+  const rootOf = (k: string): string => {
+    let cur = k;
+    for (let i = 0; i < 8; i++) {
+      const p = outline.lessons.find(l => l.key === cur)?.branch_of;
+      if (!p || p === cur || !kept.has(p)) break;
+      cur = p;
+    }
+    return cur;
+  };
+  const fam = new Map<string, string[]>();
+  for (const l of nodes) { const r = rootOf(l.key); fam.set(r, [...(fam.get(r) ?? []), l.key]); }
+  const famShare = (ks: string[]) => Math.round(ks.reduce((s, k) => s + (share.get(k) ?? 0), 0) * 1000);
+  return [...fam.entries()]
+    .map(([root, ks]) => ({ root, ks: [root, ...ks.filter(k => k !== root).sort((a, b) => idx.get(a)! - idx.get(b)!)] }))
+    .sort((a, b) => famShare(b.ks) - famShare(a.ks) || idx.get(a.root)! - idx.get(b.root)!)
+    .flatMap(f => f.ks);
+}
+
 /** The pure planner (no I/O): what `plan` writes. */
 export function buildPlan(inp: PlanInput): PlanResult {
   const { goal, outline, examMap } = inp;
@@ -70,13 +100,15 @@ export function buildPlan(inp: PlanInput): PlanResult {
   const weight = new Map((examMap?.weights ?? []).map(w => [w.key, w.share]));
   const weightOf = (k: string) => (examMap ? weight.get(k) ?? 0 : null);
 
-  // order: the Lead's --order first (unknown keys ignored), then the rest of keep in outline (prerequisite) order
+  // order: the Lead's --order first (unknown keys ignored), then the rest of keep in study order: topological over
+  // parent/subtopic links (a subtopic right after its parent), heavier past-paper share first (G2 review: the 30%
+  // topic was learned last and got the fewest spaced reviews), outline order on ties
   const ordered: string[] = [];
   for (const k of inp.order ?? []) {
     if (!keep.includes(k)) { warnings.push(`--order names ${k}, which is not kept; ignored.`); continue; }
     if (!ordered.includes(k)) ordered.push(k);
   }
-  for (const k of keys) if (keep.includes(k) && !ordered.includes(k)) ordered.push(k);
+  for (const k of defaultStudyOrder(keep, outline, examMap)) if (!ordered.includes(k)) ordered.push(k);
 
   // calendar
   const examDay = goal.deadline ?? goal.exam_at?.slice(0, 10) ?? null;
@@ -148,8 +180,9 @@ export function buildPlan(inp: PlanInput): PlanResult {
     if (keep.includes(l.key)) continue;
     const given = inp.cut?.[l.key]?.trim();
     const w = weightOf(l.key);
-    const folded = (examMap?.questions ?? []).filter(q => (q as { folded_from?: string }).folded_from === l.key).map(q => q.id);
-    const reason = given || (folded.length ? `Its exam questions (${folded.join(', ')}) are counted in ${byKey.get(l.branch_of ?? '')?.title ?? 'its parent topic'}.`
+    const f = examMap ? foldedInto(examMap, l.key) : null;
+    // G2 review: a subtopic whose questions are counted in its parent never gets "No marks in the past paper"
+    const reason = (given && !(f && /no marks/i.test(given)) ? given : '') || (f ? `Its exam questions (${f.questions.join(', ')}) are counted in ${byKey.get(f.into)?.title ?? 'its parent topic'}${keep.includes(f.into) ? ', which is kept and covers them' : ''}.`
       : w === 0 ? 'No marks in the past paper, and the days are better spent on topics that carry them.'
       : 'Not kept: there is no time for it before the exam.');
     cut.push({ key: l.key, title: l.title, reason, weight: w });
@@ -191,9 +224,8 @@ export function planMarkdown(plan: PlanResult, outline: OutlineResult, examMap: 
   if (examMap) {
     L.push('## What the past paper weights', '', '| Topic | Marks | Share | Questions |', '|---|---:|---:|---|');
     for (const w of examMap.weights) {
-      const folded = examMap.questions.filter(q => (q as { folded_from?: string }).folded_from === w.key);
-      const into = folded[0]?.assigned ? byKey.get(folded[0].assigned)?.title ?? folded[0].assigned : null;
-      if (!w.marks && folded.length && into) L.push(`| ${w.title} | — | counted in ${into} | ${folded.map(q => q.id).join(', ')} |`);
+      const f = foldedInto(examMap, w.key);
+      if (!w.marks && f) L.push(`| ${w.title} | — | counted in ${byKey.get(f.into)?.title ?? f.into} (${f.questions.join(', ')}) | — |`);
       else L.push(`| ${w.title} | ${w.marks} | ${pct(w.share)} | ${w.questions.join(', ') || '—'} |`);
     }
     L.push('');
@@ -203,7 +235,7 @@ export function planMarkdown(plan: PlanResult, outline: OutlineResult, examMap: 
   L.push('');
   if (plan.cut.length) {
     L.push('## Cut, and why', '');
-    for (const c of plan.cut) L.push(`- **${c.title}**${c.weight !== null ? ` (${pct(c.weight)} of marks)` : ''}: ${c.reason}`);
+    for (const c of plan.cut) L.push(`- **${c.title}**${c.weight !== null && !(examMap && !c.weight && foldedInto(examMap, c.key)) ? ` (${pct(c.weight)} of marks)` : ''}: ${c.reason}`);
     L.push('');
   }
   L.push('## Day by day', '');
@@ -212,7 +244,7 @@ export function planMarkdown(plan: PlanResult, outline: OutlineResult, examMap: 
     if (d.exam) { L.push(`### ${pretty(d.date)}: ${d.label ?? 'Exam'}`, '', '- Exam day. No new lessons.', ''); continue; }
     const reviewing = plan.lessons.filter(l => plan.review_dates[l.key]?.includes(d.date)).map(l => l.title);
     L.push(`### ${pretty(d.date)} · ${d.minutes} min`, '');
-    for (const k of d.lessons) L.push(`- Learn: ${titleOf(k)} (${byKey.get(k)?.estimated_minutes ?? 0} min)`);
+    for (const k of d.lessons) L.push(`- Learn: ${titleOf(k)} (${plan.lessons.find(l => l.key === k)?.minutes ?? byKey.get(k)?.estimated_minutes ?? 0} min)`);
     if (reviewing.length) L.push(`- Review: ${reviewing.join(', ')} (${reviewing.length * PLAN_REVIEW_MINUTES} min)`);
     if (!d.lessons.length && !reviewing.length) L.push('- Rest, or redo the questions you got wrong.');
     L.push('');

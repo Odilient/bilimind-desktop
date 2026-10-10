@@ -1,0 +1,469 @@
+{
+  "key": "grab_and_directions",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "The Grab arrives. You get in. Neither of you says anything useful for eleven minutes, and you spend the whole ride hoping the pin was right.\n\nThat silence is the thing this lesson removes. It is not a vocabulary problem — you already know enough words. It is a *sequencing* problem: the ride has four moments where something must be said, and if you say them in the wrong order or skip one, the driver fills the gap with his own guess.\n\nThe four moments, in order:\n\n1. **When he calls or texts** — tell him where you are standing, in a way he can act on.\n2. **Before he moves** — confirm the destination out loud, even though the app already shows it. This is your best chance to catch a wrong pin while the car is still stationary.\n3. **While moving** — give directions only if he asks or if he is clearly about to miss the turn.\n4. **On arrival** — stop him at the right gate, not at the security post 400 metres earlier.\n\nYour source phrasebook has all of these in section 6. What it does not give you is the order, and the order is what stops the silent ride.\n\nTwo things about how the words sound, from section 1 of the same phrasebook. Final *k* is a short stop in the throat, not a full \"k\" — so *tidak* comes out closer to \"tida'\". And stress is light and fairly even, leaning slightly on the second-last syllable. That matters here because *belok* and *terus* are the two words a driver has to catch over engine noise, and both are short.\n\nOne structural note before you start. On campus, the same three direction words do all the work: *kiri*, *kanan*, *terus*. You will use them on foot, in a car, and pointing at a map on someone's phone. Learn them once, here."
+      },
+      "source_material_ids": [
+        5,
+        12
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "The full ride, from booking to getting out, in the order it happens: first the driver has to find you, then you confirm where you are going, then you steer and stop.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "When he calls, describe where you are standing",
+            "detail_markdown": "Drivers often call rather than text. Answer, and say where you are:\n\n> **Saya tunggu di pintu utama.**\n\nThen add one thing he can see from the road:\n\n> **Saya pakai baju biru.**\n\nIf you are not there yet:\n\n> **Saya lambat sikit, lima minit.**\n\nSwap *biru* for whatever colour you are actually wearing. The colour is the whole point — it is the only part of this that he can use from a moving car.",
+            "warning": "Do not say *Saya dah sampai* (I've arrived) if you are not yet at the pickup point: it tells him you are standing there now, and he will look for you there. If you are late, say *Saya lambat sikit, lima minit.*",
+            "check": "He has stopped describing where he is and started describing where you are. That is the switch you are listening for."
+          },
+          {
+            "n": 2,
+            "title": "Ask whether he has arrived, once, if the car is not where you are",
+            "detail_markdown": "If the app says the car is here and you cannot see it, send:\n\n> **Abang dah sampai?**\n\n*Abang* is the friendly address for a man a bit older than you — the same *bang* you use for the mamak waiter. It is the right word for a Grab driver too.\n\nSend it once. If he does not reply within a minute, call. Do not send it three times; a driver who is circling a one-way system cannot read while driving, and repeated messages make him stop reading altogether.",
+            "warning": "Do not walk toward where you think the car is. Stay at the pin. A moving passenger and a moving driver can circle each other for ten minutes; a stationary passenger gets found.",
+            "check": "You have a reply, or you have called and spoken. If neither, cancel and rebook — you are past the point where more messages help."
+          },
+          {
+            "n": 3,
+            "title": "Get in and say the destination out loud",
+            "detail_markdown": "As you open the door or just after you sit down, say:\n\n> **Saya nak pergi ke Taylor's, Lakeside Campus.**\n\nThis is the phrase from section 6 of your phrasebook. You are not asking a question — you are stating the destination so he can confirm it. If he repeats it back or nods, you are aligned. If he says something you do not catch, point at his phone screen and say *ini* while tapping the pin.\n\nSay it before the car moves. A wrong pin corrected at the kerb costs ten seconds; corrected 3 km down the road it costs a fare and an argument.",
+            "warning": "Do not skip this because the app already shows the destination. A campus has several gates, and a pin dropped at the wrong one still routes somewhere.",
+            "check": "He has said the destination back, or nodded while looking at his own screen. If neither happened, say it again more slowly."
+          },
+          {
+            "n": 4,
+            "title": "Give directions only when he asks or is about to miss a turn",
+            "detail_markdown": "Three words, from section 6:\n\n| Malay | English |\n|---|---|\n| **Belok kiri.** | Turn left. |\n| **Belok kanan.** | Turn right. |\n| **Jalan terus.** | Go straight on. |\n\nAnd if he overshoots:\n\n> **Pusing balik.**\n\nSay the word, then point. The gesture and the word together survive engine noise; either one alone often does not. Your phrasebook notes that Wikivoyage also lists *Pusing kiri* and *Pusing kanan* for left and right — if a driver uses those, they mean the same thing, and *belok* is the safer word to produce yourself.\n\nIf he asks how long:\n\n> **Berapa lama?**\n\nis the question, and *Jalan sesak* or *Jem* is what he will say back if the answer is bad.",
+            "warning": "Do not narrate the whole route. A driver who knows the campus better than you will find constant directions distracting, and you will run out of attention before the turns that matter.",
+            "check": "He has taken at least one turn you asked for. If he has ignored two, stop giving directions — he knows a route you do not."
+          },
+          {
+            "n": 5,
+            "title": "Stop him at the right gate",
+            "detail_markdown": "When you can see where you want to get out:\n\n> **Tolong berhenti di sini.**\n\nSay it early enough that he can pull over legally. On a campus road that means roughly 50 metres before the point you actually want, because he needs to find a gap.\n\nIf you are not sure whether you are close enough yet, ask:\n\n> **Dekat atau jauh?**\n\nusing *dekat* and *jauh* from the same table.",
+            "warning": "Do not wait until you are level with the gate. At that point he has already passed the turning and you will be dropped on the far side of a divided road.",
+            "check": "The car has stopped and he has not asked you for more money than the app quoted."
+          },
+          {
+            "n": 6,
+            "title": "On foot, use the same three words",
+            "detail_markdown": "The direction words do not change when you get out of the car. If you are lost on campus and stop someone:\n\n> **Di mana perpustakaan?**\n\nThen listen for *kiri*, *kanan* or *terus* in the answer. Those three are the whole of what you need to catch. If the answer comes too fast, say the place again and point — most people will point as they repeat it, and the point is the answer.\n\n*Di mana perpustakaan?* is from section 7 of your phrasebook; the rest of the campus words come in the campus lesson.",
+            "warning": "Do not nod at an answer you did not understand. Ask again with the place name — *perpustakaan?* — and let them point. A wrong nod sends you 200 metres in the wrong direction and you will not know until you are there.",
+            "check": "You can see the building, or the person has pointed at something you can see."
+          }
+        ]
+      },
+      "source_material_ids": [
+        5,
+        12,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "Listen to each line, then say it twice. These are the six you will actually produce in a Grab. Keep the final *k* in *belok* as a short catch in the throat, not a hard \"k\".",
+        "language": "ms",
+        "items": [
+          {
+            "text": "Saya nak pergi ke Taylor's, Lakeside Campus.",
+            "translation": "I want to go to Taylor's Lakeside Campus.",
+            "phonetic": "SAH-yah nah' PUHR-gee kuh TAY-lerz, LAYK-side KAM-pus",
+            "audio": "audio/eac23323dc197633.mp3"
+          },
+          {
+            "text": "Saya tunggu di pintu utama.",
+            "translation": "I'm waiting at the main entrance.",
+            "phonetic": "SAH-yah TOONG-goo dee PEEN-too oo-TAH-mah",
+            "audio": "audio/d71a8bddc27fb1f6.mp3"
+          },
+          {
+            "text": "Saya pakai baju biru.",
+            "translation": "I'm wearing a blue shirt.",
+            "phonetic": "SAH-yah PAH-kai BAH-joo BEE-roo",
+            "audio": "audio/0fe52fbf8eb51b8f.mp3"
+          },
+          {
+            "text": "Abang dah sampai?",
+            "translation": "Have you arrived? (to the driver)",
+            "phonetic": "AH-bahng dah SAM-pie",
+            "audio": "audio/42d49f7a56464444.mp3"
+          },
+          {
+            "text": "Belok kiri. Jalan terus.",
+            "translation": "Turn left. Go straight on.",
+            "phonetic": "buh-LO' KEE-ree. JAH-lahn tuh-ROOS",
+            "audio": "audio/323336b83cee0086.mp3"
+          },
+          {
+            "text": "Tolong berhenti di sini.",
+            "translation": "Please stop here.",
+            "phonetic": "TOH-long buhr-HUHN-tee dee SEE-nee",
+            "audio": "audio/cd8f59b8bf1f2156.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, natural Malaysian pace",
+        "voice": "ms-MY-YasminNeural"
+      },
+      "source_material_ids": [
+        5,
+        12
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "dialogue",
+      "payload": {
+        "scenario_markdown": "You booked a Grab to Taylor's Lakeside Campus. The app says the car has arrived. You are at the main entrance in a blue shirt. The driver is somewhere nearby and cannot see you.",
+        "language": "ms",
+        "ai_role": "Grab driver, calling from the car",
+        "learner_role": "passenger",
+        "goal": "Tell the driver where you are standing, confirm you are going to Taylor's Lakeside Campus, and get him to the pickup point without leaving your spot.",
+        "opening_line": "Helo, saya dah sampai. Awak di mana?",
+        "hints": [
+          "Saya tunggu di pintu utama.",
+          "Saya pakai baju biru.",
+          "Saya nak pergi ke Taylor's, Lakeside Campus.",
+          "Saya lambat sikit, lima minit."
+        ],
+        "opening_audio": "audio/f699e7d9b6b0e93d.mp3"
+      },
+      "source_material_ids": [
+        12
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "checklist",
+      "payload": {
+        "title": "Keep this open in the car",
+        "items": [
+          {
+            "text": "Destination said out loud before the car moves",
+            "why": "Catches a wrong pin while it is still free to fix"
+          },
+          {
+            "text": "Phone answered, not ignored, when the driver calls",
+            "why": "An unanswered call is the start of the silent ride"
+          },
+          {
+            "text": "One landmark given: gate name or shirt colour",
+            "why": "A driver cannot use \"near the building\" from a moving car"
+          },
+          {
+            "text": "You stayed at the pin instead of walking toward the car",
+            "why": "Two moving people circle each other; one stationary person gets found"
+          },
+          {
+            "text": "Abang dah sampai? sent once, not three times",
+            "why": "A driver reading four messages reads none of them"
+          },
+          {
+            "text": "Direction given as word plus point, not word alone",
+            "why": "Belok kiri over engine noise needs the hand to land"
+          },
+          {
+            "text": "Tolong berhenti di sini said about 50 m before the gate",
+            "why": "He needs room to pull over legally"
+          },
+          {
+            "text": "Fare on the app matches what he asks for",
+            "why": "The quoted price is the price; anything else is a conversation"
+          }
+        ],
+        "note": "If you only do three of these, do the first, the fourth and the seventh. Those three are the ones that turn into money or a long walk when they are missed."
+      },
+      "source_material_ids": [
+        12
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "misconception",
+      "payload": {
+        "belief": "The app already shows the driver my destination, so saying it out loud is redundant.",
+        "why_it_seems_right": "The pin is on his screen, the fare is fixed, and the route is drawn. Nothing about the interface suggests there is anything left to confirm, and speaking up feels like implying he cannot read his own phone.",
+        "what_is_true": "The pin is where you dropped it, which is not always where you are going. Campuses have several gates, and a pin dropped on the wrong side of a dual carriageway still routes somewhere. Saying *Saya nak pergi ke Taylor's, Lakeside Campus* before the car moves costs four seconds and surfaces the mismatch while the car is stationary. The difference it predicts: if you skip it, the first time you learn the pin was wrong is when the car stops somewhere you do not recognise, and by then you are negotiating a fare in a language you have had for two weeks."
+      },
+      "source_material_ids": [
+        12
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        5,
+        12
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "Put these moments of a Grab ride in the order you perform them, from booking to getting out.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Say the destination out loud while the car is still stationary."
+            },
+            {
+              "id": "b",
+              "text": "Answer the driver's call and say where you are standing."
+            },
+            {
+              "id": "c",
+              "text": "Say Tolong berhenti di sini about 50 metres before the gate."
+            },
+            {
+              "id": "d",
+              "text": "Say Belok kiri or Jalan terus as the car approaches the turn."
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "a",
+              "b",
+              "d",
+              "c"
+            ]
+          },
+          "max_score": 10,
+          "explanation": "Destination is confirmed before movement, because that is the only moment a wrong pin is free to fix. The location call comes next, since the driver needs to find you before he can drive anywhere. Directions come while moving. The stop request comes last, and early enough for him to pull over legally.",
+          "id": "q1",
+          "status": "contradicted",
+          "reason": "Pickup comes first: you tell the driver where you are waiting before you get in and give the destination.",
+          "quote": "Saya tunggu di pintu utama. | I'm waiting at the main entrance.",
+          "cite_chunk_ids": [
+            12
+          ]
+        },
+        {
+          "id": "q6",
+          "kind": "ordering",
+          "prompt": "Put these moments of a Grab ride in the order you perform them, from booking to getting out.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "max_score": 10,
+          "options": [
+            {
+              "id": "a",
+              "text": "Say the destination out loud while the car is still stationary."
+            },
+            {
+              "id": "b",
+              "text": "Answer the driver's call and say where you are standing."
+            },
+            {
+              "id": "c",
+              "text": "Say Tolong berhenti di sini about 50 metres before the gate."
+            },
+            {
+              "id": "d",
+              "text": "Say Belok kiri or Jalan terus as the car approaches the turn."
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "b",
+              "a",
+              "d",
+              "c"
+            ]
+          },
+          "explanation": "The driver calls to find you first, then you state the destination before moving, give turn directions while moving, and ask to stop near the gate.",
+          "replaces": "q1",
+          "labels": [
+            "rewritten"
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Saya tunggu di pintu utama.",
+          "cite_chunk_ids": [
+            12
+          ]
+        },
+        {
+          "kind": "mcq",
+          "prompt": "The app says your Grab has arrived. You are at the main entrance and cannot see the car. You have already sent Abang dah sampai? twice with no reply. What is the best next move?",
+          "bloom": "evaluate",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Walk toward the road you think he is on, so you meet him halfway."
+            },
+            {
+              "id": "b",
+              "text": "Call him, and if he does not answer, cancel and rebook from the same pin."
+            },
+            {
+              "id": "c",
+              "text": "Keep sending Abang dah sampai? until he replies, since he may not have seen the first two."
+            },
+            {
+              "id": "d",
+              "text": "Wait at the pin without calling, because he can see your location on his screen."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 10,
+          "explanation": "A driver who is circling a one-way system cannot read messages, so more messages add nothing. Walking away from the pin means two moving people trying to meet. A call reaches him hands-free; if that fails, cancelling from the pin is the only move that keeps your position known.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            12
+          ],
+          "status": "not_covered",
+          "reason": "Re-solved independently and the answer holds, but the quote did not check out against the slide.",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Your Grab driver is approaching a junction on the campus road and asks which way to go. You need him to turn right and then keep going. Write what you say, in Malay, and explain why you say the direction word together with a hand gesture rather than the word alone.",
+          "bloom": "apply",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Belok kanan. Jalan terus. The word alone is short and competes with engine noise and road noise; the phrasebook notes that a final k is only a short stop and a final r is often dropped, so a short direction word is easily lost. The gesture carries the same information through a channel that noise does not affect, so the driver gets the instruction even if he only half-hears the word."
+          },
+          "rubric": [
+            {
+              "criterion": "Produces the correct Malay direction phrases for right then straight",
+              "weight": 0.4,
+              "excellent": "Gives Belok kanan and Jalan terus, spelled as in the phrasebook, in that order.",
+              "acceptable": "Gives one of the two correctly and the other recognisably, or gives both with minor spelling drift.",
+              "poor": "Gives English directions, invents a Malay phrase not in the source, or reverses left and right."
+            },
+            {
+              "criterion": "Explains the acoustic reason for pairing the word with a gesture",
+              "weight": 0.4,
+              "excellent": "Names engine or road noise competing with a short word, and states that the gesture carries the same information on a channel noise does not affect.",
+              "acceptable": "States that the gesture helps the driver understand, without naming noise or the short length of the word.",
+              "poor": "Says only that gestures are polite, or gives no reason at all."
+            },
+            {
+              "criterion": "Keeps the instruction to the two words rather than narrating the route",
+              "weight": 0.2,
+              "excellent": "Gives exactly the two directions needed and nothing more.",
+              "acceptable": "Gives the two directions plus one extra phrase that does not confuse the instruction.",
+              "poor": "Describes the whole route or adds several turns not asked for."
+            }
+          ],
+          "max_score": 20,
+          "id": "q3",
+          "status": "supported",
+          "reason": "Belok kanan is turn right and Jalan terus is go straight on; the gesture advice is the lesson's.",
+          "quote": "Belok kiri. / Belok kanan. | Turn left. / Turn right.",
+          "cite_chunk_ids": [
+            12
+          ],
+          "explanation": "Belok kiri. / Belok kanan. | Turn left. / Turn right."
+        },
+        {
+          "kind": "cloze",
+          "prompt": "You are standing at the main entrance and the driver cannot see you. You tell him where you are waiting: Saya tunggu di ____ utama.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "pintu"
+            ]
+          },
+          "max_score": 10,
+          "explanation": "Pintu utama is the main entrance, the phrase the phrasebook gives for telling a driver where you are standing. Pintu is the word for door or gate.",
+          "id": "q4",
+          "cite_chunk_ids": [
+            12
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Saya tunggu di pintu utama. | I'm waiting at the main entrance."
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "type": "project",
+      "payload": {
+        "title": "One real ride, scripted end to end",
+        "brief_markdown": "Take one actual Grab trip you will make in the next few days — campus to a mamak, campus to KL Sentral, or a ride back to your accommodation. Before you book it, write the four things you will say, in Malay, in the order you will say them: the location line, the destination line, one direction line for a turn you expect on that route, and the stop line.\n\nConstraints:\n\n- Every Malay phrase must come from section 6 of your phrasebook, spelled exactly as it appears there (swapping in your own shirt colour is fine). Do not compose new Malay sentences.\n- The location line must contain something specific to you: the gate you will actually stand at, or the colour shirt you will actually wear.\n- The direction line must name a real turn on the route, not a generic one. Look at the map before you write it.\n\nThen take the ride and say all four. Done means you have said all four out loud to a real driver, and you can state which one he responded to fastest.",
+        "deliverables": [
+          "The four phrases written in order, in Malay, with the English beside each",
+          "A one-line note on the actual route naming the turn you used for the direction line",
+          "Two sentences after the ride: which phrase the driver reacted to immediately, and which one you had to repeat"
+        ]
+      },
+      "source_material_ids": [
+        12
+      ],
+      "assessments": [
+        {
+          "kind": "project",
+          "prompt": "Submit the four scripted phrases in order, the route note naming the real turn you used, and your two-sentence reflection on which phrase landed immediately and which you had to repeat.",
+          "bloom": "create",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "A complete submission has four Malay phrases drawn verbatim from section 6 of the phrasebook, ordered location, destination, direction, stop; a route note naming an actual turn on the learner's real journey; and a reflection that identifies a specific phrase the driver acted on without repetition and a specific phrase that needed a second attempt."
+          },
+          "rubric": [
+            {
+              "criterion": "Four phrases present, in the correct ride order, drawn verbatim from the source",
+              "weight": 0.35,
+              "excellent": "All four phrases appear in location, destination, direction, stop order, each spelled as in section 6 with no invented Malay.",
+              "acceptable": "Four phrases present but one is out of order, or one phrase is a close paraphrase rather than the source wording.",
+              "poor": "Fewer than four phrases, or Malay sentences composed rather than taken from the source."
+            },
+            {
+              "criterion": "Location and direction lines are specific to the learner's real journey",
+              "weight": 0.35,
+              "excellent": "Names an actual gate or a colour the learner will wear, and an actual turn on the route confirmed against the map.",
+              "acceptable": "One of the two is specific and the other is generic.",
+              "poor": "Both lines are generic placeholders that would fit any ride."
+            },
+            {
+              "criterion": "Reflection names which phrase landed and which needed repeating",
+              "weight": 0.3,
+              "excellent": "Names one specific phrase the driver acted on immediately and one specific phrase that required a second attempt, with what the driver did in each case.",
+              "acceptable": "Names the two phrases but describes the driver's response only vaguely.",
+              "poor": "Says the ride went well or badly without naming any phrase."
+            }
+          ],
+          "max_score": 30,
+          "id": "q5"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.004001,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Spoken-language course: explanations in English, phrases in Malay. Use only Malay words and phrases that appear in the source excerpts, spelled exactly as there; never invent new Malay sentences. Besi\"",
+    "cites: q2: cited chunk 12 (6. Grab and getting around †), found by its question and answer",
+    "cites: q4: cited chunk 12 (6. Grab and getting around †), found by its question and answer",
+    "checker: q1 contradicted on re-solving: Re-solved from the slides: the answer is b) Answer the driver's call and say where you are standing. -> a) Say the destination out loud while the car is still stationary. -> d) Say Belok kiri or Jalan terus as the car approaches the turn. -> c) Say Tolong berhenti di sini about 50 metres before the ",
+    "checker: rewrote q1 as q6 (b) Answer the driver's call and say where you are standing. -> a) Say the destination out loud while the car is still stationary. -> d) Say Belok kiri or Jalan terus as the car approaches the turn. -> c) Say Tolong berhenti di sini about 50 metres before the gate. is the correct answer when the question is re-solved; the key said 1. a) Say the destination out loud while the car is still stationary.  2. b) Answer the driver's call and say where you are standing.  3. d) Say Belok kiri or Jalan terus as the car approaches the turn.  4. c) Say Tolong berhenti di sini about 50 metres before the gate.. Write a replacement whose key is right.)",
+    "checker: q1 contradicted by chunk 12: Pickup comes first: you tell the driver where you are waiting before you get in and give the destination."
+  ]
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "name": "walkthrough: key 5 swaps once with 9, then stops under 4",
+    "call": "siftUp([4, 7, 9, 12, 8, 10, 5], 6)",
+    "expect": [
+      4,
+      7,
+      5,
+      12,
+      8,
+      10,
+      9
+    ]
+  },
+  {
+    "name": "slide 7: inserting 2 into [1, 3, 6, 5, 9, 8]",
+    "call": "siftUp([1, 3, 6, 5, 9, 8, 2], 6)",
+    "expect": [
+      1,
+      3,
+      2,
+      5,
+      9,
+      8,
+      6
+    ]
+  },
+  {
+    "name": "a new minimum climbs all the way to the root",
+    "call": "siftUp([6, 15, 8, 20, 19, 25, 11, 4], 7)",
+    "expect": [
+      4,
+      6,
+      8,
+      15,
+      19,
+      25,
+      11,
+      20
+    ]
+  },
+  {
+    "name": "parent already smaller: nothing moves",
+    "call": "siftUp([1, 3, 6, 5, 9, 8, 7], 6)",
+    "expect": [
+      1,
+      3,
+      6,
+      5,
+      9,
+      8,
+      7
+    ]
+  },
+  {
+    "name": "changes the array in place",
+    "call": "(() => { const h = [1, 3, 6, 5, 9, 8, 2]; siftUp(h, 6); return h; })()",
+    "expect": [
+      1,
+      3,
+      2,
+      5,
+      9,
+      8,
+      6
+    ]
+  }
+]

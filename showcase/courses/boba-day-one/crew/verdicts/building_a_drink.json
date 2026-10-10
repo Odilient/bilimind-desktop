@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "building_a_drink",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "Ice before syrup washes the stripes away. Syrup always goes in first.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 16,
+    "round": 1,
+    "at": "2026-10-10T16:24:21.783Z"
+  },
+  {
+    "lesson": "building_a_drink",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Oat milk only if the sticker says OAT.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 17,
+    "round": 1,
+    "at": "2026-10-10T16:24:21.783Z"
+  },
+  {
+    "lesson": "building_a_drink",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "A wet rim or crooked film leaks: this is how most counter spills start.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 17,
+    "round": 1,
+    "at": "2026-10-10T16:24:21.783Z"
+  },
+  {
+    "lesson": "building_a_drink",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Cold or thin syrup will not stick: no stripes. Use the bottle from the warm bath.",
+    "reason": "6.4 steps 3 and 4 name both causes in the key: cold syrup, and ice before syrup washing the stripes away.",
+    "chunk_id": 16,
+    "round": 1,
+    "at": "2026-10-10T16:26:06.972Z"
+  }
+]

@@ -23,7 +23,7 @@ const calls: Call[] = [];
 function cli(label: string, args: string[], cwd: string): Call {
   const t0 = Date.now();
   const r = spawnSync(process.execPath, ['--no-warnings', '--import', NO_NET, CLI, ...args], {
-    cwd, encoding: 'utf8', timeout: 120_000, env: { ...process.env, BILIMIND_DEBUG: '', NODE_OPTIONS: '' },
+    cwd, encoding: 'utf8', timeout: 120_000, env: { ...process.env, BILIMIND_DEBUG: '', NODE_OPTIONS: '', BILIMIND_NO_CLOCK: '1' },   // offline probe must not cache skew 0 in the real ~/.bilimind/clock.json
   });
   const lines = (r.stdout ?? '').split(/\r?\n/).filter(l => l.trim());
   let line: Line | null = null;

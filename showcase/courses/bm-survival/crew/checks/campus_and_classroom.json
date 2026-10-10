@@ -1,0 +1,183 @@
+{
+  "lesson": "campus_and_classroom",
+  "round": 6,
+  "at": "2026-10-10T16:35:02.707Z",
+  "total": 25,
+  "passed": 25,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "8 blocks and 4 items have unique ids"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "speaking payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "flashcards payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "dialogue payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 8
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 8,
+      "item": "q4"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 8,
+      "item": "q2"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 8,
+      "item": "q3"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "communicative: has speaking, dialogue"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "3 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "2 higher-order, 1 remember of 3"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 3 items (max 1)"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 8,
+      "item": "q4"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 1 accepted answer",
+      "block": 8,
+      "item": "q2"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 8,
+      "item": "q3"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "19 chunk citations on 8 blocks resolve"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "2 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "898 teaching words for a 25-minute lesson (target about 750, minimum 375)"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q17 language",
+      "ok": true,
+      "detail": "speaking language ms",
+      "block": 2
+    },
+    {
+      "lesson": "campus_and_classroom",
+      "rule": "Q17 language",
+      "ok": true,
+      "detail": "dialogue language ms",
+      "block": 4
+    }
+  ]
+}

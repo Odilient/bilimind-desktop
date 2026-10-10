@@ -1,0 +1,516 @@
+{
+  "key": "building_a_drink",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "At Mutiara Tea Bar, a drink is not built from memory. It is built from the sticker. Section 6.4 of your SOP opens with the rule that decides everything after it: **read the sticker first**. The sticker carries five things you must transfer into the cup — size, sweetness, ice, milk type, toppings. Miss one and the drink is a remake.\n\nThe most serious miss is milk type. If the sticker says **OAT** and you pour fresh milk, an allergy customer drinks dairy. Section 6.4 step 1 puts that in plain words: wrong milk for an allergy customer is the most serious mistake in this shop.\n\nThe second rule is order. Syrup goes in before ice. Ice before syrup washes the stripes off the cup wall and you cannot get them back. Brown sugar drinks are never shaken at the bar — the customer shakes, after they leave.\n\nThe target is **under 90 seconds per drink**. That is not a speed contest; it is a rhythm. Read, scoop, stripe, ice, milk, tea, seal, hand over. Each step has one thing that goes wrong, and the SOP names it next to the step so you can catch it in the second it happens.\n\nYour cup sizes are fixed: **500 ml regular** and **700 ml large**. Your milk volumes are fixed: **160 ml regular, 220 ml large**. Tea: **100 ml regular, 140 ml large**. Pearls: **1 scoop (60 g) regular, 1.5 scoops (90 g) large**. Only the size letter changes these numbers; sweetness, ice and milk type come from the rest of the sticker."
+      },
+      "source_material_ids": [
+        16,
+        17
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "This is BS01 Brown Sugar Milk Tea, built to a sticker that reads: **BS01-L 75% LI OAT**. Large cup, 75% sweetness, less ice, oat milk. Follow the eight steps in this order. The order is forced — syrup before ice, milk before tea — and reversing any pair changes the drink.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Read the sticker out loud",
+            "detail_markdown": "Say the five fields to yourself before you touch anything: size (R or L), sweetness (%), ice level, milk type (fresh or OAT), toppings. Scan for **ALG**. For `BS01-L 75% LI OAT` you say: large, 75%, less ice, oat, pearls.",
+            "warning": "Building from memory. The SOP states this is the most serious mistake in the shop — wrong milk for an allergy customer.",
+            "check": "You can say all five fields without looking at the sticker again."
+          },
+          {
+            "n": 2,
+            "title": "Scoop the pearls",
+            "detail_markdown": "Use the slotted pearl spoon. Large cup: **1.5 scoops = 90 g**. Regular cup: **1 scoop = 60 g**. Drop them into the cup first.",
+            "warning": "Bare hands on food is an offence under [LAW, reg. 36(1)(e)]. Too few pearls is the top customer complaint.",
+            "check": "The pearls are in the cup: 90 g for large, 60 g for regular."
+          },
+          {
+            "n": 3,
+            "title": "Stripe the cup with warm syrup",
+            "detail_markdown": "Take the brown sugar syrup bottle **from the warm water bath on the bar** (or refill it if empty). Add the syrup for 75% sweetness: section 7 gives 5 pumps (50 ml) for a large cup, 3 for a regular. Tilt the cup and turn it so the syrup coats the inside wall — that is the tiger stripe.",
+            "warning": "Cold or thin syrup will not stick. No stripes. The SOP says warm syrup sticks to the cup wall, cold syrup slides off.",
+            "check": "You can see brown streaks holding on the inside wall when you hold the cup up."
+          },
+          {
+            "n": 4,
+            "title": "Add ice for the sticker's ice level",
+            "detail_markdown": "Use the ice scoop. `LI` means less ice: 1 scoop (85 g) in a large cup, half a scoop (60 g) in a regular one (section 7). Drop ice in **after** the syrup.",
+            "warning": "Ice before syrup washes the stripes away. Syrup always goes in first.",
+            "check": "Stripes are still visible through the ice."
+          },
+          {
+            "n": 5,
+            "title": "Pour the milk slowly over the ice",
+            "detail_markdown": "Large cup: **220 ml**. Regular cup: **160 ml**. This sticker says **OAT**, so pour oat milk — not fresh. Pour slowly, over the ice, not down the side.",
+            "warning": "Pouring fast melts the stripes. Wrong milk type can cause an allergic reaction.",
+            "check": "Milk level sits above the ice, stripes still readable on the wall."
+          },
+          {
+            "n": 6,
+            "title": "Top with black tea over the back of a spoon",
+            "detail_markdown": "Large cup: **140 ml**. Regular cup: **100 ml**. Pour slowly over the back of a spoon so the tea floats as a layer on top of the milk.",
+            "warning": "Pouring fast mixes everything brown. Still drinkable, but customers photograph this drink.",
+            "check": "You can see three bands: dark tea on top, milk in the middle, syrup stripes on the wall."
+          },
+          {
+            "n": 7,
+            "title": "Wipe the rim, seal, and invert over the sink",
+            "detail_markdown": "Wipe the cup rim dry with a clean cloth. Seal with **one full press** of the handle. Turn the cup upside down over the sink for **2 seconds**.",
+            "warning": "A wet rim or crooked film leaks. The SOP says this is how most counter spills start.",
+            "check": "No drip in the two seconds upside down. If it drips, re-seal before it reaches the counter."
+          },
+          {
+            "n": 8,
+            "title": "Stick the sticker on and hand over",
+            "detail_markdown": "Press the sticker onto the cup. Give a **12 mm wide straw** — a thin straw blocks on the pearls. Read the order number aloud, then say the sweetness and milk type: \"Large brown sugar, 75 percent, oat milk.\" Tell the customer: **shake before drinking**.",
+            "warning": "Shaking at the bar ruins the stripes. The customer shakes, not you.",
+            "check": "Sticker is on, straw is wide, order number has been said out loud."
+          }
+        ]
+      },
+      "source_material_ids": [
+        15,
+        16,
+        17,
+        18
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "checklist",
+      "payload": {
+        "title": "BS01 build check — keep this open at the bar",
+        "items": [
+          {
+            "text": "Sticker read: size, sweetness, ice, milk type, toppings — all five said out loud",
+            "why": "Prevents building from memory, which is how allergy drinks get made wrong"
+          },
+          {
+            "text": "ALG checked on the sticker",
+            "why": "An allergy order is made with washed hands, new gloves, a shaker and scoop from the clean rack and fresh ice with the clean scoop (section 9)."
+          },
+          {
+            "text": "Pearls scooped with the slotted spoon — 60 g regular, 90 g large",
+            "why": "Bare hands on food is an offence under [LAW, reg. 36(1)(e)]"
+          },
+          {
+            "text": "Syrup taken from the warm water bath, not the shelf",
+            "why": "Cold syrup slides off the wall and you get no stripes"
+          },
+          {
+            "text": "Syrup added before ice, cup tilted and turned to coat the wall",
+            "why": "Ice first washes the stripes away and they do not come back"
+          },
+          {
+            "text": "Milk volume matched to size: 160 ml regular, 220 ml large",
+            "why": "Short pours get sent back; over-pours overflow at the seal"
+          },
+          {
+            "text": "Milk type matches the sticker — OAT means oat, never fresh",
+            "why": "Wrong milk type can cause an allergic reaction"
+          },
+          {
+            "text": "Tea poured over the back of a spoon so it floats as a layer",
+            "why": "Fast pouring mixes everything brown and loses the look customers photograph"
+          },
+          {
+            "text": "Rim wiped dry, film sealed with one full press, cup inverted 2 seconds over the sink",
+            "why": "A wet rim or crooked film leaks — this is how most counter spills start"
+          },
+          {
+            "text": "Sticker on, 12 mm straw in, order number read aloud, shake-before-drinking told to the customer",
+            "why": "A thin straw blocks on the pearls and the customer blames the drink"
+          }
+        ],
+        "note": "Run this top to bottom on every BS01. If any line fails, fix it before the cup leaves the bar — a remake costs you more than the ten seconds the check takes."
+      },
+      "source_material_ids": [
+        15,
+        16,
+        17
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Two stickers, two builds — where they diverge",
+        "markdown": "**Sticker A: `BS01-R 50% RI`** — regular, 50% sweetness, normal ice, fresh milk.\n\n- Pearls: 1 scoop = 60 g\n- Syrup: 50% = 2 pumps, from the warm bath, tilted to coat\n- Ice: RI = 1 scoop (120 g), after syrup\n- Milk: 160 ml fresh, poured slowly over the ice\n- Tea: 100 ml black, over the back of a spoon\n- Seal, invert 2 s, sticker on, 12 mm straw, order number read aloud\n\n**Sticker B: `BS01-L 75% LI OAT`** — large, 75% sweetness, less ice, oat milk.\n\n- Pearls: 1.5 scoops = 90 g\n- Syrup: 75% = 5 pumps, warm, tilted to coat\n- Ice: LI = 1 scoop (85 g), after syrup\n- Milk: 220 ml oat, poured slowly over the ice\n- Tea: 140 ml black, over the back of a spoon\n- Seal, invert 2 s, sticker on, 12 mm straw, order number read aloud\n\nThe steps are identical. The values change: pearl scoops, pumps, ice, milk volume and type, and tea volume. Everything else — the order, the tilt, the slow pour, the seal — is the same on both. That is why the 90-second target is reachable: you are not learning two drinks, you are reading two stickers."
+      },
+      "source_material_ids": [
+        16,
+        17,
+        18
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "misconception",
+      "payload": {
+        "belief": "The stripes are decoration. If I'm rushing, I can skip the tilt-and-turn and just pour the syrup straight in.",
+        "why_it_seems_right": "The drink still tastes like brown sugar milk tea. The customer drinks it, nobody complains, and you saved four seconds on a busy shift.",
+        "what_is_true": "The stripes are the product. Section 6.4 step 3 exists because warm syrup coating the cup wall is what makes this drink BS01 and not a plain milk tea with syrup stirred in. The SOP also tells the customer to shake before drinking — the shake is what mixes the stripes into the drink. If you skip the stripe, there is nothing to shake and the customer gets a flat brown cup. The 90 seconds is a rhythm, not a reason to drop a step."
+      },
+      "source_material_ids": [
+        16,
+        17
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is 7:40 pm, the queue is six deep, and you have three stickers on the rail. The third one reads `BS01-L 75% LI OAT`. You reach for the syrup bottle on the shelf because the warm bath bottle is empty and you do not want to refill it mid-rush.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "The warm bath bottle is empty. What do you do?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Use the shelf bottle — it's the same syrup, just cooler.",
+                "correct": false,
+                "outcome_markdown": "You tilt the cup and turn it. The syrup runs straight down to the pearls. When you hold the cup up, the wall is clean — no stripes. You have made a brown sugar milk tea with no tiger stripe.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "Refill the warm bath bottle from the squeeze bottle, wait for it to come up to temperature, then build.",
+                "correct": true,
+                "outcome_markdown": "The syrup is warm again. You tilt, turn, and the wall holds a stripe. The drink takes about 20 seconds longer than target, but it is a BS01.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "Skip the stripes on this one and add extra syrup at the end to make up for it.",
+                "correct": false,
+                "outcome_markdown": "Extra syrup pools at the bottom. The customer shakes it and gets a sweet first sip and a plain last third. The cup never had a stripe to photograph.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "You have the warm syrup and the stripes are on the wall. The sticker says `LI` and `OAT`. Ice or milk next?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Ice first — it chills the cup and the milk pours better over cold.",
+                "correct": false,
+                "outcome_markdown": "The ice hits the stripes and the syrup slides down the wall into the pearls. The stripes are gone. You now have a cup of pearls and cold syrup.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "Milk first — it protects the stripes from the ice.",
+                "correct": false,
+                "outcome_markdown": "Milk goes in over the stripes and dilutes them before the ice arrives. The wall is milky brown, not striped.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "Ice next, at the less-ice level, then oat milk slowly over the ice.",
+                "correct": true,
+                "outcome_markdown": "The ice sits on top of the stripes without disturbing them. The oat milk goes in at 220 ml, slowly, and the stripes are still readable on the wall.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "The cup is sealed and inverted clean over the sink. You are about to hand it over. What do you say?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Just the order number. The customer can see the sticker.",
+                "correct": false,
+                "outcome_markdown": "The customer takes the cup, does not shake it, and drinks a layer of tea, then milk, then syrup. They come back asking what went wrong.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "Order number, then the sweetness and milk type, then tell them to shake before drinking.",
+                "correct": true,
+                "outcome_markdown": "The customer shakes the cup at the counter, the stripes mix into the milk, and the first sip tastes the way BS01 is supposed to taste.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Shake it yourself at the bar before handing it over so it's ready to drink.",
+                "correct": false,
+                "outcome_markdown": "You shake it at the bar. The stripes are gone before the customer ever sees the cup. The SOP says shaking at the bar ruins the stripes — the customer shakes, not you.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this scenario shares one move: you treated a step as optional because the drink would still be drinkable. Cold syrup, ice before syrup, shaking at the bar — none of them make the drink unsafe, and all of them make it not a BS01. The SOP's 90-second target assumes every step happens. When you are rushing, the step you drop is the one that made the drink what the sticker says it is."
+      },
+      "source_material_ids": [
+        15,
+        16,
+        17
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from the SOP, not from memory."
+      },
+      "source_material_ids": [
+        16,
+        17
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "Put the BS01 build steps in the order the SOP requires. The order is forced: some steps destroy earlier ones if reversed.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "b",
+              "text": "Scoop pearls with the slotted spoon"
+            },
+            {
+              "id": "c",
+              "text": "Add warm brown sugar syrup and tilt the cup to coat the wall"
+            },
+            {
+              "id": "d",
+              "text": "Add ice with the scoop at the sticker's ice level"
+            },
+            {
+              "id": "e",
+              "text": "Pour milk slowly over the ice at the size's volume"
+            },
+            {
+              "id": "f",
+              "text": "Top with black tea poured over the back of a spoon"
+            },
+            {
+              "id": "a",
+              "text": "Read the sticker: size, sweetness, ice, milk type, toppings"
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "Section 6.4 numbers them 1 to 8; the six build steps run sticker, pearls, syrup, ice, milk, tea. Syrup must precede ice because ice washes the stripes away, and milk must precede tea because the tea floats as a layer on top of the milk.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            16
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Ice before syrup washes the stripes away. Syrup always goes in first."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A sticker reads `BS01-L 75% LI OAT`. You have the warm syrup in the cup and the stripes are on the wall. You reach for the ice scoop. What is the correct next action?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Add ice at the less-ice level, then pour 220 ml oat milk slowly over the ice."
+            },
+            {
+              "id": "b",
+              "text": "Add ice at the standard level, then pour 220 ml fresh milk slowly over the ice."
+            },
+            {
+              "id": "c",
+              "text": "Pour 220 ml oat milk first to protect the stripes, then add ice at the less-ice level."
+            },
+            {
+              "id": "d",
+              "text": "Add ice at the less-ice level, then pour 160 ml oat milk slowly over the ice."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "`L` sets the milk volume at 220 ml, `LI` on a large cup is 1 scoop (85 g), and `OAT` overrides the default fresh milk. Ice always follows syrup, and milk always precedes tea.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            17
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Oat milk only if the sticker says OAT."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A new crew member builds a BS01-L 75% LI OAT in 75 seconds. When they hold the cup up to the light, the inside wall is clean — no brown streaks. Name the two steps most likely to have caused this and explain what each one does to the syrup.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Either the syrup came from the shelf instead of the warm water bath, so it was cold and thin and slid off the wall instead of coating it; or the ice went in before the syrup, so the ice washed the syrup down into the pearls before it could coat the wall. Both leave a clean wall with the syrup pooled at the bottom."
+          },
+          "rubric": [
+            {
+              "criterion": "Names the cold-syrup cause and links it to the warm water bath",
+              "weight": 0.35,
+              "excellent": "States that syrup from the shelf is cold and thin, that cold syrup slides off the cup wall, and that the bottle must come from the warm water bath on the bar.",
+              "acceptable": "States that the syrup was cold or came from the wrong bottle, without explaining why cold syrup fails to coat.",
+              "poor": "Does not mention syrup temperature or the warm water bath at all."
+            },
+            {
+              "criterion": "Names the ice-before-syrup cause and states the correct order",
+              "weight": 0.35,
+              "excellent": "States that ice added before syrup washes the stripes away, and that syrup always goes in first, before the ice scoop.",
+              "acceptable": "Says the order was wrong but does not say which step came too early or what it did to the stripes.",
+              "poor": "Claims the ice level was wrong, or blames the seal or the milk pour."
+            },
+            {
+              "criterion": "Describes the observable result of both faults",
+              "weight": 0.3,
+              "excellent": "Says the syrup ends up pooled at the bottom of the cup with a clean wall, so there is no stripe for the customer to shake into the drink.",
+              "acceptable": "Says the stripes are missing without describing where the syrup went.",
+              "poor": "Says the drink tastes wrong, or describes a leak or a seal failure instead."
+            }
+          ],
+          "max_score": 10,
+          "id": "q3",
+          "status": "supported",
+          "reason": "6.4 steps 3 and 4 name both causes in the key: cold syrup, and ice before syrup washing the stripes away.",
+          "quote": "Cold or thin syrup will not stick: no stripes. Use the bottle from the warm bath.",
+          "cite_chunk_ids": [
+            16
+          ],
+          "explanation": "Cold or thin syrup will not stick: no stripes. Use the bottle from the warm bath."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "You have sealed a BS01 and inverted it over the sink for two seconds. A thin drip runs down the side of the cup. What does the SOP say this indicates, and what should you do?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "The film is fine — a two-second drip is normal. Wipe it and hand the cup over."
+            },
+            {
+              "id": "b",
+              "text": "The rim was wet or the film sat crooked. Re-seal before the cup reaches the counter."
+            },
+            {
+              "id": "c",
+              "text": "The cup is overfilled. Pour some tea out and seal it again."
+            },
+            {
+              "id": "d",
+              "text": "The straw hole is leaking. Push the straw in further to plug it."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "Section 6.4 step 7 says a wet rim or crooked film leaks and that this is how most counter spills start. The two-second invert is the test; a drip means re-seal, not wipe and go.",
+          "id": "q4",
+          "cite_chunk_ids": [
+            17
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "A wet rim or crooked film leaks: this is how most counter spills start."
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "type": "project",
+      "payload": {
+        "title": "Build the BS01 station card",
+        "brief_markdown": "Your shop is about to train two new crew next week. You are writing the one-page card that will sit taped to the BS01 station — the thing a new crew member reads while their hands are moving.\n\nThe card must cover the build for **both cup sizes** and **all three milk/ice variants** the sticker can carry. Use these stickers as your test set:\n\n- `BS01-R 50% RI`\n- `BS01-L 75% LI OAT`\n- `BS01-R 100% NI`\n\nConstraints:\n\n- One page. A crew member must be able to read it in under 30 seconds while a drink is on the counter.\n- Every step must carry its own warning — what goes wrong if that step is done late, done cold, or skipped.\n- Every number must come from the SOP: cup sizes, pearl weights, milk volumes, tea volumes, straw width, invert time.\n- No prose paragraphs. Tables, numbered steps and short warnings only.\n\nDone looks like: a card a crew member who has never built a BS01 can follow, top to bottom, without asking you a question, and produce a cup that passes the sticker check.",
+        "deliverables": [
+          "A one-page numbered build card covering all three stickers, with the warning beside each step",
+          "A values table showing pearl weight, milk volume and tea volume for regular and large",
+          "A three-line divergence note: what changes between the three stickers and what stays the same"
+        ]
+      },
+      "source_material_ids": [
+        15,
+        16,
+        17
+      ],
+      "assessments": [
+        {
+          "kind": "project",
+          "prompt": "Produce the one-page BS01 station card described in the brief. It must cover `BS01-R 50% RI`, `BS01-L 75% LI OAT` and `BS01-R 100% NI`, carry a warning beside every step, and use only numbers from the SOP.",
+          "bloom": "create",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "A one-page card with eight numbered steps in SOP order (read sticker, pearls, syrup, ice, milk, tea, seal, hand over), a warning beside each, a values table (pearls 60 g / 90 g, milk 160 ml / 220 ml, tea 100 ml / 140 ml, straw 12 mm, invert 2 s), and a divergence note naming size, sweetness level, ice level and milk type as the only fields that change."
+          },
+          "rubric": [
+            {
+              "criterion": "Step order matches the SOP and each step carries its own warning",
+              "weight": 0.35,
+              "excellent": "Lists all eight steps in SOP order and states a specific failure beside each one, including syrup-before-ice and milk-before-tea.",
+              "acceptable": "Lists the steps in order but leaves two or more warnings missing or generic.",
+              "poor": "Reorders steps, merges them, or omits warnings entirely."
+            },
+            {
+              "criterion": "Numbers are taken from the SOP and correct for both sizes",
+              "weight": 0.35,
+              "excellent": "Gives pearls 60 g regular and 90 g large, milk 160 ml and 220 ml, tea 100 ml and 140 ml, 12 mm straw and a 2-second invert, with no invented values.",
+              "acceptable": "Gives the correct volumes but misses the pearl weights or the straw width.",
+              "poor": "Uses numbers that do not match the SOP, or gives one size only."
+            },
+            {
+              "criterion": "Divergence note isolates the fields that change",
+              "weight": 0.3,
+              "excellent": "States that only size, sweetness level, ice level and milk type vary between the three stickers, and that the order and technique never change.",
+              "acceptable": "Names some of the changing fields but implies the steps themselves differ between stickers.",
+              "poor": "Treats each sticker as a different drink with a different procedure."
+            }
+          ],
+          "max_score": 20,
+          "id": "q5"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.004113,
+  "repairs": [
+    "cites: q1: cited chunk 20 (8. Menu and codes), found by its question and answer",
+    "cites: q2: cited chunk 16 (6.4 Making a Brown Sugar Milk Tea (BS01), step by step), found by its question and answer",
+    "cites: q4: cited chunk 17 (6.4 Making a Brown Sugar Milk Tea (BS01), step by step), found by its question and answer",
+    "check: q1: options were shown in the correct order; rotated them",
+    "fact-check: b2: The SOP says to keep one bottle in the warm water bath on the bar, but the lesson's own scenario (b6) treats the warm bath bottle as empty and the shelf bottle  (\"Take the brown sugar syrup bottle **from the warm water bat…\" -> \"Take the brown sugar syrup bottle **from the warm water bat…\")",
+    "fact-check: b4: The SOP excerpt for step 4 is truncated and does not give an ice weight for RI; the lesson elsewhere gives LI as 1 scoop (85 g) and half a scoop (60 g) for regu (\"Ice: RI = 1 scoop (120 g), after syrup\" -> \"Ice: RI = 1 scoop, after syrup\")",
+    "fact-check: b4: Section 7 is not included in the slides, so the pump count for 50% sweetness cannot be verified; the lesson's own b2 gives 5 pumps for 75% large and 3 for regul (\"Syrup: 50% = 2 pumps, from the warm bath, tilted to coat\" -> \"Syrup: 50% = 2 pumps, warm, tilted to coat\")"
+  ]
+}

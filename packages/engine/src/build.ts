@@ -16,6 +16,7 @@ import { computeReceipts } from './export/receipts.ts';
 import { prerenderDiagrams } from './export/mermaid-svg.ts';
 import { clockText, isoInZone, localOf, longDay, zoned } from './export/time.ts';
 import { initReview } from './review.ts';
+import { foldedInto } from './exam.ts';
 
 const HERE = (() => { try { return dirname(fileURLToPath(import.meta.url)); } catch { return process.cwd(); } })();
 
@@ -44,6 +45,45 @@ function shortLabel(name: string, role: string): string | undefined {
   if (role === 'past_paper') return 'Paper';
   if (role === 'sop') return 'SOP';
   return undefined;
+}
+
+const COUNT_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+/** G2 review: a quiz intro written at draft time ("Four items. Two of them...") keeps its count after the Checker
+ * drops an item; when the leading count no longer matches the live items, drop that opening sentence. */
+export function fixQuizIntros(l: CourseLesson): CourseLesson {
+  for (const b of l.blocks) {
+    if (b.type !== 'quiz') continue;
+    const p = b.payload as { intro?: string };
+    const m = typeof p.intro === 'string' ? /^\s*(\d+|[A-Za-z]+)\s+(?:items?|questions?|quick questions?|short questions?)\b[^.!?]*[.!?]\s*/i.exec(p.intro) : null;
+    if (!m) continue;
+    const word = m[1]!.toLowerCase();
+    const n = /^\d+$/.test(word) ? Number(word) : COUNT_WORDS.indexOf(word);
+    if (n < 0 || n === b.assessments.length) continue;
+    const rest = p.intro!.slice(m[0].length).replace(/^(?:\d+|[A-Za-z]+) of (?:them|these)\b[^.!?]*[.!?]\s*/i, '').trim();
+    if (rest) p.intro = rest; else delete p.intro;
+  }
+  return l;
+}
+
+/** Display titles longer than this wrap to 4-5 hero lines and push the plan strip below the fold (G2 review). */
+export const TITLE_MAX = 32;
+const TITLE_TAIL_STOP = new Set(['and', 'or', 'of', 'the', 'a', 'an', 'for', 'to', 'in', 'on', 'with', 'from', '&', '-', '–', '—', ':']);
+/** A short display title (<= 32 characters): drops 'from your ... slides' tails, then the part after a colon or dash,
+ * then whole words from the end. 'Data Structures exam prep from your CSC2103 slides' -> 'Data Structures exam prep'. */
+export function shortTitle(title: string, max = TITLE_MAX): string {
+  let t = title.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const steps: ((x: string) => string)[] = [
+    x => x.replace(/\s*\([^)]*\)\s*/g, ' ').trim(),
+    x => x.replace(/\s+(?:from|using|based on|built from|made from|with|for)\s+(?:your|my|the|these|our)\b.*$/i, '').trim(),
+    x => { const m = /^(.{8,}?)\s*(?::|\s[-–—]\s|\|)\s*.+$/.exec(x); return m ? m[1]!.trim() : x; },
+  ];
+  for (const f of steps) { const n = f(t); if (n.length >= 6) t = n; if (t.length <= max) return t; }
+  const words = t.split(' ');
+  while (words.length > 1 && words.join(' ').length > max) words.pop();
+  while (words.length > 1 && TITLE_TAIL_STOP.has(words[words.length - 1]!.toLowerCase())) words.pop();
+  const out = words.join(' ').replace(/[\s:,;–—-]+$/, '');
+  return out.length <= max ? out : out.slice(0, max - 1).trimEnd() + '…';
 }
 
 function courseLede(crew: Crew, lessons: CourseLesson[], checked?: { n: number; of: number }): string {
@@ -175,7 +215,7 @@ export function assembleFromCrew(crew: Crew, now: Date, warn: (m: string) => voi
   const excluded: ExcludedItem[] = [];
   for (const e of entries) {
     const narration = (crew.narration?.lessons?.[e.key] ?? null) as Narration | null;
-    lessons.push(toCourseLesson(e, { resolveCite, narration, warn }));
+    lessons.push(fixQuizIntros(toCourseLesson(e, { resolveCite, narration, warn })));
     excluded.push(...excludedItems(e.key, e.draft as unknown as SaasLesson, resolveCite));
   }
   const files = crew.ingest?.files ?? [];
@@ -205,7 +245,7 @@ export function assembleFromCrew(crew: Crew, now: Date, warn: (m: string) => voi
   const course: Omit<Course, 'receipts'> & { receipts?: Course['receipts'] } = {
     schema: COURSE_SCHEMA_VERSION,
     id: slug(basename(crew.course)),
-    title: crew.outline.title || g.title || g.topic || 'Your course',
+    title: shortTitle(crew.outline.title || g.title || g.topic || 'Your course'),
     lede: courseLede(crew, lessons),
     skin: pickSkin(crew),
     object: pickObject(crew, lessons),
@@ -235,9 +275,12 @@ export function assembleFromCrew(crew: Crew, now: Date, warn: (m: string) => voi
         ...(d.exam ? { exam: true } : {}),
         ...(d.label ? { label: d.label } : d.exam && g.exam_at ? { label: `Exam ${clockText(localOf(g.exam_at, tz).hm)}` } : {}),
       })),
-      weights: (crew.examMap?.weights ?? []).filter(w => w.key && w.title).map(w => ({
-        key: w.key, title: w.title, marks: w.marks, share: Math.min(1, Math.max(0, w.share)), questions: w.questions ?? [],
-      })),
+      weights: (crew.examMap?.weights ?? []).filter(w => w.key && w.title).map(w => {
+        // G2 review: a subtopic whose questions were counted in its parent says so (REPORT: 'counted in <parent> (Q2a)')
+        const f = !w.marks && crew.examMap ? foldedInto(crew.examMap, w.key) : null;
+        return { key: w.key, title: w.title, marks: w.marks, share: Math.min(1, Math.max(0, w.share)), questions: f ? f.questions : w.questions ?? [],
+          ...(f ? { counted_in: f.into } : {}) };
+      }),
       cut: (plan?.cut ?? []).filter(c => c.key && c.title).map(c => ({ key: c.key, title: c.title, reason: c.reason || 'Cut to fit the days you have.' })),
       capacity_min: Math.max(0, plan?.capacity_min ?? 0),
       used_min: Math.max(0, plan?.used_min ?? lessons.reduce((s, l) => s + l.minutes, 0)),
@@ -336,7 +379,7 @@ export const build: BuildFn = async (ctx, opts = {}) => {
   const course = await assembleCourse(ctx);
   course.exports = course.exports.filter(x => existsSync(join(p.root, x.file)));
   // G2 review: scripted test rulings must never reach a page a judge sees
-  const scripted = course.receipts.excluded.filter(e => /scripted test|G2:/i.test(`${e.reason} ${e.prompt}`));
+  const scripted = course.receipts.excluded.filter(e => /scripted test|\bG2:/i.test(`${e.reason} ${e.prompt}`));
   if (scripted.length) throw new BilimindError(`course.json would show ${scripted.length} scripted test ruling(s) (${scripted.map(e => `${e.lesson}/${e.item}`).join(', ')}).`,
     'Rebuild from a clean copy of the course folder: scripted rulings belong in a throwaway copy only.');
   // a lesson whose latest check is older than its latest draft was never re-checked: say so

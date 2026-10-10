@@ -1,0 +1,1206 @@
+{
+  "questions": [
+    {
+      "id": "Q1a",
+      "number": "1",
+      "part": "a",
+      "text": "Algorithm analysis and arrays: Using the formal definition of Big O notation, show that f(n) = 4n² + 10n + 7 is O(n²). State suitable values for the constants c and n₀.",
+      "marks": 5,
+      "file": "past-paper.pdf",
+      "locator": "Page 1",
+      "chunk_id": 62,
+      "matches": [
+        {
+          "key": "counting_operations_big_o",
+          "score": 16.7,
+          "terms": [
+            "definition",
+            "big",
+            "notation",
+            "show",
+            "state",
+            "constants"
+          ]
+        },
+        {
+          "key": "big_o_omega_theta_bounds",
+          "score": 20.4,
+          "terms": [
+            "using",
+            "definition",
+            "big",
+            "notation",
+            "show",
+            "constants"
+          ]
+        },
+        {
+          "key": "map_adt_and_hash_functions",
+          "score": 6.23,
+          "terms": [
+            "using",
+            "state",
+            "values"
+          ]
+        }
+      ],
+      "assigned": "counting_operations_big_o",
+      "assigned_by": "auto",
+      "folded_from": "big_o_omega_theta_bounds"
+    },
+    {
+      "id": "Q1b",
+      "number": "1",
+      "part": "b",
+      "text": "Algorithm analysis and arrays: State the time complexity of the code fragment below in Big O notation. Justify your answer. for (let i = 1; i < n; i = i * 2) for (let j = 0; j < n; j++) count++;",
+      "marks": 4,
+      "file": "past-paper.pdf",
+      "locator": "Page 1",
+      "chunk_id": 62,
+      "matches": [
+        {
+          "key": "counting_operations_big_o",
+          "score": 41.55,
+          "terms": [
+            "state",
+            "time",
+            "complexity",
+            "code",
+            "big",
+            "notation",
+            "let",
+            "count"
+          ]
+        },
+        {
+          "key": "big_o_omega_theta_bounds",
+          "score": 19.59,
+          "terms": [
+            "complexity",
+            "big",
+            "notation",
+            "answer"
+          ]
+        },
+        {
+          "key": "capstone_past_paper_under_time",
+          "score": 9.09,
+          "terms": [
+            "time",
+            "let",
+            "count"
+          ]
+        }
+      ],
+      "assigned": "counting_operations_big_o",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q1c",
+      "number": "1",
+      "part": "c",
+      "text": "Algorithm analysis and arrays: A dynamic array doubles its capacity whenever it is full. Explain why appending n elements to an initially empty dynamic array costs O(n) in total, and state the amortised cost of a single append.",
+      "marks": 6,
+      "file": "past-paper.pdf",
+      "locator": "Page 1",
+      "chunk_id": 62,
+      "matches": [
+        {
+          "key": "amortised_cost_of_append",
+          "score": 53.84,
+          "terms": [
+            "dynamic",
+            "array",
+            "doubles",
+            "capacity",
+            "appending",
+            "elements",
+            "empty",
+            "costs",
+            "total",
+            "amortised",
+            "cost",
+            "single",
+            "append"
+          ]
+        },
+        {
+          "key": "arrays_vs_linked_lists",
+          "score": 36.86,
+          "terms": [
+            "dynamic",
+            "array",
+            "doubles",
+            "capacity",
+            "full",
+            "appending",
+            "elements",
+            "costs",
+            "amortised",
+            "cost",
+            "append"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 19.13,
+          "terms": [
+            "array",
+            "whenever",
+            "explain",
+            "empty",
+            "costs",
+            "cost",
+            "single"
+          ]
+        }
+      ],
+      "assigned": "amortised_cost_of_append",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q2a",
+      "number": "2",
+      "part": "a",
+      "text": "Hashing: Define the load factor α of a hash table. Explain why a hash table is resized when α exceeds a threshold, and describe what happens during a resize.",
+      "marks": 4,
+      "file": "past-paper.pdf",
+      "locator": "Page 1",
+      "chunk_id": 63,
+      "matches": [
+        {
+          "key": "load_factor_and_resizing",
+          "score": 49.63,
+          "terms": [
+            "load",
+            "factor",
+            "hash",
+            "table",
+            "resized",
+            "exceeds",
+            "threshold",
+            "resize"
+          ]
+        },
+        {
+          "key": "map_adt_and_hash_functions",
+          "score": 25.9,
+          "terms": [
+            "load",
+            "factor",
+            "hash",
+            "table",
+            "explain",
+            "resized",
+            "resize"
+          ]
+        },
+        {
+          "key": "collision_resolution_strategies",
+          "score": 15.82,
+          "terms": [
+            "load",
+            "factor",
+            "hash",
+            "table",
+            "resized",
+            "exceeds",
+            "threshold",
+            "resize"
+          ]
+        }
+      ],
+      "assigned": "load_factor_and_resizing",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q2b",
+      "number": "2",
+      "part": "b",
+      "text": "Hashing: The keys 18, 41, 22, 44, 59, 32, 31, 73 are inserted, in this order, into an initially empty hash table of size m = 13 using the hash function h(k) = k mod 13 and linear probing. Show the final contents of the table and state the number of probes needed to insert 31 and to insert 73.",
+      "marks": 10,
+      "file": "past-paper.pdf",
+      "locator": "Page 1",
+      "chunk_id": 63,
+      "matches": [
+        {
+          "key": "map_adt_and_hash_functions",
+          "score": 34.02,
+          "terms": [
+            "keys",
+            "inserted",
+            "order",
+            "hash",
+            "table",
+            "size",
+            "using",
+            "function",
+            "mod",
+            "linear",
+            "probing",
+            "state",
+            "probes",
+            "needed",
+            "insert"
+          ]
+        },
+        {
+          "key": "collision_resolution_strategies",
+          "score": 36.54,
+          "terms": [
+            "keys",
+            "inserted",
+            "empty",
+            "hash",
+            "table",
+            "size",
+            "using",
+            "mod",
+            "linear",
+            "probing",
+            "probes",
+            "needed",
+            "insert"
+          ]
+        },
+        {
+          "key": "load_factor_and_resizing",
+          "score": 21.06,
+          "terms": [
+            "inserted",
+            "hash",
+            "table",
+            "size",
+            "using",
+            "function",
+            "mod",
+            "linear",
+            "probing",
+            "probes",
+            "insert"
+          ]
+        }
+      ],
+      "assigned": "map_adt_and_hash_functions",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q2c",
+      "number": "2",
+      "part": "c",
+      "text": "Hashing: Repeat part (b) using separate chaining instead of linear probing. Draw the resulting table.",
+      "marks": 6,
+      "file": "past-paper.pdf",
+      "locator": "Page 1",
+      "chunk_id": 63,
+      "matches": [
+        {
+          "key": "collision_resolution_strategies",
+          "score": 23.57,
+          "terms": [
+            "using",
+            "separate",
+            "chaining",
+            "linear",
+            "probing",
+            "table"
+          ]
+        },
+        {
+          "key": "load_factor_and_resizing",
+          "score": 11.6,
+          "terms": [
+            "using",
+            "separate",
+            "chaining",
+            "instead",
+            "linear",
+            "probing",
+            "table"
+          ]
+        },
+        {
+          "key": "big_o_omega_theta_bounds",
+          "score": 10.31,
+          "terms": [
+            "using",
+            "separate",
+            "chaining",
+            "instead",
+            "linear",
+            "probing",
+            "table"
+          ]
+        }
+      ],
+      "assigned": "map_adt_and_hash_functions",
+      "assigned_by": "lead"
+    },
+    {
+      "id": "Q2d",
+      "number": "2",
+      "part": "d",
+      "text": "Hashing: Explain what primary clustering is and why it occurs with linear probing. Describe how double hashing reduces it.",
+      "marks": 5,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "map_adt_and_hash_functions",
+          "score": 15.78,
+          "terms": [
+            "explain",
+            "linear",
+            "probing",
+            "double",
+            "hashing"
+          ]
+        },
+        {
+          "key": "collision_resolution_strategies",
+          "score": 14.61,
+          "terms": [
+            "linear",
+            "probing",
+            "double",
+            "hashing"
+          ]
+        },
+        {
+          "key": "load_factor_and_resizing",
+          "score": 11.59,
+          "terms": [
+            "linear",
+            "probing",
+            "double",
+            "hashing"
+          ]
+        }
+      ],
+      "assigned": "map_adt_and_hash_functions",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q2e",
+      "number": "2",
+      "part": "e",
+      "text": "Hashing: With linear probing, the expected number of probes for an unsuccessful search is approximately ½(1 + 1/(1 − α)²). Calculate this value for α = 0.5 and α = 0.9, and use your answers to recommend a maximum load factor.",
+      "marks": 5,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "load_factor_and_resizing",
+          "score": 25.99,
+          "terms": [
+            "linear",
+            "probing",
+            "expected",
+            "probes",
+            "unsuccessful",
+            "search",
+            "value",
+            "load",
+            "factor"
+          ]
+        },
+        {
+          "key": "collision_resolution_strategies",
+          "score": 21.64,
+          "terms": [
+            "linear",
+            "probing",
+            "expected",
+            "probes",
+            "unsuccessful",
+            "search",
+            "load",
+            "factor"
+          ]
+        },
+        {
+          "key": "map_adt_and_hash_functions",
+          "score": 15.01,
+          "terms": [
+            "linear",
+            "probing",
+            "expected",
+            "probes",
+            "unsuccessful",
+            "search",
+            "value",
+            "load",
+            "factor"
+          ]
+        }
+      ],
+      "assigned": "load_factor_and_resizing",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q3a",
+      "number": "3",
+      "part": "a",
+      "text": "Heaps and priority queues: State the two properties that together define a binary min-heap.",
+      "marks": 4,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "binary_heaps_and_priority_queues",
+          "score": 32.55,
+          "terms": [
+            "two",
+            "properties",
+            "binary",
+            "min",
+            "heap"
+          ]
+        },
+        {
+          "key": "build_heap_and_heapsort",
+          "score": 20.71,
+          "terms": [
+            "two",
+            "properties",
+            "binary",
+            "min",
+            "heap"
+          ]
+        },
+        {
+          "key": "binary_search_tree_operations",
+          "score": 10.55,
+          "terms": [
+            "two",
+            "together",
+            "binary"
+          ]
+        }
+      ],
+      "assigned": "binary_heaps_and_priority_queues",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q3b",
+      "number": "3",
+      "part": "b",
+      "text": "Heaps and priority queues: A binary heap is stored in an array starting at index 0. Give the index of the parent, the left child and the right child of the node at index i.",
+      "marks": 3,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "binary_heaps_and_priority_queues",
+          "score": 32.74,
+          "terms": [
+            "binary",
+            "heap",
+            "stored",
+            "array",
+            "index",
+            "parent",
+            "left"
+          ]
+        },
+        {
+          "key": "build_heap_and_heapsort",
+          "score": 21.35,
+          "terms": [
+            "binary",
+            "heap",
+            "stored",
+            "array",
+            "node"
+          ]
+        },
+        {
+          "key": "binary_search_tree_operations",
+          "score": 18.5,
+          "terms": [
+            "binary",
+            "parent",
+            "left",
+            "child",
+            "right",
+            "node"
+          ]
+        }
+      ],
+      "assigned": "binary_heaps_and_priority_queues",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q3c",
+      "number": "3",
+      "part": "c",
+      "text": "Heaps and priority queues: Insert the keys 35, 33, 42, 10, 14, 19, 27, 44, 26, 31, in this order, into an initially empty min-heap. Show the array after each insertion.",
+      "marks": 8,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "binary_heaps_and_priority_queues",
+          "score": 31.83,
+          "terms": [
+            "insert",
+            "order",
+            "empty",
+            "min",
+            "heap",
+            "show",
+            "array",
+            "after",
+            "each"
+          ]
+        },
+        {
+          "key": "build_heap_and_heapsort",
+          "score": 25.13,
+          "terms": [
+            "insert",
+            "keys",
+            "order",
+            "empty",
+            "min",
+            "heap",
+            "show",
+            "array",
+            "after",
+            "each"
+          ]
+        },
+        {
+          "key": "arrays_vs_linked_lists",
+          "score": 12.6,
+          "terms": [
+            "insert",
+            "order",
+            "show",
+            "array",
+            "after",
+            "each"
+          ]
+        }
+      ],
+      "assigned": "binary_heaps_and_priority_queues",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q3d",
+      "number": "3",
+      "part": "d",
+      "text": "Heaps and priority queues: Perform one extract-min operation on the final heap from part (c). Show every swap and the final array.",
+      "marks": 6,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "binary_heaps_and_priority_queues",
+          "score": 41.14,
+          "terms": [
+            "perform",
+            "one",
+            "extract",
+            "min",
+            "operation",
+            "heap",
+            "show",
+            "every",
+            "swap",
+            "array"
+          ]
+        },
+        {
+          "key": "build_heap_and_heapsort",
+          "score": 26.65,
+          "terms": [
+            "perform",
+            "one",
+            "extract",
+            "min",
+            "operation",
+            "heap",
+            "show",
+            "every",
+            "swap",
+            "array"
+          ]
+        },
+        {
+          "key": "capstone_past_paper_under_time",
+          "score": 13.94,
+          "terms": [
+            "one",
+            "extract",
+            "min",
+            "operation",
+            "heap",
+            "show",
+            "every",
+            "swap",
+            "array"
+          ]
+        }
+      ],
+      "assigned": "binary_heaps_and_priority_queues",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q3e",
+      "number": "3",
+      "part": "e",
+      "text": "Heaps and priority queues: Explain why building a heap bottom-up from n unordered keys takes O(n) time, while inserting the n keys one at a time takes O(n log n) time in the worst case.",
+      "marks": 5,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 64,
+      "matches": [
+        {
+          "key": "build_heap_and_heapsort",
+          "score": 44.94,
+          "terms": [
+            "building",
+            "heap",
+            "bottom",
+            "unordered",
+            "keys",
+            "time",
+            "while",
+            "inserting",
+            "one",
+            "log",
+            "worst",
+            "case"
+          ]
+        },
+        {
+          "key": "binary_heaps_and_priority_queues",
+          "score": 26.02,
+          "terms": [
+            "building",
+            "heap",
+            "time",
+            "while",
+            "inserting",
+            "one",
+            "log",
+            "worst",
+            "case"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 16.8,
+          "terms": [
+            "explain",
+            "building",
+            "keys",
+            "inserting",
+            "one",
+            "log",
+            "worst",
+            "case"
+          ]
+        }
+      ],
+      "assigned": "build_heap_and_heapsort",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q3f",
+      "number": "3",
+      "part": "f",
+      "text": "Heaps and priority queues: Name TWO applications of priority queues and explain briefly why a heap suits each one.",
+      "marks": 4,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "binary_heaps_and_priority_queues",
+          "score": 46.45,
+          "terms": [
+            "two",
+            "applications",
+            "priority",
+            "queues",
+            "heap",
+            "each",
+            "one"
+          ]
+        },
+        {
+          "key": "build_heap_and_heapsort",
+          "score": 17.3,
+          "terms": [
+            "name",
+            "two",
+            "heap",
+            "each",
+            "one"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 9.55,
+          "terms": [
+            "name",
+            "two",
+            "explain",
+            "each",
+            "one"
+          ]
+        }
+      ],
+      "assigned": "binary_heaps_and_priority_queues",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q4a",
+      "number": "4",
+      "part": "a",
+      "text": "Linked lists: Compare a singly linked list with a dynamic array in terms of (i) access by index, (ii) insertion at the front and (iii) memory use.",
+      "marks": 6,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "arrays_vs_linked_lists",
+          "score": 46.77,
+          "terms": [
+            "singly",
+            "linked",
+            "list",
+            "dynamic",
+            "array",
+            "terms",
+            "access",
+            "index",
+            "front",
+            "memory"
+          ]
+        },
+        {
+          "key": "amortised_cost_of_append",
+          "score": 9.74,
+          "terms": [
+            "compare",
+            "singly",
+            "linked",
+            "list",
+            "dynamic",
+            "array",
+            "terms",
+            "access",
+            "index"
+          ]
+        },
+        {
+          "key": "big_o_omega_theta_bounds",
+          "score": 9.51,
+          "terms": [
+            "singly",
+            "linked",
+            "list",
+            "dynamic",
+            "array",
+            "terms",
+            "access",
+            "index"
+          ]
+        }
+      ],
+      "assigned": "arrays_vs_linked_lists",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q4b",
+      "number": "4",
+      "part": "b",
+      "text": "Linked lists: Write a function reverse(head) that reverses a singly linked list in place and returns the new head. State its time complexity.",
+      "marks": 4,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "arrays_vs_linked_lists",
+          "score": 19.06,
+          "terms": [
+            "write",
+            "function",
+            "head",
+            "singly",
+            "linked",
+            "list",
+            "returns",
+            "new",
+            "time"
+          ]
+        },
+        {
+          "key": "counting_operations_big_o",
+          "score": 16.39,
+          "terms": [
+            "write",
+            "function",
+            "singly",
+            "linked",
+            "list",
+            "returns",
+            "new",
+            "state",
+            "time",
+            "complexity"
+          ]
+        },
+        {
+          "key": "map_adt_and_hash_functions",
+          "score": 12.81,
+          "terms": [
+            "function",
+            "head",
+            "singly",
+            "linked",
+            "list",
+            "state"
+          ]
+        }
+      ],
+      "assigned": "arrays_vs_linked_lists",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q5a",
+      "number": "5",
+      "part": "a",
+      "text": "Binary search trees: Insert the keys 45, 25, 65, 15, 35, 55, 75, 30, in this order, into an initially empty binary search tree. Draw the final tree.",
+      "marks": 4,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "binary_search_tree_operations",
+          "score": 26.19,
+          "terms": [
+            "insert",
+            "keys",
+            "order",
+            "binary",
+            "search",
+            "tree"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 17.99,
+          "terms": [
+            "insert",
+            "keys",
+            "order",
+            "empty",
+            "binary",
+            "search",
+            "tree"
+          ]
+        },
+        {
+          "key": "avl_rotation_balancing",
+          "score": 16.38,
+          "terms": [
+            "insert",
+            "order",
+            "empty",
+            "search",
+            "tree",
+            "draw"
+          ]
+        }
+      ],
+      "assigned": "binary_search_tree_operations",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q5b",
+      "number": "5",
+      "part": "b",
+      "text": "Binary search trees: Give the in-order, pre-order and post-order traversals of the tree from part (a).",
+      "marks": 6,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "binary_search_tree_operations",
+          "score": 13.44,
+          "terms": [
+            "order",
+            "traversals",
+            "tree"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 11.04,
+          "terms": [
+            "give",
+            "order",
+            "pre",
+            "traversals",
+            "tree"
+          ]
+        },
+        {
+          "key": "avl_rotation_balancing",
+          "score": 9.26,
+          "terms": [
+            "order",
+            "pre",
+            "traversals",
+            "tree"
+          ]
+        }
+      ],
+      "assigned": "binary_search_tree_operations",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q5c",
+      "number": "5",
+      "part": "c",
+      "text": "Binary search trees: Delete the key 25 from the tree in part (a), using the in-order successor. Draw the resulting tree.",
+      "marks": 3,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "binary_search_tree_operations",
+          "score": 19.62,
+          "terms": [
+            "delete",
+            "key",
+            "tree",
+            "order",
+            "successor"
+          ]
+        },
+        {
+          "key": "avl_rotation_balancing",
+          "score": 15.53,
+          "terms": [
+            "delete",
+            "key",
+            "tree",
+            "using",
+            "order",
+            "successor",
+            "draw"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 10.67,
+          "terms": [
+            "delete",
+            "key",
+            "tree",
+            "using",
+            "order",
+            "successor"
+          ]
+        }
+      ],
+      "assigned": "binary_search_tree_operations",
+      "assigned_by": "auto"
+    },
+    {
+      "id": "Q5d",
+      "number": "5",
+      "part": "d",
+      "text": "Binary search trees: State the worst-case height of a binary search tree with n nodes and give an insertion order that produces it.",
+      "marks": 2,
+      "file": "past-paper.pdf",
+      "locator": "Page 2",
+      "chunk_id": 65,
+      "matches": [
+        {
+          "key": "binary_search_tree_operations",
+          "score": 30.98,
+          "terms": [
+            "worst",
+            "case",
+            "height",
+            "binary",
+            "search",
+            "tree",
+            "nodes",
+            "order"
+          ]
+        },
+        {
+          "key": "avl_rotation_balancing",
+          "score": 18.97,
+          "terms": [
+            "worst",
+            "case",
+            "height",
+            "search",
+            "tree",
+            "nodes",
+            "order"
+          ]
+        },
+        {
+          "key": "bst_chain_from_sorted_inserts",
+          "score": 16.89,
+          "terms": [
+            "worst",
+            "case",
+            "height",
+            "binary",
+            "search",
+            "tree",
+            "nodes",
+            "give",
+            "order"
+          ]
+        }
+      ],
+      "assigned": "binary_search_tree_operations",
+      "assigned_by": "auto"
+    }
+  ],
+  "total_marks": 100,
+  "weights": [
+    {
+      "key": "binary_heaps_and_priority_queues",
+      "title": "Binary heaps: priority queue operations",
+      "marks": 25,
+      "share": 0.25,
+      "questions": [
+        "Q3a",
+        "Q3b",
+        "Q3c",
+        "Q3d",
+        "Q3f"
+      ]
+    },
+    {
+      "key": "map_adt_and_hash_functions",
+      "title": "Hash tables: the map ADT and hash functions",
+      "marks": 21,
+      "share": 0.21,
+      "questions": [
+        "Q2b",
+        "Q2c",
+        "Q2d"
+      ]
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "Binary search trees: search, insert and delete",
+      "marks": 15,
+      "share": 0.15,
+      "questions": [
+        "Q5a",
+        "Q5b",
+        "Q5c",
+        "Q5d"
+      ]
+    },
+    {
+      "key": "arrays_vs_linked_lists",
+      "title": "Dynamic arrays vs linked lists: layout and cost",
+      "marks": 10,
+      "share": 0.1,
+      "questions": [
+        "Q4a",
+        "Q4b"
+      ]
+    },
+    {
+      "key": "counting_operations_big_o",
+      "title": "Counting operations to get Big-O from real code",
+      "marks": 9,
+      "share": 0.09,
+      "questions": [
+        "Q1a",
+        "Q1b"
+      ]
+    },
+    {
+      "key": "load_factor_and_resizing",
+      "title": "Load factor and when to resize",
+      "marks": 9,
+      "share": 0.09,
+      "questions": [
+        "Q2a",
+        "Q2e"
+      ]
+    },
+    {
+      "key": "amortised_cost_of_append",
+      "title": "Why n appends cost O(n) in total",
+      "marks": 6,
+      "share": 0.06,
+      "questions": [
+        "Q1c"
+      ]
+    },
+    {
+      "key": "build_heap_and_heapsort",
+      "title": "Build-heap in O(n), then heapsort",
+      "marks": 5,
+      "share": 0.05,
+      "questions": [
+        "Q3e"
+      ]
+    },
+    {
+      "key": "big_o_omega_theta_bounds",
+      "title": "Big-O, Omega and Theta: which bound?",
+      "marks": 0,
+      "share": 0,
+      "questions": []
+    },
+    {
+      "key": "collision_resolution_strategies",
+      "title": "Chaining vs open addressing for collisions",
+      "marks": 0,
+      "share": 0,
+      "questions": []
+    },
+    {
+      "key": "bst_chain_from_sorted_inserts",
+      "title": "Sorted inserts turn a BST into a chain",
+      "marks": 0,
+      "share": 0,
+      "questions": []
+    },
+    {
+      "key": "avl_rotation_balancing",
+      "title": "AVL rotations: keeping height at log n",
+      "marks": 0,
+      "share": 0,
+      "questions": []
+    },
+    {
+      "key": "capstone_past_paper_under_time",
+      "title": "Capstone: last year's paper under the clock",
+      "marks": 0,
+      "share": 0,
+      "questions": []
+    }
+  ],
+  "unmatched": []
+}

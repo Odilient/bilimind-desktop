@@ -15,6 +15,7 @@ import NumericItem from './NumericItem.vue';
 import ClozeItem from './ClozeItem.vue';
 import SelfMarkedItem from './SelfMarkedItem.vue';
 import CiteChip from '../components/CiteChip.vue';
+import { quoteLead, sameText } from '../runtime/model.ts';
 import Ico from './ui/Ico.vue';
 
 const props = withDefaults(defineProps<{
@@ -52,7 +53,15 @@ const labels = computed(() => props.item.labels ?? []);
 const beyond = computed(() => labels.value.includes('beyond_slides'));
 const rewritten = computed(() => labels.value.includes('rewritten'));
 const cites = computed(() => (props.item.cites ?? []).filter(c => c && c.quote));
-const explanation = computed(() => (props.item.explanation ?? '').trim());
+// G2: a Checker ruling may copy the slide quote into the explanation. The quote is shown once, as
+// "Your slide says: ...", next to its chip; the explanation is kept only when it says something else.
+const quotes = computed(() => cites.value.slice(0, 2).map(c => ({
+  c, lead: quoteLead(course, c), q: c.quote.length > 240 ? c.quote.slice(0, 237).trimEnd() + '…' : c.quote,
+})));
+const explanation = computed(() => {
+  const e = (props.item.explanation ?? '').trim();
+  return e && cites.value.some(c => sameText(e, c.quote)) ? '' : e;
+});
 const hasWhy = computed(() => !!explanation.value || cites.value.length > 0 || beyond.value || rewritten.value);
 
 const CONF: [Confidence, string][] = [['guess', 'Guessing'], ['think', 'Fairly sure'], ['sure', 'Certain']];
@@ -128,7 +137,8 @@ function onSelf(r: GradeResult) { checked.value = true; record(r); }
           <span class="we">{{ explanation ? 'Why' : 'Where this comes from' }}</span>
           <!-- eslint-disable-next-line vue/no-v-html -->
           <span v-if="explanation" class="wt" v-html="renderInline(explanation)" />
-          <CiteChip v-for="(c, i) in cites" :key="i" :cite="c" />
+          <span v-for="(x, i) in quotes" :key="i" class="wq"><b>{{ x.lead }}:</b> <q>{{ x.q }}</q> <CiteChip :cite="x.c" /></span>
+          <CiteChip v-for="(c, i) in cites.slice(2)" :key="'more' + i" :cite="c" />
           <span v-if="beyond" class="wbeyond">
             <Ico name="flag" />Beyond your slides: the Checker found no passage in your notes that covers this. Treat it as extra reading, not exam material.
           </span>
@@ -200,6 +210,10 @@ function onSelf(r: GradeResult) { checked.value = true; record(r); }
 .bmx .why .wbeyond, .bmx .why .wre { display: flex; gap: 8px; margin-top: 8px; font: 500 13px/1.45 var(--body); color: var(--note-ink); }
 .bmx .why .wbeyond .bm-ico { width: 14px; height: 14px; margin-top: 2px; }
 .bmx .why .wre { color: var(--text-2); }
+.bmx .why .wq { display: block; margin-top: 6px; overflow-wrap: anywhere; }
+.bmx .why .wq b { font-weight: 600; color: var(--ink); }
+.bmx .why .wq q { font-style: italic; }
+.bmx .why .wq .cite { vertical-align: middle; margin-left: 2px; }
 
 .bmx .ord { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; position: relative; }
 .bmx .ord li { position: relative; display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 56px; padding: 8px 8px 8px 12px; border-radius: var(--r-row); background: var(--surface); box-shadow: var(--hair-strong); font: 500 15.5px/1.4 var(--body); color: var(--ink-3); transition: background var(--d-fast), box-shadow var(--d-fast); }

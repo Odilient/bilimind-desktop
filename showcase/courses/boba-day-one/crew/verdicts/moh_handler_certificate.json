@@ -1,0 +1,22 @@
+[
+  {
+    "lesson": "moh_handler_certificate",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Every food handler must still attend a food handler training course recognised by the Ministry of Health Malaysia and get the certificate.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:16:19.202Z"
+  },
+  {
+    "lesson": "moh_handler_certificate",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Every food handler must still attend a food handler training course recognised by the Ministry of Health Malaysia and get the certificate.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 1,
+    "round": 1,
+    "at": "2026-10-10T16:16:19.202Z"
+  }
+]

@@ -7,6 +7,7 @@ import { mermaidProblem } from './mermaid.ts';
 import { formulaProblem, sweepFormula } from './playground.ts';
 import type { PlaygroundInput } from './playground.ts';
 import { testCodeBlock } from './code.ts';
+import { workProblems } from './arith.ts';
 import { blockNo, isLive, liveItems, narrativeTexts, narrativeWords } from './lesson.ts';
 import type { Raw } from './lesson.ts';
 
@@ -18,6 +19,7 @@ export interface CheckContext {
   files: Map<number, SourceFile>;
   timeoutMs: number;                   // Q11 per test (2000)
   share?: number | null;               // the lesson's past-paper share (Q2 asks for more practice on heavy topics)
+  supplied?: number[] | null;          // `draft` only: the chunk ids the Writer was given (preferred when citing an uncited block)
 }
 
 export const RULE = {
@@ -171,8 +173,9 @@ export const ruleMulti: Rule = itemRule(['multi_select'], (a, b, cx) => {
   const problems: string[] = [];
   if (opts.length < 4 || opts.length > 6) problems.push(`${opts.length} options (wanted 4-6)`);
   if (correct.length < 2 || correct.length > 3) problems.push(`${correct.length} correct ids (wanted 2-3)`);
-  if (!MULTI_HINT.test(a.prompt)) problems.push('the prompt does not say more than one answer is correct');
   const said = MULTI_COUNT.exec(a.prompt);
+  // "Which two ..." with exactly two correct ids already says more than one answer is correct
+  if (!MULTI_HINT.test(a.prompt) && !(said && COUNTS[said[2]!.toLowerCase()] === correct.length)) problems.push('the prompt does not say more than one answer is correct');
   if (said && COUNTS[said[2]!.toLowerCase()] !== correct.length) problems.push(`the prompt says "${said[0]}" but ${correct.length} options are correct`);
   return row(cx, RULE.multi, !problems.length, problems.length ? problems.join('; ') : `${opts.length} options, ${correct.length} correct`, {
     block: b, item: a, suggestion: 'Use 4-6 options with 2-3 correct ids, and say "(Select all that apply.)" in the prompt.',
@@ -213,8 +216,18 @@ export const ruleNumeric: Rule = itemRule(['numeric'], (a, b, cx) => {
   if (typeof k.value !== 'number' || !Number.isFinite(k.value)) problems.push('answer_key.value is not a finite number');
   else if (!Number.isInteger(k.value) && !(typeof k.tolerance === 'number' && k.tolerance > 0)) problems.push(`non-integer answer ${k.value} needs a tolerance > 0`);
   if (typeof k.unit === 'string' && k.unit.trim() && !a.prompt.toLowerCase().includes(k.unit.trim().toLowerCase())) problems.push(`the prompt does not name the unit (${k.unit})`);
-  return row(cx, RULE.numeric, !problems.length, problems.length ? problems.join('; ') : `value ${k.value}${k.tolerance ? ` ± ${k.tolerance}` : ''}${k.unit ? ` ${k.unit}` : ''}`, {
-    block: b, item: a, suggestion: 'Set a finite value, a tolerance for non-integer answers, and name the unit in the prompt.',
+  // G2 review: recompute the item's working (69 mod 10 = 9 ...) and compare its last number with the key
+  const work = (k as Raw).work;
+  const slips = typeof k.value === 'number' ? workProblems(work, k.value, k.tolerance) : [];
+  problems.push(...slips);
+  const ok = !problems.length;
+  const detail = ok
+    ? `value ${k.value}${k.tolerance ? ` ± ${k.tolerance}` : ''}${k.unit ? ` ${k.unit}` : ''}${typeof work === 'string' && work.trim() ? ', working recomputed' : ' (no working: the Checker recomputes it)'}`
+    : problems.join('; ');
+  return row(cx, RULE.numeric, ok, detail, {
+    block: b, item: a, suggestion: slips.length
+      ? `The answer key or its working is wrong: recompute it by hand and fix answer_key.value/work in crew/lessons/${cx.key}.json, or \`rewrite-item --lesson ${cx.key} --item ${a.id} --reason "${slips[0]!.replace(/"/g, "'")}"\`.`
+      : 'Set a finite value, a tolerance for non-integer answers, and name the unit in the prompt.',
   });
 });
 

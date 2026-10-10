@@ -1,0 +1,458 @@
+{
+  "key": "allergens",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "A milk allergy is not a preference: section 9 lists trouble breathing among the reactions. Your creamer label is the single most dangerous object on the bar, because it says **non-dairy** and contains **milk**.\n\nSection 9 of the Mutiara SOP lists the four ingredients on the creamer label:\n\n| Ingredient | What it actually is |\n|---|---|\n| Glucose syrup | Sugar, no protein |\n| Vegetable oil | Fat, no protein |\n| **Sodium caseinate (milk)** | **A milk protein.** |\n| Emulsifier (soy lecithin) | Soy-derived, a declared soy allergen |\n\n\"Non-dairy\" on the tub is not a promise that the creamer is free of milk. This one contains sodium caseinate, so it is unsafe for a milk allergy. The SOP states it flatly: *\"Non-dairy creamer\" is NOT safe for a milk allergy. It contains milk protein. Never tell a customer that non-dairy means dairy-free.*\n\nOn this bar you also handle egg, soy and oats. Section 9 tells you to be honest about that: you cannot promise zero traces, so you tell the customer what you did and let them decide.\n\nIf someone reacts — swollen lips or face, trouble breathing, hives, vomiting — you call 999 at once, tell the shift lead, keep the person still, and ask whether they carry their own adrenaline auto-injector. You give them nothing to eat or drink."
+      },
+      "source_material_ids": [
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "misconception",
+      "payload": {
+        "belief": "\"Non-dairy creamer\" means there is no milk in it, so classic milk tea is safe for a milk allergy.",
+        "why_it_seems_right": "The word on the tub is literally \"non-dairy\". Every other food label you have ever read uses \"non-\" to mean \"without\", and the powder is white and sold beside the coffee, not in the chiller with the fresh milk.",
+        "what_is_true": "The creamer label lists sodium caseinate (milk) as its third ingredient. Sodium caseinate is a milk protein, so a creamer sold as non-dairy can still be unsafe for a milk allergy. The SOP's own wording is that you must never tell a customer that non-dairy means dairy-free."
+      },
+      "source_material_ids": [
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "reference_table",
+      "payload": {
+        "title": "What is in the cup, and what you say about it",
+        "columns": [
+          "Menu item",
+          "Milk protein present?",
+          "Caffeine",
+          "What you say at the counter"
+        ],
+        "rows": [
+          [
+            "Classic milk tea (CT01)",
+            "Yes — sodium caseinate in the creamer (also soy)",
+            "Yes — tea base",
+            "Contains milk protein. Not safe for a milk allergy."
+          ],
+          [
+            "Fruit tea FT01",
+            "No milk in the recipe",
+            "Yes — tea base",
+            "No milk in the recipe. We can make it with clean equipment."
+          ],
+          [
+            "Fruit tea FT02",
+            "No milk in the recipe",
+            "Yes — tea base",
+            "No milk in the recipe. We can make it with clean equipment."
+          ],
+          [
+            "Fruit tea FT03",
+            "No milk in the recipe",
+            "Yes — tea base",
+            "No milk in the recipe. We can make it with clean equipment."
+          ],
+          [
+            "Cheese foam topping (+CF)",
+            "Yes — milk (cream cheese, cream)",
+            "No",
+            "Contains milk. Never add it to an allergy order."
+          ],
+          [
+            "Egg pudding topping (+PD)",
+            "Yes — egg and milk",
+            "No",
+            "Contains egg and milk. Never add it to a milk-allergy order."
+          ],
+          [
+            "Brown sugar syrup",
+            "No — sugar and water only",
+            "No",
+            "No milk, no caffeine: it is dark brown sugar and water."
+          ]
+        ],
+        "note": "Every tea-based drink on this board carries caffeine; the syrup and the toppings do not. When a drink or topping is not clearly safe on this table and on the allergen board, say so out loud rather than guessing."
+      },
+      "source_material_ids": [
+        15,
+        21,
+        24
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is 18:40, the queue is eight deep, and you are alone on the POS while the bar works through a rush. A parent leans in and asks: \"Is the classic milk tea dairy-free? My daughter is allergic to milk.\" The bar is loud, the shift lead is at the back restocking cups, and the parent is waiting for a yes or a no.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "What do you say first?",
+            "options": [
+              {
+                "id": "a",
+                "text": "\"Yes, we use non-dairy creamer, so it's dairy-free.\"",
+                "correct": false,
+                "outcome_markdown": "The parent orders it, the daughter drinks it, and within minutes her lips swell and she starts struggling to breathe. The creamer contains sodium caseinate, a milk protein. You have just told a parent that a milk-containing drink is milk-free.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "\"No — the classic milk tea contains milk protein. Our creamer lists sodium caseinate.\"",
+                "correct": true,
+                "outcome_markdown": "The parent stops and puts the menu down. You have given the honest answer, and the conversation can now move to what she can safely order.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "\"I'm not sure, let me check with the bar.\"",
+                "correct": false,
+                "outcome_markdown": "Checking beats guessing (section 1: if you are not sure, ask; never guess about allergens), so nobody is harmed. But this answer is in section 9 and on the allergen board: the creamer contains milk protein. Know it before the rush, so the parent gets the right answer at once.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "The parent asks what her daughter can drink. What do you offer?",
+            "options": [
+              {
+                "id": "a",
+                "text": "\"The fruit teas FT01, FT02 and FT03 have no milk in the recipe. I can make one with clean equipment, without cheese foam or pudding. We do handle milk on this bar, so I can't promise zero traces.\"",
+                "correct": true,
+                "outcome_markdown": "The parent hears three safe options, hears the honest limit, and decides for herself. She orders FT02.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "\"Anything on the menu is fine as long as I use non-dairy creamer.\"",
+                "correct": false,
+                "outcome_markdown": "You have repeated the same false claim. The creamer is the source of the milk protein, so using it is exactly what makes the drink unsafe.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "\"I can make the classic milk tea with cheese foam on the side, that should be fine.\"",
+                "correct": false,
+                "outcome_markdown": "Cheese foam is dairy. You have just offered an allergy customer a second dairy topping, and the drink itself still contains caseinate.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "The parent orders FT02. What do you do before you hand the cup to the bar?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Say \"ALLERGY: milk\" out loud to the bar and add ALG to the sticker.",
+                "correct": true,
+                "outcome_markdown": "The bar hears the call-out, sees ALG on the sticker, washes hands, pulls new gloves and a shaker and scoop from the clean rack, and uses fresh ice with the clean scoop. The drink goes out with no cheese foam and no pudding.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "Type the order quietly into the POS and let the bar read the screen.",
+                "correct": false,
+                "outcome_markdown": "The bar is mid-rush and never looks at the screen. The drink is made on the same shaker as the last milk tea. Nobody in the chain knows an allergy order came through.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Tell the parent you will handle it personally and make the drink yourself without telling anyone.",
+                "correct": false,
+                "outcome_markdown": "You leave the POS, the queue stalls, and no one on the bar knows an allergy order is in progress. If the parent asks a follow-up while you are away, nobody can answer it.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this scenario comes from the same place: treating the word \"non-dairy\" as a medical guarantee instead of a butterfat label. The correct path is always the same three moves — say what is actually in the drink, offer the drinks that are clearly safe and name the trace limit, then put the allergy in the chain where the bar can see and hear it. Hesitating, guessing, or staying silent all leave the customer deciding on information you already had."
+      },
+      "source_material_ids": [
+        21,
+        24
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you hand any allergy order to the bar",
+        "items": [
+          {
+            "text": "You have read the allergen board and section 8 with the customer, not for them.",
+            "why": "Prevents a guess about a topping you did not check."
+          },
+          {
+            "text": "You said the drink's milk status out loud in plain words — \"contains milk protein\" or \"no milk in the recipe\".",
+            "why": "Prevents the customer hearing \"non-dairy\" and assuming dairy-free."
+          },
+          {
+            "text": "You named the trace limit: we handle milk, egg, soy and oats on one small bar, so zero traces cannot be promised.",
+            "why": "Prevents a promise the shop cannot keep."
+          },
+          {
+            "text": "The cashier has said \"ALLERGY: milk\" out loud to the bar.",
+            "why": "Prevents the bar making the drink on shared equipment in a rush."
+          },
+          {
+            "text": "ALG is on the sticker and visible to whoever builds the drink.",
+            "why": "Prevents the allergy being lost between POS and bar."
+          },
+          {
+            "text": "Hands washed, new gloves on, shaker and scoop taken from the clean rack.",
+            "why": "Prevents milk residue from the previous drink entering the cup."
+          },
+          {
+            "text": "Fresh ice, taken with the clean scoop from the clean rack.",
+            "why": "Prevents cross-contact from a scoop that has touched milk drinks."
+          },
+          {
+            "text": "No cheese foam and no pudding on the order.",
+            "why": "Both are dairy and both are the easiest toppings to add by habit."
+          },
+          {
+            "text": "You told the customer what you did and let them decide.",
+            "why": "Prevents you making the safety decision on their behalf."
+          }
+        ],
+        "note": "If the customer reacts — swollen lips or face, trouble breathing, hives, vomiting — stop the checklist. Call 999 at once, tell the shift lead, keep the person still, and ask if they carry their own adrenaline auto-injector. Give them nothing to eat or drink."
+      },
+      "source_material_ids": [
+        11,
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "The creamer label lists four ingredients: glucose syrup, vegetable oil, sodium caseinate (milk), and emulsifier (soy lecithin).",
+          "Sodium caseinate is a milk protein, so \"non-dairy creamer\" is not safe for a milk allergy and you must never say that non-dairy means dairy-free.",
+          "The classic milk tea contains milk protein; the fruit teas FT01, FT02 and FT03 have no milk in the recipe.",
+          "Every tea-based drink on the board carries caffeine; the brown sugar syrup and the toppings do not.",
+          "A declared allergy is spoken out loud to the bar as \"ALLERGY: milk\" and marked ALG on the sticker before the drink is built.",
+          "An allergy order is built with washed hands, new gloves, clean-rack shaker and scoop, fresh ice with the clean scoop, and no cheese foam or pudding.",
+          "We handle milk, egg, soy and oats on one small bar, so you tell the customer what you did and let them decide rather than promising zero traces."
+        ]
+      },
+      "source_material_ids": [
+        15,
+        21,
+        24
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Think of the busiest minute you have seen on a bar. In that minute, which single step of the allergy order is most likely to be skipped — the spoken call-out, the ALG sticker, the clean scoop, or the trace warning — and what would you personally do to make sure it is the one step you never skip?"
+      },
+      "source_material_ids": [
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        24,
+        21
+      ],
+      "assessments": [
+        {
+          "kind": "multi_select",
+          "prompt": "A customer says her son is allergic to milk. Which of the following are true statements you could make at the counter? Select all that apply.",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "The classic milk tea contains milk protein, because our creamer lists sodium caseinate."
+            },
+            {
+              "id": "b",
+              "text": "The fruit teas FT01, FT02 and FT03 have no milk in the recipe."
+            },
+            {
+              "id": "c",
+              "text": "We can promise this drink has zero traces of milk, because we use non-dairy creamer."
+            },
+            {
+              "id": "d",
+              "text": "We handle milk, egg, soy and oats on one small bar, so I cannot promise zero traces."
+            },
+            {
+              "id": "e",
+              "text": "Non-dairy creamer is dairy-free, so any drink made with it is safe for a milk allergy."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "b",
+              "d"
+            ]
+          },
+          "max_score": 3,
+          "explanation": "Sodium caseinate is a milk protein, so the classic milk tea is not milk-free; the fruit teas carry no milk in the recipe; and the bar handles milk, egg, soy and oats together, so zero traces cannot be promised. Options c and e repeat the \"non-dairy means dairy-free\" claim the SOP forbids.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            24
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "The creamer contains sodium caseinate, a milk protein."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A customer points at the brown sugar syrup bottle and asks whether it contains milk or caffeine. Using the recipe and the allergen rules, write the two-sentence answer you would give, and state what you would do if the customer then told you they have a milk allergy.",
+          "bloom": "apply",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "The brown sugar syrup is 1 kg dark brown sugar and 500 ml water simmered about 10 minutes, so it contains no milk and no caffeine. If the customer then declares a milk allergy, I say \"ALLERGY: milk\" out loud to the bar, add ALG to the sticker, and make the drink with washed hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, and no cheese foam or pudding — while telling them we handle milk on this bar and cannot promise zero traces."
+          },
+          "rubric": [
+            {
+              "criterion": "States that the brown sugar syrup contains no milk and no caffeine, citing the recipe",
+              "weight": 0.35,
+              "excellent": "Names both absences and grounds them in the recipe (dark brown sugar and water, simmered about 10 minutes).",
+              "acceptable": "Says the syrup has no milk and no caffeine but does not mention what it is made from.",
+              "poor": "Says the syrup is safe without addressing milk or caffeine, or claims it contains milk or caffeine."
+            },
+            {
+              "criterion": "Names the counter protocol triggered by a declared milk allergy",
+              "weight": 0.35,
+              "excellent": "Includes saying \"ALLERGY: milk\" out loud to the bar and adding ALG to the sticker.",
+              "acceptable": "Mentions telling the bar about the allergy but omits the ALG sticker or the spoken call-out.",
+              "poor": "Says nothing about telling the bar or marking the order."
+            },
+            {
+              "criterion": "Names the clean-equipment steps and the trace warning",
+              "weight": 0.3,
+              "excellent": "Lists washed hands, new gloves, clean-rack shaker and scoop, fresh ice with the clean scoop, no cheese foam or pudding, and states that zero traces cannot be promised.",
+              "acceptable": "Lists some clean-equipment steps and admits traces are possible, but misses gloves or the topping ban.",
+              "poor": "Promises the drink is completely milk-free, or omits the equipment steps entirely."
+            }
+          ],
+          "max_score": 10,
+          "id": "q2",
+          "cite_chunk_ids": [
+            21
+          ],
+          "status": "supported",
+          "reason": "Section 9 gives the allergy steps in the key; the syrup recipe (6.3: brown sugar and water) has no milk or tea.",
+          "quote": "Making an allergy order: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding.",
+          "explanation": "Making an allergy order: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding."
+        },
+        {
+          "kind": "ordering",
+          "prompt": "A customer at the counter declares a milk allergy and orders a fruit tea. Put the steps into the order they happen.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "c",
+              "text": "Wash hands, put on new gloves, and take a shaker and scoop from the clean rack."
+            },
+            {
+              "id": "d",
+              "text": "Build the drink with fresh ice using the clean scoop, and add no cheese foam or pudding."
+            },
+            {
+              "id": "e",
+              "text": "Tell the customer what you did and that you cannot promise zero traces, and let them decide."
+            },
+            {
+              "id": "b",
+              "text": "The cashier says \"ALLERGY: milk\" out loud to the bar and adds ALG to the sticker."
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "b",
+              "c",
+              "d",
+              "e"
+            ]
+          },
+          "max_score": 5,
+          "explanation": "Section 9: when a customer mentions an allergy the cashier says it out loud and adds ALG; the allergy order is made with washed hands, new gloves, a clean-rack shaker and scoop, then fresh ice with the clean scoop and no cheese foam or pudding; then you tell the customer what you did and let them decide.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            21
+          ],
+          "status": "supported",
+          "reason": "Section 9: call out and add ALG when the allergy is mentioned, then washed hands, gloves, clean rack, fresh ice; then tell the customer.",
+          "quote": "Making an allergy order: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A customer's face and lips begin to swell minutes after drinking a milk tea, and she says her throat feels tight. What do you do first?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Call 999 at once, tell the shift lead, keep her still, and ask whether she carries her own adrenaline auto-injector."
+            },
+            {
+              "id": "b",
+              "text": "Give her a cup of water and a cold fruit tea to rinse her mouth while you watch for more swelling."
+            },
+            {
+              "id": "c",
+              "text": "Finish serving the queue, then walk her to the back and wait to see whether the swelling goes down on its own."
+            },
+            {
+              "id": "d",
+              "text": "Ask the bar to remake the drink without creamer so she can see that the second cup is safe."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 2,
+          "explanation": "Swollen lips or face, trouble breathing, hives and vomiting are the reaction signs section 9 names, and the SOP's first instruction is to call 999 at once, tell the shift lead, keep the person still, and ask about their own auto-injector. Giving food or drink, waiting to see, or remaking the drink all delay the only action that matters.",
+          "id": "q4",
+          "cite_chunk_ids": [
+            21
+          ],
+          "status": "supported",
+          "reason": "Section 9 gives exactly this first response to swollen lips, trouble breathing, hives or vomiting; the auto-check missed it.",
+          "quote": "call 999 at once, tell the shift lead, keep the person still, and ask if they carry their own adrenaline auto-injector"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.003285,
+  "repairs": [
+    "re-homed 4 questions from narrative blocks into a quiz",
+    "cites: q1: cited chunk 24 (Scenario A: dairy allergy), found by its question and answer",
+    "cites: q3: cited chunk 21 (9. Allergens), found by its question and answer",
+    "cites: q4: cited chunk 21 (9. Allergens), found by its question and answer",
+    "cites: b8: the quiz cited nothing; cited chunks 24, 21 (its questions' sources)",
+    "check: q3: options were shown in the correct order; rotated them",
+    "check: q3: options were shown in the correct order; rotated them"
+  ]
+}

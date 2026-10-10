@@ -1,0 +1,62 @@
+[
+  {
+    "lesson": "campus_and_classroom",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Apa maksud \"tugasan\"? | What does \"tugasan\" mean?",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 13,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.493Z"
+  },
+  {
+    "lesson": "campus_and_classroom",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "",
+    "reason": "Re-solved from the slides: the answer is c) Boleh ulang?, but the key said b) Minta maaf..",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.496Z"
+  },
+  {
+    "lesson": "campus_and_classroom",
+    "item": "q4",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+    "chunk_id": null,
+    "round": 2,
+    "at": "2026-10-10T16:18:27.728Z"
+  },
+  {
+    "lesson": "campus_and_classroom",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Boleh ulang? † | Can you repeat that?",
+    "reason": "The phrasebook gives Boleh ulang? as Can you repeat that?, the request the prompt asks for.",
+    "chunk_id": 7,
+    "round": 2,
+    "at": "2026-10-10T16:23:39.136Z"
+  },
+  {
+    "lesson": "campus_and_classroom",
+    "item": "q3",
+    "verdict": "not_covered",
+    "quote": "Boleh cakap perlahan sikit? † | Can you speak a bit slower?",
+    "reason": "The phrases are in the phrasebook; the order of saying them in class is the lesson's advice, not the source's.",
+    "chunk_id": 7,
+    "round": 1,
+    "at": "2026-10-10T16:23:39.136Z"
+  },
+  {
+    "lesson": "campus_and_classroom",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "Boleh ulang? † | Can you repeat that?",
+    "reason": "The line that gets the content said again is Boleh ulang?; Minta maaf is only an apology.",
+    "chunk_id": 7,
+    "round": 2,
+    "at": "2026-10-10T16:30:06.982Z"
+  }
+]

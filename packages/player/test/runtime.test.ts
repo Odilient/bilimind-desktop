@@ -6,7 +6,7 @@ import type { Course } from '@bilimind/core';
 import fixture from '@bilimind/core/fixtures/course-ds-mini.json';
 import { builtWhen, countdownChip, countdownText, daysFromTo, examInfo, fmtClock, fmtMinutes, ymdIn } from '../src/runtime/time.ts';
 import { ampAt, cueAt, planWraps, waveBars } from '../src/runtime/cues.ts';
-import { citeHref, citeLabel, currentLesson, dueRows, lessonOrder, markQuote, nextLesson, nextReview, percentDone, shortName, stepLabel } from '../src/runtime/model.ts';
+import { citeHref, citeLabel, currentLesson, dueRows, lessonOrder, markQuote, nextLesson, nextReview, partLabel, percentDone, quoteLead, sameText, shortName, stepLabel } from '../src/runtime/model.ts';
 import { normaliseProgress, storageKey } from '../src/runtime/progress.ts';
 import { parseHash } from '../src/router.ts';
 
@@ -88,7 +88,8 @@ describe('model', () => {
     expect(currentLesson(course, () => true)).toBeNull();
     expect(nextLesson(course, 'hash_tables', none)?.id).toBe('binary_heaps');
     expect(percentDone(course, id => id === 'hash_tables')).toBe(0.5);
-    expect(stepLabel(course, 'binary_heaps')).toEqual({ step: 3, of: 4 });
+    expect(stepLabel(course, 'binary_heaps')).toEqual({ step: 2, of: 2 });   // cut topics are not steps
+    expect(stepLabel(course, 'hash_tables')).toEqual({ step: 1, of: 2 });
   });
   it('cite labels and links', () => {
     const cite = course.lessons[0]!.blocks[0]!.cites[0]!;
@@ -96,6 +97,17 @@ describe('model', () => {
     expect(citeHref(cite)).toBe('sources/sample-lecture-04-hashing.pdf#page=3');
     expect(citeLabel(course, { ...cite, file: 'sources/unknown.pdf', page: null, locator: 'Slide 9' })).toBe('unknown · Slide 9');
     expect(shortName({ id: 's', title: 'Lecture 12 · Graphs', file: 'x.pdf', kind: 'pdf', role: 'lecture', pages: 1, cited: 0 }, 'x.pdf')).toBe('L12');
+    // G2: a deck cited by slide shows "Slide 7", never "p.7", even when the page is set
+    expect(citeLabel(course, { ...cite, page: 7, locator: 'Slide 7 · Load factor' })).toBe('L4 · Slide 7');
+    expect(quoteLead(course, { ...cite, locator: 'Slide 7' })).toBe('Your slide says');
+    expect(quoteLead(course, { ...cite, locator: 'Page 3' })).toBe('Your file says');
+  });
+  it('spots an explanation that only repeats the quote, and numbers same-named parts', () => {
+    expect(sameText('The dictionary (map) ADT Operations: insert(key, value), search(key),', 'The dictionary (map) ADT  Operations: insert(key, value), search(key)')).toBe(true);
+    expect(sameText('Load factor is n/m, so 6/8 = 0.75.', 'Load factor alpha = n/m')).toBe(false);
+    const l = course.lessons[0]!;
+    const twin = { ...l, blocks: [{ ...l.blocks[0]!, id: 'x1', type: 'explainer', title: null }, { ...l.blocks[0]!, id: 'x2', type: 'explainer', title: null }] } as typeof l;
+    expect(twin.blocks.map(b => partLabel(twin, b))).toEqual(['Explanation 1', 'Explanation 2']);
   });
   it('marks the quote inside the excerpt', () => {
     expect(markQuote('Alpha beta gamma.', 'beta')).toEqual(['Alpha ', 'beta', ' gamma.']);

@@ -1,0 +1,451 @@
+{
+  "key": "moh_handler_certificate",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Regulation 30 of the Food Hygiene Regulations 2009 says a food handler must attend a food handler training course and hold a **Certificate of Food Handlers Training** from an institution specified by the Director of the Ministry of Health. Your one-page summary states it plainly: \"This summary does not replace MOH food-handler training. Every food handler must still attend a food handler training course recognised by the Ministry of Health Malaysia and get the certificate.\"\n\nThat sentence is the whole node. You already know from *Who is a food handler under FHR 2009* that scooping pearls, pouring milk, sealing cups and washing shakers makes you a food handler. This node is about the piece of paper that lets you legally stand behind the bar.\n\n**The SOP is not the certificate.** The Mutiara Tea Bar SOP folder tells you how *this shop* makes drinks — the 30-second steep, the pearl rotation, the sealing temperature. It is a fictional example written for training. It is not issued by MOH, it is not recognised by MOH, and no inspector will accept it in place of the certificate. The SOP and the certificate do different jobs: the SOP keeps your drinks consistent, the certificate keeps the shop legal.\n\n**What the MOH course actually contains.** A recognised food handler course covers four things that the SOP never touches:\n\n1. **Food-borne illness and how it spreads** — bacteria, viruses, cross-contamination, the temperature danger zone between 5 °C and 60 °C.\n2. **Personal hygiene** — handwashing technique, fingernails, clothing, what to do when you are sick. Your summary's reg. 33 (\"Remove your overall, apron or head cover before going to the toilet\") is examined here.\n3. **Safe food handling and storage** — the numbers in your summary: hot food above 60 °C, chilled retail food between -1 °C and 10 °C, frozen food at -18 °C, food 15 cm from the wall and 20 cm above the floor, first-in-first-out rotation.\n4. **Premises and equipment hygiene** — cleaning, pest control, waste, and the reg. 32 clothing rules (clean light-coloured overall or apron, head cover, footwear, stored in a locker when not in use).\n\n**Why you cannot skip it.** Reg. 30 and reg. 31(1) put the duty on both of you. You must not work without training, medical examination and vaccination. The owner must not *let* you work without them, and must keep the records for inspection. Penalties for most food-handler offences under regs. 30, 31 and 33–38 run to a fine of up to RM 10,000 or imprisonment of up to 2 years. The clothing offence under reg. 32 is up to RM 1,000. That is the number that makes this a day-one task, not a someday task.\n\nThe certificate is separate from the anti-typhoid injection. The injection is a medical check by a registered medical practitioner; the certificate is a training course. You need both before your first shift."
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Work these six steps in order. Each one produces something the next step needs — the registration needs your ID, the course needs your registration, the certificate needs the course. Skipping ahead means paying twice or turning up to a course you are not booked on.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Confirm you are a food handler and check your employer's record",
+            "detail_markdown": "Before you book anything, confirm the reg. 2 definition applies to you: you are directly involved in preparing food, you come into contact with food or food-contact surfaces, or you handle packaged or unpackaged food or appliances in the premises. Scooping pearls, pouring milk, sealing cups and washing shakers all qualify.\n\nThen ask your supervisor which institution the shop already uses. Mutiara Tea Bar hires every few weeks, so the manager almost certainly has a preferred provider and may already hold a group booking. Ask for the provider name and the course date in writing — a WhatsApp message is fine.",
+            "warning": "If you book with a different provider than the shop's, the shop may not reimburse you and the manager may not be able to verify your certificate during an inspection. Ask first, book second.",
+            "check": "You can name the provider and the date, and your supervisor has confirmed both."
+          },
+          {
+            "n": 2,
+            "title": "Confirm the provider is recognised by the Director of MOH",
+            "detail_markdown": "Reg. 30 requires the certificate to come from \"an institution specified by the Director\". A certificate from an unrecognised trainer is not a certificate — it is a receipt. Ask the provider directly: \"Is your food handler course recognised by the Ministry of Health Malaysia, and does your certificate carry the MOH recognition?\" Get the answer before you pay.\n\nIf the shop has no preferred provider, this is the step where you check. Your one-page summary points you to the Food Safety and Quality Division of MOH as the authority for the current list.",
+            "warning": "Cheap online courses are the common trap here. A RM 30 certificate printed by a trainer with no MOH recognition will not satisfy reg. 30, and you will pay again for a real course.",
+            "check": "The provider has stated in writing that the course is MOH-recognised and the certificate is issued under that recognition."
+          },
+          {
+            "n": 3,
+            "title": "Register and pay, and keep the receipt",
+            "detail_markdown": "Register with your full name exactly as it appears on your MyKad, your MyKad number, and a phone number you actually answer. Most providers run the course in Malay, some in English, some in both — confirm the language before you book if you are not confident in one of them.\n\nPay and keep the receipt. If the shop is covering the fee, ask whether you pay first and claim back, or whether the shop pays the provider directly. Those are different cash-flow situations and you want to know which one you are in.",
+            "warning": "A name mismatch between your MyKad and your registration is the most common reason a certificate gets held up. Do not shorten your name or use a nickname on the form.",
+            "check": "You have a registration confirmation with your full MyKad name and a receipt or a written confirmation that the shop is paying."
+          },
+          {
+            "n": 4,
+            "title": "Attend the course and pass the assessment",
+            "detail_markdown": "A recognised food handler course is typically one day and ends with a short assessment. Attend it in person unless the provider is explicitly approved for online delivery. Take notes on the four areas the course covers: food-borne illness and cross-contamination, personal hygiene and handwashing, safe food handling and storage temperatures, and premises and equipment hygiene.\n\nThe storage numbers from your summary are the ones most likely to be tested: hot food above 60 °C, chilled retail food between -1 °C and 10 °C, frozen food at -18 °C, food 15 cm from the wall and 20 cm above the floor, first-in-first-out rotation.",
+            "warning": "Do not skip the assessment or leave early. Some providers will not issue the certificate until the assessment is passed, and a re-sit costs another trip.",
+            "check": "You have sat the assessment and the provider has told you that you passed."
+          },
+          {
+            "n": 5,
+            "title": "Collect the Certificate of Food Handlers Training",
+            "detail_markdown": "The certificate is the document reg. 30 requires. Check three things on it before you leave the venue: your name matches your MyKad, the provider's name is on it, and the issue date is visible. Photograph it and store the photo somewhere you can reach from your phone — you will need to show it to the manager and possibly to an inspector.\n\nGive the original to the manager for the shop's records. The owner is required to keep training, medical examination and vaccination records for inspection.",
+            "warning": "Do not laminate the original before the manager has seen it, and do not hand over your only copy without photographing it first.",
+            "check": "You hold a certificate with your correct name, the provider's name and the issue date, and the manager has a copy on file."
+          },
+          {
+            "n": 6,
+            "title": "Complete the medical check and anti-typhoid vaccination",
+            "detail_markdown": "The certificate alone does not satisfy reg. 31(1). You also need a medical examination and vaccination by a registered medical practitioner — in practice the anti-typhoid injection. Book this at a clinic, bring your MyKad, and tell the doctor you are a food handler so the correct vaccination is given and recorded.\n\nHand both records to the manager: the training certificate and the medical/vaccination record. The owner must keep both for inspection, and must not let you work until both are in place.",
+            "warning": "The injection is not the certificate and the certificate is not the injection. Crew regularly arrive on day one with one and not the other, and the manager cannot legally put them on the bar.",
+            "check": "The manager has confirmed in writing that both your training certificate and your medical/vaccination record are on file, and has given you your first shift date."
+          }
+        ]
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "checklist",
+      "payload": {
+        "title": "Day-one certificate and medical checklist",
+        "items": [
+          {
+            "text": "Supervisor has named the MOH-recognised provider and the course date in writing.",
+            "why": "Prevents booking with a provider the shop cannot verify or reimburse."
+          },
+          {
+            "text": "Provider has confirmed in writing that the course is recognised by the Ministry of Health Malaysia.",
+            "why": "Prevents paying for a certificate that does not satisfy reg. 30."
+          },
+          {
+            "text": "Registration form uses your name exactly as printed on your MyKad.",
+            "why": "Prevents the certificate being held up or rejected over a name mismatch."
+          },
+          {
+            "text": "Receipt or written confirmation of who pays the course fee is saved.",
+            "why": "Prevents an argument about reimbursement after the course."
+          },
+          {
+            "text": "Course attended in full and assessment passed.",
+            "why": "Some providers withhold the certificate until the assessment is passed."
+          },
+          {
+            "text": "Certificate shows your correct name, the provider's name and the issue date.",
+            "why": "An incomplete certificate will not satisfy an inspection."
+          },
+          {
+            "text": "A photo of the certificate is saved on your phone.",
+            "why": "Lets you show proof immediately if the original is in the shop's file."
+          },
+          {
+            "text": "Medical examination and anti-typhoid vaccination completed at a registered clinic.",
+            "why": "Reg. 31(1) requires both, not just the training certificate."
+          },
+          {
+            "text": "Manager has confirmed in writing that both records are on file and given you a first shift date.",
+            "why": "The owner must not let you work until both are in place."
+          }
+        ],
+        "note": "Keep this open on your phone while you work through the steps. The two items crew most often miss are the written confirmation from the provider and the separate medical/vaccination record — the certificate alone does not satisfy reg. 31(1)."
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "misconception",
+      "payload": {
+        "belief": "The shop's SOP folder is the training — once I have read it and signed it, I am trained and I can start work.",
+        "why_it_seems_right": "The SOP folder is thick, it is specific to Mutiara Tea Bar, it covers how to make every drink, and the manager asks you to read and sign it before your first shift. It looks exactly like the training a new crew member needs, and it is more useful day-to-day than anything a generic MOH course would cover.",
+        "what_is_true": "Reg. 30 requires a Certificate of Food Handlers Training from an institution specified by the Director of the Ministry of Health. Your one-page summary states it directly: \"This summary does not replace MOH food-handler training. Every food handler must still attend a food handler training course recognised by the Ministry of Health Malaysia and get the certificate.\" The SOP is a fictional example written for this training; it is not issued by MOH and no inspector will accept it in place of the certificate. The difference predicts this: if you turn up for your first shift with only the signed SOP, the manager cannot legally put you on the bar, because reg. 31(1) also requires the medical examination and vaccination on file."
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "Reg. 30 requires a Certificate of Food Handlers Training from an institution specified by the Director of the Ministry of Health — the shop SOP is not a substitute.",
+          "Reg. 31(1) requires a medical examination and vaccination by a registered medical practitioner in addition to the training certificate; in practice this is the anti-typhoid injection.",
+          "The owner must not let you work without training, medical examination and vaccination, and must keep those records for inspection.",
+          "A recognised MOH food handler course covers food-borne illness and cross-contamination, personal hygiene, safe food handling and storage temperatures, and premises and equipment hygiene.",
+          "Most food-handler offences under regs. 30, 31 and 33–38 carry a fine of up to RM 10,000 or imprisonment of up to 2 years; the reg. 32 clothing offence is up to RM 1,000.",
+          "The certificate must carry your name as printed on your MyKad, the provider's name and the issue date, or it will not satisfy an inspection."
+        ]
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "project",
+      "payload": {
+        "title": "Book your own MOH food handler course and assemble your day-one file",
+        "brief_markdown": "You are a new Mutiara Tea Bar crew member starting in two weeks. Your manager has told you the shop uses a provider called SafeFood Training Sdn Bhd, which runs a one-day MOH-recognised course in both English and Malay and charges RM 80. The shop reimburses the fee on production of a receipt. You have not booked anything yet.\n\nProduce a single document — a text file, a note on your phone, or a page in your notebook — that a manager could read in two minutes to see that you are ready for your first shift. It must cover the booking sequence, the two separate requirements under regs. 30 and 31(1), and the specific numbers you will be examined on.\n\nConstraints: use only the provider named above and the numbers from your one-page FHR 2009 summary. Do not invent a second provider, a different fee, or a different course length. If you are unsure about a number, write the number from the summary rather than guessing.",
+        "deliverables": [
+          "A six-step booking plan in the correct order, with the specific failure at each step and how you would detect it before it costs you a shift.",
+          "A short written comparison of what the MOH course covers versus what the Mutiara Tea Bar SOP covers, naming at least three topics the SOP does not teach.",
+          "A one-page revision sheet listing the storage and temperature numbers from the summary that the course assessment is most likely to test, with the regulation number beside each."
+        ]
+      },
+      "source_material_ids": [
+        1,
+        2,
+        4
+      ],
+      "assessments": [
+        {
+          "kind": "project",
+          "prompt": "Produce the day-one readiness document described in the project brief: a six-step booking plan in order with the failure at each step, a comparison of MOH course content against the shop SOP, and a one-page revision sheet of the storage and temperature numbers with their regulation numbers.",
+          "bloom": "create",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "A complete answer follows the six-step order: confirm the shop's MOH-recognised provider in writing; register and pay using the full MyKad name and keep the receipt; attend the course and pass the assessment; collect the Certificate of Food Handlers Training and check name, provider and issue date; complete the medical examination and anti-typhoid vaccination at a registered clinic; hand both records to the manager and get a first shift date. The comparison names food-borne illness and cross-contamination, personal hygiene and handwashing, safe food handling and storage temperatures, and premises and equipment hygiene as MOH course content, and states that the SOP is a fictional shop document that does not satisfy reg. 30. The revision sheet lists hot food above 60 °C, chilled retail food between -1 °C and 10 °C, frozen food at -18 °C, food 15 cm from the wall and 20 cm above the floor, and first-in-first-out rotation, with the relevant regulation numbers from the summary."
+          },
+          "rubric": [
+            {
+              "criterion": "Booking plan is in the correct dependency order and names the specific failure at each step",
+              "weight": 0.35,
+              "excellent": "Lists all six steps in the order confirm provider, register, attend, collect certificate, medical and vaccination, hand records to manager, and names a concrete failure at each step such as a name mismatch on the registration or a certificate from an unrecognised trainer.",
+              "acceptable": "Lists the six steps in a workable order and names a failure at most steps, but one or two steps are out of order or the failure named is vague.",
+              "poor": "Omits steps, puts registration before confirming the provider, or lists steps with no failure attached."
+            },
+            {
+              "criterion": "Comparison correctly separates MOH course content from shop SOP content",
+              "weight": 0.3,
+              "excellent": "Names at least three topics the SOP does not teach — for example food-borne illness and cross-contamination, the temperature danger zone, or premises and equipment hygiene — and states that the SOP is a fictional shop document that no inspector accepts in place of the certificate.",
+              "acceptable": "Names two or three MOH course topics and states that the SOP is not a substitute, but does not explain what the SOP actually covers.",
+              "poor": "Treats the SOP as equivalent to or a substitute for the MOH course, or lists no MOH course topics."
+            },
+            {
+              "criterion": "Revision sheet uses the summary's actual numbers with the correct regulation beside each",
+              "weight": 0.35,
+              "excellent": "Lists hot food above 60 °C, chilled retail food between -1 °C and 10 °C, frozen food at -18 °C, food 15 cm from the wall and 20 cm above the floor, and attaches the correct regulation number to each.",
+              "acceptable": "Lists most of the numbers correctly but attaches a wrong or missing regulation number to one or two of them.",
+              "poor": "Invents numbers, omits the regulation numbers entirely, or lists fewer than three of the required values."
+            }
+          ],
+          "max_score": 20,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b7",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is Thursday. Your first shift at Mutiara Tea Bar is Saturday morning. You have paid RM 80 for an online food handler course, passed the assessment and printed a certificate. You have not had the anti-typhoid injection. You message the manager to confirm Saturday.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "The manager replies: \"Can you start Saturday?\" What do you tell them?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Yes, I have my food handler certificate, so I am ready.",
+                "correct": false,
+                "outcome_markdown": "The manager checks the file, sees no medical or vaccination record, and replies: \"I can't put you on the bar without the injection — reg. 31(1). Can you get to a clinic before Saturday?\" Your shift is at risk.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "I have the training certificate but not the anti-typhoid injection yet. Can I start after I get it?",
+                "correct": true,
+                "outcome_markdown": "The manager replies: \"Correct — I can't roster you until both are on file. Get the injection and send me the record, then I'll book you in.\" Your shift moves to the following week but nothing is lost.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "Yes, and I will bring the certificate on Saturday and sort the injection out later.",
+                "correct": false,
+                "outcome_markdown": "The manager replies: \"I can't let you work without the vaccination record — the owner is liable, not just you.\" You are not rostered.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "You go to a clinic on Friday morning for the anti-typhoid injection. The doctor asks whether you have already done your food handler training. What do you say, and what do you ask for?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Yes, I have the certificate. I ask for the vaccination and a written record of it to give the manager.",
+                "correct": true,
+                "outcome_markdown": "The doctor gives the injection and prints a record with the date and the vaccine name. You photograph it and send it to the manager, who confirms your shift for the following week.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "I ask only for the injection and do not mention the training certificate.",
+                "correct": false,
+                "outcome_markdown": "The injection is given but the record is a bare receipt with no vaccine name. The manager asks for a proper record and you have to go back to the clinic.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "I ask the doctor to write a note saying I am fit to work, and treat that as the medical record.",
+                "correct": false,
+                "outcome_markdown": "The note says \"fit for work\" but records no vaccination. The manager explains that reg. 31(1) requires the vaccination itself, not a fitness note.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "On Saturday you are not rostered, so you use the morning to review. The manager asks what you learned on the course that the SOP does not cover. What is the strongest answer?",
+            "options": [
+              {
+                "id": "a",
+                "text": "How to seal cups at the right temperature and how long to steep the tea.",
+                "correct": false,
+                "outcome_markdown": "The manager points out that both of those are in the SOP folder, not the MOH course. The answer misses the point of the training.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "How food-borne illness spreads, the temperature danger zone, and the storage numbers — hot food above 60 °C, chilled retail food between -1 °C and 10 °C, frozen food at -18 °C.",
+                "correct": true,
+                "outcome_markdown": "The manager nods: \"That is the part the SOP never covers, and it is what an inspector will ask about.\" You are confirmed for the following Saturday.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "How to rotate stock first-in-first-out and keep food 15 cm from the wall.",
+                "correct": false,
+                "outcome_markdown": "The manager says those numbers are in the summary too, but they are only two of the four areas the course covers. The answer is incomplete.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this scenario comes from treating one requirement as if it covered both. The training certificate and the medical/vaccination record are two separate obligations under regs. 30 and 31(1), and the owner must not let you work until both are on file. The second wrong turn is treating a fitness note or a bare receipt as the medical record — the record has to show the vaccination itself. The third is confusing what the MOH course teaches with what the shop SOP teaches: the SOP tells you how to make drinks, the course tells you how to keep them safe, and only the course produces the certificate."
+      },
+      "source_material_ids": [
+        1,
+        2
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        28,
+        1
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "Put these steps in the order you must complete them before your first shift at Mutiara Tea Bar. Each step depends on the one before it.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Attend the MOH-recognised food handler course and pass its assessment."
+            },
+            {
+              "id": "b",
+              "text": "Confirm with your supervisor which MOH-recognised provider the shop uses."
+            },
+            {
+              "id": "c",
+              "text": "Give the manager your Certificate of Food Handlers Training and your medical/vaccination record."
+            },
+            {
+              "id": "d",
+              "text": "Register and pay with the provider, using your full MyKad name."
+            },
+            {
+              "id": "e",
+              "text": "Collect the Certificate of Food Handlers Training and check the name, provider and issue date."
+            },
+            {
+              "id": "f",
+              "text": "Complete the medical examination and anti-typhoid vaccination at a registered clinic."
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "b",
+              "d",
+              "a",
+              "e",
+              "f",
+              "c"
+            ]
+          },
+          "max_score": 6,
+          "explanation": "You must know which provider the shop uses before you can register, and you cannot register before you know the provider. The course comes before the certificate, the certificate and the medical record are both collected before they are handed to the manager, and the manager needs both before you can be put on the bar.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            1
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Every food handler must still attend a food handler training course recognised by the Ministry of Health Malaysia and get the certificate."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A new crew member has read and signed the Mutiara Tea Bar SOP folder and has had the anti-typhoid injection. They have not attended any food handler course. What does reg. 30 of the Food Hygiene Regulations 2009 require that they are still missing?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Nothing — the signed SOP and the injection together satisfy the training and medical requirements."
+            },
+            {
+              "id": "b",
+              "text": "A Certificate of Food Handlers Training from an institution specified by the Director of the Ministry of Health."
+            },
+            {
+              "id": "c",
+              "text": "A second anti-typhoid injection, because the first one only covers the first six months of work."
+            },
+            {
+              "id": "d",
+              "text": "A written declaration from the shop owner that the crew member has been trained in the SOP."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Reg. 30 requires attendance at a food handler training course and a Certificate of Food Handlers Training from an institution specified by the Director. The SOP is the shop's own fictional document and the injection is the reg. 31(1) medical requirement — neither substitutes for the certificate.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            1
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Every food handler must still attend a food handler training course recognised by the Ministry of Health Malaysia and get the certificate."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A new crew member tells you they have completed an online food handler course and printed a certificate, so they are ready for their first shift. Using regs. 30 and 31(1), explain in two to four sentences what they still need and why the certificate alone is not enough.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "The crew member has satisfied reg. 30 only if the certificate came from an institution specified by the Director of the Ministry of Health. Reg. 31(1) separately requires a medical examination and vaccination by a registered medical practitioner — in practice the anti-typhoid injection — and the owner must not let them work until both are in place and recorded for inspection. The shop SOP is not a substitute for either, because it is the shop's own document and is not issued or recognised by MOH."
+          },
+          "rubric": [
+            {
+              "criterion": "Names the two separate requirements under regs. 30 and 31(1)",
+              "weight": 0.4,
+              "excellent": "States that reg. 30 requires the Certificate of Food Handlers Training from an institution specified by the Director, and that reg. 31(1) separately requires a medical examination and vaccination by a registered medical practitioner.",
+              "acceptable": "Names both the training certificate and the medical or vaccination requirement but does not attach them to the correct regulations.",
+              "poor": "Names only one of the two requirements, or treats the certificate as covering both."
+            },
+            {
+              "criterion": "Explains the owner's duty and the consequence of missing a requirement",
+              "weight": 0.35,
+              "excellent": "States that the owner must not let the crew member work without training, medical examination and vaccination, and must keep the records for inspection, and links this to the penalty of up to RM 10,000 or 2 years imprisonment.",
+              "acceptable": "States that the owner cannot roster the crew member until both records are on file, without naming the penalty.",
+              "poor": "Says the crew member can start and sort the rest out later, or does not mention the owner's duty at all."
+            },
+            {
+              "criterion": "Distinguishes the MOH course from the shop SOP",
+              "weight": 0.25,
+              "excellent": "States that the shop SOP is the shop's own document and is not recognised by MOH, so it cannot stand in for the certificate.",
+              "acceptable": "States that the SOP and the certificate are different things without saying why the SOP does not count.",
+              "poor": "Treats the SOP as equivalent to or a substitute for the MOH training."
+            }
+          ],
+          "max_score": 10,
+          "id": "q4"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.004565,
+  "repairs": [
+    "re-homed 3 questions from narrative blocks into a quiz",
+    "cites: q2: cited chunk 28 (12. Before your first shift you must be able to), found by its question and answer",
+    "cites: q3: cited chunk 1 (Page 1), found by its question and answer",
+    "cites: b8: the quiz cited nothing; cited chunks 28, 1 (its questions' sources)"
+  ]
+}

@@ -73,8 +73,13 @@ export function renderMermaid(source: string): Promise<string> {
 export function sanitizeSvg(markup: string): string | null {
   if (typeof DOMParser === 'undefined' || !markup || !/<svg[\s>]/i.test(markup)) return null;
   const doc = new DOMParser().parseFromString(markup, 'image/svg+xml');
-  const root = doc.documentElement;
-  if (!root || root.nodeName.toLowerCase() !== 'svg' || doc.getElementsByTagName('parsererror').length) return null;
+  let root: Element | null = doc.documentElement;
+  if (!root || root.nodeName.toLowerCase() !== 'svg' || doc.getElementsByTagName('parsererror').length) {
+    // Mermaid serialises its HTML labels as HTML (<br>, unclosed tags), which is not well-formed XML:
+    // parse a pre-rendered svg with the HTML parser instead of dropping it (G2: payload.svg first).
+    root = new DOMParser().parseFromString(markup, 'text/html').querySelector('svg');
+    if (!root) return null;
+  }
   root.querySelectorAll('script, iframe, object, embed, link, meta').forEach(n => n.remove());
   const all = [root, ...Array.from(root.querySelectorAll('*'))];
   for (const el of all) {

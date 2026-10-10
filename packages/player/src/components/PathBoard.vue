@@ -5,7 +5,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { BLOCK_META, MARK } from '@bilimind/core';
 import type { Course, PathItem, PathTopic } from '@bilimind/core';
-import { currentLesson, lessonById, lessonOrder, nextLesson } from '../runtime/model.ts';
+import { currentLesson, keptStep, keptTopics, lessonById, lessonOrder, nextLesson } from '../runtime/model.ts';
 import { isDone, setDone } from '../runtime/progress.ts';
 import { examInfo, fmtMinutes } from '../runtime/time.ts';
 import { go, lessonHref, route } from '../router.ts';
@@ -24,6 +24,10 @@ const curTopicId = computed(() => {
 });
 const allDone = computed(() => !cur.value && lessonsCount.value > 0);
 const anyCut = computed(() => c.value.path.some(t => t.cut));
+const keptCount = computed(() => keptTopics(c.value).length);
+const cutCount = computed(() => c.value.path.length - keptCount.value);
+// G2: steps are numbered along the kept line only, so "Step 3" means the same thing on the path, in the lesson and in the CTA
+const stepNo = (t: PathTopic) => keptStep(c.value, t);
 
 type Group = { name: string | null; items: PathItem[] };
 interface Row { t: PathTopic; sec: string | null; side: 'l' | 'r'; groups: Group[]; state: string }
@@ -207,7 +211,7 @@ const ctaLabel = computed(() => {
   const l = cur.value;
   if (!l) return '';
   const t = c.value.path.find(x => x.id === curTopicId.value);
-  return `Continue · Step ${t?.step ?? l.n}, ${l.title.split(/[:,(]/)[0]!.trim()}`;
+  return `Continue · Step ${stepNo(t!) ?? l.n}, ${l.title.split(/[:,(]/)[0]!.trim()}`;
 });
 function onFinish() { if (allDone.value) emit('complete'); }
 defineExpose({ redraw: draw });
@@ -216,7 +220,7 @@ defineExpose({ redraw: draw });
 <template>
   <section id="path" class="canvas-sec" style="margin-top: var(--sec-y); padding-top: 72px" aria-labelledby="path-h">
     <div class="p-head">
-      <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-path" /></svg></span>Your path · {{ c.path.length }} steps · {{ lessonsCount }} lessons</span>
+      <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-path" /></svg></span>Your path · {{ keptCount }} step{{ keptCount === 1 ? '' : 's' }} · {{ lessonsCount }} lesson{{ lessonsCount === 1 ? '' : 's' }}<template v-if="cutCount"> · {{ cutCount }} cut</template></span>
       <h2 id="path-h" class="display">One line <span class="hchip ink" aria-hidden="true"><svg><use href="#i-path" /></svg></span> to <span class="cob">{{ exam ? exam.weekdayLong + '.' : 'done.' }}</span></h2>
       <p class="lede">Ink boxes are the line. White ones hang off it. Lime means our pick.<template v-if="anyCut"> Dashed ones were cut to fit your days; the reason sits beside each.</template></p>
       <ul class="p-legend" aria-label="Marks">
@@ -256,7 +260,7 @@ defineExpose({ redraw: draw });
             <div class="p-mid" style="order: 1; position: relative">
               <span v-if="r.state === 'cur'" class="token"><i><svg aria-hidden="true"><use href="#i-target" /></svg></i>You are here</span>
               <button type="button" class="p-topic" :class="r.state" :aria-describedby="`st-${r.t.id}`" @click.stop="onTopic(r.t, $event)" @mouseenter="litTopic = r.t.id" @mouseleave="litTopic = ''">
-                <span class="no"><svg v-if="r.state === 'done'" class="ico" style="width:12px;height:12px" aria-hidden="true"><use href="#i-check" /></svg><template v-else>{{ r.t.step }}</template></span>
+                <span class="no"><svg v-if="r.state === 'done'" class="ico" style="width:12px;height:12px" aria-hidden="true"><use href="#i-check" /></svg><svg v-else-if="r.t.cut" class="ico" style="width:11px;height:11px" aria-hidden="true"><use href="#i-x" /></svg><template v-else>{{ stepNo(r.t) }}</template></span>
                 <span class="tt">{{ r.t.title }}</span>
                 <span class="mt">{{ fmtMinutes(r.t.minutes) }} <svg v-for="(ic, k) in icons(r.t)" :key="k" aria-hidden="true"><use :href="'#' + ic" /></svg><span v-if="pct(r.t.weight)" class="wt" :title="`${pct(r.t.weight)} of last year's marks`">{{ pct(r.t.weight) }}</span></span>
                 <span :id="`st-${r.t.id}`" class="sr-only">{{ r.state === 'done' ? 'Done' : r.state === 'cur' ? 'You are here' : r.state === 'cut' ? 'Cut from the plan' : '' }}, {{ r.t.minutes }} minutes</span>
@@ -276,9 +280,9 @@ defineExpose({ redraw: draw });
 
       <div v-if="brief.t" class="brief" role="dialog" :aria-label="brief.item ? brief.item.title : brief.t.title" :style="{ left: brief.x + 'px', top: brief.y + 'px' }">
         <button class="x" type="button" aria-label="Close" @click="closeBrief"><svg aria-hidden="true"><use href="#i-x" /></svg></button>
-        <div class="place"><span class="no">{{ brief.t.step }}</span>Step {{ brief.t.step }}<template v-if="brief.t.section"> · {{ brief.t.section }}</template>
+        <div class="place"><template v-if="stepNo(brief.t)"><span class="no">{{ stepNo(brief.t) }}</span>Step {{ stepNo(brief.t) }}</template><template v-else>Cut from the plan</template><template v-if="brief.t.section"> · {{ brief.t.section }}</template>
           <span v-if="brief.item?.mark" class="tag" :class="brief.item.mark === 'recommended' ? 'lime' : brief.item.mark === 'alternative' ? 'cob' : ''">{{ MARK[brief.item.mark].label }}</span>
-          <span v-if="brief.t.cut || brief.item?.cut" class="tag">Cut</span>
+          <span v-if="brief.item?.cut && !brief.t.cut" class="tag">Cut</span>
         </div>
         <h4>{{ brief.item ? brief.item.title : brief.t.title }}</h4>
         <p v-if="!brief.item && brief.t.summary">{{ brief.t.summary }}</p>

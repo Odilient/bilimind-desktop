@@ -4,7 +4,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { CourseLesson } from '@bilimind/core';
 import { useBarState } from '../runtime/useBar.ts';
-import { partIcon, partName } from '../runtime/model.ts';
+import { partIcon, partLabel } from '../runtime/model.ts';
 import { prefs } from '../runtime/progress.ts';
 import { setTextSize, toggleNight, toggleStage } from '../runtime/ui.ts';
 import { homeHref } from '../router.ts';
@@ -31,10 +31,10 @@ function jump(id: string) { menu.value = ''; emit('jump', id); }
     <span class="track" role="progressbar" :aria-valuenow="seen" :aria-valuemax="total" aria-label="Parts seen"><i :style="{ width: (pct * 100).toFixed(1) + '%' }"></i></span>
     <span class="cnt">{{ seen }}/{{ total }}</span>
     <div class="pager tb-menu">
-      <button type="button" :aria-expanded="menu === 'pager'" aria-haspopup="menu" @click.stop="toggle('pager')"><span>{{ currentIndex + 1 }}/{{ total }} {{ cur ? partName(cur) : '' }}</span><svg aria-hidden="true"><use href="#i-down" /></svg></button>
+      <button type="button" :aria-expanded="menu === 'pager'" aria-haspopup="menu" @click.stop="toggle('pager')"><span>{{ currentIndex + 1 }}/{{ total }} {{ cur ? partLabel(lesson, cur) : '' }}</span><svg aria-hidden="true"><use href="#i-down" /></svg></button>
       <div v-if="menu === 'pager'" class="menu" role="menu" style="left: 0; right: auto">
         <a v-for="(b, i) in lesson.blocks" :key="b.id" role="menuitem" :href="`#bf-${b.id}`" @click.prevent="jump(b.id)">
-          <span class="ti"><svg aria-hidden="true"><use :href="'#' + partIcon(b)" /></svg></span><span>{{ partName(b) }}</span>
+          <span class="ti"><svg aria-hidden="true"><use :href="'#' + partIcon(b)" /></svg></span><span>{{ partLabel(lesson, b) }}</span>
           <span v-if="passed.has(b.id)" class="tag ok">Done</span><span v-else-if="i === currentIndex" class="tag">Here</span>
         </a>
       </div>

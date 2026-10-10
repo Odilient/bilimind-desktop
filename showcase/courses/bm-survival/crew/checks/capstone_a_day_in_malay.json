@@ -1,0 +1,203 @@
+{
+  "lesson": "capstone_a_day_in_malay",
+  "round": 5,
+  "at": "2026-10-10T16:31:37.473Z",
+  "total": 26,
+  "passed": 25,
+  "failed": [
+    {
+      "rule": "Q15 thin lesson",
+      "block": null,
+      "item": null,
+      "detail": "878 teaching words for a 60-minute lesson (target about 1800, minimum 900)",
+      "suggestion": "Re-draft with: `draft --lesson capstone_a_day_in_malay --note \"The lesson came back at 878 words for a 60-minute node; the target is about 1800. Expand the teaching blocks with concrete worked detail; do not add new blocks.\"`"
+    }
+  ],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "6 blocks and 5 items have unique ids"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "dialogue payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "checklist payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "project payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "project item valid",
+      "block": 5,
+      "item": "q1"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 6,
+      "item": "q2"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "multi_select item valid",
+      "block": 6,
+      "item": "q3"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 6,
+      "item": "q4"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 6,
+      "item": "q5"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "performance: has project, checklist"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "3 higher-order, 1 remember of 5"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 5 items (max 2)"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 6,
+      "item": "q2"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q6 multi_select",
+      "ok": true,
+      "detail": "5 options, 3 correct",
+      "block": 6,
+      "item": "q3"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 1 accepted answer",
+      "block": 6,
+      "item": "q4"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "4 specific criteria, weights sum to 1",
+      "block": 5,
+      "item": "q1"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 6,
+      "item": "q5"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "17 chunk citations on 6 blocks resolve"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q15 thin lesson",
+      "ok": false,
+      "detail": "878 teaching words for a 60-minute lesson (target about 1800, minimum 900)",
+      "suggestion": "Re-draft with: `draft --lesson capstone_a_day_in_malay --note \"The lesson came back at 878 words for a 60-minute node; the target is about 1800. Expand the teaching blocks with concrete worked detail; do not add new blocks.\"`"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    },
+    {
+      "lesson": "capstone_a_day_in_malay",
+      "rule": "Q17 language",
+      "ok": true,
+      "detail": "dialogue language ms",
+      "block": 3
+    }
+  ]
+}

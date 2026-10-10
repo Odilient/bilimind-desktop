@@ -1,0 +1,174 @@
+{
+  "files": [
+    {
+      "material_id": 1,
+      "name": "bmk2-note.md",
+      "path": "sources/bmk2-note.md",
+      "title": "Note: Bahasa Melayu Komunikasi 2 at Taylor's University",
+      "kind": "md",
+      "role": "lecture",
+      "pages": 1,
+      "words": 188,
+      "scanned_pages": []
+    },
+    {
+      "material_id": 2,
+      "name": "malay-survival-phrasebook.md",
+      "path": "sources/malay-survival-phrasebook.md",
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "kind": "md",
+      "role": "lecture",
+      "pages": 11,
+      "words": 1509,
+      "scanned_pages": []
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "material_id": 1,
+      "title": "Note: Bahasa Melayu Komunikasi 2 at Taylor's University",
+      "ordinal": 1,
+      "locator": "Note: Bahasa Melayu Komunikasi 2 at Taylor's University",
+      "page": null,
+      "content": "# Note: Bahasa Melayu Komunikasi 2 at Taylor's University\n\nInternational students on Taylor's University degree programmes take **Bahasa Melayu Komunikasi 2**\n(module code **MPU31002**, 2 credits) as one of their MPU modules. MPU modules (Mata Pelajaran Pengajian Umum)\nare the compulsory general studies modules of Malaysian higher education. Taylor's groups them into four\ncategories, U1 to U4, and its page says students must take all the MPU modules listed under each category.\nFor international degree students, Bahasa Melayu Komunikasi 2 sits in category U1, next to Kursus Integriti dan\nAntirasuah and Citra Malaysia. Malaysian students take different U1 modules instead of Bahasa Melayu Komunikasi 2.\n\nThe survival phrasebook in this folder is a practice companion for a student's first month (mamak, Grab, campus)\nand a gentle start on Bahasa Melayu Komunikasi. It is not the official BMK syllabus and does not replace the module."
+    },
+    {
+      "id": 2,
+      "material_id": 1,
+      "title": "Note: Bahasa Melayu Komunikasi 2 at Taylor's University",
+      "ordinal": 2,
+      "locator": "Note: Bahasa Melayu Komunikasi 2 at Taylor's University",
+      "page": null,
+      "content": "first month (mamak, Grab, campus)\nand a gentle start on Bahasa Melayu Komunikasi. It is not the official BMK syllabus and does not replace the module.\n\nSource: Taylor's University, \"Malaysian Compulsory and General Studies Modules\",\nhttps://university.taylors.edu.my/en/student-life/manage-your-studies/malaysian-compulsory-and-general-studies-modules.html\n(accessed 10 October 2026). Module names, code, credits and categories are as listed on that page on that date; check\nthe page for the current list."
+    },
+    {
+      "id": 3,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 1,
+      "locator": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "page": null,
+      "content": "# Bahasa Melayu Survival Phrasebook: your first month in Malaysia\n\nA practice companion for international students (mamak, Grab, campus). It is not the official Bahasa Melayu\nKomunikasi (BMK) syllabus.\n\nAdapted from the Wikivoyage article \"Malay phrasebook\" (https://en.wikivoyage.org/wiki/Malay_phrasebook),\nlicensed CC BY-SA 4.0. Rows marked † were added for this demo (mamak ordering, Grab, campus, everyday\nMalaysian usage). This file is shared under CC BY-SA 4.0. See LICENSE.md."
+    },
+    {
+      "id": 4,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 2,
+      "locator": "1. How Malay sounds",
+      "page": null,
+      "content": "## 1. How Malay sounds\n\nMalay is written in the Latin alphabet (Rumi) and is mostly spelled as it sounds.\n\n| Letter | Sounds like | Example |\n|---|---|---|\n| a | \"a\" in *father*; at the end of a word, often a soft \"uh\" in everyday Peninsular speech | *saya* (I) sounds like \"sa-yuh\" |\n| e | usually a short \"uh\" (like the \"a\" in *about*); sometimes \"e\" in *bed* | *besar* (big) \"buh-sar\"; *meja* (table) \"meh-ja\" |\n| i | \"ee\" in *see* | *ikan* (fish) |\n| o | \"o\" in *low*, without the \"w\" | *kopi* (coffee) |\n| u | \"oo\" in *food* | *susu* (milk) |\n| c | always \"ch\" in *China* | *cakap* (speak) \"chah-kahp\" |\n| g | always hard, as in *go* | *gula* (sugar) |\n| j | \"j\" in *jug* | *jalan* (road) |\n| ng | \"ng\" in *singer* (no hard g) | *dengan* (with) |\n| ngg | \"ng\" in *finger* | *tangga* (stairs) |\n| ny | \"ny\" in *canyon* | *nyanyi* (sing) |\n| sy | \"sh\" in *shop* | *syarikat* (company) |\n| kh | \"ch\" in Scottish *loch*, often softened to \"k\" | *khabar* (news) |\n| r | a tapped r; at the end of a word often dropped in casual speech | *besar* can sound like \"besa\" |\n| final k | a short stop in the throat, not a full \"k\" | *tidak* (no) sounds like\n\n\"tida'\" |"
+    },
+    {
+      "id": 5,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 3,
+      "locator": "1. How Malay sounds",
+      "page": null,
+      "content": "in casual speech | *besar* can sound like \"besa\" |\n| final k | a short stop in the throat, not a full \"k\" | *tidak* (no) sounds like\n\n\"tida'\" |\n\nStress is light and fairly even; many speakers lean slightly on the second-last syllable."
+    },
+    {
+      "id": 6,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 4,
+      "locator": "2. Greetings and basics",
+      "page": null,
+      "content": "## 2. Greetings and basics\n\n| Malay | English | Notes |\n|---|---|---|\n| Helo / Hai | Hello | Hai is informal |\n| Assalamualaikum | Peace be upon you | Muslim greeting; the reply is *Waalaikumussalam* |\n| Selamat pagi | Good morning | until about noon |\n| Selamat tengah hari † | Good afternoon | around midday |\n| Selamat petang | Good afternoon / early evening | from mid-afternoon until dusk (Wikivoyage gives \"good evening\") |\n| Selamat malam | Good evening / good night | after dark |\n| Apa khabar? | How are you? | literally \"what news?\" |\n| Khabar baik. | I'm fine. | literally \"good news\" |\n| Siapa nama awak? | What is your name? | |\n| Nama saya Oybek. | My name is Oybek. | |\n| Selamat berkenalan. † | Nice to meet you. | Wikivoyage gives *Saya gembira berjumpa awak* (\"I am happy to meet you\") |\n| Terima kasih. | Thank you. | |\n| Terima kasih banyak. † | Thank you very much. | |\n| Sama-sama. | You're welcome. | |\n| Maaf. | Sorry / excuse me. | |\n| Minta maaf. † | I'm sorry. | more polite than *maaf* |\n| Tumpang lalu. † | Excuse me (let me pass). | for squeezing"
+    },
+    {
+      "id": 7,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 5,
+      "locator": "2. Greetings and basics",
+      "page": null,
+      "content": "| Maaf. | Sorry / excuse me. | |\n| Minta maaf. † | I'm sorry. | more polite than *maaf* |\n| Tumpang lalu. † | Excuse me (let me pass). | for squeezing\n\npast people |\n| Tolong. | Please (asking for help); Help! | *Tolong ambilkan gula.* Please pass the sugar. |\n| Sila. | Please (inviting). | *Sila duduk.* Please sit down. |\n| Ya. / Tidak. (Tak.) | Yes. / No. | *tak* is the everyday short form |\n| Boleh. / Tak boleh. † | Can, OK. / Cannot. | the most useful word in Malaysia |\n| Tak apa. † | It's OK. / Never mind. | |\n| Saya tak faham. | I don't understand. | |\n| Boleh cakap bahasa Inggeris? | Can you speak English? | |\n| Boleh ulang? † | Can you repeat that? | |\n| Boleh cakap perlahan sikit? † | Can you speak a bit slower? | |\n| Selamat tinggal. | Goodbye. | said by the person who is leaving |\n| Selamat jalan. † | Goodbye (have a safe trip). | said to the person who is leaving |\n| Jumpa lagi. † | See you again. | |\n| Di mana tandas? | Where is the toilet? | |"
+    },
+    {
+      "id": 8,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 6,
+      "locator": "3. Being polite: what to call people",
+      "page": null,
+      "content": "## 3. Being polite: what to call people\n\n| Word | Use it for | Notes |\n|---|---|---|\n| saya | I, me | polite, safe everywhere |\n| aku | I, me | only with close friends |\n| awak / anda | you | *anda* is neutral and formal (signs, ads); *awak* is friendly |\n| kamu | you | for children or close friends; can sound rude to older people |\n| Encik | Mr, sir | any adult man |\n| Puan | Mrs, madam | a married or older woman |\n| Cik | Miss | a young woman |\n| Abang / Bang | \"older brother\" | friendly for a man a bit older than you: the mamak waiter, a Grab driver |\n| Kakak / Kak | \"older sister\" | friendly for a woman a bit older than you |\n| Adik / Dik | \"younger sibling\" | for someone younger than you |\n| Pak cik / Mak cik † | \"uncle\" / \"auntie\" | older man / older woman, for example a stall owner |\n\nTip: Malaysians often avoid the word \"you\". Use the title instead: *Bang, nak order.* (Brother, I'd like to order.)"
+    },
+    {
+      "id": 9,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 7,
+      "locator": "4. Numbers and money",
+      "page": null,
+      "content": "## 4. Numbers and money\n\n| Number | Malay | Number | Malay |\n|---|---|---|---|\n| 0 | sifar (kosong †, e.g. phone numbers) | 11 | sebelas |\n| 1 | satu | 12 | dua belas |\n| 2 | dua | 13 | tiga belas |\n| 3 | tiga | 19 | sembilan belas |\n| 4 | empat | 20 | dua puluh |\n| 5 | lima | 21 | dua puluh satu † |\n| 6 | enam | 30 | tiga puluh † |\n| 7 | tujuh | 50 | lima puluh † |\n| 8 | lapan | 100 | seratus |\n| 9 | sembilan | 1,000 | seribu |\n| 10 | sepuluh | 1,000,000 | sejuta |\n\nPattern: *se-* means \"one\": *sepuluh* (10), *sebelas* (11), *seratus* (100), *seribu* (1,000).\nTeens add *belas*: *tiga belas* = 13. Tens add *puluh*: *tiga puluh* = 30.\n\nMoney: RM = ringgit; 1 ringgit = 100 sen. RM 4.50 = *empat ringgit lima puluh sen*.\n\n| Malay | English |\n|---|---|\n| Berapa harga ini? | How much is this? |\n| Berapa semua? † | How much altogether? |\n| mahal / terlalu mahal | expensive / too expensive |\n| murah | cheap |\n| Boleh kurangkan harganya? | Can you lower the price? |\n| Boleh saya guna kad kredit? | Can I use a credit card? |\n| Bayar tunai. † | Pay cash. |"
+    },
+    {
+      "id": 10,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 8,
+      "locator": "5. At the mamak †",
+      "page": null,
+      "content": "## 5. At the mamak †\n\nA *mamak* is a Malaysian Indian-Muslim restaurant, often open late or 24 hours. You order at the table.\n\nDrinks:\n\n| Order | What you get |\n|---|---|\n| teh | hot tea with condensed milk (the default) |\n| teh tarik | \"pulled\" frothy milk tea |\n| teh ais | iced milk tea |\n| teh O | tea without milk, with sugar |\n| teh O ais | iced tea without milk, with sugar |\n| teh O ais limau | iced lime tea |\n| kopi / kopi O | coffee with condensed milk / black coffee with sugar |\n| Milo ais | iced Milo |\n| air suam | warm water |\n| air kosong | plain water |\n\nChanging an order:\n\n| Malay | English |\n|---|---|\n| kurang manis | less sweet |\n| kosong | no sugar (*teh O kosong* = black tea, no sugar); for roti it means plain |\n| tak nak gula | no sugar, please |\n| ais / panas | iced / hot |\n| tak nak pedas / kurang pedas | not spicy / less spicy |\n| makan sini | eat here |\n| bungkus / tapau | takeaway (*tapau* comes from Cantonese) |\n| satu lagi | one more |"
+    },
+    {
+      "id": 11,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 9,
+      "locator": "5. At the mamak †",
+      "page": null,
+      "content": "pedas | not spicy / less spicy |\n| makan sini | eat here |\n| bungkus / tapau | takeaway (*tapau* comes from Cantonese) |\n| satu lagi | one more |\n\nFood: *roti canai* (flaky flatbread with curry), *roti kosong* (plain roti), *roti telur* (roti with egg),\n*nasi lemak* (coconut rice with sambal, anchovies, peanuts and egg), *mee goreng mamak* (mamak fried noodles;\nWikivoyage spells noodles *mi*, menus often write *mee*), *kuah campur* (mixed curry gravy).\n\nDialogue:\n\n> **Waiter:** Nak minum apa? *(What would you like to drink?)*\n> **You:** Teh tarik kurang manis, satu. *(One teh tarik, less sweet.)*\n> **Waiter:** Makan? *(Anything to eat?)*\n> **You:** Roti canai satu, kuah campur. *(One roti canai, mixed curry.)*\n> *(Later)* **You:** Bang, kira. *(The bill, please.)*\n> **Waiter:** Empat ringgit lima puluh sen. *(RM 4.50.)*\n> **You:** Terima kasih, bang!"
+    },
+    {
+      "id": 12,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 10,
+      "locator": "6. Grab and getting around †",
+      "page": null,
+      "content": "## 6. Grab and getting around †\n\n| Malay | English |\n|---|---|\n| Saya nak pergi ke Taylor's, Lakeside Campus. | I want to go to Taylor's Lakeside Campus. |\n| Abang dah sampai? | Have you arrived? (to the driver) |\n| Saya dah sampai. | I've arrived. |\n| Saya tunggu di pintu utama. | I'm waiting at the main entrance. |\n| Saya pakai baju biru. | I'm wearing a blue shirt. |\n| Saya lambat sikit, lima minit. | I'm a bit late, five minutes. |\n| Belok kiri. / Belok kanan. | Turn left. / Turn right. (Wikivoyage: *Pusing kiri / Pusing kanan*) |\n| Jalan terus. | Go straight on. |\n| Pusing balik. | Make a U-turn. |\n| Tolong berhenti di sini. | Please stop here. |\n| dekat / jauh | near / far |\n| Jalan sesak. / Jem. | Traffic is heavy. / Traffic jam. |\n| Berapa lama? | How long will it take? |\n| Berapa harga tiket ke KL Sentral? | How much is a ticket to KL Sentral? |\n| Tren ini pergi ke mana? | Where does this train go? |"
+    },
+    {
+      "id": 13,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 11,
+      "locator": "7. On campus †",
+      "page": null,
+      "content": "## 7. On campus †\n\n| Malay | English |\n|---|---|\n| Saya pelajar antarabangsa. | I'm an international student. |\n| Saya dari Uzbekistan. | I'm from Uzbekistan. |\n| Saya belajar sains komputer. | I study computer science. |\n| Di mana perpustakaan? | Where is the library? |\n| Bila kelas mula? | When does the class start? |\n| Boleh saya duduk di sini? | May I sit here? |\n| Apa maksud \"tugasan\"? | What does \"tugasan\" mean? |\n| Apa bahasa Melayu untuk \"deadline\"? | What is the Malay for \"deadline\"? |\n| pensyarah | lecturer |\n| kelas / dewan kuliah | class / lecture hall |\n| perpustakaan | library |\n| tugasan / kuiz / peperiksaan | assignment / quiz / exam |\n| kumpulan | group |\n| tandas lelaki / tandas perempuan | men's toilet / women's toilet |"
+    },
+    {
+      "id": 14,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 12,
+      "locator": "8. Time and days",
+      "page": null,
+      "content": "## 8. Time and days\n\n| Malay | English |\n|---|---|\n| sekarang | now |\n| hari ini | today |\n| semalam | yesterday (also \"last night\") |\n| esok | tomorrow (Wikivoyage lists *besok*, which is also understood) |\n| pagi / tengah hari / petang / malam | morning / midday / afternoon to dusk / night |\n| Pukul berapa sekarang? | What time is it now? |\n| pukul satu / pukul dua setengah | one o'clock / half past two |\n\nDays: Isnin (Monday), Selasa (Tuesday), Rabu (Wednesday), Khamis (Thursday), Jumaat (Friday), Sabtu (Saturday),\nAhad (Sunday)."
+    },
+    {
+      "id": 15,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 13,
+      "locator": "9. Problems",
+      "page": null,
+      "content": "## 9. Problems\n\n| Malay | English |\n|---|---|\n| Tolong! | Help! |\n| Saya tersesat. | I'm lost. |\n| Saya sakit. | I'm sick. |\n| Saya perlu doktor. | I need a doctor. |\n| Panggil polis! † | Call the police! |\n| Saya alah kepada susu. † | I'm allergic to milk. (*Saya alergi susu* is also common.) |\n\nEmergency number in Malaysia: **999** (112 also works from a mobile phone)."
+    },
+    {
+      "id": 16,
+      "material_id": 2,
+      "title": "Bahasa Melayu Survival Phrasebook: your first month in Malaysia",
+      "ordinal": 14,
+      "locator": "10. Little words you will hear everywhere †",
+      "page": null,
+      "content": "## 10. Little words you will hear everywhere †\n\n| Word | Meaning |\n|---|---|\n| lah | softens or stresses a sentence: *Okay lah.* *Jom lah!* |\n| jom | let's go |\n| kan | isn't it? right? |\n| dah | already (short for *sudah*) |\n| tak | not, no (short for *tidak*) |\n| nak | want, going to (short for *hendak*) |\n| sikit | a little (short for *sedikit*) |\n\n---\n\nReview status: phrases checked against Wikivoyage and standard Malaysian usage by the demo team; a native-speaker\ncheck is planned before the demo."
+    }
+  ],
+  "digest": "### Material #1 — \"Note: Bahasa Melayu Komunikasi 2 at Taylor's University\" (personal notes)\n[Note: Bahasa Melayu Komunikasi 2 at Taylor's University] # Note: Bahasa Melayu Komunikasi 2 at Taylor's University International students on Taylor's University degree programmes take **Bahasa Melayu Komunikasi 2** (module code **MPU31002**, 2 credits) as one of their MPU modules. MPU modules (Mata Pelajaran Pengajian Umum) are the compulsory general studies modules of Malaysian higher education. Taylor's groups them into four categories, U1 to U4, and its page says students must take all the MPU modules listed under each category. For international degree students, Bahasa Melayu Komunikasi 2 sits in category U1, next to Kursus Integriti dan Antirasuah and Citra Malaysia. Malaysian students take different U1 modules instead of Bahasa Melayu Komunikasi 2. The survival phrasebook in this folder is a practice companion for a student's first month (mamak, Grab, campus) and a gentle start on Bahasa Melayu Komunikasi. It is not the official BMK syllabus and does not replace the module.\n\n### Material #2 — \"Bahasa Melayu Survival Phrasebook: your first month in Malaysia\" (personal notes)\n[Bahasa Melayu Survival Phrasebook: your first month in Malay] # Bahasa Melayu Survival Phrasebook: your first month in Malaysia A practice companion for international students (mamak, Grab, campus). It is not the official Bahasa Melayu Komunikasi (BMK) syllab…\n[1. How Malay sounds] ## 1. How Malay sounds Malay is written in the Latin alphabet (Rumi) and is mostly spelled as it sounds. | Letter | Sounds like | Example | |---|---|---| | a | \"a\" in *father*; at the end of a word, often a soft \"uh\" in everyday Peninsula…\n[2. Greetings and basics] ## 2. Greetings and basics | Malay | English | Notes | |---|---|---| | Helo / Hai | Hello | Hai is informal | | Assalamualaikum | Peace be upon you | Muslim greeting; the reply is *Waalaikumussalam* | | Selamat pagi | Good morning | u…\n[3. Being polite: what to call people] ## 3. Being polite: what to call people | Word | Use it for | Notes | |---|---|---| | saya | I, me | polite, safe everywhere | | aku | I, me | only with close friends | | awak / anda | you | *anda* is neutral and formal (…\n[4. Numbers and money] ## 4. Numbers and money | Number | Malay | Number | Malay | |---|---|---|---| | 0 | sifar (kosong †, e.g. phone numbers) | 11 | sebelas | | 1 | satu | 12 | dua belas | | 2 | dua | 13 | tiga belas | | 3 | tiga | 19 | sembilan belas | | 4…\n[5. At the mamak †] ## 5. At the mamak † A *mamak* is a Malaysian Indian-Muslim restaurant, often open late or 24 hours. You order at the table. Drinks: | Order | What you get | |---|---| | teh | hot tea with condensed milk (the default) | | teh tarik | \"pulle…\n[6. Grab and getting around †] ## 6. Grab and getting around † | Malay | English | |---|---| | Saya nak pergi ke Taylor's, Lakeside Campus. | I want to go to Taylor's Lakeside Campus. | | Abang dah sampai? | Have you arrived? (to the driver) | | Saya dah sampa…\n[7. On campus †] ## 7. On campus † | Malay | English | |---|---| | Saya pelajar antarabangsa. | I'm an international student. | | Saya dari Uzbekistan. | I'm from Uzbekistan. | | Saya belajar sains komputer. | I study computer science. | | Di mana perpustakaan…\n[8. Time and days] ## 8. Time and days | Malay | English | |---|---| | sekarang | now | | hari ini | today | | semalam | yesterday (also \"last night\") | | esok | tomorrow (Wikivoyage lists *besok*, which is also understood) | | pagi / tengah hari / petang / ma…\n[9. Problems] ## 9. Problems | Malay | English | |---|---| | Tolong! | Help! | | Saya tersesat. | I'm lost. | | Saya sakit. | I'm sick. | | Saya perlu doktor. | I need a doctor. | | Panggil polis! † | Call the police! | | Saya alah kepada susu. † | I'm allergi…\n[10. Little words you will hear everywhere †] ## 10. Little words you will hear everywhere † | Word | Meaning | |---|---| | lah | softens or stresses a sentence: *Okay lah.* *Jom lah!* | | jom | let's go | | kan | isn't it? right? | | dah | already (short for…",
+  "thin_files": []
+}

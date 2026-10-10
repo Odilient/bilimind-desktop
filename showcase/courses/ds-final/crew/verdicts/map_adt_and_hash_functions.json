@@ -1,0 +1,92 @@
+[
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Separate chaining: each bucket holds a list of entries",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 22,
+    "round": 1,
+    "at": "2026-10-10T16:13:17.333Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q2",
+    "verdict": "contradicted",
+    "quote": "",
+    "reason": "Re-solved from the slides: the answer is c) 50 -> d) 63 -> a) 24 -> e) 76 -> b) 37 -> f) 89, but the key said 1. e) 76  2. b) 37  3. a) 24  4. d) 63  5. f) 89  6. c) 50.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:13:17.335Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "m = 10, h(k) = k mod 10",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 27,
+    "round": 2,
+    "at": "2026-10-10T16:13:20.214Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "49 → 9 taken, try 0: 2 probes",
+    "reason": "Slide 11 shows the probe-forward-and-wrap rule; applied to 24, 34, 50, 44, 89, 99 it fills slots 0, 1, 4, 5, 6, 9 as keyed.",
+    "chunk_id": 27,
+    "round": 2,
+    "at": "2026-10-10T16:19:04.642Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q3",
+    "verdict": "contradicted",
+    "quote": "49 → 9 taken, try 0: 2 probes",
+    "reason": "The model answer says 49 goes to slot 9 and the run is 9, 0, 1, 2; slide 11 puts 89 in slot 9 and 49 in slot 0.",
+    "chunk_id": 27,
+    "round": 1,
+    "at": "2026-10-10T16:19:04.642Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Load factor can exceed 1 must stay below 1",
+    "reason": "Slide 13: with separate chaining the load factor can exceed 1; only open addressing must stay below 1.",
+    "chunk_id": 29,
+    "round": 2,
+    "at": "2026-10-10T16:19:04.642Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q6",
+    "verdict": "supported",
+    "quote": "Primary clustering: occupied runs grow and attract more collisions",
+    "reason": "Slide 11 defines primary clustering as in the model answer; slide 10's double hashing step h2(k) depends on the key.",
+    "chunk_id": 27,
+    "round": 2,
+    "at": "2026-10-10T16:19:45.056Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q2",
+    "verdict": "contradicted",
+    "quote": "m = 10, h(k) = k mod 10",
+    "reason": "With slide 11's h(k) = k mod 10, slot 0 holds 50 (50 mod 10 = 0), but the key starts with 76 and ends with 50.",
+    "chunk_id": 27,
+    "round": 2,
+    "at": "2026-10-10T16:22:02.873Z"
+  },
+  {
+    "lesson": "map_adt_and_hash_functions",
+    "item": "q7",
+    "verdict": "supported",
+    "quote": "Bucket Chain 0 700 1 50 → 85 → 92",
+    "reason": "57 mod 7 = 1 and slide 9's bucket 1 chain is 50, 85, 92, so a miss compares with all three: 3.",
+    "chunk_id": 25,
+    "round": 1,
+    "at": "2026-10-10T16:27:16.828Z"
+  }
+]

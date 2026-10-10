@@ -1,0 +1,589 @@
+{
+  "key": "numbers_money_and_time",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "You are at a mamak table. The waiter says **lapan ringgit**. You hear *lapan* and hand over RM 8. He waits. The bill was **lapan puluh** — eighty. That RM 72 gap is the whole reason this lesson exists.\n\nMalay numbers are built from a small set of parts, and the parts are regular. Learn the ten digits and you can say any price up to 999 without new vocabulary.\n\n| Digit | Malay |\n|---|---|\n| 0 | sifar (kosong for phone numbers) |\n| 1 | satu |\n| 2 | dua |\n| 3 | tiga |\n| 4 | empat |\n| 5 | lima |\n| 6 | enam |\n| 7 | tujuh |\n| 8 | lapan |\n| 9 | sembilan |\n| 10 | sepuluh |\n\nThree rules generate everything else.\n\n**Teens add *belas*.** 11 is *sebelas* (the *se-* swallows the *satu*), then 12 *dua belas*, 13 *tiga belas*, up to 19 *sembilan belas*.\n\n**Tens add *puluh*.** 20 is *dua puluh*, 30 *tiga puluh*, 50 *lima puluh*. Units come after: 21 is *dua puluh satu*, 45 is *empat puluh lima*, 99 is *sembilan puluh sembilan*.\n\n**One hundred and one thousand take *se-*, not *satu*.** 100 is *seratus*, 1000 is *seribu*, 1,000,000 is *sejuta*. But 200 is *dua ratus* and 2000 is *dua ribu*.\n\nSo RM 87 is *lapan puluh tujuh ringgit*. RM 8 is *lapan ringgit*. The difference between them is one word, and it is the word you must not drop.\n\nMoney: RM is *ringgit*, and 1 ringgit = 100 sen. RM 4.50 is *empat ringgit lima puluh sen*. In a shop you will hear *kosong* for the zero in a phone number or a digit string — 012 reads *kosong satu dua*.\n\nTime is the same arithmetic. *Pukul berapa sekarang?* asks the time. *Pukul satu* is one o'clock, *pukul dua setengah* is half past two — *setengah* after the hour means half past, not half to. Days: Isnin, Selasa, Rabu, Khamis, Jumaat, Sabtu, Ahad. *Hari ini* is today, *esok* tomorrow, *semalam* yesterday. *Pagi* is morning, *tengah hari* midday, *petang* afternoon to dusk, *malam* night."
+      },
+      "source_material_ids": [
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "reference_table",
+      "payload": {
+        "title": "Numbers, money and time — the lookup sheet",
+        "columns": [
+          "Malay",
+          "English",
+          "Note"
+        ],
+        "rows": [
+          [
+            "kosong",
+            "zero (in digit strings)",
+            "012 = kosong satu dua; sifar is the general zero"
+          ],
+          [
+            "satu … sembilan",
+            "one … nine",
+            "satu, dua, tiga, empat, lima, enam, tujuh, lapan, sembilan"
+          ],
+          [
+            "sepuluh",
+            "ten",
+            "not satu puluh"
+          ],
+          [
+            "sebelas",
+            "eleven",
+            "not satu belas"
+          ],
+          [
+            "dua belas … sembilan belas",
+            "twelve … nineteen",
+            "dua belas, tiga belas, empat belas, lima belas, enam belas, tujuh belas, lapan belas, sembilan belas"
+          ],
+          [
+            "dua puluh",
+            "twenty",
+            "then dua puluh satu = 21, dua puluh lima = 25"
+          ],
+          [
+            "seratus",
+            "one hundred",
+            "dua ratus = 200"
+          ],
+          [
+            "seribu",
+            "one thousand",
+            "dua ribu = 2000"
+          ],
+          [
+            "sejuta",
+            "one million",
+            "—"
+          ],
+          [
+            "ringgit / sen",
+            "ringgit / cent",
+            "1 ringgit = 100 sen; RM 4.50 = empat ringgit lima puluh sen"
+          ],
+          [
+            "Berapa harga ini?",
+            "How much is this?",
+            "the price question"
+          ],
+          [
+            "Berapa semua?",
+            "How much altogether?",
+            "for the whole bill"
+          ],
+          [
+            "mahal / terlalu mahal",
+            "expensive / too expensive",
+            "murah = cheap"
+          ],
+          [
+            "Boleh kurangkan harganya?",
+            "Can you lower the price?",
+            "bargaining"
+          ],
+          [
+            "Boleh saya guna kad kredit?",
+            "Can I use a credit card?",
+            "Bayar tunai = pay cash"
+          ],
+          [
+            "Pukul berapa sekarang?",
+            "What time is it now?",
+            "pukul = o'clock"
+          ],
+          [
+            "pukul dua setengah",
+            "half past two",
+            "setengah after the hour = half past"
+          ],
+          [
+            "sekarang / hari ini / esok / semalam",
+            "now / today / tomorrow / yesterday",
+            "—"
+          ],
+          [
+            "pagi / tengah hari / petang / malam",
+            "morning / midday / afternoon / night",
+            "petang runs to dusk"
+          ],
+          [
+            "Isnin, Selasa, Rabu, Khamis, Jumaat, Sabtu, Ahad",
+            "Monday to Sunday",
+            "Jumaat = Friday, Ahad = Sunday"
+          ]
+        ],
+        "note": "Sorted by what you reach for: digits first, then money, then time. When a price sounds ambiguous, ask them to repeat it — Berapa? — rather than guessing."
+      },
+      "source_material_ids": [
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "11",
+            "back": "sebelas"
+          },
+          {
+            "front": "20",
+            "back": "dua puluh"
+          },
+          {
+            "front": "100",
+            "back": "seratus"
+          },
+          {
+            "front": "1000",
+            "back": "seribu"
+          },
+          {
+            "front": "45",
+            "back": "empat puluh lima"
+          },
+          {
+            "front": "zero inside a phone number",
+            "back": "kosong"
+          },
+          {
+            "front": "RM 4.50",
+            "back": "empat ringgit lima puluh sen"
+          },
+          {
+            "front": "How much is this?",
+            "back": "Berapa harga ini?"
+          },
+          {
+            "front": "What time is it now?",
+            "back": "Pukul berapa sekarang?"
+          },
+          {
+            "front": "half past two",
+            "back": "pukul dua setengah"
+          },
+          {
+            "front": "tomorrow",
+            "back": "esok"
+          },
+          {
+            "front": "Friday",
+            "back": "Jumaat"
+          }
+        ]
+      },
+      "source_material_ids": [
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "The ten digits satu to sepuluh are the only numbers you memorise; everything to 999 is built from them.",
+          "Teens are formed with belas (tiga belas = 13) and tens with puluh (tiga puluh = 30).",
+          "Hundreds, thousands and millions take se- for one: seratus, seribu, sejuta — never satu ratus.",
+          "Kosong, not sifar, is the zero you say inside a phone number or digit string.",
+          "1 ringgit is 100 sen, so RM 4.50 is empat ringgit lima puluh sen.",
+          "Setengah after the hour means half past: pukul dua setengah is 2:30, not 1:30.",
+          "Hari ini, esok and semalam are today, tomorrow and yesterday; pagi, tengah hari, petang and malam split the day."
+        ]
+      },
+      "source_material_ids": [
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "Listen once, then say each one twice. These are the numbers and phrases you will actually produce out loud — at the counter, on the phone, to a classmate. Watch the difference between lapan and lapan puluh; the second syllable carries the meaning.",
+        "language": "ms",
+        "items": [
+          {
+            "text": "satu, dua, tiga, empat, lima",
+            "translation": "one, two, three, four, five",
+            "phonetic": "SAH-too, DOO-ah, TEE-gah, uhm-PAHT, LEE-mah",
+            "audio": "audio/d40398908f3a8bf7.mp3"
+          },
+          {
+            "text": "enam, tujuh, lapan, sembilan, sepuluh",
+            "translation": "six, seven, eight, nine, ten",
+            "phonetic": "uh-NAHM, TOO-joo, LAH-pahn, suhm-BEE-lahn, suh-POO-loo",
+            "audio": "audio/19f47c77f616ac9f.mp3"
+          },
+          {
+            "text": "sebelas, dua belas, tiga belas",
+            "translation": "eleven, twelve, thirteen",
+            "phonetic": "suh-buh-LAHS, DOO-ah buh-LAHS, TEE-gah buh-LAHS",
+            "audio": "audio/5d29ea87a0f4df88.mp3"
+          },
+          {
+            "text": "lapan ringgit",
+            "translation": "eight ringgit",
+            "phonetic": "LAH-pahn RING-git",
+            "audio": "audio/f2898bf46a12ac3f.mp3"
+          },
+          {
+            "text": "lapan puluh ringgit",
+            "translation": "eighty ringgit",
+            "phonetic": "LAH-pahn POO-loo RING-git",
+            "audio": "audio/9d90ed05101f35f8.mp3"
+          },
+          {
+            "text": "Berapa harga ini?",
+            "translation": "How much is this?",
+            "phonetic": "buh-RAH-pah HAR-gah EE-nee",
+            "audio": "audio/d13f00fb0af1dd1a.mp3"
+          },
+          {
+            "text": "Berapa semua?",
+            "translation": "How much altogether?",
+            "phonetic": "buh-RAH-pah suh-MOO-ah",
+            "audio": "audio/4ad1d2bb2b74d033.mp3"
+          },
+          {
+            "text": "Pukul berapa sekarang?",
+            "translation": "What time is it now?",
+            "phonetic": "POO-kool buh-RAH-pah suh-KAH-rang",
+            "audio": "audio/3fd8e3c5a15ac5d5.mp3"
+          },
+          {
+            "text": "pukul dua setengah",
+            "translation": "half past two",
+            "phonetic": "POO-kool DOO-ah suh-TUH-ngah",
+            "audio": "audio/2086dae30c80cc15.mp3"
+          },
+          {
+            "text": "esok pagi",
+            "translation": "tomorrow morning",
+            "phonetic": "EH-so' PAH-gee",
+            "audio": "audio/8f996594b3baeb0e.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, Malaysian Malay",
+        "voice": "ms-MY-YasminNeural"
+      },
+      "source_material_ids": [
+        4,
+        5,
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is 9 pm at the mamak near Taylor's. You order roti canai and teh tarik. The waiter taps the bill and says a number. You are paying cash and you have a RM 10 note and a RM 100 note in your wallet.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "He says **lapan ringgit**. What do you hand over?",
+            "options": [
+              {
+                "id": "a",
+                "text": "The RM 10 note.",
+                "correct": true,
+                "outcome_markdown": "He takes it and brings you RM 2 change. The bill was RM 8 — *lapan ringgit* is eight.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "The RM 100 note.",
+                "correct": false,
+                "outcome_markdown": "He looks at the note, then at you, and asks *Ada duit kecil?* — do you have a smaller note? You have just asked a mamak at 9 pm to break RM 100 for an RM 8 bill.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "Say *Lapan ringgit?* to check, then hand over the RM 10 note.",
+                "correct": true,
+                "outcome_markdown": "He nods: *Ya, lapan ringgit.* Checking costs two seconds and is never wrong when money is involved. He brings you RM 2 change.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "Next morning a classmate says the group project meets **pukul dua setengah, petang**. When is that?",
+            "options": [
+              {
+                "id": "a",
+                "text": "2:30 in the afternoon.",
+                "correct": true,
+                "outcome_markdown": "Correct. *Setengah* after the hour is half past, and *petang* pins it to the afternoon. You turn up at 2:30 and the group is there.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "1:30 in the afternoon.",
+                "correct": false,
+                "outcome_markdown": "You arrive an hour early. The room is empty and you sit alone with your laptop for sixty minutes.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "2:30 in the morning.",
+                "correct": false,
+                "outcome_markdown": "You set an alarm for the middle of the night. *Petang* is afternoon to dusk, so nothing is happening at 2:30 am.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn here comes from the same habit: hearing the first familiar word and acting on it. *Lapan* is inside *lapan puluh*; *setengah* only means half past when it follows the hour. When a number or a time decides how much money leaves your wallet or whether you turn up, repeat it back — *Lapan ringgit?* — and let the other person confirm before you act."
+      },
+      "source_material_ids": [
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "misconception",
+      "payload": {
+        "belief": "Malay numbers are irregular like English — eleven, twelve and thirteen share nothing, so I just have to memorise each number separately.",
+        "why_it_seems_right": "English really is irregular at exactly this range: eleven, twelve, thirteen, twenty, thirty. If you learned to count in English by memorising, you assume every language works that way, and the first few Malay numbers you meet (sepuluh, sebelas) look like more exceptions.",
+        "what_is_true": "Malay is regular from 11 upward. Teens are the digit plus *belas* (tiga belas = 13), tens are the digit plus *puluh* (tiga puluh = 30), and only the 'one' forms change, taking *se-*: sepuluh, sebelas, seratus, seribu, sejuta. That means once you know satu to sepuluh you can already say 11 to 99 without new vocabulary — the only genuinely irregular-looking items are the se- forms, and there are five of them."
+      },
+      "source_material_ids": [
+        9
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you close this lesson",
+        "items": [
+          {
+            "text": "You can say satu to sepuluh from memory without looking.",
+            "why": "Everything above ten is built from these ten words."
+          },
+          {
+            "text": "You can produce sebelas, dua belas and tiga belas without pausing.",
+            "why": "Stops you reaching for satu belas, which is not a word."
+          },
+          {
+            "text": "You say seratus and seribu, not satu ratus and satu ribu.",
+            "why": "The se- forms are the only real exceptions and the ones most often got wrong."
+          },
+          {
+            "text": "You can say RM 87 and RM 8 out loud and hear that they differ by one word.",
+            "why": "This is the exact confusion that costs you money at the counter."
+          },
+          {
+            "text": "You know kosong is the zero in a phone number, not sifar.",
+            "why": "Drivers and shop staff read digit strings with kosong."
+          },
+          {
+            "text": "You can ask Berapa harga ini? and Berapa semua? without rehearsing.",
+            "why": "Lets you get the price again instead of guessing at it."
+          },
+          {
+            "text": "You can say pukul dua setengah and state whether that is morning or afternoon.",
+            "why": "Setengah after the hour is half past, and petang or pagi decides the half of the day."
+          },
+          {
+            "text": "You can name today, tomorrow and yesterday: hari ini, esok, semalam.",
+            "why": "Needed the moment anyone proposes a time to meet."
+          }
+        ],
+        "note": "Run this list out loud, not silently. Reading a number is not the skill — saying it back to a waiter is."
+      },
+      "source_material_ids": [
+        9,
+        14
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b9",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        11,
+        9
+      ],
+      "assessments": [
+        {
+          "kind": "cloze",
+          "prompt": "The mamak bill comes to RM 80. The waiter says the number as ____ ringgit. Write the Malay word that fills the blank.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "lapan puluh"
+            ]
+          },
+          "max_score": 10,
+          "explanation": "80 is a tens number, so it takes puluh: lapan puluh. Lapan alone is 8, which is why the two sound close and cost you RM 72 if you confuse them.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            9
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Tens add *puluh*: *tiga puluh* = 30."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "Your Grab driver reads out his number as kosong satu tiga. Which sequence of digits is he saying?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "0 1 3"
+            },
+            {
+              "id": "b",
+              "text": "1 3 0"
+            },
+            {
+              "id": "c",
+              "text": "0 3 1"
+            },
+            {
+              "id": "d",
+              "text": "1 0 3"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 10,
+          "explanation": "Kosong is the zero used inside digit strings, so it comes first and stands for 0; satu is 1 and tiga is 3, giving 0 1 3.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            9
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "0 | sifar (kosong †, e.g. phone numbers)"
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "Which of these Malay numbers are written correctly for the value shown? Select all that apply.",
+          "bloom": "analyze",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "13 = tiga belas"
+            },
+            {
+              "id": "b",
+              "text": "30 = tiga puluh"
+            },
+            {
+              "id": "c",
+              "text": "100 = satu ratus"
+            },
+            {
+              "id": "d",
+              "text": "21 = dua puluh satu"
+            },
+            {
+              "id": "e",
+              "text": "11 = satu belas"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "b",
+              "d"
+            ]
+          },
+          "max_score": 15,
+          "explanation": "Teens add belas and tens add puluh, so tiga belas, tiga puluh and dua puluh satu are right. The hundreds and the eleven both take se- instead of satu: seratus and sebelas.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            9
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Pattern: *se-* means \"one\": *sepuluh* (10), *sebelas* (11), *seratus* (100), *seribu* (1,000)."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A friend tells you the trip costs RM 90 and leaves at pukul lapan pagi. Write both facts back in Malay, and explain in one sentence why lapan pagi cannot be confused with lapan puluh in the price.",
+          "bloom": "create",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "The price is sembilan puluh ringgit (90 = sembilan puluh). The departure is pukul lapan pagi, eight o'clock in the morning. Lapan pagi is a clock hour and takes no puluh because it is a single digit 8; lapan puluh is a tens value, 80, and the word puluh is what marks it as a multiple of ten."
+          },
+          "rubric": [
+            {
+              "criterion": "Writes the price as sembilan puluh ringgit",
+              "weight": 0.35,
+              "excellent": "Gives sembilan puluh ringgit and notes that puluh marks the tens place.",
+              "acceptable": "Gives sembilan puluh ringgit with no comment on why puluh is there.",
+              "poor": "Writes sembilan ringgit or sembilan belas ringgit for 90."
+            },
+            {
+              "criterion": "Writes the departure time as pukul lapan pagi",
+              "weight": 0.35,
+              "excellent": "Gives pukul lapan pagi and states that pagi places it in the morning.",
+              "acceptable": "Gives pukul lapan pagi without mentioning pagi's role.",
+              "poor": "Writes lapan puluh pagi, or drops pukul entirely."
+            },
+            {
+              "criterion": "Distinguishes the hour 8 from the tens value 80",
+              "weight": 0.3,
+              "excellent": "States that lapan alone is a single digit and puluh is the word that turns it into a multiple of ten.",
+              "acceptable": "Says the two are different numbers without naming puluh as the marker.",
+              "poor": "Claims lapan and lapan puluh mean the same thing in different contexts."
+            }
+          ],
+          "max_score": 20,
+          "id": "q4",
+          "status": "supported",
+          "reason": "Tens take puluh, so 90 is sembilan puluh; pukul plus the hour gives the time.",
+          "quote": "Tens add *puluh*: *tiga puluh* = 30",
+          "cite_chunk_ids": [
+            9
+          ],
+          "explanation": "Tens add *puluh*: *tiga puluh* = 30"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.003369,
+  "repairs": [
+    "re-homed 4 questions from narrative blocks into a quiz",
+    "cites: q1: cited chunk 11 (5. At the mamak †), found by its question and answer",
+    "cites: q2: cited chunk 9 (4. Numbers and money), found by its question and answer",
+    "cites: q3: cited chunk 9 (4. Numbers and money), found by its question and answer",
+    "cites: b9: the quiz cited nothing; cited chunks 11, 9 (its questions' sources)"
+  ]
+}

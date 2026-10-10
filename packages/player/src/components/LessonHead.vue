@@ -29,7 +29,7 @@ const obj = computed(() => `img/${tag.value.object}.webp`);
   <section class="slab l-head" :class="course.skin" aria-labelledby="l-title">
     <i class="beams" aria-hidden="true"></i><i class="grain" aria-hidden="true"></i>
     <div class="copy">
-      <span class="eb on-dark rise" style="--i:0"><span class="dot"><svg aria-hidden="true"><use :href="'#' + tag.icon" /></svg></span>Lesson {{ lesson.n }} of {{ course.lessons.length }}<template v-if="step !== lesson.n"> · step {{ step }} on the path</template> · {{ tag.tag }}</span>
+      <span class="eb on-dark rise" style="--i:0"><span class="dot"><svg aria-hidden="true"><use :href="'#' + tag.icon" /></svg></span>Step {{ step }} of {{ of }} · {{ tag.tag }}</span>
       <h1 id="l-title" class="display rise" :class="{ long }" style="--i:1"><span class="s" data-s="title.0">{{ words[0] }}{{ ' ' }}<span class="hchip" aria-hidden="true"><svg><use :href="'#' + tag.icon" /></svg></span>{{ ' ' + words.slice(1).join(' ') }}</span></h1>
       <div class="meta rise" style="--i:2">
         <span class="meta-chip"><svg aria-hidden="true"><use href="#i-time" /></svg>{{ fmtMinutes(lesson.minutes) }}</span>

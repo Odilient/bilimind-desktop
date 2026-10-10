@@ -1,0 +1,1 @@
+[{"item": "q2", "verdict": "contradicted", "quote": "m = 10, h(k) = k mod 10", "reason": "With slide 11's h(k) = k mod 10, slot 0 holds 50 (50 mod 10 = 0), but the key starts with 76 and ends with 50."}]

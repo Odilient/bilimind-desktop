@@ -9,20 +9,26 @@ for the student, in one concrete sentence each.
 - Study days = whole days from today up to the day before the exam (or the first shift). A Wednesday
   09:00 exam seen on Sunday gives 3 days (Sun, Mon, Tue). "Tomorrow" gives 1.
 - Capacity = days x minutes per day. Each kept lesson also earns 1-4 spaced reviews of 5 min, and
-  `plan` packs every day so lessons plus that day's reviews stay within the daily minutes.
-  Example: 3 x 45 = 135 min; real outline lessons are 25-40 min (`plan` clamps a lesson to 70% of a day),
-  so 30 + 25 + 30 + 25 = 110 min of lessons plus their reviews is about the limit: keep 3-4.
-- Lesson minutes come from `outline` (`minutes`). Rank topics by marks per minute (a subtopic brings its
-  parent along). At most 6 lessons (6 Writers). 1 day: 1-2 lessons. A week of 20 min/day: 4-5 short ones.
-- Cut a lesson and run `plan` again ONLY when a warning says "more than the whole ... Cut a lesson" or
-  "over the daily N min". The other warnings (thin sources, variety, a cut topic with marks) are advice:
-  mention them in the plan summary.
+  `plan` packs every day so lessons plus that day's reviews fit the daily minutes where it can.
+- Lesson minutes come from `outline` (`minutes`); real outlines give 25-40 min per lesson. `plan` clamps a
+  lesson to 70% of a day (30 min on a 45-minute day) and warns that it did.
+  Example with real minutes: 3 days x 45 = 135 min. The four heaviest topics are 40, 25, 35 and 35 min;
+  clamped they are 30 + 25 + 30 + 30 = 115 min, under 135: keep all 4 (4 Writers in parallel). Reviews
+  then crowd one day ("over the daily 45 min") and leave less review time: say so, do not cut.
+  A fifth lesson (+30 = 145 min) would trigger "more than the whole 135 min available ... Cut a lesson".
+- Rank topics by marks per minute (a subtopic brings its parent along). At most 6 lessons (6 Writers).
+  1 day: 1-2 lessons. 3 days at 45 min: 4. A week of 20 min/day: 4-5 short ones.
+- Cut a lesson and run `plan` again ONLY on the hard warning "more than the whole N min available ...
+  Cut a lesson". "over the daily N min": try one other `--order`, then keep it and mention it. The other
+  warnings (reviews get less time, a lesson clamped, thin sources, variety, a cut topic with marks) are
+  advice: mention them in the plan summary, never cut for them.
 
 ## 2. Weight
 
 - With a past paper: weight = the share of marks each topic gets in `exam-map` (`weights[].share`).
   Check `crew/exam-map.md` first: a question about hashing matched to "arrays" skews everything, so fix
-  it with `--assign "Q2=<key>"`. Questions that match nothing stay unmatched; mention them.
+  it with `--assign "Q2=<key>"`, ALL fixes in ONE `exam-map` call (repeat `--assign`). Questions that
+  match nothing stay unmatched; mention them.
 - Without a past paper: weight by how much of the slides a topic covers and by its track (`core` beats
   `subtopic`). Record the assumption: `--assume "No past paper found; topics weighted by slide coverage"`.
 - Staff onboarding: weight by risk, not by pages. `safety_critical` topics (allergens, hygiene, cash,

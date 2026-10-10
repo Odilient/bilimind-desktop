@@ -1,0 +1,400 @@
+{
+  "key": "malay_sounds",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Malay uses the same 26 letters you already read. The trap is that it uses them differently. English **e** has several sounds; Malay **e** has two. English **c** is sometimes *k*, sometimes *s*; Malay **c** is always the *ch* in *church*. Read *terima kasih* with English vowel rules and you get \"teh-RYE-mah KAY-see\" — nobody in a mamak will turn around. Read it with the table below and you get \"tuh-ree-mah kah-seeh\", which works.\n\nTwo rules carry most of the load.\n\n**Vowels are short and pure.** *a* is the *a* in *father*, *i* is *ee* in *see*, *u* is *oo* in *food*, *o* is *o* in *low* with no *w* sliding off the end. No diphthongs — do not glide.\n\n**Consonants are single-valued.** *c* is always *ch*. *g* is always hard, as in *go* — never the soft *g* of *giant*. *j* is the *j* in *jug*. *ng* is the *ng* in *singer*, with no hard *g* after it; *ngg* is the *ng* in *finger*, with one. *ny* is the *ny* in *canyon*. *sy* is *sh*. *kh* is the Scottish *ch* in *loch*.\n\nTwo endings need practice. A word-final **-a** softens to a short *uh* in everyday Peninsular speech: *saya* is \"sa-yuh\", not \"sa-yah\". And a word-final **-k** is not a *k* at all — it is a stop in the throat, the sound you make in the middle of \"uh-oh\". *tidak* comes out \"tida'\" with the mouth closing and nothing released.\n\nStress is light and even. Most speakers lean slightly on the second-last syllable, but leaning wrong costs you far less than mispronouncing a *c* or a final *a*."
+      },
+      "source_material_ids": [
+        4,
+        5
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "reference_table",
+      "payload": {
+        "title": "Malay letter to sound, Rumi spelling",
+        "columns": [
+          "Letter",
+          "Say it as",
+          "Example",
+          "Sounds like"
+        ],
+        "rows": [
+          [
+            "a",
+            "*a* in *father*; word-final *a* softens to *uh*",
+            "saya (I)",
+            "sa-yuh"
+          ],
+          [
+            "e",
+            "short *uh* as in *about*; sometimes *e* in *bed*",
+            "besar (big)",
+            "buh-sar"
+          ],
+          [
+            "e (second value)",
+            "*e* in *bed*",
+            "meja (table)",
+            "meh-ja"
+          ],
+          [
+            "i",
+            "*ee* in *see*",
+            "ikan (fish)",
+            "ee-kahn"
+          ],
+          [
+            "o",
+            "*o* in *low*, no *w*",
+            "kopi (coffee)",
+            "ko-pee"
+          ],
+          [
+            "u",
+            "*oo* in *food*",
+            "susu (milk)",
+            "soo-soo"
+          ],
+          [
+            "c",
+            "always *ch* in *China*",
+            "cakap (speak)",
+            "chah-kahp"
+          ],
+          [
+            "g",
+            "always hard, as in *go*",
+            "gula (sugar)",
+            "goo-lah"
+          ],
+          [
+            "j",
+            "*j* in *jug*",
+            "jalan (road)",
+            "jah-lahn"
+          ],
+          [
+            "ng",
+            "*ng* in *singer*, no hard g",
+            "dengan (with)",
+            "duh-ngahn"
+          ],
+          [
+            "ngg",
+            "*ng* in *finger*",
+            "tangga (stairs)",
+            "tahng-gah"
+          ],
+          [
+            "ny",
+            "*ny* in *canyon*",
+            "nyanyi (sing)",
+            "nyah-nyee"
+          ],
+          [
+            "sy",
+            "*sh* in *shop*",
+            "syarikat (company)",
+            "shah-ree-kaht"
+          ],
+          [
+            "kh",
+            "Scottish *ch* in *loch*, often softened to *k*",
+            "khabar (news)",
+            "khah-bar"
+          ],
+          [
+            "r",
+            "tapped, as in Spanish; often dropped word-finally",
+            "besar (big)",
+            "buh-sa"
+          ],
+          [
+            "final k",
+            "a stop in the throat, nothing released",
+            "tidak (no)",
+            "tee-dah'"
+          ]
+        ],
+        "note": "Sorted by letter, the way you will look a word up, not the way the phrasebook introduces it. The second *e* row is the same letter doing a different job — check the word, not the letter alone."
+      },
+      "source_material_ids": [
+        4,
+        5
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "Malay **c** — as in *cakap*",
+            "back": "*ch* in *China*: chah-kahp. Never *k*, never *s*."
+          },
+          {
+            "front": "Malay **g** — as in *gula*",
+            "back": "Always hard, as in *go*: goo-lah. Never the soft *g* of *giant*."
+          },
+          {
+            "front": "Malay **ng** vs **ngg**",
+            "back": "*ng* = *singer*, no hard g (*dengan*). *ngg* = *finger*, one hard g (*tangga*)."
+          },
+          {
+            "front": "Word-final **-a**",
+            "back": "Softens to a short *uh* in everyday Peninsular speech: *saya* = sa-yuh."
+          },
+          {
+            "front": "Word-final **-k**",
+            "back": "A stop in the throat, nothing released: *tidak* = tee-dah'."
+          },
+          {
+            "front": "Malay **e** — two values",
+            "back": "Usually short *uh* as in *about* (*besar* = buh-sar); sometimes *e* in *bed* (*meja* = meh-ja)."
+          },
+          {
+            "front": "Malay **sy** and **kh**",
+            "back": "*sy* = *sh* in *shop* (*syarikat*). *kh* = Scottish *ch* in *loch* (*khabar*), often softened to *k*."
+          },
+          {
+            "front": "Malay **ny**",
+            "back": "*ny* in *canyon*: *nyanyi* = nyah-nyee."
+          },
+          {
+            "front": "Malay **o**",
+            "back": "*o* in *low*, with no *w* gliding off the end: *kopi* = ko-pee."
+          },
+          {
+            "front": "Malay **r**",
+            "back": "A tapped r, as in Spanish. Word-finally it is often dropped: *besar* can sound like buh-sa."
+          },
+          {
+            "front": "Where does the stress fall?",
+            "back": "Light and fairly even; many speakers lean slightly on the second-last syllable."
+          },
+          {
+            "front": "Malay **i** and **u**",
+            "back": "*i* = *ee* in *see* (*ikan*). *u* = *oo* in *food* (*susu*). Short and pure, no glide."
+          }
+        ]
+      },
+      "source_material_ids": [
+        4,
+        5
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Reading terima kasih off the table",
+        "markdown": "Your phrasebook lists *terima kasih* (thank you). Here is the whole word taken apart with the table, letter group by letter group.\n\n| Chunk | Letters | Rule | Sound |\n|---|---|---|---|\n| te- | t, e | **e** is the short *uh* of *about* | tuh |\n| -ri- | r, i | **r** tapped; **i** is *ee* in *see* | ree |\n| -ma | m, a | **a** is *a* in *father*; it ends the word *terima*, so in relaxed speech it may soften to *uh* | mah |\n| ka- | k, a | same **a** | kah |\n| -sih | s, i, h | **i** is *ee*; final **h** is breathed | seeh |\n\nPut together: **tuh-ree-mah kah-seeh**. Stress sits lightly on the second-last syllable of each word — *tuh-REE-mah*, *KAH-seeh*.\n\nNow the same method on a word you will meet at the counter. *ais* (iced) is not English \"ace\": **a** is *a* in *father*, **i** is *ee*, so it is \"ah-ees\", two syllables, not one. And *kopi* is \"ko-pee\", not \"KOH-pye\".\n\nRun the method on any new word: split it, apply the table to each chunk, then check the two endings — a final **-a** softens, a final **-k** stops."
+      },
+      "source_material_ids": [
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "quiz",
+      "payload": {
+        "intro": "Check the table against your own reading, not against your memory of the table."
+      },
+      "source_material_ids": [
+        4,
+        5
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "You are reading a menu and see the word *cakap* on a sign about speaking English. Which pronunciation matches the letter-to-sound rules in section 1 of your phrasebook?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "kah-kap, with a hard k at the front"
+            },
+            {
+              "id": "b",
+              "text": "chah-kahp, with ch at the front and ah in both syllables"
+            },
+            {
+              "id": "c",
+              "text": "sah-kap, with an s at the front"
+            },
+            {
+              "id": "d",
+              "text": "chah-kep, with a short e in the second syllable"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Malay **c** is always the *ch* in *China*, and **a** is the *a* in *father* in both syllables. *cakap* is chah-kahp. Option a applies the English habit of reading *c* as *k*; option c reads it as *s*, the other English value; option d invents a second vowel value the word does not have.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            4
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "| c | always \"ch\" in *China* | *cakap* (speak) \"chah-kahp\" |"
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "Which of these statements about Malay Rumi spelling are true according to section 1 of your phrasebook? Select all that apply.",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "The letter g is always hard, as in go."
+            },
+            {
+              "id": "b",
+              "text": "The letters ng are pronounced with a hard g after them, as in finger."
+            },
+            {
+              "id": "c",
+              "text": "A word-final a often softens to a short uh in everyday Peninsular speech."
+            },
+            {
+              "id": "d",
+              "text": "The letter e has only one pronunciation in Malay."
+            },
+            {
+              "id": "e",
+              "text": "A word-final k is a short stop in the throat, not a full k."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "c",
+              "e"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "The table gives g one value only (hard, as in *go*), softens word-final *a* to *uh* (*saya* = sa-yuh), and makes word-final *k* a throat stop (*tidak* = tida'). Option b confuses *ng* with *ngg* — *finger* is the *ngg* row. Option d is wrong because *e* has two values: short *uh* in *besar*, *e* in *bed* in *meja*.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            4
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "| g | always hard, as in *go* | *gula* (sugar) |"
+        },
+        {
+          "kind": "cloze",
+          "prompt": "Your phrasebook gives *saya* (I) as sounding like \"sa-____\" in everyday Peninsular speech, because a word-final *a* softens.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "yuh",
+              "yuh."
+            ]
+          },
+          "max_score": 1,
+          "explanation": "The word-final *a* in *saya* softens to a short *uh*, so the everyday pronunciation is sa-yuh rather than sa-yah.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            4
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "*saya* (I) sounds like \"sa-yuh\""
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A friend reads *tangga* (stairs) aloud as \"tan-gah\" and *dengan* (with) as \"deng-gahn\". Using section 1 of your phrasebook, explain what they got wrong in each word and give the correct reading of both.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "*tangga* is spelled ngg, which is the *ng* of *finger* — one hard g after the ng — so it is \"tahng-gah\", not \"tan-gah\". *dengan* is spelled ng, which is the *ng* of *singer* with no hard g, so it is \"duh-ngahn\", not \"deng-gahn\". The friend has swapped the two rows of the table."
+          },
+          "rubric": [
+            {
+              "criterion": "Correctly distinguishes ng from ngg using the phrasebook's two rows",
+              "weight": 0.4,
+              "excellent": "States that ng is the *ng* in *singer* with no hard g and ngg is the *ng* in *finger* with one hard g, and applies each to the right word.",
+              "acceptable": "States that the two spellings sound different and names *singer* and *finger*, but mixes up which word gets which.",
+              "poor": "Treats ng and ngg as the same sound, or says nothing about the hard g."
+            },
+            {
+              "criterion": "Gives a correct reading for both words",
+              "weight": 0.35,
+              "excellent": "Gives \"tahng-gah\" for *tangga* and \"duh-ngahn\" for *dengan*, with the vowels right as well as the ng.",
+              "acceptable": "Gets the ng/ngg distinction right in both but slips on one vowel, such as writing \"deng-ngahn\".",
+              "poor": "Gives readings that keep the friend's original error in one or both words."
+            },
+            {
+              "criterion": "Names the specific rule being broken rather than saying 'it sounds wrong'",
+              "weight": 0.25,
+              "excellent": "Points at the two table rows by name and says the friend has applied the ngg rule to an ng word and the reverse.",
+              "acceptable": "Says the friend used the wrong row of the table without identifying which row applies to which word.",
+              "poor": "Offers no rule, only a corrected pronunciation."
+            }
+          ],
+          "max_score": 4,
+          "id": "q4",
+          "status": "supported",
+          "reason": "Section 1 gives ng as in singer (dengan) and ngg as in finger (tangga), so the friend swapped the rows.",
+          "quote": "| ng | \"ng\" in *singer* (no hard g) | *dengan* (with) |",
+          "cite_chunk_ids": [
+            4
+          ],
+          "explanation": "| ng | \"ng\" in *singer* (no hard g) | *dengan* (with) |"
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "type": "misconception",
+      "payload": {
+        "belief": "Malay is written in the Latin alphabet, so I can just read it the way I read English.",
+        "why_it_seems_right": "The letters are identical and most of the words look familiar on the page. *Meja*, *kopi*, *susu* — nothing in the spelling warns you that a rule is about to change under you.",
+        "what_is_true": "Malay shares the alphabet but not the letter values. *c* is always *ch*, never *k* or *s*. *g* is always hard. Word-final *a* softens to *uh* and word-final *k* becomes a throat stop. Read *terima kasih* with English rules and you produce \"teh-RYE-mah KAY-see\"; read it off the table and you produce \"tuh-ree-mah kah-seeh\". The difference predicts whether a mamak counter understands you on the first try or the third."
+      },
+      "source_material_ids": [
+        4
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Pick three Malay words you have already seen this week — on a sign, a menu, a Grab receipt. Sound each one out with the table before you check it against anything. Which letter was the one you got wrong, and which row of the table would have caught it?"
+      },
+      "source_material_ids": [
+        4
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 2,
+  "cost_usd": 0.005353,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Fix these check failures: Q2 item count: Remove the 1 weakest item (delete from the JSON; the ids are never reused).\"",
+    "moved source_material_ids out of a explainer payload to the block",
+    "moved source_material_ids out of a example payload to the block",
+    "dropped code: a python code block was dropped (HACKATHON: the page runs JavaScript only)",
+    "cites: q1: cited chunk 4 (1. How Malay sounds), found by its question and answer",
+    "cites: q2: cited chunk 4 (1. How Malay sounds), found by its question and answer",
+    "cites: q3: cited chunk 4 (1. How Malay sounds), found by its question and answer",
+    "cites: b7: the reflection cited nothing; cited chunk 4 (best match for its text)"
+  ]
+}

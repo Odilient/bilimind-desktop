@@ -5,6 +5,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Course } from '@bilimind/core';
 import { fmtMinutes } from '../runtime/time.ts';
 import CiteChip from './CiteChip.vue';
+import { quoteLead } from '../runtime/model.ts';
 
 const props = defineProps<{ course: Course }>();
 const r = computed(() => props.course.receipts);
@@ -33,7 +34,7 @@ const extras = computed(() => {
   if (x.rewritten) out.push({ b: String(x.rewritten), t: `question${x.rewritten > 1 ? 's' : ''} rewritten after a rejection` });
   if (x.labels.beyond_slides) out.push({ b: String(x.labels.beyond_slides), t: `answer${x.labels.beyond_slides > 1 ? 's' : ''} labelled "beyond your slides"` });
   if (x.tests.run > 0 && x.checks.run) out.push({ b: `${x.checks.passed}/${x.checks.run}`, t: 'lesson checks passed' });
-  if (x.checks.repaired) out.push({ b: String(x.checks.repaired), t: 'repairs made before you saw it' });
+  if (x.checks.repaired) out.push({ b: String(x.checks.repaired), t: `repair${x.checks.repaired === 1 ? '' : 's'} made before you saw it` });
   if (x.wall_ms) out.push({ b: fmtWall(x.wall_ms), t: 'from files to course' });
   if (x.cost_usd || x.cost_usd === 0) out.push({ b: `$${x.cost_usd < 0.01 ? x.cost_usd.toFixed(4) : x.cost_usd.toFixed(2)}`, t: 'in text-model calls' });
   if (x.credits != null) out.push({ b: String(x.credits), t: 'WorkBuddy credits' });
@@ -76,7 +77,7 @@ onBeforeUnmount(() => io?.disconnect());
         <span class="hd"><svg aria-hidden="true"><use href="#i-x" /></svg>Rejected by the Checker</span>
         <s>{{ x.prompt }}</s>
         <p>{{ x.reason }}</p>
-        <p v-if="x.quote">Your file says: <q>{{ x.quote }}</q><CiteChip v-if="x.cite" :cite="x.cite" /></p>
+        <p v-if="x.quote">{{ x.cite ? quoteLead(course, x.cite) : 'Your file says' }}: <q>{{ x.quote }}</q><CiteChip v-if="x.cite" :cite="x.cite" /></p>
         <span v-if="x.replaced_by" class="fix"><svg aria-hidden="true"><use href="#i-check" /></svg>Rewritten, re-checked, and now in the lesson</span>
       </article>
     </div>

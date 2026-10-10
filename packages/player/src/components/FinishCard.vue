@@ -6,7 +6,7 @@ import type { Course, CourseLesson } from '@bilimind/core';
 import { BLOCK_META } from '@bilimind/core';
 import { fmtMinutes } from '../runtime/time.ts';
 import { lessonHref } from '../router.ts';
-import { topicOf } from '../runtime/model.ts';
+import { stepLabel, topicOf } from '../runtime/model.ts';
 
 const props = defineProps<{ course: Course; lesson: CourseLesson; step: number; done: boolean; passed: Set<string>; next: CourseLesson | null }>();
 const emit = defineEmits<{ complete: [el: HTMLElement]; undo: [] }>();
@@ -35,7 +35,7 @@ const reviews = computed(() => (props.course.review?.cards ?? []).filter(c => c.
     <div v-if="next" class="up">
       <span class="eyebrow">{{ next.n < lesson.n ? 'Still open' : 'Up next' }}</span>
       <a class="p-topic" :href="lessonHref(next.id)">
-        <span class="no">{{ nextTopic?.step ?? next.n }}</span><span class="tt">{{ next.title }}</span>
+        <span class="no">{{ stepLabel(course, next.id).step }}</span><span class="tt">{{ next.title }}</span>
         <span class="mt">{{ fmtMinutes(next.minutes) }}</span>
       </a>
       <div v-if="nextTopic?.items.length" class="subs">

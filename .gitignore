@@ -28,3 +28,10 @@ __pycache__/
 
 # local test runs (audio-heavy); summaries are copied into hackathon/
 hackathon/runs/
+
+# caches and screenshot dumps (keep the repo light)
+**/crew/cache/
+site/shots/
+showcase/courses/_shots/
+packages/player/shots/
+site/courses/

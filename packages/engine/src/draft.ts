@@ -19,13 +19,15 @@ import {
   expandSchema, expandSystem, expandUser, higherOrderSchema, higherOrderSystem, higherOrderUser, lessonDigest, payloadExcerpt,
   rewriteSchema, rewriteUser,
 } from './prompts/expand.ts';
-import { briefFromGoal, goalDefaults, lessonNeighbours, lessonSources, teachingChunks } from './prompts/context.ts';
+import { briefFromGoal, fillSlideRange, goalDefaults, lessonNeighbours, lessonSources, teachingChunks } from './prompts/context.ts';
 import { refineLessonChunks } from './sources.ts';
 import { readExamMap } from './exam.ts';
 import type { ExamTarget } from './prompts/expand.ts';
 import { capMcq, hasHigherOrder, missingFormats, normaliseLessonDraft, normaliseRawBlocks, stripCode } from './normalise/lesson.ts';
 import { normaliseItem } from './normalise/assessment.ts';
 import type { DraftItem } from './normalise/assessment.ts';
+import { groundCites } from './validate/fix.ts';
+import type { CheckContext } from './validate/rules.ts';
 
 export const readLessonDraft: ReadLessonDraft = (course, key) => readJson<LessonContent>(coursePaths(course).lessonJson(key));
 export const writeLessonDraft: WriteLessonDraft = (course, content) => writeJson(coursePaths(course).lessonJson(content.key), content);
@@ -54,20 +56,44 @@ function lessonContext(ctx: Ctx, key: string) {
       chunks = lesson.chunk_ids.map(id => byId.get(id)).filter((c): c is Chunk => !!c).slice(0, 6);
     }
     if (!chunks.length) chunks = lessonSources(pool, lesson).chunks;
+    try { chunks = fillSlideRange(chunks, pool, { lesson, outline, plan, cap: lesson.track === 'core' ? 12 : 9 }); } catch { /* keep the picked set */ }
   }
   const allowsCode = outline.allows_code;
-  // EXAM TARGETS: the past-paper parts counted towards this lesson (incl. parts folded in from its subtopics)
-  const em = readExamMap(ctx.course);
-  const examTargets: ExamTarget[] = (em?.questions ?? []).filter(q => q.assigned === key)
-    .map(q => ({ id: q.id, marks: q.marks, text: q.text.replace(/^[^:]{0,60}:\s*/, '') }));
+  // EXAM TARGETS (G2 review): the past-paper parts counted towards this lesson, incl. parts folded into it from its
+  // subtopics, and the parts folded AWAY from it into its parent when this subtopic is itself a kept lesson. The text
+  // keeps its section heading ("Hashing: ..."): it is context for the Writer, never a citation.
+  let em: ReturnType<typeof readExamMap> = null;
+  try { em = readExamMap(ctx.course); } catch { em = null; }
+  const examTargets: ExamTarget[] = (em?.questions ?? [])
+    .filter(q => q.assigned === key || (q as { folded_from?: string }).folded_from === key)
+    .sort((a, b) => b.marks - a.marks).slice(0, 8)
+    .map(q => ({ id: q.id, marks: q.marks, text: q.text }));
   return {
-    p, goal, outline, lesson, chunks, plan, allowsCode, examTargets, knownChunkIds: pool.map(c => c.id),
+    p, goal, outline, lesson, chunks, plan, allowsCode, examTargets, knownChunkIds: pool.map(c => c.id), ingest,
     codeLanguage: allowsCode ? outline.code_language ?? goal.code_language ?? 'javascript' : null,
     brief: briefFromGoal(goal, { title: outline.title, hasMaterials: pool.length > 0 }),
     neighbours: lessonNeighbours(outline, key, plan),
   };
 }
 type LessonCtx = ReturnType<typeof lessonContext>;
+
+/**
+ * G2 review: cite before `check` ever runs. Drops unknown/front-matter ids, cites the slides the prose names, gives
+ * auto-marked items their best-matching chunk and an uncited block the supplied chunk its prose matches. Never throws.
+ */
+function ground(content: LessonContent, lc: LessonCtx, repairs: string[]): void {
+  try {
+    const cx: CheckContext = {
+      key: content.key, archetype: null, minutes: null, timeoutMs: 2000,
+      chunks: new Map(lc.ingest.chunks.map(c => [c.id, c])), files: new Map(lc.ingest.files.map(f => [f.material_id, f])),
+      supplied: lc.chunks.map(c => c.id),
+    };
+    if (!cx.chunks!.size) return;
+    for (const f of groundCites(content, cx)) repairs.push(`cites: ${f.detail}`);
+  } catch (e) {
+    repairs.push(`citation backfill skipped (${(e as Error).message.slice(0, 80)})`);
+  }
+}
 
 function summarise(content: LessonContent, lc: LessonCtx, repairs: string[]): DraftData {
   const cites = new Set(content.blocks.flatMap(b => b.source_material_ids ?? []));
@@ -126,6 +152,7 @@ async function fullDraft(ctx: Ctx, lc: LessonCtx, note: string | undefined, prev
   });
   let cost = res.cost_usd;
   if (!hasHigherOrder(content.blocks)) cost += await higherOrderRepair(ctx, lc, content, repairs);
+  ground(content, lc, repairs);
   content.attempts = (prev?.attempts ?? 0) + 1;
   content.cost_usd = round6((prev?.cost_usd ?? 0) + cost);
   content.repairs = [...(note ? [`re-drafted with the Writer's note: "${note.slice(0, 200)}"`] : []), ...repairs];
@@ -142,6 +169,7 @@ async function onlyBlock(ctx: Ctx, lc: LessonCtx, type: BlockType, note: string 
       brief: lc.brief, lesson: lc.lesson, allowsCode: lc.allowsCode, codeLanguage: lc.codeLanguage, chunks: lc.chunks, type,
       current: existing?.payload ?? null, instruction: note ?? null,
       otherParts: prev.blocks.filter(b => b !== existing).map(b => ({ type: b.type, excerpt: payloadExcerpt(b.payload) })),
+      examTargets: CARRIES_ASSESSMENTS.includes(type) || type === 'worked_example' || type === 'walkthrough' ? lc.examTargets : [],
     }),
   });
   const repairs: string[] = [];
@@ -167,8 +195,10 @@ async function onlyBlock(ctx: Ctx, lc: LessonCtx, type: BlockType, note: string 
   capMcq(blocks, repairs);
   const content: LessonContent = {
     ...prev, blocks, attempts: prev.attempts + 1, cost_usd: round6(prev.cost_usd + res.cost_usd),
-    repairs: [...prev.repairs, `${existing ? 'rewrote' : 'added'} the ${type} block (${id})${note ? ` with the Writer's note: "${note.slice(0, 200)}"` : ''}`, ...repairs],
+    repairs: [],
   };
+  ground(content, lc, repairs);
+  content.repairs = [...prev.repairs, `${existing ? 'rewrote' : 'added'} the ${type} block (${id})${note ? ` with the Writer's note: "${note.slice(0, 200)}"` : ''}`, ...repairs];
   writeLessonDraft(ctx.course, content);
   return summarise(content, lc, repairs);
 }

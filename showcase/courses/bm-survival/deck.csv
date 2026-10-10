@@ -1,0 +1,165 @@
+#separator:Comma
+#html:false
+#notetype:Basic
+#deck:Survival Malay
+#columns:Front,Back,Tags
+#tags column:3
+Malay **c** — as in *cakap*,"*ch* in *China*: chah-kahp. Never *k*, never *s*.",bilimind bm-survival malay_sounds
+Malay **g** — as in *gula*,"Always hard, as in *go*: goo-lah. Never the soft *g* of *giant*.",bilimind bm-survival malay_sounds
+Malay **ng** vs **ngg**,"*ng* = *singer*, no hard g (*dengan*). *ngg* = *finger*, one hard g (*tangga*).",bilimind bm-survival malay_sounds
+Word-final **-a**,Softens to a short *uh* in everyday Peninsular speech: *saya* = sa-yuh.,bilimind bm-survival malay_sounds
+Word-final **-k**,"A stop in the throat, nothing released: *tidak* = tee-dah'.",bilimind bm-survival malay_sounds
+Malay **e** — two values,Usually short *uh* as in *about* (*besar* = buh-sar); sometimes *e* in *bed* (*meja* = meh-ja).,bilimind bm-survival malay_sounds
+Malay **sy** and **kh**,"*sy* = *sh* in *shop* (*syarikat*). *kh* = Scottish *ch* in *loch* (*khabar*), often softened to *k*.",bilimind bm-survival malay_sounds
+Malay **ny**,*ny* in *canyon*: *nyanyi* = nyah-nyee.,bilimind bm-survival malay_sounds
+Malay **o**,"*o* in *low*, with no *w* gliding off the end: *kopi* = ko-pee.",bilimind bm-survival malay_sounds
+Malay **r**,"A tapped r, as in Spanish. Word-finally it is often dropped: *besar* can sound like buh-sa.",bilimind bm-survival malay_sounds
+Where does the stress fall?,Light and fairly even; many speakers lean slightly on the second-last syllable.,bilimind bm-survival malay_sounds
+Malay **i** and **u**,"*i* = *ee* in *see* (*ikan*). *u* = *oo* in *food* (*susu*). Short and pure, no glide.",bilimind bm-survival malay_sounds
+"Your phrasebook gives *saya* (I) as sounding like ""sa-____"" in everyday Peninsular speech, because a word-final *a* softens.","yuh (also: yuh.)
+The word-final *a* in *saya* softens to a short *uh*, so the everyday pronunciation is sa-yuh rather than sa-yah.",bilimind bm-survival malay_sounds cloze
+11,sebelas,bilimind bm-survival numbers_money_and_time
+20,dua puluh,bilimind bm-survival numbers_money_and_time
+100,seratus,bilimind bm-survival numbers_money_and_time
+1000,seribu,bilimind bm-survival numbers_money_and_time
+45,empat puluh lima,bilimind bm-survival numbers_money_and_time
+zero inside a phone number,kosong,bilimind bm-survival numbers_money_and_time
+RM 4.50,empat ringgit lima puluh sen,bilimind bm-survival numbers_money_and_time
+How much is this?,Berapa harga ini?,bilimind bm-survival numbers_money_and_time
+What time is it now?,Pukul berapa sekarang?,bilimind bm-survival numbers_money_and_time
+half past two,pukul dua setengah,bilimind bm-survival numbers_money_and_time
+tomorrow,esok,bilimind bm-survival numbers_money_and_time
+Friday,Jumaat,bilimind bm-survival numbers_money_and_time
+The mamak bill comes to RM 80. The waiter says the number as ____ ringgit. Write the Malay word that fills the blank.,"lapan puluh
+80 is a tens number, so it takes puluh: lapan puluh. Lapan alone is 8, which is why the two sound close and cost you RM 72 if you confuse them.",bilimind bm-survival numbers_money_and_time cloze
+You are standing at the main entrance and the driver cannot see you. You tell him where you are waiting: Saya tunggu di ____ utama.,"pintu
+Pintu utama is the main entrance, the phrase the phrasebook gives for telling a driver where you are standing. Pintu is the word for door or gate.",bilimind bm-survival grab_and_directions cloze
+I'm an international student.,Saya pelajar antarabangsa.,bilimind bm-survival campus_and_classroom
+I don't understand.,Saya tak faham.,bilimind bm-survival campus_and_classroom
+Can you repeat that?,Boleh ulang?,bilimind bm-survival campus_and_classroom
+Can you speak a bit slower?,Boleh cakap perlahan sikit?,bilimind bm-survival campus_and_classroom
+I'm sorry. (polite),Minta maaf.,bilimind bm-survival campus_and_classroom
+Where is the library?,Di mana perpustakaan?,bilimind bm-survival campus_and_classroom
+When does the class start?,Bila kelas mula?,bilimind bm-survival campus_and_classroom
+"What does ""tugasan"" mean?","Apa maksud ""tugasan""?",bilimind bm-survival campus_and_classroom
+May I sit here?,Boleh saya duduk di sini?,bilimind bm-survival campus_and_classroom
+lecturer,pensyarah,bilimind bm-survival campus_and_classroom
+assignment / quiz / exam,tugasan / kuiz / peperiksaan,bilimind bm-survival campus_and_classroom
+library,perpustakaan,bilimind bm-survival campus_and_classroom
+"You heard the word *tugasan* but do not know it. You ask the tutor: Apa ____ ""tugasan""?","maksud
+Apa maksud plus the word is the phrasebook's pattern for asking what a word means, listed on campus as Apa maksud ""tugasan""?",bilimind bm-survival campus_and_classroom cloze
+Full module name,Bahasa Melayu Komunikasi 2,bilimind bm-survival bmk_module_context
+Module code,MPU31002,bilimind bm-survival bmk_module_context
+Credit value,2 credits,bilimind bm-survival bmk_module_context
+Taylor's category,U1,bilimind bm-survival bmk_module_context
+What MPU stands for,Mata Pelajaran Pengajian Umum: the compulsory general-studies modules of Malaysian higher education,bilimind bm-survival bmk_module_context
+Is BMK 2 assessed?,Yes — it is a module with a code and credits,bilimind bm-survival bmk_module_context
+"What is the phrasebook, relative to BMK 2?",Companion practice only; it is never assessed,bilimind bm-survival bmk_module_context
+Which other U1 modules do international degree students take?,Kursus Integriti dan Antirasuah and Citra Malaysia,bilimind bm-survival bmk_module_context
+The module code for Bahasa Melayu Komunikasi 2 at Taylor's is ____.,"MPU31002
+MPU31002 is the module code for Bahasa Melayu Komunikasi 2, as listed on Taylor's MPU page.",bilimind bm-survival bmk_module_context cloze
+"You have finished eating at the mamak and want the bill. You get the waiter's attention and say: Bang, ____.","kira
+*Kira* is the phrasebook's line for asking for the bill at the mamak, used in the dialogue as *Bang, kira.*",bilimind bm-survival capstone_a_day_in_malay cloze
+"You are reading a menu and see the word *cakap* on a sign about speaking English. Which pronunciation matches the letter-to-sound rules in section 1 of your phrasebook?
+a) kah-kap, with a hard k at the front
+b) chah-kahp, with ch at the front and ah in both syllables
+c) sah-kap, with an s at the front
+d) chah-kep, with a short e in the second syllable","chah-kahp, with ch at the front and ah in both syllables
+Malay **c** is always the *ch* in *China*, and **a** is the *a* in *father* in both syllables. *cakap* is chah-kahp. Option a applies the English habit of reading *c* as *k*; option c reads it as *s*, the other English value; option d invents a second vowel value the word does not have.",bilimind bm-survival malay_sounds quiz
+"Which of these statements about Malay Rumi spelling are true according to section 1 of your phrasebook? Select all that apply.
+a) The letter g is always hard, as in go.
+b) The letters ng are pronounced with a hard g after them, as in finger.
+c) A word-final a often softens to a short uh in everyday Peninsular speech.
+d) The letter e has only one pronunciation in Malay.
+e) A word-final k is a short stop in the throat, not a full k.","The letter g is always hard, as in go.; A word-final a often softens to a short uh in everyday Peninsular speech.; A word-final k is a short stop in the throat, not a full k.
+The table gives g one value only (hard, as in *go*), softens word-final *a* to *uh* (*saya* = sa-yuh), and makes word-final *k* a throat stop (*tidak* = tida'). Option b confuses *ng* with *ngg* — *finger* is the *ngg* row. Option d is wrong because *e* has two values: short *uh* in *besar*, *e* in *bed* in *meja*.",bilimind bm-survival malay_sounds quiz
+"A friend reads *tangga* (stairs) aloud as ""tan-gah"" and *dengan* (with) as ""deng-gahn"". Using section 1 of your phrasebook, explain what they got wrong in each word and give the correct reading of both.","*tangga* is spelled ngg, which is the *ng* of *finger* — one hard g after the ng — so it is ""tahng-gah"", not ""tan-gah"". *dengan* is spelled ng, which is the *ng* of *singer* with no hard g, so it is ""duh-ngahn"", not ""deng-gahn"". The friend has swapped the two rows of the table.
+| ng | ""ng"" in *singer* (no hard g) | *dengan* (with) |",bilimind bm-survival malay_sounds quiz
+"You are at the campus faculty office. The person behind the counter is a woman you would guess is about 30. You need to ask where the toilet is. Select all the forms of address that will not read as a mistake.
+a) kakak
+b) mak cik
+c) anda
+d) Puan
+e) abang","kakak; Puan
+*Kakak* is friendly for a woman a bit older than you, and *Puan* is the polite title for a married or older woman, so neither reads as a mistake. *Mak cik* is for a woman a generation older, *anda* belongs on signs and forms rather than face to face, and *abang* is for a man.",bilimind bm-survival greetings_and_address quiz
+"It is 4 pm. Your Grab driver is a man in his thirties. You want to greet him as you get in. Which greeting and address fits best?
+a) Selamat petang, abang.
+b) Selamat petang, pak cik.
+c) Selamat petang, awak.
+d) Selamat tengah hari, abang.","Selamat petang, abang.
+*Abang* is the friendly address for a man a bit older than you, such as a Grab driver, and *selamat petang* runs from mid-afternoon until dusk, so it fits 4 pm. *Pak cik* would place him a generation above you, *awak* would claim he is your peer, and *selamat tengah hari* is for around midday.",bilimind bm-survival greetings_and_address quiz
+"A classmate in your tutorial group, your own age, has just introduced himself and used your first name. Explain which word for ""you"" you would use with him, and why the same word would be wrong with the mamak uncle who served you breakfast this morning.","Use *awak* with the classmate, because *awak* asserts that the two of you are peers and he has already established that by using your first name. With the mamak uncle, *awak* would claim equality with a man a generation older, which reads as a demotion; *pak cik* is the correct address there because it places him a generation above you. The word for ""I"", *saya*, does not change in either case.",bilimind bm-survival greetings_and_address quiz
+You are squeezing past a group of people blocking the walkway at the mamak. What do you say?,"Tumpang lalu.
+*Tumpang lalu* is the phrase for squeezing past people. *Minta maaf* is a full apology for something you have done, *boleh ulang* asks someone to repeat themselves, and *tak apa* means 'never mind'.",bilimind bm-survival greetings_and_address quiz
+"Your Grab driver reads out his number as kosong satu tiga. Which sequence of digits is he saying?
+a) 0 1 3
+b) 1 3 0
+c) 0 3 1
+d) 1 0 3","0 1 3
+Kosong is the zero used inside digit strings, so it comes first and stands for 0; satu is 1 and tiga is 3, giving 0 1 3.",bilimind bm-survival numbers_money_and_time quiz
+"Which of these Malay numbers are written correctly for the value shown? Select all that apply.
+a) 13 = tiga belas
+b) 30 = tiga puluh
+c) 100 = satu ratus
+d) 21 = dua puluh satu
+e) 11 = satu belas","13 = tiga belas; 30 = tiga puluh; 21 = dua puluh satu
+Teens add belas and tens add puluh, so tiga belas, tiga puluh and dua puluh satu are right. The hundreds and the eleven both take se- instead of satu: seratus and sebelas.",bilimind bm-survival numbers_money_and_time quiz
+"A friend tells you the trip costs RM 90 and leaves at pukul lapan pagi. Write both facts back in Malay, and explain in one sentence why lapan pagi cannot be confused with lapan puluh in the price.","The price is sembilan puluh ringgit (90 = sembilan puluh). The departure is pukul lapan pagi, eight o'clock in the morning. Lapan pagi is a clock hour and takes no puluh because it is a single digit 8; lapan puluh is a tens value, 80, and the word puluh is what marks it as a multiple of ten.
+Tens add *puluh*: *tiga puluh* = 30",bilimind bm-survival numbers_money_and_time quiz
+"You want a cold drink with no milk and no sugar. Select all the orders that get you exactly that.
+a) teh O ais kosong
+b) teh ais
+c) kopi O ais kosong
+d) teh tarik ais
+e) Milo ais","teh O ais kosong; kopi O ais kosong
+""O"" removes the milk and ""kosong"" removes the sugar, so teh O ais kosong and kopi O ais kosong are both cold, milk-free and sugar-free. teh ais and teh tarik ais still carry condensed milk and sugar; Milo ais is a different drink entirely.",bilimind bm-survival mamak_ordering quiz
+"A friend orders ""teh"" at a mamak and is surprised that the tea is sweet and milky. Using only the words from the mamak drink list, write the exact order they should have given if they wanted hot tea with no milk and no sugar, and explain which word removed the milk and which removed the sugar.","They should have ordered ""teh O kosong"". ""O"" removes the milk (teh O is tea without milk, sugar still in), and ""kosong"" removes the sugar (the phrasebook gives teh O kosong as black tea, no sugar). Adding both gives hot tea with nothing added.
+*teh O kosong* = black tea, no sugar",bilimind bm-survival mamak_ordering quiz
+"You have ordered your roti canai and want to take it home rather than eat at the table. Which word gets the food wrapped?
+a) Makan sini.
+b) Bungkus.
+c) Kurang manis.
+d) Satu lagi.","Bungkus.
+Bungkus (and its synonym tapau) is the takeaway word from the mamak section. Makan sini means eating here, kurang manis changes the sugar in a drink, and satu lagi asks for one more of something you already ordered.",bilimind bm-survival mamak_ordering quiz
+"The app says your Grab has arrived. You are at the main entrance and cannot see the car. You have already sent Abang dah sampai? twice with no reply. What is the best next move?
+a) Walk toward the road you think he is on, so you meet him halfway.
+b) Call him, and if he does not answer, cancel and rebook from the same pin.
+c) Keep sending Abang dah sampai? until he replies, since he may not have seen the first two.
+d) Wait at the pin without calling, because he can see your location on his screen.","Call him, and if he does not answer, cancel and rebook from the same pin.
+A driver who is circling a one-way system cannot read messages, so more messages add nothing. Walking away from the pin means two moving people trying to meet. A call reaches him hands-free; if that fails, cancelling from the pin is the only move that keeps your position known.",bilimind bm-survival grab_and_directions quiz
+"Your Grab driver is approaching a junction on the campus road and asks which way to go. You need him to turn right and then keep going. Write what you say, in Malay, and explain why you say the direction word together with a hand gesture rather than the word alone.","Belok kanan. Jalan terus. The word alone is short and competes with engine noise and road noise; the phrasebook notes that a final k is only a short stop and a final r is often dropped, so a short direction word is easily lost. The gesture carries the same information through a channel that noise does not affect, so the driver gets the instruction even if he only half-hears the word.
+Belok kiri. / Belok kanan. | Turn left. / Turn right.",bilimind bm-survival grab_and_directions quiz
+"You are in a BMK class. The tutor has just explained the assessment structure in Malay; you caught the first sentence and nothing after it. You want the tutor to say it again. Which line asks for exactly that?
+a) Saya tak faham.
+b) Minta maaf.
+c) Boleh ulang?
+d) Apa maksud ""tugasan""?","Boleh ulang?
+*Boleh ulang?* asks the tutor to repeat what was said. *Minta maaf* is the polite apology you can put in front of it, *Saya tak faham* only says you did not understand, and *Apa maksud* asks what one word means.",bilimind bm-survival campus_and_classroom quiz
+"A classmate tells you that saying *Saya tak faham* in a BMK session is a bad idea because the tutor will think you are not paying attention. Using the phrases from this lesson, explain what you would say instead of staying silent, and what each phrase does for you.","Minta maaf first, because you are interrupting class and the phrasebook marks it as the polite form. Then Saya tak faham to name the problem in one sentence. Then exactly one specific request — Boleh ulang? if the content was missed, or Boleh cakap perlahan sikit? if it was too fast. If a single word is the blocker, Apa maksud ""tugasan""? to pin it down. Staying silent means the tutor cannot see the problem and will keep going.",bilimind bm-survival campus_and_classroom quiz
+"Which of the following statements about Bahasa Melayu Komunikasi 2 are correct? Select all that apply.
+a) It carries 2 credits toward the degree.
+b) It is part of the MPU general-studies requirement.
+c) It sits in the U1 category at Taylor's.
+d) It is an unassessed companion to a phrasebook.
+e) It is an elective that students choose instead of a core paper.","It carries 2 credits toward the degree.; It is part of the MPU general-studies requirement.; It sits in the U1 category at Taylor's.
+BMK 2 is a 2-credit, assessed MPU module in the U1 category. The phrasebook is the unassessed companion, and the module is a requirement rather than an elective.",bilimind bm-survival bmk_module_context quiz
+"A friend tells you they skipped BMK 2 all semester because they already speak enough Malay to order food. What does the module structure say about that plan?
+a) It works, because BMK 2 only checks whether you can speak Malay.
+b) It fails, because BMK 2 is an assessed 2-credit module and speaking Malay is not the same as completing it.
+c) It works, because the phrasebook is the assessed part and the module is optional.
+d) It fails, but only because BMK 2 is a 4-credit core paper with a heavier weight.","It fails, because BMK 2 is an assessed 2-credit module and speaking Malay is not the same as completing it.
+BMK 2 is an assessed, credit-bearing module, so conversational ability does not substitute for completing it. It carries 2 credits, not 4, and the phrasebook is not assessed.",bilimind bm-survival bmk_module_context quiz
+"At the mamak, the waiter asks *Makan?* after taking your drink order. What is the waiter asking?
+a) Whether you want to eat here or take the food away.
+b) Whether you want anything to eat.
+c) Whether you have finished your drink.
+d) Whether you want the bill now.","Whether you want anything to eat.
+*Makan* means to eat, and in the mamak dialogue the waiter asks it right after the drink order to find out whether you want food as well. The eat-here-versus-takeaway choice is made with *makan sini* or *bungkus*.",bilimind bm-survival capstone_a_day_in_malay quiz
+"Which of these lines from your phrasebook are used in the mamak scene of this capstone? Select all that apply.
+a) Teh tarik kurang manis, satu.
+b) Di mana perpustakaan?
+c) Roti canai satu, kuah campur.
+d) Bang, kira.
+e) Saya pelajar antarabangsa.","Teh tarik kurang manis, satu.; Roti canai satu, kuah campur.; Bang, kira.
+The mamak dialogue in section 5 uses the drink order, the food order and the request for the bill. The library question and the international-student introduction belong to the campus scene in section 7.",bilimind bm-survival capstone_a_day_in_malay quiz
+"You ran the day and abandoned *Boleh saya duduk di sini?* for English on campus. Explain what you should do with that abandoned line before your next campus day, and why that is better than simply trying again from memory.","Write the line out in full, say it aloud twice before the next campus day, and put it on next week's drilling list. It was dropped because it was not automatic — rehearsing it beforehand removes the moment of building the sentence while someone is waiting for an answer.",bilimind bm-survival capstone_a_day_in_malay quiz

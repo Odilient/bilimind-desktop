@@ -70,6 +70,7 @@ export function problems({ team = true } = {}) {
   const need = ['SKILL.md', 'references/writer.md', 'references/coder.md', 'references/checker.md',
     'references/planning.md', 'references/output-spec.md', 'references/troubleshooting.md'];
   for (const f of need) if (!fs.existsSync(path.join(SKILL, f))) out.push(`missing skills/bilimind/${f}`);
+  for (const f of markdownFiles()) if (fs.readFileSync(f.abs, 'utf8').includes('\r')) out.push(`skills/bilimind/${f.rel} has CRLF line endings (run --team to normalise to LF)`);
   const skillMd = fs.existsSync(path.join(SKILL, 'SKILL.md')) ? fs.readFileSync(path.join(SKILL, 'SKILL.md'), 'utf8') : '';
   if (!/^---\r?\nname: bilimind\r?\n/.test(skillMd)) out.push('SKILL.md: frontmatter must start with name: bilimind');
   if (skillMd.split('\n').length > 260) out.push(`SKILL.md: ${skillMd.split('\n').length} lines (keep it under ~250)`);
@@ -99,8 +100,17 @@ export function problems({ team = true } = {}) {
   return out;
 }
 
+/** SKILL.md and references/*.md: WorkBuddy's frontmatter parser and the playbook sync expect LF. */
+function markdownFiles() {
+  return walk(SKILL).filter((f) => f.rel === 'SKILL.md' || (f.rel.startsWith('references/') && f.rel.endsWith('.md')));
+}
+
 // ---------- team sync ----------
 export function syncTeam() {
+  for (const f of markdownFiles()) {
+    const text = fs.readFileSync(f.abs, 'utf8');
+    if (text.includes('\r')) fs.writeFileSync(f.abs, text.replace(/\r\n/g, '\n'));
+  }
   for (const [id, ref] of Object.entries(MEMBERS)) {
     const agentPath = path.join(TEAM, 'agents', `${id}.md`);
     const next = syncedAgent(fs.readFileSync(agentPath, 'utf8'), fs.readFileSync(path.join(SKILL, 'references', `${ref}.md`), 'utf8'), id);

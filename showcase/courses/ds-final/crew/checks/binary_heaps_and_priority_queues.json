@@ -1,0 +1,200 @@
+{
+  "lesson": "binary_heaps_and_priority_queues",
+  "round": 8,
+  "at": "2026-10-10T16:30:19.348Z",
+  "total": 27,
+  "passed": 27,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "8 blocks and 6 items have unique ids"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code item valid",
+      "block": 3,
+      "item": "q1"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "checklist payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "ordering item valid",
+      "block": 7,
+      "item": "q6"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "numeric item valid",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 7,
+      "item": "q5"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 8
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "procedural: has walkthrough, checklist"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 4-6: 25% of the paper)"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "4 higher-order, 1 remember of 5"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "0 mcq of 5 items (max 2)"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q7 ordering",
+      "ok": true,
+      "detail": "5 steps, scrambled",
+      "block": 7,
+      "item": "q6"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 6 accepted answers",
+      "block": 7,
+      "item": "q5"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q9 numeric",
+      "ok": true,
+      "detail": "value 6 child comparisons, working recomputed",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q11 code runs",
+      "ok": true,
+      "detail": "reference passes 5/5 tests · starter fails 4/5 · OK",
+      "block": 3
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "26 chunk citations on 8 blocks resolve, 8 slide/page mentions exist"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "1298 teaching words for a 30-minute lesson (target about 900, minimum 450)"
+    },
+    {
+      "lesson": "binary_heaps_and_priority_queues",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

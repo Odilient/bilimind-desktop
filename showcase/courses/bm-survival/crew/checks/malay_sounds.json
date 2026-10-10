@@ -1,0 +1,178 @@
+{
+  "lesson": "malay_sounds",
+  "round": 6,
+  "at": "2026-10-10T16:31:32.985Z",
+  "total": 24,
+  "passed": 24,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "7 blocks and 4 items have unique ids"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reference_table payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "flashcards payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 5,
+      "item": "q1"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "multi_select item valid",
+      "block": 5,
+      "item": "q2"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 5,
+      "item": "q3"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 5,
+      "item": "q4"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "factual: has flashcards, reference_table"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "2 higher-order, 1 remember of 4"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 4 items (max 1)"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 5,
+      "item": "q1"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q6 multi_select",
+      "ok": true,
+      "detail": "5 options, 3 correct",
+      "block": 5,
+      "item": "q2"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 2 accepted answers",
+      "block": 5,
+      "item": "q3"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 5,
+      "item": "q4"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "15 chunk citations on 7 blocks resolve"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "550 teaching words for a 20-minute lesson (target about 600, minimum 300)"
+    },
+    {
+      "lesson": "malay_sounds",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

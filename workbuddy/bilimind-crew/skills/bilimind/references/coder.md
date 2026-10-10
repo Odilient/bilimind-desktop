@@ -23,7 +23,9 @@ For each lesson with code:
    - the starter already passes every test: delete the line(s) that solve it and leave
      `// TODO: <what the student must write>`;
    - a test calls a helper (`inOrder`, `node`) that only the starter defines: copy it into `solution.js`;
-   - the starter never finishes (`while (true)` with only TODOs): add a placeholder `return;`.
+   - the starter never finishes (`while (true)` with only TODOs): add a placeholder `return;`;
+   - the function must change its input (insert, heapify) but the tests check only the return value:
+     make one test's `call` return the changed input too, so a solution that never writes fails.
    Change as little as possible; keep the function name and signature.
 4. **Apply.** `bm note --lesson <key> --text "<key> b<n>: <what failed> -> <what you changed and why>"`, then
    `bm code-test --lesson <key> --block <n> --apply` (writes the files back and re-runs the tests).

@@ -128,6 +128,33 @@ export function lessonSources(pool: Chunk[], lesson: { title: string; summary?: 
   return { chunks, supportWords, thin: supportWords < THIN_WORDS };
 }
 
+/**
+ * G2 review: retrieval left holes inside the lesson's own slide run (heaps got L04 slides 3, 4, 6, 8, 10-13, missing
+ * the insert and extract traces on slides 5, 7 and 9). Fill the holes between the first and last picked slide of the
+ * lesson's dominant deck, skipping front matter and slides a cut topic owns, up to `cap` chunks in all.
+ */
+export function fillSlideRange(picked: Chunk[], pool: Chunk[], o: { lesson: Lesson; outline: OutlineResult; plan?: PlanResult | null; cap: number }): Chunk[] {
+  const slideNo = (c: Chunk) => { const m = /^\s*slide\s+(\d+)\s*$/i.exec(c.locator ?? ''); return m ? Number(m[1]) : null; };
+  const count = new Map<number, number>();
+  for (const c of picked) if (slideNo(c) !== null) count.set(c.material_id, (count.get(c.material_id) ?? 0) + 1);
+  const deck = [...count.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+  if (deck === undefined || picked.length >= o.cap) return picked;
+  const nums = picked.filter(c => c.material_id === deck).map(slideNo).filter((n): n is number => n !== null);
+  const lo = Math.min(...nums), hi = Math.max(...nums);
+  const kept = new Set((o.plan?.lessons ?? []).map(l => l.key));
+  const own = new Set(o.lesson.chunk_ids ?? []);
+  const cutOwned = new Set(o.plan?.lessons?.length
+    ? o.outline.lessons.filter(l => l.key !== o.lesson.key && !kept.has(l.key)).flatMap(l => l.chunk_ids ?? []).filter(id => !own.has(id))
+    : []);
+  const have = new Set(picked.map(c => c.id));
+  const holes = pool.filter(c => c.material_id === deck && !have.has(c.id) && !cutOwned.has(c.id) && !isFrontMatter(c))
+    .filter(c => { const n = slideNo(c); return n !== null && n > lo && n < hi; })
+    .sort((a, b) => slideNo(a)! - slideNo(b)!);
+  if (!holes.length) return picked;
+  const out = [...picked, ...holes.slice(0, o.cap - picked.length)];
+  return out.sort((a, b) => (a.material_id === deck ? 0 : 1) - (b.material_id === deck ? 0 : 1) || a.material_id - b.material_id || a.ordinal - b.ordinal);
+}
+
 // ---------- neighbours ----------
 /**
  * Prerequisites / dependents for the writer. With a plan: the kept lessons in plan order (what the learner really

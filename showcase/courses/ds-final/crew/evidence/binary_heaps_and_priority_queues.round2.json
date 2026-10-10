@@ -1,0 +1,1 @@
+[{"item": "q6", "verdict": "supported", "quote": "parent: ⌊(i − 1) / 2⌋", "reason": "Slide 5's parent formula gives floor((6 - 1) / 2) = 2 for index 6, the accepted option."}]

@@ -1,0 +1,335 @@
+{
+  "key": "greeting_etiquette",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "You are standing at the door of a Malaysian friend's house, or sliding into the back seat of a Grab, or walking into a mamak at 11pm. You have one greeting to choose and about two seconds to choose it. Get it wrong and nothing explodes — but at someone's door it lands as a small slight, and you will feel it.\n\nYour phrasebook (section 2, *Greetings and basics*) gives you the two options side by side:\n\n| Malay | English | Notes |\n|---|---|---|\n| Helo / Hai | Hello | Hai is informal |\n| Assalamualaikum | Peace be upon you | Muslim greeting; the reply is *Waalaikumussalam* |\n\nRead the Notes column carefully, because it is doing more work than it looks. *Assalamualaikum* is an Arabic loan that means \"peace be upon you\". It is a religious greeting — a Muslim greets another Muslim with it. In Malaysia it has also become a general courtesy greeting, used well outside Muslim company: a non-Muslim shopkeeper will often open with it, and a non-Muslim is not expected to be offended by hearing it.\n\nWhat follows from that is the part people get wrong. **You say it when you are the one greeting, and you are reasonably confident the person you are greeting is Muslim.** You do not say it *back* to someone who did not say it to you, and you do not use it as a neutral default for a stranger whose religion you cannot guess. That is what *Helo* is for.\n\nIf someone greets *you* with *Assalamualaikum*, the reply is fixed: **Waalaikumussalam** — \"and peace be upon you too\". It is not optional and it is not a different greeting; it is the second half of the same exchange. You can say it whether or not you are Muslim. It is a courtesy, not a conversion.\n\nPronunciation, from section 1 of the same phrasebook: *s* is a normal s, *a* is the \"a\" in *father* (softening to \"uh\" at the end of a word in everyday Peninsular speech), and **the final *m* is a full hummed m** — as-sa-la-mu-a-lai-kum, six syllables, stress light and even. *Waalaikumussalam* is longer: wa-a-lai-ku-mus-sa-lam. Do not swallow the double *s* in the middle; that doubled consonant is the seam between *kum* and *salam*.\n\nTwo body conventions come with the greeting, and you will meet both in your first week.\n\n**The right hand.** When you shake hands, pass food, hand over money or take a receipt, use your right hand, or both hands. The left hand is reserved for hygiene. A Grab driver passing your change, a mamak waiter setting down your teh tarik, a lecturer accepting your assignment — right hand. If you are carrying something in your right hand, use both hands rather than the left alone.\n\n**Shoes.** Shoes come off before you enter a Malaysian home, and before you step into a mosque or a surau. Look for the shoe rack at the door; if there is one, that is the instruction. Socks stay on. If you are unsure whether a place is a shoes-off place, look at what your host is wearing on their feet — that answers it faster than asking.\n\nOne more thing worth knowing before you open your mouth: a handshake with someone of the opposite sex may not be offered. A Muslim woman may greet a man with a small nod and a hand over the heart instead of an outstretched hand. That is a complete greeting, not a rejection. Mirror it: nod, hand on heart, smile, and say your greeting."
+      },
+      "source_material_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "flowchart TD\n    A[\"Someone greets you\"] --> B{\"What did they say?\"}\n    B -->|\"Assalamualaikum\"| C[\"Reply Waalaikumussalam\"]\n    B -->|\"Helo or Hai\"| D[\"Reply Helo\"]\n    B -->|\"Selamat pagi\"| E[\"Reply Selamat pagi\"]\n    A2[\"You greet first\"] --> F{\"Is the person Muslim?\"}\n    F -->|\"Yes, or you are at their door\"| G[\"Assalamualaikum\"]\n    F -->|\"No, or you do not know\"| H[\"Helo\"]\n    G --> I[\"Right hand out, or both hands\"]\n    H --> I\n    I --> J{\"Are you entering a home or a surau?\"}\n    J -->|\"Yes\"| K[\"Shoes off at the rack\"]\n    J -->|\"No\"| L[\"Shoes stay on\"]",
+        "caption": "The greeting decision runs in two directions. When you speak first, you choose. When they speak first, the reply is already decided for you.",
+        "alt_text": "A flowchart with two starting points. If someone greets you, the greeting they used determines your reply: Assalamualaikum gets Waalaikumussalam, Helo gets Helo, Selamat pagi gets Selamat pagi. If you greet first, the question is whether the person is Muslim or you are at their door: yes leads to Assalamualaikum, no or unsure leads to Helo. Both paths then converge on offering the right hand or both hands, and finally on a check for whether you are entering a home or a surau, where shoes come off at the rack, versus anywhere else, where shoes stay on."
+      },
+      "source_material_ids": [
+        6
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "analogy",
+      "payload": {
+        "markdown": "Think of *Assalamualaikum* the way you think of \"Merry Christmas\" in a mixed office in December. Most people will smile and say it back; a few will say \"Happy holidays\"; nobody is insulted that you offered it. It is a warm, specific greeting that has leaked out of its original community into general polite use.\n\nNow think about the difference between *offering* it and *assuming* it. You say \"Merry Christmas\" to a colleague whose Christmas you know about. You do not open every December meeting with it to a room of strangers, because a handful of them will spend the next ten minutes deciding whether you were being careless. *Helo* is your \"good morning, everyone\".",
+        "breaks_down_when": "The analogy breaks the moment you treat the reply as optional. \"Merry Christmas\" has no fixed second half — you can answer it with a smile, a nod, or \"you too\". *Assalamualaikum* does. It is a call-and-response pair, and leaving the response hanging is the one thing that reads as a snub rather than as a neutral choice. The analogy also fails on the body: there is no hand-over-the-heart equivalent in the office, and no shoes-off rule at the conference room door."
+      },
+      "source_material_ids": [
+        6
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "misconception",
+      "payload": {
+        "belief": "Assalamualaikum is the Malaysian version of \"hello\", so I should use it everywhere to show I have made an effort with the local language.",
+        "why_it_seems_right": "You hear it constantly. A Grab driver says it as you get in. The auntie at the mamak counter says it when she takes your order. Your Malay phrasebook lists it in the same table as Helo, one row apart, with no warning attached. If it is that common, using it more must be using it better.",
+        "what_is_true": "It is a Muslim greeting that has spread into general courtesy use, not a religion-neutral hello. The people you hear using it are mostly Muslim and mostly greeting other Muslims. When you are the one speaking first and you do not know the person's religion, *Helo* is the correct choice — it is listed in the same phrasebook table for exactly this reason. The difference shows up at a door: greeting a non-Muslim host with Assalamualaikum is not offensive, but it is noticeably off, in the way that being greeted in a language you do not belong to is off. And if someone greets you with it, the reply is fixed at *Waalaikumussalam* regardless of your own religion — that half is never optional."
+      },
+      "source_material_ids": [
+        6
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is your fourth day in Malaysia. You have been invited to your tutor's house for Raya open house, along with six other students. You are at the gate. Your tutor, Puan Farah, opens the door and says **\"Assalamualaikum, masuk, masuk.\"** Behind her you can see a shoe rack with about a dozen pairs of shoes on it, and a tiled floor.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "She has greeted you. What comes out of your mouth?",
+            "options": [
+              {
+                "id": "a",
+                "text": "\"Waalaikumussalam.\"",
+                "correct": true,
+                "outcome_markdown": "She smiles and steps back to let you in. The exchange is complete; she turns to the next student at the gate.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "\"Assalamualaikum.\"",
+                "correct": false,
+                "outcome_markdown": "She pauses for a half-second, then repeats \"Waalaikumussalam\" herself and moves on. You have handed her greeting straight back to her, which is not a reply — it is the same greeting again, and she has had to answer her own.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "\"Helo, Puan Farah.\"",
+                "correct": false,
+                "outcome_markdown": "She says \"Waalaikumussalam\" anyway and waves you in, but the greeting she offered has been left hanging in the air. It is the equivalent of answering \"Merry Christmas\" with \"good morning\".",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "You are through the gate. The shoe rack is right there and the floor is tiled. What do you do?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Take your shoes off and leave them on the rack.",
+                "correct": true,
+                "outcome_markdown": "You walk in and nobody says anything about it, because there was nothing to say. Later you notice every other guest's shoes are on that rack and Puan Farah is in socks.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "Keep your shoes on — it is a house, not a mosque.",
+                "correct": false,
+                "outcome_markdown": "You get three steps onto the tiled floor before Puan Farah says, gently, \"Alamak, kasut.\" You go back to the gate and take them off. The other students watch you do it.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "Ask her in English whether you should take your shoes off.",
+                "correct": false,
+                "outcome_markdown": "She says yes, of course, and points at the rack. You have spent your host's attention on a question the shoe rack already answered.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "Inside, Puan Farah's husband comes over to greet you. He extends his hand.",
+            "options": [
+              {
+                "id": "a",
+                "text": "Shake it with your right hand.",
+                "correct": true,
+                "outcome_markdown": "A normal, brief handshake. He asks which course you are in and hands you a plate.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "Shake it with both hands.",
+                "correct": false,
+                "outcome_markdown": "Also fine — a two-handed handshake reads as slightly warmer and more respectful. He does the same back.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Shake it with your left hand.",
+                "correct": false,
+                "outcome_markdown": "He takes the hand, but the handshake is short and he turns away quickly. The left hand is the hygiene hand; offering it for a greeting is the one handshake mistake that registers immediately.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this scenario came from treating the greeting as a vocabulary problem rather than a timing problem. You knew the words. What you had to get right was **who speaks first**, **what the reply is once someone has spoken**, and **what the body does while the mouth is talking**. The shoe rack and the outstretched hand were both telling you what to do before anyone said a word — read those first, and the words become the easy part."
+      },
+      "source_material_ids": [
+        6,
+        7
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "Assalamualaikum is a Muslim greeting that has spread into general courtesy use in Malaysia; it is not a religion-neutral hello.",
+          "When you speak first and do not know the other person's religion, Helo is the correct choice — it sits in the same phrasebook table for exactly that reason.",
+          "If someone greets you with Assalamualaikum, the reply is Waalaikumussalam, and you say it whether or not you are Muslim.",
+          "Assalamualaikum is six syllables with a full hummed final m; Waalaikumussalam keeps the doubled s in the middle, at the seam between kum and salam.",
+          "Shake hands, pass food and hand over money with the right hand or both hands; the left hand is reserved for hygiene.",
+          "Shoes come off before entering a Malaysian home, a mosque or a surau — the shoe rack at the door is the instruction.",
+          "A small nod with a hand over the heart instead of an outstretched hand is a complete greeting, not a rejection; mirror it rather than reaching."
+        ]
+      },
+      "source_material_ids": [
+        4,
+        5,
+        6
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        6,
+        7
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "You are the first person to speak. You are greeting the security guard at your Taylor's hostel gate, whose religion you do not know. Which greeting do you use?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Assalamualaikum, because it is the most common greeting in Malaysia and shows effort."
+            },
+            {
+              "id": "b",
+              "text": "Helo, because it is the neutral choice when you do not know whether the person is Muslim."
+            },
+            {
+              "id": "c",
+              "text": "Waalaikumussalam, because it is the polite form of the greeting."
+            },
+            {
+              "id": "d",
+              "text": "Selamat malam, because it is after dark and time-based greetings are always safe."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Assalamualaikum is a Muslim greeting that has spread into general courtesy use, so it is the right choice when you know the person is Muslim — not when you are guessing. Helo is the neutral default for a stranger. Waalaikumussalam is a reply, not an opening, and Selamat malam is a farewell as much as a greeting.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            6
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Helo / Hai | Hello | Hai is informal"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A mamak waiter sets your teh tarik down in front of you and says \"Assalamualaikum.\" You are not Muslim. What do you say?",
+          "bloom": "understand",
+          "grader": "self",
+          "answer_key": {
+            "reference_answer": "Waalaikumussalam, because the reply is fixed and is a courtesy, not a statement of faith."
+          },
+          "max_score": 1,
+          "explanation": "Assalamualaikum is a call-and-response pair. Once someone has greeted you with it, Waalaikumussalam is the second half of that exchange, and saying it does not require you to be Muslim. Leaving it unanswered is the one response that reads as a snub.",
+          "id": "q2"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Explain the difference between the two situations in which you would say Assalamualaikum and the one situation in which you would say Helo instead. Then state what you say if someone greets you with Assalamualaikum first.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "You say Assalamualaikum when you are the one greeting and you know or reasonably expect the person is Muslim, and also when you are arriving at a Muslim household where it is the expected greeting at the door. You say Helo when you are speaking first and you do not know the other person's religion, because Assalamualaikum is a Muslim greeting rather than a neutral hello. If someone greets you with Assalamualaikum, the reply is Waalaikumussalam, and you say it whether or not you are Muslim."
+          },
+          "rubric": [
+            {
+              "criterion": "Distinguishes greeting first from replying",
+              "weight": 0.3,
+              "excellent": "States explicitly that the choice of Assalamualaikum versus Helo applies when you speak first, and that a reply is a separate case with a fixed answer.",
+              "acceptable": "Covers both the greeting-first case and the reply case but does not frame them as two different decisions.",
+              "poor": "Treats the greeting and the reply as the same decision, or only addresses one of the two cases."
+            },
+            {
+              "criterion": "Names the condition that selects Helo",
+              "weight": 0.3,
+              "excellent": "Says Helo is for when you do not know whether the person is Muslim, and identifies Assalamualaikum as a Muslim greeting that has spread into general courtesy use.",
+              "acceptable": "Says Helo is the safer or more neutral option without explaining what makes Assalamualaikum not neutral.",
+              "poor": "Claims Helo is used with non-Malaysians, or that Helo is simply the informal version of the same greeting."
+            },
+            {
+              "criterion": "Gives the reply correctly and unconditionally",
+              "weight": 0.25,
+              "excellent": "Gives Waalaikumussalam and states that it is said regardless of the speaker's own religion.",
+              "acceptable": "Gives Waalaikumussalam but adds a condition such as only if you are Muslim.",
+              "poor": "Gives a different reply, repeats Assalamualaikum back, or says no reply is needed."
+            },
+            {
+              "criterion": "Uses the phrasebook's own terms for the two greetings",
+              "weight": 0.15,
+              "excellent": "Spells both Assalamualaikum and Waalaikumussalam correctly and uses them as the phrasebook's table does.",
+              "acceptable": "Uses both greetings recognisably with minor spelling slips that do not change the word.",
+              "poor": "Uses only English paraphrases such as the peace greeting, or conflates the two words."
+            }
+          ],
+          "max_score": 4,
+          "id": "q3"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "You are invited to dinner at a Malaysian classmate's home. Describe what you do with your shoes and with your hands, from the front gate to accepting a plate of food, and say why each convention exists.",
+          "bloom": "apply",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "At the gate you look for the shoe rack; if there is one, you take your shoes off and leave them there, because shoes come off before entering a Malaysian home. Socks stay on. When you greet your classmate or their parents, you offer your right hand, or both hands if your right hand is occupied, because the left hand is reserved for hygiene. When food or a plate is passed to you, you take it with the right hand or both hands for the same reason. If a handshake is not offered by someone of the opposite sex, you nod with your hand over your heart instead, which is a complete greeting."
+          },
+          "rubric": [
+            {
+              "criterion": "Shoe rule stated with its trigger",
+              "weight": 0.3,
+              "excellent": "Says shoes come off before entering a Malaysian home and names the shoe rack at the door as the signal to look for.",
+              "acceptable": "Says shoes come off at a Malaysian home but gives no way of knowing when, or applies it only to mosques.",
+              "poor": "Says shoes stay on in a house, or says the rule applies only to religious buildings."
+            },
+            {
+              "criterion": "Right-hand rule applied to both greeting and receiving",
+              "weight": 0.35,
+              "excellent": "Uses the right hand or both hands for the handshake and again for accepting the plate, and gives the left hand's hygiene role as the reason.",
+              "acceptable": "Applies the right hand to one of the two moments and gives a reason, or applies it to both without a reason.",
+              "poor": "Uses the left hand for either action, or treats the rule as a matter of personal preference."
+            },
+            {
+              "criterion": "Handles the no-handshake case without treating it as rejection",
+              "weight": 0.2,
+              "excellent": "Describes the nod with a hand over the heart as a complete greeting to mirror, and says it is not a refusal.",
+              "acceptable": "Mentions that a handshake may not be offered but does not say what to do instead.",
+              "poor": "Says to offer the hand anyway, or reads the withheld handshake as rudeness."
+            },
+            {
+              "criterion": "Sequence follows the actual arrival order",
+              "weight": 0.15,
+              "excellent": "Orders the account gate, then shoes, then greeting, then food, matching how the visit actually unfolds.",
+              "acceptable": "Covers all the elements but in an order that jumps between them.",
+              "poor": "Presents the conventions as an unordered list with no sense of when each applies."
+            }
+          ],
+          "max_score": 4,
+          "id": "q4"
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Think of the last time someone greeted you in a way you did not expect — a language you do not speak, a formality you were not prepared for, a hand you did not take. What did you actually do in the two seconds before you decided? Now decide, in advance, what your two seconds will look like the next time a Malaysian greets you first: which word comes out, and what your hands are doing while it does."
+      },
+      "source_material_ids": [
+        6
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.00376,
+  "repairs": [
+    "demoted 1 of 2 mcq to short_answer (at most 1 of 4 items may be multiple choice)",
+    "cites: q1: cited chunk 6 (2. Greetings and basics), found by its question and answer"
+  ]
+}

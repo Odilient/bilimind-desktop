@@ -1,0 +1,153 @@
+#separator:Comma
+#html:false
+#notetype:Basic
+#deck:Mutiara Tea Bar crew day-one
+#columns:Front,Back,Tags
+#tags column:3
+"Under reg. 2, who is a food handler?","Anyone directly involved in preparing food, in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances in food premises.",bilimind boba-day-one food_handler_law
+Does washing shakers make you a food handler?,"Yes. A shaker is a food-contact surface, so contact with it falls inside reg. 2.",bilimind boba-day-one food_handler_law
+Which regulation imposes the training duty?,Reg. 30 — attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the Director.,bilimind boba-day-one food_handler_law
+What does reg. 31(1) require before you start work?,"Medical examination and vaccination by a registered medical practitioner — in practice the anti-typhoid injection. The owner must not let you work without training, medical examination and vaccination, and must keep the records.",bilimind boba-day-one food_handler_law
+You have a stomach bug on a shift day. What does reg. 31(2) say?,"Do not enter the food premises or handle food, report to management immediately, and stay off until a registered medical practitioner certifies you cured and fit to work.",bilimind boba-day-one food_handler_law
+What clothing does reg. 32 require?,"Clean, suitable clothing that cannot contaminate food: a clean light-coloured overall or apron, a head cover and footwear, worn only in the food premises and kept in a cupboard or locker when not in use.",bilimind boba-day-one food_handler_law
+Name three hand-washing moments reg. 33 requires.,"Before starting work, immediately after the toilet, and after handling raw food or contaminated material.",bilimind boba-day-one food_handler_law
+What jewellery does reg. 33 allow on shift?,"None. No jewellery, watches, pins or other accessories.",bilimind boba-day-one food_handler_law
+"Penalty for most food-handler offences (regs. 30, 31, 33–38)?","Fine up to RM 10,000 or imprisonment up to 2 years.",bilimind boba-day-one food_handler_law
+Penalty for the clothing offence under reg. 32?,"Fine up to RM 1,000.",bilimind boba-day-one food_handler_law
+"Under reg. 30, a food handler must attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the ____.","Director (also: Director (MOH), Director of the Ministry of Health, Director, Ministry of Health Malaysia)
+Reg. 30 ties the certificate to an institution specified by the Director — the MOH-recognised training route. That is the certificate the shop must be able to show.",bilimind boba-day-one food_handler_law cloze
+"Under section 10, a cut must be covered with a ____ waterproof plaster and then a glove worn over it.","blue
+Section 10: cover cuts with a blue waterproof plaster and wear a glove over it.",bilimind boba-day-one hygiene_rules cloze
+"BS01 — drink, regular price, large price","Brown Sugar Milk Tea with Pearls — RM 10.90 regular, RM 12.90 large",bilimind boba-day-one drink_catalog
+"BS02 — drink, regular price, large price","Brown Sugar Fresh Milk with Pearls (no tea) — RM 11.90 regular, RM 13.90 large",bilimind boba-day-one drink_catalog
+"CT01 — drink, regular price, large price","Classic Milk Tea — RM 7.90 regular, RM 9.90 large",bilimind boba-day-one drink_catalog
+"CT02 — drink, regular price, large price","Jasmine Green Milk Tea — RM 8.90 regular, RM 10.90 large",bilimind boba-day-one drink_catalog
+"TH01 — drink, regular price, large price","Thai Milk Tea — RM 8.90 regular, RM 10.90 large",bilimind boba-day-one drink_catalog
+"MT01 — drink, regular price, large price","Matcha Latte — RM 11.90 regular, large RM 13.90",bilimind boba-day-one drink_catalog
+"FT01 — drink, regular price, large price","Passion Fruit Green Tea — RM 8.90 regular, RM 10.90 large",bilimind boba-day-one drink_catalog
+"FT02 — drink, regular price, large price","Lychee Oolong Tea — RM 9.90 regular, RM 11.90 large",bilimind boba-day-one drink_catalog
+"FT03 — drink, regular price, large price","Lemon Black Tea — RM 7.90 regular, RM 9.90 large",bilimind boba-day-one drink_catalog
+Which drinks use brown sugar syrup?,BS01 and BS02 only. Every other drink uses fructose syrup.,bilimind boba-day-one drink_catalog
+Sweetness pumps — 100% regular and large,"4 pumps regular, 6 pumps large. One pump = 10 ml.",bilimind boba-day-one drink_catalog
+Sweetness pumps — 50% regular and large,"2 pumps regular, 3 pumps large.",bilimind boba-day-one drink_catalog
+Sticker codes for ice,"NI no ice, LI less ice, RI normal ice, HOT hot",bilimind boba-day-one drink_catalog
+Normal ice weight — regular and large,Regular 1 scoop = 120 g; large 1.5 scoops = 170 g,bilimind boba-day-one drink_catalog
+Add-on prices,"+P +RM 1.50, +GJ +RM 1.50, +AJ +RM 1.50, +PD +RM 2.00, +CF +RM 2.50, OAT +RM 2.00",bilimind boba-day-one drink_catalog
+Which add-ons carry milk or egg?,"+PD egg pudding (egg and milk), +CF cheese foam (milk). OAT carries oats/gluten.",bilimind boba-day-one drink_catalog
+"A customer orders a large BS01 at 100% sweetness. The SOP says one pump is 10 ml, so you draw ____ pumps of brown sugar syrup.","6 (also: six)
+Section 7 sets 100% at 4 pumps for regular and 6 pumps for large. The sticker says large, so 6 pumps — 60 ml.",bilimind boba-day-one drink_catalog cloze
+manis biasa,100% — normal sugar,bilimind boba-day-one malay_order_phrases
+kurang manis sikit,75%,bilimind boba-day-one malay_order_phrases
+kurang manis,50% — half sugar,bilimind boba-day-one malay_order_phrases
+sikit manis,25% — less sugar,bilimind boba-day-one malay_order_phrases
+tak nak gula / kosong,0% — no sugar,bilimind boba-day-one malay_order_phrases
+kurang ais,LI — less ice,bilimind boba-day-one malay_order_phrases
+tak nak ais,NI — no ice,bilimind boba-day-one malay_order_phrases
+ais biasa,RI — normal ice,bilimind boba-day-one malay_order_phrases
+panas,"HOT — CT01, CT02 and MT01 only, regular size only",bilimind boba-day-one malay_order_phrases
+bungkus / tapau,Takeaway,bilimind boba-day-one malay_order_phrases
+minum sini,Drinking here,bilimind boba-day-one malay_order_phrases
+BS01 or BS02 at 0%,Not allowed (minimum 25%): offer 25% or a CT01 at 0% with pearls,bilimind boba-day-one malay_order_phrases
+"A customer says ""Teh susu kurang manis, kurang ais, satu."" The sticker you write is CT01-R ____ LI.","50% (also: 50)
+Kurang manis without a number maps to 50% in section 7 of the SOP. Kurang ais maps to LI, and satu is the quantity, not a recipe change.",bilimind boba-day-one malay_order_phrases cloze
+"A new crew member at Mutiara spends the whole shift at the sealer: they take the filled cup, wipe the rim, run the sealing head and pass the sealed cup to the counter. They never touch the drink itself. Under reg. 2 of the Food Hygiene Regulations 2009, what is their status?
+a) Not a food handler, because they never touch the drink or any unwrapped food.
+b) A food handler, because they contact food-contact surfaces and handle packaged food.
+c) A food handler only once they have attended the MOH food handler course.
+d) Not a food handler, because sealing is packaging, and reg. 2 covers only preparation.","A food handler, because they contact food-contact surfaces and handle packaged food.
+Reg. 2 covers anyone in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances. The cup rim and sealing head are food-contact surfaces and the sealed cup is packaged food, so the sealer is a food handler. Training is a duty that follows from being a food handler, not the thing that makes you one.",bilimind boba-day-one food_handler_law quiz
+"A crew member tells you they have been vomiting since last night and their shift starts in two hours. Which of the following does reg. 31(2) require of them? (Select all that apply.)
+a) Do not enter the food premises or handle food.
+b) Report the health condition to the management immediately.
+c) Stay off work until a registered medical practitioner certifies them cured and fit to work.
+d) Come in but work only at the sink, away from unwrapped food.
+e) Come in and wear a face mask for the whole shift.
+f) Come in and take the anti-typhoid injection before starting.","Do not enter the food premises or handle food.; Report the health condition to the management immediately.; Stay off work until a registered medical practitioner certifies them cured and fit to work.
+Reg. 31(2) is a stay-away rule: no entry to the premises, no handling food, immediate report to management, and no return until a registered medical practitioner certifies them cured and fit. Working at the sink still means handling food-contact surfaces, and a mask or an injection does not satisfy the regulation.",bilimind boba-day-one food_handler_law quiz
+"A new hire says: ""I only wash shakers and wipe the counter, so the food handler rules are not about me."" Using the reg. 2 definition and the duties in regs. 30 and 31(1), explain in two to four sentences why they are wrong and what they must have done before their first shift.","Reg. 2 defines a food handler as anyone directly involved in preparing food, in contact with food or food-contact surfaces, or handling packaged or unpackaged food or appliances in food premises. A shaker is a food-contact surface, so washing shakers falls inside the definition. Because they are a food handler, reg. 30 requires them to attend food handler training and obtain a Certificate of Food Handlers Training from an institution specified by the Director, and reg. 31(1) requires medical examination and vaccination by a registered medical practitioner (in practice the anti-typhoid injection). The owner must not let them work without all three, and must keep the records for inspection.
+Bubble-tea crew who scoop pearls, pour milk, seal cups or wash shakers are food handlers.",bilimind boba-day-one food_handler_law quiz
+"A crew member's hands look clean and smell of soap after a quick rinse. Why does the SOP still require a counted twenty seconds?
+a) Twenty seconds is the time needed to scrub between fingers, thumbs, wrists and under the nails, which a quick rinse never reaches.
+b) Twenty seconds is how long the soap takes to kill all bacteria on the skin.
+c) Twenty seconds is the minimum time the tap must run before the water is safe to use.
+d) Twenty seconds is the time it takes for the soap to lather fully in cold water.","Twenty seconds is the time needed to scrub between fingers, thumbs, wrists and under the nails, which a quick rinse never reaches.
+The count exists to force coverage of the areas a quick rinse skips. Soap does not sterilise skin, and the tap water is not the variable being controlled.",bilimind boba-day-one hygiene_rules quiz
+"A crew member says they will wash their hands after touching money only when the queue is quiet, because washing mid-queue slows service. Using section 10, explain in 2–4 sentences what is wrong with that plan and name the source of the money rule.","Touching money is a [SHOP] trigger added to reg. 33(1)(c), so the wash happens at the moment of the trigger, not when the queue allows. Money is one of the dirtiest things that crosses the counter, and the next thing the hand touches is a cup or a lid. Delaying the wash means every drink made in between was built with the contaminated hand.
+Also wash hands after touching money, your phone or your face.",bilimind boba-day-one hygiene_rules quiz
+"A crew member is behind the bar mid-shift. According to section 10 of the SOP, which of these send them back to the sink to wash their hands? (Select all that apply.)
+a) They handled money for a cash order.
+b) They checked their phone for a message.
+c) They carried a bag of rubbish to the back.
+d) They wiped the counter with a clean cloth.
+e) They restocked sealed cups from the storeroom.","They handled money for a cash order.; They checked their phone for a message.; They carried a bag of rubbish to the back.
+Money, phones and faces are the [SHOP] additions to reg. 33(1)(c), and rubbish is named in the regulation itself. Wiping a counter and moving sealed stock do not touch the listed triggers.",bilimind boba-day-one hygiene_rules quiz
+"A new crew member says they do not need to take off their apron before going to the toilet because they will wash their hands afterwards anyway. Explain in 2–4 sentences why the SOP still requires the apron and cap to come off first, and name the source of that rule.","Reg. 33(1)(b) requires the apron and cap to be removed before using the toilet. Handwashing cleans hands, not fabric: the apron is the garment that hangs over the drinks and the counter, so it must not enter the toilet at all. Washing afterwards cannot undo contamination that has already transferred to the apron, and the apron is worn only inside the shop and kept in the locker (reg. 32(2)).
+Take off your apron and cap before going to the toilet.",bilimind boba-day-one hygiene_rules quiz
+"A customer says her son is allergic to milk. Which of the following are true statements you could make at the counter? Select all that apply.
+a) The classic milk tea contains milk protein, because our creamer lists sodium caseinate.
+b) The fruit teas FT01, FT02 and FT03 have no milk in the recipe.
+c) We can promise this drink has zero traces of milk, because we use non-dairy creamer.
+d) We handle milk, egg, soy and oats on one small bar, so I cannot promise zero traces.
+e) Non-dairy creamer is dairy-free, so any drink made with it is safe for a milk allergy.","The classic milk tea contains milk protein, because our creamer lists sodium caseinate.; The fruit teas FT01, FT02 and FT03 have no milk in the recipe.; We handle milk, egg, soy and oats on one small bar, so I cannot promise zero traces.
+Sodium caseinate is a milk protein, so the classic milk tea is not milk-free; the fruit teas carry no milk in the recipe; and the bar handles milk, egg, soy and oats together, so zero traces cannot be promised. Options c and e repeat the ""non-dairy means dairy-free"" claim the SOP forbids.",bilimind boba-day-one allergens quiz
+"A customer points at the brown sugar syrup bottle and asks whether it contains milk or caffeine. Using the recipe and the allergen rules, write the two-sentence answer you would give, and state what you would do if the customer then told you they have a milk allergy.","The brown sugar syrup is 1 kg dark brown sugar and 500 ml water simmered about 10 minutes, so it contains no milk and no caffeine. If the customer then declares a milk allergy, I say ""ALLERGY: milk"" out loud to the bar, add ALG to the sticker, and make the drink with washed hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, and no cheese foam or pudding — while telling them we handle milk on this bar and cannot promise zero traces.
+Making an allergy order: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding.",bilimind boba-day-one allergens quiz
+"A customer's face and lips begin to swell minutes after drinking a milk tea, and she says her throat feels tight. What do you do first?
+a) Call 999 at once, tell the shift lead, keep her still, and ask whether she carries her own adrenaline auto-injector.
+b) Give her a cup of water and a cold fruit tea to rinse her mouth while you watch for more swelling.
+c) Finish serving the queue, then walk her to the back and wait to see whether the swelling goes down on its own.
+d) Ask the bar to remake the drink without creamer so she can see that the second cup is safe.","Call 999 at once, tell the shift lead, keep her still, and ask whether she carries her own adrenaline auto-injector.
+Swollen lips or face, trouble breathing, hives and vomiting are the reaction signs section 9 names, and the SOP's first instruction is to call 999 at once, tell the shift lead, keep the person still, and ask about their own auto-injector. Giving food or drink, waiting to see, or remaking the drink all delay the only action that matters.",bilimind boba-day-one allergens quiz
+"It is 21:20. A customer orders a classic milk tea. You have half a pot of cooked pearls. What does the SOP require you to do with the pearls that are still in the pot at closing time?
+a) Keep them covered in the chiller and reheat them for the opening shift.
+b) Throw them away and record the amount in the waste log.
+c) Leave them in the pot with the lid on and use them first tomorrow.
+d) Keep them only if they were cooked after 21:00.","Throw them away and record the amount in the waste log.
+The SOP states cooked pearls, brewed tea and opened fresh milk and oat milk are prepared fresh every day and are discarded at close, with the amounts recorded in the waste log.",bilimind boba-day-one shift_routines quiz
+"The closing checklist says to put all food away or cover it before sweeping and mopping. Explain why the order matters, and name one other closing step whose timing is forced by a temperature or a cut-off.","Sweeping and mopping lift dust and floor debris into the air, which can settle on open food, so food must be covered or stored first. Other steps with forced timing: stop cooking new pearls at 21:30, last orders at 21:55, wipe the sealing plate only when it is cool, and unplug the sealing machine before cleaning it.
+Put all food away or cover it before sweeping and mopping. No sweeping while food is out.",bilimind boba-day-one shift_routines quiz
+"You arrive for the opening shift at 09:30. The chiller thermometer reads 6 °C and the freezer reads -18 °C. What do you do?
+a) Write both readings in the log and tell the shift lead before using any milk.
+b) Write both readings in the log and carry on: 6 °C is close enough.
+c) Write only the freezer reading, since it is in range, and turn the chiller dial down.
+d) Leave both blank until the chiller has cooled down to 4 °C.","Write both readings in the log and tell the shift lead before using any milk.
+Section 4: the chiller must be 4 °C or below and the freezer -18 °C or below; if the chiller is above 5 °C, tell the shift lead before using any milk. Both readings go in the log.",bilimind boba-day-one shift_routines quiz
+"A customer with a milk allergy wants a cold drink with pearls. Which of these can you serve without changing the recipe? Select all that apply.
+a) FT01 Passion Fruit Green Tea with +P pearls
+b) CT01 Classic Milk Tea with +P pearls
+c) FT03 Lemon Black Tea with +P pearls
+d) BS02 Brown Sugar Fresh Milk with Pearls
+e) MT01 Matcha Latte with +P pearls","FT01 Passion Fruit Green Tea with +P pearls; FT03 Lemon Black Tea with +P pearls
+FT01 and FT03 are the only listed drinks with no milk in the recipe, and +P pearls carry none of the listed allergens. CT01, BS02 and MT01 all contain milk, and BS02 is a fresh-milk drink.",bilimind boba-day-one drink_catalog quiz
+"A sticker reads `CT02-R 75% RI`. What do you charge and what goes in the cup?
+a) RM 8.90, 3 pumps fructose syrup, 1 scoop of ice at 120 g
+b) RM 10.90, 5 pumps fructose syrup, 1.5 scoops of ice at 170 g
+c) RM 8.90, 3 pumps brown sugar syrup, 1 scoop of ice at 120 g
+d) RM 8.90, 2 pumps fructose syrup, half a scoop of ice at 60 g","RM 8.90, 3 pumps fructose syrup, 1 scoop of ice at 120 g
+CT02 regular is RM 8.90. 75% is 3 pumps regular and 5 pumps large, and the sticker says regular. RI is normal ice, 1 scoop at 120 g regular. CT02 is not a brown sugar drink, so the syrup is fructose.",bilimind boba-day-one drink_catalog quiz
+"A customer says `kurang manis sikit` for a large BS01, then asks why the drink still looks dark. Explain what you set and what you tell them.","`kurang manis sikit` is 75%, which for a large cup is 5 pumps of brown sugar syrup. The drink still looks dark because the brown sugar syrup is what makes the stripes, and the SOP sets a floor of 25% for BS01 and BS02.
+75% | kurang manis sikit | 3 | 5",bilimind boba-day-one drink_catalog quiz
+"A customer says ""BS01 besar, kosong, bungkus."" What do you do?
+a) Write BS01-L 0% RI and send it to the bar.
+b) Offer 25% or a CT01 at 0% with pearls, because BS drinks cannot go below 25%.
+c) Write BS01-L 25% LI and say nothing to the customer.
+d) Write CT01-L 0% RI because the customer asked for no sugar.","Offer 25% or a CT01 at 0% with pearls, because BS drinks cannot go below 25%.
+Section 7 sets a 25% floor on the brown sugar series because the syrup is what makes the stripes. The SOP says to offer 25% or a CT01 at 0% with pearls instead.",bilimind boba-day-one malay_order_phrases quiz
+"You only caught the words ""teh susu"" before the customer walked off. What is the risk of writing the sticker now?","You may write 100% RI when the customer said kurang manis and kurang ais.
+Scenario D: kurang manis and kurang ais are what make the sticker CT01-R 50% LI. Miss them and the drink goes out too sweet and with too much ice.",bilimind boba-day-one malay_order_phrases quiz
+"A customer says ""Teh susu sikit manis, tak nak ais, tapau."" Write the sticker you would produce and explain each part of it.","CT01-R 25% NI, takeaway. Teh susu is CT01 at regular size. Sikit manis is 25% in section 7. Tak nak ais is NI. Tapau means takeaway, so the cup is bagged rather than served for drinking here.
+25% | sikit manis, less sugar | 1 | 2",bilimind boba-day-one malay_order_phrases quiz
+"A sticker reads `BS01-L 75% LI OAT`. You have the warm syrup in the cup and the stripes are on the wall. You reach for the ice scoop. What is the correct next action?
+a) Add ice at the less-ice level, then pour 220 ml oat milk slowly over the ice.
+b) Add ice at the standard level, then pour 220 ml fresh milk slowly over the ice.
+c) Pour 220 ml oat milk first to protect the stripes, then add ice at the less-ice level.
+d) Add ice at the less-ice level, then pour 160 ml oat milk slowly over the ice.","Add ice at the less-ice level, then pour 220 ml oat milk slowly over the ice.
+`L` sets the milk volume at 220 ml, `LI` on a large cup is 1 scoop (85 g), and `OAT` overrides the default fresh milk. Ice always follows syrup, and milk always precedes tea.",bilimind boba-day-one building_a_drink quiz
+"A new crew member builds a BS01-L 75% LI OAT in 75 seconds. When they hold the cup up to the light, the inside wall is clean — no brown streaks. Name the two steps most likely to have caused this and explain what each one does to the syrup.","Either the syrup came from the shelf instead of the warm water bath, so it was cold and thin and slid off the wall instead of coating it; or the ice went in before the syrup, so the ice washed the syrup down into the pearls before it could coat the wall. Both leave a clean wall with the syrup pooled at the bottom.
+Cold or thin syrup will not stick: no stripes. Use the bottle from the warm bath.",bilimind boba-day-one building_a_drink quiz
+"You have sealed a BS01 and inverted it over the sink for two seconds. A thin drip runs down the side of the cup. What does the SOP say this indicates, and what should you do?
+a) The film is fine — a two-second drip is normal. Wipe it and hand the cup over.
+b) The rim was wet or the film sat crooked. Re-seal before the cup reaches the counter.
+c) The cup is overfilled. Pour some tea out and seal it again.
+d) The straw hole is leaking. Push the straw in further to plug it.","The rim was wet or the film sat crooked. Re-seal before the cup reaches the counter.
+Section 6.4 step 7 says a wet rim or crooked film leaks and that this is how most counter spills start. The two-second invert is the test; a drip means re-seal, not wipe and go.",bilimind boba-day-one building_a_drink quiz

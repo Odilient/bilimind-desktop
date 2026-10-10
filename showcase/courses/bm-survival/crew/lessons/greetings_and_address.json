@@ -1,0 +1,538 @@
+{
+  "key": "greetings_and_address",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "You are standing at the counter of a mamak at 8am. The man behind it is roughly your father's age. You open your mouth and out comes *awak* — the word you drilled last night for \"you\". His face does not change, but the transaction does: he answers you in English for the rest of the order, and you have just told him, in his own language, that the two of you are peers.\n\nMalay has two systems running side by side, and the one you pick is a social decision, not a grammar decision.\n\n**The neutral set** is what a stranger uses. *Saya* for I, *awak* for you when you are clearly the same age or younger, *anda* for you on signs, forms and in formal writing. For a stranger you cannot place, use a title instead of \"you\": *Encik* (any adult man), *Puan* (a married or older woman), *Cik* (a young woman). These are the words in your phrasebook table, and they are safe because they carry no claim about the relationship.\n\n**The kinship set** is what Malaysians actually reach for. *Pak cik* (uncle) for a man old enough to be your father, *mak cik* (auntie) for a woman the same, *abang* (older brother) for a man a few years older, *kakak* (older sister) for a woman a few years older. These are not literal family. A mamak uncle is a *pak cik* on first meeting. The Grab driver who is 30 is an *abang*. The woman at the campus counter is a *kakak*.\n\nThe rule that keeps you out of trouble: **when you can see the person, kinship beats pronoun.** *Awak* is for someone you have already established as a peer — a classmate, someone your age who has introduced themselves. Used on a *pak cik*, it reads as a demotion. Used on a *kakak* at the faculty office, it reads as a student who has not learned where they are.\n\nThe phrasebook table in section 2 of your phrasebook gives you *Siapa nama awak?* and *Nama saya Oybek.* — note that the model sentence uses *awak*, because it is written for peer-to-peer introductions. When you introduce yourself to a *pak cik*, you swap the pronoun for the kinship word and the rest of the sentence does not move: *Siapa nama pak cik?* / *Nama saya Oybek.*\n\nGreetings layer on top of this. *Selamat pagi* until about noon, *selamat tengah hari* around midday, *selamat petang* from mid-afternoon until dusk, *selamat malam* after dark. *Helo* works at any hour and carries no religious weight. *Assalamualaikum* is the Muslim greeting you will hear often; the reply is *Waalaikumussalam*. If you are unsure, *Helo* is never wrong.\n\nTwo more words do more work than their length suggests. *Terima kasih* is thank you; *terima kasih banyak* is thank you very much, and it is what you say to a *pak cik* who has just walked your order to the table. *Maaf* covers both sorry and excuse me; *minta maaf* is the fuller apology you use when you have actually done something — knocked a drink over, arrived late to a tutorial."
+      },
+      "source_material_ids": [
+        6,
+        7,
+        8
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "comparison",
+      "payload": {
+        "intro": "Four ways to say \"you\" in Malay. They are not interchangeable, and the deciding factor is not politeness in the abstract — it is who is standing in front of you and how you need to be read.",
+        "axes": [
+          "Who you can safely point it at",
+          "What it claims about the relationship",
+          "What it costs you if you get it wrong"
+        ],
+        "items": [
+          {
+            "name": "awak",
+            "values": [
+              "A classmate, a hostel neighbour, someone your own age who has already introduced themselves",
+              "We are peers; no seniority either way",
+              "On a pak cik or a counter staff member it reads as a demotion — they will switch you to English"
+            ],
+            "best_for": "the tutorial group chat, the friend you met at orientation, anyone who has already used your first name."
+          },
+          {
+            "name": "anda",
+            "values": [
+              "Signs, forms, ads and formal writing; in speech, someone you cannot place at all",
+              "Neutral and slightly distant; the word printed on official paperwork",
+              "Nothing breaks, but face to face it sounds like a form letter; Encik, Puan or Cik sound warmer"
+            ],
+            "best_for": "any written message where you do not know the reader. Face to face, prefer Encik, Puan or Cik."
+          },
+          {
+            "name": "pak cik / mak cik",
+            "values": [
+              "A man or woman old enough to be your parent — mamak stall, taxi, security guard, neighbour",
+              "You place them a generation above you and defer to that",
+              "Almost none. This is what a Malaysian your age would say"
+            ],
+            "best_for": "every food stall, every shop counter, every older neighbour for your entire first month."
+          },
+          {
+            "name": "abang / kakak",
+            "values": [
+              "A man or woman a few years older than you — Grab driver, senior student, campus counter staff",
+              "You place them slightly above you as an older sibling",
+              "Almost none, and it is warmer than anda"
+            ],
+            "best_for": "the Grab driver, the senior at the faculty office, the barista who looks 25."
+          }
+        ]
+      },
+      "source_material_ids": [
+        8
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "example",
+      "payload": {
+        "title": "Ordering at a mamak, three ways",
+        "markdown": "The same transaction, run three times. The only thing that changes is the word for \"you\".\n\n**Setup.** It is 8:15am. The stall is run by a man in his fifties. You want *roti canai* and *teh tarik*. You have learned *Siapa nama awak?* and *Nama saya Oybek.* from section 2 of your phrasebook.\n\n**Attempt 1 — the phrasebook sentence, unchanged.**\n> You: *Selamat pagi. Siapa nama awak?*\n>\n> Pak cik: *Selamat pagi. [in English] What would you like?*\n\nHe answered the greeting in Malay and the question in English. *Awak* told him you were addressing him as a peer, and he corrected the register by switching languages. Nothing rude happened, but you lost the exchange.\n\n**Attempt 2 — kinship swapped in.**\n> You: *Selamat pagi, pak cik. Siapa nama pak cik?*\n>\n> Pak cik: *Selamat pagi. [name]. Nak apa?*\n\n*Nak apa?* is \"what do you want?\" — the standard next move. You have been read as a polite student, and he is now speaking Malay to you.\n\n**Attempt 3 — the full order.**\n> You: *Selamat pagi, pak cik. Saya nak roti canai satu, teh tarik satu.*\n>\n> Pak cik: *Boleh.*\n>\n> *(food arrives)*\n>\n> You: *Terima kasih banyak, pak cik.*\n>\n> Pak cik: *Sama-sama.*\n\n**What changed between 1 and 3.** Not vocabulary — you used *selamat pagi* and *terima kasih* in all three. The single substitution of *awak* → *pak cik* is what moved the conversation from English back into Malay, and *terima kasih banyak* rather than plain *terima kasih* is what closes it. Note also that *saya* never changes: it is safe in every one of the three attempts. The pronoun that carries risk is the one for the other person, not the one for you."
+      },
+      "source_material_ids": [
+        6,
+        7
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "misconception",
+      "payload": {
+        "belief": "*Awak* is just the polite word for \"you\", so I should use it with everyone until I know them well enough for something more casual.",
+        "why_it_seems_right": "It is the word your phrasebook table puts in the model sentence *Siapa nama awak?*, and phrasebook model sentences are usually the safe default. It also sounds softer than *anda*, which reads like a form, so it feels like the friendlier choice.",
+        "what_is_true": "*Awak* is the peer word, not the polite word. It asserts that you and the person you are addressing are on the same level, and it is the correct default only for someone your own age. Addressing a *pak cik* — a man old enough to be your father — as *awak* is not a grammar error, it is a social one: you have claimed equality with him. The phrasebook's model sentence is written for peer-to-peer introductions, which is why it uses *awak*; the moment the person in front of you is a generation older, the sentence stays and the pronoun swaps to *pak cik*. The difference predicts the response: use *awak* on a mamak uncle and he answers in English; use *pak cik* and he keeps speaking Malay."
+      },
+      "source_material_ids": [
+        8
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "reference_table",
+      "payload": {
+        "title": "What to call them, and what to say",
+        "columns": [
+          "Situation",
+          "Call them",
+          "Say this"
+        ],
+        "rows": [
+          [
+            "Mamak stall, man in his 50s",
+            "pak cik",
+            "Selamat pagi, pak cik. Saya nak roti canai satu."
+          ],
+          [
+            "Mamak stall, woman in her 50s",
+            "mak cik",
+            "Terima kasih banyak, mak cik."
+          ],
+          [
+            "Grab driver, man in his 30s",
+            "abang",
+            "Selamat petang, abang."
+          ],
+          [
+            "Grab driver, woman in her 30s",
+            "kakak",
+            "Selamat petang, kakak."
+          ],
+          [
+            "Campus counter, staff member you cannot age",
+            "Encik (a man) / Puan or Cik (a woman)",
+            "Maaf, Encik, boleh saya tanya?"
+          ],
+          [
+            "Classmate your own age, already introduced",
+            "awak",
+            "Siapa nama awak?"
+          ],
+          [
+            "Senior student at the faculty office",
+            "kakak / abang",
+            "Maaf, kak. Di mana tandas?"
+          ],
+          [
+            "You knocked someone's drink over",
+            "—",
+            "Minta maaf."
+          ],
+          [
+            "Someone is blocking the aisle",
+            "—",
+            "Tumpang lalu."
+          ],
+          [
+            "Someone hands you your food",
+            "—",
+            "Terima kasih banyak."
+          ],
+          [
+            "You did not catch what was said",
+            "—",
+            "Maaf, boleh ulang?"
+          ]
+        ],
+        "note": "Saya never changes. Only the word for the other person moves. If you cannot place someone, Encik, Puan or Cik is always polite; anda is for signs and forms."
+      },
+      "source_material_ids": [
+        6,
+        7,
+        8
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "Listen to each line, then say it twice. These are the four sentences you will use before 9am on your first day. Say the kinship word with the same weight as the greeting — pak cik is not mumbled.",
+        "language": "ms",
+        "items": [
+          {
+            "text": "Selamat pagi, pak cik.",
+            "translation": "Good morning, uncle.",
+            "phonetic": "se-LA-mat PA-gi, PAK-chik",
+            "audio": "audio/e0ceb714f3188d97.mp3"
+          },
+          {
+            "text": "Selamat petang, abang.",
+            "translation": "Good afternoon, older brother.",
+            "phonetic": "se-LA-mat pe-TANG, AH-bang",
+            "audio": "audio/70ad5167079aea40.mp3"
+          },
+          {
+            "text": "Nama saya Oybek.",
+            "translation": "My name is Oybek.",
+            "phonetic": "NA-ma SA-ya OY-bek",
+            "audio": "audio/f4c388e7183bbdfc.mp3"
+          },
+          {
+            "text": "Terima kasih banyak.",
+            "translation": "Thank you very much.",
+            "phonetic": "te-RI-ma KA-sih BAN-yak",
+            "audio": "audio/86c0137634f72d92.mp3"
+          },
+          {
+            "text": "Minta maaf.",
+            "translation": "I'm sorry.",
+            "phonetic": "MIN-ta MA-af",
+            "audio": "audio/d73b8d04bd8c9a4e.mp3"
+          },
+          {
+            "text": "Maaf, boleh ulang?",
+            "translation": "Sorry, can you repeat that?",
+            "phonetic": "MA-af, bo-leh U-lang",
+            "audio": "audio/8627246c570c74f3.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, natural Malaysian Malay",
+        "voice": "ms-MY-YasminNeural"
+      },
+      "source_material_ids": [
+        6,
+        7,
+        8
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is your third day. You are at the mamak near campus at 8am. The stall is run by a man in his fifties. You want *roti canai* and *teh tarik*. You have learned: *selamat pagi*, *saya*, *awak*, *pak cik*, *terima kasih*, *terima kasih banyak*, *maaf*, *minta maaf*.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "You reach the counter. He looks up. What comes out of your mouth first?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Selamat pagi, pak cik.",
+                "correct": true,
+                "outcome_markdown": "He nods and says *Selamat pagi* back. He is still speaking Malay. You have been read as a polite student and the transaction is running in the language you wanted.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "Selamat pagi, awak.",
+                "correct": false,
+                "outcome_markdown": "He pauses for half a second, then answers in English: *Good morning, what would you like?* Nothing rude happened, but the conversation has left Malay and will not come back.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "Helo.",
+                "correct": false,
+                "outcome_markdown": "He says *Helo* back and waits. It is not wrong — *helo* is never wrong — but it gave him no signal about register, so he defaults to English.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "He asks *Nak apa?* You want to order. Which sentence?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Saya nak roti canai satu, teh tarik satu.",
+                "correct": true,
+                "outcome_markdown": "He says *Boleh* and turns to the griddle. The order is in. *Saya* is the same word you would use with anyone.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "Awak nak roti canai satu.",
+                "correct": false,
+                "outcome_markdown": "He stops. *Awak nak* means \"you want\" — you have just told him what he wants. He repeats the question slowly, in English, to check.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "Maaf, boleh cakap bahasa Inggeris?",
+                "correct": false,
+                "outcome_markdown": "He switches to English and takes the order that way. You got your food, and you spent the one Malay exchange you had this morning.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "The food arrives. He sets it down. What do you say?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Terima kasih banyak, pak cik.",
+                "correct": true,
+                "outcome_markdown": "He says *Sama-sama* and moves on. You have closed the exchange in Malay, which is what makes him remember you tomorrow.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "Sama-sama.",
+                "correct": false,
+                "outcome_markdown": "He looks amused: *sama-sama* is the reply to a thank-you (\"you're welcome\"), not the thank-you itself. That is his line, not yours.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Minta maaf.",
+                "correct": false,
+                "outcome_markdown": "He looks up, puzzled — you have just apologised for something he cannot identify. *Minta maaf* is for when you have actually done something wrong.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this scenario was the same mistake in a different costume: reaching for a word that carries no information about the relationship. *Awak* and *helo* both leave the register blank, and a stranger fills a blank with the safest option available to them — usually English. *Pak cik* is the one word that tells him who you think he is, and it is the word that keeps the conversation in Malay. Notice also that *saya* never had to change. The risk lives entirely in the word for the other person."
+      },
+      "source_material_ids": [
+        6,
+        7,
+        8
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {
+        "intro": "Four checks on whether you can pick the right word under time pressure."
+      },
+      "source_material_ids": [
+        6,
+        7,
+        8
+      ],
+      "assessments": [
+        {
+          "kind": "multi_select",
+          "prompt": "You are at the campus faculty office. The person behind the counter is a woman you would guess is about 30. You need to ask where the toilet is. Select all that apply — the forms of address that will not read as a mistake.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "kakak"
+            },
+            {
+              "id": "b",
+              "text": "mak cik"
+            },
+            {
+              "id": "c",
+              "text": "awak"
+            },
+            {
+              "id": "d",
+              "text": "anda"
+            },
+            {
+              "id": "e",
+              "text": "abang"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "d"
+            ]
+          },
+          "max_score": 2,
+          "explanation": "*Kakak* fits a woman a few years older than you and is warmer than *anda*, which is always safe when you cannot place someone. *Makcik* claims she is a generation older than she is, *awak* claims she is your peer, and *abang* is the male form of *kakak*.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            8
+          ],
+          "status": "contradicted",
+          "reason": "Re-solved: only kakak fits face to face; the phrasebook gives anda as neutral and formal, for signs and ads.",
+          "quote": "*anda* is neutral and formal (signs, ads)"
+        },
+        {
+          "id": "q5",
+          "kind": "multi_select",
+          "prompt": "You are at the campus faculty office. The person behind the counter is a woman you would guess is about 30. You need to ask where the toilet is. Select all the forms of address that will not read as a mistake.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "max_score": 2,
+          "options": [
+            {
+              "id": "a",
+              "text": "kakak"
+            },
+            {
+              "id": "b",
+              "text": "mak cik"
+            },
+            {
+              "id": "c",
+              "text": "anda"
+            },
+            {
+              "id": "d",
+              "text": "Puan"
+            },
+            {
+              "id": "e",
+              "text": "abang"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "d"
+            ]
+          },
+          "explanation": "*Kakak* is friendly for a woman a bit older than you, and *Puan* is the polite title for a married or older woman, so neither reads as a mistake. *Mak cik* is for a woman a generation older, *anda* belongs on signs and forms rather than face to face, and *abang* is for a man.",
+          "replaces": "q1",
+          "labels": [
+            "rewritten"
+          ],
+          "status": "supported",
+          "cite_chunk_ids": [
+            8
+          ],
+          "reason": "Kakak fits a woman a bit older and Puan is the title for a married or older woman; anda is for signs and ads.",
+          "quote": "Kakak / Kak | \"older sister\" | friendly for a woman a bit older than you"
+        },
+        {
+          "kind": "mcq",
+          "prompt": "It is 4 pm. Your Grab driver is a man in his thirties. You want to greet him as you get in. Which greeting and address fits best?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Selamat petang, abang."
+            },
+            {
+              "id": "b",
+              "text": "Selamat petang, pak cik."
+            },
+            {
+              "id": "c",
+              "text": "Selamat petang, awak."
+            },
+            {
+              "id": "d",
+              "text": "Selamat tengah hari, abang."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "*Abang* is the friendly address for a man a bit older than you, such as a Grab driver, and *selamat petang* runs from mid-afternoon until dusk, so it fits 4 pm. *Pak cik* would place him a generation above you, *awak* would claim he is your peer, and *selamat tengah hari* is for around midday.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            8
+          ],
+          "status": "supported",
+          "reason": "Abang is the address for a Grab driver a bit older; selamat petang covers mid-afternoon until dusk (4 pm).",
+          "quote": "Abang / Bang | \"older brother\" | friendly for a man a bit older than you: the mamak waiter, a Grab driver"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A classmate in your tutorial group, your own age, has just introduced himself and used your first name. Explain which word for \"you\" you would use with him, and why the same word would be wrong with the mamak uncle who served you breakfast this morning.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Use *awak* with the classmate, because *awak* asserts that the two of you are peers and he has already established that by using your first name. With the mamak uncle, *awak* would claim equality with a man a generation older, which reads as a demotion; *pak cik* is the correct address there because it places him a generation above you. The word for \"I\", *saya*, does not change in either case."
+          },
+          "rubric": [
+            {
+              "criterion": "Names awak as correct for the classmate and gives peer status as the reason",
+              "weight": 0.3,
+              "excellent": "States that awak is the peer word and connects it to the classmate having already used the learner's first name.",
+              "acceptable": "States that awak is right for the classmate but gives only 'he is my age' with no reference to the relationship being mutual.",
+              "poor": "Picks a different word for the classmate, or says awak is correct because it is the polite form."
+            },
+            {
+              "criterion": "Explains why awak fails with the mamak uncle and names pak cik as the replacement",
+              "weight": 0.4,
+              "excellent": "States that awak claims equality with an older man, identifies that as a social rather than grammatical error, and gives pak cik as the address that fixes it.",
+              "acceptable": "Says awak is wrong with the uncle and pak cik is right, without explaining what awak claims about the relationship.",
+              "poor": "Says awak is fine with the uncle, or offers a fix other than a kinship term."
+            },
+            {
+              "criterion": "Notes that saya is unchanged across both situations",
+              "weight": 0.3,
+              "excellent": "States explicitly that only the word for the other person moves and saya is safe in both exchanges.",
+              "acceptable": "Uses saya correctly in an example sentence without commenting on it.",
+              "poor": "Claims the first-person word also has to change with the listener's age."
+            }
+          ],
+          "max_score": 4,
+          "id": "q3",
+          "cite_chunk_ids": [
+            8
+          ],
+          "status": "not_covered",
+          "reason": "The phrasebook calls awak friendly but never says it is wrong with an older man; that is the lesson's advice.",
+          "quote": "*anda* is neutral and formal (signs, ads); *awak* is friendly",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "You are squeezing past a group of people blocking the walkway at the mamak. What do you say?",
+          "bloom": "understand",
+          "grader": "self",
+          "answer_key": {
+            "reference_answer": "Tumpang lalu."
+          },
+          "max_score": 1,
+          "explanation": "*Tumpang lalu* is the phrase for squeezing past people. *Minta maaf* is a full apology for something you have done, *boleh ulang* asks someone to repeat themselves, and *tak apa* means 'never mind'.",
+          "id": "q4",
+          "status": "supported",
+          "reason": "The phrasebook gives Tumpang lalu for squeezing past people.",
+          "quote": "Tumpang lalu. † | Excuse me (let me pass). | for squeezing past people",
+          "cite_chunk_ids": [
+            7
+          ]
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.003971,
+  "repairs": [
+    "demoted 1 of 2 mcq to short_answer (at most 1 of 4 items may be multiple choice)",
+    "cites: q1: cited chunk 8 (3. Being polite: what to call people), found by its question and answer",
+    "cites: q2: cited chunk 6 (2. Greetings and basics), found by its question and answer",
+    "checker: q1 contradicted on re-solving: Re-solved from the slides: the answer is a) kakak, but the key said a) kakak; d) anda.",
+    "checker: rewrote q1 as q5 (a) kakak is the correct answer when the question is re-solved; the key said a) kakak; d) anda. Write a replacement whose key is right.)",
+    "checker: q1 contradicted by chunk 8: Re-solved: only kakak fits face to face; the phrasebook gives anda as neutral and formal, for signs and ads."
+  ]
+}

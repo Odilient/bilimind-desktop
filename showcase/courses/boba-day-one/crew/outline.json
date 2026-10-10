@@ -1,0 +1,397 @@
+{
+  "title": "Mutiara Tea Bar crew day-one training",
+  "allows_code": false,
+  "code_language": null,
+  "lessons": [
+    {
+      "key": "food_handler_law",
+      "title": "Who is a food handler under FHR 2009",
+      "summary": "You will be able to say whether you are a food handler and name what the Food Hygiene Regulations 2009 require of you before your first shift. Covers reg. 2's definition — anyone preparing food, touching food or food-contact surfaces, or handling packaged food or appliances — plus the training duty in regs. 30 and 31(1). Prevents assuming the SOP folder is the only rule that applies behind the bar.",
+      "concept_key": "food_safety_food_handler_definition",
+      "track": "core",
+      "archetype": "factual",
+      "estimated_minutes": 20,
+      "section": "Before you touch the bar",
+      "layer": 0,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 0,
+      "chunk_ids": [
+        1,
+        3,
+        8,
+        4,
+        2,
+        7
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "moh_handler_certificate",
+      "title": "Booking your MOH food handler course",
+      "summary": "You will be able to book and attend a food handler course recognised by the Ministry of Health Malaysia and hold the certificate the regulations require. Covers what the MOH training contains, how it differs from this shop's SOP, and why the SOP is not a substitute for it. Prevents turning up for your first shift without the training regs. 30 and 31(1) require.",
+      "concept_key": "food_safety_moh_food_handler_training",
+      "track": "subtopic",
+      "archetype": "procedural",
+      "estimated_minutes": 15,
+      "branch_of": "food_handler_law",
+      "layer": 0,
+      "position": 1,
+      "parent": 0,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 1,
+      "chunk_ids": [
+        1,
+        8,
+        2,
+        28,
+        7,
+        4
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "hygiene_rules",
+      "title": "Handwashing and hygiene rules you cannot skip",
+      "summary": "You will be able to wash your hands for the full 20 seconds and name every trigger that sends you back to the sink. Covers soap and water before you start work, right after the toilet, and after raw food, rubbish or anything dirty, and the section 10 rule table with its source column. Prevents the two failures an inspector catches first: washing too briefly, and washing at the wrong moment.",
+      "concept_key": "food_safety_hand_hygiene",
+      "track": "core",
+      "archetype": "safety_critical",
+      "estimated_minutes": 25,
+      "layer": 1,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "checklist",
+        "scenario",
+        "quiz"
+      ],
+      "index": 2,
+      "chunk_ids": [
+        22,
+        17,
+        3,
+        2,
+        10,
+        1
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "allergens",
+      "title": "Allergens: what the creamer really contains",
+      "summary": "You will be able to answer any allergen question at the counter without guessing. Covers the creamer label's four ingredients — glucose syrup, vegetable oil, sodium caseinate (milk), soy lecithin — why \"non-dairy creamer\" is not dairy-free, and which menu items list milk and caffeine. Prevents the one wrong sentence that turns a milk allergy into an emergency.",
+      "concept_key": "food_safety_allergen_communication",
+      "track": "core",
+      "archetype": "safety_critical",
+      "estimated_minutes": 25,
+      "note": "Never guess on an allergen question. \"Let me check with my shift lead\" is always an acceptable answer and always the safe one.",
+      "layer": 2,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "checklist",
+        "scenario",
+        "quiz"
+      ],
+      "index": 3,
+      "chunk_ids": [
+        21,
+        24,
+        28,
+        19,
+        20,
+        10
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "dairy_allergy_scenario",
+      "title": "Answering \"is this dairy-free?\"",
+      "summary": "You will be able to answer a dairy allergy question at the counter without guessing, including the parent-and-child case the SOP works through. Covers reading the creamer label back to the customer, naming sodium caseinate as milk protein, and saying what you will check before you commit to an answer. Prevents the \"yes, our creamer is non-dairy\" answer the SOP marks as wrong.",
+      "concept_key": "food_safety_allergen_response",
+      "track": "subtopic",
+      "archetype": "communicative",
+      "estimated_minutes": 20,
+      "branch_of": "allergens",
+      "layer": 2,
+      "position": 1,
+      "parent": 3,
+      "planned_block_types": [
+        "speaking",
+        "dialogue",
+        "quiz"
+      ],
+      "index": 4,
+      "chunk_ids": [
+        24,
+        21,
+        20,
+        25,
+        17,
+        28
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "shift_routines",
+      "title": "Opening and closing the kiosk by the checklist",
+      "summary": "You will be able to run the 09:30 to 10:00 opening checklist and the 21:30 to 22:30 closing checklist without missing a step. Covers the shift table — opening 10:00 to 16:00 with a 09:30 arrival — the opening steps, and the closing cut-offs: stop cooking pearls at 21:30, last orders 21:55, discard all cooked pearls. Prevents a bar opened without handwashing and pearls carried into the next day.",
+      "concept_key": "retail_opening_closing_checklist",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 35,
+      "section": "Running the bar",
+      "layer": 3,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 5,
+      "chunk_ids": [
+        12,
+        28,
+        9,
+        10,
+        13,
+        6
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "pearls_and_tea",
+      "title": "Cooking pearls and brewing tea to spec",
+      "summary": "You will be able to cook one 200 g batch of tapioca pearls and brew black and jasmine green tea to the SOP's numbers. Covers 200 g of dry pearls in 2 litres of water, black tea at 25 g loose leaf per 1 litre at 95 to 100 °C steeped 8 minutes then strained, and which tea goes into which drink family. Prevents pearls that clump and tea that turns bitter because the steep ran long.",
+      "concept_key": "beverage_pearls_and_tea_preparation",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 35,
+      "layer": 4,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 6,
+      "chunk_ids": [
+        13,
+        14,
+        10,
+        12,
+        19,
+        17
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "pearl_faults",
+      "title": "When a batch of pearls goes wrong",
+      "summary": "You will be able to look at a bad batch of pearls and name the step that caused it before you cook the next one. Covers reading the SOP's \"what goes wrong\" note against each section 6.1 step and working back from the fault to the number to change. Prevents throwing away a 200 g batch that a single adjustment would have saved.",
+      "concept_key": "beverage_pearl_troubleshooting",
+      "track": "subtopic",
+      "archetype": "diagnostic",
+      "estimated_minutes": 20,
+      "branch_of": "pearls_and_tea",
+      "layer": 4,
+      "position": 1,
+      "parent": 6,
+      "planned_block_types": [
+        "scenario",
+        "diagram",
+        "quiz"
+      ],
+      "index": 7,
+      "chunk_ids": [
+        13,
+        28,
+        17,
+        16,
+        25,
+        20
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "drink_catalog",
+      "title": "Menu codes, prices and what each drink contains",
+      "summary": "You will be able to read a code off a sticker and say the drink, the price and what it contains. Covers the menu codes — BS01 Brown Sugar Milk Tea with Pearls at RM 10.90 regular and RM 12.90 large, BS02, CT01 — the sweetness scale in 10 ml pumps, the ice levels, and which syrup each drink family uses. Prevents charging the regular price for a 700 ml cup and reaching for the wrong syrup.",
+      "concept_key": "beverage_menu_specification",
+      "track": "core",
+      "archetype": "factual",
+      "estimated_minutes": 25,
+      "layer": 5,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 8,
+      "chunk_ids": [
+        19,
+        18,
+        20,
+        17,
+        16,
+        28
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "malay_order_phrases",
+      "title": "Taking an order in Malay",
+      "summary": "You will be able to take an order spoken in Malay and write the correct sticker from it. Covers \"Teh susu kurang manis, kurang ais, satu\" as one milk tea, less sweet, less ice — CT01-R 50% LI — and the \"bungkus\" wording a takeaway order uses. Prevents writing 100% sweetness because you only caught the words \"teh susu\".",
+      "concept_key": "beverage_malay_order_taking",
+      "track": "subtopic",
+      "archetype": "communicative",
+      "estimated_minutes": 20,
+      "branch_of": "drink_catalog",
+      "mark": "anytime",
+      "layer": 5,
+      "position": 1,
+      "parent": 8,
+      "planned_block_types": [
+        "speaking",
+        "dialogue",
+        "quiz"
+      ],
+      "index": 9,
+      "chunk_ids": [
+        27,
+        18,
+        20,
+        28,
+        17,
+        12
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "building_a_drink",
+      "title": "Building a drink to the sticker in under 90 seconds",
+      "summary": "You will be able to read a cup sticker and build the drink it describes, inside the SOP's 90-second target. Covers BS01 step by step in a 500 ml regular or 700 ml large cup, syrup and ice by the sticker's percentages, sealing, and checking the finished cup against the sticker before it reaches the counter. Prevents remakes caused by building from memory instead of from the sticker.",
+      "concept_key": "beverage_drink_assembly",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 40,
+      "note": "Accuracy first, speed second. Get every step right at whatever pace you can, then chase the 90-second target once the sequence is automatic.",
+      "layer": 6,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 10,
+      "chunk_ids": [
+        16,
+        17,
+        28,
+        18,
+        10,
+        13
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "too_sweet_scenario",
+      "title": "When a customer says it is too sweet",
+      "summary": "You will be able to work out why a drink came back too sweet and what the SOP lets you do about it. Covers checking the sticker against the cup, the one free remake at the sweetness the customer asks for, and what to do when the sticker and the drink already match. Prevents a remake loop that never touches the real cause.",
+      "concept_key": "retail_drink_remake_policy",
+      "track": "subtopic",
+      "archetype": "diagnostic",
+      "estimated_minutes": 20,
+      "branch_of": "building_a_drink",
+      "layer": 6,
+      "position": 1,
+      "parent": 10,
+      "planned_block_types": [
+        "scenario",
+        "diagram",
+        "quiz"
+      ],
+      "index": 11,
+      "chunk_ids": [
+        26,
+        17,
+        18,
+        16,
+        21,
+        25
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "capstone_first_shift",
+      "title": "Capstone: open the kiosk and serve ten drinks",
+      "summary": "You will open the kiosk alone from the 09:30 checklist, cook a batch of pearls, brew tea, and build ten drinks from stickers while a supervisor checks each one. It draws on the whole path: hygiene at the sink, allergen answers at the counter, prep numbers, menu codes and the 90-second build. Prevents a first shift where you follow every step but cannot yet say why it is there.",
+      "concept_key": "retail_first_shift_capstone",
+      "track": "core",
+      "archetype": "performance",
+      "estimated_minutes": 90,
+      "section": "Putting it together",
+      "note": "You will still be slow on your first shift. That is expected. Your supervisor is checking the order of your steps, not your speed.",
+      "layer": 7,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "project",
+        "checklist"
+      ],
+      "index": 12,
+      "chunk_ids": [
+        12,
+        13,
+        10,
+        28,
+        3,
+        9
+      ],
+      "thin": false,
+      "status": "stub"
+    }
+  ],
+  "further": [
+    {
+      "title": "Handling difficult customers",
+      "topic": "Handling complaints, remakes and refunds at a busy drinks counter without losing the queue",
+      "after_key": "building_a_drink"
+    },
+    {
+      "title": "Costing and pricing a drinks menu",
+      "topic": "Working out cost per cup and setting menu prices for a small bubble tea kiosk",
+      "after_key": "drink_catalog"
+    }
+  ],
+  "variety_violation": null,
+  "relabel_passes": 0,
+  "warnings": []
+}

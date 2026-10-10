@@ -1,0 +1,194 @@
+{
+  "lesson": "shift_routines",
+  "round": 7,
+  "at": "2026-10-10T16:28:47.995Z",
+  "total": 26,
+  "passed": 26,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "7 blocks and 6 items have unique ids"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "checklist payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "ordering item valid",
+      "block": 5,
+      "item": "q6"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 5,
+      "item": "q2"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 5,
+      "item": "q3"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 5,
+      "item": "q4"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "project payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "project item valid",
+      "block": 6,
+      "item": "q5"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "procedural: has walkthrough, checklist"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "4 higher-order, 0 remember of 5"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "2 mcq of 5 items (max 2)"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 5,
+      "item": "q2"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 5,
+      "item": "q4"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q7 ordering",
+      "ok": true,
+      "detail": "5 steps, scrambled",
+      "block": 5,
+      "item": "q6"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 5,
+      "item": "q3"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "4 specific criteria, weights sum to 1",
+      "block": 6,
+      "item": "q5"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "19 chunk citations on 7 blocks resolve"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "1145 teaching words for a 35-minute lesson (target about 1050, minimum 525)"
+    },
+    {
+      "lesson": "shift_routines",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

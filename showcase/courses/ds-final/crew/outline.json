@@ -1,0 +1,400 @@
+{
+  "title": "CSC2103 Data Structures final revision sprint",
+  "allows_code": true,
+  "code_language": "javascript",
+  "lessons": [
+    {
+      "key": "counting_operations_big_o",
+      "title": "Counting operations to get Big-O from real code",
+      "summary": "For any loop nest in your lecture deck you will be able to count the basic operations it performs and state the growth rate as a function of n. Covers worst-case reasoning, the slide 7 nested loop that costs n * n operations, and the doubling experiment used to confirm a guess. Stops you quoting a stopwatch time for a claim the question asks you to prove.",
+      "concept_key": "ds_complexity_counting_operations",
+      "track": "core",
+      "archetype": "quantitative",
+      "estimated_minutes": 30,
+      "section": "Counting the cost",
+      "note": "Keep this to one session and do not skim it. Every later lecture prices its operations in these units, and one past-paper question is almost always pure analysis.",
+      "layer": 0,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "worked_example",
+        "playground",
+        "quiz"
+      ],
+      "index": 0,
+      "chunk_ids": [
+        3,
+        4,
+        6,
+        24,
+        10,
+        15
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "big_o_omega_theta_bounds",
+      "title": "Big-O, Omega and Theta: which bound?",
+      "summary": "You will be able to decide whether a statement is an upper bound, a lower bound or a tight bound, and answer questions like 'is n squared = O(n cubed)?' by applying the definition instead of pattern matching. Covers the O, Omega and Theta table on slide 5 of Lecture 1 and the drop-constants and lower-order-terms rule.",
+      "concept_key": "ds_complexity_asymptotic_bounds",
+      "track": "subtopic",
+      "archetype": "factual",
+      "estimated_minutes": 15,
+      "branch_of": "counting_operations_big_o",
+      "layer": 0,
+      "position": 1,
+      "parent": 0,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 1,
+      "chunk_ids": [
+        5,
+        4,
+        15,
+        22,
+        31,
+        39
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "arrays_vs_linked_lists",
+      "title": "Dynamic arrays vs linked lists: layout and cost",
+      "summary": "You will be able to sketch a dynamic array as a fixed block with a size and a capacity beside it, sketch a linked list as nodes joined by next references, and price index access, append and insert-at-front on each. Covers O(1) indexing, the O(n) shift when you insert at position 0 in the array, and pushFront in O(1) from slide 13. Prevents assuming the linked version is faster at everything.",
+      "concept_key": "ds_arrays_dynamic_array_vs_linked_list",
+      "track": "core",
+      "archetype": "spatial",
+      "estimated_minutes": 30,
+      "layer": 1,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "diagram",
+        "walkthrough",
+        "quiz"
+      ],
+      "index": 2,
+      "chunk_ids": [
+        8,
+        15,
+        12,
+        14,
+        9,
+        10
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "amortised_cost_of_append",
+      "title": "Why n appends cost O(n) in total",
+      "summary": "You will be able to show that n appends to a doubling array cost O(n) altogether, so each append is O(1) on average, by adding up the copies: 1 + 2 + 4 + ... + n/2 is less than n. Covers the amortised argument on slide 11 of Lecture 1 and the difference between the worst single append and the average one.",
+      "concept_key": "ds_arrays_amortised_append",
+      "track": "subtopic",
+      "archetype": "quantitative",
+      "estimated_minutes": 20,
+      "branch_of": "arrays_vs_linked_lists",
+      "layer": 1,
+      "position": 1,
+      "parent": 2,
+      "planned_block_types": [
+        "worked_example",
+        "playground",
+        "quiz"
+      ],
+      "index": 3,
+      "chunk_ids": [
+        11,
+        15,
+        45,
+        31,
+        40,
+        22
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "map_adt_and_hash_functions",
+      "title": "Hash tables: the map ADT and hash functions",
+      "summary": "You will be able to state what insert, search and delete must do, compare the four implementations on slide 3 of Lecture 2 by their search and insert costs, and explain why hashing reaches O(1) on average. Covers the three properties of a good hash function — deterministic, uniform, fast — and the load factor alpha = n / m. Prevents claiming O(1) in the worst case: with every key landing in one bucket, search is O(n).",
+      "concept_key": "ds_hashing_map_adt",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 25,
+      "section": "Looking things up by key",
+      "layer": 2,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "explainer",
+        "diagram",
+        "analogy",
+        "quiz"
+      ],
+      "index": 4,
+      "chunk_ids": [
+        19,
+        31,
+        29,
+        40,
+        45,
+        12
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "load_factor_and_resizing",
+      "title": "Load factor and when to resize",
+      "summary": "You will be able to compute alpha = n / m for a table you have just filled, decide from the 0.6 to 0.75 thresholds whether it should grow, and carry out the rehash that follows. Covers doubling m, recomputing every index under the new modulus, and the O(n) cost of a single resize. Prevents letting alpha reach 1 under open addressing, where no free slot is left to probe into.",
+      "concept_key": "ds_hashing_load_factor",
+      "track": "subtopic",
+      "archetype": "procedural",
+      "estimated_minutes": 20,
+      "branch_of": "map_adt_and_hash_functions",
+      "layer": 2,
+      "position": 1,
+      "parent": 4,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 5,
+      "chunk_ids": [
+        23,
+        31,
+        28,
+        30,
+        20,
+        11
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "collision_resolution_strategies",
+      "title": "Chaining vs open addressing for collisions",
+      "summary": "You will be able to trace a chaining table and a probing table through a short run of inserts and say which one suits a given workload. Covers m = 7 with h(k) = k mod 7, where 50, 85 and 92 all land in bucket 1, and m = 10 with linear probing, where 49 costs 2 probes and 58 costs 4. Prevents applying the wrong limit: chains may hold more entries than buckets, open addressing may not.",
+      "concept_key": "ds_hashing_collision_resolution",
+      "track": "core",
+      "archetype": "discriminative",
+      "estimated_minutes": 35,
+      "note": "Halfway. If you lose a day, compress this topic — chaining and probing are one idea with two rules — but keep the load factor arithmetic, it earns marks.",
+      "layer": 3,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "comparison",
+        "example",
+        "quiz"
+      ],
+      "index": 6,
+      "chunk_ids": [
+        31,
+        26,
+        22,
+        23,
+        29,
+        24
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "Binary search trees: search, insert and delete",
+      "summary": "You will be able to run search and insert down a tree and delete any node, redrawing the tree after each change. Covers the vocabulary from slide 3 of Lecture 3 (root, leaf, subtree, depth, height), the iterative search loop, in-order traversal giving sorted output, and the three deletion cases including the in-order successor for a node with two children. Prevents cutting out a two-child node in a way that breaks the sorted order.",
+      "concept_key": "ds_trees_binary_search_tree",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 30,
+      "layer": 4,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 7,
+      "chunk_ids": [
+        35,
+        37,
+        41,
+        45,
+        39,
+        40
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "bst_chain_from_sorted_inserts",
+      "title": "Sorted inserts turn a BST into a chain",
+      "summary": "You will be able to explain why inserting 1, 2, 3, ... in order builds a tree of height n − 1 where every operation costs O(n), and name the fix. Covers the degenerate chain on slide 8 of Lecture 3. Read it whenever the cost of a search tree surprises you; it is the whole reason the next topic exists.",
+      "concept_key": "ds_trees_bst_degenerate_chain",
+      "track": "subtopic",
+      "archetype": "diagnostic",
+      "estimated_minutes": 15,
+      "branch_of": "binary_search_tree_operations",
+      "mark": "anytime",
+      "layer": 4,
+      "position": 1,
+      "parent": 7,
+      "planned_block_types": [
+        "scenario",
+        "diagram",
+        "quiz"
+      ],
+      "index": 8,
+      "chunk_ids": [
+        40,
+        46,
+        41,
+        6,
+        43,
+        36
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "avl_rotation_balancing",
+      "title": "AVL rotations: keeping height at log n",
+      "summary": "You will be able to work out a node's balance factor and draw the rotation that restores |BF| <= 1, saying where each of the subtrees A, B and C lands. Covers the rotate-right and rotate-left diagrams on slide 10, the height updates that must run from the leaves upwards, and the insert positions where one rotation is not enough. Prevents rotating the wrong way and destroying the in-order sequence that makes the tree searchable.",
+      "concept_key": "ds_trees_avl_rotations",
+      "track": "core",
+      "archetype": "spatial",
+      "estimated_minutes": 35,
+      "layer": 5,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "diagram",
+        "walkthrough",
+        "quiz"
+      ],
+      "index": 9,
+      "chunk_ids": [
+        45,
+        41,
+        42,
+        37,
+        44,
+        46
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "binary_heaps_and_priority_queues",
+      "title": "Binary heaps: priority queue operations",
+      "summary": "You will be able to insert into a heap, extract the minimum, and write out the array that holds the tree after every swap. Covers the shape property and heap property from slide 4 of Lecture 4, the parent index floor((i − 1) / 2), sift-up, sift-down, find-min in O(1) and insert and extract-min in O(log n). Prevents inserting anywhere except the end and breaking the complete tree.",
+      "concept_key": "ds_heaps_binary_heap",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 30,
+      "section": "Priority and exam speed",
+      "layer": 6,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 10,
+      "chunk_ids": [
+        51,
+        60,
+        50,
+        53,
+        59,
+        58
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "build_heap_and_heapsort",
+      "title": "Build-heap in O(n), then heapsort",
+      "summary": "You will be able to turn an unordered array into a heap in O(n) by sifting down from i = floor(n/2) − 1 to 0, then sort it in O(n log n) by swapping the root to the end n − 1 times. Covers Floyd's bottom-up build from slide 10 and why it beats n separate inserts: most nodes sit near the bottom and sift down only a little. Prevents quoting O(n log n) for build-heap.",
+      "concept_key": "ds_heaps_build_heap_and_heapsort",
+      "track": "subtopic",
+      "archetype": "quantitative",
+      "estimated_minutes": 25,
+      "branch_of": "binary_heaps_and_priority_queues",
+      "layer": 6,
+      "position": 1,
+      "parent": 10,
+      "planned_block_types": [
+        "worked_example",
+        "playground",
+        "quiz"
+      ],
+      "index": 11,
+      "chunk_ids": [
+        58,
+        57,
+        59,
+        60,
+        6,
+        53
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "capstone_past_paper_under_time",
+      "title": "Capstone: last year's paper under the clock",
+      "summary": "You will sit last year's paper end to end in one timed block, mark it yourself against the slides, and re-study only what you got wrong. Covers reading a trace question for exactly what it asks, showing the intermediate table, tree or probe count so partial marks survive, and keeping to the clock. Prevents finding a gap in the exam hall that a marked paper would have found today.",
+      "concept_key": "ds_exam_past_paper_walkthrough",
+      "track": "core",
+      "archetype": "performance",
+      "estimated_minutes": 60,
+      "note": "Six sessions of 45 minutes covers the spine, and the capstone is a full paper, so book a double slot for it. Then switch from learning to recall: paper first, re-read only what you dropped marks on.",
+      "layer": 7,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "project",
+        "checklist"
+      ],
+      "index": 12,
+      "chunk_ids": [
+        8,
+        14,
+        53,
+        57,
+        56,
+        58
+      ],
+      "thin": false,
+      "status": "stub"
+    }
+  ],
+  "further": [
+    {
+      "title": "Graphs and shortest paths",
+      "topic": "Graph representations, breadth-first and depth-first search, and Dijkstra's algorithm with the running time of each"
+    },
+    {
+      "title": "Sorting algorithms head to head",
+      "topic": "Merge sort, quicksort, heap sort and counting sort compared on time, space and stability"
+    },
+    {
+      "title": "Build a hash map from scratch",
+      "topic": "Implementing a separate-chaining hash table in JavaScript with resizing, rehashing and a load factor limit"
+    }
+  ],
+  "variety_violation": null,
+  "relabel_passes": 0,
+  "warnings": []
+}

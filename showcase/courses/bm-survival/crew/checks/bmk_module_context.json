@@ -1,0 +1,162 @@
+{
+  "lesson": "bmk_module_context",
+  "round": 6,
+  "at": "2026-10-10T16:35:03.168Z",
+  "total": 22,
+  "passed": 22,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "7 blocks and 3 items have unique ids"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reference_table payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "flashcards payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "key_points payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "multi_select item valid",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "factual: has flashcards, reference_table"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "3 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "1 higher-order, 1 remember of 3"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 3 items (max 1)"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q6 multi_select",
+      "ok": true,
+      "detail": "5 options, 3 correct",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 1 accepted answer",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "13 chunk citations on 7 blocks resolve"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "504 teaching words for a 10-minute lesson (target about 300, minimum 150)"
+    },
+    {
+      "lesson": "bmk_module_context",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

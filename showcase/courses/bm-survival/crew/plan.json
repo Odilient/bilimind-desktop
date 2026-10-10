@@ -1,0 +1,282 @@
+{
+  "goal": {
+    "deadline": "2026-10-25",
+    "exam_at": "2026-10-25T09:00:00+08:00",
+    "minutes_per_day": 20,
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  "start": "2026-10-11",
+  "days": [
+    {
+      "date": "2026-10-11",
+      "lessons": [
+        "malay_sounds"
+      ],
+      "reviews": 0,
+      "minutes": 15
+    },
+    {
+      "date": "2026-10-12",
+      "lessons": [
+        "greetings_and_address"
+      ],
+      "reviews": 1,
+      "minutes": 20
+    },
+    {
+      "date": "2026-10-13",
+      "lessons": [
+        "numbers_money_and_time"
+      ],
+      "reviews": 1,
+      "minutes": 20
+    },
+    {
+      "date": "2026-10-14",
+      "lessons": [
+        "mamak_ordering"
+      ],
+      "reviews": 1,
+      "minutes": 20
+    },
+    {
+      "date": "2026-10-15",
+      "lessons": [
+        "grab_and_directions"
+      ],
+      "reviews": 1,
+      "minutes": 20
+    },
+    {
+      "date": "2026-10-16",
+      "lessons": [
+        "campus_and_classroom"
+      ],
+      "reviews": 1,
+      "minutes": 20
+    },
+    {
+      "date": "2026-10-17",
+      "lessons": [
+        "bmk_module_context"
+      ],
+      "reviews": 1,
+      "minutes": 15
+    },
+    {
+      "date": "2026-10-18",
+      "lessons": [],
+      "reviews": 7,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-19",
+      "lessons": [
+        "capstone_a_day_in_malay"
+      ],
+      "reviews": 0,
+      "minutes": 15
+    },
+    {
+      "date": "2026-10-20",
+      "lessons": [],
+      "reviews": 1,
+      "minutes": 5
+    },
+    {
+      "date": "2026-10-21",
+      "lessons": [],
+      "reviews": 0,
+      "minutes": 0
+    },
+    {
+      "date": "2026-10-22",
+      "lessons": [],
+      "reviews": 8,
+      "minutes": 40
+    },
+    {
+      "date": "2026-10-23",
+      "lessons": [],
+      "reviews": 0,
+      "minutes": 0
+    },
+    {
+      "date": "2026-10-24",
+      "lessons": [],
+      "reviews": 8,
+      "minutes": 40
+    },
+    {
+      "date": "2026-10-25",
+      "lessons": [],
+      "reviews": 0,
+      "minutes": 0,
+      "exam": true,
+      "label": "Exam 09:00"
+    }
+  ],
+  "lessons": [
+    {
+      "key": "malay_sounds",
+      "title": "How Malay sounds and how it is spelled",
+      "day": "2026-10-11",
+      "minutes": 15,
+      "weight": null,
+      "order": 1
+    },
+    {
+      "key": "greetings_and_address",
+      "title": "Greeting people, introducing yourself, what to call them",
+      "day": "2026-10-12",
+      "minutes": 15,
+      "weight": null,
+      "order": 2
+    },
+    {
+      "key": "numbers_money_and_time",
+      "title": "Numbers, money and telling the time",
+      "day": "2026-10-13",
+      "minutes": 15,
+      "weight": null,
+      "order": 3
+    },
+    {
+      "key": "mamak_ordering",
+      "title": "Ordering at the mamak: drinks, food, paying",
+      "day": "2026-10-14",
+      "minutes": 15,
+      "weight": null,
+      "order": 4
+    },
+    {
+      "key": "grab_and_directions",
+      "title": "Grab, directions and getting to campus",
+      "day": "2026-10-15",
+      "minutes": 15,
+      "weight": null,
+      "order": 5
+    },
+    {
+      "key": "campus_and_classroom",
+      "title": "On campus and in your BMK class",
+      "day": "2026-10-16",
+      "minutes": 15,
+      "weight": null,
+      "order": 6
+    },
+    {
+      "key": "bmk_module_context",
+      "title": "What BMK 2 at Taylor's actually is",
+      "day": "2026-10-17",
+      "minutes": 10,
+      "weight": null,
+      "order": 7
+    },
+    {
+      "key": "capstone_a_day_in_malay",
+      "title": "Capstone: a full day in Malay",
+      "day": "2026-10-19",
+      "minutes": 15,
+      "weight": null,
+      "order": 8
+    }
+  ],
+  "cut": [
+    {
+      "key": "greeting_etiquette",
+      "title": "When to use Assalamualaikum",
+      "reason": "A side lesson: the greetings lesson already teaches Assalamualaikum and its reply; the 2 weeks go to mamak, Grab and campus, which you asked for.",
+      "weight": null
+    },
+    {
+      "key": "sentence_patterns",
+      "title": "Sentences you can build yourself",
+      "reason": "Not needed to survive the first month: every lesson teaches whole phrases you can use as they are.",
+      "weight": null
+    },
+    {
+      "key": "little_words_in_speech",
+      "title": "Little words you will hear everywhere",
+      "reason": "A side lesson on lah, jom and kan: nice to have, but 20 minutes a day do not fit it next to mamak, Grab and campus.",
+      "weight": null
+    },
+    {
+      "key": "emergency_phrases",
+      "title": "When it goes wrong: lost, sick, help",
+      "reason": "A side lesson; the 2 weeks go to mamak, Grab and campus. Remember 999 (112 from a mobile) and Tolong! (Help!).",
+      "weight": null
+    }
+  ],
+  "capacity_min": 280,
+  "new_budget_min": 130,
+  "review_budget_min": 150,
+  "used_min": 115,
+  "reviews": 30,
+  "review_dates": {
+    "malay_sounds": [
+      "2026-10-12",
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "greetings_and_address": [
+      "2026-10-13",
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "numbers_money_and_time": [
+      "2026-10-14",
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "mamak_ordering": [
+      "2026-10-15",
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "grab_and_directions": [
+      "2026-10-16",
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "campus_and_classroom": [
+      "2026-10-17",
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "bmk_module_context": [
+      "2026-10-18",
+      "2026-10-22",
+      "2026-10-24"
+    ],
+    "capstone_a_day_in_malay": [
+      "2026-10-20",
+      "2026-10-22",
+      "2026-10-24"
+    ]
+  },
+  "assumptions": [
+    "Read your sentence as: 2 weeks of study from today (Sun 11 Oct to Sat 24 Oct 2026), ready by Sun 25 Oct 2026, 20 minutes a day.",
+    "No exam in the sentence: the end of the 2 weeks is used as the deadline, so the last reviews land on Sat 24 Oct.",
+    "A spoken-language course: no code exercises; Malay phrases get speaking drills and role-plays read by a Malaysian voice.",
+    "Time zone Asia/Kuala_Lumpur (not stated)."
+  ],
+  "warnings": [
+    "malay_sounds is sized at 20 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "greetings_and_address is sized at 25 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "numbers_money_and_time is sized at 25 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "mamak_ordering is sized at 30 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "grab_and_directions is sized at 25 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "campus_and_classroom is sized at 25 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "capstone_a_day_in_malay is sized at 60 min, more than 70% of a 20-minute day; planned as 15 min (split it into two lessons if it really needs more).",
+    "2026-10-18 needs 35 min (lessons plus reviews), over the daily 20 min. Cut a lesson or move one with --order.",
+    "2026-10-22 needs 40 min (lessons plus reviews), over the daily 20 min. Cut a lesson or move one with --order.",
+    "2026-10-24 needs 40 min (lessons plus reviews), over the daily 20 min. Cut a lesson or move one with --order."
+  ]
+}

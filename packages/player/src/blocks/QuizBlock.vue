@@ -16,7 +16,17 @@ const items = computed(() => props.block.assessments ?? []);
 const passedIds = ref<Set<string>>(new Set());
 const wasPassed = ref(isPassedStored(props.course.id, props.lesson.id, props.block.id));
 const allPassed = computed(() => wasPassed.value || (items.value.length > 0 && items.value.every(i => passedIds.value.has(i.id))));
-const checkedCount = computed(() => items.value.filter(i => (i.cites?.length || i.verdict === 'supported')).length);
+// G2: only items the Checker ruled on count as checked (a cite alone is the Writer's claim)
+const checkedCount = computed(() => items.value.filter(i => i.verdict === 'supported').length);
+// G2: after the Checker drops an item, "Four items. Two of them..." no longer matches; hide a stale count
+const NUM: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+const intro = computed(() => {
+  const t = (props.block.payload.intro ?? '').trim();
+  const m = t.match(/^(\w+)\s+(?:short\s+|quick\s+)?(?:items?|questions?)/i);
+  if (!m) return t;
+  const n = NUM[m[1]!.toLowerCase()] ?? Number(m[1]);
+  return Number.isFinite(n) && n !== items.value.length ? '' : t;
+});
 
 function onGraded(id: string, r: GradeResult) {
   const next = new Set(passedIds.value);
@@ -38,7 +48,7 @@ function onGraded(id: string, r: GradeResult) {
       </span>
     </template>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <p v-if="block.payload.intro" class="quiz-intro" v-html="renderInline(block.payload.intro)" />
+    <p v-if="intro" class="quiz-intro" v-html="renderInline(intro)" />
     <AssessmentItem v-for="(it, i) in items" :key="it.id" :item="it" :lesson-id="lesson.id" :block-id="block.id"
       :n="i + 1" :total="items.length" @graded="onGraded" />
     <p v-if="!items.length" class="q-fb">No questions in this check yet.</p>

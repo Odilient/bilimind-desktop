@@ -8,9 +8,17 @@ export const csvField = (s: string): string => (/[",\r\n]/.test(s) ? `"${s.repla
 const tag = (s: string) => s.replace(/[^\p{L}\p{N}_-]+/gu, '_').replace(/^_+|_+$/g, '');
 
 export const ankiCsv: AnkiCsv = course => {
+  const rows = deckRows(course);
+  const head = ['#separator:Comma', '#html:false', '#notetype:Basic', `#deck:${course.title.replace(/[\r\n]+/g, ' ')}`, '#columns:Front,Back,Tags', '#tags column:3'];
+  return [...head, ...rows.map(r => r.map(csvField).join(','))].join('\r\n') + '\r\n';
+};
+
+/** deck.csv rows [front, back, tags]: flashcards, cloze items, then every quiz item with a short answer (deduped).
+ * The receipts' card count is the length of this list, so the page and the deck always agree. */
+export function deckRows(course: { id?: string; lessons: CourseLike['lessons'] }): string[][] {
   const rows: string[][] = [];
   for (const l of course.lessons) {
-    const tags = ['bilimind', tag(course.id), tag(l.id)].filter(Boolean).join(' ');
+    const tags = ['bilimind', tag(course.id ?? ''), tag(l.id)].filter(Boolean).join(' ');
     for (const b of l.blocks) {
       if (b.type === 'flashcards') for (const c of b.payload.cards ?? []) rows.push([c.front, c.back, tags]);
       for (const a of b.assessments) {
@@ -28,9 +36,8 @@ export const ankiCsv: AnkiCsv = course => {
   // ship a 1-card deck); skip any whose front is already in the deck.
   const fronts = new Set(rows.map(r => r[0]));
   for (const r of quizRows(course)) if (!fronts.has(r[0])) { rows.push(r); fronts.add(r[0]); }
-  const head = ['#separator:Comma', '#html:false', '#notetype:Basic', `#deck:${course.title.replace(/[\r\n]+/g, ' ')}`, '#columns:Front,Back,Tags', '#tags column:3'];
-  return [...head, ...rows.map(r => r.map(csvField).join(','))].join('\r\n') + '\r\n';
-};
+  return rows;
+}
 
 type CourseLike = Parameters<AnkiCsv>[0];
 type ItemLike = CourseLike['lessons'][number]['blocks'][number]['assessments'][number];
@@ -59,10 +66,10 @@ export function quizCard(item: ItemLike): { front: string; back: string } | null
   return { front: a.prompt + options, back: a.explanation ? `${back}\n${a.explanation}` : back };
 }
 
-function quizRows(course: CourseLike): string[][] {
+function quizRows(course: { id?: string; lessons: CourseLike['lessons'] }): string[][] {
   const rows: string[][] = [];
   for (const l of course.lessons) {
-    const tags = ['bilimind', tag(course.id), tag(l.id), 'quiz'].filter(Boolean).join(' ');
+    const tags = ['bilimind', tag(course.id ?? ''), tag(l.id), 'quiz'].filter(Boolean).join(' ');
     for (const b of l.blocks) for (const a of b.assessments) {
       const c = quizCard(a);
       if (c) rows.push([c.front, c.back, tags]);

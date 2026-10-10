@@ -32,3 +32,4 @@ works offline and needs no account.
 | `crew/verdicts/<key>.json` | `verdict` | Every ruling with its quote, reason and round |
 | `crew/narration.json` | `narrate` | Clips, cues, voices |
 | `crew/log.jsonl` | every command | Agent label, command, result, time, cost: REPORT.md and the receipts come only from this |
+| `crew/proof.md` | the Lead (last step) | Proof of the run: start and end time of each task, how many Writers ran in parallel, rejections, fixes, totals |

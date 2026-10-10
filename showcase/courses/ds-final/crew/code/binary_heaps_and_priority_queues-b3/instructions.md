@@ -1,0 +1,3 @@
+Write `siftUp(heap, i)` in JavaScript. The array `heap` is a valid min-heap except that the element at index `i` may be smaller than its ancestors. Move it up by repeatedly swapping it with its parent while the parent is greater, using `Math.floor((i - 1) / 2)` for the parent index. Stop when `i` reaches 0 or the parent is already `<=` the element. Mutate `heap` in place and return it.
+
+`siftUp([4, 7, 9, 12, 8, 10, 5], 6)` must return `[4, 7, 5, 12, 8, 10, 9]` — the same trace as the walkthrough: the key 5 swaps once with 9 at index 2, then stops because 4 ≤ 5.

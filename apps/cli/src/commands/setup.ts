@@ -19,7 +19,7 @@ export function registerSetup(program: Command, g: () => GlobalOpts): void {
     .option('--slug <slug>', 'course folder name (default: from the source folder)')
     .option('--out <dir>', 'output root (default: ./bilimind-out)')
     .action((o: { src: string; sentence: string; slug?: string; out?: string }) =>
-      runCommand('init', g(), () => init({ src: o.src, sentence: o.sentence, slug: o.slug, outRoot: o.out }), {
+      runCommand('init', g(), ctx => init({ src: o.src, sentence: o.sentence, slug: o.slug, outRoot: o.out }, ctx.now()), {
         needsCourse: false, args: argSummary({ src: o.src, slug: o.slug }), logCourse: d => d.course,
       }));
 

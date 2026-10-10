@@ -1,0 +1,1 @@
+[{"item": "q7", "verdict": "supported", "quote": "Bucket Chain 0 700 1 50 → 85 → 92", "reason": "57 mod 7 = 1 and slide 9's bucket 1 chain is 50, 85, 92, so a miss compares with all three: 3."}]

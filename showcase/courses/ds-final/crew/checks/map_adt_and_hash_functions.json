@@ -1,0 +1,206 @@
+{
+  "lesson": "map_adt_and_hash_functions",
+  "round": 10,
+  "at": "2026-10-10T16:27:22.887Z",
+  "total": 28,
+  "passed": 28,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "9 blocks and 7 items have unique ids"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "diagram payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "analogy payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "code item valid",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 8
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "ordering item valid",
+      "block": 8,
+      "item": "q5"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 8,
+      "item": "q6"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 8,
+      "item": "q4"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "numeric item valid",
+      "block": 8,
+      "item": "q7"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 9
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "conceptual: has explainer, diagram, analogy"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 4-6: 21% of the paper)"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "4 higher-order, 0 remember of 5"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 5 items (max 2)"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 8,
+      "item": "q4"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q7 ordering",
+      "ok": true,
+      "detail": "6 steps, scrambled",
+      "block": 8,
+      "item": "q5"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q9 numeric",
+      "ok": true,
+      "detail": "value 3 comparisons, working recomputed",
+      "block": 8,
+      "item": "q7"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q11 code runs",
+      "ok": true,
+      "detail": "reference passes 5/5 tests · starter fails 5/5 · OK",
+      "block": 7
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q13 diagram",
+      "ok": true,
+      "detail": "plausible Mermaid (9 lines)",
+      "block": 2
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "32 chunk citations on 9 blocks resolve, 17 slide/page mentions exist"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "3 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "1576 teaching words for a 25-minute lesson (target about 750, minimum 375)"
+    },
+    {
+      "lesson": "map_adt_and_hash_functions",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

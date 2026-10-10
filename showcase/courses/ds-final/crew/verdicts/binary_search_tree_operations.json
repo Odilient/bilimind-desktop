@@ -1,0 +1,52 @@
+[
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Two children: copy in the in-order successor (smallest key in the right subtree), then delete the successor, which has at most one child",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 39,
+    "round": 1,
+    "at": "2026-10-10T16:13:22.228Z"
+  },
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Two children: copy in the in-order successor (smallest key in the right subtree), then delete the successor, which has at most one child",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 39,
+    "round": 1,
+    "at": "2026-10-10T16:13:22.228Z"
+  },
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Two children: copy in the in-order successor (smallest key in the right subtree), then delete the successor",
+    "reason": "30 has two children; its right subtree is the single node 40, so 40 is copied up and the old leaf removed, as ordered.",
+    "chunk_id": 39,
+    "round": 2,
+    "at": "2026-10-10T16:19:04.951Z"
+  },
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Two children: copy in the in-order successor (smallest key in the right subtree)",
+    "reason": "Slide 7 names the in-order successor as the smallest key in the right subtree.",
+    "chunk_id": 39,
+    "round": 2,
+    "at": "2026-10-10T16:19:04.951Z"
+  },
+  {
+    "lesson": "binary_search_tree_operations",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "builds a chain: h = n − 1, so operations are O(n)",
+    "reason": "Slide 8: sorted inserts build a chain of height n - 1, making operations O(n), as the model answer says.",
+    "chunk_id": 40,
+    "round": 1,
+    "at": "2026-10-10T16:19:04.951Z"
+  }
+]

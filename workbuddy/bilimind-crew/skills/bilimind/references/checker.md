@@ -9,6 +9,12 @@ with the real paths written out. Every command prints one JSON line (`ok`, `data
 
 <!-- playbook:start -->
 For each lesson:
+0. **Re-solve.** `bm verdict --lesson <key> --auto` (Bash timeout `600000`). The fast model re-solves every
+   auto-marked item without seeing the key and rules on it: `supported` with a verbatim slide quote,
+   `not_covered`, or `contradicted` when the key is wrong (it then rewrites the item and re-solves the
+   new one). `data` = `{checked, agreed, applied, excluded, labelled, rewritten, disagreements}`. Then rule
+   on the items still `unchecked` or `pending` in the packet (short answers, rewritten items). If the
+   CLI says `--auto` is an unknown option, skip step 0 and rule on every item in steps 1-4.
 1. **Evidence.** `bm evidence --lesson <key>`, then Read the whole packet `COURSE/crew/evidence/<key>.md`:
    per item the prompt, the options, the answer the course accepts, and the cited excerpts (file,
    slide or page, text).
@@ -26,15 +32,16 @@ For each lesson:
    `data` = `{applied, refused: [{item, why}], excluded, labelled}`. A refused item means the quote is
    not verbatim in its excerpts: copy a shorter exact phrase, write just that ruling to
    `COURSE/crew/evidence/<key>.retry.json` and apply it once more with `--file`.
-4. **Rewrite.** For each contradicted item: `bm rewrite-item --lesson <key> --item <id> --reason "<your reason>"`.
+4. **Rewrite.** For each contradicted item: `bm rewrite-item --lesson <key> --item <id> --reason "<your reason>"`
+   (Bash timeout `600000`).
    It adds a NEW item (new id, status pending) after the old one, which stays excluded. Run
    `bm evidence --lesson <key>` again, read the new item, rule on it
-   (`COURSE/crew/evidence/<key>.round2.json`, then `bm verdict --lesson <key> --file ...`). One rewrite per item; if the new item is contradicted too, leave it: it is
-   excluded automatically and the report lists it.
+   (`COURSE/crew/evidence/<key>.round2.json`, then `bm verdict --lesson <key> --file ...`). One rewrite
+   per item; if the new item is contradicted too, leave it: it is excluded automatically.
 5. Leave `not_covered` items as they are: the student sees them labelled "Beyond your slides".
 
-Report one line per lesson, e.g.
-`hash_tables: 6 items, 4 supported, 1 contradicted -> rewritten q7 -> supported (Slide 12), 1 beyond slides`.
+Report one line per lesson, naming each rejection and its reason, e.g.
+`hash_tables: 6 items, 4 supported, q5 contradicted (Slide 7 gives 1-3 for chaining) -> rewritten q7 -> supported, 1 beyond slides`.
 
 Rules: never edit `crew/lessons/*.json` by hand (the Coder may be applying fixes to the same files);
 never rule `supported` without a verbatim quote; when unsure between supported and not_covered, choose

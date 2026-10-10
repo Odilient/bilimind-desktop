@@ -1,0 +1,82 @@
+[
+  {
+    "lesson": "shift_routines",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Throw away all cooked pearls, brewed tea and opened fresh milk and oat milk (they are prepared fresh every day). Record amounts in the waste log.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 12,
+    "round": 1,
+    "at": "2026-10-10T16:16:28.506Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Read the chiller and freezer thermometers and write both in the temperature log. Chiller must be 4 °C or below, freezer -18 °C or below.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 10,
+    "round": 1,
+    "at": "2026-10-10T16:16:28.506Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "",
+    "reason": "Re-solved from the slides: the answer is b) Arrive by 09:30 and clock in -> a) Wash and sanitise hands -> d) Switch on the water heater and the tea urn -> e) Start the pearl pot and brew the first tea -> c) Read and log the chiller and freezer temperatures -> f) Unlock the front at 10:00 and post th",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:16:28.508Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q6",
+    "verdict": "supported",
+    "quote": "Opening | 10:00 to 16:00 | 09:30 | Runs the opening checklist (section 4)",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 9,
+    "round": 2,
+    "at": "2026-10-10T16:16:30.832Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q6",
+    "verdict": "supported",
+    "quote": "Start the first batch of pearls (section 6.1). It takes about 50 minutes, so start it first.",
+    "reason": "Section 4 lists hand-washing, thermometers, date labels, pearls (start first), teas, then the POS, float and allergen board before 10:00.",
+    "chunk_id": 10,
+    "round": 2,
+    "at": "2026-10-10T16:26:05.616Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "If the chiller is above 5 °C, tell the shift lead before using any milk.",
+    "reason": "Section 4: a 6 °C chiller goes to the shift lead before any milk is used; both readings are logged.",
+    "chunk_id": 10,
+    "round": 2,
+    "at": "2026-10-10T16:26:05.616Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Put all food away or cover it before sweeping and mopping. No sweeping while food is out.",
+    "reason": "Section 5 states the order and the 21:30, 21:55 and cool-plate timings named in the key.",
+    "chunk_id": 12,
+    "round": 1,
+    "at": "2026-10-10T16:26:05.616Z"
+  },
+  {
+    "lesson": "shift_routines",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "Turn on the POS, check the RM 200 float in the cash drawer, put out the DuitNow QR stand, the menu and the allergen board. Open at 10:00.",
+    "reason": "Section 4 has no water-heater step and ends with the POS, float and allergen board; the checklist photo belongs to closing (section 5).",
+    "chunk_id": 11,
+    "round": 2,
+    "at": "2026-10-10T16:28:37.608Z"
+  }
+]

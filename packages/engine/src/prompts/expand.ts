@@ -121,8 +121,18 @@ export function accuracyRules(codeLanguage: string | null): string {
     '- Every number you state must be recomputed, not recalled: redo each modulo, sum, count and array trace step by step before you write it. '
     + 'An array after each insertion must be the real result of running the algorithm.',
     "- Every numeric item's answer_key carries a short `work` string: the derivation, ending in the final number (e.g. \"69 mod 10 = 9; slot 9 "
-    + 'is empty; 1 probe"). Its last number must equal `value`.',
+    + 'is empty; 1 probe"). Write each step as plain arithmetic ("9/11 = 0.82") — it is recomputed, and an item whose working is wrong or whose '
+    + 'last number differs from `value` is dropped.',
+    '- Every auto-marked item (mcq, multi_select, ordering, numeric, cloze) carries `explanation`: one or two sentences on WHY the answer is right, '
+    + 'shown to the learner after they submit (never just "see slide N").',
     '- A multi_select prompt never says how many options are correct unless that number equals the correct ids (prefer "Select all that apply.").',
+    '- Items test DIFFERENT points: no two items ask the same fact in other words. An ordering item orders steps whose order is forced and '
+    + 'worth learning (the stages of an algorithm, an array after each insertion), never the trivial lines of one loop.',
+    "- A misconception's belief must be genuinely false, and any example you give for it (an array that \"is a heap\", a table that \"is full\") "
+    + 'must be checked against the definition before you write it. Its what_is_true is a fact the slides state.',
+    "- A code block's instructions describe exactly what its tests check: any example call in the prose is one of the tests, with the same "
+    + 'arguments and the same expected result.',
+    '- A quiz intro never states how many items follow (the count is shown live and can change).',
     "- A project must fit inside this lesson's study time; give the data it needs (keys, arrays) in the brief.",
   ];
   if (codeLanguage) L.push(`- All code, pseudo-code and idioms are ${codeLanguage}: no other language's operators or behaviour (no Python "//", `
@@ -166,7 +176,8 @@ export const assessmentSchema = (higherOrderOnly = false) => ({
       items: { type: 'object', required: ['id', 'text'], properties: {
         id: { type: 'string', minLength: 1, maxLength: 8 }, text: { type: 'string', minLength: 1, maxLength: 600 } } },
     },
-    answer_key: { type: 'object', description: 'never shown to the learner: {correct_option_ids:[]} | {accepted:[]} | {correct_order:[]} | {value,tolerance,unit} | {reference_answer} | {reference_solution}' },
+    answer_key: { type: 'object', description: 'never shown to the learner: {correct_option_ids:[]} | {accepted:[]} | {correct_order:[]} | {value,tolerance,unit,work} (work = the short derivation ending in value) | {reference_answer} | {reference_solution}' },
+    explanation: { type: 'string', maxLength: 600, description: 'auto-marked items: 1-2 sentences on why the answer is right, shown after the learner submits' },
     rubric: {
       type: 'array', minItems: 2, maxItems: 4, description: 'REQUIRED for every llm_rubric item; weights sum to 1',
       items: { type: 'object', required: ['criterion', 'weight', 'excellent', 'acceptable', 'poor'], properties: {
@@ -217,6 +228,7 @@ export interface RewriteInput {
   current: Record<string, unknown> | null;     // the block's payload now; null = the lesson has no block of this type yet
   otherParts: { type: string; excerpt: string }[];
   instruction?: string | null;
+  examTargets?: ExamTarget[];                  // G2 review: a re-drafted quiz/code/worked example still rehearses the paper
 }
 
 export function rewriteUser(a: RewriteInput): string {
@@ -236,6 +248,7 @@ export function rewriteUser(a: RewriteInput): string {
     nodeBrief(a.lesson, [], a.allowsCode, a.codeLanguage),
     researchList(),
     a.chunks.length ? assemble([GROUNDING_RULES, materialExcerpts(a.chunks)]) : null,
+    examTargets(a.examTargets),
     accuracyRules(a.allowsCode ? a.codeLanguage : null),
     others,
     part,

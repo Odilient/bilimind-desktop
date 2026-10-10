@@ -59,7 +59,10 @@ export const initReview: InitReview = async ctx => {
     const due = zonedToDate(firstReviewDay(crew, l, today), REVIEW_HOUR, tz);
     for (const c of cardsForLesson(l)) {
       const prev = old.get(c.id);
-      cards.push({ ...c, fsrs: prev?.fsrs ?? newCard(due, now) });
+      // a card never rated follows the CURRENT plan's first review day (G2 review: re-planning used to leave the
+      // old due dates, so the page and the .ics disagreed with plan.md); a rated card keeps its FSRS state
+      const fresh = !prev || (prev.fsrs.reps === 0 && !prev.fsrs.last_review);
+      cards.push({ ...c, fsrs: fresh ? newCard(due, now) : prev!.fsrs });
     }
   }
   const state: ReviewState = {

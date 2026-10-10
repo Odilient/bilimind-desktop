@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "capstone_a_day_in_malay",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "**Waiter:** Makan? *(Anything to eat?)*",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 11,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.736Z"
+  },
+  {
+    "lesson": "capstone_a_day_in_malay",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "**You:** Bang, kira. *(The bill, please.)*",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 11,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.736Z"
+  },
+  {
+    "lesson": "capstone_a_day_in_malay",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "**You:** Bang, kira. *(The bill, please.)*",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 11,
+    "round": 1,
+    "at": "2026-10-10T16:18:25.736Z"
+  },
+  {
+    "lesson": "capstone_a_day_in_malay",
+    "item": "q5",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Rehearsing an abandoned line is study advice; the phrasebook only supplies the line itself.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:23:18.397Z"
+  }
+]

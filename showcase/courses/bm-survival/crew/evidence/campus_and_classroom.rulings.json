@@ -1,0 +1,4 @@
+[
+ {"item": "q4", "verdict": "supported", "quote": "Boleh ulang? † | Can you repeat that?", "reason": "The phrasebook gives Boleh ulang? as Can you repeat that?, the request the prompt asks for."},
+ {"item": "q3", "verdict": "not_covered", "quote": "Boleh cakap perlahan sikit? † | Can you speak a bit slower?", "reason": "The phrases are in the phrasebook; the order of saying them in class is the lesson's advice, not the source's."}
+]

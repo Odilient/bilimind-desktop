@@ -29,6 +29,10 @@ node "SKILL_DIR/scripts/bilimind.mjs" <command> --course "COURSE" --as "Lead" [f
 - COURSE is the absolute folder `init` printed. Always pass `--course` and `--as` (your label is `Lead`).
 - Below, `bm <command> [flags]` is shorthand for the full line above. Always type the full line.
 - Never run `bm run`: it is a developer harness that skips the crew.
+- **Timeouts.** The Bash tool kills a command after 120 s unless you pass a timeout, and you never see its
+  JSON line. ALWAYS call `outline`, `draft`, `narrate`, `rewrite-item`, `verdict --auto` and `build` with the
+  Bash tool's `timeout` set to `600000` (outline takes about 100 s, narrate 2-3 min). If one still times
+  out, run it once more: finished model and TTS calls are cached, so the rerun picks up where it stopped.
 
 ## Rules
 
@@ -53,8 +57,11 @@ task completed if it failed; leave it `in_progress` and say why in the final rep
 ## Step 1: understand the goal (task 1)
 
 1. `node "SKILL_DIR/scripts/bilimind.mjs" doctor --as "Lead"` (no `--course` yet). If `key` is false,
-   stop and give the user the one fix from troubleshooting.md ("missing key"). If `clock_skew_ms` is over
-   an hour, the real time is the local time plus the skew: use the real time for every date below.
+   stop and give the user the one fix from troubleshooting.md ("missing key"). If `clock_skew_ms` (SKEW)
+   is more than 3600000 (1 h) either way, the PC clock is wrong and the real time is the local time plus SKEW. Get the
+   real date once, with SKEW written out:
+   `node -e "console.log(new Date(Date.now()+SKEW).toLocaleString('sv-SE',{timeZone:'Asia/Kuala_Lumpur'}))"`.
+   Use that real date for "today" and every date below, and pass `--start <real today>` to `plan`.
 2. `node "SKILL_DIR/scripts/bilimind.mjs" init --src "<folder>" --sentence "<the user's sentence, verbatim>" --as "Lead"`.
    The folder is the one the user named, else the workspace (current directory). COURSE = `data.course`.
 3. Read the sentence like a tutor would, and decide (every default you use is an assumption):
@@ -78,27 +85,38 @@ cannot be cited) and which files are thin.
 
 ## Step 3: plan the path (task 3)
 
-1. `bm outline` gives topics with `key`, `archetype`, `formats`, `minutes`, `track`, `parent`, `thin`.
+1. `bm outline` (Bash `timeout` `600000`; about 100 s) gives topics with `key`, `archetype`, `formats`,
+   `minutes`, `track`, `parent`, `thin`.
 2. If a past paper exists: `bm exam-map`. Read `COURSE/crew/exam-map.md`. For each question check that
-   the matched topic makes sense; fix a wrong match with `bm exam-map --assign "Q3=<topic key>"`
-   (repeatable). Note unmatched questions.
+   the matched topic makes sense; fix wrong matches with `bm exam-map --assign "Q3=<topic key>"`. Pass ALL
+   your fixes in ONE call (repeat `--assign`, e.g. `--assign "Q1a=k1" --assign "Q1b=k1"`); if you ever
+   run `exam-map` again, repeat every earlier `--assign` too. Note unmatched questions. A subtopic shown
+   as "counted in <parent>" has its marks in the parent lesson.
 3. Read `SKILL_DIR/references/planning.md`, then decide what to keep, what to cut and in what order:
    capacity from the goal, weight from the past paper, prerequisites from the outline.
 4. `bm plan --keep k1,k2,k3,k4 --cut "k5=No question in last year's paper; 3 days allow 4 lessons" --order k1,k3,k2,k4`
-   (`--cut` repeats, one concrete reason each). If `data.warnings` says the plan is over capacity, cut
-   one more lesson and run `plan` once more. Log any judgment call with `bm note --text "<decision>"`.
+   (`--cut` repeats, one concrete reason each). If doctor's `clock_skew_ms` was over 1 h either way, ALWAYS add
+   `--start <real today YYYY-MM-DD>`. Cut one more lesson and run `plan` again ONLY on the hard warning
+   "more than the whole N min available ... Cut a lesson". "over the daily N min" means one crowded day:
+   try one other `--order`, then keep it and mention it. Every other warning (reviews get less time,
+   thin, variety, a cut topic with marks) is advice to mention, never a reason to cut. Order the heaviest
+   topic first unless a kept lesson needs another one before it. Log judgment calls with `bm note --text "<decision>"`.
 5. Show the plan in at most 10 lines: your assumptions, the top weights (topic, marks, share), the kept
    lessons by day, each cut topic with its reason. Do not wait for approval.
 
 ## Step 4: write lessons in parallel (task 4)
 
-In ONE message, call the Agent tool once per kept lesson, all as parallel tool calls (at most 6 at a
-time; if more, start the rest as the first ones finish):
-- `name` and `description`: `Writer · <lesson title>`; `subagent_type`: `general-purpose` (leave it out
-  if it is rejected).
+First run `bm note --text "Launching N Writers in parallel: k1, k2, k3, k4"` (the proof's timestamp).
+In ONE message, call the Agent tool once per kept lesson, all as parallel tool calls (at most 6):
+- `description`: `Writer · <lesson title>`; `subagent_type`: `general-purpose` (leave it out if it is
+  rejected). Do NOT pass `name` (nor `team_name`): a named Agent call becomes a team member that answers
+  by mailbox, and you would get "Spawned successfully" stubs instead of reports. Without `name` each call
+  runs to the end and returns the Writer's report line as its result; the calls in one message run at
+  the same time, and the message returns when all of them are done.
 - `prompt` (with the real paths filled in): "You are the BiliMind Writer for lesson `<key>` (<title>).
   Read `SKILL_DIR/references/writer.md` and follow it exactly. CLI: `node "SKILL_DIR/scripts/bilimind.mjs"`.
-  Course: `COURSE`. Your label: `Writer <key>`. Never ask questions. Reply with your one-line report."
+  Course: `COURSE`. Your label: `Writer <key>`. Run every `draft` with the Bash timeout 600000.
+  Never ask questions. Reply with your one-line report."
 
 Never draft or fix a lesson yourself. When all Writers are back, post their report lines. If a Writer
 failed, launch one new Writer for that lesson; if it fails again, re-run `plan` with that lesson cut
@@ -106,26 +124,29 @@ failed, launch one new Writer for that lesson; if it fails again, re-run `plan` 
 
 **Expert Team mode.** If you are the BiliMind Crew team lead (`bilimind-crew-team-lead`), your agent
 file's team rules replace the Agent calls in steps 4 and 5: TeamCreate first, members spawned by
-Agent ID, reports relayed through you.
+Agent ID with a unique `name`, every member prompt ending with "SendMessage your one-line report to the
+lead (`to`: `team-lead`), then stop", and you wait for exactly N reports before the next phase.
 
 ## Step 5: test code and check answers, in parallel (tasks 5 and 6)
 
-When every Writer has reported, in ONE message launch both (parallel tool calls):
-- **Coder** (only if a Writer reported `code` above 0): `name` `Coder`; prompt: "You are the BiliMind
+When every Writer has reported, in ONE message launch both (parallel Agent calls, no `name`, each
+returns its report as its result):
+- **Coder** (only if a Writer reported `code` above 0): `description` `Coder` (no `name`); prompt: "You are the BiliMind
   Coder. Read `SKILL_DIR/references/coder.md` and follow it. CLI: ... Course: ... Label: `Coder`.
   Lessons with code: `<key> (<n> exercises)`, ... Writers' reports: <paste them>."
-- **Checker** (always): `name` `Checker`; prompt: "You are the BiliMind Checker. Read
+- **Checker** (always): `description` `Checker` (no `name`); prompt: "You are the BiliMind Checker. Read
   `SKILL_DIR/references/checker.md` and follow it. CLI: ... Course: ... Label: `Checker`. Lessons:
   `<k1,k2,...>`. Writers' reports: <paste them>."
   With more than 4 lessons, launch two Checkers (`Checker 1`, `Checker 2`) and split the lessons.
+  Every prompt ends with "Never ask questions. Reply with your report lines."
 
 No code at all: mark task 5 completed with a one-line note. Wait for both, then post their lines.
 
 ## Step 6: narrate (task 7)
 
-`bm narrate` (add `--langs en,<code>` only when the course teaches another language, e.g. `en,ms`). A
-narration failure (Edge TTS 403 or timeout) is not fatal: say so and continue; the course plays
-without audio and still builds.
+`bm narrate` with the Bash timeout at `600000` (add `--langs en,<code>` only when the course teaches
+another language, e.g. `en,ms`). If it times out or fails, run it once more: it resumes from its cache.
+A second failure is not fatal: say so and continue; the course plays without audio and still builds.
 
 ## Step 7: schedule reviews (task 8)
 
@@ -133,25 +154,40 @@ without audio and still builds.
 
 ## Step 8: package and open (task 9)
 
-1. `bm build` writes `course.json` and `index.html`. If it fails and the hint names a lesson, launch
-   one Writer for that lesson with the error in its prompt, then build once more.
-2. Read `COURSE/REPORT.md` (and `data.receipts` from build) for the numbers below.
-3. Optional, only if the user's own message asked to publish or share a link: publish the course
-   folder with `workbuddy_sites_deploy`, and say that the folder includes `sources/` (their files).
-4. **Your FINAL tool call is `present_files`** with the absolute paths of `COURSE/index.html`,
+1. `bm build` (Bash `timeout` `600000`) writes `course.json` and `index.html`. If it fails and the hint
+   names a lesson, launch one Writer for that lesson with the error in its prompt, then build once more.
+2. Take the numbers below from build's `data.receipts` (REPORT.md is written before build).
+3. **Proof.** With the Write tool, write `COURSE/crew/proof.md` (facts only, for the team's pitch):
+   - `| Task | Start | End | Who | Result |`, one row per task 1-9. Start and End are the first and last
+     times of that task's steps in REPORT.md's "## Timeline" (Lead: init, goal, ingest, outline,
+     exam-map, plan; `Writer <key>`: draft, check; Coder: code-test; Checker: evidence, verdict,
+     rewrite-item; narrate; export). Task 9 has no Timeline row: write "build took <its `ms`/1000> s".
+   - `Parallel Writers: N launched in ONE message at <time of your "Launching" note> (k1, k2, ...);
+     their drafts finished between <first> and <last>.`
+   - `Rejected:` each contradicted item (lesson, item, the Checker's reason, rewritten as) or "none".
+     `Fixes:` each Coder fix and each Writer repair, from their report lines, or "none".
+   - `Totals:` checks run/passed, Anki cards, narration minutes, cost_usd, wall time (build's receipts).
+4. Optional, only if the user's own message asked to publish or share a link: copy ONLY `index.html`,
+   `audio/`, `img/` and `sources/` into `COURSE/site/` and publish that folder with
+   `workbuddy_sites_deploy` (never `crew/`: it holds caches and logs). Say that `sources/` holds their files.
+5. **Your FINAL tool call is `present_files`** with the absolute paths of `COURSE/index.html`,
    `COURSE/plan.md` and `COURSE/REPORT.md`, in one call. It opens the course in the Preview panel.
    Nothing after it except your reply.
 
 ## The final reply (at most 15 lines)
 
-- **Built**: N lessons, B blocks, Q questions, C code exercises, F flashcards, M minutes of narration.
+Use exactly these bullets, numbers from build's `data.receipts`; never guess a number. If a receipts
+field is missing, sum it from the Writers' report lines (`<B> blocks, <Q> questions, code <C>`).
+- **Built**: N lessons, B blocks, Q questions, C code exercises, A Anki cards, M minutes of narration
+  (receipts `lessons`, `blocks`, `items`, `code_exercises`, `cards`, `narration_min`).
+- **Crew**: N Writers in parallel, the Coder, the Checker (timeline in `crew/proof.md`).
 - **Checked**: checks run / passed / repaired / still flagged; the Checker's supported, rejected
   (contradicted) and rewritten counts, "Beyond your slides" labels; the Coder's fixes and disabled
   exercises. Name one concrete rejection or fix in a sentence (only if it really happened).
 - **Plan**: study days, minutes a day, what was cut and why.
-- **Cost**: text API in USD (REPORT.md), WorkBuddy credits (the number if WorkBuddy shows it to you,
-  else "see this task's usage in WorkBuddy"), wall time (REPORT.md: first command to `build`).
-- **Files**: index.html, plan.md, REPORT.md, reviews.ics, deck.csv, lessons/.
+- **Cost**: text API in USD (receipts `cost_usd`), WorkBuddy credits (the number if WorkBuddy shows it to
+  you, else "see this task's usage in WorkBuddy"), wall time (receipts `wall_ms`).
+- **Files**: index.html (open in the Preview panel), plan.md, REPORT.md, reviews.ics, deck.csv, lessons/.
 - End with one sentence: import `reviews.ics` into your calendar; the course home shows what is due today.
 
 ## Resume and partial requests

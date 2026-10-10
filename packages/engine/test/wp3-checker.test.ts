@@ -163,7 +163,8 @@ describe('plant / plant-score', () => {
           return { item: a.id, verdict: (style === 'perfect' && planted ? 'contradicted' : 'supported') as 'contradicted' | 'supported', quote, reason: 'scripted' };
         });
         const v = await verdict(t.ctx, { lesson: lessonKey, rulings });
-        expect(v.refused).toEqual([]);
+        // G2: a supported quote must share a key term with the answer; the scripted first-sentence quote often does not
+        expect(v.refused.filter(r => !/does not mention the answer/.test(r.why))).toEqual([]);
       }
       const s = await plantScore(t.ctx);
       expect(s).toEqual(style === 'perfect' ? { planted: 10, caught: 10, missed: 0, false_alarms: 0 } : { planted: 10, caught: 0, missed: 10, false_alarms: 0 });

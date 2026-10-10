@@ -2,7 +2,7 @@
 // in place and returns what it did ({rule, detail}); ids are never changed and no item is ever deleted.
 import type { Assessment, Block, Chunk, LessonContent } from '@bilimind/core';
 import { codeTests, isDisabledCode } from './code.ts';
-import { blockNo, codeItemOf, liveItems as allLive, narrativeTexts } from './lesson.ts';
+import { blockNo, codeItemOf, isLive, liveItems as allLive, narrativeTexts } from './lesson.ts';
 import type { Raw } from './lesson.ts';
 import { sweepFormula, formulaProblem } from './playground.ts';
 import { mermaidProblem } from './mermaid.ts';
@@ -62,7 +62,8 @@ const fixMulti: Fixer = lesson => {
       item.prompt = item.prompt.replace(MULTI_COUNT, (_all, verb: string) => verb).replace(/\s{2,}/g, ' ');
       out.push({ rule: RULE.multi, detail: `${item.id}: the prompt said "${m[0]}" but ${correct} options are correct; dropped the count` });
     }
-    if (!MULTI_HINT.test(item.prompt)) {
+    const kept = MULTI_COUNT.exec(item.prompt);
+    if (!MULTI_HINT.test(item.prompt) && !(kept && COUNT_WORDS[kept[2]!.toLowerCase()] === correct)) {
       item.prompt = `${item.prompt.trimEnd()} (Select all that apply.)`;
       out.push({ rule: RULE.multi, detail: `${item.id}: added "(Select all that apply.)" to the prompt` });
     }
@@ -113,6 +114,11 @@ const fixSlideMentionCites: Fixer = (lesson, cx) => {
 
 const DETERMINISTIC = new Set(['mcq', 'multi_select', 'ordering', 'numeric', 'cloze']);
 const indexCache = new WeakMap<Map<number, Chunk>, RetrievalIndex>();
+function lectureIndex(cx: CheckContext, pool: Chunk[]): RetrievalIndex {
+  let idx = indexCache.get(cx.chunks!);
+  if (!idx) { idx = buildIndex(pool); indexCache.set(cx.chunks!, idx); }
+  return idx;
+}
 /** The words of an item's accepted answer, for retrieval. */
 function answerText(a: Assessment): string {
   const k = (a.answer_key ?? {}) as Raw;
@@ -131,8 +137,7 @@ const fixItemCites: Fixer = (lesson, cx) => {
   if (!cx.chunks) return [];
   const pool = lectureChunksOf(cx);
   if (!pool.length) return [];
-  let idx = indexCache.get(cx.chunks);
-  if (!idx) { idx = buildIndex(pool); indexCache.set(cx.chunks, idx); }
+  const idx = lectureIndex(cx, pool);
   const decks = new Set(lessonDecks(lesson, cx).map(c => c.material_id));
   const out: Fix[] = [];
   for (const { item, block } of liveItems(lesson)) {
@@ -141,11 +146,51 @@ const fixItemCites: Fixer = (lesson, cx) => {
     if (!hits.length) continue;
     const top = hits[0]!;
     const own = new Set(block.source_material_ids ?? []);
-    const pick = hits.find(h => own.has(h.chunk.id) && h.score >= top.score * 0.6)
+    // the block's own chunks win only on a near-tie (a quiz block cites a broad union: slide 3's ADT table is not
+    // the source of a "good hash function" question just because the quiz block cites it)
+    const pick = hits.find(h => own.has(h.chunk.id) && h.score >= top.score * 0.85)
       ?? hits.find(h => decks.has(h.chunk.material_id) && h.score >= top.score * 0.6) ?? top;
     if ((pick.terms?.length ?? 0) < 3) continue;          // score floor: at least 3 query terms in the chunk
     item.cite_chunk_ids = [pick.chunk.id];
     out.push({ rule: RULE.itemCites, detail: `${item.id}: cited chunk ${pick.chunk.id} (${pick.chunk.locator ?? 'part ' + pick.chunk.ordinal}), found by its question and answer` });
+  }
+  return out;
+};
+
+/**
+ * G2 review: a block the Writer left uncited (the model dropped source_material_ids) still shows a "From your files"
+ * chip: a quiz cites its items' chunks; a teaching block cites the 1-2 chunks its own prose matches best (at least 3
+ * shared terms), preferring the chunks the draft was given and the lesson's own deck. Code blocks are left alone.
+ */
+const fixBlockCites: Fixer = (lesson, cx) => {
+  if (!cx.chunks) return [];
+  const pool = lectureChunksOf(cx);
+  if (!pool.length) return [];
+  const supplied = cx.supplied?.length ? new Set(cx.supplied) : null;
+  const decks = new Set([...lessonDecks(lesson, cx), ...lesson.blocks.flatMap(b => (b.assessments ?? []).flatMap(a => a.cite_chunk_ids ?? []))
+    .map(id => (typeof id === 'number' ? cx.chunks!.get(id) : undefined)).filter((c): c is Chunk => !!c)].map(c => c.material_id));
+  const out: Fix[] = [];
+  for (const b of lesson.blocks) {
+    if ((b.source_material_ids ?? []).length || b.type === 'code') continue;
+    let add: number[] = [];
+    if (b.type === 'quiz' || b.type === 'project') {
+      add = [...new Set((b.assessments ?? []).filter(isLive).flatMap(a => a.cite_chunk_ids ?? []))].filter(id => cx.chunks!.has(id)).slice(0, 4);
+    }
+    if (!add.length) {
+      const text = narrativeTexts(b).join(' ');
+      if (text.split(/\s+/).filter(Boolean).length < 12) continue;
+      // draft: only the chunks the Writer was given; check: the lesson's own decks first
+      const hits = lectureIndex(cx, pool).search(text, 24)
+        .filter(h => !isFrontMatter(h.chunk) && (h.terms?.length ?? 0) >= 3 && (!supplied || supplied.has(h.chunk.id)));
+      const rank = (h: (typeof hits)[number]) => (decks.has(h.chunk.material_id) ? 1 : 0);
+      const ranked = [...hits].sort((x, y) => rank(y) - rank(x) || y.score - x.score);
+      const top = ranked[0];
+      if (!top) continue;
+      add = ranked.filter(h => rank(h) === rank(top) && h.score >= top.score * 0.6).slice(0, 2).map(h => h.chunk.id);
+    }
+    if (!add.length) continue;
+    b.source_material_ids = add;
+    out.push({ rule: RULE.cites, detail: `${where(b)}: the ${b.type} cited nothing; cited chunk${add.length === 1 ? '' : 's'} ${add.join(', ')} (${b.type === 'quiz' || b.type === 'project' ? "its questions' sources" : 'best match for its text'})` });
   }
   return out;
 };
@@ -330,6 +375,13 @@ const fixDiagram: Fixer = lesson => {
 
 /** In order: leaks before the cap (a leaked mcq is demoted anyway), then the rest. */
 export const FIXERS: Fixer[] = [fixMcqLeak, fixMcqCap, fixMulti, fixOrdering, fixCloze, fixNumeric, fixRubric, fixCodeTestNames,
-  fixPlaygroundOrder, fixCiteIds, fixSlideMentionCites, fixItemCites, fixQuizIntro, fixUrls, fixLanguage, fixDiagram];
+  fixPlaygroundOrder, fixCiteIds, fixSlideMentionCites, fixItemCites, fixBlockCites, fixQuizIntro, fixUrls, fixLanguage, fixDiagram];
 
 export const autoFix = (lesson: LessonContent, cx: CheckContext): Fix[] => FIXERS.flatMap(f => f(lesson, cx));
+
+/**
+ * The grounding repairs alone, for `draft` (so a fresh draft is cited before `check` ever runs): drop unknown and
+ * front-matter ids, cite the slides the prose names, give auto-marked items a chunk, and cite uncited blocks.
+ */
+export const groundCites = (lesson: LessonContent, cx: CheckContext): Fix[] =>
+  [fixCiteIds, fixSlideMentionCites, fixItemCites, fixBlockCites].flatMap(f => f(lesson, cx));

@@ -1,0 +1,112 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BiliMind//BiliMind for WorkBuddy//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:CSC2103 Data Structures final
+X-WR-TIMEZONE:Asia/Kuala_Lumpur
+BEGIN:VTIMEZONE
+TZID:Asia/Kuala_Lumpur
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+TZNAME:+08
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:ds-final-study-2026-10-11@bilimind
+DTSTAMP:20261010T163021Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261011T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261011T202500
+SUMMARY:Study: Hash tables: the map ADT and hash functions
+DESCRIPTION:CSC2103 Data Structures final. 25 minutes.\nLesson 1: Hash tabl
+ es: the map ADT and hash functions (25 min)\nOpen index.html in your cours
+ e folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Hash tables: the map ADT and hash functions
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-final-review-2026-10-12@bilimind
+DTSTAMP:20261010T163021Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T081000
+SUMMARY:Review: Hash tables: the map ADT and hash functions
+DESCRIPTION:Spaced review for CSC2103 Data Structures final\, Mon 12 Oct: 1
+  lesson\, about 10 minutes.\nOpen index.html\, then Due today: it shows th
+ e cards that are due.\n- Keys 24\, 34\, 50\, 44\, 89\, 99 are inserted in 
+ that order into an initially empty table of...\n- Explain what primary clu
+ stering is and why linear probing produces it. Then state one w...\n- A ha
+ sh table uses separate chaining with m = 8 buckets and holds n = 20 entrie
+ s. A clas...\n- Slide 9 inserts 50\, 700\, 76\, 85\, 92\, 73\, 101 into a 
+ chained table with m = 7 and h(k) =...
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Hash tables: the map ADT and hash functions
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-final-study-2026-10-12@bilimind
+DTSTAMP:20261010T163021Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T203000
+SUMMARY:Study: Binary search trees: search\, insert and delete
+DESCRIPTION:CSC2103 Data Structures final. 30 minutes.\nLesson 2: Binary se
+ arch trees: search\, insert and delete (30 min)\nOpen index.html in your c
+ ourse folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Binary search trees: search\, insert and delete
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-final-review-2026-10-13@bilimind
+DTSTAMP:20261010T163021Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T081000
+SUMMARY:Review: Hash tables: the map ADT and hash functions\, Binary search
+  trees: search\, insert and delete
+DESCRIPTION:Spaced review for CSC2103 Data Structures final\, Tue 13 Oct: 2
+  lessons\, about 10 minutes.\nOpen index.html\, then Due today: it shows t
+ he cards that are due.\n- Keys 24\, 34\, 50\, 44\, 89\, 99 are inserted in
+  that order into an initially empty table of...\n- Explain what primary cl
+ ustering is and why linear probing produces it. Then state one w...\n- A h
+ ash table uses separate chaining with m = 8 buckets and holds n = 20 entri
+ es. A clas...\n- Slide 9 inserts 50\, 700\, 76\, 85\, 92\, 73\, 101 into a
+  chained table with m = 7 and h(k) =...\n- Insert 50\, 30\, 70\, 20\, 40\,
+  60\, 80 into an empty BST\, then delete 30 using the in-order ...\n- In t
+ he deletion rule on slide 7\, a node with two children is replaced by its 
+ in-order _...\n... and 1 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Hash tables: the map ADT and hash functions\, Binary se
+ arch trees: search\, insert and delete
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ds-final-study-2026-10-13@bilimind
+DTSTAMP:20261010T163021Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T203000
+SUMMARY:Study: Binary heaps: priority queue operations
+DESCRIPTION:CSC2103 Data Structures final. 30 minutes.\nLesson 3: Binary he
+ aps: priority queue operations (30 min)\nOpen index.html in your course fo
+ lder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Binary heaps: priority queue operations
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -6,9 +6,10 @@ The lead gave you: the lesson key, the course folder COURSE, the CLI path and yo
 
 `bm <command>` below means: `node "SKILL_DIR/scripts/bilimind.mjs" <command> --course "COURSE" --as "Writer <key>"`
 with the real paths written out. Every command prints one JSON line (`ok`, `data` or `error` + `hint`).
-Run `draft` with the Bash tool's timeout set to `600000` (a draft can take 30-60 s).
 
 <!-- playbook:start -->
+Run EVERY `draft` with the Bash tool's `timeout` set to `600000` (a draft takes 30-60 s and the default
+120 s kill hides its result). A draft that timed out: run the same command once more (it is cached).
 1. **Draft.** `bm draft --lesson <key>`. `data` = `{blocks, items, code_blocks, cites}`. On `ok:false`
    follow the hint once; a second failure ends your work: report `<key>: draft failed: <error>`.
 2. **Check.** `bm check --lesson <key>`. `data` = `{total, passed, failed: [{rule, block, item, detail,

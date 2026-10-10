@@ -1,0 +1,156 @@
+{
+  "goal": {
+    "deadline": "2026-10-14",
+    "exam_at": "2026-10-14T09:00:00+08:00",
+    "minutes_per_day": 45,
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  "start": "2026-10-11",
+  "days": [
+    {
+      "date": "2026-10-11",
+      "lessons": [
+        "map_adt_and_hash_functions"
+      ],
+      "reviews": 0,
+      "minutes": 25
+    },
+    {
+      "date": "2026-10-12",
+      "lessons": [
+        "binary_search_tree_operations"
+      ],
+      "reviews": 1,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-13",
+      "lessons": [
+        "binary_heaps_and_priority_queues"
+      ],
+      "reviews": 2,
+      "minutes": 40
+    },
+    {
+      "date": "2026-10-14",
+      "lessons": [],
+      "reviews": 0,
+      "minutes": 0,
+      "exam": true,
+      "label": "Exam 09:00"
+    }
+  ],
+  "lessons": [
+    {
+      "key": "map_adt_and_hash_functions",
+      "title": "Hash tables: the map ADT and hash functions",
+      "day": "2026-10-11",
+      "minutes": 25,
+      "weight": 0.21,
+      "order": 1
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "Binary search trees: search, insert and delete",
+      "day": "2026-10-12",
+      "minutes": 30,
+      "weight": 0.15,
+      "order": 2
+    },
+    {
+      "key": "binary_heaps_and_priority_queues",
+      "title": "Binary heaps: priority queue operations",
+      "day": "2026-10-13",
+      "minutes": 30,
+      "weight": 0.25,
+      "order": 3
+    }
+  ],
+  "cut": [
+    {
+      "key": "counting_operations_big_o",
+      "title": "Counting operations to get Big-O from real code",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 30 min did not fit the days left.",
+      "weight": 0.09
+    },
+    {
+      "key": "big_o_omega_theta_bounds",
+      "title": "Big-O, Omega and Theta: which bound?",
+      "reason": "Its exam questions (Q1a) are counted in its parent Counting operations to get Big-O from real code.",
+      "weight": 0
+    },
+    {
+      "key": "arrays_vs_linked_lists",
+      "title": "Dynamic arrays vs linked lists: layout and cost",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 10% in 30 min did not fit the days left.",
+      "weight": 0.1
+    },
+    {
+      "key": "amortised_cost_of_append",
+      "title": "Why n appends cost O(n) in total",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 6% in 20 min plus its parent topic did not fit the days left.",
+      "weight": 0.06
+    },
+    {
+      "key": "load_factor_and_resizing",
+      "title": "Load factor and when to resize",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 20 min did not fit the days left.",
+      "weight": 0.09
+    },
+    {
+      "key": "collision_resolution_strategies",
+      "title": "Chaining vs open addressing for collisions",
+      "reason": "Its chaining question (Q2c) is practised in Hash tables (the slide 9 chaining example and the buildChains exercise), so it adds no marks of its own.",
+      "weight": 0
+    },
+    {
+      "key": "bst_chain_from_sorted_inserts",
+      "title": "Sorted inserts turn a BST into a chain",
+      "reason": "No marks in the past paper; the minutes went to topics that carry them.",
+      "weight": 0
+    },
+    {
+      "key": "avl_rotation_balancing",
+      "title": "AVL rotations: keeping height at log n",
+      "reason": "No marks in the past paper; the minutes went to topics that carry them.",
+      "weight": 0
+    },
+    {
+      "key": "build_heap_and_heapsort",
+      "title": "Build-heap in O(n), then heapsort",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 5% in 25 min did not fit the days left.",
+      "weight": 0.05
+    },
+    {
+      "key": "capstone_past_paper_under_time",
+      "title": "Capstone: last year's paper under the clock",
+      "reason": "A full timed paper does not fit the days left; the lessons rehearse each question type instead.",
+      "weight": 0
+    }
+  ],
+  "capacity_min": 135,
+  "new_budget_min": 120,
+  "review_budget_min": 15,
+  "used_min": 85,
+  "reviews": 3,
+  "review_dates": {
+    "map_adt_and_hash_functions": [
+      "2026-10-12",
+      "2026-10-13"
+    ],
+    "binary_search_tree_operations": [
+      "2026-10-13"
+    ],
+    "binary_heaps_and_priority_queues": []
+  },
+  "assumptions": [
+    "Read your sentence as: exam 2026-10-14 at 09:00, 45 minutes a day.",
+    "\"wednesday\" read as 2026-10-14."
+  ],
+  "warnings": [
+    "Cut lesson arrays_vs_linked_lists carries 10% of the past paper's marks.",
+    "binary_heaps_and_priority_queues is learned the day before the exam and gets no spaced review (it carries 25% of the marks); move it earlier with --order if it matters.",
+    "binary_heaps_and_priority_queues carries the most marks (25%) but gets 0 review(s), fewer than map_adt_and_hash_functions; study it earlier with --order.",
+    "Variety (advice only, the Lead may keep this selection): Only 2 distinct archetypes were used across 3 nodes (you used: procedural×2, conceptual×1.); at least 3 are required. Look again at the nodes you labelled the same way: some of them are really about choosing between options, some are procedures, some are facts to be memorised, and at least one should have the learner produce something real."
+  ]
+}

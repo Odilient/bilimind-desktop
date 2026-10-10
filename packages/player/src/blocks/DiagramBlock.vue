@@ -54,7 +54,26 @@ function prepare() {
   el.removeAttribute('height');
   const vb = el.getAttribute('viewBox')?.split(/[\s,]+/).map(Number);
   if (vb && vb.length === 4 && vb[2]! > 0) el.style.setProperty('--nat', `${Math.round(Math.max(300, vb[2]!))}px`);
+  fitLabels(el);
   if (seen) animate(); else pending = true;
+}
+// G2: a pre-rendered svg measured its labels with another font (about 8% narrower than the page's Inter),
+// so the label boxes clipped the last letters. Shrink a label that does not fit its box; never clip it.
+function fitLabels(el: Element | null | undefined) {
+  if (!el) return;
+  const run = () => el.querySelectorAll('foreignObject').forEach(fo => {
+    (fo as SVGElement).style.overflow = 'visible';
+    const box = fo.firstElementChild as HTMLElement | null;
+    const w = parseFloat(fo.getAttribute('width') || '0');
+    if (!box || !(w > 0)) return;
+    box.style.fontSize = '';
+    const need = box.scrollWidth;
+    if (need <= w + 0.5) return;
+    const fs = parseFloat(getComputedStyle(box).fontSize) || 14;
+    box.style.fontSize = `${Math.max(9, Math.floor(fs * (w / need) * 2) / 2)}px`;
+  });
+  run();
+  void document.fonts?.ready.then(run);
 }
 function animate() {
   pending = false;
@@ -78,6 +97,7 @@ function full() {
   const d = dlg.value;
   if (!d) return;
   if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  void nextTick(() => fitLabels(d.querySelector('svg')));
 }
 function closeFull() { const d = dlg.value; if (!d) return; if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); }
 function backdrop(e: MouseEvent) { if (e.target === dlg.value) closeFull(); }

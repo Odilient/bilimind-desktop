@@ -1,0 +1,92 @@
+[
+  {
+    "lesson": "greetings_and_address",
+    "item": "q2",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but no slide states it directly.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:13:55.141Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "",
+    "reason": "Re-solved from the slides: the answer is a) kakak, but the key said a) kakak; d) anda.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:13:55.143Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "Kakak / Kak | \"older sister\" | friendly for a woman a bit older than you",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 8,
+    "round": 2,
+    "at": "2026-10-10T16:13:57.860Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "Kakak / Kak | \"older sister\" | friendly for a woman a bit older than you",
+    "reason": "Kakak fits a woman a bit older; anda is neutral and formal; kamu can sound rude to older people.",
+    "chunk_id": 8,
+    "round": 2,
+    "at": "2026-10-10T16:23:16.209Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Tumpang lalu. † | Excuse me (let me pass). | for squeezing past people",
+    "reason": "The phrasebook gives Tumpang lalu for squeezing past people.",
+    "chunk_id": 7,
+    "round": 1,
+    "at": "2026-10-10T16:23:16.209Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Abang / Bang | \"older brother\" | friendly for a man a bit older than you: the mamak waiter, a Grab driver",
+    "reason": "Abang is the address for a Grab driver a bit older; selamat petang covers mid-afternoon until dusk (4 pm).",
+    "chunk_id": 8,
+    "round": 2,
+    "at": "2026-10-10T16:23:38.735Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q3",
+    "verdict": "not_covered",
+    "quote": "*anda* is neutral and formal (signs, ads); *awak* is friendly",
+    "reason": "The phrasebook calls awak friendly but never says it is wrong with an older man; that is the lesson's advice.",
+    "chunk_id": 8,
+    "round": 1,
+    "at": "2026-10-10T16:23:38.735Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "Kakak / Kak | \"older sister\" | friendly for a woman a bit older than you",
+    "reason": "Kakak fits a woman a bit older and Puan is the title for a married or older woman; anda is for signs and ads.",
+    "chunk_id": 8,
+    "round": 2,
+    "at": "2026-10-10T16:30:05.709Z"
+  },
+  {
+    "lesson": "greetings_and_address",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "*anda* is neutral and formal (signs, ads)",
+    "reason": "Re-solved: only kakak fits face to face; the phrasebook gives anda as neutral and formal, for signs and ads.",
+    "chunk_id": 8,
+    "round": 2,
+    "at": "2026-10-10T16:30:05.709Z"
+  }
+]

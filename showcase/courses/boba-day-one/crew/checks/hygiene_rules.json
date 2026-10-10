@@ -1,0 +1,210 @@
+{
+  "lesson": "hygiene_rules",
+  "round": 5,
+  "at": "2026-10-10T16:26:34.521Z",
+  "total": 28,
+  "passed": 28,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "7 blocks and 6 items have unique ids"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "scenario payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reference_table payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "checklist payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "ordering item valid",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "multi_select item valid",
+      "block": 7,
+      "item": "q5"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 7,
+      "item": "q6"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "safety_critical: has checklist, scenario"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "6 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "4 higher-order, 1 remember of 6"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 6 items (max 2)"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 7,
+      "item": "q3"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q6 multi_select",
+      "ok": true,
+      "detail": "5 options, 3 correct",
+      "block": 7,
+      "item": "q5"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q7 ordering",
+      "ok": true,
+      "detail": "6 steps, scrambled",
+      "block": 7,
+      "item": "q1"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 1 accepted answer",
+      "block": 7,
+      "item": "q2"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q4"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "3 specific criteria, weights sum to 1",
+      "block": 7,
+      "item": "q6"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "21 chunk citations on 7 blocks resolve"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "4 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "1318 teaching words for a 25-minute lesson (target about 750, minimum 375)"
+    },
+    {
+      "lesson": "hygiene_rules",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    }
+  ]
+}

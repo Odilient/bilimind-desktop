@@ -3,9 +3,12 @@
 // repo) loads Mermaid once and renders each source with the cobalt theme; results are cached in crew/diagrams.json by
 // a hash of the source, so later builds (and machines without Edge or puppeteer) reuse them. Any failure is a
 // warning: the player then falls back to loading Mermaid at runtime, as before.
+import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import type { Course } from '@bilimind/core';
 import { readJsonOrNull, writeJson } from '../course.ts';
 
@@ -29,6 +32,47 @@ const HOT_CLASS = 'classDef hot fill:#C6F24E,stroke:#0B0D10,color:#0B0D10';
 const sha = (s: string) => createHash('sha256').update(s).digest('hex').slice(0, 16);
 const EDGE = [process.env.BILIMIND_BROWSER, 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe', '/usr/bin/microsoft-edge', '/usr/bin/google-chrome', '/usr/bin/chromium'];
+
+const withHot = (source: string): string => {
+  let src = source.trim();
+  if (/\bhot\b/.test(src) && !/classDef\s+hot\b/.test(src) && /^(flowchart|graph)\b/.test(src)) src += `\n  ${HOT_CLASS}`;
+  return src;
+};
+
+/**
+ * No puppeteer (the bundled CLI inside WorkBuddy has none): run the installed Edge/Chrome itself, headless, on a
+ * temporary page that renders every source and writes the SVGs (base64 JSON) into the DOM, read back with --dump-dom.
+ */
+export async function renderWithBrowserCli(exe: string, sources: string[], timeoutMs = 60_000): Promise<(string | null)[]> {
+  const dir = mkdtempSync(join(tmpdir(), 'bm-mmd-'));
+  try {
+    const page = join(dir, 'render.html');
+    const data = JSON.stringify({ cfg: MERMAID_CONFIG, src: sources.map(withHot), ids: sources.map(x => `bm-pre-${sha(withHot(x))}`) }).replace(/</g, '\\u003c');
+    writeFileSync(page, `<!doctype html><html><body><pre id="bm-out">pending</pre>
+<script src="${MERMAID_URL}"></script>
+<script>(async () => {
+  const out = document.getElementById('bm-out');
+  try {
+    const d = ${data};
+    mermaid.initialize(d.cfg);
+    const res = [];
+    for (let i = 0; i < d.src.length; i++) { try { res.push((await mermaid.render(d.ids[i], d.src[i])).svg); } catch (e) { res.push(null); } }
+    out.textContent = 'OK:' + btoa(unescape(encodeURIComponent(JSON.stringify(res))));
+  } catch (e) { out.textContent = 'ERR:' + e; }
+})();</script></body></html>`);
+    const stdout = await new Promise<string>((ok, fail) => {
+      execFile(exe, ['--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check', `--user-data-dir=${join(dir, 'profile')}`,
+        '--virtual-time-budget=30000', '--dump-dom', pathToFileURL(page).href],
+      { timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024, windowsHide: true }, (err, out) => (err && !out ? fail(err) : ok(String(out))));
+    });
+    const m = /<pre id="bm-out">OK:([A-Za-z0-9+/=]+)<\/pre>/.exec(stdout);
+    if (!m) throw new Error(/ERR:([^<]{0,160})/.exec(stdout)?.[1] ?? 'the browser printed no diagrams');
+    const list = JSON.parse(Buffer.from(m[1]!, 'base64').toString('utf8')) as (string | null)[];
+    return sources.map((_, i) => (typeof list[i] === 'string' && /<svg[\s>]/.test(list[i]!) ? list[i]! : null));
+  } finally {
+    try { rmSync(dir, { recursive: true, force: true }); } catch { /* temp folder */ }
+  }
+}
 
 /** Fill payload.svg for every diagram block that has Mermaid source and no svg. Returns how many got an svg. */
 export async function prerenderDiagrams(course: Course, crewDir: string, progress: (l: string) => void): Promise<{ rendered: number; cached: number; failed: number }> {
@@ -57,8 +101,7 @@ export async function prerenderDiagrams(course: Course, crewDir: string, progres
       await page.setContent(`<!doctype html><html><body><script src="${MERMAID_URL}"></script></body></html>`, { waitUntil: 'load', timeout: 20000 });
       await page.waitForFunction('!!window.mermaid', { timeout: 15000 });
       for (const b of missing) {
-        let src = b.payload.source!.trim();
-        if (/\bhot\b/.test(src) && !/classDef\s+hot\b/.test(src) && /^(flowchart|graph)\b/.test(src)) src += `\n  ${HOT_CLASS}`;
+        const src = withHot(b.payload.source!);
         try {
           const svg = await page.evaluate(async (s: string, cfg: unknown, id: string) => {
             const m = (globalThis as unknown as { mermaid: { initialize(c: unknown): void; render(i: string, s: string): Promise<{ svg: string }> } }).mermaid;
@@ -69,7 +112,16 @@ export async function prerenderDiagrams(course: Course, crewDir: string, progres
         } catch (e) { out.failed++; progress(`build: diagram not pre-rendered (${(e as Error).message.slice(0, 120)})`); }
       }
     } catch (e) {
-      progress(`build: diagrams not pre-rendered (${(e as Error).message.slice(0, 160)}); the page loads Mermaid when online`);
+      const why = (e as Error).message.slice(0, 160);
+      // no puppeteer (bundled CLI) or it failed to launch: let the browser render on its own (--dump-dom)
+      if (exe && !out.rendered) {
+        try {
+          const svgs = await renderWithBrowserCli(exe, missing.map(b => b.payload.source!));
+          missing.forEach((b, i) => { const svg = svgs[i]; if (svg) { cache[sha(b.payload.source!)] = svg; out.rendered++; } else out.failed++; });
+        } catch (e2) {
+          progress(`build: diagrams not pre-rendered (${why}; ${(e2 as Error).message.slice(0, 120)}); the page loads Mermaid when online`);
+        }
+      } else progress(`build: diagrams not pre-rendered (${why}); the page loads Mermaid when online`);
     } finally {
       try { await browser?.close(); } catch { /* ignore */ }
     }

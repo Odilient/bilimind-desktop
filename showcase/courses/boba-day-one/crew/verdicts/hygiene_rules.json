@@ -1,0 +1,72 @@
+[
+  {
+    "lesson": "hygiene_rules",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "Cover cuts with a blue waterproof plaster and wear a glove over it.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 23,
+    "round": 1,
+    "at": "2026-10-10T16:16:22.015Z"
+  },
+  {
+    "lesson": "hygiene_rules",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Cover cuts with a blue waterproof plaster and wear a glove over it.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 23,
+    "round": 1,
+    "at": "2026-10-10T16:16:22.015Z"
+  },
+  {
+    "lesson": "hygiene_rules",
+    "item": "q5",
+    "verdict": "supported",
+    "quote": "Also wash hands after touching money, your phone or your face.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 22,
+    "round": 1,
+    "at": "2026-10-10T16:16:22.015Z"
+  },
+  {
+    "lesson": "hygiene_rules",
+    "item": "q3",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but the quote did not check out against the slide.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:16:22.020Z"
+  },
+  {
+    "lesson": "hygiene_rules",
+    "item": "q1",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "The SOP gives the triggers and 20 seconds with soap, but no hand-washing sequence; the auto quote (blue plaster) did not decide it.",
+    "chunk_id": null,
+    "round": 2,
+    "at": "2026-10-10T16:26:04.887Z"
+  },
+  {
+    "lesson": "hygiene_rules",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Also wash hands after touching money, your phone or your face.",
+    "reason": "Section 10 lists money as a [SHOP] trigger beside the reg. 33(1)(c) [LAW] rule; the trigger means wash at that moment.",
+    "chunk_id": 22,
+    "round": 1,
+    "at": "2026-10-10T16:26:04.887Z"
+  },
+  {
+    "lesson": "hygiene_rules",
+    "item": "q6",
+    "verdict": "supported",
+    "quote": "Take off your apron and cap before going to the toilet.",
+    "reason": "Section 10 states the rule and tags it [LAW] reg. 33(1)(b), as the key says.",
+    "chunk_id": 22,
+    "round": 1,
+    "at": "2026-10-10T16:26:04.887Z"
+  }
+]

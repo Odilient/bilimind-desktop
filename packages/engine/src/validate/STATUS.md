@@ -16,9 +16,11 @@ and the whole engine suite passes (115 tests). Typecheck is clean for these file
   - Q2 item count (3 to 6), Q3 Bloom (at least one higher-order item, at most half `remember`), Q4 MCQ cap (repair: surplus demoted to short_answer)
   - Q5 mcq: 4 options, unique ids and texts. A leaked answer is demoted.
   - Q6 multi_select: 4 to 6 options and 2 to 3 correct. Repair: "(Select all that apply.)" is appended.
+  - Q6 (G2 review): a promised count ("Which two ...") that differs from the correct ids fails; repair drops the count (the draft normaliser does the same).
   - Q7 ordering: a permutation, not presented in the correct order (repair: rotate)
   - Q8 cloze: exactly one `____`. Repair: `_{3,}` becomes `____`. With no blank, the item becomes short_answer.
   - Q9 numeric: tolerance repair, and the unit is named in the prompt. Q10 rubric: weights are normalised, and generic criteria are flagged.
+  - Q9 (G2 review): `answer_key.work` (the Writer's derivation) is recomputed by arith.ts (plain + - * / % ^ mod); a slip or a last number that differs from `value` fails. The draft normaliser drops such items; without work the evidence packet tells the Checker to solve it.
   - **Q11 code runs**: node:vm, fresh context per test, 2 s budget. After a timeout the remaining tests are skipped. deepEqual follows the spec.
     The reference must pass every test, the starter must fail at least one, and a debug starter must parse. Repair: `answer_key.tests` is
     synced to the block's test names.
@@ -26,6 +28,7 @@ and the whole engine suite passes (115 tests). Typecheck is clean for these file
     `discover` must fall inside the input's range. Repair: if input 1 does not change the output, an input that does is moved first.
   - Q13 Mermaid plausibility. **An implausible diagram is dropped** (acceptance e). If it was mandatory, Q1 then asks for a new one.
   - Q14 cite ids must exist in crew/ingest.json; unknown ids are stripped. A "slide N" / "page N" in the prose that does not exist in the cited file is flagged.
+  - Q14 (G2 review): fails when no BLOCK cites a chunk. Repairs (also run by `draft` via groundCites): front-matter ids dropped, "slide N" in prose cited, auto-marked items get their best minisearch chunk (>= 3 shared terms), uncited blocks get the chunk their prose matches (draft: supplied chunks only). Q14b: every live auto-marked item cites a chunk.
   - Q15 thin lesson (words >= 50% of minutes/5 x 150). The suggestion is the verbatim re-ask sentence as a `draft --note`.
   - Q16 URLs are stripped and the link text is kept. Q17 speaking/dialogue/audio must have exactly one language code.
 - **`code-test`**:

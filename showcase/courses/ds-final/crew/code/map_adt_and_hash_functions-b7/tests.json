@@ -1,0 +1,38 @@
+[
+  {
+    "name": "slide 9 chain for bucket 1",
+    "call": "buildChains([50, 700, 76, 85, 92, 73, 101], 7)[1]",
+    "expect": [
+      50,
+      85,
+      92
+    ]
+  },
+  {
+    "name": "slide 9 chain for bucket 3",
+    "call": "buildChains([50, 700, 76, 85, 92, 73, 101], 7)[3]",
+    "expect": [
+      73,
+      101
+    ]
+  },
+  {
+    "name": "every bucket exists, empty ones included",
+    "call": "buildChains([50, 700, 76, 85, 92, 73, 101], 7).length",
+    "expect": 7
+  },
+  {
+    "name": "empty input still returns m buckets",
+    "call": "buildChains([], 5).length",
+    "expect": 5
+  },
+  {
+    "name": "duplicate keys both stay in the chain",
+    "call": "buildChains([12, 19, 12], 7)[5]",
+    "expect": [
+      12,
+      19,
+      12
+    ]
+  }
+]

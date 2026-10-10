@@ -1,0 +1,317 @@
+{
+  "key": "malay_order_phrases",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "A customer steps up and says six words. You catch **teh susu** and reach for the sticker. If that is all you caught, you will write **CT01-R 100% RI** — and the customer will send it back, because they said **kurang manis** and **kurang ais**.\n\nSection 7 of your SOP gives the mapping. The customer's words and the sticker code are two different languages, and your job is the translation:\n\n| Customer says | Sticker |\n|---|---|\n| manis biasa / normal sugar | 100% |\n| kurang manis sikit | 75% |\n| kurang manis / half sugar | 50% |\n| sikit manis / less sugar | 25% |\n| tak nak gula / kosong / no sugar | 0% |\n\n\"Teh susu kurang manis, kurang ais, satu\" is one milk tea, less sweet, less ice: **CT01-R 50% LI**. Three facts, three parts of the sticker. **Satu** is the quantity — one cup. It never changes the recipe.\n\nIce works the same way: **kurang ais** is LI, **tak nak ais** is NI, **ais biasa** is RI, **panas** is HOT. Section 7 also sets the floor on brown sugar drinks: BS01 and BS02 cannot go below 25% because the syrup is what makes the stripes. If a customer asks for 0% on a BS drink, offer 25% or a CT01 at 0% with pearls.\n\nOne more word decides where the cup goes. **Bungkus** — or **tapau** — means takeaway. **Minum sini** means drinking here. Same drink, same sticker, different bag."
+      },
+      "source_material_ids": [
+        18,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "Listen to each phrase, then say it twice. These are the words customers use, so you need to hear them at speed and say them back when you confirm the order.",
+        "language": "ms",
+        "items": [
+          {
+            "text": "Teh susu",
+            "translation": "milk tea",
+            "phonetic": "TEH SOO-soo",
+            "audio": "audio/674cda53c88f25b0.mp3"
+          },
+          {
+            "text": "Kurang manis",
+            "translation": "less sweet",
+            "phonetic": "KOO-rahng MAH-nis",
+            "audio": "audio/4eb87d01286463eb.mp3"
+          },
+          {
+            "text": "Kurang ais",
+            "translation": "less ice",
+            "phonetic": "KOO-rahng AH-yis",
+            "audio": "audio/3f3fc93a35cb06df.mp3"
+          },
+          {
+            "text": "Satu",
+            "translation": "one",
+            "phonetic": "SAH-too",
+            "audio": "audio/8628eb80aee98b3d.mp3"
+          },
+          {
+            "text": "Bungkus",
+            "translation": "takeaway",
+            "phonetic": "BOONG-koos",
+            "audio": "audio/182c8e45c44fc006.mp3"
+          },
+          {
+            "text": "Tapau",
+            "translation": "takeaway",
+            "phonetic": "TAH-pow",
+            "audio": "audio/df5e7cb613d1cf90.mp3"
+          },
+          {
+            "text": "Minum sini",
+            "translation": "drinking here",
+            "phonetic": "MEE-noom SEE-nee",
+            "audio": "audio/000f6bc04732701d.mp3"
+          },
+          {
+            "text": "Tak nak ais",
+            "translation": "no ice",
+            "phonetic": "TAH NAH AH-yis",
+            "audio": "audio/1707694d7f19aa18.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, native Malay speaker",
+        "voice": "ms-MY-YasminNeural"
+      },
+      "source_material_ids": [
+        18,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "manis biasa",
+            "back": "100% — normal sugar"
+          },
+          {
+            "front": "kurang manis sikit",
+            "back": "75%"
+          },
+          {
+            "front": "kurang manis",
+            "back": "50% — half sugar"
+          },
+          {
+            "front": "sikit manis",
+            "back": "25% — less sugar"
+          },
+          {
+            "front": "tak nak gula / kosong",
+            "back": "0% — no sugar"
+          },
+          {
+            "front": "kurang ais",
+            "back": "LI — less ice"
+          },
+          {
+            "front": "tak nak ais",
+            "back": "NI — no ice"
+          },
+          {
+            "front": "ais biasa",
+            "back": "RI — normal ice"
+          },
+          {
+            "front": "panas",
+            "back": "HOT — CT01, CT02 and MT01 only, regular size only"
+          },
+          {
+            "front": "bungkus / tapau",
+            "back": "Takeaway"
+          },
+          {
+            "front": "minum sini",
+            "back": "Drinking here"
+          },
+          {
+            "front": "BS01 or BS02 at 0%",
+            "back": "Not allowed (minimum 25%): offer 25% or a CT01 at 0% with pearls"
+          }
+        ]
+      },
+      "source_material_ids": [
+        18,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Three orders, three stickers",
+        "markdown": "**Order 1.** \"Teh susu kurang manis, kurang ais, satu.\"\n\n- teh susu → CT01, regular\n- kurang manis → 50%\n- kurang ais → LI\n- satu → one cup\n\n**Sticker: CT01-R 50% LI**\n\n---\n\n**Order 2.** \"BS01 besar, sikit manis, bungkus.\"\n\n- BS01 → Brown Sugar Milk Tea\n- besar → L (large)\n- sikit manis → 25%\n- bungkus → takeaway\n\n**Sticker: BS01-L 25% RI** — ice is normal because nothing was said about it.\n\n---\n\n**Order 3.** \"Teh susu, tak nak gula, kosong.\"\n\n- teh susu → CT01, regular\n- tak nak gula / kosong → 0%\n\n**Sticker: CT01-R 0% RI.** This one is fine — CT01 is not a brown sugar drink, so 0% is allowed. The same request on a BS01 gets the section 7 offer instead: 25%, or a CT01 at 0% with pearls."
+      },
+      "source_material_ids": [
+        18,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "dialogue",
+      "payload": {
+        "scenario_markdown": "A customer walks up to the counter and orders in Malay. You are the crew member on the register. You must understand the order, confirm it back, and write the correct sticker.",
+        "language": "ms",
+        "ai_role": "customer",
+        "learner_role": "crew member",
+        "goal": "Take the customer's order in Malay, confirm the sweetness, ice and takeaway choice back to them, and state the sticker you will write.",
+        "opening_line": "Teh susu kurang manis, kurang ais, satu.",
+        "hints": [
+          "Kurang manis, kurang ais — CT01-R 50% LI.",
+          "Boleh saya ulang: satu teh susu, kurang manis, kurang ais. Betul?",
+          "Bungkus atau minum sini?"
+        ],
+        "opening_audio": "audio/31b1f05c461aad95.mp3"
+      },
+      "source_material_ids": [
+        18,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from the order the customer actually spoke, not from what you expect them to want."
+      },
+      "source_material_ids": [
+        18,
+        27
+      ],
+      "assessments": [
+        {
+          "kind": "cloze",
+          "prompt": "A customer says \"Teh susu kurang manis, kurang ais, satu.\" The sticker you write is CT01-R ____ LI.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "50%",
+              "50"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Kurang manis without a number maps to 50% in section 7 of the SOP. Kurang ais maps to LI, and satu is the quantity, not a recipe change.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            27
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "\"Teh susu kurang manis, kurang ais, satu.\" means one milk tea, less sweet, less ice: CT01-R 50% LI."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A customer says \"BS01 besar, kosong, bungkus.\" What do you do?",
+          "bloom": "evaluate",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Write BS01-L 0% RI and send it to the bar."
+            },
+            {
+              "id": "b",
+              "text": "Offer 25% or a CT01 at 0% with pearls, because BS drinks cannot go below 25%."
+            },
+            {
+              "id": "c",
+              "text": "Write BS01-L 25% LI and say nothing to the customer."
+            },
+            {
+              "id": "d",
+              "text": "Write CT01-L 0% RI because the customer asked for no sugar."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Section 7 sets a 25% floor on the brown sugar series because the syrup is what makes the stripes. The SOP says to offer 25% or a CT01 at 0% with pearls instead.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            18
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Brown sugar series (BS01, BS02): minimum 25%, because the syrup makes the stripes. If a customer asks for 0%, offer 25% or a Classic Milk Tea (CT01) at 0% with pearls."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "You only caught the words \"teh susu\" before the customer walked off. What is the risk of writing the sticker now?",
+          "bloom": "analyze",
+          "grader": "self",
+          "answer_key": {
+            "reference_answer": "You may write 100% RI when the customer said kurang manis and kurang ais."
+          },
+          "max_score": 1,
+          "explanation": "Scenario D: kurang manis and kurang ais are what make the sticker CT01-R 50% LI. Miss them and the drink goes out too sweet and with too much ice.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            27
+          ],
+          "status": "supported",
+          "reason": "Scenario D shows kurang manis and kurang ais change the sticker; missing them gives the wrong sticker, as the key says.",
+          "quote": "means one milk tea, less sweet, less ice: CT01-R 50% LI"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A customer says \"Teh susu sikit manis, tak nak ais, tapau.\" Write the sticker you would produce and explain each part of it.",
+          "bloom": "apply",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "CT01-R 25% NI, takeaway. Teh susu is CT01 at regular size. Sikit manis is 25% in section 7. Tak nak ais is NI. Tapau means takeaway, so the cup is bagged rather than served for drinking here."
+          },
+          "rubric": [
+            {
+              "criterion": "Writes the correct sticker code CT01-R 25% NI",
+              "weight": 0.4,
+              "excellent": "States CT01-R 25% NI exactly, with all four parts in the right order.",
+              "acceptable": "States CT01 with 25% and NI but writes the size or the order of parts differently.",
+              "poor": "Writes a different drink code, a different sweetness, or a different ice code."
+            },
+            {
+              "criterion": "Maps each Malay phrase to the correct sticker part",
+              "weight": 0.35,
+              "excellent": "Names teh susu as CT01, sikit manis as 25%, tak nak ais as NI, and tapau as takeaway, each in one clause.",
+              "acceptable": "Maps at least three of the four phrases correctly, with one left unexplained.",
+              "poor": "Treats sikit manis as 50% or tak nak ais as LI, or ignores tapau entirely."
+            },
+            {
+              "criterion": "States what tapau changes about handling the cup",
+              "weight": 0.25,
+              "excellent": "Says the drink is bagged as takeaway rather than served for drinking here, and the recipe is unchanged.",
+              "acceptable": "Says it means takeaway without noting that the recipe does not change.",
+              "poor": "Confuses tapau with minum sini or says it changes the sweetness or ice."
+            }
+          ],
+          "max_score": 4,
+          "id": "q4",
+          "status": "supported",
+          "reason": "Section 7 maps sikit manis to 25% and tak nak ais to NI; Scenario D gives tapau as takeaway.",
+          "quote": "25% | sikit manis, less sugar | 1 | 2",
+          "cite_chunk_ids": [
+            18
+          ],
+          "explanation": "25% | sikit manis, less sugar | 1 | 2"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.002031,
+  "repairs": [
+    "demoted 1 of 2 mcq to short_answer (at most 1 of 4 items may be multiple choice)",
+    "cites: q1: cited chunk 27 (Scenario D: order in Malay), found by its question and answer",
+    "cites: q2: cited chunk 18 (7. Sweetness and ice levels), found by its question and answer"
+  ]
+}

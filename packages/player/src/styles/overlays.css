@@ -63,3 +63,6 @@
 
 /* G2 review: the citation popover is centred on phones */
 @media (max-width: 600px) { .cite-pop { left: 16px !important; right: 16px; width: auto; } }
+/* G2 review: the marked passage is introduced as "Your slide says" */
+.cite-pop .says { display: block; margin: 12px 0 -4px; font: var(--t-eyebrow); letter-spacing: var(--track-eyebrow); text-transform: uppercase; color: var(--lime-ink); }
+.cite-pop .ft a { white-space: nowrap; flex: none; }

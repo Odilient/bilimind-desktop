@@ -1,0 +1,249 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BiliMind//BiliMind for WorkBuddy//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Mutiara Tea Bar crew day-one
+X-WR-TIMEZONE:Asia/Kuala_Lumpur
+BEGIN:VTIMEZONE
+TZID:Asia/Kuala_Lumpur
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+TZNAME:+08
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:boba-day-one-study-2026-10-11@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261011T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261011T204500
+SUMMARY:Study: Who is a food handler under FHR 2009 + Handwashing and hygie
+ ne rules you cannot skip
+DESCRIPTION:Mutiara Tea Bar crew day-one. 45 minutes.\nLesson 1: Who is a f
+ ood handler under FHR 2009 (20 min)\nLesson 2: Handwashing and hygiene rul
+ es you cannot skip (25 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Who is a food handler under FHR 2009 + Handwashing and h
+ ygiene rules you cannot skip
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-review-2026-10-12@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T081000
+SUMMARY:Review: Who is a food handler under FHR 2009\, Handwashing and hygi
+ ene rules you cannot skip
+DESCRIPTION:Spaced review for Mutiara Tea Bar crew day-one\, Mon 12 Oct: 2 
+ lessons\, about 10 minutes.\nOpen index.html\, then Due today: it shows th
+ e cards that are due.\n- Under reg. 2\, who is a food handler?\n- Does was
+ hing shakers make you a food handler?\n- Which regulation imposes the trai
+ ning duty?\n- What does reg. 31(1) require before you start work?\n- You h
+ ave a stomach bug on a shift day. What does reg. 31(2) say?\n- What clothi
+ ng does reg. 32 require?\n... and 14 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Who is a food handler under FHR 2009\, Handwashing and 
+ hygiene rules you cannot skip
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-study-2026-10-12@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261012T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261012T202500
+SUMMARY:Study: Allergens: what the creamer really contains
+DESCRIPTION:Mutiara Tea Bar crew day-one. 25 minutes.\nLesson 3: Allergens:
+  what the creamer really contains (25 min)\nOpen index.html in your course
+  folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Allergens: what the creamer really contains
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-review-2026-10-13@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T081000
+SUMMARY:Review: Allergens: what the creamer really contains
+DESCRIPTION:Spaced review for Mutiara Tea Bar crew day-one\, Tue 13 Oct: 1 
+ lesson\, about 10 minutes.\nOpen index.html\, then Due today: it shows the
+  cards that are due.\n- A customer says her son is allergic to milk. Which
+  of the following are true statements...\n- A customer points at the brown
+  sugar syrup bottle and asks whether it contains milk or ...\n- A customer
+  at the counter declares a milk allergy and orders a fruit tea. Put the st
+ eps...\n- A customer's face and lips begin to swell minutes after drinking
+  a milk tea\, and she sa...
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Allergens: what the creamer really contains
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-study-2026-10-13@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261013T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261013T203000
+SUMMARY:Study: Opening and closing the kiosk by the checklist
+DESCRIPTION:Mutiara Tea Bar crew day-one. 30 minutes.\nLesson 4: Opening an
+ d closing the kiosk by the checklist (30 min)\nOpen index.html in your cou
+ rse folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Opening and closing the kiosk by the checklist
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-review-2026-10-14@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261014T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261014T081000
+SUMMARY:Review: Opening and closing the kiosk by the checklist
+DESCRIPTION:Spaced review for Mutiara Tea Bar crew day-one\, Wed 14 Oct: 1 
+ lesson\, about 10 minutes.\nOpen index.html\, then Due today: it shows the
+  cards that are due.\n- Put these opening-checklist steps into the order s
+ ection 4 of the SOP lists them.\n- It is 21:20. A customer orders a classi
+ c milk tea. You have half a pot of cooked pearls...\n- The closing checkli
+ st says to put all food away or cover it before sweeping and mopping...\n-
+  You arrive for the opening shift at 09:30. The chiller thermometer reads 
+ 6 °C and the f...
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Opening and closing the kiosk by the checklist
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-study-2026-10-14@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261014T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261014T202500
+SUMMARY:Study: Menu codes\, prices and what each drink contains
+DESCRIPTION:Mutiara Tea Bar crew day-one. 25 minutes.\nLesson 5: Menu codes
+ \, prices and what each drink contains (25 min)\nOpen index.html in your c
+ ourse folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Menu codes\, prices and what each drink contains
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-review-2026-10-15@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261015T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261015T082500
+SUMMARY:Review: Who is a food handler under FHR 2009\, Handwashing and hygi
+ ene rules you cannot skip\, Allergens: what the creamer really contains\, 
+ Opening and closing the kiosk by the checklist\, Menu codes\, prices and w
+ hat each drink contains
+DESCRIPTION:Spaced review for Mutiara Tea Bar crew day-one\, Thu 15 Oct: 5 
+ lessons\, about 25 minutes.\nOpen index.html\, then Due today: it shows th
+ e cards that are due.\n- Under reg. 2\, who is a food handler?\n- Does was
+ hing shakers make you a food handler?\n- Which regulation imposes the trai
+ ning duty?\n- What does reg. 31(1) require before you start work?\n- You h
+ ave a stomach bug on a shift day. What does reg. 31(2) say?\n- What clothi
+ ng does reg. 32 require?\n... and 42 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Who is a food handler under FHR 2009\, Handwashing and 
+ hygiene rules you cannot skip\, Allergens: what the creamer really contain
+ s\, Opening and closing the kiosk by the checklist\, Menu codes\, prices a
+ nd what each drink contains
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-study-2026-10-15@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261015T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261015T202000
+SUMMARY:Study: Taking an order in Malay
+DESCRIPTION:Mutiara Tea Bar crew day-one. 20 minutes.\nLesson 6: Taking an 
+ order in Malay (20 min)\nOpen index.html in your course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Taking an order in Malay
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-review-2026-10-16@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261016T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261016T081000
+SUMMARY:Review: Taking an order in Malay
+DESCRIPTION:Spaced review for Mutiara Tea Bar crew day-one\, Fri 16 Oct: 1 
+ lesson\, about 10 minutes.\nOpen index.html\, then Due today: it shows the
+  cards that are due.\n- manis biasa\n- kurang manis sikit\n- kurang manis\
+ n- sikit manis\n- tak nak gula / kosong\n- kurang ais\n... and 10 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Taking an order in Malay
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-study-2026-10-16@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261016T200000
+DTEND;TZID=Asia/Kuala_Lumpur:20261016T203000
+SUMMARY:Study: Building a drink to the sticker in under 90 seconds
+DESCRIPTION:Mutiara Tea Bar crew day-one. 30 minutes.\nLesson 7: Building a
+  drink to the sticker in under 90 seconds (30 min)\nOpen index.html in you
+ r course folder.
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Study: Building a drink to the sticker in under 90 seconds
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:boba-day-one-review-2026-10-17@bilimind
+DTSTAMP:20261010T163601Z
+DTSTART;TZID=Asia/Kuala_Lumpur:20261017T080000
+DTEND;TZID=Asia/Kuala_Lumpur:20261017T083500
+SUMMARY:Review: Who is a food handler under FHR 2009\, Handwashing and hygi
+ ene rules you cannot skip\, Allergens: what the creamer really contains\, 
+ Opening and closing the kiosk by the checklist\, Menu codes\, prices and w
+ hat each drink contains\, Taking an order in Malay\, Building a drink to t
+ he sticker in under 90 seconds
+DESCRIPTION:Spaced review for Mutiara Tea Bar crew day-one\, Sat 17 Oct: 7 
+ lessons\, about 35 minutes.\nOpen index.html\, then Due today: it shows th
+ e cards that are due.\n- Under reg. 2\, who is a food handler?\n- Does was
+ hing shakers make you a food handler?\n- Which regulation imposes the trai
+ ning duty?\n- What does reg. 31(1) require before you start work?\n- You h
+ ave a stomach bug on a shift day. What does reg. 31(2) say?\n- What clothi
+ ng does reg. 32 require?\n... and 62 more
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Review: Who is a food handler under FHR 2009\, Handwashing and 
+ hygiene rules you cannot skip\, Allergens: what the creamer really contain
+ s\, Opening and closing the kiosk by the checklist\, Menu codes\, prices a
+ nd what each drink contains\, Taking an order in Malay\, Building a drink 
+ to the sticker in under 90 seconds
+TRIGGER:-PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

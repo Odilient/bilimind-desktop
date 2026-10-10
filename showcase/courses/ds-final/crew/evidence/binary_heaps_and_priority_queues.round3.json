@@ -1,0 +1,1 @@
+[{"item": "q6", "verdict": "supported", "quote": "parent: ⌊(i − 1) / 2⌋", "reason": "Slide 5's parent formula takes index 7 to 3, then 1, then 0; with 4 smaller than 20, 15 and 6 that gives the keyed arrays."}]

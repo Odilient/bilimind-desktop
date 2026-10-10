@@ -1,0 +1,62 @@
+[
+  {
+    "lesson": "allergens",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "The creamer contains sodium caseinate, a milk protein.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 24,
+    "round": 1,
+    "at": "2026-10-10T16:16:24.217Z"
+  },
+  {
+    "lesson": "allergens",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "When a customer mentions any allergy, the cashier says it out loud to the bar (\"ALLERGY: milk\") and adds ALG to the sticker.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 21,
+    "round": 1,
+    "at": "2026-10-10T16:16:24.217Z"
+  },
+  {
+    "lesson": "allergens",
+    "item": "q4",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but the quote did not check out against the slide.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:16:24.220Z"
+  },
+  {
+    "lesson": "allergens",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Making an allergy order: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding.",
+    "reason": "Section 9 gives the allergy steps in the key; the syrup recipe (6.3: brown sugar and water) has no milk or tea.",
+    "chunk_id": 21,
+    "round": 1,
+    "at": "2026-10-10T16:26:03.215Z"
+  },
+  {
+    "lesson": "allergens",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Making an allergy order: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding.",
+    "reason": "Section 9: call out and add ALG when the allergy is mentioned, then washed hands, gloves, clean rack, fresh ice; then tell the customer.",
+    "chunk_id": 21,
+    "round": 2,
+    "at": "2026-10-10T16:26:03.215Z"
+  },
+  {
+    "lesson": "allergens",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "call 999 at once, tell the shift lead, keep the person still, and ask if they carry their own adrenaline auto-injector",
+    "reason": "Section 9 gives exactly this first response to swollen lips, trouble breathing, hives or vomiting; the auto-check missed it.",
+    "chunk_id": 21,
+    "round": 2,
+    "at": "2026-10-10T16:26:03.215Z"
+  }
+]

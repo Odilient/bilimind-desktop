@@ -1,0 +1,1439 @@
+{
+  "version": 1,
+  "course_id": "bm-survival",
+  "exam_at": "2026-10-25T09:00:00+08:00",
+  "updated_at": "2026-10-10T16:38:42.045Z",
+  "cards": [
+    {
+      "id": "malay_sounds/b3/c0",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 0,
+      "prompt": "Malay **c** — as in *cakap*",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c1",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 1,
+      "prompt": "Malay **g** — as in *gula*",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c2",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 2,
+      "prompt": "Malay **ng** vs **ngg**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c3",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 3,
+      "prompt": "Word-final **-a**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c4",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 4,
+      "prompt": "Word-final **-k**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c5",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 5,
+      "prompt": "Malay **e** — two values",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c6",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 6,
+      "prompt": "Malay **sy** and **kh**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c7",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 7,
+      "prompt": "Malay **ny**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c8",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 8,
+      "prompt": "Malay **o**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c9",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 9,
+      "prompt": "Malay **r**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c10",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 10,
+      "prompt": "Where does the stress fall?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/b3/c11",
+      "lesson": "malay_sounds",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 11,
+      "prompt": "Malay **i** and **u**",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/q1",
+      "lesson": "malay_sounds",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "You are reading a menu and see the word *cakap* on a sign about speaking English. Which pronunciation matches the letter-to-sound rules in section 1 of your phrasebook?",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/q2",
+      "lesson": "malay_sounds",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Which of these statements about Malay Rumi spelling are true according to section 1 of your phrasebook? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/q3",
+      "lesson": "malay_sounds",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Your phrasebook gives *saya* (I) as sounding like \"sa-____\" in everyday Peninsular speech, because a word-final *a* softens.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "malay_sounds/q4",
+      "lesson": "malay_sounds",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A friend reads *tangga* (stairs) aloud as \"tan-gah\" and *dengan* (with) as \"deng-gahn\". Using section 1 of your phrasebook, explain what they got wrong in each word and give the correct reading of both.",
+      "fsrs": {
+        "due": "2026-10-12T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "greetings_and_address/q5",
+      "lesson": "greetings_and_address",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "You are at the campus faculty office. The person behind the counter is a woman you would guess is about 30. You need to ask where the toilet is. Select all the forms of address that will not read as a mistake.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "greetings_and_address/q2",
+      "lesson": "greetings_and_address",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "It is 4 pm. Your Grab driver is a man in his thirties. You want to greet him as you get in. Which greeting and address fits best?",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "greetings_and_address/q3",
+      "lesson": "greetings_and_address",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A classmate in your tutorial group, your own age, has just introduced himself and used your first name. Explain which word for \"you\" you would use with him, and why the same word would be wrong with the mamak uncle who served you breakfast this morning.",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "greetings_and_address/q4",
+      "lesson": "greetings_and_address",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You are squeezing past a group of people blocking the walkway at the mamak. What do you say?",
+      "fsrs": {
+        "due": "2026-10-13T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c0",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 0,
+      "prompt": "11",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c1",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 1,
+      "prompt": "20",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c2",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 2,
+      "prompt": "100",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c3",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 3,
+      "prompt": "1000",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c4",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 4,
+      "prompt": "45",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c5",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 5,
+      "prompt": "zero inside a phone number",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c6",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 6,
+      "prompt": "RM 4.50",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c7",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 7,
+      "prompt": "How much is this?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c8",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 8,
+      "prompt": "What time is it now?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c9",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 9,
+      "prompt": "half past two",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c10",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 10,
+      "prompt": "tomorrow",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/b3/c11",
+      "lesson": "numbers_money_and_time",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 11,
+      "prompt": "Friday",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/q1",
+      "lesson": "numbers_money_and_time",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "The mamak bill comes to RM 80. The waiter says the number as ____ ringgit. Write the Malay word that fills the blank.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/q2",
+      "lesson": "numbers_money_and_time",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Your Grab driver reads out his number as kosong satu tiga. Which sequence of digits is he saying?",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/q3",
+      "lesson": "numbers_money_and_time",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Which of these Malay numbers are written correctly for the value shown? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "numbers_money_and_time/q4",
+      "lesson": "numbers_money_and_time",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "A friend tells you the trip costs RM 90 and leaves at pukul lapan pagi. Write both facts back in Malay, and explain in one sentence why lapan pagi cannot be confused with lapan puluh in the price.",
+      "fsrs": {
+        "due": "2026-10-14T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "mamak_ordering/q1",
+      "lesson": "mamak_ordering",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "You want a cold drink with no milk and no sugar. Select all the orders that get you exactly that.",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "mamak_ordering/q2",
+      "lesson": "mamak_ordering",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "A friend orders \"teh\" at a mamak and is surprised that the tea is sweet and milky. Using only the words from the mamak drink list, write the exact order they should have given if they wanted hot tea with no milk and no sugar, and explain which word removed the milk and which removed the sugar.",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "mamak_ordering/q3",
+      "lesson": "mamak_ordering",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "You have ordered your roti canai and want to take it home rather than eat at the table. Which word gets the food wrapped?",
+      "fsrs": {
+        "due": "2026-10-15T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "grab_and_directions/q6",
+      "lesson": "grab_and_directions",
+      "kind": "item",
+      "item": "q6",
+      "prompt": "Put these moments of a Grab ride in the order you perform them, from booking to getting out.",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "grab_and_directions/q2",
+      "lesson": "grab_and_directions",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "The app says your Grab has arrived. You are at the main entrance and cannot see the car. You have already sent Abang dah sampai? twice with no reply. What is the best next move?",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "grab_and_directions/q3",
+      "lesson": "grab_and_directions",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Your Grab driver is approaching a junction on the campus road and asks which way to go. You need him to turn right and then keep going. Write what you say, in Malay, and explain why you say the direction word together with a hand gesture rather than the word alone.",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "grab_and_directions/q4",
+      "lesson": "grab_and_directions",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You are standing at the main entrance and the driver cannot see you. You tell him where you are waiting: Saya tunggu di ____ utama.",
+      "fsrs": {
+        "due": "2026-10-16T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c0",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 0,
+      "prompt": "I'm an international student.",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c1",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 1,
+      "prompt": "I don't understand.",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c2",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 2,
+      "prompt": "Can you repeat that?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c3",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 3,
+      "prompt": "Can you speak a bit slower?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c4",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 4,
+      "prompt": "I'm sorry. (polite)",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c5",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 5,
+      "prompt": "Where is the library?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c6",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 6,
+      "prompt": "When does the class start?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c7",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 7,
+      "prompt": "What does \"tugasan\" mean?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c8",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 8,
+      "prompt": "May I sit here?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c9",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 9,
+      "prompt": "lecturer",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c10",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 10,
+      "prompt": "assignment / quiz / exam",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/b3/c11",
+      "lesson": "campus_and_classroom",
+      "kind": "flashcard",
+      "block": "b3",
+      "card": 11,
+      "prompt": "library",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/q4",
+      "lesson": "campus_and_classroom",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You are in a BMK class. The tutor has just explained the assessment structure in Malay; you caught the first sentence and nothing after it. You want the tutor to say it again. Which line asks for exactly that?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/q2",
+      "lesson": "campus_and_classroom",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "You heard the word *tugasan* but do not know it. You ask the tutor: Apa ____ \"tugasan\"?",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "campus_and_classroom/q3",
+      "lesson": "campus_and_classroom",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A classmate tells you that saying *Saya tak faham* in a BMK session is a bad idea because the tutor will think you are not paying attention. Using the phrases from this lesson, explain what you would say instead of staying silent, and what each phrase does for you.",
+      "fsrs": {
+        "due": "2026-10-17T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c0",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 0,
+      "prompt": "Full module name",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c1",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 1,
+      "prompt": "Module code",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c2",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 2,
+      "prompt": "Credit value",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c3",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 3,
+      "prompt": "Taylor's category",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c4",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 4,
+      "prompt": "What MPU stands for",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c5",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 5,
+      "prompt": "Is BMK 2 assessed?",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c6",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 6,
+      "prompt": "What is the phrasebook, relative to BMK 2?",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/b4/c7",
+      "lesson": "bmk_module_context",
+      "kind": "flashcard",
+      "block": "b4",
+      "card": 7,
+      "prompt": "Which other U1 modules do international degree students take?",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/q1",
+      "lesson": "bmk_module_context",
+      "kind": "item",
+      "item": "q1",
+      "prompt": "The module code for Bahasa Melayu Komunikasi 2 at Taylor's is ____.",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/q2",
+      "lesson": "bmk_module_context",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "Which of the following statements about Bahasa Melayu Komunikasi 2 are correct? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "bmk_module_context/q3",
+      "lesson": "bmk_module_context",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "A friend tells you they skipped BMK 2 all semester because they already speak enough Malay to order food. What does the module structure say about that plan?",
+      "fsrs": {
+        "due": "2026-10-18T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "capstone_a_day_in_malay/q2",
+      "lesson": "capstone_a_day_in_malay",
+      "kind": "item",
+      "item": "q2",
+      "prompt": "At the mamak, the waiter asks *Makan?* after taking your drink order. What is the waiter asking?",
+      "fsrs": {
+        "due": "2026-10-20T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "capstone_a_day_in_malay/q3",
+      "lesson": "capstone_a_day_in_malay",
+      "kind": "item",
+      "item": "q3",
+      "prompt": "Which of these lines from your phrasebook are used in the mamak scene of this capstone? Select all that apply.",
+      "fsrs": {
+        "due": "2026-10-20T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "capstone_a_day_in_malay/q4",
+      "lesson": "capstone_a_day_in_malay",
+      "kind": "item",
+      "item": "q4",
+      "prompt": "You have finished eating at the mamak and want the bill. You get the waiter's attention and say: Bang, ____.",
+      "fsrs": {
+        "due": "2026-10-20T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    },
+    {
+      "id": "capstone_a_day_in_malay/q5",
+      "lesson": "capstone_a_day_in_malay",
+      "kind": "item",
+      "item": "q5",
+      "prompt": "You ran the day and abandoned *Boleh saya duduk di sini?* for English on campus. Explain what you should do with that abandoned line before your next campus day, and why that is better than simply trying again from memory.",
+      "fsrs": {
+        "due": "2026-10-20T00:00:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": 0,
+        "last_review": null
+      }
+    }
+  ]
+}

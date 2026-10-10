@@ -1,0 +1,12 @@
+[
+  {
+    "lesson": "greeting_etiquette",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "Helo / Hai | Hello | Hai is informal",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 6,
+    "round": 1,
+    "at": "2026-10-10T16:13:59.894Z"
+  }
+]

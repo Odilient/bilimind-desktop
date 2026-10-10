@@ -11,8 +11,9 @@ Full status (WP7 + WP16): `skills/bilimind/STATUS.md`. This file stays out of th
 - **Rebuild:** `node skills/bilimind/scripts/zip-skill.mjs --team` syncs the member playbooks from
   `skills/bilimind/references/*.md` and the skill copy, then writes `skills/dist/bilimind-crew.zip`.
   Avatars: `node workbuddy/bilimind-crew/avatars/src/make-avatars.mjs`.
-- **Not done:** not registered in the real `my-experts` folder (the orchestrator does that), and not
-  run inside WorkBuddy yet (open questions T1-T5 in hackathon/EXPERT-TEAM.md section 8).
-- **Next:** after WP6's final bundle, run `--team` again. Then copy this folder to
-  `%USERPROFILE%\.workbuddy-ai\plugins\marketplaces\my-experts\plugins\bilimind-crew` and register
-  it from inside WorkBuddy (EXPERT-TEAM.md steps B-E).
+- **Installed (G3 prep, real config):** copied to `C:/Users/User/.workbuddy-ai/plugins/marketplaces/my-experts/plugins/bilimind-crew`,
+  validate_expert.py OK, register_expert.py --session-id dormathon-build OK (marketplace.json entry +
+  .created-by-session); WorkBuddy adopted it into experts/custom/<user>/experts.json by itself. The skill is
+  also installed at `C:/Users/User/.workbuddy-ai/skills/bilimind` (install.ps1).
+- **Re-copy after any rebuild:** run `--team`, then copy again and re-run register (it updates in place).
+- **Not yet run inside WorkBuddy:** parallel Agent spawns, TeamCreate + SendMessage to `team-lead`, present_files.

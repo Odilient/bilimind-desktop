@@ -31,6 +31,14 @@ function itemSection(data: CourseData, lessonChunkFallback: number[], lesson: Pa
     lines.push('');
   }
   lines.push(`**Accepted answer:** ${answerInWords(item)}`, '');
+  // G2 review: a numeric key is only as good as its arithmetic. check Q9 recomputes the Writer's working when there is
+  // one; without it the Checker must redo the sum before ruling `supported` (a wrong key marks right answers wrong).
+  if (item.kind === 'numeric') {
+    const work = (item.answer_key as { work?: unknown } | undefined)?.work;
+    lines.push(typeof work === 'string' && work.trim()
+      ? `**Writer's working:** ${work.trim()} (recompute it from the question before ruling)`
+      : '**Verify:** no working was given. Solve the question yourself from the excerpts; if your answer differs from the accepted one, rule `contradicted`, quoting the rule or formula the key breaks.', '');
+  }
   const ids = itemChunkIds(lesson, block, item, lessonChunkFallback);
   const chunks = chunksFor(data, ids);
   if (!chunks.length) {

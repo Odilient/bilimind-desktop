@@ -1,0 +1,5 @@
+[
+  {"item": "q5", "verdict": "supported", "quote": "49 → 9 taken, try 0: 2 probes", "reason": "Slide 11 shows the probe-forward-and-wrap rule; applied to 24, 34, 50, 44, 89, 99 it fills slots 0, 1, 4, 5, 6, 9 as keyed."},
+  {"item": "q3", "verdict": "contradicted", "quote": "49 → 9 taken, try 0: 2 probes", "reason": "The model answer says 49 goes to slot 9 and the run is 9, 0, 1, 2; slide 11 puts 89 in slot 9 and 49 in slot 0."},
+  {"item": "q4", "verdict": "supported", "quote": "Load factor can exceed 1 must stay below 1", "reason": "Slide 13: with separate chaining the load factor can exceed 1; only open addressing must stay below 1."}
+]

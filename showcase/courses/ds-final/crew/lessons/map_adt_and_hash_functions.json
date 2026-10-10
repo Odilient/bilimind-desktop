@@ -1,0 +1,481 @@
+{
+  "key": "map_adt_and_hash_functions",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Slide 3 of Lecture 2 lists the dictionary (map) ADT as three operations: `insert(key, value)`, `search(key)`, `delete(key)`. That is the whole contract. A map is not a list with nicer syntax — it is a promise that given a key you can get its value back, and the only question that matters on the exam is what each implementation charges you for that promise.\n\nSlide 3 gives the price list:\n\n| Implementation | Search | Insert |\n|---|---|---|\n| Unsorted array | O(n) | O(1) |\n| Sorted array | O(log n) | O(n) |\n| Balanced binary search tree | O(log n) | O(log n) |\n| Hash table | O(1) average | O(1) average |\n\nRead the table as a trade, not a ranking. An unsorted array inserts in O(1) because you drop the pair at the end and walk away; search is O(n) because nothing about the position tells you where the key is. A sorted array buys O(log n) search with binary search and pays O(n) on insert, because a new key in the middle shifts everything after it. The balanced BST is the only one that refuses to be bad at either — O(log n) both ways — and that is why it costs you pointer bookkeeping and rotations.\n\nThe hash table is the odd one out because it is the only row with the word *average*. Nothing about a hash table makes search O(1) by construction. It makes search O(1) **when the keys are spread**, and the rest of this lesson is about what \"spread\" means and what happens when it fails.\n\nThe mechanism is two steps. A hash function turns the key into a bucket index. The table stores the entry in that bucket. Search recomputes the same index and looks only there. If the buckets hold roughly one entry each, that lookup touches one entry and the cost is constant. If every key lands in bucket 0, the lookup walks a list of n entries and the cost is O(n) — the same as the unsorted array, with extra arithmetic on top.\n\nSlide 5 names the three properties a hash function must have: **deterministic** (the same key always gives the same index), **uniform** (keys spread evenly over the buckets), and **fast to compute, using the whole key**. Deterministic is not a nice-to-have. If `h(\"Ada\")` returns 3 on insert and 5 on search, the entry is unreachable and the map is broken, not slow.\n\nSlide 5 also gives the division method, `h(k) = k mod m`, with the warning to choose m prime and not close to a power of 2. The reason is uniformity. With m = 16, `k mod 16` keeps only the low 4 bits of k, so any set of keys that agrees in those bits — student IDs ending in 00, timestamps on a 16 ms tick — piles into one bucket. A prime m mixes all the bits of k into the index instead.\n\nThe last quantity is the **load factor** α = n / m, where n is the number of entries and m is the number of buckets. Slide 13 uses it to split the two collision strategies: separate chaining keeps entries in lists outside the array and lets α exceed 1, while open addressing keeps everything inside the array and must stay below 1. Both give O(1) average and O(n) worst case — slide 13 states both columns explicitly."
+      },
+      "source_material_ids": [
+        19,
+        21,
+        29
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "flowchart TD\n  K[\"Key k\"] --> H[\"h(k) = k mod m\"]\n  H --> I[\"Bucket index i\"]\n  I --> B{\"Bucket i\"}\n  B -->|\"empty\"| E[\"search returns not found\"]\n  B -->|\"one entry, key matches\"| F[\"search returns value in O(1)\"]\n  B -->|\"several entries\"| C[\"walk the chain or probe sequence\"]\n  C --> G[\"cost grows with the number of entries in that run\"]\n  G --> W[\"all n keys in one bucket gives O(n)\"]",
+        "caption": "One hash function, three outcomes. The O(1) average lives on the middle branch; the O(n) worst case lives on the bottom one.",
+        "alt_text": "A flowchart: a key k is hashed by h(k) = k mod m to a bucket index. If the bucket is empty, search returns not found. If it holds one entry whose key matches, search returns the value in constant time. If it holds several entries, the search walks the chain or probe sequence, and the cost grows with the number of entries in that run; when all n keys land in one bucket the cost is O(n)."
+      },
+      "source_material_ids": [
+        19,
+        21,
+        25,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "analogy",
+      "payload": {
+        "markdown": "A hash table is a cloakroom with m numbered hooks. The hash function is the rule the attendant uses to decide which hook your coat goes on: `h(k) = k mod m`. Hand over a coat and the attendant computes the hook, hangs the coat, and writes nothing down. Come back with the same ticket and the attendant recomputes the same hook and finds your coat immediately — that is the O(1) average.\n\nWhen two coats hash to the same hook, the attendant hangs the second coat on the same hook (chaining, slide 9: 50, 85 and 92 all hang on hook 1) or walks along the rail to the next free hook (open addressing, slide 11: 49 wants hook 9, finds it taken, takes hook 0). Either way you now have to look at more than one coat.\n\nIf every coat hashes to hook 1, the attendant stands at hook 1 and lifts coats one at a time until yours appears. That is O(n), and no amount of arithmetic changes it.",
+        "breaks_down_when": "The cloakroom has a physical rail, so a full hook is obvious and the attendant can see the whole row at a glance. A hash table has no such view: open addressing can only follow the probe sequence one slot at a time, which is why deleting an entry needs a tombstone (slide 13) rather than simply removing the coat — pulling a coat off the rail would break the chain of slots that later searches must walk through."
+      },
+      "source_material_ids": [
+        19,
+        25,
+        27,
+        29
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Insert 44, 57, 91, 18, 83 into m = 7 with h(k) = k mod 7, then search for 18",
+        "markdown": "Chaining, m = 7, new entries go to the end of the chain (slide 9's convention).\n\n| Key | k mod 7 | Bucket after insert |\n|---|---|---|\n| 44 | 44 − 42 = 2 | 2: 44 |\n| 57 | 57 − 56 = 1 | 1: 57 |\n| 91 | 91 − 91 = 0 | 0: 91 |\n| 18 | 18 − 14 = 4 | 4: 18 |\n| 83 | 83 − 77 = 6 | 6: 83 |\n\nEvery key landed in its own bucket, so α = 5/7 ≈ 0.71 and every search costs one comparison.\n\nNow add 64 and 36, both of which collide:\n\n| Key | k mod 7 | Bucket after insert |\n|---|---|---|\n| 64 | 64 − 63 = 1 | 1: 57 → 64 |\n| 36 | 36 − 35 = 1 | 1: 57 → 64 → 36 |\n\n`search(18)`: compute 18 mod 7 = 4, look at bucket 4, compare 18 with 18, return the value. **1 comparison.**\n\n`search(36)`: compute 36 mod 7 = 1, look at bucket 1, compare 36 with 57 (no), compare 36 with 64 (no), compare 36 with 36 (yes). **3 comparisons.**\n\n`search(50)`: compute 50 mod 7 = 1, walk the whole chain 57, 64, 36 and find nothing. **3 comparisons and a failed search** — the worst case for a lookup is a miss, because you must exhaust the chain to be sure.\n\nWith n = 7 and m = 7, α = 1.0. The average chain length is 1, but the longest chain is 3, and that is the number the exam will ask you to count."
+      },
+      "source_material_ids": [
+        21,
+        25
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Trace a linear-probing insertion the way you will on paper, with slide 11's example: insert 89, 18, 49, 58, 69 into m = 10 with h(k) = k mod 10. Probe h(k), then h(k)+1, h(k)+2, wrapping past 9 back to 0, and count every slot you examine, the first one included.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Write the empty table and the rule",
+            "detail_markdown": "Draw slots 0 to 9. Write the rule at the top: `h(k) = k mod 10`, probe forward, wrap at 9 back to 0. Every probe is one slot examined, including the first.",
+            "check": "Ten empty slots, numbered 0 to 9."
+          },
+          {
+            "n": 2,
+            "title": "Insert 89 and 18",
+            "detail_markdown": "89 mod 10 = 9: slot 9 is empty, so place 89 there. 18 mod 10 = 8: slot 8 is empty, so place 18 there. **1 probe each.**",
+            "check": "Slot 8 holds 18 and slot 9 holds 89."
+          },
+          {
+            "n": 3,
+            "title": "Insert 49: the first collision",
+            "detail_markdown": "49 mod 10 = 9. Slot 9 holds 89, so probe on: wrap to slot 0, which is empty. Place 49 at slot 0. **2 probes** (slots 9, 0).",
+            "warning": "Count the home slot too. 49 has one collision but needs 2 probes; slide 11 writes it as '49 → 9 taken, try 0: 2 probes'.",
+            "check": "Slot 0 holds 49."
+          },
+          {
+            "n": 4,
+            "title": "Insert 58: walk the run",
+            "detail_markdown": "58 mod 10 = 8. Slots 8 (18), 9 (89) and 0 (49) are taken, so the next try is slot 1, which is empty. Place 58 at slot 1. **4 probes** (slots 8, 9, 0, 1).",
+            "check": "Slot 1 holds 58."
+          },
+          {
+            "n": 5,
+            "title": "Insert 69: the run grows again",
+            "detail_markdown": "69 mod 10 = 9. Slots 9 (89), 0 (49) and 1 (58) are taken, so try slot 2: empty. Place 69 at slot 2. **4 probes** (slots 9, 0, 1, 2).",
+            "warning": "This is primary clustering: the occupied run 8, 9, 0, 1 caught 69 and grew to 8, 9, 0, 1, 2. Any key that hashes into a run lands at its end and makes it longer.",
+            "check": "Slot 2 holds 69."
+          },
+          {
+            "n": 6,
+            "title": "Write the final table",
+            "detail_markdown": "Final table: 0 → 49, 1 → 58, 2 → 69, 3 to 7 empty, 8 → 18, 9 → 89, exactly as on slide 11. Probes per insert: 1, 1, 2, 4, 4. Load factor α = 5/10 = 0.5.",
+            "check": "Five keys placed, slots 3 to 7 empty, and you can state the probe count of every insert."
+          }
+        ]
+      },
+      "source_material_ids": [
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "misconception",
+      "payload": {
+        "belief": "A hash table search is O(1), so it is always at least as fast as a balanced BST.",
+        "why_it_seems_right": "Slide 3 prints \"Hash table — Search: O(1) average\" right next to \"Balanced binary search tree — Search: O(log n)\", and the average is the case you see in every example you have traced. The examples on slides 9 and 11 use small prime m and a handful of keys, so chains stay short and the average really is close to one comparison.",
+        "what_is_true": "Slide 13 lists the worst case for both chaining and open addressing as O(n), and the average only holds when the hash function is uniform and α is kept in check. If every key hashes to the same bucket, search walks all n entries — strictly worse than a balanced BST's guaranteed O(log n), because you also paid the hash computation. The balanced BST's O(log n) is a worst-case bound; the hash table's O(1) is an average that depends on a property of your hash function, not on the data structure alone. On an exam, \"O(1)\" written without \"average\" for a hash table is a lost mark."
+      },
+      "source_material_ids": [
+        19,
+        29,
+        25,
+        27
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "code",
+      "payload": {
+        "mode": "function",
+        "language": "javascript",
+        "starter_code": "function buildChains(keys, m) {\n  // Return an array of length m. Each element is an array of the keys\n  // that hash to that bucket, in insertion order.\n  // Use h(k) = k mod m. New entries go to the end of the chain.\n}",
+        "instructions_markdown": "Write `buildChains(keys, m)` in JavaScript. It takes an array of integer keys and the bucket count `m`, and returns an array of length `m`. Element `i` is an array holding every key `k` from `keys` with `k % m === i`, in the order those keys appeared in `keys`.\n\nUse `k % m` for the hash. Push each key onto the end of its bucket's array, so the chain reads left to right in insertion order — slide 9's convention. Do not sort the keys and do not deduplicate them.\n**Done looks like:** `buildChains([50, 700, 76, 85, 92, 73, 101], 7)[1]` returns `[50,85,92]`.",
+        "tests": [
+          {
+            "name": "slide 9 chain for bucket 1",
+            "call": "buildChains([50, 700, 76, 85, 92, 73, 101], 7)[1]",
+            "expect": [
+              50,
+              85,
+              92
+            ]
+          },
+          {
+            "name": "slide 9 chain for bucket 3",
+            "call": "buildChains([50, 700, 76, 85, 92, 73, 101], 7)[3]",
+            "expect": [
+              73,
+              101
+            ]
+          },
+          {
+            "name": "every bucket exists, empty ones included",
+            "call": "buildChains([50, 700, 76, 85, 92, 73, 101], 7).length",
+            "expect": 7
+          },
+          {
+            "name": "empty input still returns m buckets",
+            "call": "buildChains([], 5).length",
+            "expect": 5
+          },
+          {
+            "name": "duplicate keys both stay in the chain",
+            "call": "buildChains([12, 19, 12], 7)[5]",
+            "expect": [
+              12,
+              19,
+              12
+            ]
+          }
+        ],
+        "hints": [
+          "Build the outer array first: `Array.from({ length: m }, () => [])` gives you m independent empty arrays. `new Array(m).fill([])` does not — every slot would share one array.",
+          "For each key, compute `k % m` and push the key onto `buckets[k % m]`.",
+          "Check the empty-input test: your loop over `keys` never runs, but the outer array must still have length m."
+        ]
+      },
+      "source_material_ids": [
+        21,
+        25
+      ],
+      "assessments": [
+        {
+          "kind": "code",
+          "prompt": "Write `buildChains(keys, m)` in JavaScript. It returns an array of length `m`; element `i` is the array of keys `k` from `keys` with `k % m === i`, in insertion order, duplicates kept. Empty buckets are empty arrays, not missing slots.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "reference_solution": "function buildChains(keys, m) {\n  const buckets = Array.from({ length: m }, () => []);\n  for (const k of keys) {\n    buckets[k % m].push(k);\n  }\n  return buckets;\n}",
+            "tests": [
+              "slide 9 chain for bucket 1",
+              "slide 9 chain for bucket 3",
+              "every bucket exists, empty ones included",
+              "empty input still returns m buckets",
+              "duplicate keys both stay in the chain"
+            ]
+          },
+          "max_score": 10,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {
+        "intro": "One trace, one explanation, one trade-off. Answer from the slides, not from memory of a library."
+      },
+      "source_material_ids": [
+        19,
+        21,
+        25,
+        27,
+        29
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "Keys 24, 37, 50, 63, 76, 89 are inserted in that order into an initially empty table of size m = 10 using h(k) = k mod 10 and linear probing, probing h(k), h(k)+1, h(k)+2 and wrapping past 9 back to 0. Order the six slots below by the key that ends up in each slot after all six insertions, starting with slot 0.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "24"
+            },
+            {
+              "id": "b",
+              "text": "37"
+            },
+            {
+              "id": "c",
+              "text": "50"
+            },
+            {
+              "id": "d",
+              "text": "63"
+            },
+            {
+              "id": "e",
+              "text": "76"
+            },
+            {
+              "id": "f",
+              "text": "89"
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "e",
+              "b",
+              "a",
+              "d",
+              "f",
+              "c"
+            ]
+          },
+          "max_score": 10,
+          "explanation": "24 mod 10 = 4, 37 mod 10 = 7, 50 mod 10 = 0, 63 mod 10 = 3, 76 mod 10 = 6, 89 mod 10 = 9 — all six land on empty slots, so the table is slot 0: 50, slot 3: 63, slot 4: 24, slot 6: 76, slot 7: 37, slot 9: 89. Reading slot 0 upward gives 50, 63, 24, 76, 37, 89.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            27
+          ],
+          "status": "contradicted",
+          "reason": "With slide 11's h(k) = k mod 10, slot 0 holds 50 (50 mod 10 = 0), but the key starts with 76 and ends with 50.",
+          "quote": "m = 10, h(k) = k mod 10"
+        },
+        {
+          "id": "q5",
+          "kind": "ordering",
+          "prompt": "Keys 24, 34, 50, 44, 89, 99 are inserted in that order into an initially empty table of size m = 10 using h(k) = k mod 10 and linear probing, probing h(k), h(k)+1, h(k)+2 and wrapping past 9 back to 0. Put the keys in the order of the slots they end up in, from slot 0 upward.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "max_score": 10,
+          "options": [
+            {
+              "id": "a",
+              "text": "24"
+            },
+            {
+              "id": "b",
+              "text": "34"
+            },
+            {
+              "id": "c",
+              "text": "50"
+            },
+            {
+              "id": "d",
+              "text": "44"
+            },
+            {
+              "id": "e",
+              "text": "89"
+            },
+            {
+              "id": "f",
+              "text": "99"
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "c",
+              "f",
+              "a",
+              "b",
+              "d",
+              "e"
+            ]
+          },
+          "explanation": "24 → slot 4. 34 → 4 is taken, so slot 5. 50 → slot 0. 44 → 4 and 5 are taken, so slot 6. 89 → slot 9. 99 → 9 is taken, wrap to 0 (taken by 50), so slot 1. Reading the occupied slots from 0 upward: 50 (0), 99 (1), 24 (4), 34 (5), 44 (6), 89 (9).",
+          "replaces": "q2",
+          "labels": [
+            "rewritten"
+          ],
+          "status": "supported",
+          "cite_chunk_ids": [
+            27
+          ],
+          "reason": "Slide 11 shows the probe-forward-and-wrap rule; applied to 24, 34, 50, 44, 89, 99 it fills slots 0, 1, 4, 5, 6, 9 as keyed.",
+          "quote": "49 → 9 taken, try 0: 2 probes"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Explain what primary clustering is and why linear probing produces it. Then state one way double hashing reduces it.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Primary clustering is the growth of contiguous runs of occupied slots. Linear probing causes it because every key that hashes into a run probes forward one slot at a time and therefore lands at the end of that run, lengthening it; a longer run is a bigger target, so it attracts still more keys, and the average probe count rises faster than the load factor alone would suggest. Slide 11 shows it: 49 goes to slot 9, then 58 probes 8, 9, 0 and lands at 1, then 69 probes 9, 0, 1 and lands at 2, so the run 9, 0, 1, 2 keeps growing. Double hashing reduces it by making the step size depend on the key, so two keys that collide at the same slot probe different sequences instead of both walking the same consecutive slots."
+          },
+          "rubric": [
+            {
+              "criterion": "Defines primary clustering as growing runs of occupied slots",
+              "weight": 0.3,
+              "excellent": "States that occupied slots form contiguous runs and that the run length, not just the load factor, drives probe counts.",
+              "acceptable": "Says collisions group together in the table without naming runs or contiguity.",
+              "poor": "Describes clustering as any collision at all, or as two keys sharing a bucket."
+            },
+            {
+              "criterion": "Explains the feedback loop that makes linear probing cluster",
+              "weight": 0.4,
+              "excellent": "States that a key hashing into a run probes forward and lands at the run's end, lengthening it, so longer runs attract more keys.",
+              "acceptable": "States that keys probing forward end up next to each other, without the self-reinforcing part.",
+              "poor": "Claims clustering happens because the hash function is not uniform, with no mention of probing."
+            },
+            {
+              "criterion": "States how double hashing reduces clustering",
+              "weight": 0.3,
+              "excellent": "Says the step size depends on the key, so colliding keys follow different probe sequences rather than one shared consecutive run.",
+              "acceptable": "Says double hashing uses a second hash function to pick the step, without saying why that spreads the probes.",
+              "poor": "Says double hashing removes collisions entirely, or only that it is faster."
+            }
+          ],
+          "max_score": 10,
+          "id": "q3",
+          "status": "contradicted",
+          "reason": "The model answer says 49 goes to slot 9 and the run is 9, 0, 1, 2; slide 11 puts 89 in slot 9 and 49 in slot 0.",
+          "quote": "49 → 9 taken, try 0: 2 probes",
+          "cite_chunk_ids": [
+            27
+          ]
+        },
+        {
+          "id": "q6",
+          "kind": "short_answer",
+          "prompt": "Explain what primary clustering is and why linear probing produces it. Then state one way double hashing reduces it.",
+          "bloom": "understand",
+          "grader": "self",
+          "max_score": 10,
+          "answer_key": {
+            "reference_answer": "Primary clustering is the growth of contiguous runs of occupied slots. Linear probing causes it because every key that hashes into a run probes forward one slot at a time and lands at the end of that run, lengthening it, so the run attracts still more keys. Double hashing reduces it by making the step size depend on the key, so two keys that collide at the same slot probe different sequences instead of both walking the same consecutive slots."
+          },
+          "explanation": "Occupied runs grow because linear probing walks consecutive slots, and slide 11 shows this with 89 in slot 9, 49 in slot 0, 58 in slot 1 and 69 in slot 2. Double hashing varies the step per key, so colliding keys do not share one probe sequence.",
+          "replaces": "q3",
+          "labels": [
+            "rewritten"
+          ],
+          "status": "supported",
+          "cite_chunk_ids": [
+            27
+          ],
+          "reason": "Slide 11 defines primary clustering as in the model answer; slide 10's double hashing step h2(k) depends on the key.",
+          "quote": "Primary clustering: occupied runs grow and attract more collisions"
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A hash table uses separate chaining with m = 8 buckets and holds n = 20 entries. A classmate says the table is over-full and must be resized before any more inserts. Which statement is correct?",
+          "bloom": "analyze",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "The classmate is right: α = 2.5 exceeds 1, and no hash table may exceed α = 1."
+            },
+            {
+              "id": "b",
+              "text": "The classmate is wrong: with chaining α may exceed 1, and the cost is longer chains and a higher average probe count."
+            },
+            {
+              "id": "c",
+              "text": "The classmate is right: α = 2.5 means 2.5 buckets are already full and the next insert will fail."
+            },
+            {
+              "id": "d",
+              "text": "The classmate is wrong: α measures only the number of empty buckets, which is still 8 − 20."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 5,
+          "explanation": "Slide 13 puts the α ≤ 1 limit on open addressing only, because there every entry must occupy a slot in the array. Separate chaining stores entries in lists outside the array, so α can exceed 1; the cost is that the average chain length is α = 20/8 = 2.5, which raises the average search cost even though it stays O(1) average.",
+          "id": "q4",
+          "cite_chunk_ids": [
+            29
+          ],
+          "status": "supported",
+          "reason": "Slide 13: with separate chaining the load factor can exceed 1; only open addressing must stay below 1.",
+          "quote": "Load factor can exceed 1 must stay below 1"
+        },
+        {
+          "id": "q7",
+          "kind": "numeric",
+          "prompt": "Slide 9 inserts 50, 700, 76, 85, 92, 73, 101 into a chained table with m = 7 and h(k) = k mod 7, adding each new entry at the end of its chain. A search for 57, which is not in the table, compares 57 with every key in its chain. How many key comparisons does it make? Give your answer in comparisons.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "value": 3,
+            "tolerance": 0,
+            "unit": "comparisons",
+            "work": "57 mod 7 = 1 (57 = 8 x 7 + 1). Bucket 1 holds the chain 50, 85, 92 and a miss compares 57 with each key in it, so the count is 3"
+          },
+          "max_score": 4,
+          "explanation": "57 mod 7 = 1, because 57 = 8 × 7 + 1. Bucket 1 holds the chain 50 → 85 → 92, and 57 is not in it, so the search compares 57 with all three keys before it reaches the end of the chain: 3 comparisons.",
+          "cite_chunk_ids": [
+            25
+          ],
+          "status": "supported",
+          "reason": "57 mod 7 = 1 and slide 9's bucket 1 chain is 50, 85, 92, so a miss compares with all three: 3.",
+          "quote": "Bucket Chain 0 700 1 50 → 85 → 92"
+        }
+      ]
+    },
+    {
+      "id": "b9",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Last year's paper asks you to state the number of probes needed to insert a key into a linear-probing table. Before you move on, write down the one sentence you would give a classmate who counts only the collisions and forgets to count the first probe. Then check it against the probe counts you wrote in the walkthrough."
+      },
+      "source_material_ids": [
+        27
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 2,
+  "cost_usd": 0.007862,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Fix these check failures: Q11 code runs (b7): Run `code-test --lesson map_adt_and_hash_functions --block 7 --dump`, fix solution.js / starter.js / tests.json in crew/code/map_adt_and_hash_functions-b7\"",
+    "dropped an item: a numeric item was dropped: its working ends in 1 but the key says 4",
+    "cites: b6: the prose names slide 9, slide 11; cited chunks 25, 27",
+    "cites: q2: cited chunk 27 (Slide 11), found by its question and answer",
+    "cites: q4: cited chunk 22 (Slide 6), found by its question and answer",
+    "checker: q2 contradicted on re-solving: Re-solved from the slides: the answer is c) 50 -> d) 63 -> a) 24 -> e) 76 -> b) 37 -> f) 89, but the key said 1. e) 76  2. b) 37  3. a) 24  4. d) 63  5. f) 89  6. c) 50.",
+    "checker: rewrote q2 as q5 (c) 50 -> d) 63 -> a) 24 -> e) 76 -> b) 37 -> f) 89 is the correct answer when the question is re-solved; the key said 1. e) 76  2. b) 37  3. a) 24  4. d) 63  5. f) 89  6. c) 50. Write a replacement whose key is right.)",
+    "code-test: applied crew/code/map_adt_and_hash_functions-b7 (reference 5/5, starter fails 5/5)",
+    "lecturer: b1 promised rotations \"in the next node\"; AVL rotations are cut from this plan",
+    "lecturer: b5 walkthrough traced 27, 40, 53, 66, 79 into m = 10, which has no collision at all (a step was even titled 'the first collision') -> replaced with slide 11's own trace 89, 18, 49, 58, 69 (2 and 4 probes, wrap-around, primary clustering)",
+    "lecturer: q5 (the Checker's rewrite of q2) had a wrong explanation (it put 63 in slot 1 and 24 in slot 2) and no collision, so it tested only k mod 10 -> new keys 24, 34, 50, 44, 89, 99 with three collisions and a wrap; key c, f, a, b, d, e; status reset to pending for the Checker",
+    "checker: q3 contradicted by chunk 27: The model answer says 49 goes to slot 9 and the run is 9, 0, 1, 2; slide 11 puts 89 in slot 9 and 49 in slot 0.",
+    "checker: rewrote q3 as q6 (The model answer says 49 goes to slot 9 and the run is 9, 0, 1, 2; slide 11 puts 89 in slot 9 and 49 in slot 0.)",
+    "lecturer: q6 (rewrite of q3) asks how double hashing reduces clustering, but its excerpts lacked slide 10, where double hashing is defined -> item also cites chunk 26 (Slide 10)",
+    "checker: q2 contradicted by chunk 27: With slide 11's h(k) = k mod 10, slot 0 holds 50 (50 mod 10 = 0), but the key starts with 76 and ends with 50.",
+    "lecturer: added q7 (numeric, apply): a miss in slide 9's chained table costs 3 comparisons; the quiz needed a 4th item once Q2c (chaining, 6 marks) was counted towards this lesson"
+  ]
+}

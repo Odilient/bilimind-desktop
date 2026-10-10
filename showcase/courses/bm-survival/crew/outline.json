@@ -1,0 +1,378 @@
+{
+  "title": "Survival Malay for your first month at Taylor's",
+  "allows_code": false,
+  "code_language": null,
+  "lessons": [
+    {
+      "key": "malay_sounds",
+      "title": "How Malay sounds and how it is spelled",
+      "summary": "You will be able to read any Malay word you meet and say it close enough to be understood. Covers Rumi spelling, the letter-to-sound table in section 1 of your phrasebook, and the final -a that softens to 'uh', as in saya. Prevents reading Malay with English vowel rules, which is what turns terima kasih into something nobody recognises.",
+      "concept_key": "language_malay_rumi_phonology",
+      "track": "core",
+      "archetype": "factual",
+      "estimated_minutes": 20,
+      "section": "Sounds and first words",
+      "note": "Do this one first. Malay is spelled the way it sounds, so this short lesson makes every word later in the course easier to say and easier to remember.",
+      "layer": 0,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 0,
+      "chunk_ids": [
+        4,
+        8,
+        5,
+        16,
+        6,
+        14
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "greetings_and_address",
+      "title": "Greeting people, introducing yourself, what to call them",
+      "summary": "You will be able to greet someone, thank them, apologise and introduce yourself as an international student at Taylor's. Covers Helo and Selamat pagi, terima kasih, maaf, saya against aku, anda against awak, and the kinship words pakcik, makcik, abang and kakak. Prevents calling a man old enough to be your father awak.",
+      "concept_key": "language_malay_greetings_and_address_terms",
+      "track": "core",
+      "archetype": "discriminative",
+      "estimated_minutes": 25,
+      "layer": 1,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "comparison",
+        "example",
+        "quiz"
+      ],
+      "index": 1,
+      "chunk_ids": [
+        6,
+        7,
+        1,
+        8,
+        13,
+        2
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "greeting_etiquette",
+      "title": "When to use Assalamualaikum",
+      "summary": "You will be able to use Assalamualaikum and its reply Waalaikumussalam correctly, and know when Helo is the better choice. Covers who the greeting is for, why it is used well beyond Muslim company in Malaysia, and the right-hand and shoe conventions you will meet in your first week. Prevents the small slight that comes from getting a greeting rule wrong at someone's door.",
+      "concept_key": "language_malay_greeting_etiquette",
+      "track": "subtopic",
+      "archetype": "conceptual",
+      "estimated_minutes": 15,
+      "branch_of": "greetings_and_address",
+      "mark": "anytime",
+      "layer": 1,
+      "position": 1,
+      "parent": 1,
+      "planned_block_types": [
+        "explainer",
+        "diagram",
+        "analogy",
+        "quiz"
+      ],
+      "index": 2,
+      "chunk_ids": [
+        6,
+        7,
+        8,
+        16,
+        10,
+        4
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "numbers_money_and_time",
+      "title": "Numbers, money and telling the time",
+      "summary": "You will be able to hear a price, count past a hundred, read a clock time and agree a day with someone. Covers satu to sepuluh, the -belas teens like sebelas, the puluh tens, kosong for the zero in phone numbers, ringgit and sen, and sekarang, hari ini, esok, pagi, petang and malam. Prevents nodding at lapan ringgit when the number you actually heard was lapan puluh.",
+      "concept_key": "language_malay_numbers_money_time",
+      "track": "core",
+      "archetype": "factual",
+      "estimated_minutes": 25,
+      "layer": 2,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 3,
+      "chunk_ids": [
+        9,
+        14,
+        11,
+        8,
+        16,
+        4
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "sentence_patterns",
+      "title": "Sentences you can build yourself",
+      "summary": "You will be able to build your own sentences instead of hunting for a memorised phrase. Covers saya and awak as subjects, nak for wanting, pergi ke and di for place, ada and tak, and the fact that Malay verbs do not change for tense or person. Prevents adding adalah because an English sentence needed 'is'.",
+      "concept_key": "language_malay_basic_sentence_patterns",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 25,
+      "note": "This is the hinge of the course. Memorised phrases get you through week one; the patterns here are what let you build your own sentences from week two onward.",
+      "layer": 3,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "explainer",
+        "diagram",
+        "analogy",
+        "quiz"
+      ],
+      "index": 4,
+      "chunk_ids": [
+        8,
+        12,
+        10,
+        16,
+        1,
+        6
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "little_words_in_speech",
+      "title": "Little words you will hear everywhere",
+      "summary": "You will be able to follow a sentence that has been shortened to half its length. Covers lah, kan, jom and dah, plus the way sudah becomes dah and tidak becomes tak once people are talking at normal speed. Prevents losing the thread of a conversation that moves faster than the phrasebook does.",
+      "concept_key": "language_malay_discourse_particles",
+      "track": "subtopic",
+      "archetype": "factual",
+      "estimated_minutes": 15,
+      "branch_of": "sentence_patterns",
+      "mark": "anytime",
+      "layer": 3,
+      "position": 1,
+      "parent": 4,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 5,
+      "chunk_ids": [
+        16,
+        7,
+        14,
+        12,
+        10,
+        8
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "mamak_ordering",
+      "title": "Ordering at the mamak: drinks, food, paying",
+      "summary": "You will be able to sit down at a mamak, order drinks and food, and settle the bill. Covers teh and teh tarik, teh o and kosong, kopi, kurang manis, the roti and rice dishes you will actually meet, and berapa and bungkus for the price and for takeaway. Prevents surprise at the drink that arrives with condensed milk in it, because teh is the default and not plain tea.",
+      "concept_key": "language_malay_mamak_ordering",
+      "track": "core",
+      "archetype": "discriminative",
+      "estimated_minutes": 30,
+      "section": "Out in the city",
+      "layer": 4,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "comparison",
+        "example",
+        "quiz"
+      ],
+      "index": 6,
+      "chunk_ids": [
+        10,
+        11,
+        9,
+        7,
+        8,
+        4
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "grab_and_directions",
+      "title": "Grab, directions and getting to campus",
+      "summary": "You will be able to book a Grab, tell the driver where you are going and ask your way on foot. Covers Saya nak pergi ke Taylor's, Lakeside Campus, Abang dah sampai? when the car is not where you are standing, and kiri, kanan and terus on campus. Prevents the silent ride where neither of you is sure the other has understood.",
+      "concept_key": "language_malay_transport_and_directions",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 25,
+      "layer": 5,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "walkthrough",
+        "checklist",
+        "quiz"
+      ],
+      "index": 7,
+      "chunk_ids": [
+        12,
+        8,
+        2,
+        1,
+        16,
+        13
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "emergency_phrases",
+      "title": "When it goes wrong: lost, sick, help",
+      "summary": "You will be able to call for help, say you are lost or unwell, and name an allergy. Covers Tolong!, Saya tersesat, Saya sakit, Saya perlu doktor, Panggil polis and Saya alah kepada susu, and the numbers worth saving in your phone before you need them. Prevents freezing in the one situation where a memorised phrase carries real weight.",
+      "concept_key": "language_malay_emergency_phrases",
+      "track": "subtopic",
+      "archetype": "safety_critical",
+      "estimated_minutes": 20,
+      "branch_of": "grab_and_directions",
+      "mark": "recommended",
+      "layer": 5,
+      "position": 1,
+      "parent": 7,
+      "planned_block_types": [
+        "checklist",
+        "scenario",
+        "quiz"
+      ],
+      "index": 8,
+      "chunk_ids": [
+        15,
+        7,
+        9,
+        6,
+        8,
+        12
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "campus_and_classroom",
+      "title": "On campus and in your BMK class",
+      "summary": "You will be able to introduce yourself to a lecturer, find the library and the admin office, and stop a class from running straight past you. Covers Saya pelajar antarabangsa, Di mana perpustakaan?, Saya tak faham, Boleh ulang? and minta maaf. Prevents sitting through a whole BMK session without ever saying you did not follow.",
+      "concept_key": "language_malay_campus_and_classroom_phrases",
+      "track": "core",
+      "archetype": "communicative",
+      "estimated_minutes": 25,
+      "layer": 6,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "speaking",
+        "dialogue",
+        "quiz"
+      ],
+      "index": 9,
+      "chunk_ids": [
+        13,
+        7,
+        12,
+        2,
+        1,
+        9
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "bmk_module_context",
+      "title": "What BMK 2 at Taylor's actually is",
+      "summary": "You will be able to say what Bahasa Melayu Komunikasi 2 is and where it sits in your degree. Covers module code MPU31002, its 2 credits, the MPU general-studies requirement, and Taylor's U1 to U4 categories. Prevents treating your phrasebook as the syllabus, when the module is assessed and this companion is only practice.",
+      "concept_key": "education_malaysia_mpu_bmk_module",
+      "track": "subtopic",
+      "archetype": "factual",
+      "estimated_minutes": 10,
+      "branch_of": "campus_and_classroom",
+      "mark": "anytime",
+      "layer": 6,
+      "position": 1,
+      "parent": 9,
+      "planned_block_types": [
+        "flashcards",
+        "reference_table",
+        "quiz"
+      ],
+      "index": 10,
+      "chunk_ids": [
+        1,
+        2,
+        13,
+        12,
+        7,
+        4
+      ],
+      "thin": false,
+      "status": "stub"
+    },
+    {
+      "key": "capstone_a_day_in_malay",
+      "title": "Capstone: a full day in Malay",
+      "summary": "You will spend one real day doing three things in Malay: ordering at a mamak, taking a Grab and holding one conversation on campus. Covers writing your phrases out beforehand, going out and using them, and logging which lines you had to abandon for English. Prevents staying in English for the rest of the year because the first attempt felt clumsy.",
+      "concept_key": "language_malay_survival_capstone",
+      "track": "core",
+      "archetype": "performance",
+      "estimated_minutes": 60,
+      "section": "Putting it together",
+      "note": "Do the day for real: a real mamak, a real Grab, a real classmate. Nobody is marking your grammar — being understood, and noticing which line your mouth does not have yet, is the whole point.",
+      "layer": 7,
+      "position": 0,
+      "parent": null,
+      "planned_block_types": [
+        "project",
+        "checklist"
+      ],
+      "index": 11,
+      "chunk_ids": [
+        1,
+        2,
+        16,
+        12,
+        10,
+        11
+      ],
+      "thin": false,
+      "status": "stub"
+    }
+  ],
+  "further": [
+    {
+      "title": "Malay grammar beyond survival",
+      "topic": "Moving past memorised phrases: the meN- and -kan affixes, how Malay marks past and future, and when to use formal written Malay",
+      "after_key": "sentence_patterns"
+    },
+    {
+      "title": "Eating out beyond the mamak",
+      "topic": "Ordering at Chinese hawker stalls, nasi kandar shops and Indian restaurants in Malaysia, including how to ask what is in a dish and what is halal",
+      "after_key": "mamak_ordering"
+    },
+    {
+      "title": "Bahasa Melayu Komunikasi 2, properly",
+      "topic": "A full course on the Taylor's MPU31002 Bahasa Melayu Komunikasi 2 syllabus, covering the assessed grammar, vocabulary and oral components",
+      "after_key": "campus_and_classroom"
+    }
+  ],
+  "variety_violation": null,
+  "relabel_passes": 0,
+  "warnings": []
+}

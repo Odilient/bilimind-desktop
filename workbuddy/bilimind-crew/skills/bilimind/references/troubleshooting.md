@@ -47,16 +47,23 @@ tell them the one thing only they can do (a key, a permission).
 ## Narration
 
 - **Edge TTS 403 or timeouts.** Usually the PC clock: `doctor` shows `clock_skew_ms`. The CLI corrects
-  for skew; if narration still fails, continue without it (`narrate` lists `failed`), build, and say
+  for skew. A timeout or failure: run `narrate` once more (Bash `timeout` `600000`; it resumes from its
+  cache). If it still fails, continue without it (`narrate` lists `failed`), build, and say
   the course has no audio for those lessons. Never block the course on audio.
 
 ## Sub-agents
 
 - **Agent tool rejects `subagent_type: general-purpose`**: leave the field out.
+- **Skill mode: an Agent call returned "Spawned successfully ... via mailbox"** instead of a report: it
+  was given a `name`. Never pass `name` in skill mode. That sub-agent may still be running; wait for its
+  SendMessage before you launch a replacement for the same lesson.
 - **A sub-agent never returns or returns nothing**: launch one replacement for that lesson; if it
   fails again, re-run `plan` with that lesson cut ("draft failed") and continue.
-- **Expert Team: a repeated member name is refused**: use `bilimind-writer-2`, `bilimind-writer-3`, ...
-  as `name`, keep `subagent_type` = `bilimind-writer`.
+- **Expert Team: a repeated member name**: the engine renames it (`bilimind-writer-2`, ...) and says so
+  in the spawn result; address that member by the returned name. Members report with SendMessage to
+  `team-lead`; TaskOutput does not wait for team members, so do not poll: the inbox brings the reports.
+- **A long command timed out** (no JSON line): set the Bash tool's `timeout` to `600000` and run it once
+  more; model and TTS results are cached.
 
 ## Preview
 

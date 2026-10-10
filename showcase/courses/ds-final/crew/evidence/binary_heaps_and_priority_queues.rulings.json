@@ -1,0 +1,6 @@
+[
+  {"item": "q2", "verdict": "contradicted", "quote": "parent: ⌊(i − 1) / 2⌋", "reason": "By slide 5 the parent of index 7 is index 3 (key 20), not index 2; the accepted arrays move 4 to index 2 and swap with 8."},
+  {"item": "q3", "verdict": "supported", "quote": "if (l < heap.length && heap[l] < heap[s]) s = l; if (r < heap.length && heap[r] < heap[s]) s = r;", "reason": "Each sift-down level compares the left and right child; with slide 5's indices a 14-key heap has at most 3 such levels, so 6."},
+  {"item": "q4", "verdict": "supported", "quote": "extract-min O(log n) O(n) O(1)* decrease-key O(log n) O(1) O(n)", "reason": "Slide 12 gives the heap O(log n) for extract-min and decrease-key against O(n) for the unsorted and sorted arrays respectively."},
+  {"item": "q5", "verdict": "supported", "quote": "parent: ⌊(i − 1) / 2⌋", "reason": "Slide 5 states the parent index formula exactly."}
+]

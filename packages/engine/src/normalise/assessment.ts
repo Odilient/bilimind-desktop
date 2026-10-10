@@ -7,6 +7,7 @@ import { ASSESSMENT_KINDS, BLOOM, GRADERS } from '@bilimind/core';
 import type { AnswerKey, Assessment, AssessmentKind, Grader, RubricRow } from '@bilimind/core';
 import { cap, isObj, letter, number, stringList, text } from './util.ts';
 import type { Raw } from './util.ts';
+import { workProblems } from '../validate/arith.ts';
 
 export type DraftItem = Omit<Assessment, 'id'> & { id?: string };
 export interface ItemResult { item: DraftItem | null; why?: string; note?: string }
@@ -77,7 +78,7 @@ function completeOrdering(key: Raw, opts: { id: string }[] | null): string[] | n
 export function normaliseItem(raw: unknown): ItemResult {
   if (!isObj(raw)) return { item: null, why: 'an item was not an object' };
   let kind = norm(raw.kind) as AssessmentKind;
-  const prompt = typeof raw.prompt === 'string' ? raw.prompt.trim() : '';
+  let prompt = typeof raw.prompt === 'string' ? raw.prompt.trim() : '';
   if (!(ASSESSMENT_KINDS as readonly string[]).includes(kind) || prompt === '') return { item: null, why: `an item with kind "${String(raw.kind)}" or no prompt was dropped` };
   const opts = HAS_OPTIONS.includes(kind) ? options(raw.options) : null;
   if (HAS_OPTIONS.includes(kind) && (!opts || opts.length < 2)) return { item: null, why: `a ${kind} item with fewer than 2 options was dropped` };
@@ -95,6 +96,10 @@ export function normaliseItem(raw: unknown): ItemResult {
       if (kind === 'mcq' && ids.length > 1) { kind = 'multi_select'; note = 'an mcq with several correct options became multi_select'; }
       key = { correct_option_ids: ids };
       grader = 'deterministic';
+      if (kind === 'multi_select') {
+        const fixed = multiPrompt(prompt, ids.length);
+        if (fixed !== prompt) { prompt = fixed; note = [note, 'a multi_select prompt that promised the wrong number of answers now says "Select all that apply"'].filter(Boolean).join('; '); }
+      }
       break;
     }
     case 'ordering': {
@@ -109,15 +114,13 @@ export function normaliseItem(raw: unknown): ItemResult {
       if (value === null) return { item: null, why: 'a numeric item had no numeric answer' };
       const tol = number(rawKey.tolerance);
       const unit = text(rawKey, 'unit');
-      // G2 review: the prompt asks numeric items for a short `work` derivation; when its last number disagrees with
-      // the value, the key is wrong (a 69-mod-10 probe count keyed as 5): drop the item rather than mark students wrong.
-      const work = typeof rawKey.work === 'string' ? rawKey.work : null;
-      if (work) {
-        const last = [...work.replace(/(\d),(\d{3})/g, '$1$2').matchAll(/-?\d+(?:\.\d+)?/g)].map(m => Number(m[0])).pop();
-        if (last !== undefined && Number.isFinite(last) && Math.abs(last - value) > Math.max(tol ?? 0, 1e-9))
-          return { item: null, why: `a numeric item was dropped: its working ends in ${last} but the key says ${value}` };
-      }
-      key = { value, ...(tol !== null && tol >= 0 ? { tolerance: tol } : {}), ...(unit ? { unit } : {}) };
+      // G2 review: the prompt asks numeric items for a short `work` derivation. Its arithmetic is recomputed and its
+      // last number must equal the value; a wrong key (a 69-mod-10 probe count keyed as 5) drops the item rather than
+      // mark students wrong. The work is kept on the key (check Q9 and the Checker's packet show it).
+      const work = typeof rawKey.work === 'string' && rawKey.work.trim() ? cap(rawKey.work.trim(), 600) : null;
+      const bad = work ? workProblems(work, value, tol) : [];
+      if (bad.length) return { item: null, why: `a numeric item was dropped: ${bad[0]}` };
+      key = { value, ...(tol !== null && tol >= 0 ? { tolerance: tol } : {}), ...(unit ? { unit } : {}), ...(work ? { work } : {}) } as AnswerKey;
       grader = 'deterministic';
       break;
     }
@@ -145,6 +148,8 @@ export function normaliseItem(raw: unknown): ItemResult {
   if (grader === 'llm_rubric' && !rub) grader = 'self';
   const max = number(raw.max_score);
   const bloom = norm(raw.bloom);
+  // the Writer's "why" (shown after submit; verdict keeps it); a numeric item without one explains with its working
+  const why = text(raw, 'explanation') ?? (kind === 'numeric' ? ((key as Raw | undefined)?.work as string | undefined) ?? null : null);
   const item: DraftItem = {
     kind, prompt,
     bloom: ((BLOOM as readonly string[]).includes(bloom) ? bloom : 'understand') as DraftItem['bloom'],
@@ -153,8 +158,25 @@ export function normaliseItem(raw: unknown): ItemResult {
     ...(key ? { answer_key: key } : {}),
     ...(rub ? { rubric: rub } : {}),
     max_score: max !== null ? Math.max(1, Math.min(100, Math.trunc(max))) : 100,
+    ...(why ? { explanation: cap(why, 600) } : {}),
   };
   return { item, ...(note ? { note } : {}) };
+}
+
+/** "Which two ..." / "Select three ..." (a count the prompt promises). Kept in step with validate/rules.ts MULTI_COUNT. */
+const MULTI_COUNT = /\b(which|select|choose|pick|tick|identify|name)\s+(two|three|four|2|3|4)\b/i;
+const MULTI_HINT = /more than one|all that apply|select all|choose all|tick all/i;
+const COUNTS: Record<string, number> = { two: 2, three: 3, four: 4, '2': 2, '3': 3, '4': 4 };
+/**
+ * G2 review: "Which two statements are true?" with three correct ids cannot be scored by a student who follows the
+ * prompt: drop the count and say "(Select all that apply.)". A count that matches the key is kept.
+ */
+export function multiPrompt(prompt: string, correct: number): string {
+  const m = MULTI_COUNT.exec(prompt);
+  let out = prompt;
+  if (m && COUNTS[m[2]!.toLowerCase()] !== correct) out = out.replace(MULTI_COUNT, (_all, verb: string) => verb).replace(/\s{2,}/g, ' ');
+  if (!MULTI_HINT.test(out) && !(m && COUNTS[m[2]!.toLowerCase()] === correct)) out = `${out.trimEnd()} (Select all that apply.)`;
+  return out;
 }
 
 /** reconcileCodeAssessments: a code item's test names are DERIVED from its block's tests[].name. */

@@ -1,0 +1,62 @@
+[
+  {
+    "lesson": "grab_and_directions",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Saya tunggu di pintu utama. | I'm waiting at the main entrance.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 12,
+    "round": 1,
+    "at": "2026-10-10T16:18:26.005Z"
+  },
+  {
+    "lesson": "grab_and_directions",
+    "item": "q2",
+    "verdict": "not_covered",
+    "quote": "",
+    "reason": "Re-solved independently and the answer holds, but the quote did not check out against the slide.",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:18:26.010Z"
+  },
+  {
+    "lesson": "grab_and_directions",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "",
+    "reason": "Re-solved from the slides: the answer is b) Answer the driver's call and say where you are standing. -> a) Say the destination out loud while the car is still stationary. -> d) Say Belok kiri or Jalan terus as the car approaches the turn. -> c) Say Tolong berhenti di sini about 50 metres before the ",
+    "chunk_id": null,
+    "round": 1,
+    "at": "2026-10-10T16:18:26.012Z"
+  },
+  {
+    "lesson": "grab_and_directions",
+    "item": "q6",
+    "verdict": "supported",
+    "quote": "Saya tunggu di pintu utama.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 12,
+    "round": 2,
+    "at": "2026-10-10T16:18:28.135Z"
+  },
+  {
+    "lesson": "grab_and_directions",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Belok kiri. / Belok kanan. | Turn left. / Turn right.",
+    "reason": "Belok kanan is turn right and Jalan terus is go straight on; the gesture advice is the lesson's.",
+    "chunk_id": 12,
+    "round": 1,
+    "at": "2026-10-10T16:23:17.725Z"
+  },
+  {
+    "lesson": "grab_and_directions",
+    "item": "q1",
+    "verdict": "contradicted",
+    "quote": "Saya tunggu di pintu utama. | I'm waiting at the main entrance.",
+    "reason": "Pickup comes first: you tell the driver where you are waiting before you get in and give the destination.",
+    "chunk_id": 12,
+    "round": 2,
+    "at": "2026-10-10T16:30:06.398Z"
+  }
+]

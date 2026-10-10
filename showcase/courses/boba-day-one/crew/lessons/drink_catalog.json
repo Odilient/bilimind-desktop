@@ -1,0 +1,490 @@
+{
+  "key": "drink_catalog",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "A sticker reads `BS01-L 50% LI OAT +PD ALG:milk`. You have four seconds to turn that into a drink, a price and a warning. The price is not RM 10.90 — large is RM 12.90. The syrup is not fructose — BS01 uses brown sugar syrup. And `ALG:milk` plus `+PD` is a stop: egg pudding contains milk, so the cashier stops and explains before taking payment.\n\nSection 8 of the SOP lists nine drinks. Learn the code, the two prices and the contains line as one unit:\n\n| Code | Drink | Regular | Large | Contains |\n|---|---|---|---|---|\n| BS01 | Brown Sugar Milk Tea with Pearls | RM 10.90 | RM 12.90 | Milk; caffeine |\n| BS02 | Brown Sugar Fresh Milk with Pearls (no tea) | RM 11.90 | RM 13.90 | Milk |\n| CT01 | Classic Milk Tea | RM 7.90 | RM 9.90 | Milk (creamer has milk protein); soy; caffeine |\n| CT02 | Jasmine Green Milk Tea | RM 8.90 | RM 10.90 | Milk (creamer has milk protein); soy; caffeine |\n| TH01 | Thai Milk Tea | RM 8.90 | RM 10.90 | Milk (condensed and evaporated milk); caffeine |\n| MT01 | Matcha Latte | RM 11.90 | RM 13.90 | Milk; caffeine |\n| FT01 | Passion Fruit Green Tea | RM 8.90 | RM 10.90 | No milk in recipe; caffeine |\n| FT02 | Lychee Oolong Tea | RM 9.90 | RM 11.90 | No milk in recipe; caffeine |\n| FT03 | Lemon Black Tea | RM 7.90 | RM 9.90 | No milk in recipe; caffeine |\n\nTwo families split the syrup. Brown sugar drinks — BS01 and BS02 — use brown sugar syrup. Every other drink uses fructose syrup. The pump counts are identical either way, so the only thing that changes is which bottle you reach for. Section 7 sets one pump at 10 ml: regular 100% is 4 pumps, large 100% is 6 pumps. Large is not a fixed number of pumps more than regular: 100% is 4 and 6, 75% is 3 and 5, 50% is 2 and 3, 25% is 1 and 2, 0% is 0 and 0. Read the row.\n\nIce has its own sticker codes: NI, LI, RI, HOT. Regular normal ice is one 120 g scoop; large normal ice is 1.5 scoops, 170 g. HOT exists only for CT01, CT02 and MT01, regular size only."
+      },
+      "source_material_ids": [
+        18,
+        19,
+        20
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "reference_table",
+      "payload": {
+        "title": "Mutiara Tea Bar menu — look up by code",
+        "columns": [
+          "Code",
+          "Drink",
+          "Regular",
+          "Large",
+          "Contains",
+          "Syrup"
+        ],
+        "rows": [
+          [
+            "BS01",
+            "Brown Sugar Milk Tea with Pearls",
+            "RM 10.90",
+            "RM 12.90",
+            "Milk; caffeine",
+            "Brown sugar"
+          ],
+          [
+            "BS02",
+            "Brown Sugar Fresh Milk with Pearls (no tea)",
+            "RM 11.90",
+            "RM 13.90",
+            "Milk",
+            "Brown sugar"
+          ],
+          [
+            "CT01",
+            "Classic Milk Tea",
+            "RM 7.90",
+            "RM 9.90",
+            "Milk (creamer has milk protein); soy; caffeine",
+            "Fructose"
+          ],
+          [
+            "CT02",
+            "Jasmine Green Milk Tea",
+            "RM 8.90",
+            "RM 10.90",
+            "Milk (creamer has milk protein); soy; caffeine",
+            "Fructose"
+          ],
+          [
+            "TH01",
+            "Thai Milk Tea",
+            "RM 8.90",
+            "RM 10.90",
+            "Milk (condensed and evaporated milk); caffeine",
+            "Fructose"
+          ],
+          [
+            "MT01",
+            "Matcha Latte",
+            "RM 11.90",
+            "RM 13.90",
+            "Milk; caffeine",
+            "Fructose"
+          ],
+          [
+            "FT01",
+            "Passion Fruit Green Tea",
+            "RM 8.90",
+            "RM 10.90",
+            "No milk in recipe; caffeine",
+            "Fructose"
+          ],
+          [
+            "FT02",
+            "Lychee Oolong Tea",
+            "RM 9.90",
+            "RM 11.90",
+            "No milk in recipe; caffeine",
+            "Fructose"
+          ],
+          [
+            "FT03",
+            "Lemon Black Tea",
+            "RM 7.90",
+            "RM 9.90",
+            "No milk in recipe; caffeine",
+            "Fructose"
+          ],
+          [
+            "+P",
+            "Pearls (brown sugar)",
+            "+RM 1.50",
+            "—",
+            "none of the listed allergens",
+            "—"
+          ],
+          [
+            "+GJ",
+            "Grass jelly",
+            "+RM 1.50",
+            "—",
+            "none of the listed allergens",
+            "—"
+          ],
+          [
+            "+AJ",
+            "Aloe vera jelly",
+            "+RM 1.50",
+            "—",
+            "none of the listed allergens",
+            "—"
+          ],
+          [
+            "+PD",
+            "Egg pudding",
+            "+RM 2.00",
+            "—",
+            "Egg and milk",
+            "—"
+          ],
+          [
+            "+CF",
+            "Cheese foam",
+            "+RM 2.50",
+            "—",
+            "Milk (cream cheese, cream)",
+            "—"
+          ],
+          [
+            "OAT",
+            "Swap to oat milk",
+            "+RM 2.00",
+            "—",
+            "Oats (gluten): our oat milk is not certified gluten-free",
+            "—"
+          ]
+        ],
+        "note": "Add-on prices are added once, on top of the drink price, and do not change with cup size. BS01 and BS02 cannot be made at 0% sweetness — the brown sugar stripes need syrup. HOT is available for CT01, CT02 and MT01 only, regular size only."
+      },
+      "source_material_ids": [
+        19,
+        20
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "flashcards",
+      "payload": {
+        "cards": [
+          {
+            "front": "BS01 — drink, regular price, large price",
+            "back": "Brown Sugar Milk Tea with Pearls — RM 10.90 regular, RM 12.90 large"
+          },
+          {
+            "front": "BS02 — drink, regular price, large price",
+            "back": "Brown Sugar Fresh Milk with Pearls (no tea) — RM 11.90 regular, RM 13.90 large"
+          },
+          {
+            "front": "CT01 — drink, regular price, large price",
+            "back": "Classic Milk Tea — RM 7.90 regular, RM 9.90 large"
+          },
+          {
+            "front": "CT02 — drink, regular price, large price",
+            "back": "Jasmine Green Milk Tea — RM 8.90 regular, RM 10.90 large"
+          },
+          {
+            "front": "TH01 — drink, regular price, large price",
+            "back": "Thai Milk Tea — RM 8.90 regular, RM 10.90 large"
+          },
+          {
+            "front": "MT01 — drink, regular price, large price",
+            "back": "Matcha Latte — RM 11.90 regular, large RM 13.90"
+          },
+          {
+            "front": "FT01 — drink, regular price, large price",
+            "back": "Passion Fruit Green Tea — RM 8.90 regular, RM 10.90 large"
+          },
+          {
+            "front": "FT02 — drink, regular price, large price",
+            "back": "Lychee Oolong Tea — RM 9.90 regular, RM 11.90 large"
+          },
+          {
+            "front": "FT03 — drink, regular price, large price",
+            "back": "Lemon Black Tea — RM 7.90 regular, RM 9.90 large"
+          },
+          {
+            "front": "Which drinks use brown sugar syrup?",
+            "back": "BS01 and BS02 only. Every other drink uses fructose syrup."
+          },
+          {
+            "front": "Sweetness pumps — 100% regular and large",
+            "back": "4 pumps regular, 6 pumps large. One pump = 10 ml."
+          },
+          {
+            "front": "Sweetness pumps — 50% regular and large",
+            "back": "2 pumps regular, 3 pumps large."
+          },
+          {
+            "front": "Sticker codes for ice",
+            "back": "NI no ice, LI less ice, RI normal ice, HOT hot"
+          },
+          {
+            "front": "Normal ice weight — regular and large",
+            "back": "Regular 1 scoop = 120 g; large 1.5 scoops = 170 g"
+          },
+          {
+            "front": "Add-on prices",
+            "back": "+P +RM 1.50, +GJ +RM 1.50, +AJ +RM 1.50, +PD +RM 2.00, +CF +RM 2.50, OAT +RM 2.00"
+          },
+          {
+            "front": "Which add-ons carry milk or egg?",
+            "back": "+PD egg pudding (egg and milk), +CF cheese foam (milk). OAT carries oats/gluten."
+          }
+        ]
+      },
+      "source_material_ids": [
+        18,
+        19,
+        20
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "example",
+      "payload": {
+        "title": "Reading `BS01-L 50% LI OAT +PD ALG:milk` end to end",
+        "markdown": "Split the sticker into its six fields.\n\n1. `BS01` — Brown Sugar Milk Tea with Pearls. Brown sugar family, so the syrup is brown sugar syrup, not fructose.\n2. `-L` — large, 700 ml. Price is RM 12.90, not RM 10.90.\n3. `50%` — 2 pumps regular, 3 pumps large. Large, so 3 pumps, 30 ml.\n4. `LI` — less ice. Large, so 1 scoop, 85 g (half a scoop, 60 g, is the regular size).\n5. `OAT` — swap to oat milk, +RM 2.00. This is a gluten flag: the SOP says the oat milk is not certified gluten-free.\n6. `+PD` — egg pudding, +RM 2.00. Contains egg and milk.\n\nPrice if it were servable: RM 12.90 + RM 2.00 + RM 2.00 = RM 16.90.\n\nBut `ALG:milk` is on the sticker. The customer has a milk allergy. OAT replaces the fresh milk, but `+PD` contains milk, so the drink as written is not safe. Section 8 of the SOP is explicit: the cashier must stop and explain before taking payment. You do not make this drink. You explain, offer a drink with no milk in the recipe (FT01, FT02 or FT03) without cheese foam or pudding, follow the allergy steps in section 9, and let the customer choose."
+      },
+      "source_material_ids": [
+        19,
+        20,
+        18
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "misconception",
+      "payload": {
+        "belief": "A large cup is just more of the same drink, so I charge the regular price and use the regular pump count.",
+        "why_it_seems_right": "The code is the same — BS01 is BS01 — and the drink tastes the same, so the size feels like a detail rather than a different line item.",
+        "what_is_true": "Section 8 lists two prices per code: BS01 is RM 10.90 regular and RM 12.90 large. Section 7 lists two pump counts per sweetness level: 100% is 4 pumps regular and 6 pumps large. Charging RM 10.90 for a 700 ml cup undercharges by RM 2.00, and using 4 pumps in a large cup makes the drink weak. The size letter on the sticker decides both the price and the pump count."
+      },
+      "source_material_ids": [
+        18,
+        19
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you call a drink back to the bar",
+        "items": [
+          {
+            "text": "Code read and drink named — BS01, CT02, FT03 and so on",
+            "why": "Prevents pulling the wrong base tea or the wrong syrup bottle"
+          },
+          {
+            "text": "Size letter read: regular or large, and the matching price said out loud",
+            "why": "Prevents charging RM 10.90 for a 700 ml cup"
+          },
+          {
+            "text": "Sweetness percentage converted to pumps for that size",
+            "why": "Prevents 4 pumps going into a large cup"
+          },
+          {
+            "text": "Ice code read: NI, LI, RI or HOT",
+            "why": "Prevents the wrong scoop weight and prevents HOT being taken for a large cup"
+          },
+          {
+            "text": "Syrup family confirmed: brown sugar for BS01 and BS02, fructose for everything else",
+            "why": "Prevents reaching for the wrong squeeze bottle"
+          },
+          {
+            "text": "Every add-on priced from the add-on table, not from memory",
+            "why": "Prevents a RM 2.00 add-on being charged as RM 1.50"
+          },
+          {
+            "text": "Allergy flag checked against the contains column of every component",
+            "why": "Prevents serving +PD or +CF to a milk-allergic customer"
+          },
+          {
+            "text": "If the customer said kurang manis with no number, set 50% and tell them",
+            "why": "Prevents a silent guess that the customer did not agree to"
+          }
+        ],
+        "note": "Tick these in order on the sticker itself. If any line cannot be ticked, stop and ask the shift lead before the drink goes to the bar."
+      },
+      "source_material_ids": [
+        18,
+        19,
+        20
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from the SOP. Some items have more than one correct option."
+      },
+      "source_material_ids": [
+        18,
+        19,
+        20
+      ],
+      "assessments": [
+        {
+          "kind": "cloze",
+          "prompt": "A customer orders a large BS01 at 100% sweetness. The SOP says one pump is 10 ml, so you draw ____ pumps of brown sugar syrup.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "6",
+              "six"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "Section 7 sets 100% at 4 pumps for regular and 6 pumps for large. The sticker says large, so 6 pumps — 60 ml.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            18
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "100% (normal) | manis biasa, normal sugar | 4 | 6"
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "A customer with a milk allergy wants a cold drink with pearls. Which of these can you serve without changing the recipe? Select all that apply.",
+          "bloom": "evaluate",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "FT01 Passion Fruit Green Tea with +P pearls"
+            },
+            {
+              "id": "b",
+              "text": "CT01 Classic Milk Tea with +P pearls"
+            },
+            {
+              "id": "c",
+              "text": "FT03 Lemon Black Tea with +P pearls"
+            },
+            {
+              "id": "d",
+              "text": "BS02 Brown Sugar Fresh Milk with Pearls"
+            },
+            {
+              "id": "e",
+              "text": "MT01 Matcha Latte with +P pearls"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "c"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "FT01 and FT03 are the only listed drinks with no milk in the recipe, and +P pearls carry none of the listed allergens. CT01, BS02 and MT01 all contain milk, and BS02 is a fresh-milk drink.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            19
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "FT01 | Passion Fruit Green Tea | RM 8.90 | RM 10.90 | No milk in recipe; caffeine"
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A sticker reads `CT02-R 75% RI`. What do you charge and what goes in the cup?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "RM 8.90, 3 pumps fructose syrup, 1 scoop of ice at 120 g"
+            },
+            {
+              "id": "b",
+              "text": "RM 10.90, 5 pumps fructose syrup, 1.5 scoops of ice at 170 g"
+            },
+            {
+              "id": "c",
+              "text": "RM 8.90, 3 pumps brown sugar syrup, 1 scoop of ice at 120 g"
+            },
+            {
+              "id": "d",
+              "text": "RM 8.90, 2 pumps fructose syrup, half a scoop of ice at 60 g"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "CT02 regular is RM 8.90. 75% is 3 pumps regular and 5 pumps large, and the sticker says regular. RI is normal ice, 1 scoop at 120 g regular. CT02 is not a brown sugar drink, so the syrup is fructose.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            18
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "One pump = 10 ml. Brown sugar drinks use brown sugar syrup; all other drinks use fructose syrup with the same pump counts."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A customer says `kurang manis sikit` for a large BS01, then asks why the drink still looks dark. Explain what you set and what you tell them.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "`kurang manis sikit` is 75%, which for a large cup is 5 pumps of brown sugar syrup. The drink still looks dark because the brown sugar syrup is what makes the stripes, and the SOP sets a floor of 25% for BS01 and BS02."
+          },
+          "rubric": [
+            {
+              "criterion": "Names the correct sweetness level and pump count for a large cup",
+              "weight": 0.4,
+              "excellent": "States 75% and 5 pumps of brown sugar syrup for the large size.",
+              "acceptable": "States 75% but gives the regular pump count, or gives 5 pumps without naming the percentage.",
+              "poor": "Names a different level, or gives a pump count that does not match any row of the SOP table."
+            },
+            {
+              "criterion": "Explains why the drink still looks dark",
+              "weight": 0.3,
+              "excellent": "Says the brown sugar syrup is what creates the stripes, so reducing it changes the look of the drink.",
+              "acceptable": "Says the drink contains brown sugar syrup without linking it to the appearance.",
+              "poor": "Attributes the colour to the tea or to the ice, or gives no reason."
+            },
+            {
+              "criterion": "States the 25% floor for the brown sugar series",
+              "weight": 0.3,
+              "excellent": "States that BS01 and BS02 cannot go below 25% and that 0% is not available for them.",
+              "acceptable": "Mentions a minimum without naming 25% or without limiting it to the brown sugar series.",
+              "poor": "Offers 0% for BS01, or does not mention any floor."
+            }
+          ],
+          "max_score": 10,
+          "id": "q4",
+          "status": "supported",
+          "reason": "Section 7 maps kurang manis sikit to 75%, 5 pumps for large, and sets the 25% brown sugar minimum for the stripes.",
+          "quote": "75% | kurang manis sikit | 3 | 5",
+          "cite_chunk_ids": [
+            18
+          ],
+          "explanation": "75% | kurang manis sikit | 3 | 5"
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Which of the nine codes do you still have to look up rather than recall, and what will you do on your next shift to close that gap before the customer is standing in front of you?"
+      },
+      "source_material_ids": [
+        19
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.002994,
+  "repairs": [
+    "cites: q1: cited chunk 18 (7. Sweetness and ice levels), found by its question and answer",
+    "cites: q2: cited chunk 19 (8. Menu and codes), found by its question and answer",
+    "cites: q3: cited chunk 18 (7. Sweetness and ice levels), found by its question and answer"
+  ]
+}

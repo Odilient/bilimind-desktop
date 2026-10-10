@@ -65,7 +65,7 @@ export async function runCommand<D>(cmd: string, g: GlobalOpts, fn: (ctx: Ctx) =
   const shouldLog = opts.log ?? opts.needsCourse !== false;
   try {
     const course = opts.needsCourse === false ? (g.course ?? process.cwd()) : resolveCourse(g.course, process.cwd());
-    ctx = makeCtx(g, course, await clockSkewMs());
+    ctx = makeCtx(g, course, await clockSkewMs(course));
     const data = await fn(ctx);
     const ms = Date.now() - t0;
     const cost = round6(ctx.spend.usd);

@@ -1,0 +1,5 @@
+[
+ {"item":"q6","verdict":"supported","quote":"Start the first batch of pearls (section 6.1). It takes about 50 minutes, so start it first.","reason":"Section 4 lists hand-washing, thermometers, date labels, pearls (start first), teas, then the POS, float and allergen board before 10:00."},
+ {"item":"q4","verdict":"supported","quote":"If the chiller is above 5 °C, tell the shift lead before using any milk.","reason":"Section 4: a 6 °C chiller goes to the shift lead before any milk is used; both readings are logged."},
+ {"item":"q3","verdict":"supported","quote":"Put all food away or cover it before sweeping and mopping. No sweeping while food is out.","reason":"Section 5 states the order and the 21:30, 21:55 and cool-plate timings named in the key."}
+]

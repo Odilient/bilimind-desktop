@@ -1,0 +1,592 @@
+{
+  "key": "hygiene_rules",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "Two hand-washing failures are invisible on a clean-looking bar: washing too briefly, and not going to the sink at the moment you were supposed to. The law sets the moments; the SOP sets the time.\n\nSection 10 of the Mutiara SOP splits every hygiene rule into two columns: **[LAW]** and **[SHOP]**. The source column is not decoration. A [LAW] rule comes from Malaysia's Food Hygiene Regulations 2009 (FHR 2009) and carries a regulation number — reg. 33(1)(c), reg. 36(1)(e). A [SHOP] rule is ours. Break a [SHOP] rule and the shift lead corrects you. Break a [LAW] rule and the shop is exposed, not just you.\n\nThe hand rule itself is reg. 33(1)(c): **wash hands before starting work, right after using the toilet, and after handling raw food, rubbish or anything dirty.** Our house rule adds three more triggers: money, your phone, your face.\n\nTwenty seconds is the number: the opening checklist says wash hands with soap for at least 20 seconds. Not \"until it feels clean\" — count it. Soap, running water, backs of hands, between fingers, thumbs, fingertips, wrists. Twenty seconds is roughly singing \"Happy Birthday\" twice through at normal speed.\n\nTwo rules sit next to the sink and are easy to skip. Take off your apron and cap **before** you go to the toilet (reg. 33(1)(b)) — the apron is what touches the drinks, and it does not go into the toilet with you. And cover any cut with a blue waterproof plaster, then a glove over it; blue because nothing in a milk tea is blue, so a lost plaster is visible in the cup."
+      },
+      "source_material_ids": [
+        7,
+        22,
+        23
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "misconception",
+      "payload": {
+        "belief": "Twenty seconds is just a guideline — if my hands look clean and I used soap, I'm fine.",
+        "why_it_seems_right": "Your hands do look clean after five seconds of soap. There is no visible difference between a five-second wash and a twenty-second one, so the clock feels like bureaucracy rather than hygiene.",
+        "what_is_true": "Reg. 33(1)(c) requires the wash, and the SOP's opening checklist sets the standard for it: soap for at least 20 seconds. A five-second rinse fails that standard regardless of how the hands look. What twenty seconds buys you is the scrubbing of the areas a quick rinse never reaches: between fingers, thumbs, wrists and under the nails, where the residue that transfers into a drink actually sits. The difference predicts what reaches the cup: a five-second wash leaves what was on your hands, a counted twenty seconds removes it."
+      },
+      "source_material_ids": [
+        22
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "This is the wash you perform at the sink behind the bar. Twenty seconds, counted, every time one of the triggers fires.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Wet your hands and forearms under running water",
+            "detail_markdown": "Turn the tap on and let the water run over your hands and up past your wrists. Do not fill the basin and dip — running water carries residue away, standing water holds it.",
+            "warning": "Warm water is more comfortable but the temperature is not the point; running water is.",
+            "check": "Water is flowing out of the tap, not sitting in the basin."
+          },
+          {
+            "n": 2,
+            "title": "Apply soap and start the count",
+            "detail_markdown": "One pump of liquid soap into your palm. Start counting twenty seconds now, not after you have finished lathering. Roughly two slow rounds of \"Happy Birthday\" at normal singing speed.",
+            "warning": "Do not start the count when you begin rinsing — that is the most common way a wash lands at eight seconds.",
+            "check": "You know roughly where you are in the count before you start scrubbing."
+          },
+          {
+            "n": 3,
+            "title": "Scrub palms, backs of hands and between fingers",
+            "detail_markdown": "Rub palm to palm, then the back of each hand with the other palm, then interlace your fingers and work the soap between them. This is where the residue from money and phones sits.",
+            "warning": "Skipping the backs of the hands is the second-most-common miss after the thumbs.",
+            "check": "Soap is visible between every pair of fingers."
+          },
+          {
+            "n": 4,
+            "title": "Scrub thumbs, fingertips and wrists",
+            "detail_markdown": "Rotate each thumb inside the opposite palm. Rub your fingertips into your palms to work under the nails. Finish with each wrist.",
+            "warning": "Fingernails must be short and clean (reg. 33(1)(a)); no nail polish or false nails is our [SHOP] rule. Long nails trap what the scrub cannot reach.",
+            "check": "All four areas — thumbs, fingertips, nails, wrists — have been scrubbed."
+          },
+          {
+            "n": 5,
+            "title": "Rinse under running water",
+            "detail_markdown": "Rinse from wrists down to fingertips so the soap and the residue travel off your hands, not back up your arms.",
+            "warning": "Rinsing upward pushes dirty water toward your wrists.",
+            "check": "No soap film remains on your hands."
+          },
+          {
+            "n": 6,
+            "title": "Dry with a paper towel and use it to turn off the tap",
+            "detail_markdown": "Dry your hands fully on a paper towel, then use that same towel to grip the tap handle and turn it off. Bin the towel.",
+            "warning": "Bare hands on the tap handle re-contaminate the hands you just washed — the handle was touched before the wash.",
+            "check": "The tap is off and your hands did not touch the handle bare."
+          }
+        ]
+      },
+      "source_material_ids": [
+        22
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is 7:40 pm on a Friday. The queue is eight deep, you are the only one on the bar, and the brown sugar milk teas are backed up. You just took a fifty-ringgit note from the customer in front of you and handed back change. The next order is a BS01 and the pearls are already scooped into the cup.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "You have the customer's cash in your hand and the next cup waiting. What do you do?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Finish the drink first, then wash your hands once the queue clears.",
+                "correct": false,
+                "outcome_markdown": "You hand over the drink. The shift lead sees your bare hand on the cup lid straight after the cash and stops you. The whole queue watches you walk to the sink and start again from step one of the wash — twenty seconds you could have spent before the cup.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "Wash your hands now, then build the drink.",
+                "correct": true,
+                "outcome_markdown": "You put the cash in the drawer, step to the sink and count twenty seconds. The customer waits a few seconds longer. The cup is built with clean hands and the shift lead says nothing, because there is nothing to say.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "Wipe your hands on your apron and build the drink.",
+                "correct": false,
+                "outcome_markdown": "The apron is now the contaminated surface, and it hangs over the counter for the rest of the shift. You have moved the problem from your hands to the garment that touches every drink you make tonight.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "Mid-build, you slice your finger on the sealer handle. It is a small cut but it is bleeding. What do you do?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Wrap it in a tissue, put the apron over it, and keep going.",
+                "correct": false,
+                "outcome_markdown": "The tissue is white and the apron is not waterproof. Ten minutes later there is no tissue on your finger and you cannot say where it went. Every cup made since then is suspect.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "Cover it with a blue waterproof plaster, then wear a glove over the plaster.",
+                "correct": true,
+                "outcome_markdown": "The blue plaster is visible against everything in the shop, so if it ever comes loose you will see it in the cup. The glove over it keeps the plaster dry and in place through the rest of the shift.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "Keep the finger out of the way and finish the queue before dealing with it.",
+                "correct": false,
+                "outcome_markdown": "You finish the queue. Blood has reached the cup rim on at least one drink, and the shop now has a product it cannot sell and a customer it cannot call back.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "The bin behind the bar is full. You tie the rubbish bag and carry it to the back. Do you wash your hands before you go back to the bar?",
+            "options": [
+              {
+                "id": "a",
+                "text": "No — I only touched the outside of the bag.",
+                "correct": false,
+                "outcome_markdown": "You go straight back to the bar. Rubbish is named in the hand-wash rule itself (reg. 33(1)(c)): the outside of a rubbish bag is exactly the kind of thing that sends you to the sink. The next cup you touch carries it.",
+                "next_id": "s4"
+              },
+              {
+                "id": "b",
+                "text": "Yes — handling rubbish is one of the listed triggers.",
+                "correct": true,
+                "outcome_markdown": "Twenty seconds at the sink, then back to the bar. Section 10 lists rubbish next to the toilet and raw food: wash before you touch anything behind the bar again.",
+                "next_id": "s4"
+              }
+            ]
+          },
+          {
+            "id": "s4",
+            "prompt": "It is 9:55 pm. You need the toilet before closing. Your apron is on and your cap is on.",
+            "options": [
+              {
+                "id": "a",
+                "text": "Go now, come back, wash hands, carry on.",
+                "correct": false,
+                "outcome_markdown": "You walk into the toilet wearing the apron that hangs over the drinks and the counter. Reg. 33(1)(b) requires it off before you go, and the apron has now been somewhere the shop's food must never be.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "Take off the apron and cap, leave them in the locker, then go.",
+                "correct": true,
+                "outcome_markdown": "Apron and cap go in the locker. You use the toilet, come back, wash for twenty seconds, and put the apron and cap back on. Nothing that touches a drink left the shop floor.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Go now and wash the apron when you get back.",
+                "correct": false,
+                "outcome_markdown": "You cannot wash an apron in the twenty seconds before closing, and a wet apron is worse than a dry one. The rule was never about how the apron looks — it is about where the apron has been.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this shift shares one shape: the shortcut was faster, and the cost landed on somebody who was not in the room — the customer who drank from the cup, or the shop that took the write-up. The triggers are not a list to memorise for the quiz. They are the moments where the queue is loudest and the wash feels most optional, which is exactly why the SOP writes them down."
+      },
+      "source_material_ids": [
+        22,
+        23
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "reference_table",
+      "payload": {
+        "title": "Section 10 hygiene rules, by source",
+        "columns": [
+          "Rule",
+          "Source"
+        ],
+        "rows": [
+          [
+            "Wash hands before starting work, right after using the toilet, and after handling raw food, rubbish or anything dirty.",
+            "[LAW] reg. 33(1)(c)"
+          ],
+          [
+            "Also wash hands after touching money, your phone or your face.",
+            "[SHOP]"
+          ],
+          [
+            "Keep fingernails short and clean. No nail polish or false nails.",
+            "[LAW] reg. 33(1)(a); polish rule [SHOP]"
+          ],
+          [
+            "No jewellery, watches, pins or other accessories behind the bar.",
+            "[LAW] reg. 33(1)(f)"
+          ],
+          [
+            "Take off your apron and cap before going to the toilet.",
+            "[LAW] reg. 33(1)(b)"
+          ],
+          [
+            "Nothing in apron pockets that could fall into a drink.",
+            "[LAW] reg. 33(1)(e)"
+          ],
+          [
+            "Wear the apron and cap only inside the shop; keep them in your locker.",
+            "[LAW] reg. 32(2)"
+          ],
+          [
+            "Never touch unwrapped food (pearls, jelly, fruit) with bare hands: use scoops, tongs or gloves.",
+            "[LAW] reg. 36(1)(e)"
+          ],
+          [
+            "Never blow into a cup or bag to open it.",
+            "[LAW] reg. 36(1)(g)"
+          ],
+          [
+            "Store stock at least 20 cm above the floor and 15 cm from the wall; cleaning chemicals never on the same shelf as food.",
+            "[LAW] reg. 38(1)(b) and (d)"
+          ],
+          [
+            "Chipped or cracked jugs, shakers and scoops go in the bin, not back on the rack.",
+            "[LAW] reg. 35(2)"
+          ],
+          [
+            "Cover cuts with a blue waterproof plaster and wear a glove over it.",
+            "[SHOP]"
+          ],
+          [
+            "Phones stay in the locker. No eating, smoking or vaping behind the bar.",
+            "[SHOP]; reg. 33(1)(d)"
+          ],
+          [
+            "Sick? Stay home and tell the shift lead (see section 2).",
+            "[LAW] reg. 31(2)"
+          ]
+        ],
+        "note": "Read the source column before you decide how much a rule matters. A [LAW] row carries a regulation number from FHR 2009 and is the inspector's checklist. A [SHOP] row is ours, and the shift lead enforces it."
+      },
+      "source_material_ids": [
+        22,
+        23
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you touch a cup",
+        "items": [
+          {
+            "text": "Fingernails are short and clean, with no polish and no false nails.",
+            "why": "reg. 33(1)(a) says short and clean; no polish or false nails is our [SHOP] rule."
+          },
+          {
+            "text": "No jewellery, watch, pin or accessory on your hands or wrists.",
+            "why": "reg. 33(1)(f) — accessories are surfaces that never get washed."
+          },
+          {
+            "text": "Apron and cap are on, and both came out of your locker this shift.",
+            "why": "reg. 32(2) — they are worn only inside the shop."
+          },
+          {
+            "text": "Apron pockets are empty.",
+            "why": "reg. 33(1)(e) — anything in a pocket can fall into a drink."
+          },
+          {
+            "text": "You have washed your hands for a counted twenty seconds since clocking in.",
+            "why": "reg. 33(1)(c) — wash before starting work; the opening checklist sets at least 20 seconds with soap."
+          },
+          {
+            "text": "Any cut is covered with a blue waterproof plaster and a glove over it.",
+            "why": "blue shows up in a cup; a bare plaster does not stay put."
+          },
+          {
+            "text": "Your phone is in the locker, not in your pocket.",
+            "why": "[SHOP] — a phone in a pocket is a phone you will touch, and touching it sends you back to the sink."
+          },
+          {
+            "text": "You know where the soap and paper towels are, and both are stocked.",
+            "why": "a sink with no soap is a wash you cannot perform."
+          }
+        ],
+        "note": "Run this once at the start of every shift. It takes under a minute and it is the difference between a spot check that ends in a nod and one that ends in a write-up."
+      },
+      "source_material_ids": [
+        22,
+        23
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from section 10 of the SOP. The source column matters as much as the rule."
+      },
+      "source_material_ids": [
+        17,
+        23,
+        22,
+        21
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "Put the steps of the twenty-second handwash in the order you perform them at the bar sink.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "b",
+              "text": "Apply soap and start counting twenty seconds."
+            },
+            {
+              "id": "c",
+              "text": "Scrub palms, backs of hands and between fingers."
+            },
+            {
+              "id": "d",
+              "text": "Scrub thumbs, fingertips and wrists."
+            },
+            {
+              "id": "e",
+              "text": "Rinse from wrists down to fingertips."
+            },
+            {
+              "id": "f",
+              "text": "Dry with a paper towel and use it to turn off the tap."
+            },
+            {
+              "id": "a",
+              "text": "Wet hands and forearms under running water."
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ]
+          },
+          "max_score": 6,
+          "explanation": "Water first, then soap and the count starts, then the two scrub passes covering every surface, then a downward rinse, then dry and use the towel on the tap so your bare hand never touches the handle you gripped before washing.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            23
+          ],
+          "status": "not_covered",
+          "reason": "The SOP gives the triggers and 20 seconds with soap, but no hand-washing sequence; the auto quote (blue plaster) did not decide it.",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "cloze",
+          "prompt": "Under section 10, a cut must be covered with a ____ waterproof plaster and then a glove worn over it.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "blue"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Section 10: cover cuts with a blue waterproof plaster and wear a glove over it.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            23
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Cover cuts with a blue waterproof plaster and wear a glove over it."
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A crew member's hands look clean and smell of soap after a quick rinse. Why does the SOP still require a counted twenty seconds?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Twenty seconds is the time needed to scrub between fingers, thumbs, wrists and under the nails, which a quick rinse never reaches."
+            },
+            {
+              "id": "b",
+              "text": "Twenty seconds is how long the soap takes to kill all bacteria on the skin."
+            },
+            {
+              "id": "c",
+              "text": "Twenty seconds is the minimum time the tap must run before the water is safe to use."
+            },
+            {
+              "id": "d",
+              "text": "Twenty seconds is the time it takes for the soap to lather fully in cold water."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "The count exists to force coverage of the areas a quick rinse skips. Soap does not sterilise skin, and the tap water is not the variable being controlled.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            22
+          ],
+          "status": "not_covered",
+          "reason": "Re-solved independently and the answer holds, but the quote did not check out against the slide.",
+          "labels": [
+            "beyond_slides"
+          ]
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A crew member says they will wash their hands after touching money only when the queue is quiet, because washing mid-queue slows service. Using section 10, explain in 2–4 sentences what is wrong with that plan and name the source of the money rule.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Touching money is a [SHOP] trigger added to reg. 33(1)(c), so the wash happens at the moment of the trigger, not when the queue allows. Money is one of the dirtiest things that crosses the counter, and the next thing the hand touches is a cup or a lid. Delaying the wash means every drink made in between was built with the contaminated hand."
+          },
+          "rubric": [
+            {
+              "criterion": "Identifies the money rule as a [SHOP] addition to reg. 33(1)(c)",
+              "weight": 0.35,
+              "excellent": "States that money, phones and faces are [SHOP] triggers added on top of the [LAW] reg. 33(1)(c) rule.",
+              "acceptable": "Says the money rule comes from section 10 without naming it as a shop rule or giving the regulation.",
+              "poor": "Treats the money rule as optional or invents a different source."
+            },
+            {
+              "criterion": "Explains why the wash cannot wait for the queue",
+              "weight": 0.4,
+              "excellent": "Points out that the hand touches a cup, lid or scoop immediately after the cash, so every drink made before the wash is contaminated.",
+              "acceptable": "Says the hands stay dirty until washed without naming what they touch next.",
+              "poor": "Argues about speed of service without addressing contamination."
+            },
+            {
+              "criterion": "States the timing rule as at the moment of the trigger",
+              "weight": 0.25,
+              "excellent": "Says the wash happens when the trigger occurs, not when it is convenient.",
+              "acceptable": "Says the wash should happen soon after touching money.",
+              "poor": "Says the wash can be batched at the end of a rush."
+            }
+          ],
+          "max_score": 10,
+          "id": "q4",
+          "status": "supported",
+          "reason": "Section 10 lists money as a [SHOP] trigger beside the reg. 33(1)(c) [LAW] rule; the trigger means wash at that moment.",
+          "quote": "Also wash hands after touching money, your phone or your face.",
+          "cite_chunk_ids": [
+            22
+          ],
+          "explanation": "Also wash hands after touching money, your phone or your face."
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "A crew member is behind the bar mid-shift. According to section 10 of the SOP, which of these send them back to the sink to wash their hands? (Select all that apply.)",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "They handled money for a cash order."
+            },
+            {
+              "id": "b",
+              "text": "They checked their phone for a message."
+            },
+            {
+              "id": "c",
+              "text": "They carried a bag of rubbish to the back."
+            },
+            {
+              "id": "d",
+              "text": "They wiped the counter with a clean cloth."
+            },
+            {
+              "id": "e",
+              "text": "They restocked sealed cups from the storeroom."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "max_score": 3,
+          "explanation": "Money, phones and faces are the [SHOP] additions to reg. 33(1)(c), and rubbish is named in the regulation itself. Wiping a counter and moving sealed stock do not touch the listed triggers.",
+          "id": "q5",
+          "cite_chunk_ids": [
+            22
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Also wash hands after touching money, your phone or your face."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A new crew member says they do not need to take off their apron before going to the toilet because they will wash their hands afterwards anyway. Explain in 2–4 sentences why the SOP still requires the apron and cap to come off first, and name the source of that rule.",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Reg. 33(1)(b) requires the apron and cap to be removed before using the toilet. Handwashing cleans hands, not fabric: the apron is the garment that hangs over the drinks and the counter, so it must not enter the toilet at all. Washing afterwards cannot undo contamination that has already transferred to the apron, and the apron is worn only inside the shop and kept in the locker (reg. 32(2))."
+          },
+          "rubric": [
+            {
+              "criterion": "Names reg. 33(1)(b) or the SOP's [LAW] tag as the source of the apron rule",
+              "weight": 0.3,
+              "excellent": "Cites reg. 33(1)(b) by number and identifies it as a [LAW] rule from FHR 2009.",
+              "acceptable": "Says the rule is a law rule from section 10 without giving the regulation number.",
+              "poor": "Calls it a house rule or gives no source at all."
+            },
+            {
+              "criterion": "Explains that handwashing cannot decontaminate the apron itself",
+              "weight": 0.4,
+              "excellent": "States that the apron is the garment over the drinks and counter, so contamination on it is not removed by washing hands afterwards.",
+              "acceptable": "Says the apron would get dirty or carry germs without naming the transfer to drinks or the counter.",
+              "poor": "Repeats that handwashing is required without addressing what happens to the apron."
+            },
+            {
+              "criterion": "Connects the rule to where the apron is allowed to be",
+              "weight": 0.3,
+              "excellent": "Mentions that the apron and cap are worn only inside the shop and kept in the locker, per reg. 32(2).",
+              "acceptable": "Says the apron belongs in the locker without linking it to the toilet rule.",
+              "poor": "Does not mention the locker or where the apron is stored."
+            }
+          ],
+          "max_score": 10,
+          "id": "q6",
+          "status": "supported",
+          "reason": "Section 10 states the rule and tags it [LAW] reg. 33(1)(b), as the key says.",
+          "quote": "Take off your apron and cap before going to the toilet.",
+          "cite_chunk_ids": [
+            22
+          ],
+          "explanation": "Take off your apron and cap before going to the toilet."
+        }
+      ]
+    }
+  ],
+  "attempts": 2,
+  "cost_usd": 0.040179,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Fix these check failures: Q6 multi_select (b6): Use 4-6 options with 2-3 correct ids, and say \"(Select all that apply.)\" in the prompt.\"",
+    "moved source_material_ids out of a explainer payload to the block",
+    "re-homed 2 questions from narrative blocks into the quiz",
+    "cites: q1: cited chunk 17 (6.4 Making a Brown Sugar Milk Tea (BS01), step by step), found by its question and answer",
+    "cites: q2: cited chunk 23 (10. Hygiene rules), found by its question and answer",
+    "cites: q3: cited chunk 22 (10. Hygiene rules), found by its question and answer",
+    "cites: q5: cited chunk 21 (9. Allergens), found by its question and answer",
+    "cites: b2: the misconception cited nothing; cited chunk 22 (best match for its text)",
+    "cites: b7: the quiz cited nothing; cited chunks 17, 23, 22, 21 (its questions' sources)",
+    "check: q1: options were shown in the correct order; rotated them"
+  ]
+}

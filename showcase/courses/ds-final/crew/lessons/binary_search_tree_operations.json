@@ -1,0 +1,458 @@
+{
+  "key": "binary_search_tree_operations",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "A BST is a binary tree with one extra rule: for every node, everything in its left subtree is smaller and everything in its right subtree is bigger. That single rule is what lets you search in O(h) instead of scanning every node.\n\nSlide 3 of Lecture 3 fixes the vocabulary you will be marked on:\n\n| Term | Meaning |\n|---|---|\n| Root | the top node; no parent |\n| Leaf | a node with no children |\n| Subtree | a node plus all its descendants |\n| Depth of a node | number of edges from the root |\n| Height of a tree | number of edges on the longest root-to-leaf path |\n| Binary tree | every node has at most two children |\n\nSlide 5 gives the search loop. It is iterative, not recursive:\n\n```javascript\nfunction search(node, key) {\n  while (node !== null && key !== node.key)\n    node = key < node.key ? node.left : node.right;\n  return node; // null when the key is absent\n}\n```\n\nEach comparison sends you exactly one level down, so the cost is O(h). Insert is the same walk with one extra move: search for the key, and when the walk falls off the tree, attach a new leaf there. Delete is the hard one, and it has three cases — slide 7 lists them. A leaf just goes. A node with one child is replaced by that child. A node with two children is replaced by its in-order successor, the smallest key in its right subtree, and then that successor is deleted from where it sat.\n\nWhy the successor and not just any node? Because in-order traversal of a BST visits keys in sorted order. Slide 6 shows it on the example tree: in-order gives 20 30 40 50 60 70 80, pre-order gives 50 30 20 40 70 60 80, post-order gives 20 40 30 60 80 70 50. The successor is the next key in that sorted list, so putting it where the deleted node was keeps the sorted order intact."
+      },
+      "source_material_ids": [
+        35,
+        37,
+        38,
+        39
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Insert 40, 20, 60, 10, 30, 50, 70, 25 into an empty BST, then delete 20. Follow the comparisons — every insertion is one search that fails, plus one attach.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Insert 40 — the root",
+            "detail_markdown": "The tree is empty, so 40 becomes the root. No comparisons needed.",
+            "check": "Tree is a single node: 40."
+          },
+          {
+            "n": 2,
+            "title": "Insert 20 — go left",
+            "detail_markdown": "Start at 40. 20 < 40, so move to the left child. It is null, so attach 20 there.",
+            "check": "20 is the left child of 40."
+          },
+          {
+            "n": 3,
+            "title": "Insert 60 — go right",
+            "detail_markdown": "Start at 40. 60 > 40, so move to the right child. It is null, so attach 60 there.",
+            "check": "60 is the right child of 40."
+          },
+          {
+            "n": 4,
+            "title": "Insert 10 — two lefts",
+            "detail_markdown": "10 < 40 → left to 20. 10 < 20 → left of 20. Null, so attach.",
+            "warning": "Do not stop after comparing with 40: its left link already holds 20. Keep walking down until you reach an empty link, then attach.",
+            "check": "10 is the left child of 20."
+          },
+          {
+            "n": 5,
+            "title": "Insert 30 — left then right",
+            "detail_markdown": "30 < 40 → left to 20. 30 > 20 → right of 20. Null, so attach.",
+            "check": "30 is the right child of 20."
+          },
+          {
+            "n": 6,
+            "title": "Insert 50 and 70",
+            "detail_markdown": "50 > 40 → right to 60. 50 < 60 → left of 60. Attach. Then 70 > 40 → right to 60. 70 > 60 → right of 60. Attach.",
+            "check": "50 is the left child of 60; 70 is the right child of 60."
+          },
+          {
+            "n": 7,
+            "title": "Insert 25 — three comparisons",
+            "detail_markdown": "25 < 40 → left to 20. 25 > 20 → right to 30. 25 < 30 → left of 30. Null, so attach.",
+            "warning": "25 is not a child of 20. It belongs under 30 because 25 > 20 sent you right first.",
+            "check": "25 is the left child of 30."
+          },
+          {
+            "n": 8,
+            "title": "Delete 20 — two children, use the in-order successor",
+            "detail_markdown": "20 has two children (10 and 30), so slide 7 says copy in the in-order successor. The successor is the smallest key in the right subtree of 20: walk right to 30, then left as far as possible. 30 has a left child, 25, and 25 has no left child, so the successor is 25. Copy 25 into 20's slot, then delete the old 25 node, which is a leaf.",
+            "warning": "Do not stop at 30 or promote a child by hand. 30 has a left child (25), so it is not the smallest key on the right; promoting 30 into 20's place would also leave it with two left children, 10 and 25.",
+            "check": "In-order traversal of the final tree reads 10 25 30 40 50 60 70 — still sorted."
+          }
+        ]
+      },
+      "source_material_ids": [
+        35,
+        37,
+        38,
+        39
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "checklist",
+      "payload": {
+        "title": "BST operation field check",
+        "items": [
+          {
+            "text": "Every node's left subtree keys are strictly less than the node and right subtree keys strictly greater",
+            "why": "one out-of-place node makes every later search wrong"
+          },
+          {
+            "text": "Search loop compares against node.key, not node, and moves to node.left or node.right",
+            "why": "comparing a number with the node object is always false, so the search turns the wrong way and returns null"
+          },
+          {
+            "text": "Insert attaches the new key as a leaf, not as an internal node",
+            "why": "splicing a key into the middle of an edge orphans a subtree"
+          },
+          {
+            "text": "Before deleting, count the node's children and name the case out loud",
+            "why": "applying the two-child rule to a leaf deletes the wrong node"
+          },
+          {
+            "text": "For a two-child delete, the replacement is the smallest key in the RIGHT subtree",
+            "why": "using the largest key in the left subtree is legal but is the predecessor, and mixing them up loses marks"
+          },
+          {
+            "text": "After any delete, run in-order traversal and confirm the output is ascending",
+            "why": "this is the only check that catches a broken BST"
+          },
+          {
+            "text": "Height is counted in edges, not nodes",
+            "why": "slide 3 defines height as edges on the longest root-to-leaf path"
+          }
+        ],
+        "note": "Keep this open while you redraw the tree after each operation. The in-order check at the end is the one that catches everything else."
+      },
+      "source_material_ids": [
+        35,
+        37,
+        39
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "code",
+      "payload": {
+        "mode": "function",
+        "language": "javascript",
+        "starter_code": "function insert(root, key) {\n  // root is null or {key, left, right}\n  // Return the root of the tree after inserting key.\n  // TODO\n}\n\nfunction inOrder(node, out) {\n  // Push node.key into out in in-order, then recurse.\n  // TODO\n  return out;\n}",
+        "instructions_markdown": "Write `insert(root, key)` so it returns the root of the tree after inserting `key` as a leaf, following slide 5's rule: walk down comparing `key` to `node.key`, go left when smaller, right when larger, and attach a new node `{key, left: null, right: null}` where the walk falls off. If the key is already present, leave the tree unchanged. Then write `inOrder(node, out)` that pushes keys into `out` in left-node-right order. A node is a plain object `{key, left, right}`; an empty tree is `null`.",
+        "tests": [
+          {
+            "name": "inserts into an empty tree",
+            "call": "insert(null, 40).key",
+            "expect": 40
+          },
+          {
+            "name": "inserts 20 to the left of 40",
+            "call": "insert(insert(null, 40), 20).left.key",
+            "expect": 20
+          },
+          {
+            "name": "in-order returns sorted keys",
+            "call": "inOrder(insert(insert(insert(null, 40), 20), 60), [])",
+            "expect": [
+              20,
+              40,
+              60
+            ]
+          },
+          {
+            "name": "duplicate key is ignored",
+            "call": "inOrder(insert(insert(insert(null, 40), 20), 20), [])",
+            "expect": [
+              20,
+              40
+            ]
+          }
+        ],
+        "hints": [
+          "Handle the null case first: if root is null, return a new node with that key.",
+          "Otherwise compare key to root.key and recurse into root.left or root.right, assigning the result back so the link is kept.",
+          "For inOrder, recurse left, push node.key, then recurse right."
+        ]
+      },
+      "source_material_ids": [
+        37,
+        38
+      ],
+      "assessments": [
+        {
+          "kind": "code",
+          "prompt": "Write `insert(root, key)` and `inOrder(node, out)` in JavaScript. `insert` returns the root of the tree after inserting `key` as a leaf using the slide 5 comparison rule, ignoring duplicates. `inOrder` pushes keys into `out` in left-node-right order and returns `out`. Nodes are `{key, left, right}` and an empty tree is `null`.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "reference_solution": "function insert(root, key) {\n  if (root === null) return {key: key, left: null, right: null};\n  if (key < root.key) root.left = insert(root.left, key);\n  else if (key > root.key) root.right = insert(root.right, key);\n  return root;\n}\n\nfunction inOrder(node, out) {\n  if (node === null) return out;\n  inOrder(node.left, out);\n  out.push(node.key);\n  inOrder(node.right, out);\n  return out;\n}",
+            "tests": [
+              "inserts into an empty tree",
+              "inserts 20 to the left of 40",
+              "in-order returns sorted keys",
+              "duplicate key is ignored"
+            ]
+          },
+          "max_score": 10,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b5",
+      "type": "example",
+      "payload": {
+        "title": "Delete 50 from the slide 6 example tree",
+        "markdown": "Slide 6's example tree has 50 at the root, with left subtree 30 (20, 40) and right subtree 70 (60, 80). Its in-order traversal is 20 30 40 50 60 70 80.\n\nDelete 50. It has two children, so slide 7 says use the in-order successor.\n\n1. Walk right from 50 to 70.\n2. Walk left as far as possible: 70 → 60 → 60 has no left child.\n3. Successor is 60.\n4. Copy 60 into 50's slot. The root is now 60.\n5. Delete the old 60 node. It was the left child of 70 and had no children, so it just goes.\n\nFinal tree: root 60, left child 30 (with 20 and 40), right child 70 (with 80 as its right child, no left child).\n\nIn-order traversal: 20 30 40 60 70 80. Sorted, and 50 is gone. Slide 7 states the same result: deleting 50 puts 60 at the root."
+      },
+      "source_material_ids": [
+        38,
+        39
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "misconception",
+      "payload": {
+        "belief": "To delete a node with two children I can just promote either child into its place.",
+        "why_it_seems_right": "For a node with one child the rule really is 'replace it by its child', so the same move looks like it should scale to two children — and a drawing where you promote the left child often still looks like a tree.",
+        "what_is_true": "Slide 7 gives the two-child rule as copying in the in-order successor, the smallest key in the right subtree, and then deleting that successor. Promoting a child does not work in general: in the walkthrough tree, promoting 30 into 20's place would leave 30 needing two left children, 10 and its own left child 25, and a node has only one left link, so a subtree gets lost. Copying the successor (25) changes one key and removes one leaf; every other link stays where it was. The difference is observable: run in-order traversal after the delete and a lost subtree shows up as missing keys."
+      },
+      "source_material_ids": [
+        39
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "You are tracing an exam question. The tree currently holds 40 at the root, with 20 (children 10 and 30) on the left and 60 (children 50 and 70) on the right. The question asks you to delete 40 and draw the result. You have one minute per decision.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "40 has two children. What do you do first?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Find the smallest key in 40's right subtree",
+                "correct": true,
+                "outcome_markdown": "You walk right to 60, then left to 50. 50 has no left child, so the successor is 50. You now have the key to copy into 40's slot.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "Promote 60 into 40's slot and keep going",
+                "correct": false,
+                "outcome_markdown": "Promoting 60 puts it at the root, but 60 already has a left child, 50, and 40's whole left subtree (20 with 10 and 30) also has to hang on 60's left. A node has one left link, so one of those subtrees is lost and the in-order traversal is missing keys.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Remove 40 and reattach both subtrees to the root's parent",
+                "correct": false,
+                "outcome_markdown": "There is no parent above the root, so there is nowhere to reattach. Even with a parent this would leave the left subtree's keys unconnected to the right subtree's keys and the ordering rule unverifiable.",
+                "next_id": null
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "You copied 50 into the root. The old 50 node is still sitting as the left child of 60. What now?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Delete the old 50 node, which has no children",
+                "correct": true,
+                "outcome_markdown": "The old 50 was a leaf, so it just goes. The tree is now root 50, left 20 (10, 30), right 60 (with 70 as its right child, no left child).",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "Leave the old 50 node where it is",
+                "correct": false,
+                "outcome_markdown": "The tree now contains 50 twice. In-order traversal reads 10 20 30 50 50 60 70. Sorted but with a duplicate — wrong for a set, and the node count is one too high.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Delete 60 instead, since it was the successor's parent",
+                "correct": false,
+                "outcome_markdown": "Deleting 60 removes a key that was never asked about. In-order traversal reads 10 20 30 50 50 70 — 60 is gone and 50 is duplicated.",
+                "next_id": null
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "You have drawn the result. How do you check it in five seconds?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Run in-order traversal and confirm the keys come out ascending",
+                "correct": true,
+                "outcome_markdown": "In-order gives 10 20 30 50 60 70. Ascending, six keys, 40 gone — the delete is correct.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "Count the nodes and confirm there are six",
+                "correct": false,
+                "outcome_markdown": "Six is right, but the duplicate case also gives six when a key was copied without deleting the original. The count alone does not catch it.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "Check that the root is larger than everything on its left",
+                "correct": false,
+                "outcome_markdown": "50 is larger than 10, 20 and 30, so this passes — but it says nothing about the ordering inside the right subtree, where the duplicate sat.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn here shares one shape: it moves a key without removing the node it came from. Copying the successor and then deleting the successor's old node is two operations, and skipping the second one leaves a duplicate. The in-order traversal check catches it because a duplicate shows up as a repeated key in an otherwise sorted list."
+      },
+      "source_material_ids": [
+        39
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from the slides, not from memory of a different tree."
+      },
+      "source_material_ids": [
+        35,
+        37,
+        39
+      ],
+      "assessments": [
+        {
+          "kind": "ordering",
+          "prompt": "Insert 50, 30, 70, 20, 40, 60, 80 into an empty BST, then delete 30 using the in-order successor. Put the stages in the order they happen.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "b",
+              "text": "20 becomes the left child of 30 and 40 becomes the right child of 30; 60 and 80 attach under 70"
+            },
+            {
+              "id": "c",
+              "text": "Delete 30: it has two children, so find the smallest key in its right subtree — walk right to 40, which has no left child, so the successor is 40"
+            },
+            {
+              "id": "d",
+              "text": "Copy 40 into 30's slot, then delete the old 40 node, which was a leaf"
+            },
+            {
+              "id": "e",
+              "text": "In-order traversal reads 20 40 50 60 70 80"
+            },
+            {
+              "id": "a",
+              "text": "50 becomes the root; 30 goes left of 50 and 70 goes right of 50"
+            }
+          ],
+          "answer_key": {
+            "correct_order": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ]
+          },
+          "max_score": 5,
+          "explanation": "Insertion always attaches a leaf, so the first two keys bracket the root and the rest hang below. The two-child delete copies the in-order successor — the smallest key in the right subtree, which is 40 — and then removes the old 40 node. The final in-order traversal is ascending, which is the check that the delete worked.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            39
+          ],
+          "status": "supported",
+          "reason": "30 has two children; its right subtree is the single node 40, so 40 is copied up and the old leaf removed, as ordered.",
+          "quote": "Two children: copy in the in-order successor (smallest key in the right subtree), then delete the successor"
+        },
+        {
+          "kind": "cloze",
+          "prompt": "In the deletion rule on slide 7, a node with two children is replaced by its in-order ____, which is the smallest key in its right subtree.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "successor"
+            ]
+          },
+          "max_score": 2,
+          "explanation": "Slide 7 names the in-order successor as the smallest key in the right subtree, and notes the in-order predecessor — the largest key in the left subtree — works too.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            39
+          ],
+          "status": "supported",
+          "reason": "Slide 7 names the in-order successor as the smallest key in the right subtree.",
+          "quote": "Two children: copy in the in-order successor (smallest key in the right subtree)"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A BST holds n nodes. State its worst-case height and describe an insertion order that produces it. Explain in two or three sentences why that order is the worst.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "The worst-case height is n - 1 edges, giving a tree that is a single chain. Inserting keys in sorted order, ascending or descending, produces it: in ascending order each new key is larger than every key already present, so every insertion walks right from the root and attaches as the rightmost leaf (descending order mirrors this on the left). The height is then n - 1 because the longest root-to-leaf path visits every node, and search costs O(h) = O(n), no better than a list."
+          },
+          "rubric": [
+            {
+              "criterion": "States the worst-case height in edges",
+              "weight": 0.3,
+              "excellent": "Gives n - 1 edges (or n levels) and ties it to slide 3's definition of height as edges on the longest root-to-leaf path.",
+              "acceptable": "Gives n - 1 or n without distinguishing edges from nodes, but the number is right.",
+              "poor": "Gives log n, or gives a number with no relation to n."
+            },
+            {
+              "criterion": "Names a concrete insertion order that produces the chain",
+              "weight": 0.35,
+              "excellent": "Gives a sorted sequence such as 10, 20, 30, 40 and states that ascending or descending order both work.",
+              "acceptable": "Says 'sorted order' with an example of two or three keys.",
+              "poor": "Says 'unbalanced input' or 'random bad luck' with no sequence."
+            },
+            {
+              "criterion": "Explains why that order forces every insertion down the same side",
+              "weight": 0.35,
+              "excellent": "States that each new key is larger than all existing keys, so every comparison sends the walk right and the new node attaches as the rightmost leaf, making the height n - 1 and search O(n).",
+              "acceptable": "States that the tree becomes a chain and search degrades to O(n), without tracing the comparison.",
+              "poor": "Asserts the tree is unbalanced without saying which comparison causes it."
+            }
+          ],
+          "max_score": 6,
+          "id": "q4",
+          "cite_chunk_ids": [
+            40
+          ],
+          "status": "supported",
+          "reason": "Slide 8: sorted inserts build a chain of height n - 1, making operations O(n), as the model answer says.",
+          "quote": "builds a chain: h = n − 1, so operations are O(n)",
+          "explanation": "Slide 8: inserting keys in sorted order (1, 2, 3, …) builds a chain of height n − 1, so search, insert and delete all cost O(n) instead of O(log n)."
+        }
+      ]
+    }
+  ],
+  "attempts": 2,
+  "cost_usd": 0.006208,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Fix these check failures: Q2 item count: Add 1 more item to the quiz block (new ids from q<next>), at least one apply/analyze, grounded in the cited slides.; Q11 code runs (b4): Run `code-test --lesso\"",
+    "moved source_material_ids out of a explainer payload to the block",
+    "moved source_material_ids out of a example payload to the block",
+    "cites: q2: cited chunk 46 (Slide 14), found by its question and answer",
+    "cites: q3: cited chunk 39 (Slide 7), found by its question and answer",
+    "check: q2: options were shown in the correct order; rotated them",
+    "fact-check: b7: The successor identified in the preceding step is 50, not 60, so the copied key should be 50. (\"You copy 60 up, but 60 still exists below as the left child…\" -> \"You copy 50 up, but 50 still exists below as the left child…\")",
+    "lecturer: b2 step 8 said 30 has no left child, so the successor of 20 is 30; step 7 had just attached 25 as the left child of 30, so the successor is 25",
+    "lecturer: b6 misconception claimed promoting 10 into 20's place breaks the order; 10 with 30 on its right is still a valid BST -> the real failure is promoting 30, which already has a left child (25)",
+    "lecturer: b7 scenario s1 option b ('Promote 60'): the automatic fact-check had rewritten its outcome to 'You copy 50 up', which no longer matched the option -> rewritten to explain why promoting 60 loses a subtree",
+    "lecturer: b3 checklist said comparing with the node object \"never terminates\"; the loop still ends, it just returns null",
+    "lecturer: b4 code block cited nothing -> cites slide 5 (search/insert) and slide 6 (in-order)",
+    "lecturer: q4 (worst-case height) cited no slide and its quiz block cites slides 3, 5 and 7 only -> item cites slide 8 (chunk 40), where h = n - 1 for sorted inserts is stated",
+    "lecturer: b2 step 4 warning said stopping at 40 would attach 10 as its right child; 10 < 40 goes left, where 20 already sits -> \"keep walking until an empty link\"",
+    "lecturer: q4 had no explanation, so the Checker quote became its \"why\" -> explanation written from slide 8; model answer now says the ascending case walks right and the descending case mirrors it"
+  ]
+}

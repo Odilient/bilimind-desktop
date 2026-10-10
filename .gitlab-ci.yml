@@ -1,0 +1,14 @@
+# GitLab Pages: the landing site + the showcase courses (assembled from showcase/courses at deploy time).
+pages:
+  stage: deploy
+  image: node:22-alpine
+  script:
+    - node site/scripts/assemble.mjs
+    - mkdir -p public
+    - cp -r site/. public/
+    - rm -rf public/shots public/scripts public/STATUS.md
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

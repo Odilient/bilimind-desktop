@@ -1,0 +1,218 @@
+{
+  "goal": {
+    "deadline": "2026-10-18",
+    "exam_at": "2026-10-18T09:00:00+08:00",
+    "minutes_per_day": 45,
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  "start": "2026-10-11",
+  "days": [
+    {
+      "date": "2026-10-11",
+      "lessons": [
+        "food_handler_law",
+        "hygiene_rules"
+      ],
+      "reviews": 0,
+      "minutes": 45
+    },
+    {
+      "date": "2026-10-12",
+      "lessons": [
+        "allergens"
+      ],
+      "reviews": 2,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-13",
+      "lessons": [
+        "shift_routines"
+      ],
+      "reviews": 1,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-14",
+      "lessons": [
+        "drink_catalog"
+      ],
+      "reviews": 1,
+      "minutes": 30
+    },
+    {
+      "date": "2026-10-15",
+      "lessons": [
+        "malay_order_phrases"
+      ],
+      "reviews": 5,
+      "minutes": 45
+    },
+    {
+      "date": "2026-10-16",
+      "lessons": [
+        "building_a_drink"
+      ],
+      "reviews": 1,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-17",
+      "lessons": [],
+      "reviews": 7,
+      "minutes": 35
+    },
+    {
+      "date": "2026-10-18",
+      "lessons": [],
+      "reviews": 0,
+      "minutes": 0,
+      "exam": true,
+      "label": "Exam 09:00"
+    }
+  ],
+  "lessons": [
+    {
+      "key": "food_handler_law",
+      "title": "Who is a food handler under FHR 2009",
+      "day": "2026-10-11",
+      "minutes": 20,
+      "weight": null,
+      "order": 1
+    },
+    {
+      "key": "hygiene_rules",
+      "title": "Handwashing and hygiene rules you cannot skip",
+      "day": "2026-10-11",
+      "minutes": 25,
+      "weight": null,
+      "order": 2
+    },
+    {
+      "key": "allergens",
+      "title": "Allergens: what the creamer really contains",
+      "day": "2026-10-12",
+      "minutes": 25,
+      "weight": null,
+      "order": 3
+    },
+    {
+      "key": "shift_routines",
+      "title": "Opening and closing the kiosk by the checklist",
+      "day": "2026-10-13",
+      "minutes": 30,
+      "weight": null,
+      "order": 4
+    },
+    {
+      "key": "drink_catalog",
+      "title": "Menu codes, prices and what each drink contains",
+      "day": "2026-10-14",
+      "minutes": 25,
+      "weight": null,
+      "order": 5
+    },
+    {
+      "key": "malay_order_phrases",
+      "title": "Taking an order in Malay",
+      "day": "2026-10-15",
+      "minutes": 20,
+      "weight": null,
+      "order": 6
+    },
+    {
+      "key": "building_a_drink",
+      "title": "Building a drink to the sticker in under 90 seconds",
+      "day": "2026-10-16",
+      "minutes": 30,
+      "weight": null,
+      "order": 7
+    }
+  ],
+  "cut": [
+    {
+      "key": "moh_handler_certificate",
+      "title": "Booking your MOH food handler course",
+      "reason": "Folded into Who is a food handler: the certificate is one line of SOP section 2 and that lesson teaches it.",
+      "weight": null
+    },
+    {
+      "key": "dairy_allergy_scenario",
+      "title": "Answering \"is this dairy-free?\"",
+      "reason": "Scenario A (the dairy question) is taught inside the allergens lesson; a second lesson on it would repeat it.",
+      "weight": null
+    },
+    {
+      "key": "pearls_and_tea",
+      "title": "Cooking pearls and brewing tea to spec",
+      "reason": "Pearl and tea prep is cut to fit the week; the opening-checklist lesson covers when pearls and tea start.",
+      "weight": null
+    },
+    {
+      "key": "pearl_faults",
+      "title": "When a batch of pearls goes wrong",
+      "reason": "Builds on the cut pearl-prep lesson.",
+      "weight": null
+    },
+    {
+      "key": "too_sweet_scenario",
+      "title": "When a customer says it is too sweet",
+      "reason": "A two-line SOP scenario (remake once, free of charge); the drink-building lesson covers the sweetness pumps.",
+      "weight": null
+    },
+    {
+      "key": "capstone_first_shift",
+      "title": "Capstone: open the kiosk and serve ten drinks",
+      "reason": "A 90-minute supervised shift at the kiosk; it happens on the bar, not in a browser course.",
+      "weight": null
+    }
+  ],
+  "capacity_min": 315,
+  "new_budget_min": 230,
+  "review_budget_min": 85,
+  "used_min": 175,
+  "reviews": 17,
+  "review_dates": {
+    "food_handler_law": [
+      "2026-10-12",
+      "2026-10-15",
+      "2026-10-17"
+    ],
+    "hygiene_rules": [
+      "2026-10-12",
+      "2026-10-15",
+      "2026-10-17"
+    ],
+    "allergens": [
+      "2026-10-13",
+      "2026-10-15",
+      "2026-10-17"
+    ],
+    "shift_routines": [
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-17"
+    ],
+    "drink_catalog": [
+      "2026-10-15",
+      "2026-10-17"
+    ],
+    "malay_order_phrases": [
+      "2026-10-16",
+      "2026-10-17"
+    ],
+    "building_a_drink": [
+      "2026-10-17"
+    ]
+  },
+  "assumptions": [
+    "No exam time given: assumed 09:00.",
+    "Read your sentence as: exam 2026-10-18, 45 minutes a day.",
+    "No date in the sentence: assumed the exam is in 7 days (2026-10-18).",
+    "No daily time in the sentence: assumed 45 minutes a day."
+  ],
+  "warnings": [
+    "shift_routines is sized at 35 min, more than 70% of a 45-minute day; planned as 30 min (split it into two lessons if it really needs more).",
+    "building_a_drink is sized at 40 min, more than 70% of a 45-minute day; planned as 30 min (split it into two lessons if it really needs more)."
+  ]
+}

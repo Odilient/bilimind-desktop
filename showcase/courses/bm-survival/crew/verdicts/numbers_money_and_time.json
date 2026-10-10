@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "numbers_money_and_time",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "Tens add *puluh*: *tiga puluh* = 30.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 9,
+    "round": 1,
+    "at": "2026-10-10T16:14:01.814Z"
+  },
+  {
+    "lesson": "numbers_money_and_time",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "0 | sifar (kosong †, e.g. phone numbers)",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 9,
+    "round": 1,
+    "at": "2026-10-10T16:14:01.814Z"
+  },
+  {
+    "lesson": "numbers_money_and_time",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "Pattern: *se-* means \"one\": *sepuluh* (10), *sebelas* (11), *seratus* (100), *seribu* (1,000).",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 9,
+    "round": 1,
+    "at": "2026-10-10T16:14:01.814Z"
+  },
+  {
+    "lesson": "numbers_money_and_time",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "Tens add *puluh*: *tiga puluh* = 30",
+    "reason": "Tens take puluh, so 90 is sembilan puluh; pukul plus the hour gives the time.",
+    "chunk_id": 9,
+    "round": 1,
+    "at": "2026-10-10T16:23:16.980Z"
+  }
+]

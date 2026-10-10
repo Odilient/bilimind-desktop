@@ -1,0 +1,18 @@
+{
+  "sentence": "I'm an international student at Taylor's with zero Malay. Make me a survival course for my first month (mamak, Grab, campus) that also starts me on Bahasa Melayu Komunikasi. I have 20 minutes a day for 2 weeks.",
+  "deadline": "2026-10-25",
+  "exam_time": "09:00",
+  "exam_at": "2026-10-25T09:00:00+08:00",
+  "timezone": "Asia/Kuala_Lumpur",
+  "minutes_per_day": 20,
+  "audience": "student",
+  "language": "en",
+  "code_language": null,
+  "assumptions": [
+    "Read your sentence as: 2 weeks of study from today (Sun 11 Oct to Sat 24 Oct 2026), ready by Sun 25 Oct 2026, 20 minutes a day.",
+    "No exam in the sentence: the end of the 2 weeks is used as the deadline, so the last reviews land on Sat 24 Oct.",
+    "A spoken-language course: no code exercises; Malay phrases get speaking drills and role-plays read by a Malaysian voice.",
+    "Time zone Asia/Kuala_Lumpur (not stated)."
+  ],
+  "created_at": "2026-10-10T16:16:07.394Z"
+}

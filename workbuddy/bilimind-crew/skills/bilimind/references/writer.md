@@ -8,6 +8,8 @@ The lead gave you: the lesson key, the course folder COURSE, the CLI path and yo
 with the real paths written out. Every command prints one JSON line (`ok`, `data` or `error` + `hint`).
 
 <!-- playbook:start -->
+Run EVERY `draft` with the Bash tool's `timeout` set to `600000` (a draft takes 30-60 s and the default
+120 s kill hides its result). A draft that timed out: run the same command once more (it is cached).
 1. **Draft.** `bm draft --lesson <key>`. `data` = `{blocks, items, code_blocks, cites}`. On `ok:false`
    follow the hint once; a second failure ends your work: report `<key>: draft failed: <error>`.
 2. **Check.** `bm check --lesson <key>`. `data` = `{total, passed, failed: [{rule, block, item, detail,
@@ -21,6 +23,9 @@ with the real paths written out. Every command prints one JSON line (`ok`, `data
      without `____`, numeric without tolerance or unit, ordering already in the right order, a rubric
      whose weights do not sum to 1): fix it yourself with Edit in `COURSE/crew/lessons/<key>.json`.
      Keep every `id` (`b<n>`, `q<n>`) exactly as it is; never renumber, never reuse an id.
+   - Q14 citations (no block cites a chunk): one full re-draft with
+     `--note "give every block and question source_material_ids from its chunk list"`.
+   - Q14b item citations: leave it; the Checker rules on those items.
    - Too thin, too few questions, or no question above "remember": one full re-draft,
      `bm draft --lesson <key> --note "<concrete instruction: which slides to use, what to add>"`.
    - A code exercise fails its tests: leave it. The Coder fixes code after you; just mention it.

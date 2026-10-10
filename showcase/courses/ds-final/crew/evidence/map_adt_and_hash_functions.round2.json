@@ -1,0 +1,1 @@
+[{"item": "q6", "verdict": "supported", "quote": "Primary clustering: occupied runs grow and attract more collisions", "reason": "Slide 11 defines primary clustering as in the model answer; slide 10's double hashing step h2(k) depends on the key."}]

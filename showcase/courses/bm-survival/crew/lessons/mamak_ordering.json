@@ -1,0 +1,469 @@
+{
+  "key": "mamak_ordering",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "You sit down at a mamak. The waiter arrives in about eight seconds and asks **\"Nak minum apa?\"** — what do you want to drink. If you say *teh*, you get hot tea with condensed milk in it. Sweet, milky, and nothing like the plain tea you were picturing.\n\nThat is the whole problem this lesson solves. At a mamak the default is sweet and milky, and you have to say extra words to get anything else.\n\nYour phrasebook (section 5, \"At the mamak\") lays out the drink grid. Read it as three switches, not a list of drinks:\n\n| Switch | Setting | What it does |\n|---|---|---|\n| Milk | *teh* / *kopi* | condensed milk in |\n| Milk | *teh O* / *kopi O* | \"O\" means no milk, sugar stays |\n| Sugar | (nothing) | full sugar |\n| Sugar | *kurang manis* | less sweet |\n| Sugar | *kosong* | no sugar |\n| Temperature | (nothing) | hot |\n| Temperature | *ais* | iced |\n\nSo *teh O kosong* is black tea, no milk, no sugar. *Teh tarik* is the same milk tea pulled between two cups until it froths — same drink, more air, and it is what the phrasebook's own dialogue has you order. *Milo ais* is iced Milo, no switches needed.\n\nFood works the same way. *Roti canai* is flaky flatbread with curry; *roti kosong* is that bread plain — here *kosong* means plain, not sugarless, because the word is doing its real job: \"nothing added\". *Roti telur* has egg cooked into it. *Nasi lemak* is coconut rice with sambal, anchovies, peanuts and egg. *Mee goreng mamak* is mamak fried noodles. *Kuah campur* is mixed curry gravy, and it is how you ask for more than one curry on the plate.\n\nTwo more words finish the meal. **Bungkus** means takeaway — *tapau* means the same thing and comes from Cantonese, so both work. **Bang** is how you address the waiter; the phrasebook's dialogue ends with *\"Terima kasih, bang!\"*.\n\nAnd when you are done: **\"Bang, kira.\"** That is the bill. Not a question, just the request."
+      },
+      "source_material_ids": [
+        10,
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "comparison",
+      "payload": {
+        "intro": "These are the four tea orders you will use most; each can also be made iced with *ais*. The axis that decides your order is what is in the cup, not what it is called.",
+        "axes": [
+          "Milk",
+          "Sugar",
+          "Served how",
+          "Order it when"
+        ],
+        "items": [
+          {
+            "name": "teh",
+            "values": [
+              "condensed milk",
+              "full",
+              "hot",
+              "You want the default and do not want to think. This is what arrives if you just say \"teh\"."
+            ],
+            "best_for": "the learner who has not decided anything yet and wants the safe, sweet, milky cup."
+          },
+          {
+            "name": "teh tarik",
+            "values": [
+              "condensed milk",
+              "full",
+              "hot, pulled frothy",
+              "You want the mamak classic and a bit of theatre with it. The phrasebook's dialogue orders this."
+            ],
+            "best_for": "sitting down for a proper mamak session rather than a quick drink."
+          },
+          {
+            "name": "teh O",
+            "values": [
+              "none",
+              "full",
+              "hot",
+              "You want tea, not milk tea. \"O\" removes the milk and leaves the sugar."
+            ],
+            "best_for": "when condensed milk is the thing you cannot face at 8am."
+          },
+          {
+            "name": "teh O kosong",
+            "values": [
+              "none",
+              "none",
+              "hot",
+              "You want black tea with nothing in it at all. Two switches flipped."
+            ],
+            "best_for": "studying, or when you have already had three sweet drinks today."
+          }
+        ]
+      },
+      "source_material_ids": [
+        10
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "example",
+      "payload": {
+        "title": "Four orders, four different cups",
+        "markdown": "You are at a mamak near campus. Same table, four different days.\n\n**Day 1.** You say *\"Teh satu.\"* The waiter writes it down. What arrives: hot tea with condensed milk, full sugar. You did not ask for milk. The default put it there.\n\n**Day 2.** You say *\"Teh O satu.\"* What arrives: hot tea, no milk, sugar still in. The *O* removed exactly one thing.\n\n**Day 3.** You say *\"Teh O kosong satu.\"* What arrives: hot black tea, nothing added. Two switches, two words.\n\n**Day 4.** You say *\"Teh tarik kurang manis, satu.\"* — the phrasebook's own dialogue line. What arrives: hot pulled milk tea, less sugar than normal. The milk is still there; *kurang manis* only touched the sugar.\n\nNow the food side, same table:\n\n> **Waiter:** Makan? *(Anything to eat?)*\n>\n> **You:** Roti canai satu, kuah campur.\n\nThe *satu* goes after the dish, the way the phrasebook's dialogue says it. *Kuah campur* gets you mixed curry rather than one. If you had said *roti kosong* you would get the same bread with no egg and no filling — plain.\n\nYou eat. Then:\n\n> **You:** Bang, kira.\n>\n> **Waiter:** Empat ringgit lima puluh sen. *(RM 4.50.)*\n\nThat price is the phrasebook's, from the dialogue in section 5. You already know *empat ringgit lima puluh sen* from the numbers and money lesson, so the bill is not a surprise — you can hear it and pay it.\n\nIf you were taking it home instead of eating there, you would have said *bungkus* when ordering, or *tapau*. Same meaning, different word."
+      },
+      "source_material_ids": [
+        10,
+        11,
+        9
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "Listen to each phrase, then say it back twice. These are the six lines that carry you through a mamak from the moment you sit down to the moment you pay. Say them out loud — the waiter is eight seconds away and you will not have time to read.",
+        "language": "ms",
+        "items": [
+          {
+            "text": "Teh tarik kurang manis, satu.",
+            "translation": "One pulled milk tea, less sweet.",
+            "phonetic": "teh TAH-reek KOO-rahng MAH-nees, SAH-too",
+            "audio": "audio/41fd2bac66b6b2fa.mp3"
+          },
+          {
+            "text": "Roti canai satu, kuah campur.",
+            "translation": "One roti canai, mixed curry.",
+            "phonetic": "ROH-tee CHAH-nye SAH-too, KOO-ah CHAHM-poor",
+            "audio": "audio/ddfef7a37cb6a24f.mp3"
+          },
+          {
+            "text": "Nak minum apa?",
+            "translation": "What would you like to drink? — what the waiter asks you.",
+            "phonetic": "nah' MEE-noom AH-pah",
+            "audio": "audio/90132f41d7391319.mp3"
+          },
+          {
+            "text": "Makan sini.",
+            "translation": "Eating here.",
+            "phonetic": "MAH-kahn SEE-nee",
+            "audio": "audio/15ea53338352221b.mp3"
+          },
+          {
+            "text": "Bungkus.",
+            "translation": "Takeaway.",
+            "phonetic": "BOONG-koos",
+            "audio": "audio/29c2bfaf910ec65b.mp3"
+          },
+          {
+            "text": "Bang, kira.",
+            "translation": "The bill, please. (\"Bang\" is how you address the waiter.)",
+            "phonetic": "bahng, KEE-rah",
+            "audio": "audio/117530a7030e22cc.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, natural mamak pace",
+        "voice": "ms-MY-YasminNeural"
+      },
+      "source_material_ids": [
+        10,
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "dialogue",
+      "payload": {
+        "scenario_markdown": "You have just sat down at a mamak near Taylor's. It is 9pm, the place is loud, and the waiter is already at your table with his notepad. Order a drink, order food, then ask for the bill.",
+        "language": "ms",
+        "ai_role": "mamak waiter",
+        "learner_role": "customer",
+        "goal": "Order one drink with a modification, order one food item, then ask for the bill — all in Malay, using only the phrases from your phrasebook.",
+        "opening_line": "Nak minum apa?",
+        "hints": [
+          "Teh tarik kurang manis, satu.",
+          "Teh O kosong.",
+          "Roti canai satu, kuah campur.",
+          "Makan sini.",
+          "Bungkus.",
+          "Bang, kira."
+        ],
+        "opening_audio": "audio/90132f41d7391319.mp3"
+      },
+      "source_material_ids": [
+        10,
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "misconception",
+      "payload": {
+        "belief": "The word teh just means tea, so if I order teh I get a plain cup of hot tea like at home.",
+        "why_it_seems_right": "The word maps cleanly onto English \"tea\", and every other drink name you know works that way — you say \"coffee\" and you get coffee, black, and you add what you want yourself. Nothing in the word \"teh\" warns you that milk and sugar are already in it.",
+        "what_is_true": "At a mamak, teh is the default milk tea: hot tea with condensed milk and sugar already in the cup. Your phrasebook's mamak table gives it as \"hot tea with condensed milk (the default)\". To get anything else you add words — teh O removes the milk, kosong removes the sugar, ais makes it cold. The same default logic runs through the food: roti kosong is plain roti, because kosong means \"nothing added\", not \"no sugar\". So the difference it predicts is this: if you order teh expecting plain tea you will be surprised every single time, and if you order teh O kosong expecting plain tea you will get exactly what you wanted."
+      },
+      "source_material_ids": [
+        10,
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "scenario",
+      "payload": {
+        "setup_markdown": "It is your third day in Malaysia. You are at the mamak two streets from Taylor's with two friends. You have RM 20 in your pocket. You are thirsty, you have not eaten since breakfast, and you have a 2pm class.",
+        "steps": [
+          {
+            "id": "s1",
+            "prompt": "The waiter arrives and asks \"Nak minum apa?\" You want something cold, and you have already had two sweet drinks today. What do you say?",
+            "options": [
+              {
+                "id": "a",
+                "text": "\"Teh ais.\"",
+                "correct": false,
+                "outcome_markdown": "A tall glass of iced milk tea arrives, dark and sweet. You drink it, but it is the third sweet drink of the day and you are still thirsty afterwards.",
+                "next_id": "s2"
+              },
+              {
+                "id": "b",
+                "text": "\"Teh O ais kosong.\"",
+                "correct": true,
+                "outcome_markdown": "A tall glass of iced tea arrives with no milk and no sugar. Cold, clean, and exactly what you asked for.",
+                "next_id": "s2"
+              },
+              {
+                "id": "c",
+                "text": "\"Air suam.\"",
+                "correct": false,
+                "outcome_markdown": "A glass of warm water arrives. It is fine, but it is not what you wanted and you will be ordering again in ten minutes.",
+                "next_id": "s2"
+              }
+            ]
+          },
+          {
+            "id": "s2",
+            "prompt": "Drinks are down. The waiter asks \"Makan?\" You want flatbread with egg cooked into it, and mixed curry. What do you order?",
+            "options": [
+              {
+                "id": "a",
+                "text": "\"Roti kosong satu, kuah campur.\"",
+                "correct": false,
+                "outcome_markdown": "Plain roti arrives with mixed curry. Tasty, but there is no egg: *kosong* means nothing added.",
+                "next_id": "s3"
+              },
+              {
+                "id": "b",
+                "text": "\"Roti telur satu, kuah campur.\"",
+                "correct": true,
+                "outcome_markdown": "Roti with egg cooked into it arrives, with mixed curry gravy. You eat it with your hands, the way the table next to you is doing.",
+                "next_id": "s3"
+              },
+              {
+                "id": "c",
+                "text": "\"Nasi lemak satu, kurang pedas.\"",
+                "correct": false,
+                "outcome_markdown": "Coconut rice with sambal, anchovies, peanuts and egg arrives, and the sambal is mild as asked. Good, but this is a rice dish, not the egg roti you were after.",
+                "next_id": "s3"
+              }
+            ]
+          },
+          {
+            "id": "s3",
+            "prompt": "You have eaten and you need to get to your 2pm class. What do you say to the waiter?",
+            "options": [
+              {
+                "id": "a",
+                "text": "\"Bang, kira.\"",
+                "correct": true,
+                "outcome_markdown": "The waiter brings the bill and says the total out loud. You count out the ringgit, leave it on the table, and you are out the door with time to spare.",
+                "next_id": null
+              },
+              {
+                "id": "b",
+                "text": "\"Satu lagi.\"",
+                "correct": false,
+                "outcome_markdown": "Another of whatever you last ordered arrives. You now have more food than you can finish and less time before class.",
+                "next_id": null
+              },
+              {
+                "id": "c",
+                "text": "\"Terima kasih, bang!\"",
+                "correct": false,
+                "outcome_markdown": "The waiter smiles and walks off to another table. You sit there with an unpaid bill until you catch his eye again.",
+                "next_id": null
+              }
+            ]
+          }
+        ],
+        "debrief_markdown": "Every wrong turn in this scenario is the same mistake: saying something true and polite instead of saying the specific thing you want. \"Teh ais\" is a real order, just not the one you wanted. \"Roti kosong\" is real food, just without the egg. \"Terima kasih\" is real gratitude, just not a request for the bill. At a mamak the waiter is not going to interview you — he writes down what you say and walks away. The words that do the work are the modifiers: O, kosong, kurang manis, ais, campur, bungkus. Learn the modifiers and the drink names become a grid you can steer instead of a lottery you draw from."
+      },
+      "source_material_ids": [
+        10,
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you sit down at a mamak",
+        "items": [
+          {
+            "text": "You can say the drink you want without using the word \"teh\" alone.",
+            "why": "Teh alone arrives with condensed milk and full sugar, and you will not enjoy the surprise."
+          },
+          {
+            "text": "You know that O removes milk and kosong removes sugar, and you can say both in one order.",
+            "why": "These are the two switches that turn one drink name into the four cups on the menu."
+          },
+          {
+            "text": "You know teh tarik is milk tea, not a different drink.",
+            "why": "It is the same cup pulled frothy, so ordering it does not get you anything plainer."
+          },
+          {
+            "text": "You can put satu after the dish name, the way the phrasebook's dialogue does.",
+            "why": "\"Roti canai satu\" is the shape the phrasebook's dialogue uses and the shape waiters expect."
+          },
+          {
+            "text": "You know roti kosong means plain roti, not sugarless roti.",
+            "why": "Kosong means \"nothing added\", and on bread that means no egg and no filling."
+          },
+          {
+            "text": "You can say bungkus or tapau if you are taking it away.",
+            "why": "Without it the food is plated for eating there and you cannot carry it to class."
+          },
+          {
+            "text": "You can say \"Bang, kira\" when you are finished.",
+            "why": "The bill does not come on its own at a mamak; you have to ask for it."
+          },
+          {
+            "text": "You can hear a total like empat ringgit lima puluh sen and match it to the notes in your hand.",
+            "why": "Payment is spoken out loud, not shown on a screen."
+          }
+        ],
+        "note": "Run this list once in your head before you walk in. The waiter asks \"Nak minum apa?\" within about eight seconds of you sitting down, so the drink order has to be ready before you choose a table."
+      },
+      "source_material_ids": [
+        10,
+        11,
+        9
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b9",
+      "type": "quiz",
+      "payload": {},
+      "source_material_ids": [
+        10,
+        11
+      ],
+      "assessments": [
+        {
+          "kind": "multi_select",
+          "prompt": "You want a cold drink with no milk and no sugar. Select all the orders that get you exactly that.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "teh O ais kosong"
+            },
+            {
+              "id": "b",
+              "text": "teh ais"
+            },
+            {
+              "id": "c",
+              "text": "kopi O ais kosong"
+            },
+            {
+              "id": "d",
+              "text": "teh tarik ais"
+            },
+            {
+              "id": "e",
+              "text": "Milo ais"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "c"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "\"O\" removes the milk and \"kosong\" removes the sugar, so teh O ais kosong and kopi O ais kosong are both cold, milk-free and sugar-free. teh ais and teh tarik ais still carry condensed milk and sugar; Milo ais is a different drink entirely.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            10
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "kosong | no sugar (*teh O kosong* = black tea, no sugar); for roti it means plain"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A friend orders \"teh\" at a mamak and is surprised that the tea is sweet and milky. Using only the words from the mamak drink list, write the exact order they should have given if they wanted hot tea with no milk and no sugar, and explain which word removed the milk and which removed the sugar.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "They should have ordered \"teh O kosong\". \"O\" removes the milk (teh O is tea without milk, sugar still in), and \"kosong\" removes the sugar (the phrasebook gives teh O kosong as black tea, no sugar). Adding both gives hot tea with nothing added."
+          },
+          "rubric": [
+            {
+              "criterion": "Names the correct order string",
+              "weight": 0.4,
+              "excellent": "Gives \"teh O kosong\" exactly, with no extra or missing words.",
+              "acceptable": "Gives a recognisable variant such as \"teh O, kosong\" or \"teh kosong O\" that a mamak waiter would understand.",
+              "poor": "Gives an order that still contains milk or sugar, or names a different drink such as teh tarik or kopi."
+            },
+            {
+              "criterion": "Assigns each switch to the right word",
+              "weight": 0.4,
+              "excellent": "States that \"O\" removes the milk and \"kosong\" removes the sugar, in that order, without swapping them.",
+              "acceptable": "States that one word removes milk and the other removes sugar but is vague about which is which.",
+              "poor": "Claims kosong removes the milk, or that O removes the sugar, or treats the two words as interchangeable."
+            },
+            {
+              "criterion": "Uses only vocabulary from the source list",
+              "weight": 0.2,
+              "excellent": "Every Malay word used appears in the mamak drink or changing-an-order tables.",
+              "acceptable": "Uses only source words but adds an unnecessary extra such as \"tak nak gula\" alongside kosong.",
+              "poor": "Invents a Malay word or phrase that does not appear in the source."
+            }
+          ],
+          "max_score": 4,
+          "id": "q2",
+          "status": "supported",
+          "reason": "Teh O is tea without milk and kosong means no sugar, so teh O kosong is the order.",
+          "quote": "*teh O kosong* = black tea, no sugar",
+          "cite_chunk_ids": [
+            10
+          ],
+          "explanation": "*teh O kosong* = black tea, no sugar"
+        },
+        {
+          "kind": "mcq",
+          "prompt": "You have ordered your roti canai and want to take it home rather than eat at the table. Which word gets the food wrapped?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Makan sini."
+            },
+            {
+              "id": "b",
+              "text": "Bungkus."
+            },
+            {
+              "id": "c",
+              "text": "Kurang manis."
+            },
+            {
+              "id": "d",
+              "text": "Satu lagi."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Bungkus (and its synonym tapau) is the takeaway word from the mamak section. Makan sini means eating here, kurang manis changes the sugar in a drink, and satu lagi asks for one more of something you already ordered.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            11
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "bungkus / tapau | takeaway (*tapau* comes from Cantonese)"
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.003154,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Spoken-language course: explanations in English, phrases in Malay. Use only Malay words and phrases that appear in the source excerpts, spelled exactly as there; never invent new Malay sentences. Besi\"",
+    "re-homed 3 questions from narrative blocks into a quiz",
+    "cites: q1: cited chunk 10 (5. At the mamak †), found by its question and answer",
+    "cites: q3: cited chunk 11 (5. At the mamak †), found by its question and answer",
+    "cites: b9: the quiz cited nothing; cited chunks 10, 11 (its questions' sources)"
+  ]
+}

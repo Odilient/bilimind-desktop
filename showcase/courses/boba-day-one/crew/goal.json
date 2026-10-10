@@ -1,0 +1,18 @@
+{
+  "sentence": "We hire new crew every few weeks at Mutiara Tea Bar. Turn our SOP folder into a day-one course they must pass before their first shift, narrated in English and Malay.",
+  "deadline": "2026-10-18",
+  "exam_time": "09:00",
+  "exam_at": "2026-10-18T09:00:00+08:00",
+  "timezone": "Asia/Kuala_Lumpur",
+  "minutes_per_day": 45,
+  "audience": "staff",
+  "language": "en",
+  "code_language": null,
+  "assumptions": [
+    "No exam time given: assumed 09:00.",
+    "Read your sentence as: exam 2026-10-18, 45 minutes a day.",
+    "No date in the sentence: assumed the exam is in 7 days (2026-10-18).",
+    "No daily time in the sentence: assumed 45 minutes a day."
+  ],
+  "created_at": "2026-10-10T16:11:19.567Z"
+}

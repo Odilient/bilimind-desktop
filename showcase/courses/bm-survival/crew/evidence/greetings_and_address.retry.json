@@ -1,0 +1,14 @@
+[
+ {
+  "item": "q2",
+  "verdict": "supported",
+  "quote": "Abang / Bang | \"older brother\" | friendly for a man a bit older than you: the mamak waiter, a Grab driver",
+  "reason": "Abang is the address for a Grab driver a bit older; selamat petang covers mid-afternoon until dusk (4 pm)."
+ },
+ {
+  "item": "q3",
+  "verdict": "not_covered",
+  "quote": "*anda* is neutral and formal (signs, ads); *awak* is friendly",
+  "reason": "The phrasebook calls awak friendly but never says it is wrong with an older man; that is the lesson's advice."
+ }
+]

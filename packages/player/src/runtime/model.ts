@@ -31,9 +31,20 @@ export function topicOf(c: Course, lessonId: string): PathTopic | undefined {
 /** Kept steps (milestones with a lesson), 1-based numbering along the line. */
 export function keptTopics(c: Course): PathTopic[] { return c.path.filter(t => !t.cut); }
 
+/** A topic's step number counted along the kept line only; cut topics have none (G2: "Step 7 of 8" counted cut topics). */
+export function keptStep(c: Course, t: PathTopic | undefined | null): number | null {
+  if (!t || t.cut) return null;
+  const i = keptTopics(c).findIndex(k => k.id === t.id);
+  return i >= 0 ? i + 1 : null;
+}
+
 export function stepLabel(c: Course, lessonId: string): { step: number; of: number } {
-  const t = topicOf(c, lessonId);
-  return { step: t?.step ?? (lessonById(c, lessonId)?.n ?? 1), of: c.path.length || c.lessons.length };
+  const kept = keptTopics(c).length;
+  const s = keptStep(c, topicOf(c, lessonId));
+  if (s != null) return { step: s, of: kept };
+  const order = lessonOrder(c);
+  const i = order.findIndex(l => l.id === lessonId);
+  return { step: i >= 0 ? i + 1 : (lessonById(c, lessonId)?.n ?? 1), of: kept || order.length || 1 };
 }
 
 /** First lesson in path order that is not done (null when all are). */
@@ -62,6 +73,12 @@ export function partName(b: CourseBlock): string {
   if (b.type === 'explainer') return 'Explanation';
   return BLOCK_META[b.type]?.eyebrow || 'Part';
 }
+/** Nav label: two parts with the same name are numbered ("Explanation 2"). */
+export function partLabel(l: CourseLesson, b: CourseBlock): string {
+  const name = partName(b);
+  const same = l.blocks.filter(x => partName(x) === name);
+  return same.length < 2 ? name : `${name} ${same.indexOf(b) + 1}`;
+}
 export const partIcon = (b: CourseBlock): string => BLOCK_META[b.type]?.icon || 'i-book';
 export const archetypeTag = (a: CourseLesson['archetype']) => LEARNER_TAG[a] ?? { tag: 'A lesson', icon: 'i-book', object: 'obj-book' };
 
@@ -82,7 +99,8 @@ export function shortName(s: CourseSource | undefined, file: string): string {
 export function citeLabel(c: Course, cite: Cite): string {
   const short = shortName(sourceFor(c, cite.file), cite.file);
   // G2: a landscape deck is cited by slide ("Slide 7"), as the prose says, not "p.7"
-  if (cite.locator && /^slide\s+\d+/i.test(cite.locator)) return `${short} · ${cite.locator}`;
+  const slide = cite.locator?.match(/^slide\s+(\d+)/i);
+  if (slide) return `${short} · Slide ${slide[1]}`;
   if (cite.page) return `${short} · p.${cite.page}`;
   const loc = cite.locator?.replace(/^Page\s+/i, 'p.') ?? '';
   return loc ? `${short} · ${loc.length > 18 ? loc.slice(0, 17) + '…' : loc}` : short;
@@ -99,6 +117,21 @@ export const fileKind = (s: { kind?: string; file: string }): string => {
   if (k.includes('txt') || k.includes('text')) return 'TXT';
   return k.slice(0, 3).toUpperCase() || 'FILE';
 };
+
+/** Lead-in for a verbatim quote: "Your slide says" for a deck cited by slide, else "Your file says". */
+export function quoteLead(c: Course | null | undefined, cite: Cite): string {
+  const s = c ? sourceFor(c, cite.file) : undefined;
+  const slide = /^slide\s+\d+/i.test(cite.locator ?? '') || s?.kind === 'pptx' || /\.pptx?$/i.test(cite.file);
+  return slide ? 'Your slide says' : 'Your file says';
+}
+
+/** True when an explanation is just the cited quote again (a Checker ruling copies the quote in). */
+export function sameText(a: string, b: string): boolean {
+  const n = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const x = n(a), y = n(b);
+  if (!x || !y) return false;
+  return x === y || (x.length > 24 && y.includes(x)) || (y.length > 24 && x.includes(y));
+}
 
 /** Split an excerpt around the quote so the popover can mark it: [before, quote, after] or null. */
 export function markQuote(excerpt: string, quote: string): [string, string, string] | null {

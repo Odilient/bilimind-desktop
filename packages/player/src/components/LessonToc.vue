@@ -4,7 +4,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { BLOCK_META } from '@bilimind/core';
 import type { CourseLesson } from '@bilimind/core';
-import { partIcon, partName } from '../runtime/model.ts';
+import { partIcon, partLabel } from '../runtime/model.ts';
 
 const props = defineProps<{ lesson: CourseLesson; seen: Set<string>; passed: Set<string>; currentIndex: number; speaking: string }>();
 const emit = defineEmits<{ jump: [blockId: string] }>();
@@ -21,16 +21,8 @@ function measure() {
   if (!it) { fill.value = 0; return; }
   fill.value = Math.max(0, it.offsetTop + it.offsetHeight / 2 - 14);
 }
-// G2: two parts with the same name are numbered ("Explanation 2"), or use the block's own title
-function navLabel(i: number): string {
-  const b = props.lesson.blocks[i]!;
-  const name = partName(b);
-  const same = props.lesson.blocks.filter(x => partName(x) === name);
-  if (same.length < 2) return name;
-  const title = (b as { title?: string }).title?.trim();
-  if (title && title.length <= 34) return title;
-  return `${name} ${same.indexOf(b) + 1}`;
-}
+// G2: two parts with the same name are numbered ("Explanation 2")
+const navLabel = (i: number): string => partLabel(props.lesson, props.lesson.blocks[i]!);
 watch(() => props.currentIndex, () => nextTick(measure));
 onMounted(() => nextTick(measure));
 </script>

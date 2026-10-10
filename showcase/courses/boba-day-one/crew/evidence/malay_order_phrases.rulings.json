@@ -1,0 +1,4 @@
+[
+ {"item":"q3","verdict":"supported","quote":"means one milk tea, less sweet, less ice: CT01-R 50% LI","reason":"Scenario D shows kurang manis and kurang ais change the sticker; missing them gives the wrong sticker, as the key says."},
+ {"item":"q4","verdict":"supported","quote":"25% | sikit manis, less sugar | 1 | 2","reason":"Section 7 maps sikit manis to 25% and tak nak ais to NI; Scenario D gives tapau as takeaway."}
+]

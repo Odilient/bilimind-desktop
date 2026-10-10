@@ -64,12 +64,22 @@ export function answerTerms(item: Assessment): string[] {
   const toks = normaliseQuoteText(text).toLowerCase().match(/[\p{L}\p{N}][\p{L}\p{N}()^.]*/gu) ?? [];
   return [...new Set(toks.map(t => t.replace(/[.]+$/, '')).filter(t => /\d/.test(t) || (t.length >= 3 && !ANSWER_STOP.has(t))))];
 }
-/** True when the chunk mentions at least one answer term (or the item has none to check). */
+/** True when the text (the Checker's quote) shares a key term with the correct answer, or the item has none to check. */
 export function mentionsAnswer(content: string, item: Assessment): boolean {
   const terms = answerTerms(item);
-  if (!terms.length) return true;
   const hay = normaliseQuoteText(content).toLowerCase();
-  return terms.some(t => (/^\d+$/.test(t) ? new RegExp(`(^|[^\\d.])${t}([^\\d]|$)`).test(hay) : hay.includes(t)));
+  // short formula-like answers ("n / m", "O(log n)") match as a whole, ignoring spaces
+  const k = (item.answer_key ?? {}) as Record<string, unknown>;
+  const opt = (id: unknown) => (item.options ?? []).find(o => o.id === id)?.text ?? '';
+  const answers = item.kind === 'mcq' || item.kind === 'multi_select' ? ((k.correct_option_ids as unknown[]) ?? []).map(opt)
+    : item.kind === 'cloze' ? ((k.accepted as unknown[]) ?? []).map(String) : [];
+  const compact = hay.replace(/\s+/g, '');
+  const frags = answers.flatMap(a => normaliseQuoteText(a).toLowerCase().split(/[,;]|\bor\b|\band\b/)).map(f => f.replace(/\s+/g, '')).filter(f => f.length >= 3);
+  if (frags.some(f => compact.includes(f))) return true;
+  if (!terms.length) return true;
+  // crude stem so a quote saying "chain" supports the answer "chaining" (and "probes" ~ "probing")
+  const stem = (t: string) => (t.length > 5 && /^\p{L}+$/u.test(t) ? t.slice(0, Math.max(4, t.length - 3)) : t);
+  return terms.some(t => (/^\d+$/.test(t) ? new RegExp(`(^|[^\\d.])${t}([^\\d]|$)`).test(hay) : hay.includes(stem(t))));
 }
 
 export const verdict: VerdictFn = async (ctx, opts) => {
@@ -116,10 +126,10 @@ function applyRulings(ctx: Ctx, key: string, rulings: VerdictInput[], data: Cour
       }
     }
     if (r.verdict === 'contradicted' && !reason) { refuse('a contradicted ruling needs a reason (it is shown in the receipts)'); continue; }
-    // G2 review: a "supported" quote must come from a slide that mentions the answer (a number or keyword of it);
+    // G2 review: a "supported" quote must share a key term (a number or keyword) with the correct answer;
     // an ADT bullet run is not evidence for a load-factor answer.
-    if (r.verdict === 'supported' && chunk && !mentionsAnswer(chunk.content, ref.item)) {
-      refuse(`quote does not mention the answer: chunk ${chunk.id} has none of "${answerTerms(ref.item).slice(0, 5).join('", "')}"`);
+    if (r.verdict === 'supported' && chunk && !mentionsAnswer(quote, ref.item)) {
+      refuse(`quote does not mention the answer: it shares no key term with the correct answer ("${answerTerms(ref.item).slice(0, 5).join('", "')}"); quote the line that states it`);
       continue;
     }
 

@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "malay_order_phrases",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "\"Teh susu kurang manis, kurang ais, satu.\" means one milk tea, less sweet, less ice: CT01-R 50% LI.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 27,
+    "round": 1,
+    "at": "2026-10-10T16:24:19.588Z"
+  },
+  {
+    "lesson": "malay_order_phrases",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "Brown sugar series (BS01, BS02): minimum 25%, because the syrup makes the stripes. If a customer asks for 0%, offer 25% or a Classic Milk Tea (CT01) at 0% with pearls.",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 18,
+    "round": 1,
+    "at": "2026-10-10T16:24:19.588Z"
+  },
+  {
+    "lesson": "malay_order_phrases",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "means one milk tea, less sweet, less ice: CT01-R 50% LI",
+    "reason": "Scenario D shows kurang manis and kurang ais change the sticker; missing them gives the wrong sticker, as the key says.",
+    "chunk_id": 27,
+    "round": 1,
+    "at": "2026-10-10T16:26:07.646Z"
+  },
+  {
+    "lesson": "malay_order_phrases",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "25% | sikit manis, less sugar | 1 | 2",
+    "reason": "Section 7 maps sikit manis to 25% and tak nak ais to NI; Scenario D gives tapau as takeaway.",
+    "chunk_id": 18,
+    "round": 1,
+    "at": "2026-10-10T16:26:07.646Z"
+  }
+]

@@ -1,0 +1,366 @@
+{
+  "key": "capstone_a_day_in_malay",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "You have the phrases. What you do not have is a day where you used them.\n\nThe failure mode this capstone prevents is specific. You order at a mamak in English, it works, and you conclude that Malay is optional. Six months later you still cannot say *teh tarik kurang manis, satu* without rehearsing it in your head first. The first attempt will feel clumsy. Clumsy is the point.\n\nToday you run three scenes from your phrasebook in one short day:\n\n1. **Mamak breakfast** — order a drink and food, ask for the bill.\n2. **Grab ride to campus** — greet the driver, confirm the destination, thank them.\n3. **One conversation on campus** — introduce yourself, ask one real question.\n\nBefore you leave, write your lines down. Not because you will read them, but because writing them commits you to a specific sentence instead of a vague intention. Use only the phrases from your phrasebook — *teh tarik kurang manis, satu*, *roti canai satu, kuah campur*, *bang, kira*, *terima kasih, bang* — spelled as your phrasebook spells them.\n\nAfter each scene, log one line: which Malay phrase you actually said, and which one you abandoned for English. The abandoned ones are your real syllabus for next week.\n\nYour phrasebook notes that final *k* is a short stop in the throat, not a full \"k\" — *tidak* sounds like \"tida'\". Say your lines out loud once before you go. Stress is light and fairly even, so do not hunt for an English-style emphasis."
+      },
+      "source_material_ids": [
+        5,
+        11,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Fifteen minutes of preparation, then you go. Do this the evening before or the morning of — not in the queue.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Pick your three scenes and write the lines",
+            "detail_markdown": "On paper or in your notes app, write three headings: **Mamak**, **Grab**, **Campus**. Under each, write the exact Malay lines you intend to say, copied from your phrasebook.\n\nMamak, from section 5: *Teh tarik kurang manis, satu.* Then *Roti canai satu, kuah campur.* Then, at the end, *Bang, kira.*\n\nGrab, from section 6: *Saya nak pergi ke Taylor's, Lakeside Campus.* as you get in, then *Terima kasih, bang* on arrival.\n\nCampus, from section 7: *Saya pelajar antarabangsa.* Then one question — *Di mana perpustakaan?* or *Boleh saya duduk di sini?*",
+            "warning": "Do not write a sentence your phrasebook does not contain. An invented sentence is the one you will freeze on.",
+            "check": "Three headings, each with at least two Malay lines written out in full."
+          },
+          {
+            "n": 2,
+            "title": "Say every line out loud twice",
+            "detail_markdown": "Read each line aloud. Twice. Your phrasebook notes that final *k* is a short stop in the throat, not a full \"k\" — so *tidak* comes out like \"tida'\". Stress is light and fairly even; many speakers lean slightly on the second-last syllable.\n\nSay *terima kasih, bang* until the *bang* does not sound like the English word \"bang\".",
+            "check": "You can say *Roti canai satu, kuah campur* without looking at the paper."
+          },
+          {
+            "n": 3,
+            "title": "Order at the mamak",
+            "detail_markdown": "The waiter will ask *Nak minum apa?* — what would you like to drink. Answer with your written line: *Teh tarik kurang manis, satu.*\n\nThey will then ask *Makan?* — anything to eat. Answer: *Roti canai satu, kuah campur.*\n\nWhen you are done, get attention and say *Bang, kira.* They will name the price, e.g. *Empat ringgit lima puluh sen* — RM 4.50. Pay, then *Terima kasih, bang!*",
+            "warning": "If they reply faster than you can follow, say the line anyway. You are not being tested on comprehension today.",
+            "check": "You said at least two Malay lines and the bill arrived."
+          },
+          {
+            "n": 4,
+            "title": "Take the Grab and use your Malay lines",
+            "detail_markdown": "Get in and say *Saya nak pergi ke Taylor's, Lakeside Campus.* When you are close, *Tolong berhenti di sini.* On arrival, *Terima kasih, bang.* Even one of these lines, said out loud to a real person, counts.",
+            "warning": "Do not let the app's English interface talk you out of saying the line. The app is not the conversation.",
+            "check": "*Terima kasih, bang* left your mouth, not just your head."
+          },
+          {
+            "n": 5,
+            "title": "One campus conversation",
+            "detail_markdown": "Find one person — classmate, staff, anyone — and say *Saya pelajar antarabangsa.* Then ask your one question: *Di mana perpustakaan?* or *Boleh saya duduk di sini?*\n\nIf they answer in English, that is fine. You still opened in Malay.",
+            "check": "You said the introduction line to a person, not to a mirror."
+          },
+          {
+            "n": 6,
+            "title": "Log what you abandoned",
+            "detail_markdown": "Within an hour of finishing, write three short entries: scene, phrase you said, phrase you dropped for English. Be honest — the dropped ones are the ones you will drill next week.",
+            "check": "Three entries, at least one of which names a phrase you did not manage."
+          }
+        ]
+      },
+      "source_material_ids": [
+        5,
+        11,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "dialogue",
+      "payload": {
+        "scenario_markdown": "You are at a mamak for breakfast. The waiter comes to your table. Order a drink and food, then ask for the bill.",
+        "language": "ms",
+        "ai_role": "waiter at a mamak",
+        "learner_role": "customer",
+        "goal": "Order one drink and one food item in Malay, then ask for the bill and thank the waiter.",
+        "opening_line": "Nak minum apa?",
+        "hints": [
+          "Teh tarik kurang manis, satu",
+          "Roti canai satu, kuah campur",
+          "Bang, kira",
+          "Terima kasih, bang"
+        ],
+        "opening_audio": "audio/90132f41d7391319.mp3"
+      },
+      "source_material_ids": [
+        11
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you call the day done",
+        "items": [
+          {
+            "text": "Three scenes attempted in one day: mamak, Grab, campus.",
+            "why": "Prevents the whole day collapsing into one scene and calling it a win."
+          },
+          {
+            "text": "At least four Malay lines spoken out loud to a real person.",
+            "why": "Written lines do not build the habit; spoken ones do."
+          },
+          {
+            "text": "The mamak order used *teh tarik kurang manis, satu* or *roti canai satu, kuah campur* — not English.",
+            "why": "They are the drink and food orders from the mamak lesson."
+          },
+          {
+            "text": "The bill was requested with *Bang, kira.*",
+            "why": "At a mamak the bill does not come until you ask for it."
+          },
+          {
+            "text": "*Terima kasih, bang* said to the Grab driver on arrival.",
+            "why": "One line to a stranger is the cheapest possible practice."
+          },
+          {
+            "text": "*Saya pelajar antarabangsa* said to one person on campus.",
+            "why": "It is the sentence that opens every future campus conversation."
+          },
+          {
+            "text": "Every Malay line you spoke came from your phrasebook, spelled as the phrasebook spells it.",
+            "why": "Invented sentences are the ones that fail under pressure."
+          },
+          {
+            "text": "Three log entries written: scene, phrase used, phrase abandoned.",
+            "why": "The abandoned list is what you drill next week."
+          },
+          {
+            "text": "At least one abandoned phrase is written down in full, ready to practise.",
+            "why": "Turns a clumsy moment into a concrete next step instead of a vague regret."
+          }
+        ],
+        "note": "This is a field document. Tick it the same day, while you still remember which line you dropped."
+      },
+      "source_material_ids": [
+        11,
+        13
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "project",
+      "payload": {
+        "title": "One day, three scenes, one log",
+        "brief_markdown": "Run the day described in this lesson: mamak breakfast, Grab ride to campus, one campus conversation. Then write it up.\n\n**Constraints**\n- Every Malay line you report must appear in your phrasebook, spelled as your phrasebook spells it. Do not invent sentences.\n- The day must include all three scenes. A day with only the mamak does not count.\n- Report what actually happened, including the lines you abandoned. A log with no abandoned lines is almost certainly not honest.\n\n**What \"done\" looks like**\nA short written log with three sections — one per scene. Each section names the Malay lines you said, the lines you dropped for English, and one sentence on what you would say differently next time. Finish with a three-line list of the phrases you are drilling next week.\n\nThis fits in one 15-minute sitting after the day itself: the day takes the time, the write-up takes the sitting.",
+        "deliverables": [
+          "A three-section log (mamak, Grab, campus) naming the Malay lines you actually said in each scene.",
+          "A list of the phrases you abandoned for English, written out in full.",
+          "A three-line drilling list for next week, drawn from the abandoned phrases."
+        ]
+      },
+      "source_material_ids": [
+        11,
+        13
+      ],
+      "assessments": [
+        {
+          "kind": "project",
+          "prompt": "Write the log of your Malay day: three sections (mamak, Grab, campus). In each, name the Malay lines you said, the lines you abandoned for English, and one thing you would say differently. End with a three-line drilling list for next week. Every Malay line must come from your phrasebook, spelled as it spells it.",
+          "bloom": "create",
+          "grader": "llm_rubric",
+          "rubric": [
+            {
+              "criterion": "All three scenes are present and each names at least one Malay line actually spoken",
+              "weight": 0.3,
+              "excellent": "Mamak, Grab and campus each appear with a specific Malay line quoted, e.g. 'Bang, kira' at the mamak and 'Terima kasih, bang' in the Grab.",
+              "acceptable": "All three scenes appear but one scene names no Malay line, only a description of what happened.",
+              "poor": "One or two scenes are missing, or the log reports no Malay lines at all."
+            },
+            {
+              "criterion": "Abandoned phrases are named concretely, not glossed over",
+              "weight": 0.3,
+              "excellent": "At least two abandoned lines are written out in full with the scene where they were dropped, e.g. 'wanted to ask Di mana perpustakaan? but asked in English'.",
+              "acceptable": "One abandoned line is named in full; the rest are described vaguely as 'some phrases'.",
+              "poor": "The log claims nothing was abandoned, or lists only 'I used English sometimes' with no phrase named."
+            },
+            {
+              "criterion": "Every reported Malay line matches the phrasebook wording and spelling",
+              "weight": 0.25,
+              "excellent": "All quoted lines match the phrasebook exactly, including 'kuah campur', 'kurang manis' and 'bang'.",
+              "acceptable": "Lines are recognisable phrasebook lines with one or two minor spelling slips that do not change the meaning.",
+              "poor": "Lines are invented sentences not present in the phrasebook, or are so garbled they no longer match any source line."
+            },
+            {
+              "criterion": "The drilling list for next week follows from the abandoned phrases",
+              "weight": 0.15,
+              "excellent": "Three phrases listed, each traceable to an abandoned line named earlier in the log.",
+              "acceptable": "Three phrases listed, but at least one has no connection to anything abandoned in the log.",
+              "poor": "No drilling list, or a list of phrases unrelated to the day's abandoned lines."
+            }
+          ],
+          "max_score": 100,
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "type": "quiz",
+      "payload": {
+        "intro": "Four quick checks on the lines and the plan."
+      },
+      "source_material_ids": [
+        5,
+        11,
+        13
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "At the mamak, the waiter asks *Makan?* after taking your drink order. What is the waiter asking?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Whether you want to eat here or take the food away."
+            },
+            {
+              "id": "b",
+              "text": "Whether you want anything to eat."
+            },
+            {
+              "id": "c",
+              "text": "Whether you have finished your drink."
+            },
+            {
+              "id": "d",
+              "text": "Whether you want the bill now."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "*Makan* means to eat, and in the mamak dialogue the waiter asks it right after the drink order to find out whether you want food as well. The eat-here-versus-takeaway choice is made with *makan sini* or *bungkus*.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            11
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "**Waiter:** Makan? *(Anything to eat?)*"
+        },
+        {
+          "kind": "multi_select",
+          "prompt": "Which of these lines from your phrasebook are used in the mamak scene of this capstone? Select all that apply.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Teh tarik kurang manis, satu."
+            },
+            {
+              "id": "b",
+              "text": "Di mana perpustakaan?"
+            },
+            {
+              "id": "c",
+              "text": "Roti canai satu, kuah campur."
+            },
+            {
+              "id": "d",
+              "text": "Bang, kira."
+            },
+            {
+              "id": "e",
+              "text": "Saya pelajar antarabangsa."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a",
+              "c",
+              "d"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "The mamak dialogue in section 5 uses the drink order, the food order and the request for the bill. The library question and the international-student introduction belong to the campus scene in section 7.",
+          "id": "q3",
+          "cite_chunk_ids": [
+            11
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "**You:** Bang, kira. *(The bill, please.)*"
+        },
+        {
+          "kind": "cloze",
+          "prompt": "You have finished eating at the mamak and want the bill. You get the waiter's attention and say: Bang, ____.",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "kira"
+            ]
+          },
+          "max_score": 100,
+          "explanation": "*Kira* is the phrasebook's line for asking for the bill at the mamak, used in the dialogue as *Bang, kira.*",
+          "id": "q4",
+          "cite_chunk_ids": [
+            11
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "**You:** Bang, kira. *(The bill, please.)*"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "You ran the day and abandoned *Boleh saya duduk di sini?* for English on campus. Explain what you should do with that abandoned line before your next campus day, and why that is better than simply trying again from memory.",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Write the line out in full, say it aloud twice before the next campus day, and put it on next week's drilling list. It was dropped because it was not automatic — rehearsing it beforehand removes the moment of building the sentence while someone is waiting for an answer."
+          },
+          "rubric": [
+            {
+              "criterion": "Names a concrete action for the abandoned line",
+              "weight": 0.4,
+              "excellent": "States a specific action such as writing the line out in full, saying it aloud twice before leaving, or putting it on the drilling list for next week.",
+              "acceptable": "Suggests practising the line but does not say how or when.",
+              "poor": "Says only that they will try harder or be more confident next time."
+            },
+            {
+              "criterion": "Explains why rehearsal beats trying again from memory",
+              "weight": 0.35,
+              "excellent": "Says the line was dropped because it was not automatic under pressure, and that saying it aloud beforehand removes the moment of construction during the conversation.",
+              "acceptable": "Says practice helps, without connecting it to why the line failed in the moment.",
+              "poor": "No reason given, or a reason unrelated to speaking under pressure."
+            },
+            {
+              "criterion": "Keeps the line within the phrasebook wording",
+              "weight": 0.25,
+              "excellent": "Quotes the line as *Boleh saya duduk di sini?* and treats it as fixed wording to be rehearsed, not rewritten.",
+              "acceptable": "Refers to the line recognisably but does not quote it exactly.",
+              "poor": "Proposes replacing it with a self-invented Malay sentence."
+            }
+          ],
+          "max_score": 100,
+          "id": "q5",
+          "status": "not_covered",
+          "reason": "Rehearsing an abandoned line is study advice; the phrasebook only supplies the line itself.",
+          "labels": [
+            "beyond_slides"
+          ]
+        }
+      ]
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.002858,
+  "repairs": [
+    "re-drafted with the Writer's note: \"Spoken-language course: explanations in English, phrases in Malay. Use only Malay words and phrases that appear in the source excerpts, spelled exactly as there; never invent new Malay sentences. Size\"",
+    "cites: q2: cited chunk 11 (5. At the mamak †), found by its question and answer",
+    "cites: q3: cited chunk 11 (5. At the mamak †), found by its question and answer",
+    "cites: q4: cited chunk 11 (5. At the mamak †), found by its question and answer"
+  ]
+}

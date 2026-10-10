@@ -1,0 +1,359 @@
+{
+  "key": "dairy_allergy_scenario",
+  "blocks": [
+    {
+      "id": "b1",
+      "type": "explainer",
+      "payload": {
+        "markdown": "A parent leans over the counter and asks: *\"Is the classic milk tea dairy-free? My daughter is allergic to milk.\"*\n\nYou have four seconds. If you say \"yes, we use non-dairy creamer\", you have just told a parent that a drink containing milk protein is safe for a child with a milk allergy. Section 9 of your SOP names the reason: the creamer's own label lists **sodium caseinate (milk)**. Sodium caseinate is a milk protein. \"Non-dairy\" on a creamer tub is a labelling term, not a safety guarantee.\n\nScenario A of your SOP gives the answer you are allowed to give, in this order:\n\n1. **Answer the real question first.** \"No, the classic milk tea contains milk protein.\"\n2. **Name what is safe.** \"The fruit teas — FT01, FT02, FT03 — have no milk in the recipe.\"\n3. **Say what you will do.** \"I can make one with clean equipment, without cheese foam or pudding.\"\n4. **State the limit honestly.** \"We do handle milk on this bar, so I can't promise zero traces.\"\n5. **Then act.** Say \"ALLERGY: milk\" out loud to the bar, add ALG to the sticker, and follow the allergy steps in section 9.\n\nStep 4 is not weakness. Section 9 says you handle milk, egg, soy and oats on one small bar and cannot promise zero traces — so you tell the customer what you did and let them decide. A parent who hears the limit can choose. A parent who hears \"dairy-free\" cannot.\n\nThe two toppings that break a milk-safe order are **+PD (egg pudding — egg and milk)** and **+CF (cheese foam — cream cheese, cream)**. Both are on the sticker codes in section 8. If either is on the cup, the drink is not milk-safe, and you say so before taking payment."
+      },
+      "source_material_ids": [
+        21,
+        24,
+        20
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b2",
+      "type": "misconception",
+      "payload": {
+        "belief": "\"Non-dairy creamer\" means the creamer has no dairy in it, so I can tell a milk-allergic customer the classic milk tea is safe.",
+        "why_it_seems_right": "The word \"non-dairy\" is printed on the tub in front of you, and it reads like a manufacturer's guarantee. It is also what the previous crew member told the last customer, so it sounds like shop knowledge rather than a guess.",
+        "what_is_true": "Section 9 states that the creamer's label lists sodium caseinate (milk) among its four ingredients, so the creamer contains milk protein and \"non-dairy\" is not safe for a milk allergy. The SOP's Scenario A marks \"Yes, we use non-dairy creamer\" as the wrong answer and gives the correct one: \"No, the classic milk tea contains milk protein.\" The difference predicts what happens next — the wrong answer sends a milk-allergic child home with a drink that can cause swollen lips or breathing trouble, while the right answer moves the order to a fruit tea made with clean equipment."
+      },
+      "source_material_ids": [
+        21,
+        24
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b3",
+      "type": "speaking",
+      "payload": {
+        "intro_markdown": "These are the lines you will actually say at the counter. Listen to each one, then say it back twice at normal speaking speed — not slowly, not shouted. The first four are the answer to a dairy question; the last two are what you say to the bar and what you ask when you are not sure.",
+        "language": "en",
+        "items": [
+          {
+            "text": "No, the classic milk tea contains milk protein.",
+            "translation": "The direct answer. Say it first, before any explanation.",
+            "phonetic": "noh, thuh KLASS-ik milk tee kon-TAYNZ milk PRO-teen",
+            "audio": "audio/4f76eac3b278a096.mp3"
+          },
+          {
+            "text": "The fruit teas have no milk in the recipe.",
+            "translation": "Points the customer at FT01, FT02 and FT03.",
+            "phonetic": "thuh froot teez hav noh milk in thuh RESS-ih-pee",
+            "audio": "audio/fd105d957faf9754.mp3"
+          },
+          {
+            "text": "I can make one with clean equipment, without cheese foam or pudding.",
+            "translation": "Names the two toppings you will leave off.",
+            "phonetic": "eye kan mayk wun with kleen ee-KWIP-ment, with-OWT cheez fohm or POO-ding",
+            "audio": "audio/6e3d164622abdc2e.mp3"
+          },
+          {
+            "text": "We do handle milk on this bar, so I can't promise zero traces.",
+            "translation": "The honest limit. Do not skip this line.",
+            "phonetic": "wee doo HAN-dul milk on this bar, soh eye kant PROM-iss ZEER-oh TRAY-siz",
+            "audio": "audio/0776b33d86b389bf.mp3"
+          },
+          {
+            "text": "ALLERGY: milk!",
+            "translation": "Said out loud to the bar, loud enough for the bar to hear over the blenders.",
+            "phonetic": "AL-er-jee: milk",
+            "audio": "audio/dd18c9c8eb257510.mp3"
+          },
+          {
+            "text": "Let me check the allergen board with you before I take your order.",
+            "translation": "Use this instead of guessing when the drink or topping is not clearly safe.",
+            "phonetic": "let mee chek thee AL-er-jen bord with yoo bee-for eye tayk yor OR-der",
+            "audio": "audio/f92cddcd68035a16.mp3"
+          }
+        ],
+        "voice_hint": "clear, unhurried, conversational volume",
+        "voice": "en-US-AvaMultilingualNeural"
+      },
+      "source_material_ids": null,
+      "assessments": []
+    },
+    {
+      "id": "b4",
+      "type": "dialogue",
+      "payload": {
+        "scenario_markdown": "A parent is at the counter with a young daughter. The parent asks whether the classic milk tea is dairy-free because the daughter is allergic to milk. You are the cashier. Talk it through in English — the parent will answer you, ask follow-up questions and decide what to order based on what you say.",
+        "language": "en",
+        "ai_role": "parent of a milk-allergic child",
+        "learner_role": "cashier at Mutiara Tea Bar",
+        "goal": "Give the parent a truthful answer about the classic milk tea, offer a milk-safe alternative by name, state the trace limit honestly, and get the parent to a decision they made themselves.",
+        "opening_line": "Hi — is the classic milk tea dairy-free? My daughter is allergic to milk.",
+        "hints": [
+          "No, the classic milk tea contains milk protein.",
+          "The fruit teas have no milk in the recipe.",
+          "I can make one with clean equipment, without cheese foam or pudding.",
+          "We do handle milk on this bar, so I can't promise zero traces."
+        ],
+        "opening_audio": "audio/8b671d6277aa221e.mp3"
+      },
+      "source_material_ids": null,
+      "assessments": []
+    },
+    {
+      "id": "b5",
+      "type": "example",
+      "payload": {
+        "title": "The sticker that should stop the payment",
+        "markdown": "A customer orders and the cashier writes the sticker:\n\n```\nBS01-L 50% LI OAT +PD ALG:milk\n```\n\nRead it against section 8 and section 9.\n\n| Part | Means | Check |\n|---|---|---|\n| BS01-L | Brown Sugar Milk Tea, large | Base drink contains milk |\n| 50% | 50% sweet | fine |\n| LI | less ice | fine |\n| OAT | swap to oat milk, +RM 2.00 | oats (gluten), not certified gluten-free |\n| +PD | add egg pudding, +RM 2.00 | **contains egg and milk** |\n| ALG:milk | customer has a milk allergy | must be honoured |\n\nThe order is a problem. The customer asked for oat milk to avoid milk, but +PD egg pudding contains milk, so the cup is not milk-safe. Section 8 says the cashier must stop and explain before taking payment.\n\nWhat you say, standing at the counter:\n\n> \"I have to stop you here — the egg pudding you added contains milk, so this drink isn't safe for a milk allergy. I can make the same brown sugar milk tea with oat milk and pearls or grass jelly instead, using clean equipment. We do handle milk on this bar, so I can't promise zero traces. Would you like me to change the topping?\"\n\nIf the customer keeps +PD anyway, the allergy note comes off the sticker and the drink is made as a normal order — but only after the customer has heard the milk content out loud and chosen it themselves."
+      },
+      "source_material_ids": [
+        20,
+        21
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b6",
+      "type": "walkthrough",
+      "payload": {
+        "intro": "Run this at the counter the next time anyone mentions an allergy. It is the same five moves every time, whether the customer is a parent, a colleague or someone reading the allergen board themselves.",
+        "steps": [
+          {
+            "n": 1,
+            "title": "Stop and listen for the allergy word",
+            "detail_markdown": "The moment you hear \"allergic\", \"allergy\", \"dairy\", \"milk\", \"lactose\" or a parent speaking for a child, stop taking the order. Do not finish typing it. Section 9 says: when a customer mentions any allergy, the cashier says it out loud to the bar and adds ALG to the sticker.",
+            "warning": "Taking the order first and mentioning the allergy later means the bar may already have started making it with the wrong equipment.",
+            "check": "You have not yet pressed the order through, and you are still facing the customer."
+          },
+          {
+            "n": 2,
+            "title": "Answer the actual question, not the label",
+            "detail_markdown": "For the classic milk tea, the answer is: \"No, the classic milk tea contains milk protein.\" Never answer with \"we use non-dairy creamer\" — section 9 states the creamer's label lists sodium caseinate (milk) and that non-dairy is not safe for a milk allergy.",
+            "warning": "The word \"non-dairy\" on the tub is the trap. It is printed in front of you and it is wrong for this customer.",
+            "check": "You said the word \"contains\" or \"has\" milk protein, not \"dairy-free\" and not \"non-dairy\"."
+          },
+          {
+            "n": 3,
+            "title": "Name a safe alternative by code",
+            "detail_markdown": "Say: \"The fruit teas — FT01, FT02, FT03 — have no milk in the recipe. I can make one with clean equipment, without cheese foam or pudding.\" Section 8 lists FT02 Lychee Oolong Tea and FT03 Lemon Black Tea as no milk in recipe; FT01 is the third fruit tea on the same list. Name the drink, not just the category, so the customer has something to say yes to.",
+            "warning": "Do not offer +CF cheese foam or +PD egg pudding as add-ons here. Section 8 lists +CF as milk (cream cheese, cream) and +PD as egg and milk.",
+            "check": "The customer has heard at least one specific drink code or name that is safe."
+          },
+          {
+            "n": 4,
+            "title": "State the trace limit and let them decide",
+            "detail_markdown": "Say: \"We do handle milk on this bar, so I can't promise zero traces.\" Section 9 is explicit — you handle milk, egg, soy and oats on one small bar, so you tell the customer what you did and let them decide. Then wait. Do not fill the silence.",
+            "warning": "Skipping this line to be reassuring is the failure the SOP is written against. A parent who was not told the limit cannot make a real decision.",
+            "check": "You said the words \"can't promise zero traces\" or an exact equivalent, and the customer answered."
+          },
+          {
+            "n": 5,
+            "title": "Call it to the bar and mark the sticker",
+            "detail_markdown": "Say \"ALLERGY: milk\" out loud, loud enough to be heard over the blenders, and add ALG to the sticker. Then make the drink the section 9 way: wash hands, new gloves, a shaker and scoop from the clean rack, fresh ice with the clean scoop, no cheese foam or pudding.",
+            "warning": "A sticker without the spoken call-out means the bar may not hear it. Say it, then write it.",
+            "check": "The bar repeated it back or acknowledged it, and the sticker carries ALG."
+          }
+        ]
+      },
+      "source_material_ids": [
+        21,
+        24
+      ],
+      "assessments": []
+    },
+    {
+      "id": "b7",
+      "type": "checklist",
+      "payload": {
+        "title": "Before you take payment on an allergy order",
+        "items": [
+          {
+            "text": "You said the milk content out loud before the customer chose",
+            "why": "Prevents the customer discovering the milk after they have paid and drunk it"
+          },
+          {
+            "text": "You did not use the words \"dairy-free\" or \"non-dairy\" about the creamer",
+            "why": "Prevents the Scenario A wrong answer that section 9 names"
+          },
+          {
+            "text": "You named at least one safe drink by code or name",
+            "why": "Prevents leaving the customer with a no and no alternative"
+          },
+          {
+            "text": "You said the bar cannot promise zero traces",
+            "why": "Prevents promising a guarantee the one small bar cannot keep"
+          },
+          {
+            "text": "No +PD or +CF is on the sticker",
+            "why": "Prevents a milk-containing topping riding along on a milk-safe order"
+          },
+          {
+            "text": "\"ALLERGY: milk\" was said to the bar, not just written",
+            "why": "Prevents the bar starting the drink before the call-out is heard"
+          },
+          {
+            "text": "ALG is on the sticker",
+            "why": "Prevents the allergy note being lost between counter and bar"
+          },
+          {
+            "text": "You know what to do if the customer reacts",
+            "why": "Swollen lips or face, trouble breathing, hives or vomiting means call 999 at once, tell the shift lead, keep the person still, ask about their own adrenaline auto-injector, and give them nothing to eat or drink"
+          }
+        ],
+        "note": "This is the counter-side check. The making-side steps — washed hands, new gloves, clean-rack shaker and scoop, fresh ice with the clean scoop — are section 9's allergy steps and are checked at the bar, not here."
+      },
+      "source_material_ids": null,
+      "assessments": []
+    },
+    {
+      "id": "b8",
+      "type": "quiz",
+      "payload": {
+        "intro": "Answer from the SOP, not from what the label looks like it means."
+      },
+      "source_material_ids": [
+        24,
+        21
+      ],
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "A customer says they are allergic to milk and asks whether the classic milk tea is safe. Which reply matches Scenario A of the SOP?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Yes — the creamer is labelled non-dairy, so the classic milk tea has no dairy in it."
+            },
+            {
+              "id": "b",
+              "text": "No — the classic milk tea contains milk protein; the fruit teas have no milk in the recipe, and I can make one with clean equipment without cheese foam or pudding."
+            },
+            {
+              "id": "c",
+              "text": "It depends on the sweetness level — at 0% sweet we leave out the creamer, so it is safe."
+            },
+            {
+              "id": "d",
+              "text": "I'm not sure, so I'll make it and you can tell me if it causes a reaction."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Section 9 states the creamer's label lists sodium caseinate (milk), so non-dairy is not safe for a milk allergy, and Scenario A gives the correct answer as naming the milk protein, naming the fruit teas as safe, offering clean equipment without cheese foam or pudding, and stating the trace limit.",
+          "id": "q1",
+          "cite_chunk_ids": [
+            24
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "No, the classic milk tea contains milk protein. The fruit teas (FT01, FT02, FT03) have no milk in the recipe."
+        },
+        {
+          "kind": "cloze",
+          "prompt": "Section 9 says the creamer's label lists glucose syrup, vegetable oil, ____ (milk), and emulsifier (soy lecithin) — so \"non-dairy creamer\" is not safe for a milk allergy.",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "answer_key": {
+            "accepted": [
+              "sodium caseinate",
+              "sodium caseinate (milk)",
+              "caseinate"
+            ]
+          },
+          "max_score": 1,
+          "explanation": "Sodium caseinate is a milk protein, which is why the SOP says non-dairy creamer is not safe for a milk allergy.",
+          "id": "q2",
+          "cite_chunk_ids": [
+            21
+          ],
+          "status": "supported",
+          "reason": "Re-solved independently and the slide states the rule it rests on.",
+          "quote": "Our creamer's label lists: glucose syrup, vegetable oil, sodium caseinate (milk), emulsifier (soy lecithin)."
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A parent has just heard you say the classic milk tea contains milk protein and that the fruit teas have no milk in the recipe. In two to four sentences, write what you say next, including the limit on what the bar can promise and the two toppings you will leave off.",
+          "bloom": "create",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "I can make one of the fruit teas with clean equipment, without cheese foam or pudding. We do handle milk on this bar, so I can't promise zero traces. Would you like the lychee oolong or the lemon black tea?"
+          },
+          "rubric": [
+            {
+              "criterion": "States the trace limit in the customer's hearing",
+              "weight": 0.35,
+              "excellent": "Says plainly that the bar handles milk and cannot promise zero traces, in a sentence the parent can act on.",
+              "acceptable": "Mentions traces or cross-contact but softens it so far that the parent may not hear a real limit.",
+              "poor": "Promises the drink is safe, dairy-free or free of traces."
+            },
+            {
+              "criterion": "Names cheese foam and pudding as the toppings left off",
+              "weight": 0.3,
+              "excellent": "Names both +CF cheese foam and +PD egg pudding, or the plain words cheese foam and pudding, as excluded.",
+              "acceptable": "Names one of the two, or says 'no milk toppings' without naming either.",
+              "poor": "Offers cheese foam or pudding as an add-on, or names neither."
+            },
+            {
+              "criterion": "Offers a specific milk-safe drink",
+              "weight": 0.2,
+              "excellent": "Names a fruit tea by code or name, such as FT02 Lychee Oolong Tea or FT03 Lemon Black Tea.",
+              "acceptable": "Says 'the fruit teas' without naming one.",
+              "poor": "Offers no alternative, or offers a drink that contains milk."
+            },
+            {
+              "criterion": "Leaves the decision with the parent",
+              "weight": 0.15,
+              "excellent": "Ends with a question or a clear handover so the parent chooses the drink.",
+              "acceptable": "Moves to the order without asking, but does not pressure the parent.",
+              "poor": "Tells the parent what they will be given, or pressures them to accept the milk drink."
+            }
+          ],
+          "max_score": 3,
+          "id": "q3"
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "A customer with a milk allergy orders a large brown sugar milk tea, 50% sweet, less ice, oat milk, and adds egg pudding. What does the SOP require you to do?",
+          "bloom": "analyze",
+          "grader": "self",
+          "answer_key": {
+            "reference_answer": "Stop before taking payment and explain that the egg pudding contains milk, then offer a different topping."
+          },
+          "max_score": 1,
+          "explanation": "Section 8 lists +PD egg pudding as containing egg and milk, and states the cashier must stop and explain before taking payment; the oat milk swap does not remove the milk in the pudding.",
+          "id": "q4"
+        }
+      ]
+    },
+    {
+      "id": "b9",
+      "type": "reflection",
+      "payload": {
+        "prompt": "Think of the last time a customer asked you a question about a drink and you answered without checking. What would you have said if that question had been \"is this dairy-free?\" — and which line from the SOP would have changed your answer?"
+      },
+      "source_material_ids": [
+        24
+      ],
+      "assessments": []
+    }
+  ],
+  "attempts": 1,
+  "cost_usd": 0.003252,
+  "repairs": [
+    "moved source_material_ids out of a explainer payload to the block",
+    "moved source_material_ids out of a example payload to the block",
+    "demoted 1 of 2 mcq to short_answer (at most 1 of 4 items may be multiple choice)",
+    "cites: q1: cited chunk 24 (Scenario A: dairy allergy), found by its question and answer",
+    "cites: q2: cited chunk 21 (9. Allergens), found by its question and answer",
+    "cites: b2: the misconception cited nothing; cited chunks 21, 24 (best match for its text)",
+    "cites: b6: the walkthrough cited nothing; cited chunks 21, 24 (best match for its text)",
+    "cites: b8: the quiz cited nothing; cited chunks 24, 21 (its questions' sources)",
+    "cites: b9: the reflection cited nothing; cited chunk 24 (best match for its text)"
+  ]
+}

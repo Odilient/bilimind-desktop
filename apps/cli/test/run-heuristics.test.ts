@@ -40,10 +40,11 @@ describe('chooseLessons', () => {
     { key: 'arrays', title: '', marks: 15, share: 0.15, questions: ['Q1'] },
     { key: 'avl', title: '', marks: 0, share: 0, questions: [] },
   ];
-  it('keeps the heaviest core topics that fit the new-lesson budget, in outline order, and says why it cut', () => {
-    // Sat-Tue = 4 study days x 45 min x 60% = 108 min: hashing 35 + heaps 40 + arrays 25 = 100; avl (0 marks) and the subtopic do not fit
+  it('keeps the heaviest core topics that fit, heaviest first, never spends spare minutes on a zero-mark topic, and says why it cut', () => {
+    // Sat-Tue = 4 study days x 45 min (70% for new lessons without an outline) = 126 min: hashing 35 + heaps 40 + arrays 25 = 100.
+    // avl (0 marks) would still fit, but with a past paper only the capstone may use spare minutes (G2 review).
     const r = chooseLessons(topics, weights, { exam_at: '2026-10-14T09:00:00+08:00', minutes_per_day: 45 }, NOW);
-    expect(r.keep).toEqual(['arrays', 'hashing', 'heaps']);
+    expect(r.keep).toEqual(['hashing', 'heaps', 'arrays']);
     expect(Object.keys(r.cut).sort()).toEqual(['avl', 'probing']);
     expect(r.cut.avl).toMatch(/No marks/);
   });

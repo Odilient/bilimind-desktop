@@ -1,0 +1,42 @@
+[
+  {
+    "lesson": "malay_sounds",
+    "item": "q1",
+    "verdict": "supported",
+    "quote": "| c | always \"ch\" in *China* | *cakap* (speak) \"chah-kahp\" |",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 4,
+    "round": 1,
+    "at": "2026-10-10T16:13:52.594Z"
+  },
+  {
+    "lesson": "malay_sounds",
+    "item": "q2",
+    "verdict": "supported",
+    "quote": "| g | always hard, as in *go* | *gula* (sugar) |",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 4,
+    "round": 1,
+    "at": "2026-10-10T16:13:52.594Z"
+  },
+  {
+    "lesson": "malay_sounds",
+    "item": "q3",
+    "verdict": "supported",
+    "quote": "*saya* (I) sounds like \"sa-yuh\"",
+    "reason": "Re-solved independently and the slide states the rule it rests on.",
+    "chunk_id": 4,
+    "round": 1,
+    "at": "2026-10-10T16:13:52.594Z"
+  },
+  {
+    "lesson": "malay_sounds",
+    "item": "q4",
+    "verdict": "supported",
+    "quote": "| ng | \"ng\" in *singer* (no hard g) | *dengan* (with) |",
+    "reason": "Section 1 gives ng as in singer (dengan) and ngg as in finger (tangga), so the friend swapped the rows.",
+    "chunk_id": 4,
+    "round": 1,
+    "at": "2026-10-10T16:23:16.582Z"
+  }
+]

@@ -1,0 +1,198 @@
+{
+  "lesson": "dairy_allergy_scenario",
+  "round": 2,
+  "at": "2026-10-10T16:16:25.001Z",
+  "total": 27,
+  "passed": 27,
+  "failed": [],
+  "auto_fixed": [],
+  "checks": [
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 ids",
+      "ok": true,
+      "detail": "9 blocks and 4 items have unique ids"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "explainer payload valid",
+      "block": 1
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "misconception payload valid",
+      "block": 2
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "speaking payload valid",
+      "block": 3
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "dialogue payload valid",
+      "block": 4
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "example payload valid",
+      "block": 5
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "walkthrough payload valid",
+      "block": 6
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "checklist payload valid",
+      "block": 7
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "quiz payload valid",
+      "block": 8
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "mcq item valid",
+      "block": 8,
+      "item": "q1"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "cloze item valid",
+      "block": 8,
+      "item": "q2"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 8,
+      "item": "q3"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "short_answer item valid",
+      "block": 8,
+      "item": "q4"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q0 schema",
+      "ok": true,
+      "detail": "reflection payload valid",
+      "block": 9
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q1 formats",
+      "ok": true,
+      "detail": "communicative: has speaking, dialogue"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q2 item count",
+      "ok": true,
+      "detail": "4 practice items besides code and projects (wanted 3-6)"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q3 bloom",
+      "ok": true,
+      "detail": "3 higher-order, 1 remember of 4"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q4 mcq cap",
+      "ok": true,
+      "detail": "1 mcq of 4 items (max 1)"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q5 mcq",
+      "ok": true,
+      "detail": "4 distinct options, one correct, no giveaway",
+      "block": 8,
+      "item": "q1"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q8 cloze",
+      "ok": true,
+      "detail": "one blank, 3 accepted answers",
+      "block": 8,
+      "item": "q2"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q10 rubric",
+      "ok": true,
+      "detail": "4 specific criteria, weights sum to 1",
+      "block": 8,
+      "item": "q3"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q14 citations",
+      "ok": true,
+      "detail": "14 chunk citations on 6 blocks resolve"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q14b item citations",
+      "ok": true,
+      "detail": "2 auto-marked items each cite a slide"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q15 thin lesson",
+      "ok": true,
+      "detail": "1154 teaching words for a 20-minute lesson (target about 600, minimum 300)"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q16 no urls",
+      "ok": true,
+      "detail": "no URLs in any payload"
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q17 language",
+      "ok": true,
+      "detail": "speaking language en",
+      "block": 3
+    },
+    {
+      "lesson": "dairy_allergy_scenario",
+      "rule": "Q17 language",
+      "ok": true,
+      "detail": "dialogue language en",
+      "block": 4
+    }
+  ]
+}
