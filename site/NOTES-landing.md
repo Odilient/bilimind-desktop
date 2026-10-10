@@ -42,3 +42,6 @@ Not changed on purpose: line 4060 `bilimind.com/you/espresso-at-home` is visible
 - .github/workflows/pages.yml: push to main + workflow_dispatch, ubuntu-latest, node 22, assemble.mjs, rsync site/ -> _site (excluding shots/, scripts/, NOTES*), upload-pages-artifact@v3, deploy-pages@v4, permissions pages: write + id-token: write.
 - All asset paths in index.html are relative (img/09, img/11, vid/), so https://odilient.github.io/bilimind-desktop/ works.
 - Repo setting needed once: Settings > Pages > Source = GitHub Actions.
+
+## Owner-approved change (02:35)
+The owner asked to change the browser tab title: `<title>` and the meta description (head only, not visible on the page) now name BiliMind Desktop instead of the design draft name "Landing 11 Cobalt landing". Everything else stays exact; only link targets differ.
