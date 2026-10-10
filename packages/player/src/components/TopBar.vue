@@ -12,7 +12,7 @@ const pctLabel = computed(() => `${Math.round(props.pct * 100)}%`);
 <template>
   <header class="tb" :class="{ scrolled, away }">
     <a class="brand" href="#/" aria-label="BiliMind, course home"><svg aria-hidden="true"><use href="#mark" /></svg>BiliMind</a>
-    <span class="made"><i><svg class="ico" style="width:10px;height:10px" aria-hidden="true"><use href="#i-spark" /></svg></i><span class="long">Works&nbsp;</span>offline</span>
+    <span class="made"><i><svg class="ico" style="width:10px;height:10px" aria-hidden="true"><use href="#i-spark" /></svg></i><span class="long">Works</span>offline</span>
     <span class="grow"></span>
     <span class="ringp" :style="{ '--p': pct }" role="img" :aria-label="`Course ${pctLabel} complete`"></span>
     <span class="pct" aria-hidden="true">{{ pctLabel }}</span>

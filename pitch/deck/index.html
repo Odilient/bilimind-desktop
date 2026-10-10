@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiliMind Desktop · Dormathon 2026</title>
+<!--
+  BiliMind Desktop pitch deck, Dormathon 2026 Track 2, team Opus Magnum (#58).
+  8 slides at 1920x1080. Arrow keys / click / space to move, F for fullscreen. Print = one slide per page.
+  Every app picture is the live app: app/ is a copy of the desktop renderer in mock mode (real showcase data),
+  driven into a state by app/deck-boot.js; the course windows are the real offline course players.
+-->
+<style>
+@font-face { font-family: "Space Grotesk"; font-weight: 500; src: url(app/assets/space-grotesk-latin-500-normal-lFbtlQH6.woff2) format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 700; src: url(app/assets/space-grotesk-latin-700-normal-RjhwGPKo.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url(app/assets/inter-latin-400-normal-C38fXH4l.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url(app/assets/inter-latin-500-normal-Cerq10X2.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url(app/assets/inter-latin-600-normal-LgqL8muc.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url(app/assets/inter-latin-700-normal-Yt3aPRUw.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; unicode-range: U+0100-024F, U+2190-21FF; src: url(app/assets/inter-latin-ext-400-normal-C1nco2VV.woff2) format("woff2"); }
+
+:root {
+  --page: #ECEEF2; --cobalt: #2340E6; --cobalt-3: #3253F4; --cobalt-soft: #EEF1FE;
+  --lime: #C6F24E; --lime-2: #B4E03A; --lime-soft: #EEF9CF; --lime-ink: #4E6A08;
+  --ink: #0B0D10; --ink-2: #1A1D23; --ink-3: #2A2E37; --text-2: #565B68; --text-3: #8B909C;
+  --line: rgb(11 13 16 / 0.08); --coral: #FF5A3C; --coral-soft: #FFE8DF; --coral-ink: #B33A16;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, sans-serif;
+  --r-card: 36px; --r-md: 28px; --r-sm: 18px;
+  --cobalt-grad:
+    radial-gradient(70% 90% at 82% 18%, rgb(120 150 255 / 0.40), transparent 60%),
+    radial-gradient(60% 70% at 10% 110%, rgb(10 20 120 / 0.55), transparent 70%),
+    linear-gradient(118deg, #1B33CF 0%, #2442EA 38%, #2D4CF2 56%, #2340E6 72%, #1A2FC4 100%);
+  --shadow-win: 0 2px 4px rgb(5 10 60 / 0.08), 0 24px 60px -12px rgb(5 10 60 / 0.35), 0 60px 120px -40px rgb(5 10 60 / 0.35);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: #0B0D10; color: var(--ink); font: 400 24px/1.45 var(--body); -webkit-font-smoothing: antialiased; overflow: hidden; }
+svg { display: block; }
+
+/* ── Stage: 1920x1080 slides, scaled to the window ─────────────────────── */
+.stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+.slide {
+  position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden;
+  background: var(--page); visibility: hidden; opacity: 0; transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.slide.on { visibility: visible; opacity: 1; transition: opacity .35s ease; z-index: 1; }
+
+/* ── Shared patterns (from the landing's base.css, sized for 1920) ────── */
+.slab { position: absolute; border-radius: var(--r-card); isolation: isolate; overflow: hidden; }
+.slab.cobalt { background: var(--cobalt-grad); color: #fff; }
+.slab.ink { background: var(--ink); color: #fff; }
+.slab.full { inset: 24px; }
+.grain::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background: radial-gradient(1200px 700px at 85% 0%, rgb(140 165 255 / 0.25), transparent 60%); }
+.ink.grain::after { background: radial-gradient(1100px 700px at 90% 0%, rgb(35 64 230 / 0.35), transparent 60%), radial-gradient(900px 600px at 0% 100%, rgb(198 242 78 / 0.07), transparent 60%); opacity: 1; }
+
+.eb { display: inline-flex; align-items: center; gap: 14px; height: 52px; padding: 0 22px 0 11px; border-radius: 99px;
+  background: #fff; box-shadow: inset 0 0 0 1.5px var(--line), 0 1px 2px rgb(11 13 16 / 0.04);
+  font: 500 21px/1 var(--body); color: var(--ink-3); white-space: nowrap; }
+.eb .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; }
+.eb .dot svg { width: 16px; height: 16px; }
+.eb.dark { background: rgb(255 255 255 / 0.10); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.22); color: rgb(255 255 255 / 0.92); }
+
+.h { margin: 0; font: 700 120px/0.9 var(--display); letter-spacing: -0.045em; text-transform: uppercase; }
+.h .lime { color: var(--lime); }
+.h .cob { color: var(--cobalt); }
+.h .dim { color: var(--text-3); }
+.hchip { display: inline-grid; place-items: center; position: relative; vertical-align: 0; width: 0.74em; height: 0.74em; border-radius: 50%; margin: 0 0.04em; background: var(--lime); color: var(--ink); }
+.hchip svg { position: absolute; inset: 26%; width: 48%; height: 48%; }
+.hchip.ink { background: var(--ink); color: #fff; }
+.hchip.cobalt { background: var(--cobalt); color: #fff; }
+.hchip.white { background: #fff; color: var(--cobalt); }
+.hchip.lime-on-ink { background: var(--lime); color: var(--ink); }
+.line { margin: 0; font: 400 31px/1.42 var(--body); color: var(--text-2); text-wrap: pretty; }
+.on-dark .line, .slab .line { color: rgb(255 255 255 / 0.78); }
+.line b { font-weight: 600; color: var(--ink); }
+.slab .line b { color: #fff; }
+.small { font: 500 21px/1.45 var(--body); color: var(--text-2); }
+.slab .small { color: rgb(255 255 255 / 0.66); }
+.obj { position: absolute; pointer-events: none; filter: drop-shadow(0 30px 40px rgb(5 10 60 / 0.35)); }
+
+/* ── Desktop window frame around a live iframe (1280x820 scaled by --s) ── */
+.win { position: absolute; border-radius: 18px; overflow: hidden; background: #fff; box-shadow: var(--shadow-win); }
+.win .bar { height: 40px; display: flex; align-items: center; padding: 0 0 0 16px; gap: 10px; background: #F4F5F9; border-bottom: 1px solid rgb(11 13 16 / 0.07); font: 500 15px/1 var(--body); color: #565B68; }
+.win .bar .lg { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, #fff 0 22%, var(--cobalt) 23% 100%); box-shadow: inset 0 0 0 2px var(--cobalt); flex: none; }
+.win .bar .lg.lime { background: radial-gradient(circle at 50% 50%, var(--ink) 0 22%, var(--lime) 23% 100%); box-shadow: none; }
+.win .bar .ttl { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.win .bar .ctl { display: flex; height: 100%; }
+.win .bar .ctl i { width: 50px; height: 100%; display: grid; place-items: center; color: #565B68; }
+.win .bar .ctl svg { width: 12px; height: 12px; }
+.win .vp { position: relative; width: calc(1280px * var(--s)); height: calc(820px * var(--s)); overflow: hidden; background: #ECEEF2; }
+.win .vp.tall { height: calc(var(--h) * var(--s)); }
+.win iframe { position: absolute; left: 0; top: 0; width: 1280px; height: 820px; border: 0; transform: scale(var(--s)); transform-origin: 0 0; background: #ECEEF2; }
+.win .vp.tall iframe { height: var(--h); }
+.win .shield { position: absolute; inset: 0; z-index: 2; }
+.win.dark .bar { background: #1A1D23; border-color: rgb(255 255 255 / 0.06); color: rgb(255 255 255 / 0.7); }
+.win.dark .bar .ctl i { color: rgb(255 255 255 / 0.6); }
+
+/* ── Slide 1: title ─────────────────────────────────────────────────── */
+#s1 .eb { position: absolute; left: 72px; top: 72px; }
+#s1 .h { position: absolute; left: 72px; top: 176px; font-size: 156px; line-height: .88; }
+#s1 .sub { position: absolute; left: 72px; top: 500px; width: 820px; margin: 0; font: 700 54px/0.98 var(--display); letter-spacing: -0.035em; text-transform: uppercase; color: var(--lime); }
+#s1 .team { position: absolute; left: 72px; bottom: 64px; width: 900px; }
+#s1 .team .who { font: 700 30px/1.1 var(--display); letter-spacing: -0.02em; color: #fff; margin: 0 0 10px; }
+#s1 .team .who span { color: var(--lime); }
+#s1 .team .names { margin: 0; font: 500 22px/1.5 var(--body); color: rgb(255 255 255 / 0.74); }
+#s1 .win { right: 64px; top: 214px; --s: .68; }
+#s1 .o1 { width: 240px; right: 14px; top: 70px; transform: rotate(-8deg); z-index: 3; }
+#s1 .o2 { width: 220px; right: 110px; bottom: 26px; z-index: 3; transform: rotate(6deg); }
+
+/* ── Slide 2: the problem ───────────────────────────────────────────── */
+#s2 .txt { position: absolute; left: 96px; top: 96px; width: 1060px; }
+#s2 .h { font-size: 112px; margin: 34px 0 52px; }
+#s2 .line { width: 900px; margin-bottom: 18px; }
+#s2 .slab { left: 1180px; right: 24px; top: 24px; bottom: 24px; }
+#s2 .folder { position: absolute; left: 60px; right: 60px; top: 150px; }
+#s2 .ftab { width: 230px; height: 56px; border-radius: 22px 22px 0 0; background: var(--lime); position: relative; top: 14px; }
+#s2 .fbody { position: relative; background: #fff; border-radius: 0 28px 28px 28px; padding: 34px 32px 30px; color: var(--ink); box-shadow: 0 40px 80px -30px rgb(5 10 60 / 0.6); }
+#s2 .fhead { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+#s2 .fhead .fi { width: 54px; height: 54px; border-radius: 16px; background: var(--lime); display: grid; place-items: center; }
+#s2 .fhead .fi svg { width: 28px; height: 28px; }
+#s2 .fhead b { font: 700 32px/1 var(--display); letter-spacing: -0.03em; }
+#s2 .fhead span { display: block; font: 500 18px/1.3 var(--body); color: var(--text-2); margin-top: 4px; }
+#s2 .file { display: flex; align-items: center; gap: 16px; height: 66px; padding: 0 18px; border-radius: 16px; background: #F6F7FA; margin-top: 10px; font: 500 21px/1 var(--body); color: var(--ink-3); }
+#s2 .file .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--cobalt-soft); color: var(--cobalt); display: grid; place-items: center; flex: none; }
+#s2 .file .ic svg { width: 20px; height: 20px; }
+#s2 .file .nm { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#s2 .file .pg { font-size: 17px; color: var(--text-2); }
+#s2 .file.paper { background: var(--lime-soft); box-shadow: inset 0 0 0 2px var(--lime-2); }
+#s2 .file.paper .ic { background: var(--lime); color: var(--ink); }
+#s2 .file .tag { font: 600 15px/1 var(--body); padding: 8px 12px; border-radius: 99px; background: var(--lime); color: var(--ink); }
+#s2 .q { position: absolute; left: 60px; right: 60px; bottom: 64px; display: flex; gap: 12px; flex-wrap: wrap; }
+#s2 .q span { display: inline-flex; align-items: center; height: 52px; padding: 0 22px; border-radius: 99px; background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.22); font: 500 20px/1 var(--body); color: rgb(255 255 255 / 0.85); }
+#s2 .q span s { text-decoration-color: var(--lime); text-decoration-thickness: 2px; }
+
+/* ── Slide 3: the solution ──────────────────────────────────────────── */
+#s3 .txt { position: absolute; left: 96px; top: 96px; width: 760px; }
+#s3 .h { font-size: 112px; margin: 34px 0 40px; }
+#s3 .line { width: 700px; }
+#s3 .prompt { position: absolute; left: 96px; bottom: 96px; width: 740px; background: #fff; border-radius: var(--r-md); padding: 30px 34px 34px; box-shadow: 0 30px 60px -30px rgb(5 10 60 / 0.25), inset 0 0 0 1.5px var(--line); }
+#s3 .prompt .lb { display: flex; align-items: center; gap: 12px; font: 600 19px/1 var(--body); color: var(--ink-3); margin-bottom: 18px; }
+#s3 .prompt .lb i { width: 30px; height: 30px; border-radius: 50%; background: var(--cobalt); color: #fff; font: 700 16px/30px var(--body); text-align: center; font-style: normal; }
+#s3 .prompt p { margin: 0; font: 500 30px/1.38 var(--body); color: var(--ink); letter-spacing: -0.01em; }
+#s3 .prompt .go { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; }
+#s3 .prompt .fold { display: flex; align-items: center; gap: 12px; font: 500 19px/1 var(--body); color: var(--text-2); }
+#s3 .prompt .fold b { color: var(--ink); font-weight: 600; }
+#s3 .prompt .fold .fi { width: 40px; height: 40px; border-radius: 12px; background: var(--lime); display: grid; place-items: center; }
+#s3 .prompt .fold .fi svg { width: 22px; height: 22px; }
+#s3 .pill { display: inline-flex; align-items: center; gap: 12px; height: 60px; padding: 0 10px 0 28px; border-radius: 99px; background: var(--lime); font: 600 21px/1 var(--body); color: var(--ink); }
+#s3 .pill .arr { width: 42px; height: 42px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; }
+#s3 .pill .arr svg { width: 18px; height: 18px; }
+#s3 .slab { left: 930px; right: 24px; top: 24px; bottom: 24px; }
+#s3 .w1 { left: 60px; top: 64px; --s: .70; }
+#s3 .w2 { right: 40px; bottom: 48px; --s: .52; z-index: 2; }
+#s3 .arrow { position: absolute; left: 56px; bottom: 150px; z-index: 3; width: 150px; height: 150px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; box-shadow: 0 20px 40px -10px rgb(5 10 60 / 0.5); }
+#s3 .arrow svg { width: 64px; height: 64px; }
+#s3 .arrow small { position: absolute; top: 100%; margin-top: 16px; left: 0; width: 150px; text-align: center; white-space: nowrap; font: 600 19px/1 var(--body); color: #fff; }
+
+/* ── Slide 4: the crew ──────────────────────────────────────────────── */
+#s4 .eb { position: absolute; left: 72px; top: 48px; }
+#s4 .h { position: absolute; left: 72px; top: 116px; font-size: 96px; white-space: nowrap; }
+#s4 .flow { position: absolute; left: 72px; right: 72px; top: 236px; height: 180px; display: grid; grid-template-columns: 1.25fr 1fr 1.25fr 1fr; gap: 56px; }
+#s4 .node { position: relative; background: #fff; border-radius: 24px; padding: 18px 22px; box-shadow: inset 0 0 0 1.5px var(--line), 0 14px 30px -18px rgb(5 10 60 / 0.25); }
+#s4 .node + .node::before { content: ""; position: absolute; left: -54px; top: 50%; width: 50px; border-top: 3px dashed #8FA2F5; }
+#s4 .node + .node::after { content: ""; position: absolute; left: -12px; top: calc(50% - 6px); width: 12px; height: 12px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 3px var(--ink); }
+#s4 .node .hd { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+#s4 .node .ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--cobalt-soft); color: var(--cobalt); flex: none; }
+#s4 .node .ic svg { width: 22px; height: 22px; }
+#s4 .node .nm { font: 700 25px/1 var(--display); letter-spacing: -0.02em; text-transform: uppercase; }
+#s4 .node .x { margin-left: auto; font: 600 15px/1 var(--body); padding: 7px 11px; border-radius: 99px; background: var(--lime); color: var(--ink); white-space: nowrap; }
+#s4 .node p { margin: 0; font: 400 18.5px/1.36 var(--body); color: var(--text-2); }
+#s4 .node p + p { margin-top: 8px; }
+#s4 .node p b { color: var(--ink); font-weight: 600; }
+#s4 .node.lead { background: var(--cobalt-grad); color: #fff; box-shadow: 0 18px 36px -18px rgb(35 64 230 / 0.6); }
+#s4 .node.lead .ic { background: var(--lime); color: var(--ink); }
+#s4 .node.lead p { color: rgb(255 255 255 / 0.82); }
+#s4 .stack { display: grid; gap: 7px; margin-top: 4px; }
+#s4 .stack span { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 12px; border-radius: 10px; background: #F6F7FA; font: 500 16px/1 var(--body); color: var(--ink-3); white-space: nowrap; overflow: hidden; }
+#s4 .stack span i { width: 9px; height: 9px; border-radius: 50%; background: var(--lime-2); flex: none; }
+#s4 .outs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#s4 .outs span { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 12px; border-radius: 12px; background: #F6F7FA; font: 600 18px/1 var(--body); color: var(--ink); }
+#s4 .outs span svg { width: 22px; height: 22px; color: var(--cobalt); flex: none; }
+#s4 .slab { left: 24px; right: 24px; top: 444px; bottom: 24px; }
+#s4 .win { left: 40px; top: 34px; --s: .62; }
+#s4 .run { position: absolute; left: 892px; right: 48px; top: 40px; }
+#s4 .run .eb { position: static; }
+#s4 .run h3 { margin: 22px 0 22px; font: 700 44px/1 var(--display); letter-spacing: -0.035em; text-transform: uppercase; }
+#s4 .run h3 span { color: var(--lime); }
+#s4 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+#s4 .tile { height: 128px; border-radius: 22px; padding: 18px 20px; background: rgb(255 255 255 / 0.07); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.12); display: flex; flex-direction: column; justify-content: space-between; }
+#s4 .tile b { font: 700 46px/1 var(--display); letter-spacing: -0.04em; color: #fff; white-space: nowrap; }
+#s4 .tile b small { font-size: .55em; color: rgb(255 255 255 / 0.6); letter-spacing: -0.02em; }
+#s4 .tile span { font: 500 17px/1.25 var(--body); color: rgb(255 255 255 / 0.7); }
+#s4 .tile.lime { background: var(--lime); box-shadow: none; }
+#s4 .tile.lime b, #s4 .tile.lime span { color: var(--ink); }
+#s4 .tile.lime b small { color: rgb(11 13 16 / 0.6); }
+#s4 .run .small { margin-top: 18px; }
+
+/* ── Slide 5: proof ─────────────────────────────────────────────────── */
+#s5 .eb { position: absolute; left: 72px; top: 78px; }
+#s5 .h { position: absolute; left: 72px; top: 156px; font-size: 86px; width: 780px; }
+#s5 .rej { position: absolute; left: 72px; top: 496px; width: 750px; background: #fff; color: var(--ink); border-radius: var(--r-md); padding: 26px 30px 28px; }
+#s5 .rej .hd { display: flex; align-items: center; gap: 14px; }
+#s5 .rej .hd .ic { width: 46px; height: 46px; border-radius: 13px; background: var(--cobalt-soft); color: var(--cobalt); display: grid; place-items: center; }
+#s5 .rej .hd .ic svg { width: 24px; height: 24px; }
+#s5 .rej .hd b { font: 700 24px/1 var(--display); letter-spacing: -0.02em; text-transform: uppercase; }
+#s5 .rej .hd span { font: 500 18px/1 var(--body); color: var(--text-2); }
+#s5 .rej .hd .st { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 99px; background: var(--coral-soft); color: var(--coral-ink); font: 600 17px/1 var(--body); }
+#s5 .rej .key { margin-top: 20px; display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 16px; background: #FFF6F3; box-shadow: inset 0 0 0 1.5px rgb(255 90 60 / 0.35); }
+#s5 .rej .key .x { width: 34px; height: 34px; border-radius: 50%; background: var(--coral); color: #fff; display: grid; place-items: center; flex: none; }
+#s5 .rej .key .x svg { width: 16px; height: 16px; }
+#s5 .rej .lbl { font: 600 15px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); margin-bottom: 6px; }
+#s5 .rej .key p { margin: 0; font: 600 28px/1.2 var(--body); color: var(--coral-ink); text-decoration: line-through; text-decoration-thickness: 2px; }
+#s5 .rej .quote { margin-top: 12px; padding: 18px 22px; border-radius: 16px; background: var(--cobalt-soft); border-left: 6px solid var(--cobalt); }
+#s5 .rej .quote p { margin: 0; font: 600 32px/1.2 var(--body); color: var(--ink); letter-spacing: -0.01em; }
+#s5 .rej .quote .src { margin-top: 10px; display: flex; align-items: center; gap: 8px; font: 500 17px/1 var(--body); color: var(--cobalt); }
+#s5 .rej .quote .src svg { width: 16px; height: 16px; }
+#s5 .rej .fix { margin-top: 12px; display: flex; align-items: center; gap: 14px; padding: 15px 20px; border-radius: 16px; background: var(--lime); font: 600 22px/1 var(--body); color: var(--ink); }
+#s5 .rej .fix .ok { width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; }
+#s5 .rej .fix .ok svg { width: 16px; height: 16px; }
+#s5 .rej .fix span { margin-left: auto; font: 500 17px/1 var(--body); color: rgb(11 13 16 / 0.7); }
+#s5 .win { right: 64px; top: 92px; --s: .72; }
+#s5 .nums { position: absolute; left: 886px; right: 64px; top: 702px; display: grid; grid-template-columns: 1fr 1.25fr 1.25fr 1fr; gap: 12px; }
+#s5 .num { height: 136px; border-radius: 22px; padding: 16px 20px; background: rgb(255 255 255 / 0.07); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.14); display: flex; flex-direction: column; justify-content: space-between; }
+#s5 .num b { font: 700 42px/1 var(--display); letter-spacing: -0.04em; color: #fff; white-space: nowrap; }
+#s5 .num span { font: 500 17px/1.25 var(--body); color: rgb(255 255 255 / 0.72); }
+#s5 .num.lime { background: var(--lime); box-shadow: none; }
+#s5 .num.lime b, #s5 .num.lime span { color: var(--ink); }
+#s5 .meas { position: absolute; left: 886px; right: 64px; top: 868px; margin: 0; }
+#s5 .ds { position: absolute; left: 72px; top: 912px; width: 800px; }
+
+/* ── Slide 6: small business ───────────────────────────────────────── */
+#s6 .txt { position: absolute; left: 96px; top: 96px; width: 700px; }
+#s6 .h { font-size: 120px; margin: 34px 0 40px; }
+#s6 .line { width: 660px; }
+#s6 .stats { position: absolute; left: 96px; bottom: 96px; width: 680px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+#s6 .st { height: 128px; border-radius: 22px; padding: 18px 22px; background: #fff; box-shadow: inset 0 0 0 1.5px var(--line); display: flex; flex-direction: column; justify-content: space-between; }
+#s6 .st b { font: 700 50px/1 var(--display); letter-spacing: -0.04em; }
+#s6 .st span { font: 500 18px/1 var(--body); color: var(--text-2); }
+#s6 .st.lime { background: var(--lime); box-shadow: none; }
+#s6 .st.lime span { color: rgb(11 13 16 / 0.7); }
+#s6 .st.ink { background: var(--ink); color: #fff; box-shadow: none; }
+#s6 .st.ink span { color: rgb(255 255 255 / 0.7); }
+#s6 .slab { left: 860px; right: 24px; top: 24px; bottom: 24px; }
+#s6 .w1 { left: 56px; top: 56px; --s: .72; }
+#s6 .w2 { right: 40px; bottom: 40px; --s: .50; z-index: 2; }
+#s6 .lang { position: absolute; left: 56px; bottom: 64px; display: flex; gap: 12px; z-index: 3; }
+#s6 .lang span { display: inline-flex; align-items: center; gap: 10px; height: 56px; padding: 0 22px 0 12px; border-radius: 99px; background: #fff; font: 600 20px/1 var(--body); color: var(--ink); box-shadow: 0 16px 30px -12px rgb(5 10 60 / 0.5); }
+#s6 .lang span i { width: 34px; height: 34px; border-radius: 50%; background: var(--lime); display: grid; place-items: center; }
+#s6 .lang span i svg { width: 18px; height: 18px; }
+
+/* ── Slide 7: WorkBuddy ─────────────────────────────────────────────── */
+#s7 .eb { position: absolute; left: 72px; top: 72px; }
+#s7 .h { position: absolute; left: 72px; top: 152px; font-size: 128px; }
+#s7 .cards { position: absolute; left: 72px; right: 72px; top: 450px; height: 470px; display: grid; grid-template-columns: 1.55fr 1fr 1fr 1fr; gap: 20px; }
+#s7 .card { border-radius: var(--r-md); padding: 28px 28px 30px; background: rgb(255 255 255 / 0.08); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.18); display: flex; flex-direction: column; color: #fff; }
+#s7 .card .hd { display: flex; align-items: center; gap: 14px; margin-bottom: auto; }
+#s7 .card .n { font: 700 22px/1 var(--display); color: rgb(255 255 255 / 0.55); letter-spacing: -0.02em; }
+#s7 .card .ic { width: 52px; height: 52px; border-radius: 15px; background: var(--lime); color: var(--ink); display: grid; place-items: center; margin-left: auto; }
+#s7 .card .ic svg { width: 26px; height: 26px; }
+#s7 .card h4 { margin: 0 0 12px; font: 700 34px/1 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+#s7 .card p { margin: 0; font: 400 21px/1.4 var(--body); color: rgb(255 255 255 / 0.8); }
+#s7 .card.white { background: #fff; color: var(--ink); box-shadow: 0 30px 60px -30px rgb(5 10 60 / 0.6); }
+#s7 .card.white .n { color: var(--text-3); }
+#s7 .card.white p { color: var(--text-2); }
+#s7 .card.lime { background: var(--lime); color: var(--ink); box-shadow: none; }
+#s7 .card.lime .n { color: rgb(11 13 16 / 0.5); }
+#s7 .card.lime .ic { background: var(--ink); color: var(--lime); }
+#s7 .card.lime p { color: rgb(11 13 16 / 0.78); }
+#s7 .big { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 0 22px; }
+#s7 .big div { border-radius: 20px; background: #F6F7FA; padding: 18px 20px; }
+#s7 .big b { display: block; font: 700 76px/1 var(--display); letter-spacing: -0.05em; color: var(--cobalt); }
+#s7 .big span { display: block; margin-top: 10px; font: 500 17px/1.3 var(--body); color: var(--ink-3); }
+#s7 .big em { font-style: normal; color: var(--text-2); }
+#s7 .foot { position: absolute; left: 72px; right: 72px; bottom: 58px; display: flex; align-items: center; gap: 14px; }
+#s7 .foot .dotl { width: 12px; height: 12px; border-radius: 50%; background: var(--lime); }
+#s7 .o1 { width: 300px; right: 40px; top: 30px; transform: rotate(10deg); }
+
+/* ── Slide 8: open source ───────────────────────────────────────────── */
+#s8 .eb { position: absolute; left: 72px; top: 72px; }
+#s8 .h { position: absolute; left: 72px; top: 150px; font-size: 116px; width: 1300px; }
+#s8 .rows { position: absolute; left: 72px; top: 506px; width: 1190px; display: grid; gap: 14px; }
+#s8 .row { display: flex; align-items: center; gap: 20px; height: 78px; padding: 0 26px 0 16px; border-radius: 22px; background: rgb(255 255 255 / 0.06); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.12); }
+#s8 .row .ic { width: 52px; height: 52px; border-radius: 15px; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; }
+#s8 .row .ic svg { width: 26px; height: 26px; }
+#s8 .row .k { font: 500 19px/1 var(--body); color: rgb(255 255 255 / 0.6); width: 230px; flex: none; }
+#s8 .row .v { font: 600 25px/1 var(--body); color: #fff; letter-spacing: -0.01em; white-space: nowrap; }
+#s8 .end { position: absolute; left: 72px; bottom: 64px; margin: 0; font: 700 70px/0.95 var(--display); letter-spacing: -0.045em; text-transform: uppercase; color: var(--lime); }
+#s8 .o1 { width: 500px; right: 50px; top: 110px; }
+#s8 .team { position: absolute; right: 72px; bottom: 78px; text-align: right; }
+#s8 .team b { display: block; font: 700 28px/1.1 var(--display); letter-spacing: -0.02em; color: #fff; }
+#s8 .team span { display: block; margin-top: 8px; font: 500 19px/1.4 var(--body); color: rgb(255 255 255 / 0.6); }
+
+/* ── Presenter chrome ──────────────────────────────────────────────── */
+.exporting .hud { display: none; }
+.hud { position: fixed; right: 18px; bottom: 14px; z-index: 10; font: 500 13px/1 var(--body); color: rgb(255 255 255 / 0.45); user-select: none; }
+
+/* ── Print: one slide per 1920x1080 page ───────────────────────────── */
+@page { size: 1920px 1080px; margin: 0; }
+@media print {
+  html, body { height: auto; overflow: visible; background: var(--page); }
+  .stage { position: static; transform: none !important; width: 1920px; height: auto; }
+  .slide { position: relative; visibility: visible; opacity: 1; transition: none; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .hud { display: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z" fill="currentColor"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a1.6 1.6 0 0 1 1.6-1.6h4.6l2.1 2.2h8.1A1.6 1.6 0 0 1 21 9.2v9.2A1.6 1.6 0 0 1 19.4 20H4.6A1.6 1.6 0 0 1 3 18.4z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6 2.8h8l4.5 4.5v13a1.2 1.2 0 0 1-1.2 1.2H6a1.2 1.2 0 0 1-1.2-1.2V4A1.2 1.2 0 0 1 6 2.8z"/><path d="M14 2.8v4.5h4.5"/></g></symbol>
+    <symbol id="i-slides" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M12 16.5V20M8 20h8"/></g></symbol>
+    <symbol id="i-scales" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 7h14M5 7l-2.5 6a2.8 2.8 0 0 0 5 0zM19 7l-2.5 6a2.8 2.8 0 0 0 5 0z"/></g></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M8.5 7L3.5 12l5 5M15.5 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M15.5 4.5l4 4L8 20H4v-4zM13 7l4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></g><circle cx="12" cy="12" r="1.7" fill="currentColor"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></g></symbol>
+    <symbol id="i-cards" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="7" y="3" width="13" height="16" rx="2"/><path d="M4 7v12a2 2 0 0 0 2 2h9"/></g></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></g></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.5l1.6 1.6 3-3M3.5 13.5l1.6 1.6 3-3M11 7h9.5M11 14h9.5M11 20h9.5"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></g></symbol>
+    <symbol id="i-vs" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></g></symbol>
+    <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M9 3.5h3.5v2a2 2 0 1 0 4 0v-2H20v6.5h-2a2 2 0 1 0 0 4h2V20h-6.5v-2a2 2 0 1 0-4 0v2H4v-6.5h2a2 2 0 1 0 0-4H4V3.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></g></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.3 3.5 8.5s-1.1 6.1-3.5 8.5M12 3.5C9.6 5.9 8.5 8.8 8.5 12s1.1 6.1 3.5 8.5"/></g></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15.5" r="4"/><path d="M11 12.5L20 3.5M16.5 7l2.5 2.5"/></g></symbol>
+    <symbol id="i-speaker" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12.5 5v14l-5-4.5H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g></symbol>
+    <symbol id="w-min" viewBox="0 0 12 12"><path d="M1 6h10" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="w-max" viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="w-x" viewBox="0 0 12 12"><path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" stroke-width="1.2"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage" id="stage">
+
+<!-- 1 · Title -->
+<section class="slide on" id="s1" data-n="1">
+  <div class="slab cobalt full grain">
+    <span class="eb dark"><span class="dot"><svg><use href="#i-spark"/></svg></span>Dormathon 2026 · Track 2</span>
+    <h1 class="h">BiliMind<br><span class="hchip"><svg><use href="#i-arrow"/></svg></span> Desktop</h1>
+    <p class="sub">Drop in your files. Get a course, checked against them.</p>
+    <div class="team">
+      <p class="who">Team Opus Magnum <span>(#58)</span> · Taylor's University</p>
+      <p class="names">Oybek Odilov · Abdugaffor Odilov · Ramil Khutlimuratov · Gameel Al-Bazeeli</p>
+    </div>
+    <div class="win">
+      <div class="bar"><i class="lg"></i><span class="ttl">BiliMind Desktop</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-app src="app/index.html?deck=home" title="BiliMind Desktop home screen"></iframe><div class="shield"></div></div>
+    </div>
+    <img class="obj o1" src="img/obj-cap.webp" alt="">
+    <img class="obj o2" src="img/obj-docs.webp" alt="">
+  </div>
+</section>
+
+<!-- 2 · The problem -->
+<section class="slide" id="s2" data-n="2">
+  <div class="txt">
+    <span class="eb"><span class="dot"><svg><use href="#i-spark"/></svg></span>The problem</span>
+    <h2 class="h">Exam in <span class="hchip ink"><svg><use href="#i-clock"/></svg></span> 3&nbsp;days.<br>A folder of slides.<br><span class="cob">No plan.</span></h2>
+    <p class="line">Last year's paper is in there somewhere.</p>
+    <p class="line">Making questions, flashcards and a schedule takes <b>hours you don't have.</b></p>
+  </div>
+  <div class="slab cobalt grain">
+    <div class="folder">
+      <div class="ftab"></div>
+      <div class="fbody">
+        <div class="fhead"><span class="fi"><svg><use href="#i-folder"/></svg></span><div><b>ds-final</b><span>5 files · 63 pages</span></div></div>
+        <div class="file"><span class="ic"><svg><use href="#i-slides"/></svg></span><span class="nm">CSC2103-L01-analysis-arrays-linked-lists.pdf</span><span class="pg">16 slides</span></div>
+        <div class="file"><span class="ic"><svg><use href="#i-slides"/></svg></span><span class="nm">CSC2103-L02-hash-tables.pdf</span><span class="pg">16 slides</span></div>
+        <div class="file"><span class="ic"><svg><use href="#i-slides"/></svg></span><span class="nm">CSC2103-L03-bst-and-avl-trees.pdf</span><span class="pg">15 slides</span></div>
+        <div class="file"><span class="ic"><svg><use href="#i-slides"/></svg></span><span class="nm">CSC2103-L04-binary-heaps.pdf</span><span class="pg">14 slides</span></div>
+        <div class="file paper"><span class="ic"><svg><use href="#i-file"/></svg></span><span class="nm">past-paper.pdf</span><span class="tag">Last year's paper</span></div>
+      </div>
+    </div>
+    <div class="q"><span><s>Questions</s></span><span><s>Flashcards</s></span><span><s>Schedule</s></span></div>
+  </div>
+</section>
+
+<!-- 3 · The solution -->
+<section class="slide" id="s3" data-n="3">
+  <div class="txt">
+    <span class="eb"><span class="dot"><svg><use href="#i-spark"/></svg></span>The solution</span>
+    <h2 class="h">One folder.<br>One sentence.<br><span class="cob">One course.</span></h2>
+    <p class="line">BiliMind Desktop turns your own files into a <b>narrated, checked course</b> on your laptop, with your own AI key.</p>
+  </div>
+  <div class="prompt">
+    <div class="lb"><i>1</i>What do you need?</div>
+    <p>“My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.”</p>
+    <div class="go">
+      <span class="fold"><span class="fi"><svg><use href="#i-folder"/></svg></span><span><b>ds-final</b> · 5 files</span></span>
+      <span class="pill">Build my course <span class="arr"><svg><use href="#i-arrow"/></svg></span></span>
+    </div>
+  </div>
+  <div class="slab cobalt grain">
+    <div class="win w1">
+      <div class="bar"><i class="lg"></i><span class="ttl">BiliMind Desktop</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-app src="app/index.html?deck=filled" title="BiliMind Desktop with a folder and a sentence"></iframe><div class="shield"></div></div>
+    </div>
+    <div class="arrow"><svg><use href="#i-arrow"/></svg><small>Minutes later</small></div>
+    <div class="win w2">
+      <div class="bar"><i class="lg"></i><span class="ttl">CSC2103 Data Structures final · offline course</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-course src="../../showcase/courses/ds-final/index.html#/?now=2026-10-11" title="The finished Data Structures course"></iframe><div class="shield"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · How it works -->
+<section class="slide" id="s4" data-n="4">
+  <span class="eb"><span class="dot"><svg><use href="#i-spark"/></svg></span>How it works</span>
+  <h2 class="h">A course team <span class="hchip cobalt"><svg><use href="#i-target"/></svg></span> in one app.</h2>
+  <div class="flow">
+    <div class="node lead">
+      <div class="hd"><span class="ic"><svg><use href="#i-target"/></svg></span><span class="nm">Lead</span></div>
+      <p>Reads your files, weights topics by last year's marks, fits the plan to your days, cuts what the paper never asks.</p>
+    </div>
+    <div class="node">
+      <div class="hd"><span class="ic"><svg><use href="#i-pencil"/></svg></span><span class="nm">Writers</span><span class="x">in parallel</span></div>
+      <div class="stack"><span><i></i>Lesson 1 · hash tables</span><span><i></i>Lesson 2 · search trees</span><span><i></i>Lesson 3 · heaps</span></div>
+    </div>
+    <div class="node">
+      <div class="hd"><span class="ic"><svg><use href="#i-code"/></svg></span><span class="nm">Coder</span><span style="opacity:.35;font:700 24px/1 var(--display)">+</span><span class="ic"><svg><use href="#i-scales"/></svg></span><span class="nm">Checker</span></div>
+      <p><b>Runs every code exercise.</b></p>
+      <p><b>Re-solves every answer</b> against your files, rejects and rewrites wrong ones.</p>
+    </div>
+    <div class="node">
+      <div class="hd"><span class="nm">You get</span></div>
+      <div class="outs">
+        <span><svg><use href="#i-mic"/></svg>Narration</span>
+        <span><svg><use href="#i-cards"/></svg>Anki deck</span>
+        <span><svg><use href="#i-cal"/></svg>Calendar</span>
+        <span><svg><use href="#i-list"/></svg>Plan</span>
+      </div>
+    </div>
+  </div>
+  <div class="slab ink grain">
+    <div class="win dark">
+      <div class="bar"><i class="lg lime"></i><span class="ttl">BiliMind Desktop · building your course</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-app data-replay src="app/index.html?deck=building&amp;replay=14" title="The crew building a course, live"></iframe><div class="shield"></div></div>
+    </div>
+    <div class="run">
+      <span class="eb dark"><span class="dot"><svg><use href="#i-check"/></svg></span>A real run in the desktop app</span>
+      <h3>Data Structures folder, <span>one click</span></h3>
+      <div class="tiles">
+        <div class="tile lime"><b>3 min 23 s</b><span>Time to build</span></div>
+        <div class="tile"><b>$0.036</b><span>Cost of the AI</span></div>
+        <div class="tile"><b>91<small>/91</small></b><span>Checks passed</span></div>
+        <div class="tile"><b>8<small>/8</small></b><span>Code tests passed</span></div>
+        <div class="tile"><b>3 <small>kept</small></b><span>Lessons (11 topics cut)</span></div>
+        <div class="tile"><b>18.5 <small>min</small></b><span>Narration</span></div>
+      </div>
+      <p class="small">Left: the live canvas replaying a recorded run. The Checker has just rejected a wrong answer key and rewritten it from the slides.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · Proof -->
+<section class="slide" id="s5" data-n="5">
+  <div class="slab ink full grain">
+    <span class="eb dark"><span class="dot"><svg><use href="#i-scales"/></svg></span>Proof it's right</span>
+    <h2 class="h">It checks itself <span class="hchip"><svg><use href="#i-check"/></svg></span> against your <span class="lime">slides.</span></h2>
+    <div class="rej">
+      <div class="hd"><span class="ic"><svg><use href="#i-scales"/></svg></span><div><b>Checker</b><br><span>Hash tables lesson · question 3</span></div><span class="st"><svg width="16" height="16"><use href="#i-x"/></svg>Rejected</span></div>
+      <div class="key"><span class="x"><svg><use href="#i-x"/></svg></span><div><div class="lbl">Answer key</div><p>49 goes to slot 9</p></div></div>
+      <div class="quote"><div class="lbl">Your slide says</div><p>“49 → 9 taken, try 0: 2 probes”</p><div class="src"><svg><use href="#i-file"/></svg>CSC2103-L02-hash-tables.pdf · Slide 11</div></div>
+      <div class="fix"><span class="ok"><svg><use href="#i-check"/></svg></span>Rewritten from your slides<span>never shown to the student</span></div>
+    </div>
+    <div class="win">
+      <div class="bar"><i class="lg"></i><span class="ttl">BiliMind Desktop · your course is ready</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp tall" style="--h:740px"><iframe data-app src="app/index.html?deck=finished&amp;replay=3" title="The finished course screen"></iframe><div class="shield"></div></div>
+    </div>
+    <div class="nums">
+      <div class="num lime"><b>80/80</b><span>checks passed</span></div>
+      <div class="num"><b>14/14</b><span>code tests (1 fixed by the Coder)</span></div>
+      <div class="num"><b>3</b><span>wrong answers rejected and rewritten</span></div>
+      <div class="num"><b>$0.04</b><span>per course</span></div>
+    </div>
+    <p class="small meas">Data Structures course. Measured unattended runs: 268 s and 289 s, $0.046 and $0.047 per course.</p>
+  </div>
+</section>
+
+<!-- 6 · Small businesses -->
+<section class="slide" id="s6" data-n="6">
+  <div class="txt">
+    <span class="eb"><span class="dot"><svg><use href="#i-spark"/></svg></span>Small businesses too</span>
+    <h2 class="h">Same app.<br>A shop's <span class="cob">SOP.</span></h2>
+    <p class="line">A bubble-tea shop's SOP became a <b>day-one course with a pass mark</b>, narrated in English and Malay.</p>
+  </div>
+  <div class="stats">
+    <div class="st lime"><b>7</b><span>lessons</span></div>
+    <div class="st"><b>231/231</b><span>checks passed</span></div>
+    <div class="st"><b>64</b><span>Anki cards</span></div>
+    <div class="st ink"><b>$0.09</b><span>for the whole course</span></div>
+  </div>
+  <div class="slab cobalt grain">
+    <div class="win w1">
+      <div class="bar"><i class="lg"></i><span class="ttl">Mutiara Tea Bar crew day-one · offline course</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-course src="../../showcase/courses/boba-day-one/index.html#/?now=2026-10-11" title="Mutiara Tea Bar crew day-one course"></iframe><div class="shield"></div></div>
+    </div>
+    <div class="win w2">
+      <div class="bar"><i class="lg"></i><span class="ttl">Step 5 · Taking an order in Malay</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-course src="../../showcase/courses/boba-day-one/index.html#/l/malay_order_phrases?b=b5&amp;now=2026-10-11" title="A Malay ordering drill from the course"></iframe><div class="shield"></div></div>
+    </div>
+    <div class="lang"><span><i><svg><use href="#i-speaker"/></svg></i>English</span><span><i><svg><use href="#i-speaker"/></svg></i>Bahasa Melayu</span></div>
+  </div>
+</section>
+
+<!-- 7 · WorkBuddy -->
+<section class="slide" id="s7" data-n="7">
+  <div class="slab cobalt full grain">
+    <span class="eb dark"><span class="dot"><svg><use href="#i-spark"/></svg></span>How we used WorkBuddy</span>
+    <h2 class="h">Where WorkBuddy<br><span class="hchip"><svg><use href="#i-puzzle"/></svg></span> came <span class="lime">in.</span></h2>
+    <img class="obj o1" src="img/obj-check.webp" alt="">
+    <div class="cards">
+      <div class="card white">
+        <div class="big">
+          <div><b>22.2%</b><span>staff attrition in Malaysian retail and hospitality <em>(Aon 2025)</em></span></div>
+          <div><b>51%</b><span>of students deterred by AI errors <em>(HEPI 2026)</em></span></div>
+        </div>
+        <div class="hd" style="margin-bottom:12px"><span class="n">01</span></div>
+        <h4>Deep Research</h4>
+        <p>Idea validated with WorkBuddy Deep Research.</p>
+      </div>
+      <div class="card">
+        <div class="hd"><span class="n">02</span><span class="ic"><svg><use href="#i-slides"/></svg></span></div>
+        <h4>Slides Creation</h4>
+        <p>Our first pitch deck: generated in WorkBuddy Slides Creation.</p>
+      </div>
+      <div class="card">
+        <div class="hd"><span class="n">03</span><span class="ic"><svg><use href="#i-vs"/></svg></span></div>
+        <h4>Head to head</h4>
+        <p>Plain WorkBuddy vs BiliMind on the same student request: a plan, but no slide citations, tested code, narration or exports.</p>
+      </div>
+      <div class="card lime">
+        <div class="hd"><span class="n">04</span><span class="ic"><svg><use href="#i-puzzle"/></svg></span></div>
+        <h4>Skill + Expert Team</h4>
+        <p>BiliMind also ships as a WorkBuddy skill and Expert Team, validated with WorkBuddy's own validator.</p>
+      </div>
+    </div>
+    <div class="foot"><i class="dotl"></i><span class="small">The desktop app was built by our team with AI coding agents.</span></div>
+  </div>
+</section>
+
+<!-- 8 · Open source -->
+<section class="slide" id="s8" data-n="8">
+  <div class="slab ink full grain">
+    <span class="eb dark"><span class="dot"><svg><use href="#i-lock"/></svg></span>Open source · AGPL-3.0</span>
+    <h2 class="h">Free. Open source.<br>Your files <span class="hchip"><svg><use href="#i-lock"/></svg></span> stay yours.</h2>
+    <img class="obj o1" src="img/obj-rocket.webp" alt="">
+    <div class="rows">
+      <div class="row"><span class="ic"><svg><use href="#i-download"/></svg></span><span class="k">Download for Windows</span><span class="v">github.com/Odilient/bilimind-desktop/releases</span></div>
+      <div class="row"><span class="ic"><svg><use href="#i-globe"/></svg></span><span class="k">Website</span><span class="v">odilient.github.io/bilimind-desktop</span></div>
+      <div class="row"><span class="ic"><svg><use href="#i-key"/></svg></span><span class="k">AGPL-3.0</span><span class="v">Bring your own DeepSeek or OpenRouter key · about 5 cents a course</span></div>
+    </div>
+    <p class="end">Drop in your files.<br>Get a course.</p>
+    <div class="team"><b>Opus Magnum (#58)</b><span>Taylor's University · Dormathon 2026</span></div>
+  </div>
+</section>
+
+</div>
+<div class="hud" id="hud"></div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var hud = document.getElementById('hud');
+  var exporting = /[?&]export\b/.test(location.search);
+  if (exporting) document.documentElement.classList.add('exporting');
+  var cur = 0;
+  var m = /^#(\d+)$/.exec(location.hash); if (m) cur = Math.min(slides.length - 1, Math.max(0, +m[1] - 1));
+
+  function fit() {
+    var s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = 'translate(' + (-960 * s) + 'px,' + (-540 * s) + 'px) scale(' + s + ')';
+  }
+  function show(i) {
+    var prev = cur;
+    cur = Math.min(slides.length - 1, Math.max(0, i));
+    slides.forEach(function (el, k) { el.classList.toggle('on', k === cur); });
+    hud.textContent = (cur + 1) + ' / ' + slides.length;
+    if (history.replaceState) history.replaceState(null, '', '#' + (cur + 1));
+    // Presenting: entering the crew slide replays the live run from the start.
+    if (!exporting && cur !== prev) {
+      var f = slides[cur].querySelector('iframe[data-replay]');
+      if (f) f.src = f.getAttribute('src');
+    }
+  }
+  addEventListener('resize', fit);
+  addEventListener('keydown', function (e) {
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].indexOf(e.key) >= 0) { e.preventDefault(); show(cur + 1); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].indexOf(e.key) >= 0) { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }
+  });
+  addEventListener('click', function (e) { show(e.clientX < innerWidth * 0.25 ? cur - 1 : cur + 1); });
+
+  // Readiness for the PDF export: every live app frame reports its state, course players report load.
+  var apps = document.querySelectorAll('iframe[data-app]').length, appsReady = 0;
+  var courses = [].slice.call(document.querySelectorAll('iframe[data-course]')), coursesReady = 0;
+  addEventListener('message', function (e) { if (e.data && e.data.bmDeck === 'ready') { appsReady++; check(); } });
+  courses.forEach(function (f) { f.addEventListener('load', function () { coursesReady++; check(); }); });
+  function check() {
+    if (appsReady >= apps && coursesReady >= courses.length) document.fonts.ready.then(function () { setTimeout(function () { window.__deckReady = true; }, 1500); });
+  }
+  window.__show = show;
+  fit(); show(cur);
+})();
+</script>
+</body>
+</html>
