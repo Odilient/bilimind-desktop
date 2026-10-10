@@ -1,193 +1,203 @@
 # BiliMind Desktop
 
-**Drop in your files. Get a course, checked against them.**
+**Drop in your files, type one sentence, get a course checked against them.**
 
-BiliMind Desktop is an open-source Windows app that turns a folder of your own files and one sentence into a
-narrated, interactive course you keep. A student with an exam in three days drops in the lecture slides and
-last year's paper, types "My Data Structures final is Wednesday 9am, I have 45 minutes a day", and gets a
-study plan sized to those days, lessons weighted by the past paper's marks, code exercises that run, quizzes
-whose answers were re-checked against the slides, narration, an Anki deck and a review calendar. A small
-business does the same with its SOP: a bubble-tea shop that hires new crew every few weeks turns its
-operations manual into a day-one course with a pass mark. Everything runs on your machine, the AI is free to
-start (or use your own key), and everything it makes lands in a normal folder you own.
+BiliMind Desktop is a Windows app for two kinds of people: students with an exam coming, and small
+businesses that keep training new staff. You drop in your lecture slides and last year's paper, or your
+shop's SOP, and say what you need in one sentence. A few minutes later you have a narrated course:
+lessons, quizzes checked against your own files, code exercises that run, a study plan sized to your
+days, flashcards and a review calendar. It is free, needs no account and no key, the finished course
+works offline, and the code is open source.
 
-Built by team **Opus Magnum (#58), Taylor's University branch**, for **Dormathon 2026, Track 2**: "How can AI
-help students and small businesses solve real business problems and operate more effectively?"
+![BiliMind Desktop: your course, with the assistant answering from your files](docs/img/app-workspace.png)
 
-## Download
+### [Download for Windows](https://github.com/Odilient/bilimind-desktop/releases/latest)
 
-- **Windows (installer or portable):** https://github.com/Odilient/bilimind-desktop/releases/latest
-- **Website:** https://odilient.github.io/bilimind-desktop/
-- **Source:** https://github.com/Odilient/bilimind-desktop
-- **Try courses it made, no install** (they play in the browser, with narration):
-  [Data Structures final](https://odilient.github.io/bilimind-desktop/courses/ds-final/) ·
-  [Boba shop: day one for new crew](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/) ·
-  [Survival Malay](https://odilient.github.io/bilimind-desktop/courses/bm-survival/)
+**Try a course it made, in your browser, no install:**
+[Data Structures final](https://odilient.github.io/bilimind-desktop/courses/ds-final/) ·
+[Boba shop: day one for new crew](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/) ·
+[Survival Malay](https://odilient.github.io/bilimind-desktop/courses/bm-survival/)
 
-No account, no login. The AI is free out of the box (BiliMind free, no key); you can switch to your own
-DeepSeek or OpenRouter key (see [AI: free, or your own key](#ai-free-or-your-own-key)).
+[Website](https://odilient.github.io/bilimind-desktop/) ·
+[Pitch deck (PDF)](https://odilient.github.io/bilimind-desktop/downloads/BiliMind-Desktop-Deck.pdf) ·
+[How we used WorkBuddy](docs/workbuddy.md) ·
+[For judges: Dormathon 2026, Track 2](#dormathon-2026--track-2)
 
-## Screenshots
+## What it does
 
-![Home: pick a folder and type one sentence](docs/img/app-home.png)
+1. **Drop your files.** Lecture slides, a past exam paper, notes or an SOP. A whole folder or a few files.
+2. **Type one sentence.** "My Data Structures final is Wednesday 9am. The slides and last year's paper
+   are in this folder. I have 45 minutes a day. Get me ready."
+3. **Get your course.** BiliMind reads your files, plans your days, writes the lessons, tests the code,
+   checks the answers against your files and records the narration. You watch each step as it happens.
+   It asks you nothing along the way. In our runs in the app, a course took about 3 to 5 minutes.
 
-![Building: the crew at work, step by step](docs/img/app-building.png)
+![Home: drop your files or a folder and type one sentence](docs/img/app-home.png)
+
+![Building: each step of the crew, in plain words](docs/img/app-building.png)
+
+![Your course: the lesson, the narration, and an assistant that answers from your files with the slide it came from](docs/img/app-workspace.png)
+
+## What you get
+
+- **Lessons in the format that fits.** A procedure gets a walkthrough, a formula gets a worked example,
+  a language gets speaking drills.
+- **Narration.** Every lesson is read aloud, and the page highlights the sentence being read.
+- **Quizzes checked against your files.** Anything your files do not cover is labelled "Beyond your slides".
+- **Code exercises that run**, for programming subjects.
+- **An assistant beside every lesson.** Ask a question and it answers from your files, with the file,
+  the slide or page and the quote for each point. It shows what each answer cost.
+- **A study plan** sized to the days you have, weighted by last year's marks when you add a past paper.
+- **An Anki deck** (`deck.csv`) and **a review calendar** (`reviews.ics`).
+- **A folder you own** in `Documents\BiliMind`. The course is one `index.html` that opens in any browser
+  and works offline.
+
+## One engine, many ways to use it
+
+| Way | For whom | How to start | Link |
+|---|---|---|---|
+| **BiliMind Desktop** (Windows app) | Everyone. This is the main way. | Download, drop your files, type one sentence | [Download](https://github.com/Odilient/bilimind-desktop/releases/latest) |
+| **Inside WorkBuddy** | WorkBuddy users | Install the BiliMind skill or the "BiliMind Crew" Expert Team (a Lead, Writers, a Coder and a Checker), then type the same sentence; WorkBuddy's agent runs the crew | [skills/bilimind](skills/bilimind/), [workbuddy/bilimind-crew](workbuddy/bilimind-crew/), [install steps](docs/DEVELOPERS.md#workbuddy-skill-and-expert-team) |
+| **Command line** | Power users, scripts, automation | One file, `bilimind.mjs`, with Node 22 or newer. Every step is its own command (`init`, `ingest`, `outline`, `exam-map`, `plan`, `draft`, `check`, `code-test`, `narrate`, `build` and more) | [apps/cli](apps/cli/), [bilimind.mjs](skills/bilimind/scripts/bilimind.mjs) |
+| **The course itself** | Anyone you share it with | Open `index.html` in any browser, offline, or put it online like our three demo courses. `deck.csv` goes into Anki, `reviews.ics` into your calendar, `plan.md` is the study plan | [The three demo courses](#made-for) |
+| **BiliMind free** (the AI service) | Nobody opens it | The app and the command line use it by default, so nobody needs a key. Open source; its key lives only on the server | [server/free-proxy](server/free-proxy/) |
+| **bilimind.com** | | Our separate online product, with accounts. It is not in this repo | [bilimind.com](https://bilimind.com) |
+
+## Made for
+
+Three courses BiliMind made, playable on the website. After the run, our team reviewed each one (see
+[Why you can trust it](#why-you-can-trust-it)).
+
+**A student before an exam.** "My Data Structures final is Wednesday 9am. The slides and last year's paper
+are in this folder. I have 45 minutes a day. Get me ready." From 4 lecture decks and a past paper (63
+pages), BiliMind planned 3 lessons for the 3 days left, chosen by last year's marks, with a reason for
+every topic it cut. 14 code tests, 3 answers rejected against the slides and rewritten, 24 minutes of
+narration, $0.04.
+[Open the course](https://odilient.github.io/bilimind-desktop/courses/ds-final/) ·
+[what the agents did](showcase/courses/ds-final/REPORT.md)
+
+**A bubble-tea shop training new crew.** "We hire new crew every few weeks at Mutiara Tea Bar. Turn our
+SOP folder into a day-one course they must pass before their first shift, narrated in English and Malay."
+From the shop's SOP and a one-page food-hygiene regulation: 7 lessons, from handwashing to building a
+drink to the sticker, 64 Anki cards, 35 minutes of narration, $0.09.
+[Open the course](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/) ·
+[what the agents did](showcase/courses/boba-day-one/REPORT.md)
+
+**An international student learning Malay.** 20 minutes a day for 2 weeks: ordering at the mamak, Grab,
+campus. 8 lessons with speaking drills read by a Malaysian voice, $0.06.
+[Open the course](https://odilient.github.io/bilimind-desktop/courses/bm-survival/) ·
+[what the agents did](showcase/courses/bm-survival/REPORT.md)
+
+## Why you can trust it
+
+- **Every auto-marked answer is solved again against your files.** If your files contradict it, it is
+  rejected with the exact quote from your slide or page, and rewritten. The quote must match your file word
+  for word, so the checker cannot invent evidence.
+- **Every code exercise is run.** The model solution must pass every test, and the starting code must fail
+  at least one. A broken exercise is fixed or switched off with a reason.
+- **Every course comes with a report** (`REPORT.md`): every check, every rejected answer, what was cut and
+  why, the time and the cost.
+
+Real runs, on our own laptop:
+
+| Run | Your files | Lessons | Checks passed | Wrong answers rejected | Code tests | Narration | AI cost | Time |
+|---|---|---|---|---|---|---|---|---|
+| App, run 1 | Data Structures, 5 PDFs (63 pages) | 3 | 91/91 | 0 | 8/8 | 18.5 min | $0.036 | 3 min 23 s |
+| App, run 2 | same | 3 | 98/100 | 0 | 4/4 | 32 min | $0.049 | 4 min 42 s |
+| App, run 3 (packaged app) | same | 3 | 79/80 | 2 | 13/13 | 24.4 min | $0.032 | 3 min 37 s |
+| [App, fresh install, no key (BiliMind free)](hackathon/proof/free-provider-fresh-install-run.txt) | same | 2 of 3 planned | 52/53 | 0 | 4 runs, all ok | 10.9 min | $0.016 | 5 min 10 s |
+| Demo: [Data Structures final](showcase/courses/ds-final/REPORT.md) | 5 PDFs (63 pages) | 3 | 80/80 | 3 | 14/14 | 24.3 min | $0.040 | 19 min 39 s |
+| Demo: [Boba shop day one](showcase/courses/boba-day-one/REPORT.md) | 2 files (21 pages) | 7 | 231/231 | 1 | no code | 34.7 min | $0.094 | 24 min 39 s |
+| Demo: [Survival Malay](showcase/courses/bm-survival/REPORT.md) | 2 files (12 pages) | 8 | 228/229 | 3 | no code | 39.2 min | $0.055 | 30 min 1 s |
+
+The app runs are as the app recorded them, with no review afterwards (every step's time and cost:
+[desktop-run-timings.json](hackathon/proof/desktop-run-timings.json)). In the fresh-install run one lesson
+failed its draft twice, so the app dropped it and finished the other two. The three demo courses started as
+the same kind of run, then our team reviewed them with an AI coding agent (re-planning, fixing exercises,
+correcting lesson text). Their steps are in each course's `crew/log.jsonl`, and every hand change is
+described in [showcase/courses/_notes](showcase/courses/_notes/). That review is why they took longer.
 
 ![Finished: the checks, the cost and the files you own](docs/img/app-finished.png)
 
-![The course: lessons, runnable code, quizzes with the slide they come from, narration](docs/img/app-course.png)
+## Free and private
 
-## How it works
+- **Free by default.** "BiliMind free" is the AI the app uses out of the box: no account, no key. The team
+  pays for it; our runs cost between $0.016 and $0.094 a course. Its code is open
+  ([server/free-proxy](server/free-proxy/)) and its AI key lives only on that server.
+- **Your files stay on your computer.** To write the course and to answer your questions, text from your
+  files is sent to the AI (through BiliMind free, or straight to the provider if you use your own key).
+  Narration text goes to Microsoft Edge's online voices. The course, your files and the report stay in
+  your folder.
+- **Your own key, if you want.** DeepSeek or OpenRouter, in Settings. Then your text goes straight to that
+  provider. The key is kept in `%USERPROFILE%\.bilimind\config.json` and never shown in the app.
+- **Spending limits.** Each course stops at $0.25 and each day at $2 by default.
 
-```mermaid
-flowchart LR
-    U["You: a folder + one sentence<br/>slides, past paper, notes or SOP"] --> L1["Lead<br/>reads the files, weights the past paper,<br/>plans the days, keeps and cuts topics"]
-    L1 --> W1["Writer: lesson 1"]
-    L1 --> W2["Writer: lesson 2"]
-    L1 --> W3["Writer: lesson N"]
-    W1 & W2 & W3 --> C["Coder<br/>runs every code exercise"]
-    W1 & W2 & W3 --> K["Checker<br/>re-solves every auto-marked answer<br/>against your files"]
-    C & K --> L2["Lead<br/>narration, Anki deck, calendar, plan"]
-    L2 --> F["A folder you own<br/>index.html, plan.md, REPORT.md,<br/>deck.csv, reviews.ics, lessons/"]
-```
+## Dormathon 2026 · Track 2
 
-1. **Lead** reads your files (which one is the past paper, which pages are scans), works out the goal from
-   your sentence (exam date and time, minutes a day, audience, language), weights each topic by the past
-   paper's marks, keeps and cuts topics with one reason each, and plans the days you have.
-2. **Writers**, one per lesson, write in parallel. The kind of knowledge decides the lesson format: a
-   procedure gets a walkthrough, a formula gets a worked example, a language gets speaking drills.
-3. **Coder** runs every code exercise. Nothing ships unless the reference solution passes every test and the
-   starter fails at least one; a broken exercise is fixed or switched off with a reason.
-4. **Checker** re-solves every auto-marked answer against your files. An answer your files contradict is
-   rejected with the exact quote from the slide or page, and rewritten. The quote is verified word for word,
-   so the Checker cannot invent evidence. Anything not in your files is labelled "Beyond your slides".
-5. **Narration** with Microsoft Edge's free online voices, one cue per sentence, so the page highlights what
-   is being read.
-6. **Your files**: an Anki deck (`deck.csv`), a review calendar dated back from the exam (`reviews.ics`),
-   `plan.md`, `REPORT.md` (every check, every rejection, the cost) and Markdown notes, all in
-   `Documents\BiliMind\<course>\`. The course is one `index.html` that works offline.
+> **Team Opus Magnum (#58), Taylor's University**
+> Oybek Odilov · Abdugaffor Odilov · Ramil Khutlimuratov · Gameel Al-Bazeeli
+>
+> Track 2 (WorkBuddy Track, "Agentic Solutions"): can your AI agent use WorkBuddy to solve a real problem
+> and actually get things done?
 
-More detail: [docs/how-it-works.md](docs/how-it-works.md). Output format: [docs/course-format.md](docs/course-format.md).
+**How it meets the Track 2 criteria**
 
-## AI: free, or your own key
+| Criterion | What we built | Evidence |
+|---|---|---|
+| 1. Problem relevance | Two real bottlenecks: a student turning a pile of slides into a plan before an exam, and a shop training new crew every few weeks from its SOP. One sentence in, a checked course out in minutes, for cents | The [three demo courses](#made-for) and their sentences; market check: [workbuddy-market-validation.md](hackathon/proof/workbuddy-market-validation.md) |
+| 2. Autonomous workflow | A Lead reads the goal and files, weights the past paper, plans the days, keeps and cuts topics with a reason each (in the app by marks per minute; in WorkBuddy the agent decides); Writers work in parallel; a Coder and a Checker verify; failed checks trigger a re-draft, a lesson that fails twice is dropped and the run continues. No questions to the user | [run.ts](packages/engine/src/run.ts), [desktop-run-timings.json](hackathon/proof/desktop-run-timings.json), [crew/log.jsonl](showcase/courses/ds-final/crew/log.jsonl), [plan.md](showcase/courses/ds-final/plan.md) |
+| 3. WorkBuddy integration | BiliMind ships as a WorkBuddy skill: WorkBuddy's agent is the Lead, launches Writer sub-agents in parallel, runs the `bilimind` command line that enforces schemas, tests and quotes, previews with `present_files` and can publish with `workbuddy_sites_deploy`. Also an Expert Team validated with WorkBuddy's `validate_expert.py`. We used WorkBuddy for our first deck, market research and a comparison. The same engine also runs as the Windows app and the command line. The courses in this repo were built by the app and the command line, not inside WorkBuddy | [SKILL.md](skills/bilimind/SKILL.md), [bilimind-crew](workbuddy/bilimind-crew/), [EXPERT-TEAM.md](hackathon/EXPERT-TEAM.md), [docs/workbuddy.md](docs/workbuddy.md) (task links and screenshots) |
+| 4. Reliability and verification | Built-in checks on every lesson, answers re-solved against your files with word-for-word quotes, code run against tests, a report per course; 338 automated tests | [REPORT.md](showcase/courses/ds-final/REPORT.md), [rulings](showcase/courses/ds-final/crew/evidence/), [verdicts](showcase/courses/ds-final/crew/verdicts/), [verdict.ts](packages/engine/src/verdict.ts), [codework.ts](packages/engine/src/codework.ts) |
+| 5. Live execution | A packaged Windows app; one sentence runs end to end with no further input; a fresh install with no key built a course; three courses play on the website; the same engine works from WorkBuddy and the command line | [Download](https://github.com/Odilient/bilimind-desktop/releases/latest), [film](https://odilient.github.io/bilimind-desktop/vid/bilimind-desktop.mp4), [deck](https://odilient.github.io/bilimind-desktop/downloads/BiliMind-Desktop-Deck.pdf), [screenshots](docs/img/) |
 
-**BiliMind free** is the default: a fresh install writes courses with no key at all. The app talks to
-`https://desktop-api.bilimind.com/v1`, an OpenAI-compatible service run by the team; the service's own
-OpenRouter key lives only on that server, never in the app, this repo or your computer. The app sends no
-`Authorization` header, only `X-BiliMind-Client: desktop/<version>`. The service is rate-limited; when it is
-busy or paused the app says so and suggests adding your own key.
+**One sentence, end to end.** After "My Data Structures final is Wednesday 9am. The slides and last year's
+paper are in this folder. I have 45 minutes a day. Get me ready." the crew, with no further input:
+reads the goal (exam Wednesday 14 October, 09:00, 45 minutes a day) → reads the 5 files and finds the past
+paper → outlines the topics → maps the past paper's marks to topics → keeps 3 lessons and cuts the rest
+with a reason each → 3 Writers draft in parallel and check their lessons → the Coder runs the exercises →
+the Checker rules on every answer → narration → Anki deck and calendar → the course. Trace with times and
+costs: [desktop-run-timings.json](hackathon/proof/desktop-run-timings.json).
 
-Your own key is optional: **DeepSeek** (direct API) or **OpenRouter**; pick it in Settings and paste the key.
-Then text goes straight to that provider, not through BiliMind. Narration needs no key. Measured cost:
-**about $0.05 per course** (two unattended runs on the sample Data Structures folder: $0.046 and $0.047,
-268 s and 289 s), paid by the team on BiliMind free and by you with your own key.
+**How we used WorkBuddy** ([details, task links and screenshots](docs/workbuddy.md)):
 
-The key is stored in `%USERPROFILE%\.bilimind\config.json`, the same file the CLI and the WorkBuddy skill
-read. It never reaches the app's window, and the app never logs it.
+| Where in WorkBuddy | What we did |
+|---|---|
+| Slides Creation | Made our first pitch deck from a written brief, then corrected it slide by slide |
+| Deep Research | Checked demand on both halves of Track 2 (students, small businesses), competitors and risks |
+| Plain chat | Sent our student sentence to WorkBuddy without BiliMind, to see the gap |
+| Skills and Expert Teams | Shipped BiliMind as a skill and as the "BiliMind Crew" Expert Team |
 
-```json
-{
-  "provider": "deepseek",
-  "keys": { "deepseek": "sk-...", "openrouter": "sk-or-..." }
-}
-```
+**Built at Dormathon and before.** BiliMind existed before Dormathon as a web app (bilimind.com). From it we
+reused the teaching approach: the lesson prompts and the rules that match each kind of knowledge to a
+lesson format. The desktop app, the engine, the checks, the planner, the course player, BiliMind free and
+the WorkBuddy skill and team were built during Dormathon (10-11 October 2026), with AI coding agents.
 
-`"provider"` is `"bilimind"` (free, no key), `"deepseek"` or `"openrouter"`. With no provider and no key the
-app and the CLI use `"bilimind"`; with a key and no provider they use that key's pool.
+## FAQ
 
-Optional fields: `models`, `caps` (`{"run_usd": 0.25, "day_usd": 2}` by default) and `reserve_usd` (a
-balance floor; set it to `0` for normal use; BiliMind free has none). Environment variables `DEEPSEEK_API_KEY`,
-`OPENROUTER_API_KEY` and `BILIMIND_PROVIDER` also work; `BILIMIND_FREE_URL` (or `"free_base_url"`) points
-BiliMind free at another server, for tests. Never commit a key: `.env` and `.env.*` are git-ignored.
+**I'm on a Mac or Linux.** The app is Windows only for now. Every course opens in any browser, on any
+computer or phone, so you can try the three demo courses above. The command line needs Node 22 or newer;
+we have tested it on Windows only.
 
-## Measured so far
+**Is it really free?** Yes. The app is free and open source, and BiliMind free pays for the AI. It has a
+rate limit; when it is busy the app says so, and you can wait or add your own key.
 
-Only numbers we measured on our own runs.
+**Does it need the internet?** To build a course and to ask the assistant, yes: the AI and the narration
+voices are online. A finished course opens without the internet.
 
-- Unattended pipeline (DeepSeek direct, sample Data Structures folder): 268 s and 289 s, $0.046 and $0.047
-  in text-model calls. About 4.5 to 5 minutes and about $0.05 per course; narration adds a little time.
-- The desktop app itself, three runs clicked through its own window (DeepSeek, narration on, the same
-  sample folder; two in the dev build, one in the packaged exe): 3 min 23 s, 4 min 42 s and 3 min 37 s,
-  $0.036, $0.049 and $0.032, checks 91/91, 98/100 and 79/80. Every step's time and cost:
-  [hackathon/proof/desktop-run-timings.json](hackathon/proof/desktop-run-timings.json).
-- Showcase courses, built with the agent workflow (a Lead, one Writer per lesson in parallel, a Coder and a
-  Checker), from each course's `REPORT.md` in `showcase/courses/`:
+**What files work?** PDF, Word (`.docx`), PowerPoint (`.pptx`), text and Markdown (`.txt`, `.md`) and web
+pages (`.html`). Save older `.doc` and `.ppt` files in the new format first. Scanned pages with no text
+layer cannot be read.
 
-  | Course | Lessons | Checks passed | Code tests | Rejected / rewritten | Anki cards | Narration | Text cost | Wall time |
-  |---|---|---|---|---|---|---|---|---|
-  | Data Structures final | 3 | 80/80 | 14/14 (1 fixed by the Coder) | 3 / 3 | 8 | 24.3 min | $0.040 | 19 min 39 s |
-  | Mutiara Tea Bar: crew day one | 7 | 231/231 | none | 1 / 1 | 64 | 34.7 min | $0.094 | 24 min 39 s |
-  | Bahasa Melayu survival | 8 | 228/229 (1 still flagged) | none | 3 / 3 | 72 | 39.2 min | $0.055 | 30 min 1 s |
+**Where does my course go?** To `Documents\BiliMind\<course>\` (you can change it in Settings). It holds
+`index.html`, `plan.md`, `REPORT.md`, `deck.csv`, `reviews.ics`, the narration and the lesson notes. Delete
+the folder and the course is gone.
 
-  An example rejection from the Data Structures course: the answer key said 49 goes to slot 9; the Checker
-  quoted slide 11 ("49 → 9 taken, try 0: 2 probes"), rejected it and rewrote the question.
-- Tests: core 55, engine 195 (2 live-voice tests skipped), player 73, CLI 12, skill 12, all passing at the
-  last integration gate.
-
-## Develop and build
-
-Requirements: Node 22 or newer (Node 24 runs the TypeScript sources directly), pnpm 10, Windows for the
-installer.
-
-```bash
-pnpm i
-pnpm --filter @bilimind/player build     # the offline course player -> packages/player/dist/player.html
-pnpm --filter @bilimind/desktop build    # renderer, main, preload and worker -> apps/desktop/dist/
-pnpm --filter @bilimind/desktop start    # run the app
-pnpm --filter @bilimind/desktop dist     # Windows portable + NSIS installer (electron-builder)
-pnpm test                                # all packages (vitest)
-pnpm typecheck
-```
-
-Pushing a tag such as `v0.1.0` to GitHub builds the installers and attaches them to a release.
-
-## Repository layout
-
-```
-apps/desktop       the Electron app (main, preload, worker running the engine, Vue renderer); CONTRACT.md
-apps/cli           the bilimind CLI; bundled into skills/bilimind/scripts/bilimind.mjs
-packages/core      shared types, course.json schema (bilimind.course/1), archetypes and formats, graders, FSRS
-packages/engine    ingest, outline, exam map, planner, drafts, checks, code tests, verdicts, narration, exports, build
-packages/player    the offline course page (Vue + Vite, built into one self-contained HTML file)
-skills/bilimind    the WorkBuddy skill (extra)
-workbuddy/bilimind-crew   the WorkBuddy Expert Team package (extra)
-showcase           sample source folders (with licences) and the courses built from them
-site               the website
-docs               this documentation
-hackathon          Dormathon pitch runbook, slides brief, research and notes
-```
-
-## Also available
-
-The same engine ships in two more forms. They are extras; the desktop app is the product.
-
-- **CLI.** `node apps/cli/src/main.ts <command>` (Node 24) or the bundled
-  `node skills/bilimind/scripts/bilimind.mjs <command>`. Every command prints one JSON line. `doctor` checks
-  the key (never printing it), the balance and the narration voices; `run` builds a whole course unattended.
-- **WorkBuddy skill and Expert Team.** `skills/bilimind/` is a WorkBuddy skill and `workbuddy/bilimind-crew/`
-  is an Expert Team (Lead, Writer, Coder, Checker) validated with WorkBuddy's own `validate_expert.py`, so a
-  WorkBuddy user gets the same course from one sentence. Install: `powershell -ExecutionPolicy Bypass -File
-  skills\bilimind\install.ps1`; team notes in `hackathon/EXPERT-TEAM.md`.
-
-## Dormathon 2026
-
-- **Team:** Opus Magnum (#58), Taylor's University branch: Oybek Odilov, Abdugaffor Odilov, Ramil
-  Khutlimuratov and Gameel Al-Bazeeli.
-- **Track 2:** How can AI help students and small businesses solve real business problems and operate more
-  effectively? BiliMind Desktop covers both halves: a student preparing for an exam from their own slides,
-  and a small business onboarding new staff from its own SOP.
-- **How we used WorkBuddy:** the first pitch deck was made in WorkBuddy's Slides Creation, we checked the market
-  with WorkBuddy's Deep Research, we compared plain WorkBuddy on the same student request, and we shipped BiliMind as a WorkBuddy skill and Expert Team too.
-  Details, links and screenshots: [docs/workbuddy.md](docs/workbuddy.md).
-- **Built at Dormathon vs. before:** BiliMind already existed before Dormathon as a web app (Laravel +
-  Nuxt) that Oybek and Abdugaffor Odilov work on. From it we reused the pedagogy: the lesson prompts and the rules that map each kind of knowledge to
-  its lesson formats. The Node engine, the Checker and Coder loops, the past-paper planner, the offline
-  player, the exports, the WorkBuddy skill and team, and the desktop app were built during Dormathon
-  (10-11 October 2026), with AI coding agents.
-
-*Bilim* means knowledge in Uzbek.
-
-## License
+## Licence
 
 GNU Affero General Public License v3.0 only (AGPL-3.0-only). See [LICENSE](LICENSE). The sample source
 folders in `showcase/sources/` carry their own licences (each folder has a `LICENSE.md`).
+
+For developers (how it works, building from source, the command line, the WorkBuddy skill):
+[docs/DEVELOPERS.md](docs/DEVELOPERS.md).
+
+*Bilim* means knowledge in Uzbek.

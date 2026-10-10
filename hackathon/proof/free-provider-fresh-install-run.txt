@@ -1,0 +1,46 @@
+# Fresh install, no keys: a real course through BiliMind free (Sun 11 Oct 2026, about 04:00 MYT)
+#
+# Built app (electron, hidden test window), empty BILIMIND_HOME (no config, no keys), so the provider defaults to
+# BiliMind free (https://desktop-api.bilimind.com/v1). Source: the same 5 Data Structures files (C:\Demo\DS-Final).
+# Then one assistant question on the finished course. Raw output of the test script, unedited below this line.
+
+fresh install provider: bilimind keys: {"bilimind":{"set":true},"deepseek":{"set":false},"openrouter":{"set":false}}
+check: {"ok":true,"note":"Free, no key needed"}
+run 1038f42a-8866-4d6a-9ec0-c47cd3dba2ac
+  ok  Lead goal 0.0s $0.0000
+  ok  Lead ingest 0.3s $0.0000
+  ok  Lead outline 92.6s $0.0020
+  ok  Lead exam-map 0.0s $0.0000
+  ok  Lead note 0.0s $0.0000
+  ok  Lead plan 0.0s $0.0000
+  ok  Writer · Binary Heaps: Sift-Up, Sift-Down, Build-Heap draft binary_heaps 28.2s $0.0017
+  ok  Writer · Binary Heaps: Sift-Up, Sift-Down, Build-Heap check binary_heaps 0.0s $0.0000
+  ok  Writer · Arrays and Linked Lists draft arrays_linked_lists 31.8s $0.0016
+  ok  Writer · Arrays and Linked Lists check arrays_linked_lists 0.0s $0.0000
+  ok  Writer · Arrays and Linked Lists draft arrays_linked_lists 25.9s $0.0009
+  ok  Writer · Arrays and Linked Lists check arrays_linked_lists 0.0s $0.0000
+  ok  Writer · Binary Heaps: Sift-Up, Sift-Down, Build-Heap draft binary_heaps 33.1s $0.0012
+  ok  Writer · Binary Heaps: Sift-Up, Sift-Down, Build-Heap check binary_heaps 0.0s $0.0000
+  FAIL Writer · Hash Tables: Chaining and Open Addressing draft hash_tables 76.5s $0.0043 The model answered in a shape BiliMind could not use. Trying again almost always fixes it. (expand: $.blocks[6].assessments[0].rubric: needs at least 2 items (got 1); $.blocks[6].assessments[0].rubric[0].excellent: must be at least 10 characters long (got 9); $.blocks[8].assessments[0].rubric: needs at least 2 items (got 1))
+  FAIL Writer · Hash Tables: Chaining and Open Addressing draft hash_tables 64.0s $0.0027 The model answered in a shape BiliMind could not use. Trying again almost always fixes it. (expand: The response was not a single valid JSON object. Return raw JSON only — no prose, no markdown fences.)
+  ok  Coder code-test arrays_linked_lists 0.0s $0.0000
+  ok  Coder code-test arrays_linked_lists 0.0s $0.0000
+  ok  Coder code-test binary_heaps 0.0s $0.0000
+  ok  Coder code-test binary_heaps 0.0s $0.0000
+  ok  Checker fact-check binary_heaps 6.0s $0.0006
+  ok  Checker check binary_heaps 0.0s $0.0000
+  ok  Checker verdict binary_heaps 30.4s $0.0006
+  ok  Checker evidence binary_heaps 0.0s $0.0000
+  ok  Checker fact-check arrays_linked_lists 1.0s $0.0002
+  ok  Checker check arrays_linked_lists 0.0s $0.0000
+  ok  Checker verdict arrays_linked_lists 3.7s $0.0001
+  ok  Checker evidence arrays_linked_lists 0.0s $0.0000
+  ok  Lead narrate 29.9s $0.0000
+  ok  Lead export 0.0s $0.0000
+  ok  Lead build 2.9s $0.0000
+END {"id":"C:\\Users\\User\\AppData\\Local\\Temp\\bm-free-out-cmiXen\\ds-final","title":"Data Structures Final Exam Prep","createdAt":"2026-10-10T20:00:36.388Z","status":"ready","lessons":2,"minutes":10.9,"checks":{"passed":52,"total":53},"rejected":0,"costUsd":0.016019,"wallMs":304597} 310s
+lessons: Binary Heaps: Sift-Up, Sift-Down, Build-Heap | Arrays and Linked Lists
+ASSISTANT {"askId":"a63dc51b-df4f-4e36-b7e1-4f88bd76c8d4","type":"done","text":"The one thing you must not get wrong: **insertion cost depends on position**.  \n- Dynamic array: insert at front or middle is O(n) because elements shift [3][4].  \n- Linked list: insert at a known node is O(1), no shifting [2].  \n- Only append to a dynamic array is amortised O(1) [5].  \n\nIf you mix these up, you'll fail the complexity questions.","cites":[{"n":2,"file":"CSC2103-L01-analysis-arrays-linked-lists.pdf","quote":"Access the k-th element: O(n), must walk from the head Costs: extra memory for references, poor cache locality","locator":"Slide 12"},{"n":3,"file":"CSC2103-L01-analysis-arrays-linked-lists.pdf","quote":"Elements stored in one contiguous block of memory Address of element i = base address + i × element size, so access by index is O(1) Capacity is fixed when the array is created Inserting or deleting…","locator":"Slide 8"},{"n":4,"file":"CSC2103-L01-analysis-arrays-linked-lists.pdf","quote":"append still O(1) amortised? Why? (3) Write a function that returns the middle node of a singly linked list in one pass.","locator":"Slide 15"},{"n":5,"file":"CSC2103-L01-analysis-arrays-linked-lists.pdf","quote":"Dynamic arrays A variable-size list built on a fixed-size array plus a capacity Elements 0 .. size−1 are used; the rest of the capacity is reserved for growth When size = capacity, allocate a bigger…","locator":"Slide 9"}],"costUsd":0.000229,"model":"deepseek/deepseek-v4-flash"}
+outRoot C:\Users\User\AppData\Local\Temp\bm-free-out-cmiXen
+
+[exited with code 0]

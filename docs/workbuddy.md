@@ -53,8 +53,9 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
     (Lesson Writer), Ada Passmore (Exercise Tester), Vera Citewell (Slide Fact-Checker). We validated it with
     WorkBuddy's own `validate_expert.py` and registered it with `register_expert.py`, so it appears in
     "My Experts".
-- **Scenario:** a WorkBuddy user sets the workspace to their folder and types one sentence; they get the same
-  course the desktop app makes.
+- **Scenario:** a WorkBuddy user sets the workspace to their folder and types one sentence; the skill runs
+  the same engine as the desktop app. The courses in this repo were built by the desktop app and the CLI,
+  not inside WorkBuddy.
 - **When:** Saturday 10 October evening (spike) to about 23:55 (team registered).
 
 | WorkBuddy feature | How the skill uses it | Where in this repo |
@@ -79,7 +80,7 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
 | Pool | What it paid for | Measured |
 |---|---|---|
 | WorkBuddy credits | The first deck, the comparison, the market research and the second deck run | Not itemised |
-| DeepSeek or OpenRouter (user's own key) | Course text in the desktop app | About $0.05 per course in unattended runs ($0.046 and $0.047); showcase courses $0.040, $0.094 and $0.055 |
+| BiliMind free (default, paid by the team) or the user's own DeepSeek or OpenRouter key | Course text in the desktop app and the CLI | $0.016 to $0.049 per course in unattended app runs; showcase courses $0.040, $0.094 and $0.055 |
 | Edge voices | Narration | Free |
 
 ## Practical notes for other WorkBuddy builders

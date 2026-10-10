@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BiliMind</title>
   <!-- Deck copy of apps/desktop/dist/renderer: classic script (works from file://), mock data, deck-boot drives the state. -->
-  <script>window.__BM_BASE = new URL('./assets/app.js', location.href).href;</script>
+  <script>
+    window.__BM_BASE = new URL('./assets/app.js', location.href).href;
+    // the mock opens course players from the repo's showcase folder (three levels up from pitch/deck/app/)
+    window.__BM_SHOWCASE = new URL('../../../showcase/courses/', location.href).href;
+  </script>
   <link rel="stylesheet" href="./assets/app.css">
   <script defer src="./assets/app.js"></script>
   <script defer src="./deck-boot.js"></script>

@@ -26,15 +26,17 @@ screenshots `docs/img/app-home.png`, `app-building.png`, `app-finished.png` and 
    don't have." Visual: a plain folder icon with four slide decks and "past-paper.pdf".
 
 3. **The solution.** Headline: "ONE FOLDER. ONE SENTENCE. ONE COURSE." Line: "BiliMind Desktop turns your
-   own files into a narrated, checked course on your laptop, with your own AI key." Visual: the prompt
+   own files into a narrated, checked course on your laptop. Free by default, no key needed." Visual: the prompt
    card "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder.
-   I have 45 minutes a day. Get me ready." next to the home screen screenshot.
+   I have 45 minutes a day. Get me ready." next to the home screen, then the course open in the app: lessons
+   on the left, the lesson in the middle, the assistant on the right with a cited answer.
 
 4. **How it works (the crew).** Headline: "A COURSE TEAM IN ONE APP." Diagram, left to right with dashed
    connectors: Lead (reads your files, weights topics by last year's marks, fits the plan to your days,
    cuts what the paper never asks) → Writers in parallel (one lesson each) → Coder (runs every code
    exercise) + Checker (re-solves every answer against your files, rejects and rewrites wrong ones) →
-   narration, Anki deck, calendar, plan. Visual: the building screen screenshot.
+   narration, Anki deck, calendar, plan, and "Ask the course: answers cited from your files". Visual: the
+   building screen screenshot.
 
 5. **Proof it's right.** Headline: "IT CHECKS ITSELF AGAINST YOUR SLIDES." Visual: the rejected answer
    from the Data Structures course: answer key "49 goes to slot 9" rejected, with the quote from Slide 11
@@ -55,5 +57,5 @@ screenshots `docs/img/app-home.png`, `app-building.png`, `app-finished.png` and 
 
 8. **Open source + download.** Headline: "FREE. OPEN SOURCE. YOUR FILES STAY YOURS." Lines:
    "Download for Windows: github.com/Odilient/bilimind-desktop/releases" / "Website:
-   odilient.github.io/bilimind-desktop" / "AGPL-3.0 · bring your own DeepSeek or OpenRouter key · about
-   5 cents a course". Final line in lime: "DROP IN YOUR FILES. GET A COURSE."
+   odilient.github.io/bilimind-desktop" / "Free by default, no key needed. Your own DeepSeek or OpenRouter
+   key if you want it." Final line in lime: "DROP IN YOUR FILES. GET A COURSE."

@@ -8,7 +8,8 @@
   BiliMind Desktop pitch deck, Dormathon 2026 Track 2, team Opus Magnum (#58).
   8 slides at 1920x1080. Arrow keys / click / space to move, F for fullscreen. Print = one slide per page.
   Every app picture is the live app: app/ is a copy of the desktop renderer in mock mode (real showcase data),
-  driven into a state by app/deck-boot.js; the course windows are the real offline course players.
+  driven into a state by app/deck-boot.js (slide 3: the course workspace with the assistant); the other course
+  windows are the real offline course players.
 -->
 <style>
 @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url(app/assets/space-grotesk-latin-500-normal-lFbtlQH6.woff2) format("woff2"); }
@@ -152,8 +153,8 @@ svg { display: block; }
 #s3 .pill .arr svg { width: 18px; height: 18px; }
 #s3 .slab { left: 930px; right: 24px; top: 24px; bottom: 24px; }
 #s3 .w1 { left: 60px; top: 64px; --s: .70; }
-#s3 .w2 { right: 40px; bottom: 48px; --s: .52; z-index: 2; }
-#s3 .arrow { position: absolute; left: 56px; bottom: 150px; z-index: 3; width: 150px; height: 150px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; box-shadow: 0 20px 40px -10px rgb(5 10 60 / 0.5); }
+#s3 .w2 { right: 28px; bottom: 36px; --s: .58; z-index: 2; }
+#s3 .arrow { position: absolute; left: 40px; bottom: 150px; z-index: 3; width: 150px; height: 150px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; box-shadow: 0 20px 40px -10px rgb(5 10 60 / 0.5); }
 #s3 .arrow svg { width: 64px; height: 64px; }
 #s3 .arrow small { position: absolute; top: 100%; margin-top: 16px; left: 0; width: 150px; text-align: center; white-space: nowrap; font: 600 19px/1 var(--body); color: #fff; }
 
@@ -178,8 +179,9 @@ svg { display: block; }
 #s4 .stack { display: grid; gap: 7px; margin-top: 4px; }
 #s4 .stack span { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 12px; border-radius: 10px; background: #F6F7FA; font: 500 16px/1 var(--body); color: var(--ink-3); white-space: nowrap; overflow: hidden; }
 #s4 .stack span i { width: 9px; height: 9px; border-radius: 50%; background: var(--lime-2); flex: none; }
-#s4 .outs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-#s4 .outs span { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 12px; border-radius: 12px; background: #F6F7FA; font: 600 18px/1 var(--body); color: var(--ink); }
+#s4 .outs { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+#s4 .outs span { display: flex; align-items: center; gap: 10px; height: 37px; padding: 0 12px; border-radius: 12px; background: #F6F7FA; font: 600 18px/1 var(--body); color: var(--ink); white-space: nowrap; }
+#s4 .outs span.ask { grid-column: 1 / -1; background: var(--cobalt-soft); font-size: 16.5px; }
 #s4 .outs span svg { width: 22px; height: 22px; color: var(--cobalt); flex: none; }
 #s4 .slab { left: 24px; right: 24px; top: 444px; bottom: 24px; }
 #s4 .win { left: 40px; top: 34px; --s: .62; }
@@ -391,7 +393,7 @@ svg { display: block; }
   <div class="txt">
     <span class="eb"><span class="dot"><svg><use href="#i-spark"/></svg></span>The solution</span>
     <h2 class="h">One folder.<br>One sentence.<br><span class="cob">One course.</span></h2>
-    <p class="line">BiliMind Desktop turns your own files into a <b>narrated, checked course</b> on your laptop, with your own AI key.</p>
+    <p class="line">BiliMind Desktop turns your own files into a <b>narrated, checked course</b> on your laptop. Free by default, no key needed.</p>
   </div>
   <div class="prompt">
     <div class="lb"><i>1</i>What do you need?</div>
@@ -408,8 +410,8 @@ svg { display: block; }
     </div>
     <div class="arrow"><svg><use href="#i-arrow"/></svg><small>Minutes later</small></div>
     <div class="win w2">
-      <div class="bar"><i class="lg"></i><span class="ttl">CSC2103 Data Structures final · offline course</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
-      <div class="vp"><iframe data-course src="../../showcase/courses/ds-final/index.html#/?now=2026-10-11" title="The finished Data Structures course"></iframe><div class="shield"></div></div>
+      <div class="bar"><i class="lg"></i><span class="ttl">BiliMind Desktop · CSC2103 Data Structures final</span><span class="ctl"><i><svg><use href="#w-min"/></svg></i><i><svg><use href="#w-max"/></svg></i><i><svg><use href="#w-x"/></svg></i></span></div>
+      <div class="vp"><iframe data-app src="app/index.html?deck=course" title="The Data Structures course open in the app, with the assistant's cited answer"></iframe><div class="shield"></div></div>
     </div>
   </div>
 </section>
@@ -439,6 +441,7 @@ svg { display: block; }
         <span><svg><use href="#i-cards"/></svg>Anki deck</span>
         <span><svg><use href="#i-cal"/></svg>Calendar</span>
         <span><svg><use href="#i-list"/></svg>Plan</span>
+        <span class="ask"><svg><use href="#i-search"/></svg>Ask the course: cited answers</span>
       </div>
     </div>
   </div>
@@ -559,7 +562,7 @@ svg { display: block; }
     <div class="rows">
       <div class="row"><span class="ic"><svg><use href="#i-download"/></svg></span><span class="k">Download for Windows</span><span class="v">github.com/Odilient/bilimind-desktop/releases</span></div>
       <div class="row"><span class="ic"><svg><use href="#i-globe"/></svg></span><span class="k">Website</span><span class="v">odilient.github.io/bilimind-desktop</span></div>
-      <div class="row"><span class="ic"><svg><use href="#i-key"/></svg></span><span class="k">AGPL-3.0</span><span class="v">Bring your own DeepSeek or OpenRouter key · about 5 cents a course</span></div>
+      <div class="row"><span class="ic"><svg><use href="#i-key"/></svg></span><span class="k">No key needed</span><span class="v">Free by default · your own DeepSeek or OpenRouter key optional</span></div>
     </div>
     <p class="end">Drop in your files.<br>Get a course.</p>
     <div class="team"><b>Opus Magnum (#58)</b><span>Taylor's University · Dormathon 2026</span></div>
