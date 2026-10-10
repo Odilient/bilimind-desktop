@@ -3,12 +3,21 @@
 The Dormathon organisers asked every Track 2 team to show proof that they used WorkBuddy and to explain how,
 where and in what scenario. This page is that explanation.
 
-**Short version.** WorkBuddy is not a tool we used on the side: it is the runtime of the product. BiliMind
-for WorkBuddy is a WorkBuddy **skill** (`skills/bilimind/`) and a WorkBuddy **Expert Team**
-(`workbuddy/bilimind-crew/`). A student types one sentence into WorkBuddy; WorkBuddy's agent loop plays the
-Lead, launches Writer sub-agents in parallel, then a Coder and a Checker, tracks the work in its task
-checklist, and opens the finished course in its Preview panel. There is no BiliMind server: WorkBuddy runs
-the agents, and our CLI runs inside WorkBuddy's own shell.
+**Short version.** The organisers confirmed that WorkBuddy does not have to be built into the solution;
+teams show proof that they used it. We used it in two ways:
+
+1. **As the platform we built for.** BiliMind ships as a WorkBuddy **skill** (`skills/bilimind/`) and a
+   WorkBuddy **Expert Team** (`workbuddy/bilimind-crew/`). We studied WorkBuddy's skill and Expert Team
+   formats on our laptop, validated our package with WorkBuddy's own `validate_expert.py` and registered
+   the team into "My Experts". In this design a student types one sentence into WorkBuddy; WorkBuddy's
+   agent loop plays the Lead, launches Writer sub-agents in parallel, then a Coder and a Checker, and opens
+   the course in its Preview panel. There is no BiliMind server.
+2. **As a work tool during Dormathon.** The 8-slide pitch deck was generated in the WorkBuddy web app
+   (Slides Creation), and we ran the same student request in plain WorkBuddy to compare the result with
+   BiliMind's.
+
+The three showcase courses were generated with the same CLI and crew playbook by our build agents outside
+WorkBuddy. We do not claim they were made inside WorkBuddy.
 
 ## The scenario
 
@@ -54,12 +63,12 @@ What the agents decide and what our code enforces is described in [how-it-works.
 | When | What we did in WorkBuddy | Proof |
 |---|---|---|
 | Sat 10 Oct, evening | Spike: read WorkBuddy's tool list, skills folder and Expert Team format on this machine; drafted the Expert Team package and validated it with WorkBuddy's own validator; checked the bundled Node and Python | `hackathon/SPIKE.md`, `hackathon/EXPERT-TEAM.md` |
-| {{TIME}} | First run of the `bilimind` skill inside WorkBuddy with the hero sentence (gate G3) | {{SCREENSHOT: task checklist, parallel Writer cards, Preview}} |
 | Sat 10 Oct, ~23:55 | Expert Team "BiliMind Crew" registered into WorkBuddy (My Experts) with WorkBuddy's own `validate_expert.py` / `register_expert.py`; skill installed into its skills folder | `workbuddy/bilimind-crew/`, `skills/bilimind/` |
 | Sun 11 Oct, 00:00-00:40 | Showcase courses (Data Structures final, Mutiara Tea Bar day one, Bahasa Melayu survival) generated with the same CLI and crew playbook, run by our build agents outside WorkBuddy | `showcase/courses/*/REPORT.md` |
-| {{TIME}} | Same sentence in WorkBuddy without the skill, for comparison | {{SCREENSHOT}} |
-| Sun 11 Oct, 00:38 | Pitch deck generated in the WorkBuddy web app (Slides Creation, model Hy4 preview) from our brief + 5 screenshots | https://www.workbuddy.ai/app/task/2108960359124951040 |
+| Sun 11 Oct, 00:38 | Pitch deck generated in the WorkBuddy web app (Slides Creation, model Hy4 preview) from our brief + 5 screenshots | https://www.workbuddy.ai/app/task/2108960359124951040, `hackathon/proof/workbuddy-web-deck-task.jpg`, `hackathon/proof/deck-assets/` |
 | Sun 11 Oct, 00:41 | Site published (GitLab Pages) | https://bilimind-workbuddy-55b817.gitlab.io/ |
+| Sun 11 Oct, 00:40-01:00 | The hero sentence in the WorkBuddy web app without BiliMind, for comparison: a reasonable 3-day plan, but no citations to the slides, no narration, no tested code and no exports | https://www.workbuddy.ai/app/task/2108963860471234560, `hackathon/proof/workbuddy-web-plain-comparison.jpg` |
+| Sun 11 Oct, 00:50-01:07 | Deck reviewed slide by slide; four factual corrections applied in WorkBuddy and the final PDF downloaded | `hackathon/proof/workbuddy-web-deck-slide5-review.jpg`, `pitch/BiliMind-Dormathon-Deck.pdf` |
 | Sun 11 Oct, 10:00-13:00 | Live demo: WorkBuddy on the projector for the whole pitch | - |
 
 Screenshots of each step go in `hackathon/proof/`.
@@ -79,7 +88,7 @@ Screenshots of each step go in `hackathon/proof/`.
 
 | Pool | What it pays for | Measured |
 |---|---|---|
-| WorkBuddy credits | All agent turns: Lead, Writers, Coder, Checker | {{CREDITS_PER_COURSE}} per course; {{CREDITS_TOTAL}} used during Dormathon |
+| WorkBuddy credits | All agent turns: Lead, Writers, Coder, Checker | Not measured yet for a course run (the showcase courses ran outside WorkBuddy) |
 | DeepSeek or OpenRouter (user's own key) | Outline, lesson drafts, rewrites | About $0.05 per course in unattended runs ($0.046 and $0.047); showcase courses $0.040, $0.094 and $0.055 |
 | Edge TTS | Narration | Free |
 

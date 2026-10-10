@@ -86,7 +86,8 @@ From two unattended runs (`run`, DeepSeek direct) on the sample Data Structures 
 
 A run with the agents takes longer, because they read reports and make decisions between commands: the
 Data Structures showcase course (3 lessons, 6 agents) took 16 min 55 s of wall time and $0.040 in text
-calls, according to its `REPORT.md`. WorkBuddy credits per course: {{CREDITS_PER_COURSE}}.
+calls, according to its `REPORT.md`. That run used our own build agents outside WorkBuddy, so it spent no
+WorkBuddy credits.
 
 ## Resume
 

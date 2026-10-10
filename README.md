@@ -205,7 +205,8 @@ Only numbers we measured on our own runs:
   | Boba Shop: Day One | 7 | 231/231 | none | 1 / 1 | 64 | 34.7 min | $0.094 | 17 min 29 s |
   | Bahasa Melayu survival | 8 | 228/229 (1 still flagged) | none | 3 / 3 | 72 | 39.2 min | $0.055 | 14 min 53 s |
 
-- WorkBuddy credits per course: {{CREDITS_PER_COURSE}}.
+- WorkBuddy credits: none for these courses (our build agents ran them outside WorkBuddy). Credits for a
+  run inside WorkBuddy are not measured yet.
 - Tests: core 55, engine 172 (2 live-TTS tests skipped), player 72, CLI 12, skill 12, all passing at the
   integration gate.
 
