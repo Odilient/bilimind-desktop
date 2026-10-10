@@ -16,7 +16,7 @@ agentic solutions**.
 
 - Repository: https://gitlab.com/avinmaster/bilimind-workbuddy
 - Deployed site: https://bilimind-workbuddy-55b817.gitlab.io/
-- Slides (PDF): {{SLIDES_PDF_LINK}}
+- Slides (PDF, made in WorkBuddy): [pitch/BiliMind-Dormathon-Deck.pdf](pitch/BiliMind-Dormathon-Deck.pdf) · also at https://bilimind-workbuddy-55b817.gitlab.io/downloads/BiliMind-Dormathon-Deck.pdf
 - How, where and when we used WorkBuddy: [docs/workbuddy.md](docs/workbuddy.md)
 
 ![The BiliMind for WorkBuddy landing page](docs/img/site-hero.png)

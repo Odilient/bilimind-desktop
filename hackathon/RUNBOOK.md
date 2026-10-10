@@ -241,6 +241,11 @@ They give you a chat and separate summaries or quizzes to reread. We give you an
 by your past paper, code exercises that were run before you saw them, answers checked against your
 slides, and reviews in your calendar, all as files you own. NotebookLM has no spaced-review schedule and
 does not export its flashcards or quizzes.
+(Measured, Sun 00:52, WorkBuddy web, same sentence + same 5 PDFs, no skill: plain WorkBuddy wrote a good
+one-page "sprint" HTML with a 3-day plan and drills, but it answered in Chinese to an English request,
+cited no slides, ran no independent check of its answers, had no narration, no runnable tested code and no
+calendar or Anki export. Be fair about it on stage: "WorkBuddy alone is smart; BiliMind makes it a
+teacher that checks itself against your slides." Task: https://www.workbuddy.ai/app/task/2108963860471234560)
 
 **6. "What is the business model?"**
 The skill is free and students pay cents to their own model provider, so there is no paywall in front of
