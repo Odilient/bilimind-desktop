@@ -1,3 +1,5 @@
+> Superseded first brief (Sun 00:38) for the WorkBuddy-skill version; its claims are not current. See hackathon/SLIDES-BRIEF.md.
+
 Attached: 01-landing.jpg (landing page hero), 02-ds-home.jpg (course home), 03-ds-lesson.jpg (a lesson), 04-teabar-home.jpg (the shop onboarding course), 05-malay-lesson.jpg (Malay course lesson). Use them as the slide visuals.
 
 # Pitch deck brief (for WorkBuddy "Slides Creation")

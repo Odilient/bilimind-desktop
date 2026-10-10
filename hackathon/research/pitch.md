@@ -1,6 +1,6 @@
 # BiliMind for WorkBuddy: hackathon strategy and pitch
 
-Dormathon at Taylor's University. Track 2: WorkBuddy, agentic solutions.
+Dormathon at Taylor's University. Track 2: "How can AI help students and small businesses solve real business problems and operate more effectively?" (earlier strategy notes for the WorkBuddy-skill version; the product is now BiliMind Desktop).
 Team: Opus Magnum (#58), Taylor's University branch: Oybek Odilov, Abdugaffor Odilov, Ramil Khutlimuratov and Gameel Al-Bazeeli.
 Status: complete (2026-10-10). Sections: 0 bet, 1 problem evidence, 2 competitor gap,
 3 judging criteria, 4 pitch + demo scripts, 5 showcase courses, 6 name and tagline, 7 Q&A,

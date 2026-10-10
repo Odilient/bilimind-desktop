@@ -13,22 +13,23 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
 
 | # | Where | Scenario | Proof |
 |---|---|---|---|
-| a | WorkBuddy web app, Slides Creation | Generated our pitch deck from a written brief and screenshots, then reviewed and corrected it slide by slide | Task https://www.workbuddy.ai/app/task/2108960359124951040, `hackathon/proof/workbuddy-web-deck-task.jpg`, `hackathon/proof/workbuddy-web-deck-slide5-review.jpg`, `pitch/BiliMind-Dormathon-Deck.pdf` |
+| a | WorkBuddy web app, Slides Creation | Generated the first version of our pitch deck from a written brief and screenshots, then reviewed and corrected it slide by slide | Task https://www.workbuddy.ai/app/task/2108960359124951040, `hackathon/proof/workbuddy-web-deck-task.jpg`, `hackathon/proof/workbuddy-web-deck-slide5-review.jpg`, `hackathon/proof/workbuddy-deck-v1.pdf` |
 | b | WorkBuddy web app, plain chat | Sent our student request to plain WorkBuddy to see what a general agent does without BiliMind | Task https://www.workbuddy.ai/app/task/2108963860471234560, `hackathon/proof/workbuddy-web-plain-comparison.jpg` |
 | c | WorkBuddy desktop app | Studied its skill and Expert Team format and shipped BiliMind as a WorkBuddy skill and Expert Team, validated with WorkBuddy's own `validate_expert.py` | `skills/bilimind/`, `workbuddy/bilimind-crew/`, `hackathon/SPIKE.md`, `hackathon/EXPERT-TEAM.md` |
 | d | WorkBuddy web app, Deep Research | Market validation (Sunday 01:47 to 01:57 MYT): demand on both halves of Track 2 (students and small businesses), competitors and risks | Task https://www.workbuddy.ai/app/task/2108977764853211136, `hackathon/proof/workbuddy-market-validation.md`, `hackathon/proof/workbuddy-web-market-research.jpg` |
-| e | WorkBuddy (Sunday) | Documentation review and an app review | See [More WorkBuddy work on Sunday](#more-workbuddy-work-on-sunday) |
+| e | WorkBuddy web app, Slides Creation | A second deck run for the desktop app from our brief (its sandbox could not read the attached screenshots, so the final deck was built from the app's HTML) | Task https://www.workbuddy.ai/app/task/2108988088788561920 |
 
-## (a) The pitch deck, made in WorkBuddy
+## (a) The first pitch deck, made in WorkBuddy
 
 - **Where:** the WorkBuddy web app (workbuddy.ai/app), Slides Creation.
 - **How:** we wrote an 8-slide brief (`hackathon/SLIDES-BRIEF.md`: structure, style, real numbers only) and
   attached five screenshots (`hackathon/proof/deck-assets/`). WorkBuddy generated the deck; we reviewed it
   slide by slide, asked WorkBuddy for four factual corrections and downloaded the PDF
-  (`pitch/BiliMind-Dormathon-Deck.pdf`).
+  (`hackathon/proof/workbuddy-deck-v1.pdf`).
 - **When:** Sunday 11 October, about 00:38 to 01:07 MYT.
-- **Next:** the deck is regenerated in WorkBuddy for the desktop app from the new brief in
-  `hackathon/SLIDES-BRIEF.md`.
+- **Then:** that deck described the earlier WorkBuddy-skill version. The final deck for the desktop app
+  (`pitch/BiliMind-Desktop-Deck.pdf`) was built by our team from the app's own screens, outside WorkBuddy;
+  the WorkBuddy deck is kept as proof.
 
 ## (b) Plain WorkBuddy on the same student request
 
@@ -70,15 +71,14 @@ and BiliMind also ships as a WorkBuddy skill and Expert Team so WorkBuddy users 
 
 | When (MYT) | What we did in WorkBuddy | Proof |
 |---|---|---|
-| Sun 11 Oct | Documentation review: README and docs reviewed in WorkBuddy for clarity and accuracy | (pending) |
-| Sun 11 Oct | App review: BiliMind Desktop reviewed in WorkBuddy (flow, wording, first-run experience) | (pending) |
-| Sun 11 Oct | Pitch deck regenerated for the desktop app in Slides Creation | (pending) |
+| Sun 11 Oct, 01:47-01:57 | Market validation with Deep Research: student AI use and trust, Malaysian F&B staff turnover, competitor table, risks. We kept its numbers and corrected its cost estimate with our measured runs | https://www.workbuddy.ai/app/task/2108977764853211136, `hackathon/proof/workbuddy-market-validation.md`, `hackathon/proof/workbuddy-web-market-research.jpg` |
+| Sun 11 Oct, 02:28 | Slides Creation run for the desktop deck from `hackathon/SLIDES-BRIEF.md` and four app screenshots. WorkBuddy's sandbox could not read the attached images, so our final deck was built from the app's own HTML (`pitch/deck/`) | https://www.workbuddy.ai/app/task/2108988088788561920 |
 
 ## Credits and cost
 
 | Pool | What it paid for | Measured |
 |---|---|---|
-| WorkBuddy credits | The deck, the comparison and the reviews above | Not itemised |
+| WorkBuddy credits | The first deck, the comparison, the market research and the second deck run | Not itemised |
 | DeepSeek or OpenRouter (user's own key) | Course text in the desktop app | About $0.05 per course in unattended runs ($0.046 and $0.047); showcase courses $0.040, $0.094 and $0.055 |
 | Edge voices | Narration | Free |
 
