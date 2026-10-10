@@ -16,3 +16,7 @@ Thumbs.db
 /vaults/
 film/out/
 film/frames/
+# hackathon scratch + local generated courses (showcase courses are committed under showcase/)
+hackathon/scratch/
+/courses/
+.npmrc.local

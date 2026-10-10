@@ -1,0 +1,173 @@
+{
+  "blocks": [
+    {
+      "type": "explainer",
+      "payload": {
+        "markdown": "Your lecture slide 14 defines the BST ordering invariant: for every node x, all keys in the left subtree are less than x.key, and all keys in the right subtree are greater. This single rule turns a tree into a sorted structure you can search, insert into, and traverse in order.\n\nWhen you insert a key, you compare it with the root. If it's smaller, you go left; if larger, you go right. You repeat this at each node until you find an empty spot — that's where the new key goes. The tree's shape depends entirely on the insertion order.\n\nTo read the keys in sorted order, you perform an in-order traversal: visit the left subtree, then the node, then the right subtree. This recursively visits every node in ascending key order, as slide 14's search algorithm implies.\n\nThe catch: if you insert keys in sorted order (10, 20, 30, 40, 50), every new key is larger than the last, so you always go right. The tree becomes a chain — a degenerate tree — and search degrades to O(n) instead of O(log n). Slide 15 shows this: inserting 10, 20, 30, 40, 50 gives height 4, while inserting 50, 30, 70, 20, 40, 60, 80 gives height 2."
+      },
+      "source_material_ids": [
+        14,
+        15
+      ]
+    },
+    {
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "graph TD\n    A[\"50\"] --> B[\"30\"]\n    A --> C[\"70\"]\n    B --> D[\"20\"]\n    B --> E[\"40\"]\n    C --> F[\"60\"]\n    C --> G[\"80\"]",
+        "caption": "A balanced BST from inserting 50, 30, 70, 20, 40, 60, 80. Height is 2.",
+        "alt_text": "A binary search tree with root 50, left child 30 and right child 70. 30 has left child 20 and right child 40. 70 has left child 60 and right child 80."
+      },
+      "source_material_ids": [
+        15
+      ]
+    },
+    {
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "graph LR\n    A[\"10\"] --> B[\"20\"]\n    B --> C[\"30\"]\n    C --> D[\"40\"]\n    D --> E[\"50\"]",
+        "caption": "A degenerate BST from inserting 10, 20, 30, 40, 50 in sorted order. Height is 4 — a linked list.",
+        "alt_text": "A chain of nodes: 10 connected to 20, 20 to 30, 30 to 40, 40 to 50, all as right children."
+      },
+      "source_material_ids": [
+        15
+      ]
+    },
+    {
+      "type": "analogy",
+      "payload": {
+        "markdown": "Think of a BST like a library's Dewey Decimal system. Each shelf (node) tells you: books with numbers smaller than this go to the left aisle, books with numbers larger go to the right aisle. To find a book, you start at the main shelf and follow the signs. Inserting a new book means walking the aisles until you find an empty shelf and putting it there.\n\nIf you add books in order — 100, 200, 300, 400 — every new book goes to the rightmost aisle, and the library becomes a single corridor you have to walk end to end. That's the degenerate tree.",
+        "breaks_down_when": "A library can reorganise its shelves; a BST cannot reorganise itself without being rebuilt. The analogy also suggests every shelf has exactly two aisles, which is true of a BST but not of a real library."
+      },
+      "source_material_ids": []
+    },
+    {
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "The BST invariant: left subtree < node.key < right subtree for every node.",
+          "Insertion compares the new key with each node and goes left or right until finding an empty spot.",
+          "In-order traversal (left, node, right) visits keys in ascending sorted order.",
+          "Inserting keys in sorted order produces a degenerate tree (linked list) with height O(n).",
+          "Search cost is O(h), so a degenerate tree gives O(n) search, not O(log n)."
+        ]
+      },
+      "source_material_ids": [
+        14,
+        15
+      ]
+    },
+    {
+      "type": "quiz",
+      "payload": {
+        "intro": "Check your understanding of BST ordering."
+      },
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "You insert keys 5, 3, 7, 2, 4, 6, 8 into an empty BST. What is the height of the resulting tree?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "0"
+            },
+            {
+              "id": "b",
+              "text": "1"
+            },
+            {
+              "id": "c",
+              "text": "2"
+            },
+            {
+              "id": "d",
+              "text": "3"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "c"
+            ]
+          },
+          "max_score": 10
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Explain why inserting keys in sorted order (e.g., 1, 2, 3, 4, 5) into a BST produces a degenerate tree, and state what happens to the search time.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "When keys are inserted in sorted order, each new key is larger than all existing keys, so the comparison always goes right. The tree becomes a chain where every node has only a right child. Search time becomes O(n) because you may have to traverse all n nodes to find a key, instead of O(log n) for a balanced tree."
+          },
+          "rubric": [
+            {
+              "criterion": "Identifies the insertion pattern",
+              "weight": 0.3,
+              "excellent": "States that each new key is larger than all previous, so it always goes right.",
+              "acceptable": "Mentions keys are in order but does not explain the direction.",
+              "poor": "Does not mention the insertion order or direction."
+            },
+            {
+              "criterion": "Describes the resulting shape",
+              "weight": 0.3,
+              "excellent": "Describes a chain or linked list with only right children.",
+              "acceptable": "Says the tree is unbalanced but does not specify the shape.",
+              "poor": "Does not describe the shape or gives an incorrect description."
+            },
+            {
+              "criterion": "States the search time consequence",
+              "weight": 0.4,
+              "excellent": "States search becomes O(n) and explains why (must traverse the chain).",
+              "acceptable": "Mentions O(n) without explanation.",
+              "poor": "Says O(log n) or does not mention time complexity."
+            }
+          ],
+          "max_score": 20
+        },
+        {
+          "kind": "essay",
+          "prompt": "Your friend claims that a BST always guarantees O(log n) search time. Write a 200–300 word response explaining why this is false, using the BST ordering invariant and the concept of insertion order. Include a specific example of an insertion sequence that breaks the guarantee and describe the resulting tree shape.",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "The claim is false because BST search time depends on height, which depends on insertion order. The BST invariant (left < node < right) does not constrain the shape. If you insert in sorted order like 10, 20, 30, 40, 50, each new key is larger than all existing ones, so it always becomes a right child. The tree becomes a degenerate chain (a linked list) with height n-1. Search in that tree is O(n), not O(log n). A balanced tree from inserting 50, 30, 70, 20, 40, 60, 80 has height 2 and gives O(log n) search. The guarantee only holds if the tree remains balanced, which basic BSTs do not enforce."
+          },
+          "rubric": [
+            {
+              "criterion": "Identifies the flaw in the friend's claim",
+              "weight": 0.25,
+              "excellent": "States clearly that BST search is O(h), not O(log n), and h depends on insertion order.",
+              "acceptable": "Says the claim is false but does not connect it to height.",
+              "poor": "Agrees with the claim or does not address it."
+            },
+            {
+              "criterion": "Uses the BST invariant correctly",
+              "weight": 0.25,
+              "excellent": "References the left < node < right invariant and shows how it forces the degenerate shape.",
+              "acceptable": "Mentions the invariant but does not apply it to the example.",
+              "poor": "Does not mention the invariant or misstates it."
+            },
+            {
+              "criterion": "Provides a specific insertion sequence and resulting shape",
+              "weight": 0.25,
+              "excellent": "Gives a concrete sequence (e.g., 10, 20, 30, 40, 50) and describes the chain shape.",
+              "acceptable": "Gives an example but does not describe the shape.",
+              "poor": "No example or an incorrect one."
+            },
+            {
+              "criterion": "States the correct complexity for degenerate and balanced cases",
+              "weight": 0.25,
+              "excellent": "States O(n) for degenerate and O(log n) for balanced, with justification.",
+              "acceptable": "Mentions O(n) but does not contrast with balanced.",
+              "poor": "Gives incorrect complexities."
+            }
+          ],
+          "max_score": 30
+        }
+      ]
+    }
+  ]
+}

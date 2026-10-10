@@ -1,0 +1,135 @@
+{
+  "course_title": "Data Structures: Trees and Heaps for Your Final Exam",
+  "allows_code": true,
+  "nodes": [
+    {
+      "key": "tree_terminology_traversals",
+      "title": "Tree Terminology and Traversals",
+      "summary": "You will be able to identify tree components and perform preorder, inorder, postorder, and level-order traversals. Covers root, parent, child, leaf, sibling, depth, height, and traversal algorithms using recursion and a queue. Prevents confusion between depth and height.",
+      "concept_key": "ds.trees.basics",
+      "section": "Trees",
+      "note": "Recursion is essential for traversals; if you are unsure, study the subtopic on recursion first.",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 40
+    },
+    {
+      "key": "recursion_for_trees",
+      "title": "Recursion in Tree Traversals",
+      "summary": "You will be able to write recursive functions for tree traversals and understand the call stack. Covers base case, recursive case, and how pre/in/post order differ. Prevents infinite recursion and stack overflow.",
+      "concept_key": "ds.recursion.trees",
+      "track": "subtopic",
+      "branch_of": "tree_terminology_traversals",
+      "mark": "recommended",
+      "archetype": "conceptual",
+      "estimated_minutes": 20
+    },
+    {
+      "key": "array_representation_trees",
+      "title": "Array Representation of Trees",
+      "summary": "You will be able to map a tree to an array and compute parent/child indices. Covers array indexing for complete binary trees, used later for heaps. Prevents confusion when switching between pointer and array views.",
+      "concept_key": "ds.trees.array_rep",
+      "track": "subtopic",
+      "branch_of": "tree_terminology_traversals",
+      "mark": "recommended",
+      "archetype": "spatial",
+      "estimated_minutes": 15
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "Binary Search Trees: Search, Insert, Delete",
+      "summary": "You will be able to implement and trace BST search, insertion, and deletion. Covers the BST property, recursive and iterative approaches, and handling deletion with inorder successor. Prevents common mistakes like losing the tree structure during delete.",
+      "concept_key": "ds.bst.operations",
+      "section": "Binary Search Trees",
+      "note": "Practice on paper with different insertion orders to see how tree shape affects height.",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 45
+    },
+    {
+      "key": "avl_trees_balancing",
+      "title": "AVL Trees: Balancing and Rotations",
+      "summary": "You will be able to compute balance factors and apply LL, RR, LR, RL rotations to maintain balance. Covers AVL property, rotation mechanics, and insertion with rebalancing. Prevents forgetting to update heights after rotation.",
+      "concept_key": "ds.avl.rotations",
+      "section": "Balanced Trees",
+      "note": "Focus on the four rotation cases; they are the most common exam questions.",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 45
+    },
+    {
+      "key": "visualizing_avl_rotations",
+      "title": "Visualizing AVL Rotations",
+      "summary": "You will be able to draw the before and after of each rotation and identify which case applies. Covers step-by-step diagrams for LL, RR, LR, RL. Prevents mixing up LR and RL.",
+      "concept_key": "ds.avl.visual",
+      "track": "subtopic",
+      "branch_of": "avl_trees_balancing",
+      "mark": "anytime",
+      "archetype": "spatial",
+      "estimated_minutes": 15
+    },
+    {
+      "key": "binary_heap_operations",
+      "title": "Binary Heaps: Structure and Operations",
+      "summary": "You will be able to implement insert and extract-min in a binary heap using array representation. Covers heap property, sift-up, sift-down, and array indexing. Prevents off-by-one errors in parent/child formulas.",
+      "concept_key": "ds.heap.operations",
+      "section": "Heaps and Heapsort",
+      "note": "Memorize the parent and child index formulas; they appear in every heap question.",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 40
+    },
+    {
+      "key": "heap_array_indexing_practice",
+      "title": "Heap Array Indexing Practice",
+      "summary": "You will be able to quickly compute parent and child indices for any node. Covers formulas: parent=(i-1)//2, left=2i+1, right=2i+2. Prevents slow calculation during exams.",
+      "concept_key": "ds.heap.indexing",
+      "track": "subtopic",
+      "branch_of": "binary_heap_operations",
+      "mark": "recommended",
+      "archetype": "factual",
+      "estimated_minutes": 10
+    },
+    {
+      "key": "heapsort_priority_queues",
+      "title": "Heapsort and Priority Queues",
+      "summary": "You will be able to sort an array using heapsort and explain priority queue applications. Covers build-heap, heapsort algorithm (O(n log n)), and uses in Dijkstra and event simulation. Prevents confusing heapsort with other O(n log n) sorts.",
+      "concept_key": "ds.heapsort",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 45
+    },
+    {
+      "key": "priority_queue_applications",
+      "title": "Priority Queue Applications in Dijkstra",
+      "summary": "You will be able to describe how a priority queue accelerates Dijkstra's shortest path algorithm. Covers extract-min and decrease-key operations. Prevents thinking Dijkstra works with a simple queue.",
+      "concept_key": "ds.pq.dijkstra",
+      "track": "subtopic",
+      "branch_of": "heapsort_priority_queues",
+      "mark": "anytime",
+      "archetype": "conceptual",
+      "estimated_minutes": 15
+    },
+    {
+      "key": "capstone_practice_exam",
+      "title": "Capstone: Practice Exam on Trees and Heaps",
+      "summary": "You will solve a timed set of problems covering tree traversals, BST operations, AVL rotations, heap operations, and heapsort. Covers mixed questions similar to the final exam. Prevents being caught off-guard by multi-topic questions.",
+      "concept_key": "ds.exam.practice",
+      "section": "Putting It Together",
+      "note": "Simulate exam conditions: no notes, time yourself, then review mistakes.",
+      "track": "core",
+      "archetype": "performance",
+      "estimated_minutes": 90
+    }
+  ],
+  "further": [
+    {
+      "title": "Advanced Trees and Graphs",
+      "topic": "Red-Black trees, B-trees, and graph algorithms for computer science exams"
+    },
+    {
+      "title": "Algorithm Analysis and Complexity",
+      "topic": "Analyzing time and space complexity of data structures and algorithms"
+    }
+  ]
+}

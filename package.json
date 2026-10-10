@@ -1,0 +1,20 @@
+{
+  "name": "bilimind-desktop",
+  "private": true,
+  "type": "module",
+  "description": "BiliMind: turn your own files into a course that talks, codes and quizzes you back.",
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@10.18.1",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "pnpm -r --if-present test",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r --if-present typecheck"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "tsx": "4.23.15",
+    "vitest": "5.0.3",
+    "@types/node": "^24.0.0"
+  }
+}

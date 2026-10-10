@@ -1,0 +1,187 @@
+{
+  "blocks": [
+    {
+      "type": "explainer",
+      "payload": {
+        "markdown": "You have a set of keys and need to find any one quickly. A binary search tree (BST) solves this by keeping keys in a specific order. As slide 14 of your deck shows, the BST invariant is: for every node x, all keys in the left subtree are less than x.key, and all keys in the right subtree are greater. This invariant is maintained during insertion and deletion. When you search, you compare with the root and go left or right, eliminating half the remaining tree at each step—if the tree is balanced. The cost is O(h) where h is the height. But h depends on the order of insertions, as you'll see next."
+      },
+      "source_material_ids": [
+        14
+      ]
+    },
+    {
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "flowchart TD\n    50(50) --> 30(30)\n    50 --> 70(70)\n    30 --> 20(20)\n    30 --> 40(40)\n    70 --> 60(60)\n    70 --> 80(80)\n    subgraph left_sub [\"Left subtree < 50\"]\n        30\n        20\n        40\n    end\n    subgraph right_sub [\"Right subtree > 50\"]\n        70\n        60\n        80\n    end",
+        "caption": "A balanced BST with 7 nodes, height 2. Each node's left subtree contains smaller keys, right subtree larger keys.",
+        "alt_text": "Tree diagram: root 50, left child 30 with children 20 and 40, right child 70 with children 60 and 80. The left subtree of 50 is grouped and labeled 'Left subtree < 50'; the right subtree is grouped and labeled 'Right subtree > 50'."
+      },
+      "source_material_ids": [
+        14,
+        15
+      ]
+    },
+    {
+      "type": "analogy",
+      "payload": {
+        "markdown": "Think of a BST like a well-organized filing cabinet. Each drawer (node) has a label (key). When you need a file, you compare the label you want with the drawer's label. If smaller, you go to the left drawer; if larger, go right. This lets you find any file in at most the number of drawers deep.",
+        "breaks_down_when": "If the files were inserted in alphabetical order, the drawers form a single chain—you'd have to check every drawer, losing the speed advantage. The analogy suggests all drawers are equally accessible, but in a degenerate tree they are not."
+      },
+      "source_material_ids": [
+        14
+      ]
+    },
+    {
+      "type": "misconception",
+      "payload": {
+        "belief": "A binary search tree always gives O(log n) search time.",
+        "why_it_seems_right": "In a balanced tree, each comparison halves the search space, so it seems like log n always.",
+        "what_is_true": "The height h can be as large as n if insertions are sorted (e.g., 10, 20, 30, 40, 50), making search O(n). As slide 15 shows, inserting 10,20,30,40,50 creates a degenerate tree (linked list) with height 4 for 5 nodes. The BST invariant is still satisfied, but the tree is unbalanced. Balanced trees require extra work (like AVL rotations, covered next)."
+      },
+      "source_material_ids": [
+        15
+      ]
+    },
+    {
+      "type": "key_points",
+      "payload": {
+        "points": [
+          "The BST invariant: left subtree keys < node key < right subtree keys.",
+          "Insertion always places a new key as a leaf, following the invariant.",
+          "In-order traversal (left, root, right) visits keys in ascending order.",
+          "Search cost is O(h), where h is the tree's height.",
+          "Sorted insertion sequence creates a degenerate tree with height n-1, making search O(n).",
+          "The shape of a BST depends on the order of insertions, not just the set of keys."
+        ]
+      },
+      "source_material_ids": [
+        14,
+        15
+      ]
+    },
+    {
+      "type": "quiz",
+      "payload": {
+        "intro": "Check your understanding."
+      },
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "What is the BST invariant?",
+          "bloom": "remember",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "Left subtree keys are less than the node's key, right subtree keys are greater."
+            },
+            {
+              "id": "b",
+              "text": "Left subtree keys are greater than the node's key, right subtree keys are less."
+            },
+            {
+              "id": "c",
+              "text": "All keys in the tree are in sorted order."
+            },
+            {
+              "id": "d",
+              "text": "The tree must be balanced."
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "a"
+            ]
+          },
+          "max_score": 10
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Insert the keys 15, 10, 20, 8, 12 into an initially empty BST in that order. Draw the resulting tree (describe it in words or use ASCII). Then state the height of the tree (number of edges from root to deepest leaf).",
+          "bloom": "apply",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Root 15. Left child 10 (with left 8, right 12). Right child 20. Height = 2 (edges: 15-10-8 or 15-10-12)."
+          },
+          "rubric": [
+            {
+              "criterion": "Tree structure",
+              "weight": 0.6,
+              "excellent": "Correctly places each key following BST invariant, all children correctly assigned.",
+              "acceptable": "Most keys placed correctly but one minor error (e.g., 12 placed as right child of 15 instead of 10).",
+              "poor": "Multiple errors or invariant violated."
+            },
+            {
+              "criterion": "Height",
+              "weight": 0.4,
+              "excellent": "Height correctly stated as 2.",
+              "acceptable": "Height off by one but tree otherwise correct.",
+              "poor": "Height incorrect or missing."
+            }
+          ],
+          "max_score": 10
+        },
+        {
+          "kind": "essay",
+          "prompt": "Compare a balanced BST (e.g., after inserting 50,30,70,20,40,60,80) with a degenerate BST (e.g., after inserting 10,20,30,40,50). Discuss the search time complexity for each and explain why the degenerate case is problematic. Also suggest one way to avoid the degenerate case (you may refer to concepts from the next node).",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Balanced BST: height ~log n, search O(log n). Degenerate BST: height n-1, search O(n). The degenerate case is problematic because search becomes linear, defeating the purpose of a BST. To avoid it, we can use self-balancing trees like AVL, which perform rotations after insertions to keep height O(log n)."
+          },
+          "rubric": [
+            {
+              "criterion": "Comparison of search times",
+              "weight": 0.5,
+              "excellent": "Clearly states balanced BST search O(log n) and degenerate O(n), explains why due to height.",
+              "acceptable": "States correct complexities but explanation is vague.",
+              "poor": "Incorrect complexities or no explanation."
+            },
+            {
+              "criterion": "Problem identification",
+              "weight": 0.3,
+              "excellent": "Identifies that sorted insertion causes degeneracy and explains why it's bad for performance.",
+              "acceptable": "Mentions degeneracy but doesn't fully explain cause.",
+              "poor": "Does not identify the problem."
+            },
+            {
+              "criterion": "Suggestion for prevention",
+              "weight": 0.2,
+              "excellent": "Suggests rebalancing (e.g., AVL rotations) or using a self-balancing tree.",
+              "acceptable": "Suggests a general idea like 'rearrange the tree' without specifics.",
+              "poor": "No suggestion or incorrect suggestion."
+            }
+          ],
+          "max_score": 10
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Given the following BST: root 25, left child 15 (with left 10, right 20), right child 35 (with left 30, right 40). Is this tree a valid BST? If not, identify the violation. If yes, explain why it satisfies the invariant.",
+          "bloom": "analyze",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Yes, it is valid. For root 25: left subtree (15,10,20) all <25, right subtree (35,30,40) all >25. For node 15: left 10 <15, right 20 >15. For node 35: left 30 <35, right 40 >35. All invariants hold."
+          },
+          "rubric": [
+            {
+              "criterion": "Correctness of validation",
+              "weight": 0.7,
+              "excellent": "Correctly identifies valid and explains each level.",
+              "acceptable": "Correctly identifies valid but explanation is incomplete.",
+              "poor": "Incorrectly says invalid or misses a violation."
+            },
+            {
+              "criterion": "Explanation of invariant",
+              "weight": 0.3,
+              "excellent": "Clearly references the BST invariant for each node.",
+              "acceptable": "Mentions invariant but not applied to all nodes.",
+              "poor": "No reference to invariant."
+            }
+          ],
+          "max_score": 10
+        }
+      ]
+    }
+  ]
+}

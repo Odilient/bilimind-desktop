@@ -723,4 +723,45 @@ Files: `app/Services/OpenRouter/OpenRouterClient.php`, `config/openrouter.php`, 
 
 ## 8. Porting to BiliMind Desktop
 
-@@IRM_PENDING_S8@@
+Verified 2026-10-10 with `npm view` on Node 24 / pnpm 10 (Windows). Module paths refer to the monorepo in `opensource.md` §6 (`packages/core/src/...`).
+
+### 8.0 Ground rules for the port
+
+_pending_
+
+### 8.1 Research providers on a desktop with no server
+
+_pending_
+
+### 8.2 Materials ingest (every NotebookLM source type)
+
+_pending_
+
+### 8.3 Chunking, embeddings, local search, citation anchors
+
+_pending_
+
+### 8.4 Imagery
+
+_pending_
+
+### 8.5 TTS (narration, speaking drills, audio overviews)
+
+_pending_
+
+### 8.6 STT (speech in)
+
+_pending_
+
+### 8.7 LLM transport
+
+_pending_
+
+### 8.8 Per-feature port table (SRC-01..50)
+
+_pending_
+
+### 8.9 Porting risks
+
+_pending_
+

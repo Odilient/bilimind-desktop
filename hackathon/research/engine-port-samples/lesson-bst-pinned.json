@@ -1,0 +1,190 @@
+{
+  "blocks": [
+    {
+      "type": "explainer",
+      "payload": {
+        "markdown": "A binary search tree solves one problem: finding a key among many without checking every one. The trick is a single rule that every node in the tree obeys.\n\nLook at slide 14 of your deck. The BST invariant says: for every node x, **all keys in the left subtree are less than x.key, and all keys in the right subtree are greater than x.key**. This isn't a suggestion — it's a contract the tree enforces at every insert. Because of it, you can search by comparing with the root and deciding in one step which half of the tree to check next, exactly like binary search on a sorted array.\n\nWhat the invariant buys you: you never need to look at the other half. A search that starts at the root and follows one path to a leaf visits at most h nodes, where h is the tree's height. If the tree is short and bushy, h is about log₂ n and search is fast. If the tree is tall and skinny, h approaches n and search is as slow as a linked list."
+      },
+      "source_material_ids": [
+        14
+      ]
+    },
+    {
+      "type": "diagram",
+      "payload": {
+        "format": "mermaid",
+        "source": "graph TD\n    A[\"50\"] --> B[\"30\"]\n    A --> C[\"70\"]\n    B --> D[\"20\"]\n    B --> E[\"40\"]\n    C --> F[\"60\"]\n    C --> G[\"80\"]\n    style A fill:#e6f3ff\n    style D fill:#f9f9f9\n    style E fill:#f9f9f9\n    style F fill:#f9f9f9\n    style G fill:#f9f9f9",
+        "caption": "A balanced BST after inserting 50, 30, 70, 20, 40, 60, 80. Height = 2. Every node's left subtree holds smaller keys, right subtree holds larger keys.",
+        "alt_text": "A binary tree with 50 at the root, 30 and 70 as its children, and 20, 40, 60, 80 as leaves. The tree is symmetric and short."
+      },
+      "source_material_ids": [
+        15
+      ]
+    },
+    {
+      "type": "explainer",
+      "payload": {
+        "markdown": "Insertion follows the same rule. Starting at the root, compare the new key with the current node. If it's smaller, go left; if larger, go right. When you hit a null child, place the new node there. Slide 15 of your deck shows two sequences:\n\n- Insert 50, 30, 70, 20, 40, 60, 80 → the tree stays balanced, height = 2.\n- Insert 10, 20, 30, 40, 50 → every new key is larger than the last, so each one goes to the right of the previous node. The tree becomes a chain — what's called a **degenerate tree** or a linked list. Height = 4. Searching for 50 now takes 5 comparisons instead of 3.\n\nThe degenerate case matters because you can't assume every BST lookup is O(log n). The invariant guarantees ordering, not balance. A sorted insert produces the worst case: O(n) search, which is no better than a list."
+      },
+      "source_material_ids": [
+        14,
+        15
+      ]
+    },
+    {
+      "type": "analogy",
+      "payload": {
+        "markdown": "A BST is like a well-organised filing cabinet. Each drawer has a label: \"A–M\" on the left, \"N–Z\" on the right. To find 'Garcia', you open the left drawer, then the left folder inside it, and so on. You never open the right drawer. The invariant is the label on each drawer.\n\nIf you file every new folder at the end of the alphabet — 'Adams', then 'Baker', then 'Clark' — every folder goes into the rightmost drawer of the rightmost cabinet. After a dozen folders, you're digging through a stack instead of using the labels.",
+        "breaks_down_when": "A filing cabinet has a fixed number of drawers; a BST grows new nodes wherever needed. The analogy also suggests you can see all drawers at once, but in a BST you only see the node you're at and its children."
+      },
+      "source_material_ids": []
+    },
+    {
+      "type": "explainer",
+      "payload": {
+        "markdown": "The invariant also gives you a way to **visit every key in sorted order** without sorting. This is called an **in-order traversal**: recursively visit the left subtree, then the node itself, then the right subtree. For any BST, this produces the keys in ascending order.\n\nTry it on the balanced tree from slide 15: start at 50, go left to 30, go left to 20 (no left child), visit 20, back to 30, visit 30, go right to 40 (no left child), visit 40, back to 50, visit 50, go right to 70, go left to 60, visit 60, back to 70, visit 70, go right to 80, visit 80. Result: 20, 30, 40, 50, 60, 70, 80.\n\nIn-order traversal is how a database returns sorted rows without an explicit sort operation. It works because the invariant guarantees that everything left of a node is smaller and everything right is larger."
+      },
+      "source_material_ids": [
+        14
+      ]
+    },
+    {
+      "type": "misconception",
+      "payload": {
+        "belief": "A BST search is always O(log n) because it splits the data in half at each step.",
+        "why_it_seems_right": "Binary search on a sorted array does split in half every time, and a BST uses comparisons too. The balanced tree example on slide 15 looks like a binary search.",
+        "what_is_true": "The BST invariant only guarantees ordering, not balance. A search visits h nodes, and h can be as large as n if the tree is degenerate. The O(log n) claim assumes the tree stays balanced, which requires extra work — that's what AVL rotations (the next node) are for."
+      },
+      "source_material_ids": [
+        15
+      ]
+    },
+    {
+      "type": "quiz",
+      "payload": {
+        "intro": "Check your understanding of BST ordering and its consequences."
+      },
+      "assessments": [
+        {
+          "kind": "mcq",
+          "prompt": "You insert the keys 1, 2, 3, 4, 5 into an empty BST in that order. What is the height of the resulting tree?",
+          "bloom": "apply",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "2"
+            },
+            {
+              "id": "b",
+              "text": "4"
+            },
+            {
+              "id": "c",
+              "text": "5"
+            },
+            {
+              "id": "d",
+              "text": "3"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 20
+        },
+        {
+          "kind": "short_answer",
+          "prompt": "Explain why an in-order traversal of a BST produces keys in sorted order. Refer to the BST invariant in your answer.",
+          "bloom": "understand",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "The BST invariant states that for every node, all keys in its left subtree are smaller and all keys in its right subtree are larger. An in-order traversal visits the left subtree first (all smaller keys), then the node itself, then the right subtree (all larger keys). Recursively applying this at every node means the traversal outputs keys in ascending order."
+          },
+          "rubric": [
+            {
+              "criterion": "States the BST invariant correctly",
+              "weight": 0.4,
+              "excellent": "Quotes or paraphrases the invariant: left subtree keys < node key < right subtree keys.",
+              "acceptable": "Mentions that smaller keys go left and larger keys go right, but is vague about 'all keys in subtree'.",
+              "poor": "Does not mention the invariant or gets the direction wrong."
+            },
+            {
+              "criterion": "Connects invariant to traversal order",
+              "weight": 0.6,
+              "excellent": "Explains that visiting left-then-node-then-right at each level recursively produces ascending order.",
+              "acceptable": "Describes the traversal steps but does not clearly link them to the invariant.",
+              "poor": "Says 'it just works' or gives an unrelated reason."
+            }
+          ],
+          "max_score": 30
+        },
+        {
+          "kind": "mcq",
+          "prompt": "A BST has height h. Which of the following is the worst-case time complexity of searching for a key in that BST?",
+          "bloom": "understand",
+          "grader": "deterministic",
+          "options": [
+            {
+              "id": "a",
+              "text": "O(log n)"
+            },
+            {
+              "id": "b",
+              "text": "O(h)"
+            },
+            {
+              "id": "c",
+              "text": "O(n log n)"
+            },
+            {
+              "id": "d",
+              "text": "O(1)"
+            }
+          ],
+          "answer_key": {
+            "correct_option_ids": [
+              "b"
+            ]
+          },
+          "max_score": 20
+        },
+        {
+          "kind": "essay",
+          "prompt": "A colleague claims that inserting keys in sorted order into a BST is fine because 'search is still O(log n)'. Explain why this is wrong. Describe what shape the tree takes, what happens to search time, and what the actual worst-case time complexity becomes. Finally, suggest one way to avoid this problem.",
+          "bloom": "evaluate",
+          "grader": "llm_rubric",
+          "answer_key": {
+            "reference_answer": "Inserting keys in sorted order produces a degenerate tree where each new node becomes the right child of the previous node, forming a linked list. The height h equals n-1. Search time becomes O(n) because each comparison only eliminates one node, not half the tree. The BST invariant is maintained, but without balance, the tree's structure is useless for fast lookup. To avoid this, use a self-balancing tree like an AVL tree that performs rotations after inserts to keep height O(log n)."
+          },
+          "rubric": [
+            {
+              "criterion": "Identifies degenerate tree shape and height",
+              "weight": 0.3,
+              "excellent": "States that sorted insert creates a chain where h ≈ n, and describes the shape clearly.",
+              "acceptable": "Mentions the tree becomes 'like a list' but does not connect it to height.",
+              "poor": "Does not describe the shape or says it stays balanced."
+            },
+            {
+              "criterion": "States correct worst-case complexity",
+              "weight": 0.3,
+              "excellent": "States O(n) for search in the degenerate case and explains why.",
+              "acceptable": "Says O(n) but does not explain the reasoning.",
+              "poor": "Claims O(log n) or gives an incorrect complexity."
+            },
+            {
+              "criterion": "Suggests a valid mitigation",
+              "weight": 0.4,
+              "excellent": "Names a specific self-balancing tree (AVL, red-black) or other mechanism that maintains balance.",
+              "acceptable": "Says 'use a balanced tree' without naming a specific approach.",
+              "poor": "Suggests something unrelated or says 'just don't insert sorted keys'."
+            }
+          ],
+          "max_score": 30
+        }
+      ]
+    }
+  ]
+}

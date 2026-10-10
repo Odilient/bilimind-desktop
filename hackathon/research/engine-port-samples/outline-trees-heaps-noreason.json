@@ -1,0 +1,120 @@
+{
+  "course_title": "Trees and Heaps for Your Data Structures Final",
+  "allows_code": false,
+  "nodes": [
+    {
+      "key": "tree_terminology_and_basics",
+      "title": "Tree terminology and basic properties",
+      "summary": "You will be able to name and identify the parts of a tree: root, parent, child, leaf, sibling, depth, height. Covers definitions from slide 3 of your deck and the relationship between depth and height. Prevents confusion later when we talk about balance factors and traversal positions.",
+      "concept_key": "data_structures.tree_terminology",
+      "section": "Foundations of trees",
+      "note": "This is the vocabulary you need for every tree topic. Learn the terms cold now.",
+      "track": "core",
+      "archetype": "factual",
+      "estimated_minutes": 15
+    },
+    {
+      "key": "tree_traversals",
+      "title": "Tree traversals: preorder, inorder, postorder, level-order",
+      "summary": "You will be able to write the output of preorder (N L R), inorder (L N R), postorder (L R N) and level-order traversals for any binary tree. Covers the recursive pattern and the queue-based level-order from slide 9. Prevents mixing up the three depth-first orders on the exam.",
+      "concept_key": "data_structures.tree_traversals",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 25
+    },
+    {
+      "key": "binary_search_tree_operations",
+      "title": "BST: search, insert, and the cost O(h)",
+      "summary": "You will be able to search and insert into a BST using the rule from slide 14: left < node < right. Covers the O(h) cost and the difference between a balanced tree (h=2 from slide 15) and a degenerate one (h=4). Prevents thinking BST operations are always fast.",
+      "concept_key": "data_structures.bst_operations",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 25
+    },
+    {
+      "key": "bst_deletion",
+      "title": "BST deletion: leaf, one child, two children",
+      "summary": "You will be able to delete any node from a BST using the three cases from slide 18: leaf (just remove), one child (splice), two children (replace with inorder successor). Covers finding the successor and the splice step. Prevents the common mistake of breaking the BST property when deleting a node with two children.",
+      "concept_key": "data_structures.bst_deletion",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 20
+    },
+    {
+      "key": "bst_performance_and_balance",
+      "title": "Why BSTs go bad: balanced vs degenerate trees",
+      "summary": "You will be able to explain why inserting sorted data makes a degenerate BST with O(n) operations, using the examples from slide 15. Covers the concept of height and the need for self-balancing. Prevents assuming a BST is always efficient.",
+      "concept_key": "data_structures.bst_balance_need",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 15
+    },
+    {
+      "key": "avl_trees_and_rotations",
+      "title": "AVL trees: balance factor and rotations",
+      "summary": "You will be able to compute the balance factor (height(left) - height(right)) and apply LL, RR, LR, RL rotations to restore the {-1, 0, 1} invariant from slide 22. Covers when each rotation is needed and how it rearranges nodes. Prevents failing a question that asks you to rebalance after an insertion.",
+      "concept_key": "data_structures.avl_rotations",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 35
+    },
+    {
+      "key": "binary_heap_properties",
+      "title": "Binary heap: structure and array representation",
+      "summary": "You will be able to identify a binary heap as a complete binary tree stored in an array, using parent (i-1)//2 and children 2i+1, 2i+2 from slide 4. Covers the heap property (min-heap or max-heap). Prevents confusion about which index maps to which node.",
+      "concept_key": "data_structures.heap_structure",
+      "section": "Heaps and priority queues",
+      "track": "core",
+      "archetype": "spatial",
+      "estimated_minutes": 20
+    },
+    {
+      "key": "heap_insert_and_extract",
+      "title": "Heap insert (sift up) and extract-min (sift down)",
+      "summary": "You will be able to insert by appending and sifting up, and extract the min by moving the last element to the root and sifting down, both O(log n) as on slide 7. Covers the step-by-step process for each operation. Prevents the common error of sifting in the wrong direction.",
+      "concept_key": "data_structures.heap_operations",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 25
+    },
+    {
+      "key": "heapsort",
+      "title": "Heapsort: build-heap and sort in place",
+      "summary": "You will be able to perform heapsort on an array: build a max-heap in O(n) then extract max n times for O(n log n), in place and not stable as per slide 11. Covers the build-heap procedure and the extraction loop. Prevents confusing heapsort with other O(n log n) sorts.",
+      "concept_key": "data_structures.heapsort",
+      "track": "core",
+      "archetype": "procedural",
+      "estimated_minutes": 30
+    },
+    {
+      "key": "priority_queue_applications",
+      "title": "Priority queue applications: Dijkstra, event simulation, top-k",
+      "summary": "You will be able to describe how a heap-based priority queue is used in Dijkstra's algorithm, event-driven simulation, and finding the top-k elements, drawing on slide 13. Covers the role of extract-min/insert in each context. Prevents treating heaps as an abstract data structure with no real use.",
+      "concept_key": "data_structures.priority_queue_applications",
+      "track": "core",
+      "archetype": "conceptual",
+      "estimated_minutes": 15
+    },
+    {
+      "key": "capstone_mock_exam_problems",
+      "title": "Capstone: solve a mixed set of exam-style problems",
+      "summary": "You will solve a set of problems that combine trees, BSTs, AVL rotations, heaps and heapsort, similar to what could appear on your final. Covers drawing trees after operations, computing traversal orders, rebalancing an AVL tree, and running heapsort on a small array. Prevents the shock of seeing combined topics on the exam.",
+      "concept_key": "data_structures.capstone_mixed_problems",
+      "section": "Putting it together",
+      "note": "Do this the day before the exam. It ties everything together and shows you what you still need to review.",
+      "track": "core",
+      "archetype": "performance",
+      "estimated_minutes": 45
+    }
+  ],
+  "further": [
+    {
+      "title": "Advanced tree structures",
+      "topic": "B-trees, red-black trees and tries for database and algorithm applications"
+    },
+    {
+      "title": "Graph algorithms with heaps",
+      "topic": "Dijkstra's algorithm, Prim's MST and A* search using priority queues"
+    }
+  ]
+}
