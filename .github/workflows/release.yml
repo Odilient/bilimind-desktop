@@ -1,0 +1,51 @@
+# Release BiliMind Desktop for Windows: push a tag like v0.1.0 and this builds the portable .exe and the installer
+# and attaches both to a GitHub release.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    env:
+      # the repo .npmrc points at npmmirror (venue firewall); CI uses the public registry and GitHub downloads
+      npm_config_registry: https://registry.npmjs.org/
+      npm_config_electron_mirror: https://github.com/electron/electron/releases/download/
+      npm_config_electron_builder_binaries_mirror: https://github.com/electron-userland/electron-builder-binaries/releases/download/
+      ELECTRON_MIRROR: https://github.com/electron/electron/releases/download/
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the course player
+        run: pnpm --filter @bilimind/player build
+
+      - name: Build the desktop app
+        run: pnpm --filter @bilimind/desktop build
+
+      - name: Package (portable + installer)
+        working-directory: apps/desktop
+        run: pnpm exec electron-builder --win portable nsis --x64 --publish never
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: apps/desktop/release/*.exe
+          generate_release_notes: true

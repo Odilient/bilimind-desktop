@@ -1,0 +1,147 @@
+/* BiliMind Desktop: the cobalt system of the landing (plan/reference/design/hero-v7/11/base.css). */
+:root {
+  --page: #ECEEF2;
+  --canvas: #F6F7FA;
+  --white: #FFFFFF;
+  --cobalt: #2340E6;
+  --cobalt-2: #1B33CF;
+  --cobalt-3: #3253F4;
+  --navy: #0D1660;
+  --cobalt-soft: #EEF1FE;
+  --lime: #C6F24E;
+  --lime-2: #B4E03A;
+  --lime-soft: #EEF9CF;
+  --lime-ink: #4E6A08;
+  --ink: #0B0D10;
+  --ink-2: #1A1D23;
+  --ink-3: #2A2E37;
+  --text-2: #565B68;
+  --text-3: #8B909C;
+  --line: rgb(11 13 16 / 0.08);
+  --line-2: rgb(11 13 16 / 0.14);
+  --green: #12A150;
+  --green-soft: #E3F6EA;
+  --coral: #FF5A3C;
+  --coral-soft: #FFE9E4;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, sans-serif;
+  --gut: 16px;
+  --r-card: 36px;
+  --r-md: 28px;
+  --r-sm: 18px;
+  --bar-h: 40px;
+  --overlay-w: 140px;
+  --cobalt-grad:
+    radial-gradient(70% 90% at 82% 18%, rgb(120 150 255 / 0.40), transparent 60%),
+    radial-gradient(60% 70% at 10% 110%, rgb(10 20 120 / 0.55), transparent 70%),
+    linear-gradient(118deg, #1B33CF 0%, #2442EA 38%, #2D4CF2 56%, #2340E6 72%, #1A2FC4 100%);
+  --shadow-card: 0 1px 2px rgb(11 13 16 / 0.04), 0 8px 24px -12px rgb(11 13 16 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(11 13 16 / 0.05), 0 18px 40px -16px rgb(13 22 96 / 0.28);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #app { height: 100%; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 400 15px/1.5 var(--body);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  overflow: hidden; user-select: none;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
+input, textarea { font: inherit; color: inherit; user-select: text; }
+img, svg { display: block; max-width: 100%; }
+.ico { width: 1em; height: 1em; flex: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2.5px solid var(--lime); outline-offset: 3px; }
+::selection { background: var(--lime); color: var(--ink); }
+
+/* Scrollbars that do not shout. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgb(11 13 16 / 0.14); border-radius: 99px; border: 3px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: rgb(11 13 16 / 0.24); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Slabs */
+.slab { border-radius: var(--r-card); position: relative; isolation: isolate; overflow: hidden; }
+.slab.cobalt { background: var(--cobalt-grad); color: #fff; }
+.slab.white { background: #fff; color: var(--ink); }
+.slab.ink { background: var(--ink); color: #fff; }
+
+/* Eyebrow pill with the lime dot */
+.eb {
+  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+  height: 32px; padding: 0 14px 0 6px; border-radius: 99px;
+  background: #fff; box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px rgb(11 13 16 / 0.04);
+  font-size: 13px; font-weight: 500; color: var(--ink-3); white-space: nowrap;
+}
+.eb .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--lime); color: var(--ink); display: grid; place-items: center; flex: none; }
+.eb .dot .ico { width: 11px; height: 11px; }
+.eb.on-dark { background: rgb(255 255 255 / 0.10); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); color: rgb(255 255 255 / 0.92); backdrop-filter: blur(10px); }
+
+/* Display heading: uppercase grotesk, tight, with inline round chips */
+.disp {
+  margin: 0; font-family: var(--display); font-weight: 700; line-height: 0.9;
+  letter-spacing: -0.045em; text-transform: uppercase; text-wrap: balance;
+}
+.disp .lime { color: var(--lime); }
+.disp .cob { color: var(--cobalt); }
+.disp .dim { color: var(--text-3); }
+.hchip {
+  display: inline-grid; place-items: center; vertical-align: 0; position: relative;
+  width: 0.74em; height: 0.74em; border-radius: 50%; margin: 0 0.04em;
+  background: var(--lime); color: var(--ink);
+}
+.hchip .ico { position: absolute; inset: 27%; width: 46%; height: 46%; }
+.hchip.ink { background: var(--ink); color: #fff; }
+.hchip.cobalt { background: var(--cobalt); color: #fff; }
+.hchip.white { background: #fff; color: var(--cobalt); }
+
+/* Pills (buttons) */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border-radius: 99px; border: 1px solid transparent;
+  font-size: 14.5px; font-weight: 600; white-space: nowrap;
+  transition: transform .15s, background .2s, box-shadow .2s, opacity .2s;
+}
+.pill:active { transform: scale(.97); }
+.pill:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.pill .ico { width: 16px; height: 16px; }
+.pill.dark { background: var(--ink); color: #fff; }
+.pill.dark:hover:not(:disabled) { background: #22262E; }
+.pill.light { background: #fff; border-color: rgb(11 13 16 / 0.1); box-shadow: 0 1px 2px rgb(11 13 16 / 0.05); }
+.pill.light:hover:not(:disabled) { box-shadow: 0 4px 14px rgb(11 13 16 / 0.08); }
+.pill.glass { background: rgb(255 255 255 / 0.12); color: #fff; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); }
+.pill.glass:hover:not(:disabled) { background: rgb(255 255 255 / 0.2); }
+.pill.lime { background: var(--lime); color: var(--ink); }
+.pill.lime:hover:not(:disabled) { background: #D2F86A; }
+.pill.big { height: 54px; padding: 0 12px 0 26px; font-size: 16px; }
+.pill .arr { width: 34px; height: 34px; margin-right: -4px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; }
+.pill .arr .ico { width: 15px; height: 15px; }
+.pill.sm { height: 34px; padding: 0 14px; font-size: 13px; }
+
+/* Round icon button */
+.iconbtn { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: var(--ink-3); transition: background .15s; }
+.iconbtn:hover { background: rgb(11 13 16 / 0.06); }
+.iconbtn .ico { width: 17px; height: 17px; }
+
+/* Segmented control */
+.seg { display: inline-flex; padding: 4px; border-radius: 99px; background: var(--page); gap: 2px; }
+.seg button { height: 32px; padding: 0 14px; border-radius: 99px; font-size: 13px; font-weight: 600; color: var(--text-2); }
+.seg button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgb(11 13 16 / 0.12); }
+
+/* Text field */
+.field {
+  width: 100%; height: 44px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line-2);
+  background: #fff; font-size: 14px; outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.field:focus { border-color: var(--cobalt); box-shadow: 0 0 0 4px rgb(35 64 230 / 0.12); }
+
+@keyframes pulse-lime {
+  0% { box-shadow: 0 0 0 0 rgb(198 242 78 / 0.85); }
+  70% { box-shadow: 0 0 0 9px rgb(198 242 78 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(198 242 78 / 0); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

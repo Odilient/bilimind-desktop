@@ -1,0 +1,1678 @@
+{
+ "courses": [
+  {
+   "example": "exam",
+   "object": "obj-book.webp",
+   "sentence": "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.",
+   "files": [
+    {
+     "name": "CSC2103-L01-analysis-arrays-linked-lists.pdf",
+     "path": "C:\\Users\\you\\Documents\\ds-final\\CSC2103-L01-analysis-arrays-linked-lists.pdf",
+     "ext": "pdf",
+     "bytes": 189697,
+     "role": "lecture",
+     "pages": 16
+    },
+    {
+     "name": "CSC2103-L02-hash-tables.pdf",
+     "path": "C:\\Users\\you\\Documents\\ds-final\\CSC2103-L02-hash-tables.pdf",
+     "ext": "pdf",
+     "bytes": 214895,
+     "role": "lecture",
+     "pages": 16
+    },
+    {
+     "name": "CSC2103-L03-bst-and-avl-trees.pdf",
+     "path": "C:\\Users\\you\\Documents\\ds-final\\CSC2103-L03-bst-and-avl-trees.pdf",
+     "ext": "pdf",
+     "bytes": 189327,
+     "role": "lecture",
+     "pages": 15
+    },
+    {
+     "name": "CSC2103-L04-binary-heaps.pdf",
+     "path": "C:\\Users\\you\\Documents\\ds-final\\CSC2103-L04-binary-heaps.pdf",
+     "ext": "pdf",
+     "bytes": 183100,
+     "role": "lecture",
+     "pages": 14
+    },
+    {
+     "name": "past-paper.pdf",
+     "path": "C:\\Users\\you\\Documents\\ds-final\\past-paper.pdf",
+     "ext": "pdf",
+     "bytes": 110144,
+     "role": "past_paper",
+     "pages": 2
+    }
+   ],
+   "plan": {
+    "keep": [
+     {
+      "key": "binary_heaps_and_priority_queues",
+      "title": "Binary heaps: priority queue operations",
+      "day": 3
+     },
+     {
+      "key": "map_adt_and_hash_functions",
+      "title": "Hash tables: the map ADT and hash functions",
+      "day": 1
+     },
+     {
+      "key": "binary_search_tree_operations",
+      "title": "Binary search trees: search, insert and delete",
+      "day": 2
+     }
+    ],
+    "cut": [
+     {
+      "key": "counting_operations_big_o",
+      "title": "Counting operations to get Big-O from real code",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 30 min did not fit the days left."
+     },
+     {
+      "key": "big_o_omega_theta_bounds",
+      "title": "Big-O, Omega and Theta: which bound?",
+      "reason": "Its exam questions (Q1a) are counted in its parent Counting operations to get Big-O from real code."
+     },
+     {
+      "key": "arrays_vs_linked_lists",
+      "title": "Dynamic arrays vs linked lists: layout and cost",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 10% in 30 min did not fit the days left."
+     },
+     {
+      "key": "amortised_cost_of_append",
+      "title": "Why n appends cost O(n) in total",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 6% in 20 min plus its parent topic did not fit the days left."
+     },
+     {
+      "key": "load_factor_and_resizing",
+      "title": "Load factor and when to resize",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 9% in 20 min did not fit the days left."
+     },
+     {
+      "key": "collision_resolution_strategies",
+      "title": "Chaining vs open addressing for collisions",
+      "reason": "Its chaining question (Q2c) is practised in Hash tables (the slide 9 chaining example and the buildChains exercise), so it adds no marks of its own."
+     },
+     {
+      "key": "bst_chain_from_sorted_inserts",
+      "title": "Sorted inserts turn a BST into a chain",
+      "reason": "No marks in the past paper; the minutes went to topics that carry them."
+     },
+     {
+      "key": "avl_rotation_balancing",
+      "title": "AVL rotations: keeping height at log n",
+      "reason": "No marks in the past paper; the minutes went to topics that carry them."
+     },
+     {
+      "key": "build_heap_and_heapsort",
+      "title": "Build-heap in O(n), then heapsort",
+      "reason": "Cut for Binary heaps: priority queue operations (25% of marks in 30 min): 5% in 25 min did not fit the days left."
+     },
+     {
+      "key": "capstone_past_paper_under_time",
+      "title": "Capstone: last year's paper under the clock",
+      "reason": "A full timed paper does not fit the days left; the lessons rehearse each question type instead."
+     }
+    ]
+   },
+   "steps": [
+    {
+     "agent": "Lead",
+     "cmd": "init",
+     "ok": true,
+     "ms": 11,
+     "costUsd": 0,
+     "result": "course folder ds-final",
+     "start": 0,
+     "end": 0
+    },
+    {
+     "agent": "Lead",
+     "cmd": "goal",
+     "ok": true,
+     "ms": 5,
+     "costUsd": 0,
+     "result": "exam 2026-10-14T09:00:00+08:00, 45 min/day, student, 2 assumptions",
+     "start": 24,
+     "end": 29
+    },
+    {
+     "agent": "Lead",
+     "cmd": "ingest",
+     "ok": true,
+     "ms": 332,
+     "costUsd": 0,
+     "result": "5 files, 65 chunks, 1 past paper",
+     "start": 30,
+     "end": 362
+    },
+    {
+     "agent": "Lead",
+     "cmd": "outline",
+     "ok": true,
+     "ms": 94300,
+     "costUsd": 0.013212,
+     "result": "13 topics, with code: counting_operations_big_o, big_o_omega_theta_bounds, arrays_vs_linked_lists, amortised_cost_of_append, map_adt_and_hash_functions, load_factor_and_resizing, collision_resolution_strategies, binary_search_tree_operations, bst_chain_from_sorted_inserts, avl_rotation_balancing, binary_heaps_and_priority_queues, build_heap_and_heapsort, capstone_past_paper_under_time",
+     "start": 363,
+     "end": 94663
+    },
+    {
+     "agent": "Lead",
+     "cmd": "exam-map",
+     "ok": true,
+     "ms": 20,
+     "costUsd": 0,
+     "result": "20 questions, 100 marks: binary_heaps_and_priority_queues 25%, map_adt_and_hash_functions 15%, binary_search_tree_operations 15%",
+     "start": 94663,
+     "end": 94683
+    },
+    {
+     "agent": "Lead",
+     "cmd": "note",
+     "ok": true,
+     "ms": 0,
+     "costUsd": 0,
+     "result": "Kept binary_heaps_and_priority_queues, map_adt_and_hash_functions, binary_search_tree_operations (by marks per minute, heaviest deck first); cut counting_operations_big_o, big_o_omega_theta_bounds, arrays_vs_linked_lists, amortised_cost_of_append, load_factor_and_resizing, collision_resolution_strategies, bst_chain_from_sorted_inserts, avl_rotation_balancing, build_heap_and_heapsort, capstone_past_paper_under_time.",
+     "start": 94691,
+     "end": 94691
+    },
+    {
+     "agent": "Lead",
+     "cmd": "plan",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0,
+     "result": "3 lessons, 85/135 min, 3 reviews, 3 warnings",
+     "start": 94692,
+     "end": 94698
+    },
+    {
+     "agent": "Writer · Binary heaps and priority queue operations",
+     "cmd": "draft",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 22568,
+     "costUsd": 0.003994,
+     "result": "9 blocks, 5 questions, 1 code exercise, 6 citations",
+     "start": 94700,
+     "end": 117268
+    },
+    {
+     "agent": "Writer · The map ADT and hash functions that spread keys",
+     "cmd": "draft",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 20277,
+     "costUsd": 0.003488,
+     "result": "9 blocks, 4 questions, 1 code exercise, 7 citations",
+     "start": 94718,
+     "end": 114995
+    },
+    {
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "cmd": "draft",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 17500,
+     "costUsd": 0.002904,
+     "result": "8 blocks, 3 questions, 1 code exercise, 4 citations",
+     "start": 94735,
+     "end": 112235
+    },
+    {
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "cmd": "check",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 42,
+     "costUsd": 0,
+     "result": "21/23 checks, failed: Q2 item count, Q11 code runs",
+     "start": 112236,
+     "end": 112278
+    },
+    {
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "cmd": "draft",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 19974,
+     "costUsd": 0.003304,
+     "result": "8 blocks, 4 questions, 1 code exercise, 4 citations",
+     "start": 112279,
+     "end": 132253
+    },
+    {
+     "agent": "Writer · The map ADT and hash functions that spread keys",
+     "cmd": "check",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 37,
+     "costUsd": 0,
+     "result": "26/27 checks, failed: Q11 code runs, 1 auto-fixed",
+     "start": 114996,
+     "end": 115033
+    },
+    {
+     "agent": "Writer · The map ADT and hash functions that spread keys",
+     "cmd": "draft",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 23255,
+     "costUsd": 0.003613,
+     "result": "9 blocks, 4 questions, 1 code exercise, 5 citations",
+     "start": 115033,
+     "end": 138288
+    },
+    {
+     "agent": "Writer · Binary heaps and priority queue operations",
+     "cmd": "check",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 21,
+     "costUsd": 0,
+     "result": "28/29 checks, failed: Q11 code runs",
+     "start": 117268,
+     "end": 117289
+    },
+    {
+     "agent": "Writer · Binary heaps and priority queue operations",
+     "cmd": "draft",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 22941,
+     "costUsd": 0.003562,
+     "result": "8 blocks, 5 questions, 1 code exercise, 9 citations",
+     "start": 117290,
+     "end": 140231
+    },
+    {
+     "agent": "Writer · Binary search trees: search, insert and delete",
+     "cmd": "check",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 21,
+     "costUsd": 0,
+     "result": "25/25 checks, 1 auto-fixed",
+     "start": 132253,
+     "end": 132274
+    },
+    {
+     "agent": "Writer · The map ADT and hash functions that spread keys",
+     "cmd": "check",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 20,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 138289,
+     "end": 138309
+    },
+    {
+     "agent": "Writer · Binary heaps and priority queue operations",
+     "cmd": "check",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 11,
+     "costUsd": 0,
+     "result": "26/27 checks, failed: Q11 code runs, 1 auto-fixed",
+     "start": 140231,
+     "end": 140242
+    },
+    {
+     "agent": "Coder",
+     "cmd": "code-test",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 10,
+     "costUsd": 0,
+     "result": "b4 reference 4/4, starter 0/4",
+     "start": 140242,
+     "end": 140252
+    },
+    {
+     "agent": "Coder",
+     "cmd": "code-test",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 10,
+     "costUsd": 0,
+     "result": "b7 reference 5/5, starter 0/5",
+     "start": 140252,
+     "end": 140262
+    },
+    {
+     "agent": "Coder",
+     "cmd": "code-test",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 1,
+     "costUsd": 0,
+     "result": "b3 reference 0/4, starter 0/4",
+     "start": 140262,
+     "end": 140263
+    },
+    {
+     "agent": "Coder",
+     "cmd": "code-test",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "b3 self-marked",
+     "start": 140264,
+     "end": 140266
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 965,
+     "costUsd": 0.000619,
+     "result": "0 of 1 error fixed in place, 1 left",
+     "start": 140267,
+     "end": 141232
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 9,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 141233,
+     "end": 141242
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 10492,
+     "costUsd": 0.00189,
+     "result": "re-solved 3: 3 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 141243,
+     "end": 151735
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "binary_heaps_and_priority_queues",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0,
+     "result": "4 items -> crew/evidence/binary_heaps_and_priority_queues.md",
+     "start": 151735,
+     "end": 151738
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 2962,
+     "costUsd": 0.000935,
+     "result": "0 of 7 errors fixed in place, 7 left",
+     "start": 151739,
+     "end": 154701
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 20,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 154701,
+     "end": 154721
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 4283,
+     "costUsd": 0.001068,
+     "result": "re-solved 3: 2 agree with the key, 1 wrong key rejected and rewritten, 0 beyond the slides",
+     "start": 154722,
+     "end": 159005
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 4,
+     "costUsd": 0,
+     "result": "3 items -> crew/evidence/map_adt_and_hash_functions.md",
+     "start": 159005,
+     "end": 159009
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 781,
+     "costUsd": 0.000425,
+     "result": "1 of 1 error fixed in place",
+     "start": 159010,
+     "end": 159791
+    },
+    {
+     "agent": "Checker",
+     "cmd": "rewrite-item",
+     "lesson": "map_adt_and_hash_functions",
+     "ok": true,
+     "ms": 1928,
+     "costUsd": 0.000313,
+     "result": "new q6 replaces q3 (pending)",
+     "start": 159055,
+     "end": 160983
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 17,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 159792,
+     "end": 159809
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 1208,
+     "costUsd": 0.000333,
+     "result": "re-solved 2: 2 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 159810,
+     "end": 161018
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "binary_search_tree_operations",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "3 items -> crew/evidence/binary_search_tree_operations.md",
+     "start": 161018,
+     "end": 161020
+    },
+    {
+     "agent": "Lead",
+     "cmd": "narrate",
+     "ok": true,
+     "ms": 106137,
+     "costUsd": 0,
+     "result": "4 clips, 24.0 min",
+     "start": 161021,
+     "end": 267158
+    },
+    {
+     "agent": "Lead",
+     "cmd": "export",
+     "ok": true,
+     "ms": 46,
+     "costUsd": 0,
+     "result": "7 files",
+     "start": 267159,
+     "end": 267205
+    },
+    {
+     "agent": "Lead",
+     "cmd": "build",
+     "ok": true,
+     "ms": 5511,
+     "costUsd": 0,
+     "result": "index.html 1007 KB, 3 lessons",
+     "start": 267205,
+     "end": 272716
+    }
+   ],
+   "card": {
+    "id": "C:\\Users\\you\\Documents\\BiliMind\\ds-final",
+    "title": "CSC2103 Data Structures final",
+    "sentence": "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.",
+    "createdAt": "2026-10-11T00:48:36+08:00",
+    "status": "ready",
+    "lessons": 3,
+    "minutes": 24.3,
+    "checks": {
+     "passed": 80,
+     "total": 80
+    },
+    "rejected": 3,
+    "codeTests": {
+     "passed": 14,
+     "total": 14
+    },
+    "costUsd": 0.039922,
+    "wallMs": 2033981
+   }
+  },
+  {
+   "example": "shop",
+   "object": "obj-check.webp",
+   "sentence": "We hire new crew every few weeks at Mutiara Tea Bar. Turn our SOP folder into a day-one course they must pass before their first shift, narrated in English and Malay.",
+   "files": [
+    {
+     "name": "food-hygiene-regulations-2009-one-page.pdf",
+     "path": "C:\\Users\\you\\Documents\\boba-day-one\\food-hygiene-regulations-2009-one-page.pdf",
+     "ext": "pdf",
+     "bytes": 73189,
+     "role": "lecture",
+     "pages": 1
+    },
+    {
+     "name": "mutiara-tea-bar-SOP.docx",
+     "path": "C:\\Users\\you\\Documents\\boba-day-one\\mutiara-tea-bar-SOP.docx",
+     "ext": "docx",
+     "bytes": 45551,
+     "role": "sop",
+     "pages": 20
+    }
+   ],
+   "plan": {
+    "keep": [
+     {
+      "key": "food_handler_law",
+      "title": "Who is a food handler under FHR 2009",
+      "day": 1
+     },
+     {
+      "key": "moh_handler_certificate",
+      "title": "Booking your MOH food handler course",
+      "day": 2
+     },
+     {
+      "key": "hygiene_rules",
+      "title": "Handwashing and hygiene rules you cannot skip",
+      "day": 1
+     },
+     {
+      "key": "allergens",
+      "title": "Allergens: what the creamer really contains",
+      "day": 2
+     },
+     {
+      "key": "dairy_allergy_scenario",
+      "title": "Answering \"is this dairy-free?\"",
+      "day": 5
+     },
+     {
+      "key": "shift_routines",
+      "title": "Opening and closing the kiosk by the checklist",
+      "day": 3
+     }
+    ],
+    "cut": [
+     {
+      "key": "pearls_and_tea",
+      "title": "Cooking pearls and brewing tea to spec",
+      "reason": "Pearl and tea prep is cut to fit the week; the opening-checklist lesson covers when pearls and tea start."
+     },
+     {
+      "key": "pearl_faults",
+      "title": "When a batch of pearls goes wrong",
+      "reason": "Builds on the cut pearl-prep lesson."
+     },
+     {
+      "key": "too_sweet_scenario",
+      "title": "When a customer says it is too sweet",
+      "reason": "A two-line SOP scenario (remake once, free of charge); the drink-building lesson covers the sweetness pumps."
+     },
+     {
+      "key": "capstone_first_shift",
+      "title": "Capstone: open the kiosk and serve ten drinks",
+      "reason": "A 90-minute supervised shift at the kiosk; it happens on the bar, not in a browser course."
+     }
+    ]
+   },
+   "steps": [
+    {
+     "agent": "Lead",
+     "cmd": "init",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0,
+     "result": "course folder boba-day-one",
+     "start": 0,
+     "end": 0
+    },
+    {
+     "agent": "Lead",
+     "cmd": "goal",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "exam 2026-10-18T09:00:00+08:00, 45 min/day, staff, 4 assumptions",
+     "start": 24,
+     "end": 26
+    },
+    {
+     "agent": "Lead",
+     "cmd": "ingest",
+     "ok": true,
+     "ms": 234,
+     "costUsd": 0,
+     "result": "2 files, 28 chunks",
+     "start": 29,
+     "end": 263
+    },
+    {
+     "agent": "Lead",
+     "cmd": "outline",
+     "ok": true,
+     "ms": 83314,
+     "costUsd": 0.012123,
+     "result": "13 topics: food_handler_law, moh_handler_certificate, hygiene_rules, allergens, dairy_allergy_scenario, shift_routines, pearls_and_tea, pearl_faults, drink_catalog, malay_order_phrases, building_a_drink, too_sweet_scenario, capstone_first_shift",
+     "start": 263,
+     "end": 83577
+    },
+    {
+     "agent": "Lead",
+     "cmd": "note",
+     "ok": true,
+     "ms": 0,
+     "costUsd": 0,
+     "result": "Kept food_handler_law, moh_handler_certificate, hygiene_rules, allergens, dairy_allergy_scenario, shift_routines (by marks per minute, heaviest deck first); cut pearls_and_tea, pearl_faults, drink_catalog, malay_order_phrases, building_a_drink, too_sweet_scenario, capstone_first_shift.",
+     "start": 83585,
+     "end": 83585
+    },
+    {
+     "agent": "Lead",
+     "cmd": "plan",
+     "ok": true,
+     "ms": 12,
+     "costUsd": 0,
+     "result": "6 lessons, 135/315 min, 15 reviews, 1 warning",
+     "start": 83586,
+     "end": 83598
+    },
+    {
+     "agent": "Writer · Who is a food handler under FHR 2009",
+     "cmd": "draft",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 17636,
+     "costUsd": 0.002961,
+     "result": "8 blocks, 4 questions, 5 citations",
+     "start": 83599,
+     "end": 101235
+    },
+    {
+     "agent": "Writer · Booking your MOH food handler course",
+     "cmd": "draft",
+     "lesson": "moh_handler_certificate",
+     "ok": true,
+     "ms": 29908,
+     "costUsd": 0.004565,
+     "result": "8 blocks, 4 questions, 4 citations",
+     "start": 83620,
+     "end": 113528
+    },
+    {
+     "agent": "Writer · Handwashing and hygiene rules you cannot skip",
+     "cmd": "draft",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 187102,
+     "costUsd": 0.036539,
+     "result": "6 blocks, 6 questions, 2 citations",
+     "start": 83636,
+     "end": 270738
+    },
+    {
+     "agent": "Writer · Allergens: what the creamer really contains",
+     "cmd": "draft",
+     "lesson": "allergens",
+     "ok": true,
+     "ms": 19524,
+     "costUsd": 0.003285,
+     "result": "8 blocks, 4 questions, 4 citations",
+     "start": 83652,
+     "end": 103176
+    },
+    {
+     "agent": "Writer · Who is a food handler under FHR 2009",
+     "cmd": "check",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 28,
+     "costUsd": 0,
+     "result": "24/25 checks, failed: Q6 multi_select",
+     "start": 101236,
+     "end": 101264
+    },
+    {
+     "agent": "Writer · Who is a food handler under FHR 2009",
+     "cmd": "draft",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 16887,
+     "costUsd": 0.002601,
+     "result": "7 blocks, 4 questions, 4 citations",
+     "start": 101265,
+     "end": 118152
+    },
+    {
+     "agent": "Writer · Allergens: what the creamer really contains",
+     "cmd": "check",
+     "lesson": "allergens",
+     "ok": true,
+     "ms": 15,
+     "costUsd": 0,
+     "result": "25/25 checks, 1 auto-fixed",
+     "start": 103176,
+     "end": 103191
+    },
+    {
+     "agent": "Writer · Answering \"is this dairy-free?\"",
+     "cmd": "draft",
+     "lesson": "dairy_allergy_scenario",
+     "ok": true,
+     "ms": 20345,
+     "costUsd": 0.003252,
+     "result": "9 blocks, 4 questions, 3 citations",
+     "start": 103191,
+     "end": 123536
+    },
+    {
+     "agent": "Writer · Booking your MOH food handler course",
+     "cmd": "check",
+     "lesson": "moh_handler_certificate",
+     "ok": true,
+     "ms": 14,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 113528,
+     "end": 113542
+    },
+    {
+     "agent": "Writer · Opening and closing the kiosk by the checklist",
+     "cmd": "draft",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 19077,
+     "costUsd": 0.002829,
+     "result": "10 blocks, 3 questions, 2 citations",
+     "start": 113543,
+     "end": 132620
+    },
+    {
+     "agent": "Writer · Who is a food handler under FHR 2009",
+     "cmd": "check",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 9,
+     "costUsd": 0,
+     "result": "24/24 checks",
+     "start": 118153,
+     "end": 118162
+    },
+    {
+     "agent": "Writer · Answering \"is this dairy-free?\"",
+     "cmd": "check",
+     "lesson": "dairy_allergy_scenario",
+     "ok": true,
+     "ms": 10,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 123537,
+     "end": 123547
+    },
+    {
+     "agent": "Writer · Opening and closing the kiosk by the checklist",
+     "cmd": "check",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "24/25 checks, failed: Q2 item count, 1 auto-fixed",
+     "start": 132621,
+     "end": 132629
+    },
+    {
+     "agent": "Writer · Opening and closing the kiosk by the checklist",
+     "cmd": "draft",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 20980,
+     "costUsd": 0.003011,
+     "result": "7 blocks, 5 questions, 2 citations",
+     "start": 132630,
+     "end": 153610
+    },
+    {
+     "agent": "Writer · Opening and closing the kiosk by the checklist",
+     "cmd": "check",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "26/26 checks",
+     "start": 153610,
+     "end": 153618
+    },
+    {
+     "agent": "Writer · Handwashing and hygiene rules you cannot skip",
+     "cmd": "check",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 9,
+     "costUsd": 0,
+     "result": "26/27 checks, failed: Q6 multi_select",
+     "start": 270739,
+     "end": 270748
+    },
+    {
+     "agent": "Writer · Handwashing and hygiene rules you cannot skip",
+     "cmd": "draft",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 24819,
+     "costUsd": 0.00364,
+     "result": "7 blocks, 6 questions, 5 citations",
+     "start": 270749,
+     "end": 295568
+    },
+    {
+     "agent": "Writer · Handwashing and hygiene rules you cannot skip",
+     "cmd": "check",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 17,
+     "costUsd": 0,
+     "result": "28/28 checks, 1 auto-fixed",
+     "start": 295568,
+     "end": 295585
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 408,
+     "costUsd": 0.000326,
+     "result": "0 of 0 errors fixed in place",
+     "start": 295586,
+     "end": 295994
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 9,
+     "costUsd": 0,
+     "result": "24/24 checks",
+     "start": 295994,
+     "end": 296003
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 1580,
+     "costUsd": 0.000651,
+     "result": "re-solved 3: 3 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 296004,
+     "end": 297584
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "food_handler_law",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0,
+     "result": "4 items -> crew/evidence/food_handler_law.md",
+     "start": 297584,
+     "end": 297590
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "moh_handler_certificate",
+     "ok": true,
+     "ms": 685,
+     "costUsd": 0.000577,
+     "result": "0 of 0 errors fixed in place",
+     "start": 297591,
+     "end": 298276
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "moh_handler_certificate",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 298277,
+     "end": 298285
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "moh_handler_certificate",
+     "ok": true,
+     "ms": 1377,
+     "costUsd": 0.00034,
+     "result": "re-solved 2: 2 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 298286,
+     "end": 299663
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "moh_handler_certificate",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "3 items -> crew/evidence/moh_handler_certificate.md",
+     "start": 299664,
+     "end": 299666
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 994,
+     "costUsd": 0.000447,
+     "result": "0 of 1 error fixed in place, 1 left",
+     "start": 299666,
+     "end": 300660
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 7,
+     "costUsd": 0,
+     "result": "28/28 checks",
+     "start": 300661,
+     "end": 300668
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 1811,
+     "costUsd": 0.000883,
+     "result": "re-solved 4: 4 agree with the key, 0 wrong keys rejected, 1 beyond the slides",
+     "start": 300669,
+     "end": 302480
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "hygiene_rules",
+     "ok": true,
+     "ms": 3,
+     "costUsd": 0,
+     "result": "6 items -> crew/evidence/hygiene_rules.md",
+     "start": 302480,
+     "end": 302483
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "allergens",
+     "ok": true,
+     "ms": 385,
+     "costUsd": 0.000305,
+     "result": "0 of 0 errors fixed in place",
+     "start": 302484,
+     "end": 302869
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "allergens",
+     "ok": true,
+     "ms": 10,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 302869,
+     "end": 302879
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "allergens",
+     "ok": true,
+     "ms": 1801,
+     "costUsd": 0.000501,
+     "result": "re-solved 3: 3 agree with the key, 0 wrong keys rejected, 1 beyond the slides",
+     "start": 302879,
+     "end": 304680
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "allergens",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "4 items -> crew/evidence/allergens.md",
+     "start": 304681,
+     "end": 304683
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "dairy_allergy_scenario",
+     "ok": true,
+     "ms": 767,
+     "costUsd": 0.000381,
+     "result": "0 of 0 errors fixed in place",
+     "start": 304683,
+     "end": 305450
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "dairy_allergy_scenario",
+     "ok": true,
+     "ms": 10,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 305451,
+     "end": 305461
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "dairy_allergy_scenario",
+     "ok": true,
+     "ms": 1348,
+     "costUsd": 0.00033,
+     "result": "re-solved 2: 2 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 305461,
+     "end": 306809
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "dairy_allergy_scenario",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "3 items -> crew/evidence/dairy_allergy_scenario.md",
+     "start": 306809,
+     "end": 306811
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 611,
+     "costUsd": 0.000324,
+     "result": "0 of 0 errors fixed in place",
+     "start": 306812,
+     "end": 307423
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "26/26 checks",
+     "start": 307425,
+     "end": 307433
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 3860,
+     "costUsd": 0.001095,
+     "result": "re-solved 4: 3 agree with the key, 1 wrong key rejected and rewritten, 0 beyond the slides",
+     "start": 307433,
+     "end": 311293
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "shift_routines",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "4 items -> crew/evidence/shift_routines.md",
+     "start": 311293,
+     "end": 311295
+    },
+    {
+     "agent": "Lead",
+     "cmd": "narrate",
+     "ok": true,
+     "ms": 165536,
+     "costUsd": 0,
+     "result": "14 clips, 36.4 min",
+     "start": 311295,
+     "end": 476831
+    },
+    {
+     "agent": "Lead",
+     "cmd": "export",
+     "ok": true,
+     "ms": 51,
+     "costUsd": 0,
+     "result": "10 files",
+     "start": 476831,
+     "end": 476882
+    },
+    {
+     "agent": "Lead",
+     "cmd": "build",
+     "ok": true,
+     "ms": 61,
+     "costUsd": 0,
+     "result": "index.html 1135 KB, 6 lessons",
+     "start": 476882,
+     "end": 476943
+    }
+   ],
+   "card": {
+    "id": "C:\\Users\\you\\Documents\\BiliMind\\boba-day-one",
+    "title": "Mutiara Tea Bar crew day-one",
+    "sentence": "We hire new crew every few weeks at Mutiara Tea Bar. Turn our SOP folder into a day-one course they must pass before their first shift, narrated in English and Malay.",
+    "createdAt": "2026-10-11T00:48:37+08:00",
+    "status": "ready",
+    "lessons": 7,
+    "minutes": 34.7,
+    "checks": {
+     "passed": 231,
+     "total": 231
+    },
+    "rejected": 1,
+    "codeTests": {
+     "passed": 0,
+     "total": 0
+    },
+    "costUsd": 0.094294,
+    "wallMs": 1996087
+   }
+  },
+  {
+   "example": "language",
+   "object": "obj-book.webp",
+   "sentence": "I'm an international student at Taylor's with zero Malay. Make me a survival course for my first month (mamak, Grab, campus) that also starts me on Bahasa Melayu Komunikasi. I have 20 minutes a day for 2 weeks.",
+   "files": [
+    {
+     "name": "bmk2-note.md",
+     "path": "C:\\Users\\you\\Documents\\bm-survival\\bmk2-note.md",
+     "ext": "md",
+     "bytes": 1295,
+     "role": "lecture",
+     "pages": 1
+    },
+    {
+     "name": "malay-survival-phrasebook.md",
+     "path": "C:\\Users\\you\\Documents\\bm-survival\\malay-survival-phrasebook.md",
+     "ext": "md",
+     "bytes": 10459,
+     "role": "lecture",
+     "pages": 11
+    }
+   ],
+   "plan": {
+    "keep": [
+     {
+      "key": "malay_sounds",
+      "title": "How Malay sounds and how it is spelled",
+      "day": 1
+     },
+     {
+      "key": "greetings_and_address",
+      "title": "Greeting people, introducing yourself, what to call them",
+      "day": 2
+     },
+     {
+      "key": "greeting_etiquette",
+      "title": "When to use Assalamualaikum",
+      "day": 3
+     },
+     {
+      "key": "numbers_money_and_time",
+      "title": "Numbers, money and telling the time",
+      "day": 3
+     }
+    ],
+    "cut": [
+     {
+      "key": "sentence_patterns",
+      "title": "Sentences you can build yourself",
+      "reason": "Not needed to survive the first month: every lesson teaches whole phrases you can use as they are."
+     },
+     {
+      "key": "little_words_in_speech",
+      "title": "Little words you will hear everywhere",
+      "reason": "A side lesson on lah, jom and kan: nice to have, but 20 minutes a day do not fit it next to mamak, Grab and campus."
+     },
+     {
+      "key": "emergency_phrases",
+      "title": "When it goes wrong: lost, sick, help",
+      "reason": "A side lesson; the 2 weeks go to mamak, Grab and campus. Remember 999 (112 from a mobile) and Tolong! (Help!)."
+     }
+    ]
+   },
+   "steps": [
+    {
+     "agent": "Lead",
+     "cmd": "init",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0,
+     "result": "course folder bm-survival",
+     "start": 0,
+     "end": 0
+    },
+    {
+     "agent": "Lead",
+     "cmd": "goal",
+     "ok": true,
+     "ms": 4,
+     "costUsd": 0,
+     "result": "exam 2026-10-18T09:00:00+08:00, 20 min/day, student, 3 assumptions",
+     "start": 21,
+     "end": 25
+    },
+    {
+     "agent": "Lead",
+     "cmd": "ingest",
+     "ok": true,
+     "ms": 16,
+     "costUsd": 0,
+     "result": "2 files, 16 chunks",
+     "start": 26,
+     "end": 42
+    },
+    {
+     "agent": "Lead",
+     "cmd": "outline",
+     "ok": true,
+     "ms": 114899,
+     "costUsd": 0.015483,
+     "result": "12 topics: malay_sounds, greetings_and_address, greeting_etiquette, numbers_money_and_time, sentence_patterns, little_words_in_speech, mamak_ordering, grab_and_directions, emergency_phrases, campus_and_classroom, bmk_module_context, capstone_a_day_in_malay",
+     "start": 43,
+     "end": 114942
+    },
+    {
+     "agent": "Lead",
+     "cmd": "note",
+     "ok": true,
+     "ms": 0,
+     "costUsd": 0,
+     "result": "Kept malay_sounds, greetings_and_address, greeting_etiquette, numbers_money_and_time (by marks per minute, heaviest deck first); cut sentence_patterns, little_words_in_speech, mamak_ordering, grab_and_directions, emergency_phrases, campus_and_classroom, bmk_module_context, capstone_a_day_in_malay.",
+     "start": 114951,
+     "end": 114951
+    },
+    {
+     "agent": "Lead",
+     "cmd": "plan",
+     "ok": true,
+     "ms": 7,
+     "costUsd": 0,
+     "result": "4 lessons, 60/140 min, 11 reviews, 4 warnings",
+     "start": 114951,
+     "end": 114958
+    },
+    {
+     "agent": "Writer · How Malay sounds and how it is spelled",
+     "cmd": "draft",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 15566,
+     "costUsd": 0.002637,
+     "result": "7 blocks, 7 questions, 3 citations",
+     "start": 114959,
+     "end": 130525
+    },
+    {
+     "agent": "Writer · Greeting people, introducing yourself, what to call them",
+     "cmd": "draft",
+     "lesson": "greetings_and_address",
+     "ok": true,
+     "ms": 23951,
+     "costUsd": 0.003593,
+     "result": "8 blocks, 4 questions, 2 citations",
+     "start": 114972,
+     "end": 138923
+    },
+    {
+     "agent": "Writer · When to use Assalamualaikum",
+     "cmd": "draft",
+     "lesson": "greeting_etiquette",
+     "ok": true,
+     "ms": 24621,
+     "costUsd": 0.00376,
+     "result": "8 blocks, 4 questions, 4 citations",
+     "start": 114984,
+     "end": 139605
+    },
+    {
+     "agent": "Writer · Numbers, money and telling the time",
+     "cmd": "draft",
+     "lesson": "numbers_money_and_time",
+     "ok": true,
+     "ms": 19885,
+     "costUsd": 0.003369,
+     "result": "9 blocks, 4 questions, 5 citations",
+     "start": 114995,
+     "end": 134880
+    },
+    {
+     "agent": "Writer · How Malay sounds and how it is spelled",
+     "cmd": "check",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 23,
+     "costUsd": 0,
+     "result": "30/31 checks, failed: Q2 item count",
+     "start": 130526,
+     "end": 130549
+    },
+    {
+     "agent": "Writer · How Malay sounds and how it is spelled",
+     "cmd": "draft",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 17628,
+     "costUsd": 0.002716,
+     "result": "7 blocks, 4 questions, 2 citations",
+     "start": 130550,
+     "end": 148178
+    },
+    {
+     "agent": "Writer · Numbers, money and telling the time",
+     "cmd": "check",
+     "lesson": "numbers_money_and_time",
+     "ok": true,
+     "ms": 9,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 134880,
+     "end": 134889
+    },
+    {
+     "agent": "Writer · Greeting people, introducing yourself, what to call them",
+     "cmd": "check",
+     "lesson": "greetings_and_address",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 138923,
+     "end": 138931
+    },
+    {
+     "agent": "Writer · When to use Assalamualaikum",
+     "cmd": "check",
+     "lesson": "greeting_etiquette",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 139606,
+     "end": 139614
+    },
+    {
+     "agent": "Writer · How Malay sounds and how it is spelled",
+     "cmd": "check",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "24/24 checks",
+     "start": 148178,
+     "end": 148186
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 435,
+     "costUsd": 0.000256,
+     "result": "0 of 0 errors fixed in place",
+     "start": 148187,
+     "end": 148622
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0,
+     "result": "24/24 checks",
+     "start": 148622,
+     "end": 148628
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 1285,
+     "costUsd": 0.000444,
+     "result": "re-solved 3: 3 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 148628,
+     "end": 149913
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "malay_sounds",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "4 items -> crew/evidence/malay_sounds.md",
+     "start": 149914,
+     "end": 149916
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "greetings_and_address",
+     "ok": true,
+     "ms": 590,
+     "costUsd": 0.000461,
+     "result": "0 of 0 errors fixed in place",
+     "start": 149917,
+     "end": 150507
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "greetings_and_address",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 150507,
+     "end": 150515
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "greetings_and_address",
+     "ok": true,
+     "ms": 4663,
+     "costUsd": 0.00113,
+     "result": "re-solved 3: 2 agree with the key, 1 wrong key rejected and rewritten, 1 beyond the slides",
+     "start": 150515,
+     "end": 155178
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "greetings_and_address",
+     "ok": true,
+     "ms": 1,
+     "costUsd": 0,
+     "result": "3 items -> crew/evidence/greetings_and_address.md",
+     "start": 155179,
+     "end": 155180
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "greeting_etiquette",
+     "ok": true,
+     "ms": 1094,
+     "costUsd": 0.000513,
+     "result": "0 of 0 errors fixed in place",
+     "start": 155181,
+     "end": 156275
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "greeting_etiquette",
+     "ok": true,
+     "ms": 6,
+     "costUsd": 0,
+     "result": "25/25 checks",
+     "start": 156276,
+     "end": 156282
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "greeting_etiquette",
+     "ok": true,
+     "ms": 932,
+     "costUsd": 0.000225,
+     "result": "re-solved 1: 1 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 156282,
+     "end": 157214
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "greeting_etiquette",
+     "ok": true,
+     "ms": 8,
+     "costUsd": 0,
+     "result": "3 items -> crew/evidence/greeting_etiquette.md",
+     "start": 157215,
+     "end": 157223
+    },
+    {
+     "agent": "Checker",
+     "cmd": "fact-check",
+     "lesson": "numbers_money_and_time",
+     "ok": true,
+     "ms": 624,
+     "costUsd": 0.000311,
+     "result": "0 of 0 errors fixed in place",
+     "start": 157225,
+     "end": 157849
+    },
+    {
+     "agent": "Checker",
+     "cmd": "check",
+     "lesson": "numbers_money_and_time",
+     "ok": true,
+     "ms": 7,
+     "costUsd": 0,
+     "result": "27/27 checks",
+     "start": 157850,
+     "end": 157857
+    },
+    {
+     "agent": "Checker",
+     "cmd": "verdict",
+     "lesson": "numbers_money_and_time",
+     "ok": true,
+     "ms": 1280,
+     "costUsd": 0.000532,
+     "result": "re-solved 3: 3 agree with the key, 0 wrong keys rejected, 0 beyond the slides",
+     "start": 157857,
+     "end": 159137
+    },
+    {
+     "agent": "Checker",
+     "cmd": "evidence",
+     "lesson": "numbers_money_and_time",
+     "ok": true,
+     "ms": 2,
+     "costUsd": 0,
+     "result": "4 items -> crew/evidence/numbers_money_and_time.md",
+     "start": 159138,
+     "end": 159140
+    },
+    {
+     "agent": "Lead",
+     "cmd": "narrate",
+     "ok": true,
+     "ms": 99453,
+     "costUsd": 0,
+     "result": "21 clips, 21.2 min",
+     "start": 159140,
+     "end": 258593
+    },
+    {
+     "agent": "Lead",
+     "cmd": "export",
+     "ok": true,
+     "ms": 42,
+     "costUsd": 0,
+     "result": "8 files",
+     "start": 258593,
+     "end": 258635
+    },
+    {
+     "agent": "Lead",
+     "cmd": "build",
+     "ok": true,
+     "ms": 7128,
+     "costUsd": 0,
+     "result": "index.html 1041 KB, 4 lessons",
+     "start": 258635,
+     "end": 265763
+    }
+   ],
+   "card": {
+    "id": "C:\\Users\\you\\Documents\\BiliMind\\bm-survival",
+    "title": "Survival Malay",
+    "sentence": "I'm an international student at Taylor's with zero Malay. Make me a survival course for my first month (mamak, Grab, campus) that also starts me on Bahasa Melayu Komunikasi. I have 20 minutes a day for 2 weeks.",
+    "createdAt": "2026-10-11T00:48:38+08:00",
+    "status": "ready",
+    "lessons": 8,
+    "minutes": 39.2,
+    "checks": {
+     "passed": 228,
+     "total": 229
+    },
+    "rejected": 3,
+    "codeTests": {
+     "passed": 0,
+     "total": 0
+    },
+    "costUsd": 0.055227,
+    "wallMs": 1993392
+   }
+  }
+ ]
+}

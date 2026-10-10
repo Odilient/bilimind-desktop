@@ -6,5 +6,7 @@ autoInstallPeers: true
 strictPeerDependencies: false
 onlyBuiltDependencies:
   - esbuild
+  - electron
+  - electron-winstaller
 ignoredBuiltDependencies:
   - msedge-tts

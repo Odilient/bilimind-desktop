@@ -212,9 +212,9 @@ must actually execute tests; the Automation must actually send a message.
 - **The trick:** the pitch starts by pressing Enter on the live run, so the agent works *during*
   the talk. The demo then opens with a finished result instead of a progress bar. That is the
   reveal moment, and it proves "end to end, no steering" better than any slide.
-- **Roles:** Oybek speaks. A second team member drives the laptop (call them the **driver**;
-  Sharif is the natural fit as the engineer). A third holds the backup laptop with every
-  pre-generated course already open in tabs. Ulugbek takes business-model questions in Q&A.
+- **Roles:** one team member speaks, a second drives the laptop (the **driver**), a third holds
+  the backup laptop with every pre-generated course already open in tabs. The team decides who
+  does what, and who takes which questions in Q&A.
   (Confirm who will be on stage; the script works with two people.)
 - **Pace:** about 420 spoken words (counted) plus two pauses (the hand raise, the turn to the
   screen). That needs ~150 words a minute to land at 3:00, so speak briskly in the problem and
@@ -618,7 +618,7 @@ anyone gives this answer.)
 | 11 | Numbers in this file | Production cost numbers come from the SaaS (`inv-generation.md` §1-2) | Replace with the costs measured on the hackathon runs before rehearsal |
 | 12 | Business-model claims | Not validated | Present as plan/hypothesis, never as revenue |
 | 13 | Licensing of showcase sources | MIT OCW is CC BY-NC-SA; Wikivoyage is CC BY-SA | Attribution in every course footer; no commercial use of the OCW-derived course |
-| 14 | Team on stage | Script assumes a speaker and a driver | Confirm who presents; assign Q&A owners (Ulugbek: business, Sharif: tech, Oybek: product) |
+| 14 | Team on stage | Script assumes a speaker and a driver | Confirm who presents; assign Q&A owners (team decides) |
 
 ---
 

@@ -1,55 +1,58 @@
-# Pitch deck brief (for WorkBuddy "Slides Creation")
+# Pitch deck brief: BiliMind Desktop (for WorkBuddy "Slides Creation")
 
-Format: 16:9, 8 slides, exported as PDF for the Dormathon submission. Talk length: 3 minutes, so very
-little text per slide: one headline, one visual, at most 3 short lines.
+Format: 16:9, 8 slides, exported as PDF for the Dormathon submission. The talk is a 3-minute live demo of
+the app, so slides carry very little text: one headline, one visual, at most 3 short lines. Attach the app
+screenshots `docs/img/app-home.png`, `app-building.png`, `app-finished.png` and `app-course.png`.
 
-## Visual style (cobalt, match the attached screenshots exactly)
+## Visual style (cobalt, match the attached screenshots)
 
-- Page background #ECEEF2; big rounded slabs (radius ~36px) in cobalt #2340E6 with a soft radial
+- Page background #ECEEF2; big rounded slabs (radius about 36px) in cobalt #2340E6 with a soft radial
   gradient to #3253F4; ink slabs #0B0D10; white cards.
 - Accent lime #C6F24E, always with dark ink text on it (never white text on lime).
 - Headlines: Space Grotesk Bold, UPPERCASE, tight letter-spacing (-0.04em), very large. Body: Inter.
-- Small "eyebrow" pills with a lime dot above headlines. Round inline icon chips inside headlines.
-- Use the attached screenshots as the main visuals (course home, lesson, landing hero, WorkBuddy run).
-- No emoji, no cartoons, no stock photos, no AI-generated text inside images.
+- Small "eyebrow" pills with a lime dot above headlines.
+- Use the attached app screenshots as the main visuals.
+- No emoji, no cartoons, no stock photos, no AI-generated text inside images. Use only the numbers below.
 
 ## Slides
 
-1. **Title.** Eyebrow: "Dormathon 2026 · Track 2 · WorkBuddy". Headline: "ONE SENTENCE IN. A COURSE OUT."
-   Second line in lime: "CHECKED AGAINST YOUR SLIDES." Small: "BiliMind for WorkBuddy · team Opus Magnum (#58) ·
-   Taylor's University". Visual: landing hero screenshot.
+1. **Title.** Eyebrow: "Dormathon 2026 · Track 2". Headline: "BILIMIND DESKTOP". Second line in lime:
+   "DROP IN YOUR FILES. GET A COURSE, CHECKED AGAINST THEM." Small: "Team Opus Magnum (#58) · Taylor's
+   University · Oybek Odilov, Abdugaffor Odilov, Ramil Khutlimuratov, Gameel Al-Bazeeli". Visual: the home
+   screen screenshot.
 
-2. **The problem.** Headline: "84% OF STUDENTS STUDY BY REREADING." Lines: "Testing yourself: ~80%
-   remembered a week later. Rereading: about a third." / "Doing it right takes hours: questions,
-   flashcards, a schedule, mapping last year's paper." Footnote: Karpicke, Butler & Roediger 2009;
-   Karpicke & Roediger 2008, Science.
+2. **The problem (personal).** Headline: "EXAM IN 3 DAYS. A FOLDER OF SLIDES. NO PLAN." Lines: "Last
+   year's paper is in there somewhere." / "Making questions, flashcards and a schedule takes hours you
+   don't have." Visual: a plain folder icon with four slide decks and "past-paper.pdf".
 
-3. **One sentence in WorkBuddy.** Headline: "TELL WORKBUDDY WHEN YOUR EXAM IS." Visual: the prompt card
-   "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have
-   45 minutes a day. Get me ready." + screenshot of the WorkBuddy run (plan checklist + parallel writers).
+3. **The solution.** Headline: "ONE FOLDER. ONE SENTENCE. ONE COURSE." Line: "BiliMind Desktop turns your
+   own files into a narrated, checked course on your laptop, with your own AI key." Visual: the prompt
+   card "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder.
+   I have 45 minutes a day. Get me ready." next to the home screen screenshot.
 
-4. **The crew (agentic workflow).** Headline: "A COURSE TEAM, INSIDE WORKBUDDY." Diagram, left to right
-   with dashed connectors: Lead (reads the past paper, weights topics, fits the plan to your days, cuts
-   what the exam never asks) → 4 Writers in parallel (one lesson each) → Coder (runs every code
-   exercise, fixes failures) + Checker (rejects answers your slides don't support, rewrites them) → Lead
-   packages. Tagline under it: "Agents decide what and when. Code decides how. Then they check."
+4. **How it works (the crew).** Headline: "A COURSE TEAM IN ONE APP." Diagram, left to right with dashed
+   connectors: Lead (reads your files, weights topics by last year's marks, fits the plan to your days,
+   cuts what the paper never asks) → Writers in parallel (one lesson each) → Coder (runs every code
+   exercise) + Checker (re-solves every answer against your files, rejects and rewrites wrong ones) →
+   narration, Anki deck, calendar, plan. Visual: the building screen screenshot.
 
-5. **What you get.** Headline: "NOT A CHAT. A FOLDER YOU OWN." Visual: course home + lesson screenshots.
-   Icons row: Interactive offline course · Notes in Markdown · Anki deck · Calendar reviews (.ics) ·
-   REPORT of every check. Format chips: "A procedure gets a walkthrough. A formula gets a slider. A
-   language gets a native voice."
+5. **Proof it's right.** Headline: "IT CHECKS ITSELF AGAINST YOUR SLIDES." Visual: the rejected answer
+   from the Data Structures course: answer key "49 goes to slot 9" rejected, with the quote from Slide 11
+   "49 → 9 taken, try 0: 2 probes", rewritten. Numbers row (Data Structures course): "80/80 checks passed
+   · 14/14 code tests (1 fixed by the Coder) · 3 wrong answers rejected and rewritten · $0.04". Small
+   line: "Measured unattended runs: 268 s and 289 s, $0.046 and $0.047 per course."
 
-6. **Proof it checks itself.** Headline: "IT ARGUED WITH ITSELF." Numbers from our real runs:
-   {{CHECKS}} checks run · {{REJECTED}} answers rejected and rewritten · {{CODEFIX}} code exercises fixed
-   by the Coder · {{TESTS}} tests passing · ~{{MIN}} min and ${{COST}} per course + {{CREDITS}} WorkBuddy
-   credits. Visual: a quiz with a "Slide 7" citation chip and the slide quote.
+6. **Small businesses too.** Headline: "SAME APP. A SHOP'S SOP." Visual: the Mutiara Tea Bar crew day-one
+   course. Lines: "A bubble-tea shop's SOP became a day-one course with a pass mark, narrated in English
+   and Malay." / "7 lessons · 231/231 checks passed · 64 Anki cards · $0.09".
 
-7. **Small businesses too.** Headline: "SAME CREW. A SHOP'S SOP." Visual: the Mutiara Tea Bar course.
-   Lines: "SOP folder → day-one course with a pass mark, narrated in English and Malay." / "Frontline
-   turnover in SEA: up to 48% a year (Momentum Works x Lark, 2024)."
+7. **How we used WorkBuddy.** Headline: "WHERE WORKBUDDY CAME IN." Three short items: "This deck: made in
+   WorkBuddy Slides Creation" / "Plain WorkBuddy vs BiliMind on the same student request: a plan, but no
+   slide citations, tested code, narration or exports" / "BiliMind also ships as a WorkBuddy skill and
+   Expert Team, validated with WorkBuddy's own validator". Small line: "The desktop app was built by our
+   team with AI coding agents."
 
-8. **How we used WorkBuddy + close.** Headline: "BUILT TO RUN ON WORKBUDDY." Bullets: "Runs as a
-   WorkBuddy skill and Expert Team (Lead, Writers, Coder, Checker)" / "Sub-agents in parallel, task
-   checklist, Preview panel, credits" / "Deck, docs and the deployed site made with WorkBuddy" / "Built at
-   Dormathon: the skill, crew, checker loop, planner, offline player. Pedagogy ported from our app
-   BiliMind." Final line in lime: "ONE SENTENCE IN. A COURSE OUT."
+8. **Open source + download.** Headline: "FREE. OPEN SOURCE. YOUR FILES STAY YOURS." Lines:
+   "Download for Windows: github.com/Odilient/bilimind-desktop/releases" / "Website:
+   odilient.github.io/bilimind-desktop" / "AGPL-3.0 · bring your own DeepSeek or OpenRouter key · about
+   5 cents a course". Final line in lime: "DROP IN YOUR FILES. GET A COURSE."

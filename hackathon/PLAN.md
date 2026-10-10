@@ -580,7 +580,7 @@ Cut: "Why Rereading Lies to You" (the 4th course). Its one stat goes on slide 1 
 
 - Projector: WorkBuddy on the left ~70% (Compact Mode off, font zoom up), the slides on the right ~30%
   (rail mode, or the PDF in a narrow Edge window). The course opens in WorkBuddy's Preview panel.
-- Driver (Sharif or whoever H14 names) works the laptop; Oybek speaks.
+- The team decides who speaks and who drives the laptop (H14).
 - Before the timer: demo workspace `C:\Demo\DS-Final\` (sources only, `bilimind-out` emptied by the reset
   script), Full Access for that folder only, the morning run of the identical sentence open in a second
   WorkBuddy task, player localStorage cleared, the deployed link open in a background tab.
@@ -963,7 +963,7 @@ blocks something.
 | H11 | Real users (optional, if anyone is awake): 2-3 students at the venue try the hero course for 5 minutes; "would you use it before your next exam?" + one quote with consent | 00:00-03:00 | 30 min | Slide 4 |
 | H12 | Write two true sentences for the personal hook | Before 06:00 | 10 min | Pitch |
 | H13 | OBS screen recording of the best full run (backup only) | After G4 | 15 min | §4.4 |
-| H14 | Decide who presents and who drives; Q&A owners (Ulugbek business, Sharif tech, Oybek product) | Before 06:00 | 10 min | RUNBOOK |
+| H14 | Decide who presents and who drives; Q&A owners (team decides) | Before 06:00 | 10 min | RUNBOOK |
 | H15 | A Malaysian friend checks the Malay course phrases | After G4 | 20 min | Course C in Q&A |
 | H16 | Run the hero sentence once in WorkBuddy WITHOUT the skill; keep a screenshot of its output | After H4 | 10 min | Slide 4 |
 | H17 | Rehearse: 3 consecutive runs plus one on the phone hotspot; the 3-minute pitch 3 times with a timer | 06:00-08:30 | 2 h | G5 |

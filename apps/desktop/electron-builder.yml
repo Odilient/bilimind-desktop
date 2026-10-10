@@ -1,0 +1,47 @@
+# BiliMind Desktop packaging (electron-builder 26). Build first: node scripts/build.mjs (scripts/dist.mjs does both).
+# Everything the app runs is bundled by esbuild into dist/, so no node_modules are packaged (all deps are dev deps).
+appId: ai.bilimind.desktop
+productName: BiliMind Desktop
+copyright: Copyright (C) 2026 Opus Magnum. AGPL-3.0-only.
+directories:
+  output: release
+  buildResources: resources
+files:
+  - package.json
+  - dist/**
+  - "!dist/**/*.map"
+asar: true
+# utilityProcess loads the worker from disk, and sql.js reads sql-wasm.wasm next to it via __dirname
+asarUnpack:
+  - dist/worker/**
+extraResources:
+  - from: resources/templates
+    to: templates
+  - from: resources/assets
+    to: assets
+  - from: resources/icon.png
+    to: icon.png
+npmRebuild: false
+nodeGypRebuild: false
+buildDependenciesFromSource: false
+# use the Electron already installed by pnpm (no download behind the venue firewall)
+electronDist: node_modules/electron/dist
+electronVersion: 44.7.0
+win:
+  icon: resources/icon.ico
+  target:
+    - target: portable
+      arch: [x64]
+    - target: nsis
+      arch: [x64]
+  signAndEditExecutable: true
+portable:
+  artifactName: BiliMind-Desktop-${version}-${arch}-portable.exe
+nsis:
+  artifactName: BiliMind-Desktop-${version}-${arch}-setup.exe
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: BiliMind Desktop
+publish: null

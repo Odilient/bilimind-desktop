@@ -1,192 +1,160 @@
-# RUNBOOK: BiliMind for WorkBuddy on stage
+# RUNBOOK: BiliMind Desktop on stage
 
-Dormathon 2026, Track 2 (WorkBuddy agentic solutions). Team Opus Magnum #58, Taylor's University branch:
-Oybek, Ulugbek, Sharif and Abdugaffor Odilov.
+Dormathon 2026, Track 2: "How can AI help students and small businesses solve real business problems and
+operate more effectively?" Team Opus Magnum (#58), Taylor's University branch: Oybek Odilov, Abdugaffor
+Odilov, Ramil Khutlimuratov and Gameel Al-Bazeeli.
 
-- Phase 1 (local branch): 3:00 live presentation + 2:00 Q&A.
+- Phase 1 (branch): 3:00 live presentation + 2:00 Q&A.
 - Phase 2 (top 18, global video call): 4:00 demo + 3:00 Q&A.
-- Public repo: https://gitlab.com/avinmaster/bilimind-workbuddy
-- Deployed site: https://bilimind-workbuddy-55b817.gitlab.io/
+- Download: https://github.com/Odilient/bilimind-desktop/releases/latest
+- Website: https://odilient.github.io/bilimind-desktop/
+- Source: https://github.com/Odilient/bilimind-desktop
+
+Team decides who speaks and who drives. Below, **Speaker** is whoever talks and **Driver** is whoever works
+the laptop; write the names here once decided: Speaker ______ Driver ______ Timer ______.
 
 Rules for everyone on stage:
 
-1. Say only numbers that were measured. Every number in this file comes from
-   `hackathon/scratch/b-result.txt` (the G2 integration runs) or is a `{{PLACEHOLDER}}` to fill from the
-   real run's `REPORT.md` before going on. If a placeholder is still empty, drop the sentence.
-2. Never claim the live run started later than it did. Never show a log line that did not happen.
-3. Never show an API key. Never open `.env.local` or `%USERPROFILE%\.bilimind\config.json` on screen.
-
-Roles: **Speaker** Oybek. **Driver** {{DRIVER_NAME}} (PLAN 4.2 suggests Sharif) works the laptop.
-**Timer** {{TIMER_NAME}} holds up cards at 1:00, 2:00 and 2:40.
+1. Say only numbers that were measured. Every number here comes from the showcase courses' `REPORT.md`
+   files or the two measured unattended runs (268 s / $0.046 and 289 s / $0.047). If a number for today's
+   live run is not known, drop the sentence.
+2. Never claim the live run started later than it did, and never show a step that did not happen.
+3. Never show an API key. Never open `%USERPROFILE%\.bilimind\config.json` on screen. In Settings the app
+   shows only the last four characters.
 
 ---
 
-## 1. Setup checklist (do it before the timer starts)
+## 1. Setup checklist (before the timer starts)
 
 Laptop and screen
 
-- [ ] Laptop on mains power, sleep and screen saver off, notifications off (Focus assist on).
-- [ ] PC clock synced (Settings > Time > Sync now). If not, the course says "Built ..." with wrong times.
-- [ ] Alt-Tab check: close every window that is not part of the demo, including leftover Edge windows
-      titled like "Survival Malay ..." or "Data Structures ..." from build and screenshot runs. Only
-      WorkBuddy and one Edge window should be left.
-- [ ] Projector at 1920x1080 or the venue's native size. WorkBuddy font zoom up one step.
+- [ ] On mains power; sleep, screen saver and notifications off (Focus assist on). Clock synced.
+- [ ] Close every window except BiliMind Desktop and one Edge window (slides). Alt-Tab check.
+- [ ] Projector at its native resolution; app window maximised.
 
-WorkBuddy
+BiliMind Desktop
 
-- [ ] WorkBuddy open and signed in. Credits read and written down before the run: {{CREDITS_BEFORE}}.
-- [ ] **Compact Mode off**, so the agent cards and the checklist show.
-- [ ] Skill `bilimind` visible in the Skills list, and the Expert Team **BiliMind Crew** (Lead, Writer,
-      Coder, Checker) visible in My Experts.
-- [ ] Workspace set to **`C:\Demo\DS-Final`** (sources only: four lecture PDFs and `past-paper.pdf`).
-      Its `bilimind-out` folder is empty, so the live run starts clean.
-- [ ] **Full Access** granted for `C:\Demo\DS-Final` only, not the whole disk.
-- [ ] Task 1 (live): the BiliMind Crew selected, the sentence below typed into the box, **not sent yet**.
-- [ ] Task 2 (backup): **a finished morning run of the identical sentence**, open in a second task,
-      scrolled to: the plan, a Coder fix, a Checker rejection, and the Preview of `index.html`.
-      This must be a real run, not `hackathon/runs/g2/ds-final` (its rejections were scripted).
-- [ ] In Task 2, rehearse the exact chip to click (a rewritten quiz item) and the exact code exercise
-      to run. Click only those on stage.
+- [ ] Latest build installed from the release (or `pnpm --filter @bilimind/desktop start` from the repo).
+- [ ] Settings: provider DeepSeek, key set, **Test key** shows a balance. Narration on.
+- [ ] Demo folder `C:\Demo\DS-Final` with the four lecture PDFs and `past-paper.pdf` only (a copy of
+      `showcase/sources/ds-final`). No old course for it in `Documents\BiliMind`.
+- [ ] A **finished course built earlier from the same folder and sentence** is in the course list. Rehearse
+      on it: the rejected answer and its slide quote in the finished screen or `REPORT.md`, the code
+      exercise to run, the narration button.
+- [ ] The Mutiara Tea Bar crew day-one course (made from the shop's SOP) is in the course list, for the
+      small-business beat.
+- [ ] Home screen open, folder picked, the sentence typed, **Build not pressed yet**.
 
-Edge (one window, these tabs in this order)
-
-- [ ] Tab 1: the deployed site https://bilimind-workbuddy-55b817.gitlab.io/.
-- [ ] Tab 2: the Data Structures showcase course on the site.
-- [ ] Tab 3: the Mutiara Tea Bar day-one course (English and Malay narration) on the site.
-- [ ] Tab 4: the Bahasa Melayu Survival Kit course on the site (Q&A only).
-- [ ] Tab 5: the public repo https://gitlab.com/avinmaster/bilimind-workbuddy
-- [ ] Tab 6: the slides PDF (rail view, about 30% of the screen width).
-- [ ] Player storage cleared for the hero course (fresh progress, "Due today" list visible).
-
-Offline copies (if Wi-Fi fails)
-
-- [ ] `showcase/courses/ds-final/index.html`, `boba-day-one/index.html`, `bm-survival/index.html`
-      copied to the desktop and to a USB stick, each with its `audio/` and `img/` folders. They open from
-      `file://` with no network (G2 browser gate: 12 page loads, 0 console errors).
-- [ ] Slides PDF and the morning run's `REPORT.md` and `plan.md` on the desktop.
-- [ ] Phone hotspot ready, with the deployed link open on the phone.
-- [ ] Screen recording of the best run on the desktop, if one was made: {{RECORDING_PATH}}.
-
-Timing of the live run
-
-- [ ] The CLI harness run measured 268 s and 289 s (about 4.5-5 min). A full crew run inside WorkBuddy
-      takes longer: {{CREW_WALL_TIME}} (read it from the morning run's `REPORT.md`). So **press Enter
-      when setup starts**, not when the timer starts, and say so honestly in the first line.
-- [ ] Phase 1 has 3 minutes. The outcome is always shown from the morning run (Task 2) unless the
-      live run has finished.
-
-### The exact prompt (one sentence, typed into Task 1)
+The sentence (typed on the home screen):
 
 > My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.
 
-(It is the crew's default prompt in `workbuddy/bilimind-crew/.codebuddy-plugin/plugin.json`. The
-pitch is on Sunday, so Wednesday leaves three study days.)
+(The pitch is on Sunday, so Wednesday leaves three study days.)
+
+Edge (one window)
+
+- [ ] Tab 1: the slides PDF (only the WorkBuddy slide and the closing slide are used on stage).
+- [ ] Tab 2: https://github.com/Odilient/bilimind-desktop/releases/latest
+
+Backups
+
+- [ ] The three showcase courses (`showcase/courses/*/index.html` with `audio/` and `img/`) copied to the
+      desktop and a USB stick; they open from `file://` with no network.
+- [ ] Phone hotspot ready.
+- [ ] A screen recording of a full build, if one was made, on the desktop.
+
+Timing of the live build
+
+- A real build takes about 5 minutes with narration (measured unattended runs: 268 s and 289 s). The pitch
+  is 3 minutes, so **press Build at 0:00**, show the live building screen, then switch to the finished
+  course made earlier from the same sentence. Say so out loud.
 
 ---
 
-## 2. Phase 1: the 3-minute script, word for word
+## 2. Phase 1: the 3-minute pitch
 
-About 380 words. Stage directions are in brackets. Fill the `{{...}}` items from the morning run's
-`plan.md` and `REPORT.md` before rehearsal; if one is still empty, say the bracketed fallback.
+About 400 words. Stage directions in brackets.
 
-**[0:00] Driver: press Enter on Task 1 (or, if it was sent at setup, show the run already in flight.)**
+**[0:00] Driver presses Build. Building screen visible.**
 
-"This is WorkBuddy, Tencent's agent workspace. When we plugged in, I gave it one sentence: *My Data
-Structures final is Wednesday 9am. The slides and last year's paper are in this folder. I have 45
-minutes a day. Get me ready.* I have not touched it since."
+Speaker: "Three days before an exam, most of us have the same thing: a folder of slides, last year's paper,
+and no plan. I just gave this app that folder and one sentence: *My Data Structures final is Wednesday 9am.
+I have 45 minutes a day. Get me ready.* It started building when I pressed this button. I will not touch it
+again."
 
-**[0:15] Slide 1 in the rail: "Who studies by rereading?"**
+**[0:20] Building screen: the steps ticking, the plan appearing**
 
-"Here is the problem. 84% of students study by rereading. Students who test themselves remember about
-80% a week later. Students who keep rereading remember about a third. Testing works, but setting it up
-takes hours: questions, a schedule, and working out what the exam actually weights."
+"This is BiliMind Desktop. It is open source and runs on my laptop with my own AI key. A Lead reads my
+files, finds last year's paper, weights every topic by its marks, fits the plan to my three days and cuts
+what the paper never asks, with a reason. Then Writers write the lessons in parallel."
 
-**[0:35] WorkBuddy, Task 1: the Lead's plan and the checklist ticking**
+**[0:45] Switch to the finished course made earlier from the same folder and sentence**
 
-"So we built BiliMind for WorkBuddy: a skill and an Expert Team, the BiliMind Crew. The Lead found last
-year's paper, weighted every topic by its marks, sized the plan to my three days, and cut
-{{CUT_TOPIC}} [fallback: one topic] because the paper gives it no marks. Then it sent out Writers in
-parallel, one per lesson. The agents decide what to teach and when. Our code decides how each kind of
-knowledge must be taught, and checks that it was."
+"A full build takes about five minutes, so here is the same sentence, built earlier. Two more roles check
+the work. The Coder runs every code exercise: nothing ships unless the solution passes its tests. The
+Checker re-solves every auto-marked answer against my own slides. Here it rejected one: the answer key said
+49 goes to slot 9, and it quoted slide 11, '49 goes to 9, taken, try 0', then rewrote the question. In
+this course: 80 of 80 checks passed, 14 of 14 code tests, 3 answers rejected and rewritten."
 
-**[1:05] Task 2 (morning run): the Coder's fix, then the Checker's rejection**
+**[1:20] Course: press Run on the exercise, press play on narration for 3 seconds, click a citation chip**
 
-"And they check each other. This is the same sentence, run this morning. The Coder ran every
-exercise: this test failed, it fixed the solution, it passed. The Checker read
-every quiz answer next to the slide it cites. This one was rejected, with the exact quote from
-{{REJECTED_SLIDE}} [fallback: the slide], then rewritten and checked again."
+"The code runs in the page. Every answer shows the slide it came from. And it reads itself aloud, for the
+bus ride."
 
-**[1:30] Preview: the finished course. Click the rehearsed citation chip, press Run on the exercise, press play on narration for 3 seconds**
+**[1:40] Finished screen: the files**
 
-"Here is the course. Click an answer to see its slide. This exercise runs in the
-page. And it reads itself aloud, for the bus ride. It is one offline file, plus a plan, Anki
-flashcards, and reviews in my calendar, counted back from the exam."
+"And it is not a chat. It is a folder I own: the course as one offline file, a day-by-day plan, an Anki
+deck, review dates in my calendar counted back from the exam, and a report of every check. That course
+cost four cents of AI. About five cents is typical."
 
-**[2:00] Edge Tab 3: Mutiara Tea Bar course, switch narration English then Malay (2 seconds each)**
+**[2:00] Course list: Mutiara Tea Bar**
 
-"Same crew, different job. Mutiara Tea Bar hires new crew every few weeks. Their SOP became a day-one
-course in English and Malay, with an allergy scenario and a pass mark."
+"Small businesses have the same problem. A bubble-tea shop hires new crew every few weeks and trains them
+from an SOP nobody reads. Same app, their SOP folder, one sentence: a day-one course with a pass mark,
+narrated in English and Malay. 7 lessons, 231 of 231 checks passed, nine cents."
 
-**[2:15] Slide: "How, where and when we used WorkBuddy"**
+**[2:25] Slide: how and where we used WorkBuddy**
 
-"How, where and when we used WorkBuddy: it is the runtime. Every course you saw was made inside
-WorkBuddy, on this laptop, during Dormathon: our skill, our crew of agents, the local folder, the
-Preview. Text runs on your own DeepSeek or OpenRouter key, about five cents a course in our
-measured runs. Narration uses free voices."
+"How we used WorkBuddy: our pitch deck was made in WorkBuddy's Slides Creation, we compared plain WorkBuddy
+on this same student request, and we shipped BiliMind as a WorkBuddy skill and Expert Team too, so a
+WorkBuddy user gets this course from one sentence."
 
-**[2:35] Slide: "What we built here"**
+**[2:45] Closing slide + the releases page**
 
-"To be clear: the teaching prompts come from our existing app, BiliMind. Everything running in
-WorkBuddy, the engine port, the crew, the checker and coder loops, the past-paper planner and the
-player, we built here."
-
-**[2:50] Last slide**
-
-"One sentence in. A course out. Checked against your slides."
+"BiliMind Desktop is open source under AGPL. Download it from GitHub, bring your own key, and your files
+never go to a server of ours. Drop in your files. Get a course, checked against them."
 
 ### Timing table (Phase 1)
 
 | Start | End | Screen | Beat | Cut first if late |
 |---|---|---|---|---|
-| 0:00 | 0:15 | WorkBuddy Task 1 | The sentence, the run in flight | never |
-| 0:15 | 0:35 | Slide 1 | One stat: 84% reread; ~80% vs ~33% recall a week later | never |
-| 0:35 | 1:05 | Task 1: plan, checklist, Writer cards | Past paper weights, cut topic, parallel Writers, "agents decide, code enforces" | shorten the cut-topic clause |
-| 1:05 | 1:30 | Task 2: Coder fix, Checker rejection | They check each other | never |
-| 1:30 | 2:00 | Preview of `index.html` | Citation chip, Run code, narration | drop narration (3 s) |
-| 2:00 | 2:15 | Edge Tab 3 | Mutiara Tea Bar, English + Malay | 2nd to cut |
-| 2:15 | 2:35 | Slide | How, where and when we used WorkBuddy; cost | never (organisers asked for it) |
-| 2:35 | 2:50 | Slide | Honest disclosure | never |
-| 2:50 | 3:00 | Last slide | Tagline | never |
+| 0:00 | 0:20 | Building screen | The personal problem, Build pressed | never |
+| 0:20 | 0:45 | Building screen | Lead plans and cuts, Writers in parallel | shorten |
+| 0:45 | 1:20 | Finished course (earlier build) | Coder, Checker rejection with slide quote, numbers | never |
+| 1:20 | 1:40 | Course | Run code, citation, narration | drop narration |
+| 1:40 | 2:00 | Finished screen | Files you own, cost | shorten |
+| 2:00 | 2:25 | Mutiara Tea Bar | Small business half of the theme | 2nd to cut |
+| 2:25 | 2:45 | Slide | How and where we used WorkBuddy | never (organisers ask for it) |
+| 2:45 | 3:00 | Slide + releases page | Open source, download | never |
 
-If the timer card says 2:00 and you are still on the course: skip the Mutiara beat and go straight to
-the WorkBuddy line.
+If the timer shows 2:00 while still on the course: one sentence on the shop, then the WorkBuddy slide.
 
 ---
 
 ## 3. Phase 2: the 4-minute demo (video call)
 
-Same setup, shared screen at 1920x1080, WorkBuddy full screen (no slide rail; switch to the slides PDF
-only for the stat and the tagline). Press Enter on the live run before the call joins. Use the Phase 1
-script with these changes:
+Same setup; share the app window only. Press Build when the call starts. Changes to Phase 1:
 
-| Start | End | Screen | Beat (additions to Phase 1 in bold) |
+| Start | End | Screen | Beat (additions in bold) |
 |---|---|---|---|
-| 0:00 | 0:20 | Task 1 | The sentence, the run in flight. **"Bilim means knowledge in Uzbek."** |
-| 0:20 | 0:40 | Slides PDF | One stat (same words) |
-| 0:40 | 1:20 | Task 1, then `plan.md` | Plan, cut topic, parallel Writers. **Open `plan.md`: the assumptions the Lead wrote instead of asking, the topic weights, the cut and its reason.** |
-| 1:20 | 1:55 | Task 2 | Coder fix and Checker rejection. **Open `REPORT.md` for 5 s: every check, every rejection, the cost.** |
-| 1:55 | 2:40 | Preview | Chip, Run, narration. **Open `reviews.ics` in a calendar for 5 s. If the live run has finished by now, show its Preview instead of the morning run and say so.** |
-| 2:40 | 3:05 | Edge Tabs 3-4 | Mutiara Tea Bar (English + Malay). **Then the Bahasa Melayu Survival Kit: "A different sentence gives a different course: speaking drills, not code."** |
-| 3:05 | 3:30 | Slide | How, where and when we used WorkBuddy; measured cost and time |
-| 3:30 | 3:50 | Slide | Honest disclosure, repo link |
-| 3:50 | 4:00 | Slide | Tagline |
-
-Extra words for 0:00 in Phase 2: "Tell WorkBuddy when your exam is and where your slides are. The
-BiliMind crew reads them and your past paper, plans the days you have, builds a course checked against
-your slides, and puts your reviews in your calendar until exam day."
-
-Video-call specifics: share one window, not the whole desktop (no Alt-Tab surprises, no notifications).
-Keep the offline `index.html` files open in a second Edge window, ready to share if WorkBuddy freezes.
+| 0:00 | 0:25 | Home, then Building | Personal problem, Build pressed. **Show the folder: four slide decks and a past paper.** |
+| 0:25 | 1:00 | Building | Lead, plan, Writers. **Point at a kept topic and a cut topic with its reason.** |
+| 1:00 | 1:45 | Finished course (earlier build) | Coder and Checker, the rejection with the slide 11 quote. **Open `REPORT.md` for 5 s: every check, every rejection, the cost.** |
+| 1:45 | 2:25 | Course | Run code, citation chip, narration. **Open `plan.md`: assumptions written instead of questions, topic weights, cut reasons.** |
+| 2:25 | 2:55 | Mutiara Tea Bar | Small business. **Play the Malay narration for 2 s.** |
+| 2:55 | 3:20 | Building screen | **If the live build has finished, open it and say so; if not, show how far it got and say so.** |
+| 3:20 | 3:40 | Slide | How and where we used WorkBuddy |
+| 3:40 | 4:00 | Slide + releases page | Open source, download, tagline |
 
 ---
 
@@ -194,119 +162,84 @@ Keep the offline `index.html` files open in a second Edge window, ready to share
 
 | If | Then | Say |
 |---|---|---|
-| The live run is not finished by 1:05 (expected) | Switch to Task 2, the morning run of the identical sentence and folder | "Still writing. Here is the same sentence from this morning." |
-| The live run fails or stops | Leave it; use Task 2 for everything | "It stopped on the venue network. Here is the same sentence from this morning." |
-| WorkBuddy freezes, credits run out or the network fails | Offline `index.html` from the desktop in Edge; slides PDF; `REPORT.md` from the desktop; recording if one exists | "Hackathon Wi-Fi. Here is this exact run, as files on the laptop." |
-| The live run has no rejection | Show the morning run's rejection (real, saved) | Never fake one. |
-| No Coder fix in either run | Show `REPORT.md` code-test rows and say what was tested | "Every exercise ran before you saw it." |
-| The Preview panel misbehaves | Open the same `index.html` in Edge | (nothing; just continue) |
-| A citation chip looks wrong | Click only the rehearsed chip | |
+| The live build is still running at 0:45 (expected) | Switch to the earlier course | "Still writing. Here is the same sentence, built earlier." |
+| The live build fails | Leave it; use the earlier course | "It stopped on the venue network. Here is the same sentence, built earlier." |
+| The app will not start or the network fails | Showcase `index.html` from the desktop in Edge | "Hackathon Wi-Fi. Here is the same course as files on the laptop." |
 | Narration does not play | Skip it | "It also reads itself aloud." |
-| The deployed site is down | Offline copies on the desktop or USB | |
-| Projector shows the wrong resolution | Driver zooms WorkBuddy to 90%; skip the slide rail, use full-screen slides for the stat | |
-| Time runs short | Drop narration, then the Mutiara beat, then the calendar (Phase 2). Never drop the stat, the rejection, the WorkBuddy line or the disclosure. | |
+| Time runs short | Drop narration, then `plan.md`, then the shop. Never drop the rejection, the WorkBuddy slide or the download. | |
 
 ---
 
-## 5. Q&A prep: the 12 hardest questions
+## 5. Q&A: 12 likely questions
 
 Rule: two or three sentences, then stop. End on a fact or something you can show.
 
-**1. "How do you stop hallucinations?"**
-Each Writer sees only the slide chunks for its topic, and every quiz answer must cite one. The Checker
-rules each answer supported, contradicted or not covered with a verbatim quote; the tool refuses a
-quote that is not word for word in the cited slide, contradicted answers never reach the course, and
-answers the slides do not cover get a visible "Beyond your slides" label. What we cannot fully stop is
-a weak sentence of explanation, so every answer shows its slide in one click. (Planted-error test:
-{{PLANTED_CAUGHT}} of 20 caught, {{FALSE_ALARMS}} false alarms; drop this sentence if not measured.)
+**1. Privacy: where do my files go?**
+Your files stay on your laptop and the course is a folder on your disk. Only the passages needed for each
+step go to the AI provider you chose, with your own key; there is no BiliMind server and no account. So it
+is private by default, not air-gapped.
 
-**2. "What does it cost, including WorkBuddy credits?"**
-Text generation: our two measured full runs on DeepSeek direct cost $0.046 and $0.047, about five
-cents a course, in 268 and 289 seconds. WorkBuddy credits for the crew run: {{CREDITS_PER_RUN}} (read
-before and after the morning run). Narration is free (Edge voices).
+**2. What does it cost?**
+About five cents a course in AI text: our two measured runs cost $0.046 and $0.047. The showcase courses
+cost $0.040, $0.094 and $0.055. Narration uses free Edge voices. The app itself is free and open source.
 
-**3. "Privacy? Does it work offline?"**
-WorkBuddy gets Full Access to one folder, and the output is files on your disk, not an account. The
-course is one HTML file that opens from disk with no network; we tested it with zero console errors.
-Honest caveat: slide excerpts go to the model provider you chose with your own key, and WorkBuddy's
-model sees the task, so it is private by default, not air-gapped.
+**3. How do you stop hallucinations?**
+Every auto-marked answer is re-solved against your files by the Checker, and it must quote the slide word
+for word; the code refuses a quote that is not in the file. Wrong answers are rejected and rewritten
+(3 of 3 in the Data Structures course), and anything not in your files is labelled "Beyond your slides".
+Every answer shows its source in one click.
 
-**4. "Why WorkBuddy? Isn't it just calling your API?"**
-There is no BiliMind server. WorkBuddy does the work: the plan checklist, the parallel sub-agents, the
-local folder, the shell that runs our tests, the loop that sends rejected answers back, and the Preview.
-Our skill is the know-how and the tools; the agents make every judgment, and our code enforces the rules.
+**4. Why a desktop app?**
+Your slides and your company's SOP stay on your machine, you use your own key, and the result is files you
+keep: an offline course, an Anki deck, a calendar. No login and nothing to host.
 
-**5. "NotebookLM, or WorkBuddy's own student experts, already do this."**
-They give you a chat and separate summaries or quizzes to reread. We give you an ordered course weighted
-by your past paper, code exercises that were run before you saw them, answers checked against your
-slides, and reviews in your calendar, all as files you own. NotebookLM has no spaced-review schedule and
-does not export its flashcards or quizzes.
-(Measured, Sun 00:52, WorkBuddy web, same sentence + same 5 PDFs, no skill: plain WorkBuddy wrote a good
-one-page "sprint" HTML with a 3-day plan and drills, but it answered in Chinese to an English request,
-cited no slides, ran no independent check of its answers, had no narration, no runnable tested code and no
-calendar or Anki export. Be fair about it on stage: "WorkBuddy alone is smart; BiliMind makes it a
-teacher that checks itself against your slides." Task: https://www.workbuddy.ai/app/task/2108963860471234560)
+**5. Why not NotebookLM, or just ChatGPT?**
+They give you a chat. We give you an ordered course weighted by your past paper, code that was run before
+you saw it, answers checked against your slides, narration, and reviews in your calendar, as files you own.
+We ran plain WorkBuddy on the same request: a reasonable plan, but no slide citations, no tested code, no
+narration and no exports.
 
-**6. "What is the business model?"**
-The skill is free and students pay cents to their own model provider, so there is no paywall in front of
-learning. Our hypothesis, not yet tested: small businesses and training teams pay per seat for records
-(who finished onboarding, scores, refreshers), and institutions pay for course packs.
+**6. Does it work offline?**
+The finished course does: one HTML file that opens from disk with no network. Building a course needs the
+internet for the AI calls and the voices.
 
-**7. "What did you build here? BiliMind existed before."**
-The BiliMind web app existed; we reused its teaching prompts and the rules that map each kind of
-knowledge to a lesson format. Built at Dormathon: the engine port, the WorkBuddy skill and the
-BiliMind Crew, the Checker and Coder loops, the past-paper planner, the offline player, the exports and
-the landing site. The repo's history is the timestamped record.
+**7. Business model?**
+For students it stays free and open source; they pay cents to their own AI provider. Our hypothesis, not yet
+tested: small businesses pay for team features (who finished onboarding, scores, refreshers) and schools for
+course packs.
 
-**8. "Does it scale?"**
-Each run happens on the user's machine with the user's key, so our cost per course is close to zero. The
-Lead runs up to six Writers in parallel. The limit is WorkBuddy credits per run, which is why the heavy
-text goes through a cheap model on the user's own key.
+**8. How did you use WorkBuddy?**
+Three ways: the pitch deck was generated in WorkBuddy's Slides Creation; we compared plain WorkBuddy on the
+same student request; and we shipped BiliMind as a WorkBuddy skill and Expert Team, validated with
+WorkBuddy's own validator. The desktop app itself we built with AI coding agents outside WorkBuddy. Links and
+screenshots: `docs/workbuddy.md`.
 
-**9. "What if the generated code exercise is wrong?"**
-It often is: in our integration runs, 3 of the 4 exercises we examined needed a fix (a missing helper,
-a wrong expected value, a starter that never finished). That is why the Coder exists: it runs every
-exercise, fixes it, and nothing ships unless the reference solution passes every test. If it cannot be
-fixed, the exercise is switched to self-marked rather than shipped broken.
+**9. Which languages?**
+Lessons are written in the language you ask for, and narration uses Edge voices: the tea shop course is
+narrated in English and Malay, and the Malay survival course drills Malay phrases. Code exercises run
+JavaScript for now.
 
-**10. "Which languages?"**
-The crew replies in the user's language, and narration uses Edge voices: the Mutiara Tea Bar course is
-narrated in English and Malay, and the Survival Kit drills Malay phrases. Translated text carries a note
-to have a fluent speaker check it. Code exercises run JavaScript only for now.
+**10. Does it scale?**
+Each build runs on the user's own machine with the user's own key, so our cost per course is close to zero.
+Writers run in parallel; bigger folders take longer, not more of our money.
 
-**11. "Is it accessible?"**
-Every lesson can be listened to, with the current sentence highlighted, and the page works at phone
-width (checked at 390 px, no horizontal overflow) and offline. We have not done a screen-reader audit
-yet; that is on the list.
+**11. What's next?**
+A pilot with one Taylor's module, with a proper comparison, because we do not claim grade gains we have not
+measured. Then macOS and Linux builds, Python exercises, reading scanned slides, and a real shop's SOP with
+its permission.
 
-**12. "What are the next steps?"**
-A pilot with one Taylor's module, with a controlled comparison, because we do not claim grade gains we
-have not measured. Then a WorkBuddy Automation that builds each morning's review page, Anki `.apkg`
-export, Python exercises, OCR for scanned slides, and a real shop's SOP with permission.
+**12. Who are you and what did you build here?**
+Opus Magnum: Oybek Odilov, Abdugaffor Odilov, Ramil Khutlimuratov and Gameel Al-Bazeeli. BiliMind existed as
+a web app; we reused its teaching prompts. The engine, the Checker and Coder, the past-paper planner, the
+offline player, the WorkBuddy skill and the desktop app were built this weekend; the repo history is the
+timestamped record.
 
 Spare answers (only if asked):
 
-- "Engineering quality?" Tests pass across the packages: core 55, engine 172, player 72, CLI 12.
-- "Are students allowed to turn lecturer slides into a course?" Same as making your own notes, for
-  personal study, kept on the laptop. Our demo uses openly licensed teaching material with attribution.
-- "Slow?" The two long steps are the outline (109-117 s) and narration (about 100 s); drafts run in
-  parallel. The crew run takes longer than the harness because the agents read, fix and check.
-
----
-
-## 6. Placeholders to fill before rehearsal
-
-| Placeholder | Where to read it |
-|---|---|
-| `https://bilimind-workbuddy-55b817.gitlab.io/` | the site deploy result |
-| `{{DRIVER_NAME}}`, `{{TIMER_NAME}}` | team decision |
-| `{{CREDITS_BEFORE}}`, `{{CREDITS_PER_RUN}}` | WorkBuddy credit page, before and after the morning run |
-| `{{CREW_WALL_TIME}}` | morning run `REPORT.md`, "Wall time" |
-| `{{CUT_TOPIC}}` | morning run `plan.md`, cut list |
-| `{{REJECTED_SLIDE}}` | morning run `REPORT.md`, rejected item's cite |
-| `{{PLANTED_CAUGHT}}`, `{{FALSE_ALARMS}}` | planted-error benchmark (`plant` / `plant-score`), if run |
-| `{{RECORDING_PATH}}` | the screen recording, if made |
-
-Evidence for the stat: Karpicke, Butler & Roediger (2009), *Memory* 17(4) (84% reread); Karpicke &
-Roediger (2008), *Science* 319 (about 80% vs 33-36% a week later). Full links in
-`hackathon/research/pitch.md`.
+- "Tests?" core 55, engine 172, player 72, CLI 12, skill 12, all passing at the last integration gate.
+- "Slow?" The long steps are the outline (109-117 s) and narration (about 100 s); lessons are written in
+  parallel.
+- "Is turning lecturer slides into a course allowed?" Same as making your own notes for personal study, kept
+  on your laptop. Our demo uses openly licensed teaching material with attribution.
+- "Why does testing yourself matter?" Students who test themselves remember far more a week later than
+  students who reread (Karpicke and Roediger 2008, Science). Sources in `hackathon/research/pitch.md`.
