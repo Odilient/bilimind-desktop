@@ -3,13 +3,24 @@
 - **Where:** the WorkBuddy desktop app on our laptop, a new task in the default (Craft) mode, with the BiliMind
   skill installed (`skills/bilimind`, installed with its `install.ps1`).
 - **When:** Sunday 11 October 2026, 05:05:43 to 05:20:30 MYT (14 min 47 s from the request to the finished course
-  in WorkBuddy's preview panel).
+  in WorkBuddy's preview panel; WorkBuddy shows "Completed 14m52s").
 - **The request, the only message typed:**
   > Use the bilimind skill. My Data Structures final is Wednesday 9am. The slides and last year's paper are in
   > C:\Demo\DS-WorkBuddy. I have 45 minutes a day. Get me ready.
 - **Source files:** the same 5 Data Structures PDFs as our other runs (4 lecture decks and a past paper, 63 pages).
 - **AI:** WorkBuddy's own model ran the crew (the Lead and the sub-agents). The `bilimind` command line the crew
   calls used BiliMind free for its own AI calls, no key.
+
+## Screenshots
+
+WorkBuddy's own view of the task: the request, "Completed 14m52s" and its summary; the files it opened; the
+course in its preview panel. "Total used 99.49" is the WorkBuddy credits the task spent.
+
+![The request and WorkBuddy's summary of the run](screenshot-1-request-and-summary.png)
+
+![The files WorkBuddy opened, and the credits it used](screenshot-2-files-and-credits.png)
+
+![The finished course in WorkBuddy's preview panel](screenshot-3-course-in-preview.webp)
 
 ## What WorkBuddy did, in order
 
