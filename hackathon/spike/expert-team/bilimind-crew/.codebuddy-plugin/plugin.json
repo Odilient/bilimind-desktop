@@ -1,0 +1,95 @@
+{
+  "name": "bilimind-crew",
+  "version": "0.1.0",
+  "description": "A study crew that reads your lecture slides and past paper, plans the days you have, writes lessons in parallel, tests every code exercise and checks every answer against your slides.",
+  "author": {
+    "name": "BiliMind team",
+    "email": "team@bilimind.com"
+  },
+  "agents": [
+    "./agents/bilimind-crew-team-lead.md",
+    "./agents/bilimind-writer.md",
+    "./agents/bilimind-coder.md",
+    "./agents/bilimind-checker.md"
+  ],
+
+  "expertType": "team",
+  "agentName": "bilimind-crew-team-lead",
+  "teamInfo": {
+    "leadAgent": "bilimind-crew-team-lead",
+    "memberAgents": ["bilimind-writer", "bilimind-coder", "bilimind-checker"]
+  },
+
+  "displayName": {
+    "en": "BiliMind Crew",
+    "zh": "BiliMind 备考团"
+  },
+  "profession": {
+    "en": "BiliMind Crew",
+    "zh": "BiliMind 备考团"
+  },
+  "displayDescription": {
+    "en": "Reads your slides and last year's paper, plans the days you have, writes interactive lessons in parallel, tests every code exercise and checks every answer against your slides.",
+    "zh": "读懂课件和往年试卷，按剩余天数规划复习，并行编写互动课程，测试代码练习，逐题对照课件核查答案"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "06-ContentCreative",
+  "defaultInitPrompt": {
+    "en": "My Data Structures final is Thursday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.",
+    "zh": "我的数据结构期末考试在周四上午9点。课件和去年的试卷都在这个文件夹里。我每天有45分钟。帮我做好准备。"
+  },
+  "plugin": "bilimind-crew",
+  "tags": [
+    { "en": "Exam prep", "zh": "备考" },
+    { "en": "Interactive courses", "zh": "互动课程" },
+    { "en": "Checked against slides", "zh": "对照课件核查" }
+  ],
+  "quickPrompts": [
+    {
+      "en": "My Data Structures final is Thursday 9am. The slides and last year's paper are in this folder. I have 45 minutes a day. Get me ready.",
+      "zh": "我的数据结构期末考试在周四上午9点。课件和去年的试卷都在这个文件夹里。我每天有45分钟。帮我做好准备。"
+    },
+    {
+      "en": "Turn the SOP in this folder into a first-shift training course for our new boba shop staff.",
+      "zh": "把这个文件夹里的操作手册做成奶茶店新员工第一天上岗培训课程。"
+    },
+    {
+      "en": "Make a Bahasa Melayu survival course from these notes: 20 minutes a day for one week.",
+      "zh": "用这些笔记做一个马来语生存会话课程：每天20分钟，一周学完。"
+    }
+  ],
+  "members": [
+    {
+      "id": "bilimind-crew-team-lead",
+      "name": { "en": "Dina Planwell", "zh": "程备考" },
+      "displayName": { "en": "Dina Planwell", "zh": "程备考" },
+      "profession": { "en": "Exam Strategist", "zh": "备考总策划" },
+      "avatar": "avatars/bilimind-crew-team-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "bilimind-writer",
+      "name": { "en": "Lena Page", "zh": "许成章" },
+      "displayName": { "en": "Lena Page", "zh": "许成章" },
+      "profession": { "en": "Lesson Writer", "zh": "课程撰稿人" },
+      "avatar": "avatars/bilimind-writer.png",
+      "role": "member"
+    },
+    {
+      "id": "bilimind-coder",
+      "name": { "en": "Cody Pass", "zh": "寇测通" },
+      "displayName": { "en": "Cody Pass", "zh": "寇测通" },
+      "profession": { "en": "Exercise Tester", "zh": "练习题测试工程师" },
+      "avatar": "avatars/bilimind-coder.png",
+      "role": "member"
+    },
+    {
+      "id": "bilimind-checker",
+      "name": { "en": "Vera Quote", "zh": "严引证" },
+      "displayName": { "en": "Vera Quote", "zh": "严引证" },
+      "profession": { "en": "Slide Fact-Checker", "zh": "课件核查员" },
+      "avatar": "avatars/bilimind-checker.png",
+      "role": "member"
+    }
+  ]
+}

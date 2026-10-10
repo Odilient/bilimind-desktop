@@ -20,3 +20,8 @@ film/frames/
 hackathon/scratch/
 /courses/
 .npmrc.local
+# organiser material and private hero/shop material: local only, never committed (WP8)
+showcase/sources/dormathon-briefing/*.pdf
+showcase/sources/private/
+# python build caches
+__pycache__/

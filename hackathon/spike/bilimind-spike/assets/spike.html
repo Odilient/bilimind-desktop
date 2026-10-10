@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiliMind spike: Preview test</title>
+<style>
+  :root { --cobalt:#2340E6; --ink:#0E1330; --lime:#C6F24E; --lime-soft:#EEF9CF; --bad:#B42318; --bad-soft:#FDECEA; --line:#DDE2F0; --muted:#5B6280; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.5 system-ui, "Segoe UI", Arial, sans-serif; color:var(--ink); background:#F7F8FC; }
+  header { background:var(--cobalt); color:#fff; padding:18px 20px; }
+  header h1 { margin:0; font-size:20px; }
+  header p { margin:4px 0 0; opacity:.8; font-size:13px; }
+  main { max-width:880px; margin:0 auto; padding:16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:12px 0; }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .tag { display:inline-block; min-width:64px; text-align:center; font-weight:700; font-size:12px; padding:3px 8px; border-radius:999px; background:#EEF1FE; color:var(--cobalt); }
+  .tag.pass { background:var(--lime-soft); color:#4E6A08; }
+  .tag.fail { background:var(--bad-soft); color:var(--bad); }
+  .tag.manual { background:#FFF4D6; color:#7A5600; }
+  h2 { margin:0 0 6px; font-size:16px; }
+  .detail { color:var(--muted); font-size:13px; word-break:break-word; }
+  button, a.btn { font:inherit; cursor:pointer; border:0; border-radius:8px; padding:7px 12px; background:var(--cobalt); color:#fff; text-decoration:none; }
+  button.ghost, a.ghost { background:#EEF1FE; color:var(--cobalt); }
+  textarea { width:100%; min-height:180px; font:12px/1.4 Consolas, monospace; border:1px solid var(--line); border-radius:8px; padding:8px; }
+  audio { width:100%; max-width:420px; }
+  ol { margin:6px 0 0 18px; padding:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BiliMind spike: does WorkBuddy's Preview run our course page?</h1>
+  <p>Every check runs by itself. Then do the 4 manual clicks below and copy the results box into hackathon/SPIKE.md.</p>
+</header>
+<main>
+  <div class="card" id="t-env"><div class="row"><span class="tag" id="s-env">...</span><h2>1. Page environment</h2></div><div class="detail" id="d-env"></div></div>
+
+  <div class="card" id="t-audio">
+    <div class="row"><span class="tag" id="s-audio">...</span><h2>2. MP3 next to the page (narration)</h2></div>
+    <div class="detail" id="d-audio"></div>
+    <div class="row" style="margin-top:8px"><audio id="audio" controls preload="metadata" src="sample.mp3"></audio>
+      <button id="b-play">Play</button></div>
+    <div class="row" style="margin-top:6px"><span class="tag manual" id="s-audible">manual</span>
+      <span class="detail">Did you HEAR it? </span><button class="ghost" data-heard="yes">Yes, I heard it</button><button class="ghost" data-heard="no">No sound</button></div>
+  </div>
+
+  <div class="card" id="t-fetch"><div class="row"><span class="tag" id="s-fetch">...</span><h2>3. fetch() of a file next to the page</h2></div><div class="detail" id="d-fetch"></div></div>
+
+  <div class="card" id="t-worker"><div class="row"><span class="tag" id="s-worker">...</span><h2>4. Blob worker runs a JS exercise test</h2></div><div class="detail" id="d-worker"></div></div>
+
+  <div class="card" id="t-loop"><div class="row"><span class="tag" id="s-loop">...</span><h2>5. Infinite loop is killed after 1.5 s</h2></div><div class="detail" id="d-loop"></div></div>
+
+  <div class="card" id="t-ls">
+    <div class="row"><span class="tag" id="s-ls">...</span><h2>6. localStorage (progress survives reload)</h2></div>
+    <div class="detail" id="d-ls"></div>
+    <div class="row" style="margin-top:8px"><button id="b-reload" class="ghost">Reload this page</button>
+      <span class="detail">The counter must go up by 1 after a reload, and again after closing and reopening Preview.</span></div>
+  </div>
+
+  <div class="card" id="t-pdf">
+    <div class="row"><span class="tag manual" id="s-pdf">manual</span><h2>7. Citation link to sources/x.pdf#page=3</h2></div>
+    <div class="detail">The PDF has 4 big pages ("SLIDE 1" .. "SLIDE 4"). Click each link; note where it opens and which slide shows first.</div>
+    <div class="row" style="margin-top:8px">
+      <a class="btn" id="pdf-new" href="sources/x.pdf#page=3" target="_blank" rel="noopener">Open slide 3 (new tab)</a>
+      <a class="btn ghost" id="pdf-same" href="sources/x.pdf#page=3">Open slide 3 (same tab)</a>
+    </div>
+    <div class="row" style="margin-top:6px"><span class="detail">Result:</span>
+      <button class="ghost" data-pdf="slide3">Opened on SLIDE 3</button>
+      <button class="ghost" data-pdf="slide1">Opened, but on SLIDE 1</button>
+      <button class="ghost" data-pdf="external">Opened outside WorkBuddy</button>
+      <button class="ghost" data-pdf="nothing">Nothing happened</button></div>
+  </div>
+
+  <div class="card" id="t-net"><div class="row"><span class="tag" id="s-net">...</span><h2>8. CDN reachable from the page (Mermaid on jsDelivr)</h2></div><div class="detail" id="d-net"></div></div>
+
+  <div class="card" id="t-media"><div class="row"><span class="tag" id="s-media">...</span><h2>9. Recording and speech APIs (speaking drills)</h2></div><div class="detail" id="d-media"></div>
+    <div class="row" style="margin-top:8px"><button id="b-mic" class="ghost">Try the microphone (2 s)</button><span class="detail" id="d-mic"></span></div></div>
+
+  <div class="card">
+    <h2>Results (copy all of this into hackathon/SPIKE.md, section "Preview page results")</h2>
+    <textarea id="out" readonly></textarea>
+    <div class="row" style="margin-top:8px"><button id="b-copy">Copy results</button><span class="detail" id="d-copy"></span></div>
+  </div>
+</main>
+<script>
+(function () {
+  'use strict';
+  var R = { page_version: 'spike-1', tested_at: new Date().toISOString() };
+  function $(id) { return document.getElementById(id); }
+  function set(key, status, detail) {
+    R[key] = { status: status, detail: detail };
+    var tag = $('s-' + key);
+    if (tag) { tag.textContent = status; tag.className = 'tag ' + (status === 'PASS' ? 'pass' : status === 'FAIL' ? 'fail' : 'manual'); }
+    var d = $('d-' + key);
+    if (d) d.textContent = detail;
+    render();
+  }
+  function render() { $('out').value = JSON.stringify(R, null, 2); }
+
+  // 1. environment
+  try {
+    var env = {
+      protocol: location.protocol,
+      href: location.href.slice(0, 160),
+      userAgent: navigator.userAgent,
+      secureContext: window.isSecureContext,
+      crossOriginIsolated: window.crossOriginIsolated === true,
+      online: navigator.onLine,
+      viewport: window.innerWidth + 'x' + window.innerHeight,
+      dpr: window.devicePixelRatio
+    };
+    set('env', 'PASS', JSON.stringify(env));
+  } catch (e) { set('env', 'FAIL', String(e)); }
+
+  // 2. audio metadata (no user gesture needed)
+  (function () {
+    var a = $('audio'); var done = false;
+    var timer = setTimeout(function () { if (!done) { done = true; set('audio', 'FAIL', 'no metadata after 6 s (networkState ' + a.networkState + ', error ' + (a.error && a.error.code) + ')'); } }, 6000);
+    a.addEventListener('loadedmetadata', function () { if (done) return; done = true; clearTimeout(timer); set('audio', a.duration > 0 ? 'PASS' : 'FAIL', 'duration ' + a.duration.toFixed(2) + ' s'); });
+    a.addEventListener('error', function () { if (done) return; done = true; clearTimeout(timer); set('audio', 'FAIL', 'media error code ' + (a.error && a.error.code)); });
+    $('b-play').addEventListener('click', function () {
+      var p = a.play();
+      if (p && p.then) p.then(function () { R.audio_play = 'play() resolved'; render(); }, function (err) { R.audio_play = 'play() rejected: ' + err.name; render(); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-heard]'), function (b) {
+      b.addEventListener('click', function () { set('audible', b.getAttribute('data-heard') === 'yes' ? 'PASS' : 'FAIL', 'user says: ' + b.textContent); });
+    });
+    R.audible = { status: 'manual', detail: 'press Play, then answer' };
+  })();
+
+  // 3. fetch a sibling file (the player needs this only if we ever load JSON/audio by fetch)
+  (function () {
+    var t0 = performance.now();
+    try {
+      fetch('sample.mp3').then(function (r) { return r.arrayBuffer().then(function (b) { set('fetch', 'PASS', 'HTTP ' + r.status + ', ' + b.byteLength + ' bytes in ' + Math.round(performance.now() - t0) + ' ms'); }); })
+        .catch(function (e) { set('fetch', 'FAIL', e.name + ': ' + e.message + ' (fine if protocol is file:, the player inlines data)'); });
+    } catch (e) { set('fetch', 'FAIL', String(e)); }
+  })();
+
+  // 4 + 5. Blob worker running a JS exercise test, and a killed infinite loop
+  function runInWorker(src, timeoutMs, cb) {
+    var url, w, finished = false;
+    try {
+      url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+      w = new Worker(url);
+    } catch (e) { cb({ error: 'cannot create worker: ' + e.name + ': ' + e.message }); return; }
+    var t0 = performance.now();
+    var timer = setTimeout(function () { if (finished) return; finished = true; w.terminate(); URL.revokeObjectURL(url); cb({ timeout: true, ms: Math.round(performance.now() - t0) }); }, timeoutMs);
+    w.onmessage = function (ev) { if (finished) return; finished = true; clearTimeout(timer); w.terminate(); URL.revokeObjectURL(url); cb({ data: ev.data, ms: Math.round(performance.now() - t0) }); };
+    w.onerror = function (ev) { if (finished) return; finished = true; clearTimeout(timer); w.terminate(); URL.revokeObjectURL(url); cb({ error: 'worker error: ' + (ev.message || 'unknown') }); };
+  }
+  var exercise = [
+    'function insertHeap(h, x) { h.push(x); var i = h.length - 1; while (i > 0) { var p = (i - 1) >> 1; if (h[p] <= h[i]) break; var t = h[p]; h[p] = h[i]; h[i] = t; i = p; } return h; }',
+    'var tests = [ { call: [[1, 3, 5], 0], expect: [0, 1, 5, 3] }, { call: [[], 7], expect: [7] } ];',
+    'var results = tests.map(function (t) { var got = insertHeap(t.call[0].slice(), t.call[1]); return { pass: JSON.stringify(got) === JSON.stringify(t.expect), got: got }; });',
+    'postMessage(results);'
+  ].join('\n');
+  runInWorker(exercise, 1500, function (r) {
+    if (r.data) {
+      var passed = r.data.filter(function (x) { return x.pass; }).length;
+      set('worker', passed === r.data.length ? 'PASS' : 'FAIL', passed + '/' + r.data.length + ' tests passed in ' + r.ms + ' ms');
+    } else set('worker', 'FAIL', r.error || ('timed out after ' + r.ms + ' ms'));
+  });
+  runInWorker('while (true) {}', 1500, function (r) {
+    if (r.timeout) set('loop', 'PASS', 'terminated after ' + r.ms + ' ms; page stayed responsive');
+    else set('loop', 'FAIL', JSON.stringify(r));
+  });
+
+  // 6. localStorage
+  (function () {
+    try {
+      var k = 'bm:spike:counter';
+      var n = parseInt(localStorage.getItem(k) || '0', 10) + 1;
+      localStorage.setItem(k, String(n));
+      var back = localStorage.getItem(k);
+      var first = localStorage.getItem('bm:spike:first') || new Date().toISOString();
+      localStorage.setItem('bm:spike:first', first);
+      set('ls', back === String(n) ? 'PASS' : 'FAIL', 'visit counter = ' + n + ' (first visit ' + first + '). Reload: it must become ' + (n + 1) + '.');
+    } catch (e) { set('ls', 'FAIL', 'localStorage threw ' + e.name + ': ' + e.message); }
+    $('b-reload').addEventListener('click', function () { location.reload(); });
+  })();
+
+  // 7. pdf answers
+  R.pdf = { status: 'manual', detail: 'click a link, then answer' };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-pdf]'), function (b) {
+    b.addEventListener('click', function () { set('pdf', b.getAttribute('data-pdf') === 'slide3' ? 'PASS' : 'FAIL', 'user says: ' + b.textContent); });
+  });
+  ['pdf-new', 'pdf-same'].forEach(function (id) { $(id).addEventListener('click', function () { R.pdf_clicked = (R.pdf_clicked || []).concat(id); render(); }); });
+
+  // 8. CDN reachability
+  (function () {
+    var t0 = performance.now();
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 6000);
+    fetch('https://cdn.jsdelivr.net/npm/mermaid@11/package.json', ctl ? { signal: ctl.signal } : {})
+      .then(function (r) { return r.json(); })
+      .then(function (j) { clearTimeout(timer); set('net', 'PASS', 'mermaid ' + j.version + ' manifest in ' + Math.round(performance.now() - t0) + ' ms'); })
+      .catch(function (e) { clearTimeout(timer); set('net', 'FAIL', e.name + ': ' + e.message); });
+  })();
+
+  // 9. media APIs
+  (function () {
+    var m = {
+      MediaRecorder: typeof window.MediaRecorder === 'function',
+      getUserMedia: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
+      speechSynthesis: 'speechSynthesis' in window,
+      SpeechRecognition: !!(window.SpeechRecognition || window.webkitSpeechRecognition)
+    };
+    set('media', m.MediaRecorder && m.getUserMedia ? 'PASS' : 'FAIL', JSON.stringify(m));
+    $('b-mic').addEventListener('click', function () {
+      if (!m.getUserMedia) { $('d-mic').textContent = 'no getUserMedia'; return; }
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+        var rec = new MediaRecorder(stream); var chunks = [];
+        rec.ondataavailable = function (e) { chunks.push(e.data); };
+        rec.onstop = function () {
+          stream.getTracks().forEach(function (t) { t.stop(); });
+          var size = chunks.reduce(function (s, c) { return s + c.size; }, 0);
+          R.mic = { status: size > 0 ? 'PASS' : 'FAIL', detail: 'recorded ' + size + ' bytes (' + rec.mimeType + ')' };
+          $('d-mic').textContent = R.mic.detail; render();
+        };
+        rec.start(); setTimeout(function () { rec.stop(); }, 2000);
+        $('d-mic').textContent = 'recording 2 s...';
+      }, function (err) { R.mic = { status: 'FAIL', detail: err.name + ': ' + err.message }; $('d-mic').textContent = R.mic.detail; render(); });
+    });
+  })();
+
+  $('b-copy').addEventListener('click', function () {
+    var ta = $('out'); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(function () { $('d-copy').textContent = 'copied'; }, function () { $('d-copy').textContent = ok ? 'copied' : 'copy blocked: select the text and press Ctrl+C'; });
+    } else $('d-copy').textContent = ok ? 'copied' : 'copy blocked: select the text and press Ctrl+C';
+  });
+  render();
+})();
+</script>
+</body>
+</html>

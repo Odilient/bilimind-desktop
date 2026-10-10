@@ -1,0 +1,70 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 111 >>
+stream
+BT /F1 110 Tf 150 330 Td (SLIDE 1) Tj ET
+BT /F1 22 Tf 150 260 Td (BiliMind spike sample PDF, page 1 of 4) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 111 >>
+stream
+BT /F1 110 Tf 150 330 Td (SLIDE 2) Tj ET
+BT /F1 22 Tf 150 260 Td (BiliMind spike sample PDF, page 2 of 4) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 193 >>
+stream
+BT /F1 110 Tf 150 330 Td (SLIDE 3) Tj ET
+BT /F1 22 Tf 150 260 Td (BiliMind spike sample PDF, page 3 of 4) Tj ET
+BT /F1 22 Tf 150 220 Td (If this is the first page you saw, #page=3 works.) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 111 >>
+stream
+BT /F1 110 Tf 150 330 Td (SLIDE 4) Tj ET
+BT /F1 22 Tf 150 260 Td (BiliMind spike sample PDF, page 4 of 4) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000134 00000 n 
+0000000204 00000 n 
+0000000366 00000 n 
+0000000492 00000 n 
+0000000654 00000 n 
+0000000780 00000 n 
+0000001024 00000 n 
+0000001150 00000 n 
+0000001313 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+1441
+%%EOF

@@ -1,0 +1,32 @@
+{
+  "name": "@bilimind/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Node-only engine: ingest, llm, outline, exam-map, plan, draft, validate, code tests, evidence/verdict, tts, review, exports, build.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@bilimind/core": "workspace:*",
+    "fflate": "0.8.3",
+    "mammoth": "1.13.0",
+    "minisearch": "7.2.0",
+    "msedge-tts": "2.0.9",
+    "sql.js": "1.14.2",
+    "ts-fsrs": "5.4.2",
+    "unpdf": "1.8.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/sql.js": "1.4.11",
+    "puppeteer-core": "25.13.0",
+    "vitest": "5.0.3"
+  }
+}

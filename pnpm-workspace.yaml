@@ -1,5 +1,10 @@
 packages:
   - packages/*
   - apps/*
+  - film
 autoInstallPeers: true
 strictPeerDependencies: false
+onlyBuiltDependencies:
+  - esbuild
+ignoredBuiltDependencies:
+  - msedge-tts

@@ -16,7 +16,7 @@ Where this plan and a research file disagree, this plan wins.
 3. Block formats to build, with the archetype mapping
 4. Showcase courses, live demo flow, backups
 5. Work packages for builder agents, and the order
-6. OpenRouter budget
+6. Budget (DeepSeek, OpenRouter, WorkBuddy credits)
 7. What the human must do
 8. Risks and fallbacks
 9. Decisions still open
@@ -113,7 +113,7 @@ facts `research/workbuddy.md`; evidence and Q&A `research/pitch.md`.
 
 In: one message in WorkBuddy, with the workspace set to the folder.
 
-> My Data Structures final is Thursday 9am. The slides and last year's paper are in this folder.
+> My Data Structures final is Wednesday 9am. The slides and last year's paper are in this folder.
 > I have 45 minutes a day. Get me ready.
 
 Out: a folder the student owns, every file opened from WorkBuddy's Results panel.
@@ -137,7 +137,7 @@ the card locally. P2 only: a WorkBuddy Automation that rebuilds a "today's revie
 The rule that answers the "thin wrapper" complaint: **agents decide; code enforces.** Agents make every
 judgment call in WorkBuddy's own loop, visible in the transcript. Our CLI does what must be
 deterministic or cheap (parsing files, the archetype-to-format table, schema checks, running tests, TTS,
-packaging) plus single-shot content calls (one OpenRouter call per lesson draft).
+packaging) plus single-shot content calls (one text-model API call per lesson draft).
 
 | Agent (in WorkBuddy) | Judgment it makes, in its own words | Tools (our CLI through Bash/PowerShell, plus WorkBuddy Read/Edit/Write) | What code enforces |
 |---|---|---|---|
@@ -156,7 +156,7 @@ knowledge must be taught, and checks that it was."**
 |---|---|
 | Core question: "Can your agent use WorkBuddy to solve a real problem and actually get things done?" | One sentence, no further messages. Files appear in WorkBuddy's Artifacts. The course opens in WorkBuddy's Preview. The calendar opens in a real calendar. The same course is live at the deployed link. |
 | 1. Real problem and user value | A named user with a dated exam and a past paper. One stat (84% reread; ~80% vs ~33% recall a week later with testing). Measured at the event: agent minutes vs a student making 20 cards plus a schedule by hand; 3-5 Taylor's students' reactions and one quote. |
-| 2. Agentic workflow | The Lead's plan in its own words ("Past paper: hashing 30% of marks, heaps 25%, AVL 0%. 3 days x 45 min = 4 lessons. Cut: AVL rotations."). Writers in parallel. A Writer repairing its own lesson. Coder: test failed, fixed, passed. Checker: Q7 rejected with a quote from slide 22, rewritten, passed. Two sentences, two different plans (screenshot pair: "Thursday" vs "tomorrow"). |
+| 2. Agentic workflow | The Lead's plan in its own words ("Past paper: hashing 30% of marks, heaps 25%, AVL 0%. 3 days x 45 min = 4 lessons. Cut: AVL rotations."). Writers in parallel. A Writer repairing its own lesson. Coder: test failed, fixed, passed. Checker: Q7 rejected with a quote from slide 22, rewritten, passed. Two sentences, two different plans (screenshot pair: "Wednesday" vs "tomorrow"). |
 | 3. Meaningful use of WorkBuddy | Skill in the Skills list; workspace folder access; Agent sub-agents (Expert Team member cards, P1); TaskCreate checklist; Preview and Artifacts panels; Artifact share link for the study group (if S10 works); the slides and docs themselves made in WorkBuddy (0b). No BiliMind server and no SaaS anywhere in the demo. |
 | 4. End-to-end execution | The conversation has exactly one user message. SKILL.md forbids questions; the Lead writes its assumptions at the top of `plan.md`. |
 | 5. Usable and verifiable results | Citation chip shows the exact slide text. JS exercise runs green in the page. `REPORT.md` lists every check. Checker benchmark: "caught X of 20 planted wrong answers, Y false alarms" (measured in WP9). |
@@ -164,13 +164,13 @@ knowledge must be taught, and checks that it was."**
 The six track capabilities: understanding the goal = Lead's goal + assumptions; planning = outline +
 past-paper weights + `plan.md` + TaskCreate checklist; executing = CLI tools, file writes, test runs,
 TTS; collaborating and validating = Writers, Coder, Checker with real rejections; integrating =
-`export` + `build` into one course and one schedule; delivering = files, Preview, share link, Automation.
+`export` + `build` into one course and one schedule; delivering = files, Preview, share link, the deployed course.
 
 ### 1.5 The judges' must-change items: adopted, modified, rejected
 
 | Item | Verdict | Why |
 |---|---|---|
-| Spike WorkBuddy before writing engine code | **Modified** | The spike comes first for the orchestration layer (SKILL.md, agent prompts, Telegram loop): nothing there is frozen until it is done. Ingest, archetypes, validators, TTS and the player are needed whatever the spike shows, so builder agents start them at T+0. Waiting would waste the scarcest resource, hours. |
+| Spike WorkBuddy before writing engine code | **Modified** | The spike comes first for the orchestration layer (SKILL.md, agent prompts, Expert Team): nothing there is frozen until it is done. Ingest, archetypes, validators, TTS and the player are needed whatever the spike shows, so builder agents start them at T+0. Waiting would waste the scarcest resource, hours. |
 | Get the real organiser slides; ask for credit codes and a ruling on pre-existing code | Done (0b) | 3-min live presentation + 2 min Q&A; ~2,350 WorkBuddy credits on the account. Pre-existing code: disclose (§1.6). |
 | Move every decision into WorkBuddy agents; delete `run --concurrency` from the skill | Adopted | Section 1.3. The fixed correction sentence is gone from the agent path: `draft` makes one attempt, `check` reports, the Writer decides. `run` stays in `apps/cli` for tests and fixtures only. |
 | Past-year paper drives planning; size to days left; state cuts; date reviews back from the exam | Adopted | P0: `exam-map` + `plan`. |
@@ -198,7 +198,7 @@ TTS; collaborating and validating = Writers, Coder, Checker with real rejections
 - **"What did you build here?"** BiliMind existed as a web app (Laravel + Nuxt). We reused its pedagogy:
   the lesson prompts and the archetype-to-format rules. Built at Dormathon: the Node engine port, the
   WorkBuddy skill and agent crew, the past-paper planner, the Checker and Coder loops, the offline cobalt
-  player, the exports and the Telegram review loop.
+  player, the exports and the FSRS review schedule.
 - **"What does it cost?"** Measured per course: text-model API $0.0X (DeepSeek direct) plus N WorkBuddy
   credits (fill in from REPORT.md after gate G4). Narration is free (Edge voices).
 
@@ -282,7 +282,7 @@ No `ics` package: the .ics writer is 60 lines of our own code.
 | `archetypes.ts` | Verbatim port of `ConceptArchetype` (`engine-port.md` §2): FORMATS, OPTIONAL, ASSESSMENT_BIAS, TEST, WRITING_NOTE, LABEL, `mandatoryFormats` (annotated_media → walkthrough), `plannedBlockTypes`, plus the learner tag words and icons (`player-design.md` §2.1) |
 | `blocks.ts` | `ENABLED_TYPES` (18 Tier A + 4 Tier B), one zod schema per payload, assessment schemas (mcq, multi_select, ordering, numeric, cloze, short_answer, essay, project, code) |
 | `course-schema.ts` | zod schema of `course.json`; the player and `build` both validate against it |
-| `grade.ts` | Deterministic graders (port of DeterministicGrader, `engine-port.md` §4.2). Used by the player AND by `bilimind grade` for Telegram answers, so a question grades the same everywhere |
+| `grade.ts` | Deterministic graders (port of DeterministicGrader, `engine-port.md` §4.2). Used by the player AND by `bilimind grade` (P2), so a question grades the same everywhere |
 | `sentences.ts` | One sentence splitter + `spokenText()` (Markdown → narration text). Narration cue ids (`blockId.sentenceIndex`) and the player's highlighted spans come from the same function |
 | `fsrs.ts` | Thin wrapper over ts-fsrs: new card, rate (again/hard/good/easy), due list, "review dates backwards from the exam" |
 | `fixtures/` | `course-ds-mini.json`: a hand-written 2-lesson course containing every P0 block type, every assessment kind, citations, narration cues and receipts. Unblocks the player before the engine works |
@@ -527,21 +527,19 @@ and in `node:vm` for the Coder. Never say "Python in the browser" on stage.
 All three are generated **through WorkBuddy with the skill** (so their receipts slab is true), at most 3
 runs each, best run committed to `showcase/courses/<slug>/` together with its `REPORT.md`.
 
-**A. Hero, live: "Data Structures: Final on Thursday"** (skin cobalt, object `obj-book`)
-- Sources, option 1 (preferred, H9): Oybek's own module slides plus a past-year paper, kept on the laptop,
-  never published; lecturer permission if shown on the projector.
-- Sources, option 2 (default until H9 answers, public): MIT OpenCourseWare 6.006 Introduction to
-  Algorithms, Spring 2020, CC BY-NC-SA 4.0: lecture notes 2 (sequences, dynamic arrays), 4 (hashing),
-  6-7 (binary trees, AVL), 8 (binary heaps), plus Quiz 1 problems as the "past paper". Attribution in the
-  course footer and `LICENSE.md`. Non-commercial demo use fits the licence.
-- Sentence: "My Data Structures final is Thursday 9am. The slides and last year's paper are in this
-  folder. I have 45 minutes a day. Get me ready." (Thursday = 3 days after pitch day; adjust the word.)
+**A. Hero, live: "Data Structures: Final on Wednesday"** (skin cobalt, object `obj-book`)
+- Sources (public only, owner decision in 0b): MIT OpenCourseWare 6.006 Introduction to Algorithms,
+  Spring 2020, CC BY-NC-SA 4.0: lecture notes 2 (sequences, dynamic arrays), 4 (hashing), 6-7 (binary
+  trees, AVL), 8 (binary heaps), plus Quiz 1 problems as the "past paper". Attribution in the course footer
+  and `LICENSE.md`. Non-commercial demo use fits the licence. No private student slides anywhere.
+- Sentence: "My Data Structures final is Wednesday 9am. The slides and last year's paper are in this
+  folder. I have 45 minutes a day. Get me ready." (Pitch is Sunday, so Wednesday = 3 study days.)
 - Expected plan: capacity 3 x 45 = 135 min, 60% to new lessons, so 4 lessons; the past paper weights
   hashing and heaps; at least one topic cut with a reason.
 - Expected formats: code (JS), diagram, worked_example, playground (load factor vs probes), comparison,
   reference_table (Big-O), flashcards, walkthrough (heap insert), quizzes with slide chips.
 - Live targets (measured in WP9, not promised): one user message; 4 Writers in parallel; at least one
-  Checker rejection or label; one Coder fix; wall time under 5 min; OpenRouter under $0.08.
+  Checker rejection or label; one Coder fix; wall time under 5 min; text API under $0.08.
 
 **B. Cameo: "Boba Shop: Day One"** or the real shop's name (skin lime, object `img/11/cafe.webp` or `obj-check`)
 - Sources: a real local shop's SOP and menu sheet with written permission (H10). Fallback: a sample SOP
@@ -553,9 +551,9 @@ runs each, best run committed to `showcase/courses/<slug>/` together with its `R
 - Formats: walkthrough (make a brown-sugar milk tea, what goes wrong at each step), checklist (opening and
   closing shift), scenario (dairy allergy, spill at the counter), reference_table (sweetness and ice
   levels), flashcards (menu codes), quiz with a pass mark.
-- Stage beat (25 s): the course home on the rail, then the new hire's Telegram question. P1: lesson 1
-  narrated in Malay and Burmese (`ms-MY-YasminNeural`, `my-MM-NilarNeural`) and the Telegram question in
-  Burmese, with the disclaimer "Translated by AI. Ask a fluent colleague to check."
+- Stage beat (15 s): the lime course home at the deployed link. P2: lesson 1 narrated in Malay and
+  Burmese (`ms-MY-YasminNeural`, `my-MM-NilarNeural`) with the disclaimer "Translated by AI. Ask a fluent
+  colleague to check."
 
 **C. Cameo: "Bahasa Melayu Survival Kit"** (skin ink, object `obj-mic`)
 - Sources: Wikivoyage "Malay phrasebook" (CC BY-SA) saved as Markdown in the folder with attribution,
@@ -569,65 +567,62 @@ runs each, best run committed to `showcase/courses/<slug>/` together with its `R
   play it back next to the native voice, self-rate. No score is claimed. A Malaysian friend checks the
   phrases first (H15). Its real job: proof that a different sentence gives a different course.
 
-Cut: "Why Rereading Lies to You" (the 4th course). Its one stat goes on a rail card instead.
+Cut: "Why Rereading Lies to You" (the 4th course). Its one stat goes on slide 1 instead.
 
 ### 4.2 Stage layout
 
-- Projector: WorkBuddy on the left ~70% (Compact Mode off, font zoom up), the pitch rail on the right
-  ~30% (`pitch/index.html?mode=rail` in an Edge window). The course opens in WorkBuddy's Preview panel.
-- Phone with Telegram on the table; Telegram Desktop pinned under the rail as the projector copy.
+- Projector: WorkBuddy on the left ~70% (Compact Mode off, font zoom up), the slides on the right ~30%
+  (rail mode, or the PDF in a narrow Edge window). The course opens in WorkBuddy's Preview panel.
 - Driver (Sharif or whoever H14 names) works the laptop; Oybek speaks.
 - Before the timer: demo workspace `C:\Demo\DS-Final\` (sources only, `bilimind-out` emptied by the reset
-  script), Full Access for that folder only, the Automation already created, the morning run of the
-  identical sentence open in a second WorkBuddy task, player localStorage cleared.
-- Rule for pressing Enter: if rehearsal p90 is under 4:30, press Enter at 0:00 on stage. If over, and the
-  organisers give setup time, press Enter during setup and say so ("I pressed Enter when we plugged in,
-  two minutes ago"). Never claim it started later than it did.
+  script), Full Access for that folder only, the morning run of the identical sentence open in a second
+  WorkBuddy task, player localStorage cleared, the deployed link open in a background tab.
+- The slot is 3 minutes in total (0b), and a full crew run takes about 5. So: press Enter when setup
+  starts and say so ("I gave it this sentence when we plugged in"). The talk shows the live run in flight
+  (plan, cards) and the finished morning run for the outcome. Never claim it started later than it did.
 
-### 4.3 Live flow (assumes 3 min pitch + 2 min demo; re-time when the real rules arrive)
+### 4.3 Live flow: 3:00 presentation, then 2:00 Q&A (0b)
 
 | Time | Screen | Said (gist) |
 |---|---|---|
-| 0:00 | WorkBuddy, empty task, folder visible in All Files | "This is WorkBuddy, Tencent's agent workstation. I'm giving it one sentence." Paste, Enter. |
-| 0:20 | Rail card 1: "Who studies by rereading?" | Hands up; 84% reread; testing = ~80% vs ~33% a week later; why nobody does it: hours of setup; Oybek's two true sentences. |
-| 0:50 | WorkBuddy: the Lead's assumptions and plan, checklist ticking | "I didn't write these steps. It found last year's paper, weighted topics by marks, sized 4 lessons to my 3 days, and cut AVL rotations because the paper never asks it." (Example wording: say what the real run decided.) |
-| 1:30 | Writer sub-agent cards running in parallel | "Four writers, one per lesson. The agents decide what to teach and when; our code decides how each kind of knowledge is taught: a calculation gets a slider, a procedure a walkthrough." |
-| 2:00 | Rail card 3: the cafe course + the new hire's Telegram question | "Same crew, a shop's SOP: a day-one course and a question on the new hire's phone." |
-| 2:25 | Rail card 4: honest numbers | Cost per course in dollars and credits, wall time, Checker caught X/20 planted errors, N students tried it today + one quote. "The engine's prompts come from our app BiliMind; everything running in WorkBuddy was built here." |
-| 2:50 | Rail card 6 | "One sentence in. A course out. Checked against your slides." |
-| D 0:00 | Automation page: press **Run now** (questions will arrive in ~40 s) | "While that runs, here's what the crew did." |
-| D 0:10 | Transcript: the Checker's rejection, then the Coder's fail-then-pass | "It argued with itself. Q7 said worst case O(n log n); slide 22 says otherwise. Rejected, rewritten, passed. And a test failed, the Coder fixed it." |
-| D 0:35 | Preview: `index.html` home, path, receipts slab | "A course with an order, and the receipts." |
-| D 0:50 | A lesson: click the rewritten Q7's chip (slide text pops up); Run the JS exercise (green) | "Every answer shows its slide. Every exercise was run before I saw it." |
-| D 1:10 | Phone buzzes: 3 due questions; a teammate answers one wrong | "It keeps working after the chat closes." |
-| D 1:30 | WorkBuddy's reply on Telegram: correct answer, slide quote, "moved to tomorrow"; `reviews.ics` updated | "Wrong answer, so it comes back tomorrow, in my calendar too." |
-| D 1:50 | Close | Tagline. |
+| 0:00 | WorkBuddy: the sentence, the live run in progress | "This is WorkBuddy, Tencent's agent workstation. When we plugged in I gave it one sentence." Read it. |
+| 0:15 | Slide 1: "Who studies by rereading?" | 84% reread; testing = ~80% vs ~33% a week later; nobody does it because setup takes hours; Oybek's two true sentences. |
+| 0:40 | WorkBuddy: the Lead's assumptions and plan, checklist ticking, Writer cards in parallel | "I didn't write these steps. It found last year's paper, weighted topics by marks, sized 4 lessons to my 3 days, and cut one topic with a reason. Four writers, one per lesson. The agents decide what to teach and when; our code decides how each kind of knowledge is taught." (Say what the real run decided.) |
+| 1:15 | Transcript (live run, or the morning run): the Checker's rejection, the Coder's fail-then-pass | "It argued with itself. Q7's answer wasn't in slide 22: rejected, rewritten, passed. A test failed; the Coder fixed it." |
+| 1:40 | Preview: the finished course (morning run, or live if done): path, receipts slab; click the rewritten Q7's chip; Run the JS exercise | "Every answer shows its slide. Every exercise ran before I saw it." |
+| 2:10 | `reviews.ics` in a calendar (5 s), then slide 3: the cafe course | "Reviews already in my calendar. Same crew, a shop's SOP: a day-one onboarding course." |
+| 2:30 | Slide 4: honest numbers + what we built here | Cost per course in dollars and credits, wall time, Checker caught X/20 planted errors. "The prompts come from our app BiliMind; everything running in WorkBuddy was built in the last 24 hours." |
+| 2:52 | Slide 6 | "One sentence in. A course out. Checked against your slides." |
 
-If the live run is still going at D 0:00, show its checklist and cards, then switch to the morning run for
-the rejection and the course ("Here is the same sentence at 9 this morning").
+Q&A assets ready to open: the Malay course (different sentence → speaking drills), the vanilla WorkBuddy
+comparison, `REPORT.md`, `plan.md` of the "tomorrow" variant, the deployed link.
+
+Phase 2 (top 18, global video call, 4 min demo + 3 min Q&A, 0b): the same flow with one more minute for
+the live run's finished course and the Malay cameo.
 
 ### 4.4 Backups (decided before going on stage)
 
 | If | Then | Line |
 |---|---|---|
-| Live run not finished by D 0:00 | Morning run of the identical sentence, same folder | "Still writing the last lesson. Here's the same sentence from this morning." |
-| WorkBuddy, credits or network fail | Film segment (sped up with a visible clock) + offline course folders from USB in Edge | "Hackathon Wi-Fi. Here is this exact run, recorded." |
+| Live run not finished by 1:40 | Morning run of the identical sentence, same folder | "Still writing. Here's the same sentence from this morning." |
+| WorkBuddy, credits or network fail | Screen recording of the best run (if WP13 made one) + offline course folders from USB in Edge + the deployed link on a phone hotspot | "Hackathon Wi-Fi. Here is this exact run, recorded." |
 | No real rejection in the live run | Show the morning run's rejection (it must be real, saved in `hackathon/runs/`) | (Never fake a log line.) |
-| Telegram does not arrive in 60 s | "Run now" result inside WorkBuddy chat; reply there | "Here's the same loop inside WorkBuddy." |
 | Preview panel misbehaves | Open the same `index.html` in Edge | |
 | A citation looks wrong | Only click the rehearsed chip on stage | |
-| Time runs short | Drop the calendar beat, then the cafe card. Never drop the rejection or the Telegram reply. | |
-| Rules require a video | `film/out/bilimind-3min.mp4` (WP13) is the submission; the live slot uses the same flow | |
+| Time runs short | Drop the calendar beat, then the cafe slide. Never drop the plan or the rejection. | |
 
-### 4.5 Rail cards (`pitch/`)
+### 4.5 Slides (`pitch/`): required as PDF, made with WorkBuddy (0b)
+
+Six slides, cobalt look, produced in WorkBuddy (the orchestrator drives workbuddy.ai/app) and exported to
+PDF for the submission; the same content as a narrow rail for the live screen.
 
 1. "Who studies by rereading?" + 84% + 80% vs 33% (sources in small print).
-2. Real screenshot of the sub-agent cards from a real run (replaces the planned agent diagram) + "Agents
-   decide what and when. Code decides how. Then they check."
-3. Cafe: SOP → course → Telegram question (real shop name if H10 succeeds).
-4. Measured numbers from `hackathon/runs/` only: $ + credits per course, wall time, Checker X/20 planted,
-   students who tried it + one quote; vanilla WorkBuddy vs BiliMind (5-second clip or screenshot pair).
-5. "What we built here" (the disclosure in §1.6).
+2. Real screenshot of the sub-agent cards from a real run + "Agents decide what and when. Code decides
+   how. Then they check."
+3. Cafe: SOP → course (real shop name if H10 succeeds).
+4. Measured numbers from `hackathon/runs/` only: $ + credits per course, wall time, Checker X/20 planted;
+   students who tried it + one quote if H11 happened; vanilla WorkBuddy vs BiliMind screenshot pair.
+5. "What we built here" (the disclosure in §1.6) + GitHub and deployed links.
 6. "One sentence in. A course out. Checked against your slides."
 
 ---
@@ -666,7 +661,7 @@ the rejection and the course ("Here is the same sentence at 9 this morning").
   cover all kinds (multi_select Jaccard, ordering pairs, numeric "13,04", cloze normalisation);
   `sentences.ts` gives the same ids for the same text in Node and in a browser bundle.
 
-**WP-S Spike kit** · owner `hackathon/spike/` · depends on nothing · **T+0, ~30 min, then the human runs it (H4)**
+**WP-S Spike kit** · owner `hackathon/spike/` · depends on nothing · **17:00, ~30 min, then it is run in WorkBuddy (H4)**; skip the questions 0b already answered
 - Outputs: `hackathon/spike/bilimind-spike/` skill (SKILL.md + `scripts/hello.mjs`) that prints shell,
   node version, cwd, skill dir, whether `OPENROUTER_API_KEY` is set (yes/no only), then launches 3 parallel
   sub-agents that each run `hello.mjs --sleep 20 --id N`, creates a TaskCreate checklist, writes
@@ -681,7 +676,8 @@ the rejection and the course ("Here is the same sentence at 9 this morning").
   balance - $4 reserve < 0 (unless `BILIMIND_DEMO_DAY=1`); cache hit costs $0. Ingest: a hand-written
   minimal PDF fixture gives `Page N` locators; a hand-built pptx (fflate) gives `Slide N` with speaker
   notes; a text-less PDF page is reported as scanned; on WP8's MIT folder every file ingests, the quiz is
-  role `past_paper`. Live allowance: one 20-token OpenRouter call to confirm the pinned route ($0.001).
+  role `past_paper`. Live allowance: one 20-token call per provider (DeepSeek direct, and OpenRouter to
+  confirm the pinned route), about $0.001.
 
 **WP2 Engine planning and drafting: prompts, outline, exam-map, plan, draft, normalisers** · owner `packages/engine/src/{prompts/*,outline,exam,plan,draft,normalise/*}.ts` · depends on WP0, WP1 (llm interface can be mocked)
 - Acceptance: golden tests on `outline-trees-heaps-noreason.json` (fails the gate: procedural 55%, wrong
@@ -706,9 +702,8 @@ the rejection and the course ("Here is the same sentence at 9 this morning").
 - Acceptance: `narrate` on the fixture works with the PC clock 8 h off (skew fix), mp3 duration > 0 by
   ffprobe, cue count equals the player's sentence spans for the same text; 12 parallel clips in under 20 s;
   `.ics` parses back, has study blocks plus reviews, every event before the exam, TZ Asia/Kuala_Lumpur
-  (one manual import into Google or Outlook, screenshot in STATUS.md); `due` → `grade "1 b, 2 x, 3 O(n)"`
-  updates `state.json`, `history.jsonl` and `reviews.ics`, and the reply text carries the slide quote;
-  `deck.csv` imports into Anki (manual once); `REPORT.md` counts equal counts recomputed from `log.jsonl`;
+  (one manual import into Google or Outlook, screenshot in STATUS.md); `state.json` has one card per quiz
+  item and flashcard with first due dates from the plan; `deck.csv` imports into Anki (manual once); `REPORT.md` counts equal counts recomputed from `log.jsonl`;
   `build` on the fixture produces `index.html` under 2.5 MB that validates against `course-schema.ts`.
 
 **WP5a Player shell** · owner `packages/player` (shell, routing, home, lesson view, dock, cites, runtime, build) · depends on WP0's fixture
@@ -740,49 +735,52 @@ the rejection and the course ("Here is the same sentence at 9 this morning").
   them on the fixture); `scripts/bundle.mjs` produces `skills/bilimind/scripts/bilimind.mjs` that runs
   `doctor` from a temp folder with no `node_modules`; `run` on the MIT folder makes a schema-valid course in
   under 6 min and under $0.08 (record both in STATUS.md); the skill zip is under 10 MB with SKILL.md at
-  its root.
+  its root; esbuild targets node22 and the bundle runs under WorkBuddy's bundled Node 22
+  (`~\.workbuddy-ai\binaries`) as well as the system Node 24.
 
-**WP7 Skill, playbooks, install** · owner `skills/bilimind` (SKILL.md, references/, install.ps1, zip script) · draft from T+2h; **final text only after gate G1 (spike)**
+**WP7 Skill, playbooks, install** · owner `skills/bilimind` (SKILL.md, references/, install.ps1, zip script) · draft from ~18:15; **final text only after gate G1 (spike)**
 - Acceptance (human-run in WorkBuddy, builder reads the transcript): the hero sentence produces a course
   with zero questions to the user; 4 Writer sub-agents ran in parallel; the Coder and Checker ran; every
   repair decision appears in the transcript in the agent's own words; REPORT.md shows at least one real
   rejection or "beyond your slides" label; `index.html` opens in Preview; no command ever called `run`.
 
-**WP8 Showcase sources** · owner `showcase/sources/{ds-final,bm-survival,boba-day-one}` · depends on nothing · T+0
+**WP8 Showcase sources** · owner `showcase/sources/{ds-final,bm-survival,boba-day-one}` · depends on nothing · 17:00
 - Outputs: each folder with its files and `LICENSE.md` (source URL, licence, attribution text); the MIT
   6.006 lecture-note PDFs and Quiz 1 problems; Wikivoyage Malay phrasebook as Markdown; the sample SOP
-  (DOCX or PDF, marked fictional) + the FHR 2009 one-pager; slots for H9 and H10 material (never committed
-  if private: add their paths to `.gitignore`).
+  (DOCX or PDF, marked "Sample document") + the FHR 2009 one-pager; a slot for H10 material (a real
+  shop's SOP only with written permission). No private student material (0b).
 - Acceptance: WP1's ingest reads every file; the past paper is detected; no file without a licence note.
   Downloads are approved by the human through the permission prompt (filename, source, size).
 
 **WP9 Integration, measurement, Checker benchmark** · owner `hackathon/runs/` · depends on WP6, WP7 · from G2
 - Work: run the CLI `run` end to end and fix contract breaks with the owners; then WorkBuddy runs of the
-  hero (human at the keyboard); per run save `REPORT.md`, wall time, OpenRouter cost (ledger) and
-  WorkBuddy credits (read from the app); the benchmark: `plant --n 20` on a finished hero course, the
-  Checker agent run on it in WorkBuddy, `plant-score` → "caught X/20, Y false alarms"; a hand check of 40
-  supported verdicts against the slides; the "Thursday" vs "tomorrow" plan pair.
+  hero (owner at the keyboard, or the orchestrator driving WorkBuddy); per run save `REPORT.md`, wall
+  time, text-API cost (ledger) and WorkBuddy credits (read from the app); the benchmark: `plant --n 20` on
+  a finished hero course, the Checker agent run on it in WorkBuddy, `plant-score` → "caught X/20, Y false
+  alarms"; a hand check of 20 supported verdicts against the slides; the "Wednesday" vs "tomorrow" plan pair.
 - Acceptance: 3 consecutive WorkBuddy runs on the venue network, each under the target time, numbers in
   `hackathon/runs/summary.md`; every number on the rail traces to a file there.
 
-**WP10 Review loop wiring** · owner `skills/bilimind/references/coach.md` + `packages/engine/src/review.ts` fixes · depends on WP4, WP7, H8
-- Acceptance: Automation "Run now" → the phone receives 3 questions within 60 s; a reply with one wrong
-  answer → graded reply with the slide quote and the new due date within 60 s; `state.json` and
-  `reviews.ics` updated; the fallback (answering inside WorkBuddy chat) works the same.
+**WP10 Review loop wiring** · **CUT (Telegram cut by the owner, 0b).** The schedule work lives in WP4
+(`state.json`, `reviews.ics`) and WP5a ("Due today" strip). The P2 Automation needs only `due`/`grade`.
 
-**WP11 Pitch deck** · owner `pitch/` · depends on screenshots from WP9 (placeholders before)
-- Outputs: `pitch/index.html`, cobalt tokens, 6 cards (§4.5), `?mode=rail` (480px column) and full mode,
-  arrow keys, works offline, fonts embedded.
-- Acceptance: rail text at least 28px; opens from `file://` with no network; every number links to its
-  `hackathon/runs/` source in the speaker notes; 1280x720 and 1920x1080 screenshots.
+**WP11 Slides (P0, submission needs a PDF made with WorkBuddy, 0b)** · owner `pitch/` · depends on screenshots from WP9 (placeholders before)
+- Outputs: the 6 slides of §4.5 produced in WorkBuddy (the orchestrator drives workbuddy.ai/app; feed it
+  the cobalt tokens, the 3D objects and the measured numbers), exported as `pitch/BiliMind-Dormathon.pdf`;
+  plus `pitch/index.html` with the same content and a `?mode=rail` 480px column for the live screen.
+- Acceptance: the PDF opens and reads at 1280x720; rail text at least 28px; every number traces to
+  `hackathon/runs/summary.md`; the WorkBuddy task that made the slides is kept as evidence (screenshot).
 
-**WP12 Site (P1)** · owner `site/` · depends on showcase courses (G4)
-- Outputs: one-page landing adapted from `11-cobalt-landing.html` (problem, the crew, the three courses
-  as links to their static `index.html`, install steps for the skill, honest numbers, what was built here).
-- Acceptance: works offline from `file://` and as a static site; 390px without horizontal scroll; every
-  outbound link works. Publishing is the human's decision.
+**WP12 Site = the deployed application link (P0, required by the submission, 0b)** · owner `site/` · depends on showcase courses (G4)
+- Outputs: a static site: a landing page adapted from `11-cobalt-landing.html` (problem, the crew, how it
+  works in WorkBuddy, honest numbers, what was built here), the three showcase courses playable at
+  `/courses/<slug>/` (their `index.html` + `audio/` + `img/` + `sources/` where the licence allows), the
+  skill zip for download, install steps, links to the GitHub repo.
+- Acceptance: works as a static site and from `file://`; 390px without horizontal scroll; courses play
+  (narration, quiz, JS exercise) from the deployed URL; no secrets in any deployed file; the human signs
+  in to the host (GitHub Pages, Vercel, Netlify or Cloudflare Pages) and the URL goes into the submission.
 
-**WP13 Film** · owner `film/` · P1, P0 if the rules require a video · depends on raw recordings (H13)
+**WP13 Film** · owner `film/` · P2 (no video is required in Phase 1, 0b); a raw screen recording of the best run is enough as a backup · depends on raw recordings (H13)
 - Outputs: `film/build.mjs`: `film/raw/*.mp4` + `film/cuts.json` (in/out, speed, caption) → title cards
   rendered from cobalt HTML with puppeteer-core → ffmpeg concat with speed ramps and a visible clock on
   sped-up parts, burned captions, Oybek's voice-over (fallback `en-US-AndrewMultilingualNeural`) →
@@ -796,44 +794,61 @@ the rejection and the course ("Here is the same sentence at 9 this morning").
   `bilimind-out\`.
 - Acceptance: a teammate who has not seen the build can set up the demo from the runbook in 10 minutes.
 
-**WP15 MCP (P2, conditional)** · owner `packages/mcp` · only if G1 says named tools beat Bash calls on screen
-- Acceptance: `@modelcontextprotocol/sdk` 1.32.1 stdio server lists every tool with zod schemas; a v1
-  client test calls `check` and `verdict`; added to WorkBuddy via Connectors → Custom connector.
+**WP15 MCP** · **CUT for the 24-hour build (0b).** `packages/mcp` stays an empty slot.
 
-**WP16 Expert Team plugin (P2, conditional; P0 if the spike shows plain-skill sub-agents get no cards)** · owner `plugin/bilimind-team` · per `workbuddy.md` §7.5
-- Acceptance: installs locally (Create expert team flow or `.codebuddy/agents`), shows member cards for
-  Lead, Writer, Coder, Checker, and runs the same playbooks.
+**WP16 Expert Team plugin (P1; P0 if the spike shows plain-skill sub-agents get no cards)** · owner `plugin/bilimind-team` · per `workbuddy.md` §7.5 and 0b
+- Outputs: the plugin package (plugin.json with `expertType: team`, lead + Writer/Coder/Checker agent files
+  that point at the same playbooks, `settings.json`, avatars made from the 3D objects), registered into
+  `C:\Users\User\.workbuddy-ai\plugins\marketplaces\my-experts\plugins\bilimind-team` with WorkBuddy's own
+  `validate_expert.py` and `register_expert.py` (paths in 0b).
+- Acceptance: `validate_expert.py` passes; the team appears in My Experts; a run shows member cards for
+  Lead, Writer, Coder, Checker and uses the same skill and CLI.
+
+**WP17 Submission package (P0, 0b)** · owner repo root `README.md`, `docs/`, `hackathon/SUBMISSION.md` · depends on G4 · 03:00-06:00
+- Outputs: `README.md` (what it is, the one sentence, how the crew works, install the skill in WorkBuddy,
+  run it, the three courses, honest numbers, what was built at Dormathon vs reused, licences); docs made
+  with WorkBuddy where the rule asks for it; a secrets scan before the repo goes public (`.env.local` and
+  any `*.env*` never committed, `git grep` for `sk-or-`, `sk-`, API key patterns, `config.json` keys);
+  `hackathon/SUBMISSION.md` with the four required items (public GitHub URL, deployed URL, slides PDF,
+  group name + campus branch) ready to paste.
+- Acceptance: a fresh clone builds with `pnpm install && pnpm -r build`; the scan finds nothing; the human
+  flips the repo to public and submits before 09:00 MYT.
 
 ### 5.3 Order, lanes and gates
 
+The event is 24 hours and submission closes Sunday 09:00 MYT in practice (0b), so this is a P0-only
+plan with P1 items taken only when a lane is idle. Times are MYT, Saturday 10 → Sunday 11 October.
+
 ```
-T+0      WP0 contracts ─────────┐      WP-S spike kit ──> H1-H5 + spike (human) ──> G1
+17:00    WP0 contracts ─────────┐      WP-S spike kit ──> spike (orchestrator/owner in WorkBuddy) ──> G1
          WP8 sources ───────┐   │
-T+1.5h                     G0 contracts frozen (types, schemas, fixture)
-T+1.5h   Lane A  WP1 engine I/O
+18:15                      G0 contracts frozen (types, schemas, fixture)
+18:15    Lane A  WP1 engine I/O
          Lane B  WP2 outline / exam-map / plan / draft
          Lane C  WP3 validators + agent tools
          Lane D  WP4 tts / review / export / build
          Lane E  WP5a player shell
          Lane F  WP5b blocks (reading/visual)
          Lane G  WP5c blocks (interactive)
-         Lane H  WP6 CLI + bundle, WP7 skill draft
-T+~3h    G1 spike facts in hackathon/SPIKE.md → finalise WP7 shape; decide WP15/WP16
-T+10h    G2  `bilimind run` on the MIT folder → valid course, opens via file:// in Edge with zero errors
-T+12h    G3  first full WorkBuddy run of the hero sentence (WP7 acceptance)
-T+12h+   WP9 measurements, WP10 Telegram, fixes; Lane I: WP11 deck, WP14 runbook, WP13 film, WP12 site
-T+16h    G4  three showcase courses generated through WorkBuddy and committed; numbers in hackathon/runs/
-T+18h    Feature freeze (only fixes after this)
-T+20h+   G5  3 consecutive rehearsal runs on venue Wi-Fi under target; full pitch rehearsed 3 times
+         Lane H  WP6 CLI + bundle, WP7 skill draft, WP16 Expert Team draft
+~19:30   G1  spike facts in hackathon/SPIKE.md → finalise WP7 shape; plain skill or Expert Team on stage
+~22:30   G2  `bilimind run` on the MIT folder → valid course, opens via file:// in Edge with zero errors
+~23:30   G3  first full WorkBuddy run of the hero sentence (WP7 acceptance)
+00:00    WP9 measurements + Checker benchmark; showcase courses through WorkBuddy; WP12 site + deploy
+03:00    G4  three showcase courses committed; numbers in hackathon/runs/; site deployed
+03:00    WP11 slides via WorkBuddy → PDF; WP17 README/docs/secrets scan/public repo; WP14 runbook
+06:00    Feature freeze (fixes only)
+06:00    G5  3 consecutive rehearsal runs under target; pitch rehearsed 3 times with a timer
+09:00    SUBMIT (GitHub public URL, deployed URL, slides PDF, group + campus). Pitch 10:00-13:00.
 ```
 
 Parallelism: 8 builder lanes after G0. Integration is continuous: each lane runs against the fixture
 first, then against the CLI. The only hard serial chain is WP0 → (WP1..WP6) → G2 → WP7 final → G3.
 
-If the event leaves less than about 24 hours from T0: P0 only. Drop WP12, WP15, WP16, `.apkg`, Tier B
-blocks, Mermaid pre-render, Burmese narration and the voice reply; WP13 becomes a raw screen recording
-with captions. Never drop: the past-paper plan, the Checker and Coder loops, the Telegram text loop, the
-receipts slab, citation chips.
+Out of the 24-hour build: WP10 (cut), WP13 film beyond a raw recording, WP15 MCP, `.apkg`, Tier B blocks,
+Mermaid pre-render, Malay/Burmese narration of the cafe course, the diagnostic, Python. Never drop: the
+past-paper plan, the Checker and Coder loops, the receipts slab, citation chips, the deployed link, the
+slides PDF, the public repo.
 
 ### 5.4 Final verification before G5 (on the demo laptop)
 
@@ -841,62 +856,83 @@ receipts slab, citation chips.
    numbers recorded.
 2. `index.html` from `bilimind-out/` and from USB, Wi-Fi off: home, a lesson, quiz, JS exercise, narration.
 3. Stage mode at the projector resolution (ask the venue; test 1280x720 and 1920x1080).
-4. Telegram loop twice in a row; the second reply reflects the first answer's rescheduling.
+4. The deployed link on a phone (mobile data): a course plays, narration and JS exercise included.
 5. Ledger: balance minus reserve still positive after rehearsals; `doctor` green.
 6. Phone hotspot run: the same sentence finishes over the hotspot.
 7. `scripts/demo-reset.ps1`, then the morning run kept open in a second task.
 
 ---
 
-## 6. OpenRouter budget
+## 6. Budget: text-model APIs and WorkBuddy credits
 
-### 6.1 The real number
+### 6.1 The real numbers
 
-`/api/v1/credits` on 2026-10-10: $75.00 bought, $65.31 used, **$9.69 left**. The key shows $12.80 left of
-a $15 limit, but the account runs dry first. Plan on $9.69. Builder agents (Claude) spend no OpenRouter
-money; only engine calls do.
+Three pools (0b). Builder agents (Claude) spend none of them; only engine calls and WorkBuddy runs do.
 
-Measured unit costs (`engine-port.md` §7.2, `media.md` §3), deepseek/deepseek-v4-flash, price-pinned
+- **DeepSeek API direct, about $9** (`DEEPSEEK_API_KEY`): the default for every content call
+  (`deepseek-flash` for drafts, rewrites and outlines; never `deepseek-v4-pro` without `--allow-expensive`).
+  Balance read live from `GET https://api.deepseek.com/user/balance`.
+- **OpenRouter, $9.69 account balance** (`/api/v1/credits`: $75.00 bought, $65.31 used; the key's $12.80
+  is not the ceiling): fallback for content, images, music, and the BYOK agent model if WorkBuddy credits run out.
+- **WorkBuddy credits, about 2,350 on the account** (0b): pay for every agent loop (Lead, Writers, Coder,
+  Checker) and for the slides and docs made in WorkBuddy.
+
+Measured unit costs on OpenRouter (`engine-port.md` §7.2, `media.md` §3), deepseek-v4-flash on pinned
 providers: lesson draft $0.0011-0.0012 (33 s, reasoning off); outline $0.0016 (63 s, reasoning on); one
-quiz-item call $0.00003. A 4-lesson hero course with repairs and rewrites is about $0.01-0.03; the cap per
-run is $0.25 and the planning number is $0.08. Narration is free.
+quiz-item call $0.00003. DeepSeek direct is priced per token from its own price table; WP1 records the
+real per-call cost in the ledger, and WP9 replaces these estimates with measured ones. Planning number:
+$0.08 per 4-lesson course with repairs; hard cap $0.25 per run. Narration is free.
 
 ### 6.2 Allocation
 
+DeepSeek direct (about $9; adjust the slack to the real balance `doctor` reports):
+
 | Bucket | Cap | Covers |
 |---|---|---|
-| **Demo-day reserve (locked)** | **$4.00** | Live run, morning run, retries, Telegram explanations, two spare runs. Enforced: the ledger refuses any call that would take the balance below $4.00 unless `BILIMIND_DEMO_DAY=1` is set on the day |
-| Engine development | $0.75 | WP1-WP4 live allowances (§5.2) and prompt fixes |
+| **Demo-day reserve (locked)** | **$3.00** | Morning run, stage run, retries, spare runs. The ledger refuses calls that would cross it unless `BILIMIND_DEMO_DAY=1` |
+| Engine development | $0.75 | WP1-WP4 live allowances (§5.2), prompt fixes |
 | CLI regression runs | $0.50 | 6-8 full `run` courses during integration |
 | Showcase courses through WorkBuddy | $0.75 | 3 courses x up to 3 runs |
-| Rehearsal runs | $0.50 | At least 6 hero runs before G5 |
-| WorkBuddy agent loop on BYOK (only if WorkBuddy credits run out) | $2.50 | A separate OpenRouter key with a $2.50 key limit (H6), model `anthropic/claude-haiku-5.5`; roughly 1.5M input tokens per full crew run, so about $0.20-0.40 per run, 6-10 runs |
-| Checker benchmark, rewrites, explanations, P1 translations | $0.30 | |
-| Optional images (extra 3D objects, never text) | $0.25 | At most 8 images on a nano-banana-class model; the existing `img/11/obj-*.webp` and `cafe.webp` come first |
-| Slack | $0.14 | |
+| Rehearsal runs | $0.75 | At least 6 hero runs before G5 |
+| Checker benchmark, rewrites | $0.30 | |
+| Slack | rest (~$2.95) | |
+
+OpenRouter ($9.69):
+
+| Bucket | Cap | Covers |
+|---|---|---|
+| **Fallback reserve (locked)** | **$4.00** | Used only if DeepSeek direct fails on demo day (`BILIMIND_PROVIDER=openrouter`) |
+| BYOK agent model (only if WorkBuddy credits run out) | $2.50 | A separate OpenRouter key with a $2.50 key limit (H6), model `anthropic/claude-haiku-5.5`; about 1.5M input tokens per full crew run, so $0.20-0.40 per run |
+| Fallback content runs | $1.00 | If the DeepSeek pool is exhausted before demo day |
+| Optional images (extra 3D objects or avatars for the Expert Team, never text) | $0.50 | At most 12 images on a nano-banana-class model; the existing `img/11/obj-*.webp` and `cafe.webp` come first |
+| Optional music (one Lyria clip for the site) | $0.10 | |
+| Slack | $1.59 | |
 | **Total** | **$9.69** | |
+
+WorkBuddy credits (about 2,350): the spike measures credits for one 4-lesson crew run (plain skill) and
+one Expert Team run (documented at 3-5x a single expert). Keep at least 600 credits untouched for Sunday
+morning (morning run + stage run + a spare). If a crew run costs C credits, the build may use at most
+(2,350 - 600) / C runs for showcases, the benchmark and rehearsals; the slides and docs come out of the
+same pool, so budget them first (about 100-200 credits).
 
 ### 6.3 Rules that keep it true
 
-1. Every content call goes through `llm.ts`: provider `require_parameters: true` and
+1. Every content call goes through `llm.ts`. On OpenRouter: `require_parameters: true` and
    `max_price {prompt 0.2, completion 0.4}`, so routing never lands on the $1.28/M-output endpoints.
 2. No `deepseek-v4-pro`, no image or music model, without `--allow-expensive`.
-3. Caps in code: $0.25 per course run, $2.00 per day, the $4.00 floor. `doctor` prints balance, reserve
-   and today's spend; run it at the start of every work session and before every rehearsal.
+3. Caps in code: $0.25 per course run, $2.00 per day, and the per-provider floors above. `doctor` prints
+   provider, balance, reserve and today's spend; run it at the start of every session and before every rehearsal.
 4. Cache during development (re-building a course after a player change costs $0); `--no-cache` only for
    measured runs and on stage.
-5. Never use DeepSeek as the WorkBuddy BYOK agent model: WorkBuddy cannot send our provider pin, so it
-   could land on a $1.28/M-output route. Use `anthropic/claude-haiku-5.5` there.
-6. Checkpoints: if the balance is under $6.00 before G4, stop rehearsal runs until the showcase courses are
-   committed; if it is under $4.50 before demo day, only the final rehearsal and the stage runs remain.
+5. Never use DeepSeek through OpenRouter as the WorkBuddy BYOK agent model: WorkBuddy cannot send our
+   provider pin, so it could land on a $1.28/M-output route. Use `anthropic/claude-haiku-5.5` there.
+6. Checkpoints: if WorkBuddy credits fall under 1,200 before G4, stop rehearsal runs until the showcase
+   courses are committed; under 800, only the final rehearsal and the stage runs remain.
 
-### 6.4 WorkBuddy credits (separate from OpenRouter)
+### 6.4 Recording costs
 
-Free: 250 sign-up credits (14 days) + 100 a month + 30 a day for using the desktop client. Pro: $10 a month
-($7 the first month) for 2,000. Per-run cost is unknown until the spike measures a 4-lesson run (H4).
-Order of preference: organiser credit codes (H5) → Free credits for the spike and first runs → Pro at $7 if
-a full run costs more than about 60 credits (the human decides) → BYOK agent model from the $2.50 bucket.
-Record credits per run in `hackathon/runs/` because a judge will ask what a run really costs.
+Every measured run writes its text-API dollars (ledger) and WorkBuddy credits (read from the app before
+and after) to `hackathon/runs/<time>/`, because a judge will ask what a run really costs.
 
 ---
 
@@ -907,39 +943,41 @@ blocks something.
 
 | # | Task | When | Time | Unblocks |
 |---|---|---|---|---|
-| H1 | Windows Settings → Time & language → Date & time → "Set time automatically" ON → Sync now (the clock is 8 h slow; it breaks Edge TTS and may break WorkBuddy sign-in) | Now | 1 min | H3, narration |
-| H2 | Get the real organiser slides (the Desktop PDF is 0 bytes: re-download or ask). Note: time limits, judging weights, submission format (video?), WorkBuddy requirements, rules on pre-existing code, deadline. Ask for WorkBuddy credit codes. Put the PDF in `hackathon/` | Today | 15 min | Re-timing §4.3, WP13 priority |
-| H3 | Install WorkBuddy (international, workbuddy.ai), sign in with Google or GitHub. Settings: English, Compact Mode OFF, Prevent Sleep ON, Auto-install non-high-risk skills ON | Now | 15 min | H4 |
-| H4 | Run the spike with the WP-S kit (60 min); fill `hackathon/SPIKE.md` and take screenshots. Questions and what each answer changes are below | T+1h | 60 min | G1, WP7 final |
-| H5 | Credits: ask organisers for codes; if none and the spike shows a run costs more than ~60 credits, decide on Pro ($7 first month) | After H4 | 5 min | Rehearsals |
-| H6 | OpenRouter key for the CLI: `setx OPENROUTER_API_KEY <key>` (or `%USERPROFILE%\.bilimind\config.json`), then fully quit and restart WorkBuddy. Optional: create a second key "workbuddy-agents" with a $2.50 limit and add it in WorkBuddy Settings → Model → Custom (`https://openrouter.ai/api/v1/chat/completions`, model `anthropic/claude-haiku-5.5`, tool calling ticked) | After H4 | 10 min | G3 |
-| H7 | Install the skill: Skills → Add skill → Upload skill (zip from WP6), confirm the security scan; run `install.ps1` so a copy sits in the demo workspace's `.codebuddy\skills\bilimind` | At G2 | 10 min | G3 |
-| H8 | Telegram: BotFather `/newbot`, paste the token in WorkBuddy Assistant → Channels → Telegram, press Start in the bot on the phone. Create the Automation "BiliMind daily review" (prompt from §2.7, skill bilimind, daily 08:00, push to Telegram) | After G3 | 20 min | WP10 |
-| H9 | Hero material: decide by T+3h whether the live course uses your own module's slides + a past paper (and get the lecturer's OK if they will be on the projector) or the MIT OCW default | T+3h | 10 min | WP8, rehearsals |
-| H10 | Small business: ask one real shop near Taylor's (cafe, boba, dorm canteen) for its SOP or menu sheet and written permission, plus a one-line reaction after they see the course | By T+20h | 1-2 h | Course B, rail card 3 |
-| H11 | Real users: 3-5 Taylor's students at the event run it on their own slides (on our laptop, outputs deleted after) or try a course for 10 minutes; time one person making 20 cards + a schedule by hand; collect "would you use it before your next exam?" and one quote with consent | After G3 | 1-2 h | Rail card 4 |
-| H12 | Write two true sentences for the personal hook | Before rehearsal | 10 min | Pitch |
-| H13 | Record raw footage with OBS (1080p): the best full run, the Telegram loop, the course walkthrough; record the voice-over | After G4 | 1 h | WP13 |
-| H14 | Decide who is on stage: speaker (Oybek), driver, backup laptop holder; Q&A owners (Ulugbek business, Sharif tech, Oybek product) | Before rehearsal | 10 min | RUNBOOK |
-| H15 | A Malaysian friend checks the Malay course phrases (and the cafe's Malay lines if P1 ships) | After G4 | 20 min | Course C on stage |
-| H16 | Run the hero sentence once in WorkBuddy WITHOUT the skill (or with the built-in study expert); keep a 5-second clip and its output file | After H4 | 10 min | Rail card 4 |
-| H17 | Rehearse: 3 consecutive runs on venue Wi-Fi plus one on the phone hotspot; the full pitch 3 times with a timer | Before the pitch | 2 h | G5 |
+| H1 | Windows Settings → Time & language → Date & time → "Set time automatically" ON → Sync now (the clock is still ~8 h slow, 0b; the TTS fix covers narration, but sign-in and request signing may still break) | Now | 1 min | Fewer surprises |
+| H2 | ~~Get the real organiser slides~~ Done (0b) | | | |
+| H3 | ~~Install WorkBuddy and sign in~~ Done (0b: skills dir and expert scripts verified). Check the settings: English, Compact Mode OFF, Prevent Sleep ON, Auto-install non-high-risk skills ON | Now | 5 min | Demo |
+| H4 | Spike: the remaining questions below (sub-agent cards, Preview, credits per run, permission prompts). The orchestrator can drive it; the owner approves prompts | 17:30-19:30 | 45 min | G1, WP7 final |
+| H5 | Credits: ~2,350 on the account (0b). Watch the checkpoints in §6.3; buy a top-up only if the spike shows a crew run costs more than ~150 credits (owner decides) | After H4 | 5 min | Rehearsals |
+| H6 | Keys: `DEEPSEEK_API_KEY` (default) and `OPENROUTER_API_KEY` visible to WorkBuddy's shell (`setx`, then fully restart WorkBuddy) or `%USERPROFILE%\.bilimind\config.json`. Optional: a second OpenRouter key "workbuddy-agents" with a $2.50 limit for the BYOK agent model (`anthropic/claude-haiku-5.5`, tool calling ticked) | After H4 | 10 min | G3 |
+| H7 | Install the skill: run `install.ps1` (copies to `C:\Users\User\.workbuddy-ai\skills\bilimind\`), confirm it shows in Skills; P1: register the Expert Team (WP16) | At G2 | 10 min | G3 |
+| H8 | ~~Telegram~~ Cut (0b) | | | |
+| H9 | ~~Hero material choice~~ Decided (0b): public MIT OCW material only | | | |
+| H10 | Small business (optional): one real shop near Taylor's (cafe, boba, dorm canteen) gives its SOP or menu sheet with written permission; else the labelled sample | By 01:00 | 30 min | Course B, slide 3 |
+| H11 | Real users (optional, if anyone is awake): 2-3 students at the venue try the hero course for 5 minutes; "would you use it before your next exam?" + one quote with consent | 00:00-03:00 | 30 min | Slide 4 |
+| H12 | Write two true sentences for the personal hook | Before 06:00 | 10 min | Pitch |
+| H13 | OBS screen recording of the best full run (backup only) | After G4 | 15 min | §4.4 |
+| H14 | Decide who presents and who drives; Q&A owners (Ulugbek business, Sharif tech, Oybek product) | Before 06:00 | 10 min | RUNBOOK |
+| H15 | A Malaysian friend checks the Malay course phrases | After G4 | 20 min | Course C in Q&A |
+| H16 | Run the hero sentence once in WorkBuddy WITHOUT the skill; keep a screenshot of its output | After H4 | 10 min | Slide 4 |
+| H17 | Rehearse: 3 consecutive runs plus one on the phone hotspot; the 3-minute pitch 3 times with a timer | 06:00-08:30 | 2 h | G5 |
+| H18 | Sign in to the static host (GitHub Pages, Vercel, Netlify or Cloudflare Pages) so the site can deploy; flip the GitHub repo to PUBLIC after the secrets scan (WP17) | 00:00-06:00 | 15 min | Submission |
+| H19 | Submit: public GitHub URL, deployed URL, slides PDF, group name + campus branch | **Before 09:00 Sunday** | 10 min | Everything |
 
 ### 7.1 Spike questions (H4) and what each answer changes
 
 | # | Question | If yes | If no |
 |---|---|---|---|
-| S1 | Is `${CODEBUDDY_SKILL_DIR}` substituted in an uploaded skill? Where does the upload land on disk (`%USERPROFILE%\.workbuddy\skills`?) | SKILL.md uses it | `install.ps1` writes the absolute path into the installed SKILL.md |
+| S1 | Answered (0b): skills live in `C:\Users\User\.workbuddy-ai\skills\<name>\` and use `${CODEBUDDY_SKILL_DIR}`. Still confirm the substitution in one real run | SKILL.md uses it | `install.ps1` writes the absolute path into the installed SKILL.md |
 | S2 | Does the workspace `.codebuddy\skills\` copy load in Work mode? | Keep both copies | Upload only |
-| S3 | Which shell runs commands (PowerShell or Git Bash)? Is `node` on PATH? | | Quote rules in SKILL.md adjusted; full path to node.exe |
+| S3 | Which shell runs commands (PowerShell or Git Bash)? Is `node` on PATH? (WorkBuddy bundles Node 22 in `~\.workbuddy-ai\binaries`, 0b; our bundle must run on Node 22) | | Quote rules in SKILL.md adjusted; full path to node.exe |
 | S4 | Do 3 parallel Agent sub-agents from a plain skill show as cards? | Plain skill is the stage version | Try `.codebuddy/agents/*.md` custom agents; if still no cards, WP16 Expert Team becomes P0; if nothing parallel renders, run Writers one by one and cap the live run at 3 lessons |
 | S5 | Does TaskCreate render as a ticking checklist? | Use it | The Lead ticks a checklist in `plan.md`, shown in Preview |
-| S6 | Credits for the spike run; is a custom model selectable on this account? | | Budget decisions in §6.4 |
+| S6 | Credits for a 4-lesson crew run (plain skill) and for an Expert Team run; is a custom model selectable on this account? | | Budget decisions in §6.2 |
 | S7 | Preview panel: does the test page play mp3, run a Blob worker, keep localStorage, open `#page=` links? | Course opens in Preview on stage | Open in Edge on stage |
 | S8 | Permission prompts for scripts and network; does Full Access for one folder silence them? | Full Access in `C:\Demo\` only | Pre-approve each command type in rehearsal |
-| S9 | Is `OPENROUTER_API_KEY` visible to the skill's shell after a restart? | | `%USERPROFILE%\.bilimind\config.json` |
+| S9 | Are `DEEPSEEK_API_KEY` / `OPENROUTER_API_KEY` visible to the skill's shell after a restart? | | `%USERPROFILE%\.bilimind\config.json` |
 | S10 | Does the Artifact tool publish an HTML share link? | "Share with your study group" beat (P1) | Skip |
-| S11 | Automation: can it push to Telegram? Does a Telegram reply become a WorkBuddy task with skills? Can the bot send a file back? | Full loop; voice reply P1 if files work | Fallback loop inside WorkBuddy chat |
+| S11 | ~~Telegram loop~~ Cut (0b) | | |
 | S12 | Is the CodeBuddy CLI usable on this plan (International login, headless `-p`)? | Scripted regression runs in WP9 | WP9 uses WorkBuddy only |
 | S13 | Exact English UI labels (Skills, Experts, Automation, Assistant, Results panel tabs) | Into RUNBOOK and the script | |
 
@@ -949,17 +987,20 @@ blocks something.
 
 | # | Risk | Likelihood | Fallback / mitigation |
 |---|---|---|---|
-| R1 | Rules differ from our assumptions (PDF is 0 bytes): video submission, different time limits, a ban on pre-existing code | Medium | H2 first. Film pipeline ready (WP13). Disclosure line and repo history show what was built at the event; the reused part is prompts and rules, not running code |
+| R1 | Missing the 09:00 submission (24-hour event, 0b) | Medium | Timeline in §5.3 with feature freeze at 06:00; WP17 prepares the four items by 06:00; H19 submits by 09:00 even if polish is unfinished |
+| R1b | Judges penalise pre-existing code | Low-medium | Disclosure line and slide 5; repo history shows what was built at the event; the reused part is prompts and rules, not running code |
+| R1c | A secret leaks when the repo goes public | Low, severe | `.gitignore` already excludes `.env.*`; WP17 secrets scan before flipping to public; keys never in the skill, the site or course folders |
+| R1d | Deployed link fails or a course does not play from it | Medium | WP12 acceptance on the real URL from a phone; fallback host; courses are static files with no server |
 | R2 | Plain-skill sub-agents do not render as cards | Medium | S4 ladder: custom agents → Expert Team plugin → sequential agents with a 3-lesson live cap |
 | R3 | Live run too slow for the slot (outline 63 s, lessons 33-60 s each, plus agent overhead and repair rounds) | High | 4-lesson cap from capacity math; press Enter during setup when p90 > 4:30; morning run of the identical sentence; never show a spinner for more than 10 s |
-| R4 | WorkBuddy credits run out during rehearsals | Medium | Organiser codes, Pro $7, or BYOK `claude-haiku-5.5` from the $2.50 bucket |
-| R5 | OpenRouter balance drained | Low (code caps) | Ledger floor at $4.00; cached development; checkpoints in §6.3 |
+| R4 | WorkBuddy credits (~2,350) run out during rehearsals or slide-making | Medium | 600-credit floor for Sunday; checkpoints in §6.3; BYOK `claude-haiku-5.5` from the $2.50 OpenRouter bucket |
+| R5 | DeepSeek or OpenRouter balance drained | Low (code caps) | Per-provider floors in the ledger; cached development; switch provider with `BILIMIND_PROVIDER` |
 | R6 | Campus Wi-Fi (FortiGate) blocks something on the day | Medium | Nothing installs at demo time; npmmirror; phone hotspot tested (§5.4 step 6); offline course folders on USB |
 | R7 | Clock skew breaks sign-in or TTS | High until H1 | H1; the skew fix in `tts.ts` regardless; all showcase narration pre-rendered |
 | R8 | Edge TTS endpoint changes or rate-limits | Low | Showcase audio already rendered and shipped in the folders; narration failure leaves the transcript and is logged, never blocks the build |
 | R9 | No genuine Checker rejection in a given run | Medium | Real rejections are common on cheap no-reasoning drafts; keep every run's verdicts in `hackathon/runs/`; show a saved real one; never fake |
 | R10 | The Checker is wrong (false alarm or misses) | Medium | Measured with planted errors and a 40-item hand check; the claim matches the measurement; "beyond your slides" label instead of a silent pass |
-| R11 | Telegram loop unavailable on the international build or slow | Medium | S11; fallback loop inside WorkBuddy chat; "Run now" pressed at demo start to absorb latency |
+| R11 | A 5-minute crew run does not fit a 3-minute slot | Certain | Press Enter at setup and say so; show the live run in flight and the morning run's finished course (§4.2) |
 | R12 | The singlefile player breaks on `file://` (module script, worker) | Low | WP5a's first test of the day; IIFE output; classic Blob workers (verified working in `media.md` §4) |
 | R13 | Preview panel cannot play audio or run workers | Low-medium | S7; open in Edge |
 | R14 | Past-paper parsing fails on a real paper's layout | Medium | Regexes for "Question N", "QN", "Problem N", "[N marks]", "(N points)"; the Lead reads `exam-map.md` and fixes matches with `--assign`; if a paper cannot be parsed, the plan says so and weights by slide coverage |
@@ -967,7 +1008,7 @@ blocks something.
 | R16 | Machine-translated safety steps (cafe P1) | Medium | Disclaimer on page one; a fluent check if possible; English-only cafe course is the P0 |
 | R17 | Answer keys visible in devtools in an offline single file | Certain | Say so honestly if asked; keys never in the DOM before submit |
 | R18 | Judges read it as "WorkBuddy already has student experts" | Medium | §1.6 answer + H16 vanilla clip + the receipts slab |
-| R19 | Story too dense | Medium | One user, one stat, one before/after, three files named aloud (course, calendar, Telegram); every other feature only if a judge asks |
+| R19 | Story too dense for 3 minutes | High | One user, one stat, one before/after, three things named aloud (the plan, the rejection, the course); every other feature only if a judge asks |
 | R20 | A builder lane slips | High (some lane will) | Fixture-first lanes are independent; the 24-hour cut list in §5.3; the P0 cross-cutting items and the Checker/Coder loops are protected, polish is not |
 | R21 | Licensing of showcase sources | Low | MIT OCW CC BY-NC-SA and Wikivoyage CC BY-SA with attribution in footers; private slides never committed or published |
 
@@ -975,8 +1016,8 @@ blocks something.
 
 ## 9. Decisions still open (owner, deadline)
 
-- Event length and pitch format: H2, today. Changes §4.3 timing and WP13 priority.
-- Hero material (own module vs MIT OCW): H9, T+3h.
-- Plain skill vs Expert Team for the stage: S4, at G1.
-- Pro plan or BYOK for agents: H5, after the spike.
-- Real shop for course B: H10, by T+20h, else the labelled sample.
+- Plain skill vs Expert Team for the stage: S4 and S6 (cards and credits), at G1 (~19:30).
+- Top-up or BYOK for agents if credits run short: H5, after the spike.
+- Real shop for course B: H10, by 01:00, else the labelled sample.
+- Static host for the deployed link: H18, by 00:00.
+- Who presents and drives: H14, by 06:00.
