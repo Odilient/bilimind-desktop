@@ -2,9 +2,9 @@
 
 BiliMind Desktop is an Electron app. You pick a folder, type one sentence and press Build. The app runs the
 BiliMind engine (`@bilimind/engine`, `runPipeline` in `packages/engine/src/run.ts`) on your own machine, in a
-separate worker process. The text-model calls go to BiliMind free (our open-source proxy, no key, the
-default) or straight to DeepSeek or OpenRouter with your own key. There is no account. The finished course
-is a normal folder under `Documents\BiliMind\`.
+separate worker process. The text-model calls go straight to DeepSeek or OpenRouter with your own key, or to BiliMind free (our
+open-source proxy, no key) while it is on; it is paused for now. There is no account. The finished course is a
+normal folder under `Documents/BiliMind/`.
 
 ## Inside the app
 

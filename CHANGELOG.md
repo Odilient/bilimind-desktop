@@ -5,6 +5,15 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- While BiliMind free is paused, the app no longer offers it. A fresh install asks for a DeepSeek or OpenRouter
+  key before the first build, says DeepSeek is the cheapest, and links to where you get each key. One switch,
+  `FREE_TIER_ON` in `packages/engine/src/config.ts`, brings the free tier back in the app and the CLI
+  ([server/free-proxy/README.md](server/free-proxy/README.md)).
+- The website says "free and open source, bring your own key", with the measured 2 to 9 cents a course, and notes
+  that BiliMind free is paused. `data-free-tier` on its `<html>` element flips the copy back.
+
 ## [0.2.0] - 2026-10-21
 
 The first release for macOS and Linux, and the first one built for contributors.

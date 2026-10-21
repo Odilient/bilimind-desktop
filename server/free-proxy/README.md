@@ -24,3 +24,17 @@ npx wrangler deploy
 
 Set a credit limit on the OpenRouter key in the OpenRouter dashboard so the free service can never spend more
 than you allow.
+
+## Paused, and how to bring it back
+
+The service has been paused since October 2026: the Worker still answers `/v1/health`, but its OpenRouter key no
+longer works, so completions return 503. While it is paused, the app, the CLI and the website say "bring your own
+key" and never offer BiliMind free. To bring it back:
+
+1. Put a working key in the Worker (`npx wrangler secret put OPENROUTER_API_KEY`) with a hard credit limit on
+   it, and check that a real completion succeeds, not just `/v1/health`.
+2. Set `FREE_TIER_ON = true` in [packages/engine/src/config.ts](../../packages/engine/src/config.ts). The desktop
+   app offers BiliMind free again and a fresh install uses it; rebuild the bundled CLI (see CONTRIBUTING.md).
+3. Set `data-free-tier="on"` on the `<html>` element of [site/index.html](../../site/index.html). The landing's
+   "no key needed" copy and FAQ answers come back.
+4. Update the README ("Bring your own key") and the changelog, then release.

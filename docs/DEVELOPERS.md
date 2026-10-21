@@ -58,10 +58,12 @@ question, it says so and answers after "Beyond your files:". Each answer shows i
 
 ## AI providers and the config file
 
-**BiliMind free** is what a fresh install with no key uses: the app talks to
-`https://desktop-api.bilimind.com/v1`, an OpenAI-compatible Cloudflare Worker run by the team
-([server/free-proxy](../server/free-proxy/)). **It is paused at the moment** (the Worker answers 503), so in
-practice you add your own key; the app says so at the first AI step. The Worker's own OpenRouter key is a Worker secret, never in
+**BiliMind free** is the key-less option: the app talks to `https://desktop-api.bilimind.com/v1`, an
+OpenAI-compatible Cloudflare Worker run by the team ([server/free-proxy](../server/free-proxy/)). **It is paused
+at the moment**, behind one switch, `FREE_TIER_ON = false` in
+[packages/engine/src/config.ts](../packages/engine/src/config.ts): nothing picks it by default, a fresh install
+resolves to DeepSeek, and the app asks for a key (naming DeepSeek and OpenRouter, with links) before the first
+build. `BILIMIND_FREE=1` turns it on for one process, for tests. The Worker's own OpenRouter key is a Worker secret, never in
 the app, this repo or your computer. The app sends no `Authorization` header, only
 `X-BiliMind-Client: desktop/<version>`. Guards in the Worker: two models only, a price pin, `max_tokens`
 capped, a 600 KB body cap, 120 requests a minute per IP, no CORS, and a kill switch. When it is busy or
@@ -81,8 +83,9 @@ app's window, and the app never logs it. `BILIMIND_HOME` points the app and the 
 }
 ```
 
-`"provider"` is `"bilimind"` (free, no key), `"deepseek"` or `"openrouter"`. With no provider and no key the
-app and the CLI use `"bilimind"`; with a key and no provider they use that key's pool.
+`"provider"` is `"deepseek"`, `"openrouter"` or `"bilimind"` (free, no key; ignored while the free tier is
+paused). With a key and no provider the app and the CLI use that key's pool; with no key at all they use
+`"bilimind"` while it is on, and `"deepseek"` (which then asks for a key) while it is paused.
 
 Optional fields: `models`, `caps` (`{"run_usd": 0.25, "day_usd": 2}` by default) and `reserve_usd` (a
 balance floor; set it to `0` for normal use; BiliMind free has none). Environment variables `DEEPSEEK_API_KEY`,

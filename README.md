@@ -120,7 +120,8 @@ sentence and click **Build my course**.
 ## Bring your own key
 
 BiliMind talks to the AI provider you choose, with your key. Your files' text goes straight to that provider,
-not through us.
+not through us. **DeepSeek is the cheapest way in:** sign up, add a few dollars of credit, create an API key and
+paste it in Settings. Our courses cost 2 to 9 cents each, so a few dollars last for dozens.
 
 | Provider | Models it uses by default | Key |
 |---|---|---|
