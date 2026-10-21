@@ -42,8 +42,9 @@ export const PRESETS: Record<ProviderId, ProviderPreset> = {
   },
 };
 
-/** PLAN §6.2: demo-day reserve locked in each pool (DeepSeek $3.00, OpenRouter $4.00). BiliMind free: no balance, 0. */
-export const DEFAULT_RESERVE_USD: Record<ProviderId, number> = { deepseek: 3, openrouter: 4, bilimind: 0 };
+/** Balance floor per pool: no floor unless the user sets reserve_usd (the hackathon build kept $3 and $4 for its demo).
+ * BiliMind free: no balance, 0. */
+export const DEFAULT_RESERVE_USD: Record<ProviderId, number> = { deepseek: 0, openrouter: 0, bilimind: 0 };
 
 /** The free service's default URL (overridable with BILIMIND_FREE_URL or config.json "free_base_url", for tests). */
 export const FREE_BASE_URL = PRESETS.bilimind.baseUrl;
@@ -214,10 +215,15 @@ export function providerLabel(p: ProviderId): string {
   return p === 'deepseek' ? 'DeepSeek' : p === 'openrouter' ? 'OpenRouter' : 'BiliMind free';
 }
 
+/** The config file as the user would type it on this OS, for hints. */
+export function configPathHint(platform: string = process.platform): string {
+  return platform === 'win32' ? '%USERPROFILE%\\.bilimind\\config.json' : '~/.bilimind/config.json';
+}
+
 /** Where the key should go, for hints (never the key itself). */
 export function keyHint(p: ProviderId): string {
-  if (!needsKey(p)) return 'BiliMind free needs no key. To use your own, put it in %USERPROFILE%\\.bilimind\\config.json as {"provider":"deepseek","keys":{"deepseek":"..."}}.';
-  return `Put the key in %USERPROFILE%\\.bilimind\\config.json as {"provider":"${p}","keys":{"${p}":"..."}} (or set ${PRESETS[p].keyEnv}).`;
+  if (!needsKey(p)) return `BiliMind free needs no key. To use your own, put it in ${configPathHint()} as {"provider":"deepseek","keys":{"deepseek":"..."}}.`;
+  return `Put the key in ${configPathHint()} as {"provider":"${p}","keys":{"${p}":"..."}} (or set ${PRESETS[p].keyEnv}).`;
 }
 
 /** Remove anything that looks like a secret from a string before it is logged or shown. */

@@ -2,7 +2,7 @@
 // Owner: WP6. Never prints, logs or returns the key. Network probes time out after 6 s each and run in parallel.
 import { BilimindError } from './contracts.ts';
 import type { Doctor, DoctorData, EngineConfig } from './contracts.ts';
-import { clientHeader, loadConfig } from './config.ts';
+import { clientHeader, configPathHint, loadConfig } from './config.ts';
 import { balance, spentToday } from './ledger.ts';
 
 const EDGE_URL = 'https://speech.platform.bing.com/';
@@ -81,11 +81,11 @@ export const doctor: Doctor = async () => {
   if (!key && !free) {
     const why = warnings.find(w => w.startsWith('config:'));
     throw new BilimindError(`No API key found for DeepSeek or OpenRouter${why ? ` (${why})` : ''}.`,
-      'Write %USERPROFILE%\\.bilimind\\config.json as {"provider":"deepseek","keys":{"deepseek":"<key>"}} (or set DEEPSEEK_API_KEY) and restart WorkBuddy. Never paste the key into chat.');
+      `Write ${configPathHint()} as {"provider":"deepseek","keys":{"deepseek":"<key>"}} (or set DEEPSEEK_API_KEY) and restart the app or WorkBuddy. Never paste the key into chat.`);
   }
   if (data.balance_usd !== null && data.balance_usd - reserve < 0 && !data.demo_day) {
-    throw new BilimindError(`The ${data.provider} balance ($${data.balance_usd.toFixed(2)}) is under the demo reserve ($${reserve.toFixed(2)}).`,
-      'Top up the provider account, switch provider in %USERPROFILE%\\.bilimind\\config.json, or set BILIMIND_DEMO_DAY=1 on demo day only.');
+    throw new BilimindError(`The ${data.provider} balance ($${data.balance_usd.toFixed(2)}) is under the reserve you set (reserve_usd $${reserve.toFixed(2)}).`,
+      `Top up the provider account, lower reserve_usd or switch provider in ${configPathHint()}, or set BILIMIND_DEMO_DAY=1 to ignore the reserve.`);
   }
   return data;
 };

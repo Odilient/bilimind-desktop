@@ -88,7 +88,7 @@ describe('config', () => {
     expect(c.baseUrl).toBe('https://api.deepseek.com');
     expect(c.models).toEqual({ fast: 'deepseek-flash', reasoning: 'deepseek-v4-pro' });
     expect(c.caps).toEqual({ runUsd: 0.25, dayUsd: 2 });
-    expect(c.reserveUsd).toEqual({ deepseek: 3, openrouter: 4, bilimind: 0 });
+    expect(c.reserveUsd).toEqual({ deepseek: 0, openrouter: 0, bilimind: 0 });
     expect(c.ledgerPath).toBe(join(dir, 'home', '.bilimind', 'ledger.jsonl'));
     expect(c.demoDay).toBe(false);
   });

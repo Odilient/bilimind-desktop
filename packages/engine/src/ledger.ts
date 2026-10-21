@@ -5,7 +5,7 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { BilimindError } from './contracts.ts';
 import type { Balance, CheckBudget, EngineConfig, LedgerEntry, ProviderId, RecordSpend, SpentForCourse, SpentToday } from './contracts.ts';
-import { PRESETS, providerLabel } from './config.ts';
+import { PRESETS, configPathHint, providerLabel } from './config.ts';
 
 /** Read every ledger line (bad lines skipped). */
 export function readLedger(cfg: EngineConfig): LedgerEntry[] {
@@ -122,8 +122,8 @@ export const checkBudget: CheckBudget = async (ctx, cfg, estimateUsd) => {
   }
   const reserve = cfg.reserveUsd[cfg.provider];
   if (live - est < reserve) {
-    throw new BilimindError(`${providerLabel(cfg.provider)} balance ${usd(live)} is at the demo-day reserve (${usd(reserve)}); the call was refused to keep that money for the stage.`,
-      'On demo day set BILIMIND_DEMO_DAY=1 to use the reserve, or switch pools with BILIMIND_PROVIDER=openrouter.');
+    throw new BilimindError(`${providerLabel(cfg.provider)} balance ${usd(live)} is at the reserve you set (reserve_usd ${usd(reserve)}); the call was refused to keep that money.`,
+      `Top up the account, lower reserve_usd in ${configPathHint()}, set BILIMIND_DEMO_DAY=1 to ignore the reserve for this run, or switch pools with BILIMIND_PROVIDER.`);
   }
 };
 

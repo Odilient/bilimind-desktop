@@ -66,7 +66,7 @@ export interface EngineConfig {
   userDir: string;                // %USERPROFILE%\.bilimind
   ledgerPath: string;             // %USERPROFILE%\.bilimind\ledger.jsonl
   caps: { runUsd: number; dayUsd: number };      // 0.25 / 2.00
-  reserveUsd: Record<ProviderId, number>;        // demo-day reserves (PLAN §6)
+  reserveUsd: Record<ProviderId, number>;        // balance floor per pool (reserve_usd; 0 by default)
   demoDay: boolean;               // BILIMIND_DEMO_DAY=1 lifts the reserve floor
 }
 /** Resolve provider + key: env, then bilimind-desktop/.env.local (dev), then %USERPROFILE%\.bilimind\config.json. */
