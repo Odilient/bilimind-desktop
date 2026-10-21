@@ -88,10 +88,12 @@ try {
   const shape = await page.evaluate(() => ({
     keys: Object.keys(window.bilimind).sort(), platform: window.bilimind.platform,
     settings: Object.keys(window.bilimind.settings).sort(), courses: Object.keys(window.bilimind.courses).sort(), run: Object.keys(window.bilimind.run).sort(),
+    assistant: Object.keys(window.bilimind.assistant).sort(),
     hasRequire: typeof window.require, hasProcess: typeof window.process,
   }));
-  check('window.bilimind keys', JSON.stringify(shape.keys) === JSON.stringify(['courses', 'inspectFolder', 'openExternal', 'pickFolder', 'platform', 'run', 'settings']), JSON.stringify(shape.keys));
-  check('settings/courses/run methods', shape.settings.join() === 'get,save,testKey' && shape.courses.join() === 'get,list,openFile,playerUrl,remove,reveal' && shape.run.join() === 'cancel,onEvent,start');
+  check('window.bilimind keys', JSON.stringify(shape.keys) === JSON.stringify(['assistant', 'courses', 'inspectFolder', 'openExternal', 'pickFiles', 'pickFolder', 'platform', 'run', 'settings']), JSON.stringify(shape.keys));
+  check('settings/courses/run/assistant methods', shape.settings.join() === 'get,save,testKey' && shape.courses.join() === 'get,list,openFile,outline,playerUrl,remove,reveal'
+    && shape.run.join() === 'cancel,onEvent,start' && shape.assistant.join() === 'ask,cancel,onEvent', JSON.stringify([shape.settings, shape.courses, shape.run, shape.assistant]));
   check('platform sync value', shape.platform === 'win32' || typeof shape.platform === 'string', shape.platform);
   check('no node in renderer', shape.hasRequire === 'undefined' && shape.hasProcess === 'undefined');
 

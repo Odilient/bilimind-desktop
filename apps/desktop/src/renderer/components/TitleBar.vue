@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// The 40px draggable bar (titleBarStyle hidden + overlay: the window buttons sit in the right ~140px).
+// The 40px draggable bar (titleBarStyle hidden: the window buttons sit in the right ~140px on Windows and Linux,
+// on the left on macOS).
 import { computed } from 'vue';
 import Icon from './Icon.vue';
 import { state, go } from '../store';
@@ -35,7 +36,7 @@ const building = computed(() => state.run && !state.run.endedAt && state.screen 
 <style scoped>
 .tb {
   height: var(--bar-h); flex: none; display: flex; align-items: center; gap: 10px;
-  padding: 0 calc(var(--overlay-w) + 6px) 0 14px; -webkit-app-region: drag; app-region: drag;
+  padding: 0 calc(var(--overlay-w) + 6px) 0 var(--bar-pad-l, 14px); -webkit-app-region: drag; app-region: drag;
   background: var(--page); position: relative; z-index: 30;
 }
 .tb.white { background: #fff; box-shadow: inset 0 -1px 0 var(--line); }

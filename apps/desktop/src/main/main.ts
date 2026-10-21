@@ -14,9 +14,13 @@ const E2E = process.env.BILIMIND_E2E === '1';
 const CANVAS = '#F6F7FA';
 const COBALT = '#2340E6';
 
+const MAC = process.platform === 'darwin';
+
 if (E2E) {
   app.commandLine.appendSwitch('remote-debugging-port', process.env.BILIMIND_CDP_PORT || '9333');
   app.commandLine.appendSwitch('remote-allow-origins', '*');
+  // Linux CI and servers have no display: Chromium's headless Ozone backend (test windows are offscreen anyway)
+  if (process.platform === 'linux' && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) app.commandLine.appendSwitch('ozone-platform', 'headless');
 }
 app.setAppUserModelId('ai.bilimind.desktop');
 
@@ -41,7 +45,8 @@ function createWindow(): BrowserWindow {
     backgroundColor: CANVAS,
     icon: iconPath(),
     titleBarStyle: 'hidden',
-    titleBarOverlay: { color: CANVAS, symbolColor: COBALT, height: 40 },
+    // macOS keeps its traffic lights on the left of the 40px bar; Windows and Linux draw their buttons on the right
+    ...(MAC ? { trafficLightPosition: { x: 14, y: 13 } } : { titleBarOverlay: { color: CANVAS, symbolColor: COBALT, height: 40 } }),
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '..', 'preload', 'preload.cjs'),
@@ -135,7 +140,8 @@ if (!single) app.quit();
 else {
   app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
   app.whenReady().then(() => {
-    Menu.setApplicationMenu(null);
+    // no menu bar on Windows and Linux; macOS needs the app and Edit menus for Cmd+Q, Cmd+C/V/X/A and Cmd+W
+    Menu.setApplicationMenu(MAC ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }]) : null);
     registerIpc();
     win = createWindow();
     app.on('activate', () => { if (!BrowserWindow.getAllWindows().length) win = createWindow(); });

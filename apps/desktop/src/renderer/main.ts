@@ -13,5 +13,7 @@ import App from './App.vue';
 // No Electron preload (vite dev / preview / screenshots): install the browser mock with the showcase data.
 if (!window.bilimind) installMock();
 
+// macOS: the window buttons sit on the left of the title bar (base.css moves the bar's padding)
+document.documentElement.dataset.platform = window.bilimind.platform;
 document.body.insertAdjacentHTML('afterbegin', SPRITE);
 createApp(App).mount('#app');
