@@ -1,6 +1,6 @@
 // Lead, packaging: narrate, export, build. Coach (P2): due, grade. Builders: plant, plant-score, run.
 import type { Command } from 'commander';
-import { BilimindError, build, due, exportAll, grade, narrate, plant, plantScore, runPipeline } from '@bilimind/engine';
+import { BilimindError, build, defaultTimeZone, due, exportAll, grade, narrate, plant, plantScore, runPipeline } from '@bilimind/engine';
 import { argSummary, csv, int } from '../args.ts';
 import { maxUsdOf, runCommand } from '../output.ts';
 import type { GlobalOpts } from '../output.ts';
@@ -49,6 +49,7 @@ export function registerPackage(program: Command, g: () => GlobalOpts): void {
   program.command('run').description('(builders only) the whole pipeline without agents: fixtures, regression, cost')
     .requiredOption('--src <folder>', 'source folder')
     .requiredOption('--sentence <text>', "the user's request")
+    .option('--timezone <tz>', 'IANA time zone', defaultTimeZone())
     .option('--slug <slug>', 'course folder name')
     .option('--out <dir>', 'output root (default: ./bilimind-out)')
     .option('--concurrency <n>', 'parallel lesson drafts', '4')
@@ -56,7 +57,7 @@ export function registerPackage(program: Command, g: () => GlobalOpts): void {
     .option('--repair-rounds <n>', 're-draft rounds for lessons that fail checks', '1')
     .option('--no-narrate', 'skip Edge TTS')
     .option('--template <html>', 'player template')
-    .action((o: { src: string; sentence: string; slug?: string; out?: string; concurrency: string; maxLessons: string; repairRounds: string; narrate: boolean; template?: string }) =>
+    .action((o: { src: string; sentence: string; timezone: string; slug?: string; out?: string; concurrency: string; maxLessons: string; repairRounds: string; narrate: boolean; template?: string }) =>
       runCommand('run', g(), async ctx => {
         const gl = g();
         const template = findTemplate(o.template);
@@ -64,7 +65,7 @@ export function registerPackage(program: Command, g: () => GlobalOpts): void {
           src: o.src, sentence: o.sentence, slug: o.slug, outRoot: o.out, noCache: gl.cache === false,
           concurrency: int(o.concurrency, '--concurrency', 1, 12), maxLessons: int(o.maxLessons, '--max-lessons', 1, 20),
           repairRounds: int(o.repairRounds, '--repair-rounds', 0, 3), narrate: o.narrate, template,
-          model: gl.model, maxUsd: maxUsdOf(gl),
+          model: gl.model, maxUsd: maxUsdOf(gl), timezone: o.timezone,
         });
         ctx.spend.usd = d.cost_usd;   // the JSON line's cost_usd = the whole run
         return d;

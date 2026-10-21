@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import type { Command } from 'commander';
 import { FILE_ROLES } from '@bilimind/core';
 import type { FileRole } from '@bilimind/core';
-import { BilimindError, doctor, ingest, init, note, setGoal, status } from '@bilimind/engine';
+import { BilimindError, defaultTimeZone, doctor, ingest, init, note, setGoal, status } from '@bilimind/engine';
 import { argSummary, collect, int, pairs } from '../args.ts';
 import { runCommand } from '../output.ts';
 import type { GlobalOpts } from '../output.ts';
@@ -30,7 +30,7 @@ export function registerSetup(program: Command, g: () => GlobalOpts): void {
     .option('--audience <who>', 'student | staff', 'student')
     .option('--lang <code>', 'course language', 'en')
     .option('--code-lang <lang>', 'js | none', 'js')
-    .option('--timezone <tz>', 'IANA time zone', 'Asia/Kuala_Lumpur')
+    .option('--timezone <tz>', 'IANA time zone', defaultTimeZone())
     .option('--assume <text>', 'an assumption you made (repeatable)', collect, [])
     .action((o: { deadline?: string; examTime?: string; minutesPerDay: string; audience: string; lang: string; codeLang: string; timezone: string; assume: string[] }) =>
       runCommand('goal', g(), ctx => {

@@ -13,7 +13,7 @@ bilimind-out/ds-final/
   course.json           the course data, schema bilimind.course/1
   plan.md               the Lead's plan: assumptions, weights, kept and cut topics, days, review dates
   REPORT.md             what each agent did, every check, rejections, fixes, cost, wall time
-  reviews.ics           study blocks and spaced reviews (Asia/Kuala_Lumpur unless the goal says otherwise)
+  reviews.ics           study blocks and spaced reviews (the computer's time zone unless the goal says otherwise)
   deck.csv              Anki import file
   lessons/
     README.md           index of the notes
