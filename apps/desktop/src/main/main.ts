@@ -19,8 +19,6 @@ const MAC = process.platform === 'darwin';
 if (E2E) {
   app.commandLine.appendSwitch('remote-debugging-port', process.env.BILIMIND_CDP_PORT || '9333');
   app.commandLine.appendSwitch('remote-allow-origins', '*');
-  // Linux CI and servers have no display: Chromium's headless Ozone backend (test windows are offscreen anyway)
-  if (process.platform === 'linux' && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) app.commandLine.appendSwitch('ozone-platform', 'headless');
 }
 app.setAppUserModelId('ai.bilimind.desktop');
 

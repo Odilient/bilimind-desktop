@@ -57,4 +57,6 @@ jobs:
           # Ubuntu 24.04 blocks the unprivileged user namespaces Chromium's sandbox uses
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           node node_modules/electron/install.js
-          node scripts/e2e-main.mjs
+          # Electron needs a display (its headless Ozone backend crashes): a virtual X server
+          command -v xvfb-run >/dev/null || { sudo apt-get update -q && sudo apt-get install -yq xvfb; }
+          xvfb-run -a node scripts/e2e-main.mjs
