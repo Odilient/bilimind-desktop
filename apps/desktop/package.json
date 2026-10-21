@@ -5,7 +5,9 @@
   "private": true,
   "type": "module",
   "description": "BiliMind Desktop: drop in your files, get a checked, narrated course. Open source, bring your own AI key.",
-  "author": "Opus Magnum (Dormathon 2026 team #58)",
+  "author": { "name": "BiliMind team", "email": "oybek@bilimind.com" },
+  "homepage": "https://github.com/Odilient/bilimind-desktop",
+  "desktopName": "bilimind-desktop.desktop",
   "license": "AGPL-3.0-only",
   "main": "dist/main/main.cjs",
   "scripts": {

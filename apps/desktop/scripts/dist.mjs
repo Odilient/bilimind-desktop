@@ -1,21 +1,21 @@
-// Build + package for Windows (portable + nsis, x64) into apps/desktop/release/.
-// Behind the venue firewall the GitHub downloads fail, so the npmmirror mirrors from the repo .npmrc are the
-// default here; CI (GitHub Actions) sets CI=true and keeps electron-builder's GitHub defaults.
+// Build + package for the platform you are on into apps/desktop/release/ (targets in electron-builder.yml):
+//   Windows: portable .exe + NSIS installer (x64)   macOS: .dmg + .zip (arm64, x64)   Linux: AppImage + .deb (x64)
+// Extra arguments go to electron-builder, e.g. `node scripts/dist.mjs --linux AppImage` or `--dir` for an unpacked app.
+// Behind a firewall that blocks GitHub downloads, set ELECTRON_MIRROR and ELECTRON_BUILDER_BINARIES_MIRROR first.
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const app = join(dirname(fileURLToPath(import.meta.url)), '..');
-const env = { ...process.env };
-if (!env.CI) {
-  env.ELECTRON_MIRROR ??= env.npm_config_electron_mirror || 'https://npmmirror.com/mirrors/electron/';
-  env.ELECTRON_BUILDER_BINARIES_MIRROR ??= env.npm_config_electron_builder_binaries_mirror || 'https://npmmirror.com/mirrors/electron-builder-binaries/';
-}
+const env = { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: process.env.CSC_IDENTITY_AUTO_DISCOVERY ?? 'false' };
 const run = (cmd, args) => {
   const r = spawnSync(cmd, args, { cwd: app, env, stdio: 'inherit', shell: false });
   if (r.status !== 0) process.exit(r.status ?? 1);
 };
+const args = process.argv.slice(2).filter(a => a !== '--skip-build');
 if (!process.argv.includes('--skip-build')) run(process.execPath, [join(app, 'scripts', 'build.mjs'), '--minify']);
+const platform = { win32: '--win', darwin: '--mac', linux: '--linux' }[process.platform];
+if (!platform) { console.error(`no packaging target for ${process.platform}`); process.exit(1); }
 const builderCli = createRequire(join(app, 'package.json')).resolve('electron-builder/cli.js');
-run(process.execPath, [builderCli, '--win', 'portable', 'nsis', '--x64', '--publish', 'never', ...process.argv.slice(2).filter(a => a !== '--skip-build')]);
+run(process.execPath, [builderCli, ...(args.some(a => /^--(win|mac|linux)$/.test(a)) ? [] : [platform]), '--publish', 'never', ...args]);

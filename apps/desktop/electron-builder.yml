@@ -1,8 +1,9 @@
 # BiliMind Desktop packaging (electron-builder 26). Build first: node scripts/build.mjs (scripts/dist.mjs does both).
 # Everything the app runs is bundled by esbuild into dist/, so no node_modules are packaged (all deps are dev deps).
+# Builds are unsigned: Windows SmartScreen and macOS Gatekeeper warn on first launch (see the README).
 appId: ai.bilimind.desktop
 productName: BiliMind Desktop
-copyright: Copyright (C) 2026 Opus Magnum. AGPL-3.0-only.
+copyright: Copyright (C) 2026 the BiliMind team. AGPL-3.0-only.
 directories:
   output: release
   buildResources: resources
@@ -24,9 +25,12 @@ extraResources:
 npmRebuild: false
 nodeGypRebuild: false
 buildDependenciesFromSource: false
-# use the Electron already installed by pnpm (no download behind the venue firewall)
-electronDist: node_modules/electron/dist
+# electron-builder downloads the Electron build for each target platform and arch (ELECTRON_MIRROR is honoured)
 electronVersion: 44.7.0
+publish: null
+# Linux: a launcher in front of the binary so the AppImage starts on Ubuntu 24.04+ (see the script)
+afterPack: scripts/after-pack.cjs
+
 win:
   icon: resources/icon.ico
   target:
@@ -44,4 +48,35 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   shortcutName: BiliMind Desktop
-publish: null
+
+mac:
+  icon: resources/icon-1024.png
+  category: public.app-category.education
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  # ad-hoc signature only (no Apple Developer ID yet): Apple Silicon refuses to run a fully unsigned app
+  identity: "-"
+  hardenedRuntime: false
+  artifactName: BiliMind-Desktop-${version}-mac-${arch}.${ext}
+dmg:
+  artifactName: BiliMind-Desktop-${version}-mac-${arch}.${ext}
+
+linux:
+  icon: resources/icon-1024.png
+  # the package name (@bilimind/desktop) is not a valid file name; desktopName in package.json sets the WM_CLASS
+  executableName: bilimind-desktop
+  syncDesktopName: true
+  category: Education
+  synopsis: Turn your own files into a checked, narrated course
+  maintainer: BiliMind team <oybek@bilimind.com>
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  artifactName: BiliMind-Desktop-${version}-linux-${arch}.${ext}
+deb:
+  artifactName: BiliMind-Desktop-${version}-linux-${arch}.${ext}
