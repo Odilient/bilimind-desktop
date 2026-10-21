@@ -1,5 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-free-tier="paused">
+<!--
+  BiliMind free switch. While the key-less service (desktop-api.bilimind.com) is paused, data-free-tier="paused"
+  shows the bring-your-own-key copy. When a real completion through it succeeds again, change it to "on": every
+  element marked data-free="on" comes back, every data-free="paused" one hides, and the FAQ picks its "on" answers.
+-->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -32,6 +37,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <style>
+/* BiliMind free switch (see the comment on <html>): show one copy of each line, never both. */
+html[data-free-tier="paused"] [data-free="on"], html:not([data-free-tier="paused"]) [data-free="paused"] { display: none !important; }
 /* ════════════════════════════════════════════════════════════════════
    11 "Cobalt landing" — shared tokens and the few global patterns every
    section uses. build.py inlines this file into the page; the harness
@@ -1215,7 +1222,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
     <div class="hero-light" aria-hidden="true"><span class="sweep" id="sweep"></span><span class="grain"></span></div>
 
     <div class="copy">
-      <div class="cl c-eb"><div><span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>Free desktop app · Open source</span></div></div>
+      <div class="cl c-eb"><div><span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-spark"/></svg></span><span data-free="on">Free desktop app · Open source</span><span data-free="paused">Free and open source · bring your own key</span></span></div></div>
 
       <h1 class="head" id="h1">
         <span class="ln l1">Learn</span>
@@ -1253,7 +1260,8 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
       </div>
       <div class="under">
         <button class="add" id="add" type="button"><svg aria-hidden="true"><use href="#i-plus"/></svg><span>Add PDFs, slides, links</span></button>
-        <span class="free"><i aria-hidden="true"></i>Free · no account · no key needed</span>
+        <span class="free" data-free="on"><i aria-hidden="true"></i>Free · no account · no key needed</span>
+        <span class="free" data-free="paused"><i aria-hidden="true"></i>Free and open source · your own AI key, 2 to 9 cents a course</span>
       </div>
     </div>
 
@@ -1546,7 +1554,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
                   <div class="cr-in">
                     <p class="a-eb">Step 1 of 3 · Your goal</p>
                     <h3 class="a-h">What do you want to learn?</h3>
-                    <p class="a-p">Say it the way you would to a teacher — the subject, and what you want to be able to do. BiliMind plans the whole course for you, free.</p>
+                    <p class="a-p">Say it the way you would to a teacher — the subject, and what you want to be able to do. BiliMind plans the whole course for you.</p>
                     <div class="st-slot-wrap"><div class="slot" id="slotStory"><div class="ghost-field" aria-hidden="true">What do you want to learn?</div></div></div>
                     <div class="cr-more" aria-hidden="true">
                       <p class="cr-or">Or start from one of these</p>
@@ -1568,7 +1576,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
                       <li class="a-q"><span class="qn"><b>2</b><svg><use href="#i-check"/></svg></span><div><p>What is it for?</p><div class="a-opts"><b>The trip</b><b>An exam</b><b>Reading novels</b></div></div></li>
                       <li class="a-q"><span class="qn"><b>3</b><svg><use href="#i-check"/></svg></span><div><p>Time each week?</p><div class="a-opts"><b>1 hour</b><b>3 hours</b><b>5+ hours</b></div></div></li>
                     </ol>
-                    <div class="ask-go"><span class="btn-ink" id="planBtn">Plan my course<i><svg><use href="#i-arrow"/></svg></i></span><small>All free — the Lead picks which lessons get written.</small></div>
+                    <div class="ask-go"><span class="btn-ink" id="planBtn">Plan my course<i><svg><use href="#i-arrow"/></svg></i></span><small>The Lead picks which lessons get written.</small></div>
                   </div>
                 </div>
                 <!-- The roadmap -->
@@ -4110,7 +4118,7 @@ html.still #checks .aq-form { display: none; }
         <div class="ev-today">
           <div class="hd"><h4>Today</h4><span class="ic"><svg><use href="#i-search"/></svg></span><span class="ic"><svg><use href="#i-bell"/></svg></span><span class="av">DL</span></div>
           <div class="ev-new">
-            <div class="nh"><b>Learn something new</b><small>Planning is free</small></div>
+            <div class="nh"><b>Learn something new</b><small>Planned in minutes</small></div>
             <div class="nf"><span class="ph">What do you want to learn?</span><div class="nc"><span><svg><use href="#i-clip"/></svg>Drop files</span><span><svg><use href="#i-file"/></svg>Paste notes</span></div><i class="go"><svg><use href="#i-arrow-up"/></svg></i></div>
           </div>
           <div class="ev-due">
@@ -4552,7 +4560,8 @@ html.still #checks .aq-form { display: none; }
         <h2 class="h2" id="prH">Pricing you can explain <span class="hchip cobalt" aria-hidden="true"><svg><use href="#i-check"/></svg></span> in one breath.</h2>
       </div>
       <div class="sh">
-        <p class="lede">Building a course costs cents. <b>BiliMind free pays them for you.</b> Bring your own key and you pay the AI directly.</p>
+        <p class="lede" data-free="on">Building a course costs cents. <b>BiliMind free pays them for you.</b> Bring your own key and you pay the AI directly.</p>
+        <p class="lede" data-free="paused">The app is free. <b>The AI costs cents a course</b>, paid from your own DeepSeek or OpenRouter credit, straight to them.</p>
         <div class="pr-toggle" role="group" aria-label="AI cost per">
           <button type="button" aria-pressed="true" data-bill="m">Per course</button>
           <button type="button" aria-pressed="false" data-bill="y">Per day <em>the cap</em></button>
@@ -4563,12 +4572,16 @@ html.still #checks .aq-form { display: none; }
       <article class="plan free" aria-labelledby="pFree">
         <div class="pn" id="pFree">Free</div>
         <div class="dots-a" id="dotsFree" aria-hidden="true"></div>
-        <span class="dots-cap" aria-hidden="true">no key · no account</span>
+        <span class="dots-cap" aria-hidden="true" data-free="on">no key · no account</span>
+        <span class="dots-cap" aria-hidden="true" data-free="paused">no account · no card</span>
         <p class="price">$0</p>
-        <p class="pnote">Start here. Stay if you like.</p>
+        <p class="pnote" data-free="on">Start here. Stay if you like.</p>
+        <p class="pnote" data-free="paused">The app, for good.</p>
         <ul>
-          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>No account, no key, no card</li>
-          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>BiliMind free pays for the AI</li>
+          <li data-free="on"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>No account, no key, no card</li>
+          <li data-free="on"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>BiliMind free pays for the AI</li>
+          <li data-free="paused"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>No account, no card</li>
+          <li data-free="paused"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Your files stay on your computer</li>
           <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Narration, code, quizzes — all included</li>
           <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i><b>Open source — AGPL-3.0, for good</b></li>
         </ul>
@@ -4581,17 +4594,18 @@ html.still #checks .aq-form { display: none; }
         <p class="pnote" id="proNote">Our real runs; capped at $0.25.</p>
         <ul>
           <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Everything in Free</li>
-          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>DeepSeek or OpenRouter</li>
+          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i><span>Keys from <a href="https://platform.deepseek.com/api_keys" style="color:inherit;text-decoration:underline;text-underline-offset:3px">DeepSeek</a> or <a href="https://openrouter.ai/keys" style="color:inherit;text-decoration:underline;text-underline-offset:3px">OpenRouter</a></span></li>
           <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Your text goes straight to them</li>
-          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Key kept on your PC only</li>
+          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Key kept on your computer only</li>
           <li class="dim">That’s it. That’s the difference.</li>
         </ul>
         <div class="dots-a" id="dotsPro" aria-hidden="true"></div>
         <span class="dots-cap" aria-hidden="true">150 courses at 4¢ each: about $6, paid to the AI, not us</span>
-        <div class="cta"><a class="pill lime" href="https://github.com/Odilient/bilimind-desktop#free-and-private">Your key<span class="arr" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a></div>
+        <div class="cta"><a class="pill lime" href="https://github.com/Odilient/bilimind-desktop#bring-your-own-key">Your key<span class="arr" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a></div>
       </article>
     </div>
-    <p class="pr-foot">BiliMind free has a rate limit; when it is busy the app says so. Costs are in USD, AI only, from the real runs in our README.</p>
+    <p class="pr-foot" data-free="on">BiliMind free has a rate limit; when it is busy the app says so. Costs are in USD, AI only, from the real runs in our README.</p>
+    <p class="pr-foot" data-free="paused">BiliMind free, the key-less AI we paid for, is paused for now, so the app runs on your key. Costs are in USD, AI only, from the real runs in our README.</p>
   </section>
 
   <!-- ═══ FAQ ═══ -->
@@ -4616,7 +4630,7 @@ html.still #checks .aq-form { display: none; }
     <div class="slab cobalt closing">
       <div class="hero-light" aria-hidden="true"><span class="grain"></span></div>
       <div class="inner">
-        <span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>Free · no account · no key</span>
+        <span class="eb on-dark"><span class="dot"><svg aria-hidden="true"><use href="#i-spark"/></svg></span><span data-free="on">Free · no account · no key</span><span data-free="paused">Free and open source · bring your own key</span></span>
         <h2 class="h2" id="endH"><span class="ln">Learn <span class="hchip" aria-hidden="true"><svg><use href="#i-spark"/></svg></span> anything.</span><span class="ln lime">Finish it.</span></h2>
         <div class="end-row">
           <div class="slot" id="slotEnd"><div class="ghost-field" aria-hidden="true">What do you want to learn?</div></div>
@@ -5159,11 +5173,17 @@ else {
 }
 
 /* ══ FAQ ════════════════════════════════════════════════════════════ */
+// BiliMind free switch: <html data-free-tier> (see the comment at the top of the page)
+const FREE_ON = document.documentElement.dataset.freeTier !== 'paused';
 const QUESTIONS = [
   { q: 'Is this just ChatGPT with extra steps?', a: 'A chat gives you prose and a quiz, every topic, every time. BiliMind decides what kind of knowledge a lesson holds and teaches it accordingly — then checks every answer against your files and runs every code exercise. The generating was never the hard part.' },
   { q: 'What happens when I fall behind?', a: 'The plan slides forward. No red, no backlog, no guilt. Mark days done or skipped and everything re-flows to the hours you actually have.' },
-  { q: 'Do I need an account or a key?', a: 'No. BiliMind free pays for the AI, so nobody needs a key. Add your own DeepSeek or OpenRouter key in Settings if you like; then your text goes straight to them.' },
-  { q: 'Does BiliMind free actually stay free?', a: 'Yes. The app is free and open source (AGPL-3.0), and BiliMind free pays for the AI. It has a rate limit; when it is busy the app says so, and you can wait or add your own key.' },
+  FREE_ON
+    ? { q: 'Do I need an account or a key?', a: 'No. BiliMind free pays for the AI, so nobody needs a key. Add your own DeepSeek or OpenRouter key in Settings if you like; then your text goes straight to them.' }
+    : { q: 'Do I need an account or a key?', a: 'No account. You need an AI key from DeepSeek or OpenRouter, pasted once in Settings; your text then goes straight to them. A few dollars of credit lasts dozens of courses: ours cost 2 to 9 cents each.' },
+  FREE_ON
+    ? { q: 'Does BiliMind free actually stay free?', a: 'Yes. The app is free and open source (AGPL-3.0), and BiliMind free pays for the AI. It has a rate limit; when it is busy the app says so, and you can wait or add your own key.' }
+    : { q: 'What does it cost?', a: 'The app is free and open source (AGPL-3.0). The AI is paid from your own key: 2 to 9 cents a course in our runs, capped at 25 cents a course and $2 a day unless you change it. BiliMind free, the key-less AI we paid for, is paused for now.' },
   { q: 'Are the sources real?', a: 'Your files are the sources. Every auto-marked answer is solved again against them, with a word-for-word quote, so made-up citations don’t exist here.' },
   { q: 'Where does it run?', a: 'On Windows, macOS and Linux, as a free app; inside WorkBuddy, as a skill and an Expert Team; and from the command line. The finished course is one HTML file that plays in any browser, even offline.' },
 ];
