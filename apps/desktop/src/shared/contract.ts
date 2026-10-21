@@ -4,7 +4,8 @@ export type ProviderId = 'bilimind' | 'deepseek' | 'openrouter';
 
 export interface Settings {
   provider: ProviderId;
-  keys: Record<ProviderId, { set: boolean; last4?: string }>;   // the key itself never reaches the renderer; bilimind is always { set: true }
+  keys: Record<ProviderId, { set: boolean; last4?: string }>;   // the key itself never reaches the renderer; bilimind is { set: freeTier }
+  freeTier: boolean;                                           // BiliMind free offered (FREE_TIER_ON in the engine config)
   narrate: boolean;                                            // Edge TTS narration (free)
   outRoot: string;                                             // default <Documents>/BiliMind
   version: string;

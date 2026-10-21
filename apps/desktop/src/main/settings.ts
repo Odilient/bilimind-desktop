@@ -2,13 +2,14 @@
 // WorkBuddy skill read ({"provider","keys":{deepseek,openrouter},"models":{...}}); desktop-only fields go under
 // "desktop": {narrate, outRoot}. Writes merge: unknown fields are kept. A key is never logged or returned
 // (only `set` and the last 4 characters).
-// Providers: 'bilimind' (BiliMind free: the owner's proxy, no key on this computer, the default on a fresh install),
-// 'deepseek' and 'openrouter' (the user's own key).
+// Providers: 'bilimind' (BiliMind free: the owner's proxy, no key on this computer, the default on a fresh install
+// while FREE_TIER_ON in the engine config is true; hidden while it is paused), 'deepseek' and 'openrouter' (the
+// user's own key).
 import { app, net } from 'electron';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { PRESETS, findEnvLocal, freeBaseUrl, needsKey, parseDotenv } from '@bilimind/engine/config';
+import { PRESETS, findEnvLocal, freeBaseUrl, freeTierOn, needsKey, parseDotenv } from '@bilimind/engine/config';
 import { parseBalance } from '@bilimind/engine/ledger';
 import type { ProviderId, Settings, SettingsPatch } from '../shared/contract.ts';
 
@@ -74,17 +75,21 @@ export function defaultOutRoot(): string {
 
 export function getSettings(): Settings {
   const c = readConfig();
+  const free = freeTierOn();
   const keys = {} as Settings['keys'];
   for (const p of PROVIDERS) {
-    if (!needsKey(p)) { keys[p] = { set: true }; continue; }   // BiliMind free: nothing to set, always ready
+    if (!needsKey(p)) { keys[p] = { set: free }; continue; }   // BiliMind free: nothing to set, ready while it is on
     const k = keyFor(p, c);
     keys[p] = k ? { set: true, last4: k.slice(-4) } : { set: false };
   }
-  // the engine's rule (loadConfig): the named provider; else the pool of a key that exists; else BiliMind free
-  const provider: ProviderId = isProvider(c.provider) ? c.provider : KEYED.find(p => keys[p].set) ?? 'bilimind';
+  // the engine's rule (loadConfig): the named provider when usable; else the pool of a key that exists; else
+  // BiliMind free, or DeepSeek (no key yet, so the window asks for one) while the free tier is paused
+  const named = isProvider(c.provider) && (needsKey(c.provider) || free) ? c.provider : undefined;
+  const provider: ProviderId = named && keys[named].set ? named : KEYED.find(p => keys[p].set) ?? named ?? (free ? 'bilimind' : 'deepseek');
   return {
     provider,
     keys,
+    freeTier: free,
     narrate: c.desktop?.narrate !== false,
     outRoot: c.desktop?.outRoot && c.desktop.outRoot.trim() ? resolve(c.desktop.outRoot) : defaultOutRoot(),
     version: app.getVersion(),
@@ -95,6 +100,7 @@ export function saveSettings(p: SettingsPatch): Settings {
   const c = readConfig();
   if (p.provider !== undefined) {
     if (!isProvider(p.provider)) throw new Error('Unknown AI provider.');
+    if (!needsKey(p.provider) && !freeTierOn()) throw new Error('BiliMind free is paused for now. Use your own DeepSeek or OpenRouter key.');
     c.provider = p.provider;
   }
   if (p.key) {
@@ -121,6 +127,7 @@ export function saveSettings(p: SettingsPatch): Settings {
 
 /** BiliMind free: GET <free base>/health (no key, X-BiliMind-Client), { ok: true } when the service is up. */
 async function testFree(): Promise<{ ok: boolean; note?: string; error?: string }> {
+  if (!freeTierOn()) return { ok: false, error: 'BiliMind free is paused for now. Use your own DeepSeek or OpenRouter key.' };
   const url = freeBaseUrl(process.env, readConfig().free_base_url) + '/health';
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 10_000);

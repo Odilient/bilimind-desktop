@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { checkBudget, recordSpend, spentToday, spentForCourse, balance, parseBalance, resetBalanceCache } from '../src/ledger.ts';
-import { loadConfig, parseDotenv, redact } from '../src/config.ts';
+import { FREE_TIER_ON, freeTierOn, loadConfig, parseDotenv, redact } from '../src/config.ts';
 import { appendLog, readLog, note } from '../src/log.ts';
 import { BilimindError } from '../src/contracts.ts';
 import type { LedgerEntry } from '../src/contracts.ts';
@@ -121,23 +121,38 @@ describe('config', () => {
     expect(parseDotenv('A=1\nexport B = "two"\n#C=3\nD=x # y')).toEqual({ A: '1', B: 'two', D: 'x' });
   });
 
-  it('no key anywhere and no provider named -> BiliMind free (no key), its URL overridable', () => {
-    const c = loadConfig({ env: base() });
+  it('BiliMind free paused (FREE_TIER_ON false): a fresh install or a named "bilimind" resolves to a keyed pool', () => {
+    expect(FREE_TIER_ON).toBe(false);
+    expect(freeTierOn({})).toBe(false);
+    expect(freeTierOn({ BILIMIND_FREE: '1' })).toBe(true);
+    const c = loadConfig({ env: { ...base(), BILIMIND_FREE: '0' } });
+    expect(c.provider).toBe('deepseek');                                       // asks for a key
+    expect(c.apiKey).toBe('');
+    writeUser({ provider: 'bilimind' });
+    expect(loadConfig({ env: { ...base(), BILIMIND_FREE: '0' } }).provider).toBe('deepseek');
+    writeUser({ provider: 'bilimind', keys: { openrouter: 'sk-or' } });
+    expect(loadConfig({ env: { ...base(), BILIMIND_FREE: '0' } }).provider).toBe('openrouter');
+    expect(loadConfig({ env: { ...base(), BILIMIND_FREE: '0', BILIMIND_PROVIDER: 'bilimind' } }).provider).toBe('bilimind');   // forced: still reachable
+  });
+
+  it('BiliMind free on: no key anywhere and no provider named -> BiliMind free (no key), its URL overridable', () => {
+    const on = () => ({ ...base(), BILIMIND_FREE: '1' });
+    const c = loadConfig({ env: on() });
     expect(c.provider).toBe('bilimind');
     expect(c.apiKey).toBe('');
     expect(c.keySource).toBe('none');
     expect(c.baseUrl).toBe('https://desktop-api.bilimind.com/v1');
     expect(c.models).toEqual({ fast: 'deepseek/deepseek-v4-flash', reasoning: 'deepseek/deepseek-v4-pro' });
-    expect(loadConfig({ env: { ...base(), BILIMIND_FREE_URL: 'http://127.0.0.1:8787/v1/' } }).baseUrl).toBe('http://127.0.0.1:8787/v1');
+    expect(loadConfig({ env: { ...on(), BILIMIND_FREE_URL: 'http://127.0.0.1:8787/v1/' } }).baseUrl).toBe('http://127.0.0.1:8787/v1');
     writeUser({ free_base_url: 'http://127.0.0.1:8788/v1' });
-    expect(loadConfig({ env: base() }).baseUrl).toBe('http://127.0.0.1:8788/v1');
+    expect(loadConfig({ env: on() }).baseUrl).toBe('http://127.0.0.1:8788/v1');
   });
 
   it('a configured provider keeps the old behaviour; provider "bilimind" never takes a key', () => {
     writeUser({ provider: 'deepseek' });
     expect(loadConfig({ env: base() }).provider).toBe('deepseek');            // named but no key: still deepseek
     writeUser({ provider: 'bilimind', keys: { deepseek: 'sk-user' } });
-    const b = loadConfig({ env: { ...base(), BILIMIND_BASE_URL: 'http://elsewhere' } });
+    const b = loadConfig({ env: { ...base(), BILIMIND_FREE: '1', BILIMIND_BASE_URL: 'http://elsewhere' } });
     expect(b.provider).toBe('bilimind');
     expect(b.apiKey).toBe('');
     expect(b.baseUrl).toBe('https://desktop-api.bilimind.com/v1');

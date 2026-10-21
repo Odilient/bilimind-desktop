@@ -75,6 +75,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+function freeTierOn(env = process.env) {
+  const v2 = env.BILIMIND_FREE?.trim();
+  return v2 === "1" ? true : v2 === "0" ? false : FREE_TIER_ON;
+}
 function needsKey(p2) {
   return PRESETS[p2].keyEnv !== "";
 }
@@ -157,7 +161,7 @@ function keyHint(p2) {
 function redact(text4) {
   return text4.replace(/\bsk-[A-Za-z0-9_\-]{4,}/g, "[redacted]").replace(/\*{2,}[A-Za-z0-9_\-]+/g, "[redacted]").replace(/\bBearer\s+\S+/gi, "Bearer [redacted]");
 }
-var PRESETS, DEFAULT_RESERVE_USD, FREE_BASE_URL, ENGINE_VERSION, DEFAULT_CAPS, loadConfig;
+var PRESETS, DEFAULT_RESERVE_USD, FREE_TIER_ON, FREE_BASE_URL, ENGINE_VERSION, DEFAULT_CAPS, loadConfig;
 var init_config = __esm({
   "../../packages/engine/src/config.ts"() {
     "use strict";
@@ -189,6 +193,7 @@ var init_config = __esm({
       }
     };
     DEFAULT_RESERVE_USD = { deepseek: 0, openrouter: 0, bilimind: 0 };
+    FREE_TIER_ON = false;
     FREE_BASE_URL = PRESETS.bilimind.baseUrl;
     ENGINE_VERSION = "0.2.0";
     DEFAULT_CAPS = { runUsd: 0.25, dayUsd: 2 };
@@ -212,12 +217,15 @@ var init_config = __esm({
         return { key: "", source: "none" };
       };
       const forced = pick2("BILIMIND_PROVIDER");
+      const free = freeTierOn(env);
+      const usable = (p2) => needsKey(p2) ? !!keyFor(p2).key : free;
       let provider;
       if (isProvider(forced)) provider = forced;
-      else if (isProvider(user.provider) && (!needsKey(user.provider) || keyFor(user.provider).key)) provider = user.provider;
+      else if (isProvider(user.provider) && usable(user.provider)) provider = user.provider;
       else if (keyFor("deepseek").key) provider = "deepseek";
       else if (keyFor("openrouter").key) provider = "openrouter";
-      else provider = isProvider(user.provider) ? user.provider : "bilimind";
+      else if (isProvider(user.provider) && (needsKey(user.provider) || free)) provider = user.provider;
+      else provider = free ? "bilimind" : "deepseek";
       const preset = PRESETS[provider];
       const { key, source } = keyFor(provider);
       const um = user.models?.[provider] ?? {};

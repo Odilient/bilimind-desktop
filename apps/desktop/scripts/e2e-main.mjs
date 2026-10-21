@@ -99,6 +99,7 @@ try {
 
   const s0 = await page.evaluate(() => window.bilimind.settings.get());
   check('settings.get', s0.provider === 'deepseek' && s0.keys.deepseek.set === false && s0.narrate === true && /BiliMind$/.test(s0.outRoot) && !!s0.version, JSON.stringify({ ...s0, outRoot: '...' }));
+  check('BiliMind free offered only when the free tier is on', typeof s0.freeTier === 'boolean' && s0.keys.bilimind.set === s0.freeTier, `freeTier ${s0.freeTier}`);
   const s1 = await page.evaluate(o => window.bilimind.settings.save({ key: { provider: 'openrouter', value: 'sk-or-e2e-fake-wxyz' }, narrate: false, outRoot: o }), outRoot);
   const cfg = JSON.parse(readFileSync(join(home, 'config.json'), 'utf8'));
   check('settings.save key (last4 only)', s1.keys.openrouter.set && s1.keys.openrouter.last4 === 'wxyz' && !JSON.stringify(s1).includes('fake'));

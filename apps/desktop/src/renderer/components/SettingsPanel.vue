@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Settings slide-over: AI (BiliMind free or your own key), narration, output folder, about.
+// Settings slide-over: AI (your own key, or BiliMind free while it is on), narration, output folder, about.
 import { computed } from 'vue';
 import Icon from './Icon.vue';
 import KeyCard from './KeyCard.vue';

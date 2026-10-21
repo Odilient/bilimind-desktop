@@ -44,7 +44,7 @@ export function startRun(o: { src: string; sentence: string }): { runId: string 
   if (!src || !existsSync(src) || !statSync(src).isDirectory()) throw new Error('Pick the folder with your files first.');
   if (!sentence) throw new Error('Write one sentence about what you need.');
   const s = getSettings();
-  // the chosen provider when it is ready (BiliMind free always is), else the other own-key pool; never a silent
+  // the chosen provider when it is ready (BiliMind free is while it is on), else the other own-key pool; never a silent
   // switch to BiliMind free when the learner picked their own key
   const provider = s.keys[s.provider].set ? s.provider : (['deepseek', 'openrouter'] as const).find(p => s.keys[p].set);
   if (!provider) throw new Error('Add your AI key in Settings first.');

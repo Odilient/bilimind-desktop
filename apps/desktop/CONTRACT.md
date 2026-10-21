@@ -29,7 +29,8 @@ apps/desktop/
 type ProviderId = 'bilimind' | 'deepseek' | 'openrouter';     // 'bilimind' = BiliMind free (no key), the default
 interface Settings {
   provider: ProviderId;
-  keys: Record<ProviderId, { set: boolean; last4?: string }>;   // the key itself never reaches the renderer; bilimind: always { set: true }
+  keys: Record<ProviderId, { set: boolean; last4?: string }>;   // the key itself never reaches the renderer; bilimind: { set: freeTier }
+  freeTier: boolean;                                           // BiliMind free offered (FREE_TIER_ON in packages/engine/src/config.ts)
   narrate: boolean;                                            // Edge TTS narration (free)
   outRoot: string;                                             // default <Documents>/BiliMind
   version: string;

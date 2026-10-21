@@ -6,6 +6,7 @@ export type ProviderId = 'bilimind' | 'deepseek' | 'openrouter';
 export interface Settings {
   provider: ProviderId;
   keys: Record<ProviderId, { set: boolean; last4?: string }>;
+  freeTier: boolean;
   narrate: boolean;
   outRoot: string;
   version: string;

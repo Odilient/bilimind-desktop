@@ -2,7 +2,7 @@
 // screenshots). The data is real: mock/data.json is generated from the three showcase courses by
 // mock/gen-mock-data.mjs. A run replays the first unattended pass of the matching showcase run with its real
 // step order, parallelism, durations and costs; long waits are compressed (gap^0.6) so the replay lasts ~22 s.
-// URL switches: ?nokey (no AI key saved), ?empty (no courses yet), ?replay=<seconds> (replay length).
+// URL switches: ?nokey (no AI key saved), ?empty (no courses yet), ?free (BiliMind free on), ?replay=<seconds> (replay length).
 import type { AssistantCite, AssistantEvent, BiliMindApi, CourseCard, CourseOutline, FolderFile, RunEvent, Settings } from './env';
 import data from './mock/data.json';
 
@@ -36,7 +36,8 @@ export function installMock(): void {
 
   const settings: Settings = {
     provider: 'deepseek',
-    keys: { bilimind: { set: true }, deepseek: q.has('nokey') ? { set: false } : { set: true, last4: '7f3a' }, openrouter: { set: false } },
+    keys: { bilimind: { set: q.has('free') }, deepseek: q.has('nokey') ? { set: false } : { set: true, last4: '7f3a' }, openrouter: { set: false } },
+    freeTier: q.has('free'),
     narrate: true,
     outRoot: 'C:\\Users\\you\\Documents\\BiliMind',
     version: '0.2.0',
