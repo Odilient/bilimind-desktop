@@ -44,8 +44,8 @@ const close = () => { state.settingsOpen = false; };
           <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#mark" /></svg>
           <div>
             <b class="nm">BiliMind Desktop <span>v{{ s.version }}</span></b>
-            <p>Open source under AGPL-3.0. No account. Your courses are folders on this computer. Free AI to start, or your own key.</p>
-            <p class="team">Made by team Opus Magnum: Oybek Odilov, Abdugaffor Odilov, Ramil Khutlimuratov, Gameel Al-Bazeeli. Dormathon 2026.</p>
+            <p>Open source under AGPL-3.0. No account. Your courses are folders on this computer, built with your own AI key.</p>
+            <p class="team">Made by the BiliMind team. Started at Dormathon 2026 by team Opus Magnum.</p>
             <button class="pill sm lime" @click="openGh">Source on GitHub <Icon name="i-ext" /></button>
           </div>
         </section>
