@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/Odilient/bilimind-desktop/discussions
+    about: Ask how to do something, share a course you made or float an idea before it becomes an issue.
+  - name: Report a security problem
+    url: https://github.com/Odilient/bilimind-desktop/security/advisories/new
+    about: Please report vulnerabilities privately, not in a public issue (see SECURITY.md).
+  - name: bilimind.com (the hosted product)
+    url: https://bilimind.com
+    about: For accounts, billing or courses on bilimind.com. That product is not in this repository.

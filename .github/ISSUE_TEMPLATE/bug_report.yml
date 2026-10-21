@@ -1,0 +1,69 @@
+name: Bug report
+description: Something in BiliMind Desktop, the CLI or a course page does not work as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please **never paste an API key**, here or in a log: remove it first.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+      placeholder: |
+        1. Dropped a folder with 3 PDFs and typed "..."
+        2. Clicked Build my course
+        3. It stopped at "Writing the lesson" with "..."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Settings shows it at the bottom; for a source build, the commit (`git rev-parse --short HEAD`).
+      placeholder: "0.2.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: System
+      options:
+        - Windows 11
+        - Windows 10
+        - macOS (Apple silicon)
+        - macOS (Intel)
+        - Linux (AppImage)
+        - Linux (.deb)
+        - Built from source
+        - Command line only
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: OS version
+      placeholder: "Ubuntu 24.04, macOS 15.1, Windows 11 24H2"
+  - type: dropdown
+    id: provider
+    attributes:
+      label: AI provider
+      options:
+        - DeepSeek
+        - OpenRouter
+        - BiliMind free
+        - Not relevant
+  - type: textarea
+    id: files
+    attributes:
+      label: Your files
+      description: What kinds of files, how many pages, which language. Attach one if you can share it.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Report or log
+      description: |
+        If a course started, the end of `REPORT.md` or `crew/log.jsonl` from the course folder helps a lot.
+        The app writes keys nowhere, but check before you paste.
+      render: text

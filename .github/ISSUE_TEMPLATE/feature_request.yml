@@ -1,0 +1,30 @@
+name: Feature request
+description: Suggest something BiliMind Desktop should do. For open-ended ideas, Discussions may be a better start.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do, and what gets in the way today? A real example helps most.
+      placeholder: "I study from EPUB textbooks, and BiliMind cannot read them, so ..."
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you would like
+      description: How you picture it working. Screens, commands or file formats are all useful.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you do instead today
+      description: Other tools or workarounds you use.
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Helping
+      options:
+        - label: I would like to work on this myself.
