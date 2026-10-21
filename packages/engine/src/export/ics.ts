@@ -1,5 +1,5 @@
 // reviews.ics: study blocks (plan days) + spaced reviews (review/state.json), in the goal's zone
-// (Asia/Kuala_Lumpur), every event ending before the exam. Our own small RFC 5545 writer (no package).
+// in the goal's time zone, every event ending before the exam. Our own small RFC 5545 writer (no package).
 // Owner: WP4.
 import type { Course, PlanResult, ReviewState } from '@bilimind/core';
 import type { Ics } from '../contracts.ts';

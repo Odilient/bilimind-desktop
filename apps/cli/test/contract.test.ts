@@ -119,7 +119,7 @@ describe('fresh course: doctor, init, goal, ingest, outline, status', () => {
     expect(i2.ok, i2.error).toBe(true);
     expect(i2.data.course).toMatch(/\/bilimind-out\/ds-final$/);
 
-    const gl = contract(cli('goal', ['goal', '--deadline', '2026-10-14', '--exam-time', '09:00', '--minutes-per-day', '45', '--audience', 'student',
+    const gl = contract(cli('goal', ['goal', '--deadline', '2026-10-14', '--exam-time', '09:00', '--timezone', 'Asia/Kuala_Lumpur', '--minutes-per-day', '45', '--audience', 'student',
       '--lang', 'en', '--code-lang', 'js', '--assume', 'Wednesday means 14 Oct 2026', '--assume', 'Study starts Sunday', '--as', 'Lead'], ws));
     expect(gl.ok, gl.error).toBe(true);
     expect(gl.data.goal.exam_at).toBe('2026-10-14T09:00:00+08:00');

@@ -1,7 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { mkdtempSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import * as engine from '../src/index.ts';
-import { coursePaths, BilimindError } from '../src/index.ts';
+import { coursePaths, BilimindError, defaultTimeZone, setGoal } from '../src/index.ts';
 
 describe('engine contracts', () => {
   it('exports every EngineApi function', () => {
@@ -21,5 +23,18 @@ describe('engine contracts', () => {
     const e = new BilimindError('No key', 'Set DEEPSEEK_API_KEY');
     expect(e.hint).toBe('Set DEEPSEEK_API_KEY');
     expect(e).toBeInstanceOf(Error);
+  });
+  it('uses the computer time zone by default while allowing an explicit override', async () => {
+    const oldTz = process.env.TZ;
+    process.env.TZ = 'Europe/Oslo';
+    vi.resetModules();
+    const course = mkdtempSync(join(tmpdir(), 'bilimind-timezone-'));
+    const ctx = { course, now: () => new Date('2026-10-10T12:00:00Z'), progress: () => {}, agent: 'Test', noCache: true, spend: { usd: 0, calls: 0 } };
+    const base = { minutesPerDay: 45, audience: 'student' as const, lang: 'en', codeLang: 'none' as const, assume: [], deadline: '2026-10-14', examTime: '09:00' };
+    await setGoal(ctx, base);
+    expect(JSON.parse(readFileSync(coursePaths(course).goal, 'utf8')).timezone).toBe(defaultTimeZone());
+    await setGoal(ctx, { ...base, timezone: 'Asia/Kuala_Lumpur' });
+    expect(JSON.parse(readFileSync(coursePaths(course).goal, 'utf8')).timezone).toBe('Asia/Kuala_Lumpur');
+    if (oldTz === undefined) delete process.env.TZ; else process.env.TZ = oldTz;
   });
 });

@@ -134,7 +134,7 @@ export interface GoalInput {
   lang: string;
   codeLang?: string | null;       // 'js' -> 'javascript'
   assume: string[];
-  timezone?: string;              // default Asia/Kuala_Lumpur
+  timezone?: string;              // default: the computer's IANA time zone
 }
 /** `goal`: writes crew/goal.json. */
 export type SetGoal = (ctx: Ctx, input: GoalInput) => Promise<{ goal: Goal }>;
@@ -300,7 +300,7 @@ export type GradeFn = (ctx: Ctx, opts: { answers: string }) => Promise<{ results
 export type ToMarkdown = (lesson: CourseLesson, course: Course) => string;
 /** Anki CSV: front, back, tags (flashcards + cloze items). */
 export type AnkiCsv = (course: Course) => string;
-/** .ics: study blocks (plan days) + reviews (state.json), TZ Asia/Kuala_Lumpur, every event before the exam. */
+/** .ics: study blocks (plan days) + reviews (state.json), in the goal's time zone. */
 export type Ics = (input: { course: Course; plan: PlanResult; state: ReviewState | null }) => string;
 /** REPORT.md from log.jsonl + checks + verdicts + ledger: what each agent did, checks, rejections, code fixes, cost, wall time. */
 export type Report = (input: { course: Course; log: LogEvent[] }) => string;
