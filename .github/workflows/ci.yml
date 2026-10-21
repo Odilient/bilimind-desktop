@@ -50,7 +50,7 @@ jobs:
       - name: Skill playbooks match the CLI
         run: node --test "skills/bilimind/test/*.test.mjs"
 
-      - name: Desktop smoke test (hidden window, no AI calls)
+      - name: Desktop smoke test (hidden window, fake key, no generation)
         if: runner.os == 'Linux'
         working-directory: apps/desktop
         run: |
