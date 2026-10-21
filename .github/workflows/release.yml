@@ -1,30 +1,46 @@
-# Release BiliMind Desktop for Windows: push a tag like v0.1.0 and this builds the portable .exe and the installer
-# and attaches both to a GitHub release.
+# Release BiliMind Desktop: push a tag like v0.2.0 and this builds the app on Windows, macOS and Linux, plus the
+# single-file CLI, and attaches everything (with SHA256SUMS.txt) to a GitHub release whose body is
+# .github/release-notes.md. The builds are not code-signed (see the README).
 name: release
 
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to (re)build, e.g. v0.2.0
+        required: true
 
 permissions:
   contents: write
 
 jobs:
-  windows:
-    runs-on: windows-latest
+  build:
+    name: build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            files: apps/desktop/release/*.exe
+          - os: macos-latest
+            files: |
+              apps/desktop/release/*.dmg
+              apps/desktop/release/*.zip
+          - os: ubuntu-latest
+            files: |
+              apps/desktop/release/*.AppImage
+              apps/desktop/release/*.deb
+    runs-on: ${{ matrix.os }}
     env:
-      # the repo .npmrc points at npmmirror (venue firewall); CI uses the public registry and GitHub downloads
-      npm_config_registry: https://registry.npmjs.org/
-      npm_config_electron_mirror: https://github.com/electron/electron/releases/download/
-      npm_config_electron_builder_binaries_mirror: https://github.com/electron-userland/electron-builder-binaries/releases/download/
-      ELECTRON_MIRROR: https://github.com/electron/electron/releases/download/
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10.18.1
 
       - uses: actions/setup-node@v4
         with:
@@ -34,27 +50,59 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      # pnpm may skip electron's postinstall; electron-builder.yml points electronDist at node_modules/electron/dist
-      - name: Download Electron
-        working-directory: apps/desktop
-        run: node node_modules/electron/install.js
-
       - name: Build the course player
         run: pnpm --filter @bilimind/player build
 
-      - name: Build the desktop app
-        run: pnpm --filter @bilimind/desktop build
-
-      - name: Package (portable + installer)
+      - name: Package the desktop app
         working-directory: apps/desktop
-        run: pnpm exec electron-builder --win portable nsis --x64 --publish never
+        run: node scripts/dist.mjs
 
-      # The body comes from .github/release-notes.md and replaces the body of an existing release on a re-tag
-      # (append_body: false), so re-tagging no longer stacks "Full Changelog" lines.
+      - name: Bundle the CLI (one file, Node 22+)
+        if: runner.os == 'Linux'
+        run: |
+          node apps/cli/scripts/bundle.mjs
+          mkdir -p apps/desktop/release
+          cp skills/bilimind/scripts/bilimind.mjs apps/desktop/release/bilimind-cli.mjs
+          cp skills/bilimind/scripts/sql-wasm.wasm apps/desktop/release/sql-wasm.wasm
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.os }}
+          if-no-files-found: error
+          path: |
+            ${{ matrix.files }}
+            apps/desktop/release/bilimind-cli.mjs
+            apps/desktop/release/sql-wasm.wasm
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: release-*
+          merge-multiple: true
+
+      - name: Checksums
+        working-directory: dist
+        run: |
+          ls -la
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: apps/desktop/release/*.exe
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          name: BiliMind Desktop ${{ inputs.tag || github.ref_name }}
           body_path: .github/release-notes.md
+          files: dist/*
+          fail_on_unmatched_files: true
           append_body: false
           generate_release_notes: false
+          make_latest: 'true'

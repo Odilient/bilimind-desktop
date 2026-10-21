@@ -1,0 +1,45 @@
+# Mirror this repository to GitLab (gitlab.com/avinmaster/bilimind-workbuddy) on every push to main and every tag.
+# GitHub is the canonical repo; the GitLab copy is read-only and gets overwritten. The push uses a GitLab deploy key
+# with write access, stored here as the secret GITLAB_MIRROR_SSH_KEY. Without the secret the job is skipped.
+name: mirror
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror
+  cancel-in-progress: false
+
+jobs:
+  gitlab:
+    runs-on: ubuntu-latest
+    if: github.repository == 'Odilient/bilimind-desktop'
+    env:
+      KEY: ${{ secrets.GITLAB_MIRROR_SSH_KEY }}
+    steps:
+      - name: Skip without a deploy key
+        if: env.KEY == ''
+        run: echo "GITLAB_MIRROR_SSH_KEY is not set; nothing to mirror."
+
+      - uses: actions/checkout@v4
+        if: env.KEY != ''
+        with:
+          fetch-depth: 0
+
+      - name: Push main and tags to GitLab
+        if: env.KEY != ''
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/gitlab && chmod 600 ~/.ssh/gitlab
+          ssh-keyscan -t ed25519,rsa gitlab.com >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab -o IdentitiesOnly=yes"
+          git remote add gitlab git@gitlab.com:avinmaster/bilimind-workbuddy.git
+          # origin/main, not HEAD: a tag push must not move GitLab's main to the tagged commit
+          git push --force gitlab refs/remotes/origin/main:refs/heads/main
+          git push --force gitlab 'refs/tags/*:refs/tags/*'

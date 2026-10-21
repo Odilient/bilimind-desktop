@@ -1,0 +1,60 @@
+# CI: install, typecheck, test and build on every push to main and every pull request, on Linux, Windows and macOS.
+# On Linux it also starts the built desktop app hidden and checks its window API (scripts/e2e-main.mjs). That never
+# runs a generation: the one test run uses a fake key and must fail cleanly at the first AI call.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # the pnpm version comes from "packageManager" in package.json
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build (course player, desktop app)
+        run: pnpm build
+
+      - name: Skill playbooks match the CLI
+        run: node --test "skills/bilimind/test/*.test.mjs"
+
+      - name: Desktop smoke test (hidden window, no AI calls)
+        if: runner.os == 'Linux'
+        working-directory: apps/desktop
+        run: |
+          # Ubuntu 24.04 blocks the unprivileged user namespaces Chromium's sandbox uses
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          node node_modules/electron/install.js
+          node scripts/e2e-main.mjs
