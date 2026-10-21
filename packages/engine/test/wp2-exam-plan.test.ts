@@ -95,7 +95,7 @@ describe.skipIf(!existsSync(DS_FINAL))('exam-map on the real ds-final past paper
     expect(md).toContain('## What the paper weights');
     expect(md).toMatch(/\| Q2b \| 10 \| /);
     expect(md).toContain('exam-map --assign "Q3=<topic key>"');
-  });
+  }, 60_000);   // ingests five real PDFs: over 10 s on a busy Windows CI runner
 
   it('--assign overrides a whole question or one part; unknown keys and questions fail with a hint', async () => {
     await examMap(fakeCtx(dir), { assign: { Q2: 'hash_tables', q5d: 'avl_rotations' } });

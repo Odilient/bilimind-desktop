@@ -46,7 +46,7 @@ describe('WP4 on the fixture crew', () => {
     await exportAll(ctx);
     await build(ctx);
     built = JSON.parse(readFileSync(join(course, 'course.json'), 'utf8')) as Course;
-  });
+  }, 60_000);   // export + build of the whole fixture course: ~3 s locally, over 10 s on a busy Windows CI runner
 
   it('assembles a course.json that validates, with the same lessons, ids and rejected item as the fixture', () => {
     const v = validateCourse(built);
