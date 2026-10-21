@@ -118,6 +118,8 @@ async function start(o: WorkerStart): Promise<void> {
   try {
     const data = await runPipeline({
       src: o.src, sentence: o.sentence, outRoot: o.outRoot, template: o.template, narrate: o.narrate,
+      // "Wednesday 9am" and the review calendar mean this computer's time zone
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || undefined,
       progress: onProgress,
     });
     course = resolve(data.course);

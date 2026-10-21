@@ -7,7 +7,7 @@ import type {
   CheckData, CodeTestData, Ctx, DraftData, ExamMapData, IngestData, OutlineData, PlanData, RunFn, VerdictData,
 } from './contracts.ts';
 import { appendLog } from './log.ts';
-import { init, setGoal, todayIn } from './course.ts';
+import { init, setGoal, todayIn, zoneOffset } from './course.ts';
 import type { GoalInput } from './contracts.ts';
 import type { ExamMap, Goal, Lesson, OutlineResult } from '@bilimind/core';
 import { existsSync } from 'node:fs';
@@ -325,6 +325,7 @@ export interface RunOptions {
   autoCheck?: boolean;
   factCheck?: boolean;
   start?: string;                  // plan day 1 (YYYY-MM-DD); default today in the goal's zone, by the server clock
+  timezone?: string;               // IANA zone for the sentence's dates and the calendar (default Asia/Kuala_Lumpur)
 }
 export interface RunStep { cmd: string; agent: string; lesson?: string; ok: boolean; ms: number; cost_usd: number; result?: string; error?: string }
 export interface RunData { course: string; lessons: number; cost_usd: number; ms: number; steps: RunStep[]; failed_steps: number; warnings: string[] }
@@ -381,13 +382,13 @@ export async function runPipeline(o: RunOptions): Promise<RunData> {
     }
   }
 
-  const goalInput = parseSentence(o.sentence, now());
+  const goalInput = parseSentence(o.sentence, now(), o.timezone);
   const g = await step('goal', 'Lead', ctx => setGoal(ctx, goalInput), { args: o.sentence.slice(0, 80) });
   const ing = await step('ingest', 'Lead', ctx => ingest(ctx, {}));
   const out = await step('outline', 'Lead', ctx => outline(ctx, {}));
   if (!ing || !out || !g) throw new BilimindError('run stopped before planning', 'See the steps above.');
   const em = ing.files.some(f => f.role === 'past_paper') ? await step('exam-map', 'Lead', ctx => examMap(ctx, {}), { optional: true }) : null;
-  const startNow = o.start ? new Date(`${o.start}T12:00:00+08:00`) : now();
+  const startNow = o.start ? new Date(`${o.start}T12:00:00${zoneOffset(goalInput.timezone ?? 'Asia/Kuala_Lumpur', o.start)}`) : now();
   const { keep, cut, order } = chooseLessons(out.topics, em?.weights ?? null, g.goal, startNow, o.maxLessons ?? 6,
     { outline: readOutline(course), ingest: readIngest(course), examMap: readExamMap(course) });
   await step('note', 'Lead', ctx => note(ctx, { text: `Kept ${keep.join(', ')} (by marks per minute, heaviest deck first); cut ${Object.keys(cut).join(', ') || 'nothing'}.` }), { optional: true });
