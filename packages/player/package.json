@@ -1,6 +1,6 @@
 {
   "name": "@bilimind/player",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Vue 3 course player built to one file:// safe HTML template (dist/player.html).",

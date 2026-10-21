@@ -39,7 +39,7 @@ export function installMock(): void {
     keys: { bilimind: { set: true }, deepseek: q.has('nokey') ? { set: false } : { set: true, last4: '7f3a' }, openrouter: { set: false } },
     narrate: true,
     outRoot: 'C:\\Users\\you\\Documents\\BiliMind',
-    version: '0.1.0',
+    version: '0.2.0',
   };
   const built: CourseCard[] = [];
   const listeners = new Set<(e: RunEvent) => void>();

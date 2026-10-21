@@ -147,9 +147,12 @@ function modelFitsProvider(model, provider) {
 function providerLabel(p2) {
   return p2 === "deepseek" ? "DeepSeek" : p2 === "openrouter" ? "OpenRouter" : "BiliMind free";
 }
+function configPathHint(platform = process.platform) {
+  return platform === "win32" ? "%USERPROFILE%\\.bilimind\\config.json" : "~/.bilimind/config.json";
+}
 function keyHint(p2) {
-  if (!needsKey(p2)) return 'BiliMind free needs no key. To use your own, put it in %USERPROFILE%\\.bilimind\\config.json as {"provider":"deepseek","keys":{"deepseek":"..."}}.';
-  return `Put the key in %USERPROFILE%\\.bilimind\\config.json as {"provider":"${p2}","keys":{"${p2}":"..."}} (or set ${PRESETS[p2].keyEnv}).`;
+  if (!needsKey(p2)) return `BiliMind free needs no key. To use your own, put it in ${configPathHint()} as {"provider":"deepseek","keys":{"deepseek":"..."}}.`;
+  return `Put the key in ${configPathHint()} as {"provider":"${p2}","keys":{"${p2}":"..."}} (or set ${PRESETS[p2].keyEnv}).`;
 }
 function redact(text4) {
   return text4.replace(/\bsk-[A-Za-z0-9_\-]{4,}/g, "[redacted]").replace(/\*{2,}[A-Za-z0-9_\-]+/g, "[redacted]").replace(/\bBearer\s+\S+/gi, "Bearer [redacted]");
@@ -185,9 +188,9 @@ var init_config = __esm({
         balancePath: "/credits"
       }
     };
-    DEFAULT_RESERVE_USD = { deepseek: 3, openrouter: 4, bilimind: 0 };
+    DEFAULT_RESERVE_USD = { deepseek: 0, openrouter: 0, bilimind: 0 };
     FREE_BASE_URL = PRESETS.bilimind.baseUrl;
-    ENGINE_VERSION = "0.1.0";
+    ENGINE_VERSION = "0.2.0";
     DEFAULT_CAPS = { runUsd: 0.25, dayUsd: 2 };
     loadConfig = (opts = {}) => {
       const env = opts.env ?? process.env;
@@ -367,8 +370,8 @@ var init_ledger = __esm({
       const reserve = cfg.reserveUsd[cfg.provider];
       if (live - est < reserve) {
         throw new BilimindError(
-          `${providerLabel(cfg.provider)} balance ${usd(live)} is at the demo-day reserve (${usd(reserve)}); the call was refused to keep that money for the stage.`,
-          "On demo day set BILIMIND_DEMO_DAY=1 to use the reserve, or switch pools with BILIMIND_PROVIDER=openrouter."
+          `${providerLabel(cfg.provider)} balance ${usd(live)} is at the reserve you set (reserve_usd ${usd(reserve)}); the call was refused to keep that money.`,
+          `Top up the account, lower reserve_usd in ${configPathHint()}, set BILIMIND_DEMO_DAY=1 to ignore the reserve for this run, or switch pools with BILIMIND_PROVIDER.`
         );
       }
     };
@@ -123277,13 +123280,13 @@ var doctor = async () => {
     const why = warnings.find((w2) => w2.startsWith("config:"));
     throw new BilimindError(
       `No API key found for DeepSeek or OpenRouter${why ? ` (${why})` : ""}.`,
-      'Write %USERPROFILE%\\.bilimind\\config.json as {"provider":"deepseek","keys":{"deepseek":"<key>"}} (or set DEEPSEEK_API_KEY) and restart WorkBuddy. Never paste the key into chat.'
+      `Write ${configPathHint()} as {"provider":"deepseek","keys":{"deepseek":"<key>"}} (or set DEEPSEEK_API_KEY) and restart the app or WorkBuddy. Never paste the key into chat.`
     );
   }
   if (data.balance_usd !== null && data.balance_usd - reserve < 0 && !data.demo_day) {
     throw new BilimindError(
-      `The ${data.provider} balance ($${data.balance_usd.toFixed(2)}) is under the demo reserve ($${reserve.toFixed(2)}).`,
-      "Top up the provider account, switch provider in %USERPROFILE%\\.bilimind\\config.json, or set BILIMIND_DEMO_DAY=1 on demo day only."
+      `The ${data.provider} balance ($${data.balance_usd.toFixed(2)}) is under the reserve you set (reserve_usd $${reserve.toFixed(2)}).`,
+      `Top up the provider account, lower reserve_usd or switch provider in ${configPathHint()}, or set BILIMIND_DEMO_DAY=1 to ignore the reserve.`
     );
   }
   return data;
@@ -128599,13 +128602,13 @@ async function runPipeline(o2) {
       throw e2;
     }
   }
-  const goalInput = parseSentence(o2.sentence, now());
+  const goalInput = parseSentence(o2.sentence, now(), o2.timezone);
   const g3 = await step("goal", "Lead", (ctx) => setGoal(ctx, goalInput), { args: o2.sentence.slice(0, 80) });
   const ing = await step("ingest", "Lead", (ctx) => ingest(ctx, {}));
   const out = await step("outline", "Lead", (ctx) => outline(ctx, {}));
   if (!ing || !out || !g3) throw new BilimindError("run stopped before planning", "See the steps above.");
   const em = ing.files.some((f2) => f2.role === "past_paper") ? await step("exam-map", "Lead", (ctx) => examMap(ctx, {}), { optional: true }) : null;
-  const startNow = o2.start ? /* @__PURE__ */ new Date(`${o2.start}T12:00:00+08:00`) : now();
+  const startNow = o2.start ? /* @__PURE__ */ new Date(`${o2.start}T12:00:00${zoneOffset(goalInput.timezone ?? "Asia/Kuala_Lumpur", o2.start)}`) : now();
   const { keep, cut, order } = chooseLessons(
     out.topics,
     em?.weights ?? null,

@@ -1,7 +1,7 @@
 {
   "name": "@bilimind/desktop",
   "productName": "BiliMind Desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "BiliMind Desktop: drop in your files, get a checked, narrated course. Open source, bring your own AI key.",

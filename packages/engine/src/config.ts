@@ -49,7 +49,7 @@ export const DEFAULT_RESERVE_USD: Record<ProviderId, number> = { deepseek: 0, op
 /** The free service's default URL (overridable with BILIMIND_FREE_URL or config.json "free_base_url", for tests). */
 export const FREE_BASE_URL = PRESETS.bilimind.baseUrl;
 /** Sent as `X-BiliMind-Client: engine/<version>` when no BILIMIND_CLIENT (the desktop sets desktop/<app version>). */
-export const ENGINE_VERSION = '0.1.0';
+export const ENGINE_VERSION = '0.2.0';
 
 /** Providers that need the user's own key ('bilimind' never does). */
 export function needsKey(p: ProviderId): boolean {
