@@ -37,7 +37,7 @@ flowchart LR
    is being read.
 6. **Your files**: an Anki deck (`deck.csv`), a review calendar dated back from the exam (`reviews.ics`),
    `plan.md`, `REPORT.md` (every check, every rejection, the cost) and Markdown notes, all in
-   `Documents\BiliMind\<course>\`. The course is one `index.html` that works offline.
+   `Documents/BiliMind/<course>/`. The course is one `index.html` that works offline.
 
 Every step is logged to `<course>/crew/log.jsonl` (agent, command, result, time, cost). Example:
 [showcase/courses/ds-final/crew/log.jsonl](../showcase/courses/ds-final/crew/log.jsonl).
@@ -58,19 +58,21 @@ question, it says so and answers after "Beyond your files:". Each answer shows i
 
 ## AI providers and the config file
 
-**BiliMind free** is the default: a fresh install writes courses with no key at all. The app talks to
+**BiliMind free** is what a fresh install with no key uses: the app talks to
 `https://desktop-api.bilimind.com/v1`, an OpenAI-compatible Cloudflare Worker run by the team
-([server/free-proxy](../server/free-proxy/)). The Worker's own OpenRouter key is a Worker secret, never in
+([server/free-proxy](../server/free-proxy/)). **It is paused at the moment** (the Worker answers 503), so in
+practice you add your own key; the app says so at the first AI step. The Worker's own OpenRouter key is a Worker secret, never in
 the app, this repo or your computer. The app sends no `Authorization` header, only
 `X-BiliMind-Client: desktop/<version>`. Guards in the Worker: two models only, a price pin, `max_tokens`
 capped, a 600 KB body cap, 120 requests a minute per IP, no CORS, and a kill switch. When it is busy or
 paused the app says so and suggests adding your own key.
 
-Your own key is optional: **DeepSeek** (direct API) or **OpenRouter**; pick it in Settings and paste the key.
+Your own key: **DeepSeek** (direct API) or **OpenRouter**; pick it in Settings and paste the key.
 Then text goes straight to that provider, not through BiliMind. Narration needs no key.
 
-The key is stored in `%USERPROFILE%\.bilimind\config.json`, the same file the CLI and the WorkBuddy skill
-read. It never reaches the app's window, and the app never logs it.
+The key is stored in `~/.bilimind/config.json` (`%USERPROFILE%\.bilimind\config.json` on Windows), the same
+file the CLI and the WorkBuddy skill read. It is plain text, readable by your user account. It never reaches the
+app's window, and the app never logs it. `BILIMIND_HOME` points the app and the CLI at another folder.
 
 ```json
 {
@@ -105,32 +107,43 @@ Only numbers we measured on our own runs.
 
 ## Develop and build
 
-Requirements: Node 22 or newer (Node 24 runs the TypeScript sources directly), pnpm 10, Windows for the
-installer.
+Requirements: Node 22 or newer (Node 24 runs the TypeScript sources directly; CI uses 24) and pnpm 10
+(`corepack enable`). Each OS builds its own installers.
 
 ```bash
 pnpm i
 pnpm --filter @bilimind/player build     # the offline course player -> packages/player/dist/player.html
 pnpm --filter @bilimind/desktop build    # renderer, main, preload and worker -> apps/desktop/dist/
 pnpm --filter @bilimind/desktop start    # run the app
-pnpm --filter @bilimind/desktop dist     # Windows portable + NSIS installer (electron-builder)
+pnpm --filter @bilimind/desktop dist     # installers for this OS: Windows portable + NSIS, macOS dmg + zip, Linux AppImage + deb
 pnpm test                                # all packages (vitest)
 pnpm typecheck
 ```
 
-Pushing a tag such as `v0.1.0` to GitHub builds the installers and attaches them to a release
-([.github/workflows/release.yml](../.github/workflows/release.yml)). The website in `site/` is published to
+Every push and pull request runs install, typecheck, tests, the build and a hidden-window smoke test on Linux,
+Windows and macOS ([.github/workflows/ci.yml](../.github/workflows/ci.yml)). Pushing a tag such as `v0.2.0`
+builds the installers on all three OSes plus the one-file CLI and attaches them, with `SHA256SUMS.txt`, to a
+GitHub release whose notes are [.github/release-notes.md](../.github/release-notes.md)
+([.github/workflows/release.yml](../.github/workflows/release.yml)). A tag with a suffix (`v0.3.0-rc.1`) makes a
+pre-release. The website in `site/` is published to
 GitHub Pages by [.github/workflows/pages.yml](../.github/workflows/pages.yml), which copies the showcase
 courses to `/courses/<slug>/` ([site/scripts/assemble.mjs](../site/scripts/assemble.mjs)).
 
 Test mode for screenshots and end-to-end checks: `BILIMIND_E2E=1` creates hidden windows and
 `BILIMIND_CDP_PORT` opens a debugging port; see
-[apps/desktop/scripts/e2e-main.mjs](../apps/desktop/scripts/e2e-main.mjs).
+[apps/desktop/scripts/e2e-main.mjs](../apps/desktop/scripts/e2e-main.mjs) (`node scripts/e2e-main.mjs` after a build,
+or `--exe <packaged app>`). It needs a display; on a Linux server use `xvfb-run -a`.
+
+On Ubuntu 24.04 and later, the development Electron stops with "The SUID sandbox helper binary was found, but
+is not configured correctly", because the OS blocks the user namespaces Chromium's sandbox uses. For
+development, run with `ELECTRON_DISABLE_SANDBOX=1`. The packaged apps handle it: the AppImage's launcher adds
+`--no-sandbox` only in that case ([scripts/after-pack.cjs](../apps/desktop/scripts/after-pack.cjs)), and the
+`.deb` installs an AppArmor profile ([resources/apparmor-profile.tpl](../apps/desktop/resources/apparmor-profile.tpl)).
 
 ## Tests
 
-Vitest. `pnpm test` on 11 October 2026: core 55, engine 198 (plus 2 live-voice tests skipped), player 73
-and CLI 12, all passing. `skills/bilimind/test` checks every command and flag in the playbooks against the
+Vitest. `pnpm test` on 21 October 2026: core 55, engine 198 (plus 2 live-voice tests skipped), player 73
+and CLI 12, all passing, on Linux, Windows and macOS in CI. `skills/bilimind/test` checks every command and flag in the playbooks against the
 built CLI.
 
 ## Repository layout
@@ -158,7 +171,8 @@ hackathon          Dormathon proof, runbook, slides brief, research and notes
 Commands: `doctor`, `init`, `goal`, `ingest`, `outline`, `exam-map`, `plan`, `note`, `draft`, `check`,
 `code-test`, `fact-check`, `evidence`, `verdict`, `rewrite-item`, `narrate`, `export`, `build`, `status`,
 `due`, `grade`, `plant`, `plant-score` and `run`. `doctor` checks the provider (never printing a key) and the
-narration voices; `run` builds a whole course unattended. We have tested the CLI on Windows only.
+narration voices; `run` builds a whole course unattended. CI runs the CLI's tests on Linux, Windows and
+macOS.
 
 ## WorkBuddy skill and Expert Team
 
@@ -187,8 +201,8 @@ event: [workbuddy.md](workbuddy.md).
 
 ## Built at Dormathon and before
 
-BiliMind already existed before Dormathon as a web app (Laravel + Nuxt, bilimind.com) that Oybek and
-Abdugaffor Odilov work on. From it we reused the pedagogy: the lesson prompts and the rules that map each
+BiliMind already existed before Dormathon as a web app (Laravel + Nuxt, bilimind.com) that the BiliMind team
+(Oybek, Ulugbek, Sharif and Abdugaffor Odilov) works on. From it we reused the pedagogy: the lesson prompts and the rules that map each
 kind of knowledge to its lesson formats. The Node engine, the Checker and Coder loops, the past-paper
 planner, the offline player, the exports, the WorkBuddy skill and team, BiliMind free and the desktop app
 were built during Dormathon (10-11 October 2026), with AI coding agents.
