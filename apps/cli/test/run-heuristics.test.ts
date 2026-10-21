@@ -7,7 +7,7 @@ const NOW = new Date('2026-10-10T10:00:00+08:00');   // a Saturday in Kuala Lump
 
 describe('parseSentence', () => {
   it('reads weekday, time and minutes', () => {
-    const g = parseSentence('My Data Structures final is Wednesday 9am. I have 45 minutes a day.', NOW);
+    const g = parseSentence('My Data Structures final is Wednesday 9am. I have 45 minutes a day.', NOW, 'Asia/Kuala_Lumpur');
     expect(g.deadline).toBe('2026-10-14');
     expect(g.examTime).toBe('09:00');
     expect(g.minutesPerDay).toBe(45);
@@ -15,14 +15,14 @@ describe('parseSentence', () => {
     expect(g.codeLang).toBe('js');
   });
   it('reads "14 Oct", hours a day, staff wording', () => {
-    const g = parseSentence('Onboard our new barista before 14 Oct, 1.5 hours a day', NOW);
+    const g = parseSentence('Onboard our new barista before 14 Oct, 1.5 hours a day', NOW, 'Asia/Kuala_Lumpur');
     expect(g.deadline).toBe('2026-10-14');
     expect(g.minutesPerDay).toBe(90);
     expect(g.audience).toBe('staff');
     expect(g.codeLang).toBe('none');
   });
   it('assumes when the sentence is silent, and says so', () => {
-    const g = parseSentence('Teach me heaps', NOW);
+    const g = parseSentence('Teach me heaps', NOW, 'Asia/Kuala_Lumpur');
     expect(g.deadline).toBe('2026-10-17');
     expect(g.minutesPerDay).toBe(45);
     expect(g.assume.join(' ')).toMatch(/7 days/);
