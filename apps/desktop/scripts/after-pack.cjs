@@ -1,7 +1,8 @@
 // electron-builder afterPack hook (Linux only): put a small launcher in front of the Electron binary.
 // An AppImage cannot carry Chromium's setuid sandbox helper, and Ubuntu 24.04+ blocks the user-namespace sandbox for
 // apps without an AppArmor profile, so Chromium aborts before any JavaScript runs. The launcher adds --no-sandbox in
-// exactly that case (AppImage + restricted user namespaces). The .deb installs an AppArmor profile and keeps the sandbox.
+// exactly that case (AppImage + restricted user namespaces). The .deb installs an AppArmor profile that covers both
+// files (resources/apparmor-profile.tpl) and keeps the sandbox.
 const { chmodSync, renameSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 

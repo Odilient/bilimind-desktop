@@ -80,3 +80,5 @@ linux:
   artifactName: BiliMind-Desktop-${version}-linux-${arch}.${ext}
 deb:
   artifactName: BiliMind-Desktop-${version}-linux-${arch}.${ext}
+  # the default profile only attaches to the launcher; this one also covers the real binary
+  appArmorProfile: resources/apparmor-profile.tpl
