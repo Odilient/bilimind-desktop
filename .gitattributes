@@ -1,0 +1,10 @@
+# Built files: GitHub collapses them in diffs and leaves them out of the language bar.
+skills/bilimind/scripts/bilimind.mjs linguist-generated
+skills/bilimind/templates/player.html linguist-generated
+workbuddy/bilimind-crew/skills/bilimind/** linguist-generated
+showcase/courses/** linguist-generated
+# The landing page, the pitch deck and the history folders are not the app's source.
+site/** linguist-documentation
+pitch/** linguist-documentation
+plan/** linguist-documentation
+hackathon/** linguist-documentation

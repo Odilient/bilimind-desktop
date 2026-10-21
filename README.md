@@ -63,10 +63,16 @@
 - **Also a command line and a WorkBuddy skill.** The same engine runs as one `bilimind.mjs` file on Node 22+
   ([apps/cli](apps/cli/)), and as a skill and Expert Team for WorkBuddy ([skills/bilimind](skills/bilimind/)).
 
-| | |
-|---|---|
-| ![Home: one sentence and your files](docs/img/app-home.png) | ![Building: each agent's step in plain words](docs/img/app-building.png) |
-| ![Finished: checks, cost and the files you own](docs/img/app-finished.png) | ![Course: the lesson, narration and an assistant that cites your files](docs/img/app-workspace.png) |
+<table>
+  <tr>
+    <td width="50%"><img src="docs/img/app-home.png" alt="Home: one sentence and your files"></td>
+    <td width="50%"><img src="docs/img/app-building.png" alt="Building: each agent's step in plain words"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/img/app-finished.png" alt="Finished: checks, cost and the files you own"></td>
+    <td><img src="docs/img/app-workspace.png" alt="Course: the lesson, narration and an assistant that cites your files"></td>
+  </tr>
+</table>
 
 ## Try a course it made
 
@@ -80,15 +86,21 @@ Each one has a report of what the agents did: [ds-final](showcase/courses/ds-fin
 
 ## Install
 
-Download from the [latest release](https://github.com/Odilient/bilimind-desktop/releases/latest):
+Download from the [latest release](https://github.com/Odilient/bilimind-desktop/releases/latest). Every file is
+named `BiliMind-Desktop-<version>-…`:
 
-| System | File | First launch |
+| System | File | Then |
 |---|---|---|
-| **Windows** 10 and 11, x64 | `BiliMind-Desktop-<version>-x64-setup.exe` (installer) or `…-x64-portable.exe` (no install) | SmartScreen may say "Windows protected your PC": click **More info**, then **Run anyway**. |
-| **macOS**, Apple silicon | `BiliMind-Desktop-<version>-mac-arm64.dmg` | Drag the app to Applications. If macOS says it cannot be opened, go to **System Settings → Privacy & Security** and click **Open Anyway**, or run `xattr -dr com.apple.quarantine "/Applications/BiliMind Desktop.app"`. |
-| **macOS**, Intel | `BiliMind-Desktop-<version>-mac-x64.dmg` | As above. |
-| **Linux**, x64 | `BiliMind-Desktop-<version>-linux-x86_64.AppImage` | `chmod +x BiliMind-Desktop-*.AppImage` and run it. |
-| **Debian, Ubuntu**, x64 | `BiliMind-Desktop-<version>-linux-amd64.deb` | `sudo apt install ./BiliMind-Desktop-*.deb` |
+| **Windows** 10 and 11 (x64) | `…-x64-setup.exe`, or `…-x64-portable.exe` to run without installing | Run it |
+| **macOS**, Apple silicon | `…-mac-arm64.dmg` | Drag the app to Applications |
+| **macOS**, Intel | `…-mac-x64.dmg` | Drag the app to Applications |
+| **Linux** (x64) | `…-linux-x86_64.AppImage` | `chmod +x` it and run it |
+| **Debian, Ubuntu** (x64) | `…-linux-amd64.deb` | `sudo apt install ./BiliMind-Desktop-*.deb` |
+
+**First launch on Windows:** SmartScreen may say "Windows protected your PC". Click **More info**, then
+**Run anyway**.<br>
+**First launch on macOS:** if macOS says the app cannot be opened, go to **System Settings → Privacy & Security**
+and click **Open Anyway**, or run `xattr -dr com.apple.quarantine "/Applications/BiliMind Desktop.app"`.
 
 `SHA256SUMS.txt` in each release lists the checksums.
 
