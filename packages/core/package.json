@@ -1,6 +1,6 @@
 {
   "name": "@bilimind/core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Shared contracts: types, zod schemas, archetype table, graders, sentence splitter, FSRS wrapper. No I/O; runs in Node and the browser.",

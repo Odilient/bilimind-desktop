@@ -1,6 +1,6 @@
 {
   "name": "@bilimind/engine",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Node-only engine: ingest, llm, outline, exam-map, plan, draft, validate, code tests, evidence/verdict, tts, review, exports, build.",

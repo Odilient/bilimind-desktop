@@ -40,7 +40,7 @@ export function installMock(): void {
     freeTier: q.has('free'),
     narrate: true,
     outRoot: 'C:\\Users\\you\\Documents\\BiliMind',
-    version: '0.2.0',
+    version: '0.2.1',
   };
   const built: CourseCard[] = [];
   const listeners = new Set<(e: RunEvent) => void>();

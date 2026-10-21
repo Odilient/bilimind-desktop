@@ -5,6 +5,8 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-21
+
 ### Changed
 
 - While BiliMind free is paused, the app no longer offers it. A fresh install asks for a DeepSeek or OpenRouter
@@ -66,6 +68,7 @@ The Dormathon 2026 build, for Windows (a portable `.exe` and an installer).
 - BiliMind free (no key needed), DeepSeek and OpenRouter.
 - The `bilimind` CLI and the WorkBuddy skill and Expert Team.
 
-[Unreleased]: https://github.com/Odilient/bilimind-desktop/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Odilient/bilimind-desktop/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/Odilient/bilimind-desktop/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Odilient/bilimind-desktop/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Odilient/bilimind-desktop/releases/tag/v0.1.0

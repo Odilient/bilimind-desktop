@@ -1,38 +1,20 @@
-**BiliMind Desktop** turns your own slides, notes and past papers into a narrated course, with every answer checked against your files. It is open source (AGPL-3.0), keeps everything on your computer and runs on your own AI key.
+**BiliMind Desktop** turns your own slides, notes and past papers into a narrated course, with every answer checked against your files. Open source (AGPL-3.0), local files, your own AI key.
 
-**New in 0.2.0: macOS and Linux**, next to Windows, plus CI on all three systems and a repository set up for contributors. The full list is in the [changelog](https://github.com/Odilient/bilimind-desktop/blob/main/CHANGELOG.md).
+## What's new in 0.2.1
 
-## Which file to download
+- **First run asks for your own key.** Before the first build, the home screen asks for a DeepSeek key (the cheapest) or an OpenRouter key, with links to where you get each one. A course costs 2 to 9 cents of your own credit in our runs.
+- **BiliMind free is paused.** The key-less service no longer answers, so the app stops offering it instead of failing at the first step.
+- **Time zones:** the app reads "Wednesday 9am" and writes the review calendar in your computer's time zone (since 0.2.0). The same default for the command line is in review in [#11](https://github.com/Odilient/bilimind-desktop/pull/11).
+
+Full list: [changelog](https://github.com/Odilient/bilimind-desktop/blob/main/CHANGELOG.md).
+
+## Download
 
 | System | File |
 |---|---|
-| Windows 10 and 11 (x64) | `BiliMind-Desktop-0.2.0-x64-setup.exe` installs the app; `BiliMind-Desktop-0.2.0-x64-portable.exe` runs without installing |
-| macOS, Apple silicon (M1 and later) | `BiliMind-Desktop-0.2.0-mac-arm64.dmg` (or the `.zip`) |
-| macOS, Intel | `BiliMind-Desktop-0.2.0-mac-x64.dmg` (or the `.zip`) |
-| Linux (x64) | `BiliMind-Desktop-0.2.0-linux-x86_64.AppImage`: `chmod +x` it and run it |
-| Debian and Ubuntu (x64) | `BiliMind-Desktop-0.2.0-linux-amd64.deb`: `sudo apt install ./BiliMind-Desktop-0.2.0-linux-amd64.deb` |
-| Command line (Node 22+) | `bilimind-cli.mjs` with `sql-wasm.wasm` next to it: `node bilimind-cli.mjs --help` |
+| Windows 10 and 11 (x64) | `BiliMind-Desktop-0.2.1-x64-setup.exe`, or `…-x64-portable.exe` without installing |
+| macOS, Apple silicon / Intel | `BiliMind-Desktop-0.2.1-mac-arm64.dmg` / `…-mac-x64.dmg` |
+| Linux (x64) | `BiliMind-Desktop-0.2.1-linux-x86_64.AppImage` (`chmod +x`), or `…-linux-amd64.deb` |
+| Command line (Node 22+) | `bilimind-cli.mjs` with `sql-wasm.wasm` next to it |
 
-`SHA256SUMS.txt` lists the checksums: `sha256sum -c SHA256SUMS.txt --ignore-missing`.
-
-## The builds are not code-signed yet
-
-- **Windows:** SmartScreen may say "Windows protected your PC". Click **More info**, then **Run anyway**.
-- **macOS:** the app has an ad-hoc signature and is not notarized. If macOS says it cannot be opened, open **System Settings → Privacy & Security** and click **Open Anyway**, or run `xattr -dr com.apple.quarantine "/Applications/BiliMind Desktop.app"`.
-
-Every file here was built from this tag by the [release workflow](https://github.com/Odilient/bilimind-desktop/blob/main/.github/workflows/release.yml).
-
-## First run
-
-1. Open **Settings**, choose **DeepSeek** or **OpenRouter** and paste your API key. The key stays in `~/.bilimind/config.json` on your computer (`%USERPROFILE%\.bilimind\config.json` on Windows).
-2. Drop your files or a folder: lecture slides, a past paper, notes or an SOP (PDF, Word, PowerPoint, Markdown, text, HTML).
-3. Type one sentence, for example "My Data Structures final is Wednesday 9am. I have 45 minutes a day. Get me ready.", and click **Build my course**. In our runs it took 3 to 5 minutes and $0.02 to $0.09 of AI.
-
-The course lands in `Documents/BiliMind/<course>/`, and its `index.html` works offline in any browser.
-
-## Known issues
-
-- **BiliMind free, the key-less provider, is paused.** Use your own key for now; the app tells you at the first AI step if none is set.
-- The macOS build is new and has been built and tested in CI only. If anything is off on your Mac, please [open an issue](https://github.com/Odilient/bilimind-desktop/issues/new/choose).
-
-Try a finished course in your browser first: [Data Structures final](https://odilient.github.io/bilimind-desktop/courses/ds-final/) · [Boba shop day one](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/) · [Survival Malay](https://odilient.github.io/bilimind-desktop/courses/bm-survival/)
+The builds are not code-signed yet. On Windows, click **More info → Run anyway**. On macOS, use **System Settings → Privacy & Security → Open Anyway**, or run `xattr -dr com.apple.quarantine "/Applications/BiliMind Desktop.app"`. Checksums are in `SHA256SUMS.txt`.
