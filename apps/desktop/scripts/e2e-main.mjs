@@ -134,7 +134,7 @@ try {
     'A hash function maps a key to a slot. Collisions are resolved by chaining or probing.', ''].join('\n').repeat(20));
   // drag and drop a folder onto the page (CDP drag events with a real path): preload -> main -> pickFolder()
   const zone = await page.evaluate(() => {
-    const el = [...document.querySelectorAll('*')].find(n => n.childElementCount < 6 && /Drag a folder here/.test(n.textContent ?? '') && n.getBoundingClientRect().height > 60);
+    const el = document.querySelector('[data-testid="home-drop-zone"]');
     if (!el) return null;
     const r = el.getBoundingClientRect();
     return { x: r.x + r.width / 2, y: r.y + r.height / 2 };

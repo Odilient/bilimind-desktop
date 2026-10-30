@@ -103,7 +103,7 @@ function size(b: number) { return b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Ma
         <textarea id="sentence" ref="ta" v-model="state.draft.sentence" rows="3" :placeholder="`e.g. ${PLACEHOLDER}`" @input="grow"></textarea>
 
         <div class="lbl"><span class="n">2</span> Your files</div>
-        <div v-if="!state.draft.src" class="drop" :class="{ over }" role="button" tabindex="0"
+        <div v-if="!state.draft.src" data-testid="home-drop-zone" class="drop" :class="{ over }" role="button" tabindex="0"
              @click="pick" @keydown.enter.self="pick" @dragover.prevent="over = true" @dragleave="over = false" @drop.prevent="onDrop">
           <span class="up"><Icon name="i-arrow-up" /></span>
           <b>Drop your files or a folder</b>
