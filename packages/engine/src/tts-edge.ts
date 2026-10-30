@@ -14,10 +14,30 @@ export const TTS_VOICE_BY_LANG: Record<string, string> = {
   en: TTS_DEFAULT_VOICE,
   ms: 'ms-MY-YasminNeural',
   my: 'my-MM-NilarNeural',
+  es: 'es-ES-ElviraNeural',
+  fr: 'fr-FR-DeniseNeural',
+  de: 'de-DE-KatjaNeural',
+  it: 'it-IT-ElsaNeural',
+  pt: 'pt-BR-FranciscaNeural',
+  ru: 'ru-RU-SvetlanaNeural',
+  uk: 'uk-UA-PolinaNeural',
+  tr: 'tr-TR-EmelNeural',
+  uz: 'uz-UZ-SardorNeural',
+  kk: 'kk-KZ-AigulNeural',
+  ar: 'ar-SA-ZariyahNeural',
+  hi: 'hi-IN-SwaraNeural',
+  id: 'id-ID-GadisNeural',
+  zh: 'zh-CN-XiaoxiaoNeural',
+  ja: 'ja-JP-NanamiNeural',
+  ko: 'ko-KR-SunHiNeural',
 };
 const LANG_ALIASES: Record<string, string> = {
   malay: 'ms', 'bahasa melayu': 'ms', melayu: 'ms', bm: 'ms', may: 'ms', msa: 'ms',
   burmese: 'my', myanmar: 'my', bur: 'my', mya: 'my', english: 'en', eng: 'en',
+  spanish: 'es', french: 'fr', german: 'de', italian: 'it',
+  portuguese: 'pt', russian: 'ru', ukrainian: 'uk', turkish: 'tr', uzbek: 'uz',
+  kazakh: 'kk', arabic: 'ar', hindi: 'hi', indonesian: 'id', chinese: 'zh',
+  japanese: 'ja', korean: 'ko',
 };
 /** 'ms', 'ms-MY', 'Malay', 'Bahasa Melayu' -> 'ms' (primary subtag). */
 export const ttsLangCode = (lang: string | null | undefined): string => {

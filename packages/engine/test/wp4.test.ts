@@ -251,12 +251,15 @@ describe('TTS script logic (offline)', () => {
     expect(pk.values.every(v => v >= 0 && v <= 1)).toBe(true);
     expect(pk.values[0]!).toBeGreaterThan(pk.values[4]!);
   });
-  it('voices: Ava by default, Yasmin for Malay, Nilar for Burmese', () => {
+  it('voices: maps supported languages and English aliases to native Edge voices', () => {
     expect(ttsVoiceFor('en')).toBe('en-US-AvaMultilingualNeural');
     expect(ttsVoiceFor('ms-MY')).toBe('ms-MY-YasminNeural');
     expect(ttsVoiceFor('Bahasa Melayu')).toBe('ms-MY-YasminNeural');
     expect(ttsVoiceFor('my')).toBe('my-MM-NilarNeural');
-    expect(ttsVoiceFor('fr')).toBe('en-US-AvaMultilingualNeural');
+    expect(ttsVoiceFor('fr')).toBe('fr-FR-DeniseNeural');
+    expect(ttsVoiceFor('Spanish')).toBe('es-ES-ElviraNeural');
+    expect(ttsVoiceFor('uzbek')).toBe('uz-UZ-SardorNeural');
+    expect(ttsVoiceFor('zh-CN')).toBe('zh-CN-XiaoxiaoNeural');
   });
   it('plan cue ids are plan.N', () => {
     expect(textSentences('plan', 'One. Two.').map(s => s.id)).toEqual(['plan.0', 'plan.1']);
