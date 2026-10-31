@@ -44,7 +44,10 @@ function open(id: string): void {
     </nav>
 
     <div class="mt-6">
-      <AccountApiKeys v-if="active === 'keys'" />
+      <template v-if="active === 'keys'">
+        <CompanionSettingsKeyStorage />
+        <AccountApiKeys />
+      </template>
       <CompanionSettingsPreferences v-else />
     </div>
   </div>

@@ -8,10 +8,11 @@
 //
 // Test mode (BILIMIND_E2E=1): a throwaway profile from BILIMIND_USER_DATA, and `globalThis.__bm` hooks for
 // test/e2e.mjs, which runs on Chromium's headless Ozone platform so windows and the tray never reach the screen.
-import { BrowserWindow, Menu, app, ipcMain, nativeImage, session, shell, type IpcMainEvent, type IpcMainInvokeEvent, type WebContents } from 'electron'
+import { BrowserWindow, Menu, app, ipcMain, nativeImage, net, safeStorage, session, shell, type IpcMainEvent, type IpcMainInvokeEvent, type WebContents } from 'electron'
 import { existsSync, statSync } from 'node:fs'
 import { homedir, userInfo } from 'node:os'
 import { isAbsolute, join, resolve } from 'node:path'
+import type { Vault } from '../api/credentials.ts'
 import { createApi } from '../api/handler.ts'
 import { IPC, type CaptureRequest, type NextDeadline } from '../shared/contract.ts'
 import { allowSystemAudio } from './audio.ts'
@@ -45,6 +46,20 @@ function localName(): string {
 
 /** The folder of the settings file the CLI and the course generator share. */
 const settingsDir = () => process.env.BILIMIND_HOME ? resolve(process.env.BILIMIND_HOME) : join(process.env.USERPROFILE || process.env.HOME || homedir(), '.bilimind')
+
+/**
+ * Keys sealed by the system's keychain. Linux's "basic_text" backend is a fixed password in Chromium's own source, so
+ * that counts as no keychain: the settings screen says so, and the file stays readable by this user only.
+ */
+function keyVault(): Vault {
+  const available = safeStorage.isEncryptionAvailable()
+    && (process.platform !== 'linux' || safeStorage.getSelectedStorageBackend() !== 'basic_text')
+  return {
+    available,
+    seal: (plain) => safeStorage.encryptString(plain).toString('base64'),
+    open: (sealed) => safeStorage.decryptString(Buffer.from(sealed, 'base64')),
+  }
+}
 
 const own = (url: string | undefined) => !!url && (url === ORIGIN || url.startsWith(`${ORIGIN}/`))
 const webLink = (url: string) => /^(https?:|mailto:)/i.test(url)
@@ -184,7 +199,14 @@ function start(): void {
   // no menu bar on Windows and Linux; macOS needs the app and Edit menus for Cmd+Q, Cmd+C/V/X/A and Cmd+W
   Menu.setApplicationMenu(MAC ? Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }]) : null)
   hardenSessions()
-  const api = createApi({ dataDir: join(app.getPath('userData'), 'data'), configDir: settingsDir(), userName: localName() })
+  const api = createApi({
+    dataDir: join(app.getPath('userData'), 'data'),
+    configDir: settingsDir(),
+    userName: localName(),
+    vault: keyVault(),
+    fallbackFetch: net.fetch as typeof fetch,
+    ...(E2E && process.env.BILIMIND_LLM_BASE_URL ? { baseUrl: process.env.BILIMIND_LLM_BASE_URL } : {}),
+  })
   app.on('will-quit', () => api.close())
   serveSpa(spaRoot, api.handle, (process.env.BILIMIND_CSP_CONNECT ?? '').split(/\s+/).filter(Boolean))
   allowSystemAudio()

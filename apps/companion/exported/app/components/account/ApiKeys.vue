@@ -62,7 +62,7 @@ async function submit(): Promise<void> {
       key: key.value.trim(),
       label: label.value.trim() || undefined,
     })
-    toast.success('Key added. On Pro, new lessons use it.')
+    toast.success('Key added. The chat answers with it now.')
     reset()
   } catch (raw) {
     const error = raw instanceof ApiError ? raw : toApiError(raw)
@@ -106,7 +106,7 @@ function menuFor(item: Credential): MenuAction[] {
     <header class="mb-5">
       <h2 class="text-[16px] font-semibold tracking-[-0.015em] text-text">API keys</h2>
       <p class="mt-1 max-w-[60ch] text-[13px] leading-relaxed text-text-muted">
-        Lessons and answers are written with your own key. It stays on this computer, in BiliMind's settings file.
+        Lessons and answers are written with your own key. It stays on this computer.
       </p>
     </header>
 
@@ -181,7 +181,7 @@ function menuFor(item: Credential): MenuAction[] {
         v-else
         icon="key"
         title="No key yet"
-        description="Add a key to write lessons without touching the free cap."
+        description="Add a key and the chat can answer."
         size="inline"
       />
     </template>
