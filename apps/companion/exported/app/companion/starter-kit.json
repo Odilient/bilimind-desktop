@@ -1,0 +1,385 @@
+{
+  "_about": "What every new account starts with (StarterKit): one sample course on a path with its first lessons written, flashcards on those lessons, and in My notes a welcome page and a mind map. Two identical copies: backend/resources/companion/starter-kit.json (StarterKit seeds it as real rows at registration) and frontend/app/companion/starter-kit.json (the in-memory ?demo=new). Edit one, copy it over the other. Lesson payloads are already in BlockPayloadNormaliser shape, and the seed refuses one that is not. A card's `day` is how many days from now it falls due. In the welcome page, {course} and {board} are replaced with the ids of the sample course and the mind map.",
+  "course": {
+    "key": "learn",
+    "title": "Learning how to learn",
+    "color": "prg",
+    "sessions_per_week": 7,
+    "minutes_per_session": 15,
+    "days": 14,
+    "topics": [
+      {
+        "title": "How memory works",
+        "summary": "Encoding, storage and retrieval, the limits of working memory, and why most forgetting happens in the first day."
+      },
+      {
+        "title": "Retrieval practice",
+        "summary": "Recalling beats rereading: how to practise getting answers out, and why it should feel a little hard."
+      },
+      {
+        "title": "Spacing your practice",
+        "summary": "Why a little each day beats one long session, and how to time a review for just before you would forget."
+      },
+      {
+        "title": "Interleaving",
+        "summary": "Mixing different kinds of problems, so you learn to choose the method and not only to apply it."
+      },
+      {
+        "title": "Explaining it in your own words",
+        "summary": "Self-explanation and the Feynman technique: finding the gaps in what you know by teaching it."
+      },
+      {
+        "title": "Focus, breaks and getting started",
+        "summary": "Short focused blocks, rest on purpose, and how to begin when you would rather not."
+      }
+    ]
+  },
+  "lessons": [
+    {
+      "course": "learn",
+      "topic": "How memory works",
+      "summary": "Getting it in, keeping it, getting it out: the three steps of remembering, and why most forgetting happens in the first day.",
+      "archetype": "conceptual",
+      "estimated_minutes": 12,
+      "blocks": [
+        {
+          "type": "explainer",
+          "payload": {
+            "markdown": "Remembering something takes three steps, and studying can go wrong at any of them:\n\n1. **Encoding**: getting it in. Only what you pay attention to gets in, and it goes in best when it means something, when you link it to what you already know.\n2. **Storage**: keeping it. A new memory is fragile for hours or days, and much of the work of making it stable happens while you sleep.\n3. **Retrieval**: getting it out when you need it, in an exam, a conversation or a job.\n\nNew information first passes through **working memory**, the small space where you hold what you are thinking about right now. It holds only about **four chunks** at a time. That is why a new topic feels heavy and a familiar one does not: someone who knows a subject well has packed many facts into each chunk.\n\n**Long-term memory** has no practical limit. Room is never the problem; getting things back out is. A memory you cannot reach when you need it might as well not be there.\n\n### The forgetting curve\n\nIn the 1880s Hermann Ebbinghaus learnt lists of nonsense syllables and tested himself after different delays. Most of what he forgot, he forgot quickly: a large share within the first day, and then more and more slowly. Later studies found the same shape for meaningful material, only flatter.\n\nTwo things flatten the curve: **recalling** the material, not just seeing it again, and doing it **spaced out** over days. Every successful recall makes the memory a little more durable, so the next fall is slower. That is the idea behind the next two lessons, and behind how BiliMind schedules your flashcards."
+          }
+        },
+        {
+          "type": "diagram",
+          "payload": {
+            "format": "mermaid",
+            "source": "flowchart LR\n  A[\"What you notice\"] --> B[\"Working memory (about 4 chunks)\"]\n  B -- \"encode: link it to what you know\" --> C[\"Long-term memory\"]\n  C -- \"retrieve: recall it\" --> B\n  C -. \"never used\" .-> D[\"Fades\"]",
+            "caption": "Every recall runs the path back the other way, and that is what makes it stronger.",
+            "alt_text": "A flow from what you notice into working memory, which holds about four chunks, then into long-term memory by linking it to what you already know. Recalling brings it back into working memory. A memory that is never used fades."
+          }
+        },
+        {
+          "type": "analogy",
+          "payload": {
+            "markdown": "A memory is less like a file in a drawer and more like a **path across a field**. The first time you cross, you barely leave a trace. Walk it again the next day and it is easier to find; walk it every few days and it becomes a track you can follow without thinking. Leave it for a season and the grass grows back.",
+            "breaks_down_when": "A path wears in the same way however you walk it. Memory does not: finding the way yourself (recalling) wears it in far more than being led along it (rereading)."
+          }
+        },
+        {
+          "type": "misconception",
+          "payload": {
+            "belief": "If I reread my notes until they feel familiar, I have learnt them.",
+            "why_it_seems_right": "Each reading feels smoother than the last, and that smoothness feels like knowing. It is real, too: you do recognise the page.",
+            "what_is_true": "Recognising something when you see it is much easier than recalling it when you do not. Exams, conversations and work ask for recall. Rereading builds familiarity and barely practises getting the answer out on your own.",
+            "tell": "Close the notes and try to say it, or write it down. If you cannot, it was familiar, not learnt."
+          }
+        },
+        {
+          "type": "key_points",
+          "payload": {
+            "points": [
+              "Remembering takes three steps: encoding, storage and retrieval.",
+              "Working memory holds about four chunks, so take new material in small pieces.",
+              "Most forgetting happens in the first day or two after learning.",
+              "Each successful recall makes a memory more durable, and sleep helps make it stable."
+            ]
+          }
+        },
+        {
+          "type": "quiz",
+          "payload": {
+            "intro": "Three quick checks. Answer from memory first, then look back."
+          },
+          "assessments": [
+            {
+              "kind": "mcq",
+              "prompt": "A student closes the book and tries to write out what they just read. Which step are they practising?",
+              "options": [
+                { "id": "a", "text": "Encoding" },
+                { "id": "b", "text": "Storage" },
+                { "id": "c", "text": "Retrieval" },
+                { "id": "d", "text": "Attention" }
+              ],
+              "answer_key": { "correct_option_ids": ["c"] },
+              "grader": "deterministic",
+              "max_score": 100
+            },
+            {
+              "kind": "mcq",
+              "prompt": "Roughly when does most forgetting of something new happen?",
+              "options": [
+                { "id": "a", "text": "In the first day or two" },
+                { "id": "b", "text": "About a month later" },
+                { "id": "c", "text": "Evenly, a little each day" },
+                { "id": "d", "text": "Only once you stop studying the subject" }
+              ],
+              "answer_key": { "correct_option_ids": ["a"] },
+              "grader": "deterministic",
+              "max_score": 100
+            },
+            {
+              "kind": "cloze",
+              "prompt": "Working memory can hold only about ____ chunks at once.",
+              "options": null,
+              "answer_key": { "blanks": [["four", "4"]] },
+              "grader": "deterministic",
+              "max_score": 100
+            }
+          ]
+        },
+        {
+          "type": "reflection",
+          "payload": {
+            "prompt": "Think of something you learnt once and still know years later. How many times did you have to use it, and how far apart?"
+          }
+        }
+      ]
+    },
+    {
+      "course": "learn",
+      "topic": "Retrieval practice",
+      "summary": "Pulling an answer out of memory strengthens it more than putting it in again: how to practise recall, and why it should feel a little hard.",
+      "archetype": "procedural",
+      "estimated_minutes": 15,
+      "blocks": [
+        {
+          "type": "explainer",
+          "payload": {
+            "markdown": "**Retrieval practice** means bringing something back to mind without looking: answering a question, writing out what you remember, explaining it aloud. It is one of the most reliable findings in the study of learning. Recalling material strengthens it far more than reading it again.\n\nIn a well-known study (Roediger and Karpicke, 2006), students read short science passages. Some reread a passage several times; others read it once and then practised writing down what they remembered. Five minutes later, the rereaders did slightly better. **A week later, the recall group remembered far more**, and the rereaders were the ones who had expected to do better.\n\nWhy does it work? Each time you search for an answer and find it, you strengthen the route back to it: the path across the field from the last lesson. Rereading puts the answer in front of you, so there is no search and little strengthening.\n\n### It should feel a little hard\n\nRecall is slower and less comfortable than rereading, and you get things wrong. That effort is the point. Researchers call it a **desirable difficulty**: an easy, fluent review mostly measures familiarity.\n\nTwo habits make it work:\n\n- **Recall first, then check.** Always try before you look, then compare with the source and fix what was wrong or missing. Trying, getting it wrong and then seeing the answer still beats never trying.\n- **Vary how you recall.** Flashcards, practice questions, a blank page, explaining it to a friend: each asks for the answer from a different direction."
+          }
+        },
+        {
+          "type": "comparison",
+          "payload": {
+            "intro": "Three ways to spend the same half hour on your notes.",
+            "axes": ["What your brain does", "How it feels", "A week later"],
+            "items": [
+              {
+                "name": "Rereading",
+                "values": ["Recognises what is in front of it", "Smooth and reassuring", "Much of it is gone"],
+                "best_for": "A first pass, to see what is there."
+              },
+              {
+                "name": "Highlighting",
+                "values": ["Picks out what looks important", "Productive", "About the same as rereading"],
+                "best_for": "Marking what to turn into questions later."
+              },
+              {
+                "name": "Retrieval practice",
+                "values": ["Searches for the answer and rebuilds it", "Slow, sometimes frustrating", "Far more of it is still there"],
+                "best_for": "Anything you need to remember."
+              }
+            ]
+          }
+        },
+        {
+          "type": "walkthrough",
+          "payload": {
+            "intro": "A 15-minute session that works for any subject. You can use it tonight.",
+            "steps": [
+              {
+                "n": 1,
+                "title": "Close everything",
+                "detail_markdown": "Shut the book, the notes and the other tabs, and put your phone out of reach. Write the topic at the top of a blank page.",
+                "warning": null,
+                "check": null
+              },
+              {
+                "n": 2,
+                "title": "Write down what you remember (5 minutes)",
+                "detail_markdown": "Everything you can recall about the topic: definitions, examples, how the pieces connect. Do not stop to look anything up. Gaps are fine; they are what you are looking for.",
+                "warning": null,
+                "check": "Did you write before you looked? That order is the whole method."
+              },
+              {
+                "n": 3,
+                "title": "Check against the source (5 minutes)",
+                "detail_markdown": "Now open your notes. In a different colour, correct what was wrong and add what was missing.",
+                "warning": "Do not just tick what you got right. The value is in the gaps you mark.",
+                "check": null
+              },
+              {
+                "n": 4,
+                "title": "Turn the gaps into questions (3 minutes)",
+                "detail_markdown": "Each missing or wrong piece becomes a question to answer next time: a flashcard, or a line on a list. On a BiliMind page, select a line and press **Make a card**.",
+                "warning": null,
+                "check": null
+              },
+              {
+                "n": 5,
+                "title": "Start there next time (2 minutes)",
+                "detail_markdown": "Next session, answer those questions first, before anything new. What you can now recall drops off the list; what you still miss stays on it.",
+                "warning": null,
+                "check": null
+              }
+            ]
+          }
+        },
+        {
+          "type": "scenario",
+          "payload": {
+            "setup_markdown": "It is 21:00 and you have a quiz tomorrow on two chapters you read last week. You have **40 minutes** before you need to sleep.",
+            "steps": [
+              {
+                "id": "s1",
+                "prompt": "What do you do first?",
+                "options": [
+                  {
+                    "id": "a",
+                    "text": "Reread both chapters carefully",
+                    "outcome_markdown": "It will feel productive, and by the end the pages will look familiar. But familiar is recognition, and the quiz asks for recall. You would spend all 40 minutes and practise none of it.",
+                    "correct": false,
+                    "next_id": null
+                  },
+                  {
+                    "id": "b",
+                    "text": "Close the book and write what you remember, chapter by chapter",
+                    "outcome_markdown": "Yes. In ten minutes you will know what you can and cannot recall, and that tells you where the other thirty should go.",
+                    "correct": true,
+                    "next_id": "s2"
+                  },
+                  {
+                    "id": "c",
+                    "text": "Highlight the key terms so they stand out",
+                    "outcome_markdown": "Choosing what matters is useful, but it is not practice. Tomorrow you will have to produce those terms, not spot them.",
+                    "correct": false,
+                    "next_id": null
+                  }
+                ]
+              },
+              {
+                "id": "s2",
+                "prompt": "What you wrote has two big gaps. What now?",
+                "options": [
+                  {
+                    "id": "a",
+                    "text": "Look the answers up, write them as questions, and answer them twice before bed",
+                    "outcome_markdown": "Right: you checked, turned the gaps into questions and recalled them again. Sleep does the rest.",
+                    "correct": true,
+                    "next_id": null
+                  },
+                  {
+                    "id": "b",
+                    "text": "Stay up late and reread everything to be safe",
+                    "outcome_markdown": "The lost sleep costs more than the rereading buys: much of what you learn in a day is made stable overnight.",
+                    "correct": false,
+                    "next_id": null
+                  },
+                  {
+                    "id": "c",
+                    "text": "Accept the gaps and go to sleep",
+                    "outcome_markdown": "Sleep helps, but only with what you put in. Ten minutes on the gaps first is the best use of the time left.",
+                    "correct": false,
+                    "next_id": null
+                  }
+                ]
+              }
+            ],
+            "debrief_markdown": "Recall first to find the gaps, check and fix them, recall again, then sleep. The order matters more than the hours."
+          }
+        },
+        {
+          "type": "quiz",
+          "payload": {
+            "intro": "Answer from memory first, then check."
+          },
+          "assessments": [
+            {
+              "kind": "mcq",
+              "prompt": "In Roediger and Karpicke's study, which students remembered more a week later?",
+              "options": [
+                { "id": "a", "text": "Those who reread the passage several times" },
+                { "id": "b", "text": "Those who read it once and practised recalling it" },
+                { "id": "c", "text": "Both groups remembered about the same" },
+                { "id": "d", "text": "Those who highlighted it" }
+              ],
+              "answer_key": { "correct_option_ids": ["b"] },
+              "grader": "deterministic",
+              "max_score": 100
+            },
+            {
+              "kind": "multi_select",
+              "prompt": "Which of these are retrieval practice? Choose all that apply.",
+              "options": [
+                { "id": "a", "text": "Answering a flashcard before turning it over" },
+                { "id": "b", "text": "Rereading a chapter summary" },
+                { "id": "c", "text": "Explaining a topic aloud without notes" },
+                { "id": "d", "text": "Copying your notes out neatly" },
+                { "id": "e", "text": "Writing a practice exam answer from memory" }
+              ],
+              "answer_key": { "correct_option_ids": ["a", "c", "e"] },
+              "grader": "deterministic",
+              "max_score": 100
+            },
+            {
+              "kind": "mcq",
+              "prompt": "You recall an answer and it turns out to be wrong. What makes that attempt worth the most?",
+              "options": [
+                { "id": "a", "text": "Checking the right answer straight away" },
+                { "id": "b", "text": "Not thinking about it again" },
+                { "id": "c", "text": "Rereading the whole chapter" },
+                { "id": "d", "text": "Moving on to something new" }
+              ],
+              "answer_key": { "correct_option_ids": ["a"] },
+              "grader": "deterministic",
+              "max_score": 100
+            }
+          ]
+        },
+        {
+          "type": "reflection",
+          "payload": {
+            "prompt": "Pick one thing you are studying now. When this week will you close the book and recall it, and how: flashcards, a blank page, or explaining it to someone?"
+          }
+        }
+      ]
+    }
+  ],
+  "cards": [
+    { "topic": "How memory works", "day": 0, "front": "What are the three steps of remembering?", "back": "Encoding (getting it in), storage (keeping it) and retrieval (getting it out when you need it)." },
+    { "topic": "How memory works", "day": 0, "front": "About how many chunks can working memory hold at once?", "back": "About four. That is why a new topic feels heavy until it is broken into pieces." },
+    { "topic": "How memory works", "day": 0, "front": "When does most forgetting happen?", "back": "In the first day or two after learning, which is why the first review should come soon." },
+    { "topic": "How memory works", "day": 0, "front": "Why is rereading until it feels familiar a trap?", "back": "Familiar is recognition, not recall: you can recognise a page you could not reproduce." },
+    { "topic": "How memory works", "day": 0, "front": "What does sleep do for a new memory?", "back": "It helps make it stable: much of what you learn in a day is consolidated overnight." },
+    { "topic": "Retrieval practice", "day": 1, "front": "What is retrieval practice?", "back": "Bringing an answer back to mind without looking, instead of reading it again." },
+    { "topic": "Retrieval practice", "day": 1, "front": "Roediger and Karpicke (2006): who remembered more a week later?", "back": "The students who practised recalling the passage, not those who reread it, though the rereaders expected to do better." },
+    { "topic": "Retrieval practice", "day": 1, "front": "Why should recall feel a little hard?", "back": "The effort of searching is what strengthens the memory. An easy, fluent review mostly measures familiarity." },
+    { "topic": "Retrieval practice", "day": 1, "front": "What do you do right after a recall attempt?", "back": "Check it against the source and fix what was wrong or missing." },
+    { "topic": "Retrieval practice", "day": 1, "front": "How does a 15-minute recall session start?", "back": "Close everything and write down all you remember on a blank page, before looking anything up." }
+  ],
+  "welcome": {
+    "title": "Welcome to BiliMind",
+    "icon": "👋",
+    "preview": "What each part of BiliMind does, and where to start.",
+    "html": [
+      "<p>BiliMind is where you learn anything: your school or university courses, a language, a skill you have wanted for years. This page says what each part does. Everything marked <em>Sample</em> is here for you to look around in, and one press on Today removes it all.</p>",
+      "<h2>Ask in the chat</h2>",
+      "<p>The <a href=\"/app/chat\">chat</a> answers questions and makes things for you: a course on any topic, flashcards from your notes, a quiz before a test. Attach a page or a file and ask about it. Start with what you want to learn, in your own words.</p>",
+      "<h2>Today</h2>",
+      "<p><a href=\"/app\">Today</a> is where each day starts: the one next thing to do, then the rest of the day's plan, worked out from your courses, your flashcards and what is due.</p>",
+      "<h2>Courses</h2>",
+      "<p>A course is a path of topics, and each topic is a lesson you read, answer and mark up. The sample course, <a href=\"/app/courses/{course}\">Learning how to learn</a>, has its first two lessons written; they take about fifteen minutes each and make everything else here work better. Make your own course from the chat, or from <a href=\"/app/courses\">Courses</a>.</p>",
+      "<h2>Notes</h2>",
+      "<p><strong>Notes +</strong> in the sidebar starts a page like this one, or a whiteboard. Type <code>/</code> for headings, lists, tables, maths and more. Select a line and press <strong>Make a card</strong> to turn it into a flashcard.</p>",
+      "<p>A note stays in <a href=\"/app/notes\">My notes</a> until you file it into a course yourself. Here is a whiteboard to start from:</p>",
+      "<div data-type=\"page-link\" data-item-id=\"{board}\" data-kind=\"board\" data-title=\"How learning sticks\"></div>",
+      "<h2>Flashcards</h2>",
+      "<p>Each card comes back just before you would forget it, so a few minutes a day keeps what you have learnt. Today counts the ones due; <a href=\"/app/practice\">Practice</a> runs through them.</p>",
+      "<h2>Connect your school</h2>",
+      "<p>If your school uses Moodle, <a href=\"/app/connect\">connect it</a>: your courses, files, timetable and deadlines arrive by themselves and stay current. A timetable link or forwarded emails work too.</p>"
+    ]
+  },
+  "board": {
+    "title": "How learning sticks",
+    "preview": "Recall it · Space it · Mix it · Explain it · Rest",
+    "mind": {
+      "root": "How learning sticks",
+      "branches": [
+        { "text": "Recall it", "children": ["Close the book first", "Answer before you flip the card"] },
+        { "text": "Space it", "children": ["A little each day", "Review just before you forget"] },
+        { "text": "Mix it", "children": ["Shuffle kinds of problems", "Practise choosing the method"] },
+        { "text": "Explain it", "children": ["In your own words", "The gaps show where to study"] },
+        { "text": "Rest", "children": ["Sleep makes memories stable", "Short breaks restore focus"] }
+      ]
+    }
+  }
+}

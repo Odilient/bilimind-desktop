@@ -1,0 +1,72 @@
+/* ---------------------------------------------------------------------------
+   The companion (`/app`).
+
+   Course colours are the app's main colour system (study-companion.html):
+   every dot, week stripe, deadline edge and path node says which course it
+   belongs to before a word is read. Token names are shared with the pages
+   and boards built by other hands, so they are fixed: `--c-<token>` for the
+   contract's `subjects.color` values. A subject may also carry a raw hex,
+   which `courseColor()` in app/companion/colors.ts passes straight through.
+
+   Values are the mockup's. `c8` is the eighth, for a course added later: a
+   slate, so it never fights the other seven.
+
+   Light is the product. The dark set applies only when something sets
+   `data-theme="dark"` on the root — never from the OS preference alone,
+   because the rest of the app has no dark palette yet and bright course
+   colours on a light page would lose their contrast.
+--------------------------------------------------------------------------- */
+
+:root {
+  --c-db: #0f9488;
+  --c-net: #e07a1f;
+  --c-prg: #7357e8;
+  --c-mth: #d9466f;
+  --c-seg: #3a9a3f;
+  --c-eng: #2f86d6;
+  --c-ita: #a86f08;
+  --c-c8: #5b6b82;
+}
+
+:root[data-theme="dark"] {
+  --c-db: #2cc3b4;
+  --c-net: #f59a45;
+  --c-prg: #9d86ff;
+  --c-mth: #f06b91;
+  --c-seg: #5cc062;
+  --c-eng: #5aa8ef;
+  --c-ita: #e3ad45;
+  --c-c8: #8fa0b8;
+}
+
+/* The phone's bottom bar sits over the home indicator, never under it. */
+.cp-safe-bottom {
+  padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+}
+
+.cp-safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Skeleton bars: a quiet pulse in place of a centred spinner. */
+.cp-skel {
+  background: var(--surface-track);
+  border-radius: 8px;
+  animation: cp-skel 1.4s ease-in-out infinite;
+}
+
+@keyframes cp-skel {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-skel {
+    animation: none;
+  }
+}

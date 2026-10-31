@@ -1,0 +1,2330 @@
+@import "tailwindcss";
+@source "../../";
+
+/* ---------------------------------------------------------------------------
+   BiliMind design tokens.
+
+   The product is a workspace someone keeps open for months — closer to an
+   editor than to a reading app. That shows up here as hairline borders rather
+   than heavy cards, and content that sits on a floating white frame.
+
+   Since 2026-10-16 the whole product wears COBALT — the design first drawn in
+   `design/hero-v7/11-cobalt-landing.html` and carried into the course player
+   built earlier (`bilimind-desktop/packages/player`). A cool grey page,
+   white cards cut with hairlines, one cobalt brand colour for slabs and
+   links, one lime "go" that always carries ink, and an ink that is nearly
+   black. Nothing about the app's *structure* changed; only what the tokens
+   point at, so a learner who signs up is not handed to a different company
+   at the door.
+
+     brand   → cobalt  slabs, links, "alternative", the page heads
+     accent  → lime    the thing to do now, the current node, the assistant
+     success → green   written, passed, done
+     warn    → amber   time: a missed session, a moved lesson, mentor notes
+     danger  → coral   the one thing that is wrong
+
+   Two palettes since 2026-10-25: this light one, and a dark one written
+   directly beneath it. Which one paints is decided by `data-theme` on <html>,
+   which `useTheme` sets from the person's choice — `light`, `dark`, or
+   `system`, the default, which defers to the OS through a media query. Only
+   the app's own surfaces honour it. The public pages, the sign-in door and
+   `/start` are drawn in cobalt's slabs rather than in these tokens, so they
+   always render with `data-theme="light"`.
+
+   The dark palette has to follow the light one. A token added up here without
+   a dark value beneath it will show its light value on a dark ground.
+
+   Nothing in the component layer names a raw colour. Semantic names only:
+   surface / border / text / brand / accent / state. Where a component really
+   needs a different colour in the dark, it uses the `dark:` variant below, never
+   a second token.
+--------------------------------------------------------------------------- */
+
+/* "On a dark ground": the app in dark mode (chosen, or by the OS under
+   `system`), or inside the reader's Dim theme, minus the reader's Warm theme,
+   which keeps a light page in a dark app. */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *):not(
+      :where(.reading-theme-warm, .reading-theme-warm *)
+    ) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where([data-theme="system"], [data-theme="system"] *):not(
+        :where(.reading-theme-warm, .reading-theme-warm *)
+      ) {
+      @slot;
+    }
+  }
+
+  &:where(.reading-theme-dim, .reading-theme-dim *) {
+    @slot;
+  }
+}
+
+/* The Warm reader takes the light palette as well, so a Warm lesson in the
+   dark app has light state colours under its sepia (see READING, at the end). */
+:root,
+.reading-theme-warm {
+  color-scheme: light;
+
+  /* -- Surfaces ---------------------------------------------------------- */
+
+  /** The page. Cobalt's cool grey; the white frame floats on it. */
+  --bg: #eceef2;
+  /** Content. Where prose and blocks live. */
+  --surface: #ffffff;
+  /** Chrome: sidebar, tab bar. A breath off white, so white tabs read as on. */
+  --surface-chrome: #fafafc;
+  /** The rail, one step further from the content than the sidebar. */
+  --surface-rail: #f4f5f9;
+  /** Quiet fills: code chips, segmented items, avatar wells. */
+  --surface-sunken: #f3f4f7;
+  /** Tracks: progress bars, segmented backgrounds. */
+  --surface-track: #eef0f4;
+  /** Status pills, quiet inset rows. */
+  --surface-mute: #f7f8fb;
+  /** The dotted canvas the path is drawn on. */
+  --surface-canvas: #f6f7fa;
+
+  /* Compatibility aliases — `raised` reads as chrome in a light system. */
+  --surface-raised: var(--surface-chrome);
+
+  /* -- Borders ----------------------------------------------------------- */
+
+  /* Ink at low alpha rather than fixed greys, so a hairline sits correctly on
+     white content *and* on the grey chrome. */
+
+  /** Hairline: panel splits, section rules. Almost invisible, always present. */
+  --border: rgb(11 13 16 / 0.08);
+  /** Controls: buttons, cards that need to read as liftable. */
+  --border-strong: rgb(11 13 16 / 0.12);
+  /** Inputs, which want slightly more definition than a button. */
+  --border-field: rgb(11 13 16 / 0.15);
+  /** Row dividers inside a list. Lighter than the panel hairline. */
+  --border-rule: rgb(11 13 16 / 0.05);
+  /** Dashed drop targets, diagram nodes, glyph strokes. */
+  --border-dashed: rgb(11 13 16 / 0.22);
+
+  /* -- Text -------------------------------------------------------------- */
+
+  /* Cobalt's greys are blue-greys, solid rather than alpha: they carry the
+     cast that makes the page feel cool next to the lime. */
+
+  /** Headings, and any number the eye should land on. */
+  --text: #0b0d10;
+  /** Long-form prose. A hair lighter than headings so paragraphs settle. */
+  --text-body: #2a2e37;
+  /** Button labels, secondary controls. */
+  --text-dim: #3a3f4a;
+  /** Supporting copy inside cards. */
+  --text-soft: #565b68;
+  /** Descriptions, captions. */
+  --text-muted: #636877;
+  /** Labels, metadata, eyebrows. */
+  --text-faint: #8b909c;
+  /** Tier headings, unit suffixes, "click to flip". Nearly decorative. */
+  --text-ghost: #b9bdc8;
+
+  /* -- Brand ------------------------------------------------------------- */
+
+  /* Cobalt. The slab colour, the link colour, the "alternative" mark on the
+     path. It carries white, never ink. */
+  --brand: var(--cobalt);
+  --brand-strong: var(--cobalt-2);
+  --brand-soft: var(--cobalt-soft);
+  --brand-line: rgb(35 64 230 / 0.22);
+  --on-brand: #ffffff;
+
+  /* -- Accent ------------------------------------------------------------ */
+
+  /* One accent, four weights. Used for the current node, interactive blocks,
+     and the assistant — never for decoration.
+
+     It is the brand's lime, and the weights are not interchangeable:
+     `--accent` is the loud fill and carries INK, never white; `--accent-strong`
+     is the only one legible as text on a light ground (cobalt's `--lime-ink`,
+     6.1:1 on white and 5.5:1 on `--accent-soft`). */
+  --accent: var(--lime);
+  --accent-strong: var(--lime-ink);
+  --accent-soft: var(--lime-soft);
+  --accent-line: rgb(141 181 30 / 0.45);
+  --on-accent: var(--ink);
+
+  /* Compatibility alias — `dim` is the design file's name for `strong`. */
+  --accent-dim: var(--accent-strong);
+
+  /* -- State ------------------------------------------------------------- */
+
+  /* Each state has two weights: the base is the darker one, because these are
+     used as small text far more often than as swatches. `-bright` is for dots
+     and 8px indicators where liveliness beats contrast. */
+
+  /* Green means the content is written, not that the learner passed. Kept a
+     true green rather than folded into the lime: on a 9px dot an olive and a
+     lime are the same dot. */
+  --success: #0f7a3c;
+  --success-bright: #12a150;
+  --success-soft: #e9f7ef;
+  --success-line: #c8ead6;
+  --success-text: #0d6b35;
+
+  /* Amber carries missed sessions and the mentor's notes — never alarm. These
+     are cobalt's note colours: a butter fill, a brown word, a gold icon. */
+  --warn: #9a6f0e;
+  --warn-bright: #d9a21b;
+  --warn-soft: #fff6da;
+  --warn-line: rgb(214 168 40 / 0.35);
+  --warn-text: #6e5410;
+  --warn-text-soft: #85660f;
+
+  /* Coral. The recording dot, the wavy misspelling, the one thing wrong. */
+  --danger: #cf3d1d;
+  --danger-bright: var(--coral);
+  /* Reds on the dark code panel, where the light-surface values disappear. */
+  --danger-on-dark: #ff8a72;
+  --danger-soft: #ffe8df;
+  --danger-line: #ffcdbd;
+  --danger-text: #b33a16;
+
+  /* -- The code sandbox -------------------------------------------------- */
+
+  /* The one dark region in a light product: cobalt's ink stage. A code editor
+     that isn't dark reads as a text field, and a text field invites prose. */
+  --code-bg: var(--ink);
+  --code-bar: var(--ink-2);
+  --code-line: var(--ink-3);
+  --code-text: #e8eaf0;
+  --code-meta: rgb(255 255 255 / 0.45);
+  --code-dim: rgb(255 255 255 / 0.72);
+
+  /* Lifted hues for small text on the ink panel. Lime needs no lifting. */
+  --accent-on-dark: var(--lime);
+  --success-on-dark: #6fd394;
+
+  /* -- Elevation --------------------------------------------------------- */
+
+  /* Cast in the brand's ink, wide and soft, the way cobalt drops its app
+     window: a hairline ring and a long low shadow. */
+
+  /** The frame itself: lifts the whole app off the page. */
+  --shadow-frame: 0 0 0 1px rgb(11 13 16 / 0.06), 0 40px 90px -48px rgb(11 13 16 / 0.36);
+  /** Buttons and inline cards. Barely there — enough to catch an edge. */
+  --shadow-card: 0 1px 2px rgb(11 13 16 / 0.05);
+  --shadow-raised: 0 4px 14px rgb(11 13 16 / 0.07);
+  /** The active item in a segmented control. */
+  --shadow-segment: 0 1px 2px rgb(11 13 16 / 0.08), 0 0 0 1px rgb(11 13 16 / 0.08);
+  /** Floating assistant, modals. */
+  --shadow-pop: 0 30px 70px -20px rgb(11 13 16 / 0.32);
+  /** The closed-assistant pill and other things that hover over content. */
+  --shadow-lift: 0 20px 40px -12px rgb(11 13 16 / 0.25);
+  /** Mobile bottom sheets, which throw upward. */
+  --shadow-sheet: 0 -14px 44px rgb(11 13 16 / 0.2);
+
+  --grid-line: rgb(11 13 16 / 0.045);
+
+  /* -- Inverse, chip and wash ------------------------------------------- */
+
+  /* Two jobs the light theme gave to one ink, which the dark has to tell
+     apart. (Not `--solid`: `border-solid` is already a Tailwind utility.) */
+
+  /** The ink pill that commits: `primary` buttons, the selected answer. It
+      inverts in the dark, a near-white pill, because ink on ink is no button. */
+  --inverse: var(--ink);
+  --inverse-hover: #22262e;
+  --on-inverse: #ffffff;
+  /** The ink chip that carries a lime glyph or white words: step numbers,
+      the done disc, the selected tool, the toast and the floating toolbar. It
+      stays dark in the dark, one step above the surface so it keeps an edge. */
+  --chip: var(--ink);
+
+  /** The ink's channels, for one-off hairline rings and hover washes at an
+      alpha: `shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.1)]`. White in the
+      dark. Never for a drop shadow, which stays black in both themes. */
+  --wash-rgb: 11 13 16;
+}
+
+/* ---------------------------------------------------------------------------
+   The dark palette. Same names, same jobs, cobalt's ink for the ground.
+
+   Elevation reads the way it does in the light: the content frame is the
+   lightest ground and everything behind it steps darker (frame → chrome →
+   rail → desk), so a selected tab or row is still the one that matches the
+   content. Quiet fills go the other way, lighter than the surface they sit
+   on, because a chip darker than a dark card reads as a hole.
+
+   Contrast on `--surface` (#14171c): text 15.8:1, body 12:1, muted 5.8:1,
+   faint 4:1 (the light theme's faint is 3.2:1 on white), brand 4.8:1. White
+   on the brand fill is 3.7:1, enough for icon tiles and bars; words set on a
+   brand fill use `--brand-strong` (5.4:1).
+
+   `.reading-theme-dim` is this palette too, so a lesson read in Dim in the
+   light app matches the dark app exactly. It used to be a third palette.
+--------------------------------------------------------------------------- */
+
+:root,
+.reading-theme-dim {
+  @variant dark {
+    color-scheme: dark;
+
+    --bg: #08090c;
+    --surface: #14171c;
+    --surface-chrome: #101217;
+    --surface-rail: #0c0e12;
+    --surface-sunken: #1d2026;
+    --surface-track: #262a32;
+    --surface-mute: #1a1d23;
+    --surface-canvas: #0e1014;
+    --surface-raised: var(--surface-chrome);
+
+    --border: rgb(255 255 255 / 0.08);
+    --border-strong: rgb(255 255 255 / 0.12);
+    --border-field: rgb(255 255 255 / 0.16);
+    --border-rule: rgb(255 255 255 / 0.055);
+    --border-dashed: rgb(255 255 255 / 0.24);
+
+    --text: #eef0f5;
+    --text-body: #cfd3dc;
+    --text-dim: #bdc2cc;
+    --text-soft: #a3a9b6;
+    --text-muted: #8d93a1;
+    --text-faint: #717786;
+    --text-ghost: #4b505c;
+
+    /* Cobalt lifted until it reads as a link on the ink; `-strong` goes the
+       other way, a deeper fill for white words. */
+    --brand: #6178ff;
+    --brand-strong: #4058f2;
+    --brand-soft: #171d40;
+    --brand-line: rgb(97 120 255 / 0.32);
+
+    /* Lime fills exactly as it does in the light. `-strong` is the text
+       weight, so on a dark ground it is the lime itself. */
+    --accent-strong: #c6f24e;
+    --accent-soft: #1e2510;
+    --accent-line: rgb(198 242 78 / 0.32);
+
+    --success: #4cc985;
+    --success-bright: #2fd673;
+    --success-soft: #11241a;
+    --success-line: #1c3b2a;
+    --success-text: #6fd394;
+
+    --warn: #e0b03a;
+    --warn-bright: #f2bd2c;
+    --warn-soft: #2a2312;
+    --warn-line: rgb(242 189 44 / 0.3);
+    --warn-text: #f2c94c;
+    --warn-text-soft: #d6b04a;
+
+    --danger: #ff6b4d;
+    --danger-soft: #2e1914;
+    --danger-line: #4d2a21;
+    --danger-text: #ff8a72;
+
+    /* The code panel keeps its ink (`--code-*` are not redefined). It is no
+       longer the only dark thing on the page, but it is still darker than the
+       surface around it, which is enough to set it apart. */
+
+    /* A shadow can't lift anything off a dark ground, so the frame and the
+       pop-ups carry a white hairline ring as well. */
+    --shadow-frame: 0 0 0 1px rgb(255 255 255 / 0.06), 0 40px 90px -48px rgb(0 0 0 / 0.8);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-raised: 0 4px 14px rgb(0 0 0 / 0.4);
+    --shadow-segment: 0 1px 2px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(255 255 255 / 0.08);
+    --shadow-pop: 0 0 0 1px rgb(255 255 255 / 0.07), 0 30px 70px -20px rgb(0 0 0 / 0.75);
+    --shadow-lift: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 40px -12px rgb(0 0 0 / 0.6);
+    --shadow-sheet: 0 -14px 44px rgb(0 0 0 / 0.55);
+
+    --grid-line: rgb(255 255 255 / 0.04);
+
+    --inverse: #eef0f5;
+    --inverse-hover: #ffffff;
+    --on-inverse: #0b0d10;
+    --chip: var(--ink-3);
+    --wash-rgb: 255 255 255;
+
+    /* The course map's greys (`RoadmapBoard`), which have no token: its
+       scoped styles read these with the light value as the fallback. */
+    --rm-dot: rgb(255 255 255 / 0.07);
+    --rm-lead: #4b505c;
+    --rm-tie: #5a606d;
+    --rm-rail: #343843;
+    --rm-finish-line: rgb(255 255 255 / 0.16);
+    --rm-group: #111317;
+    --rm-link-hover: #1f2756;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-chrome: var(--surface-chrome);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-track: var(--surface-track);
+  --color-surface-mute: var(--surface-mute);
+  --color-surface-rail: var(--surface-rail);
+  --color-surface-canvas: var(--surface-canvas);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-field: var(--border-field);
+  --color-border-rule: var(--border-rule);
+  --color-border-dashed: var(--border-dashed);
+
+  --color-text: var(--text);
+  --color-text-body: var(--text-body);
+  --color-text-dim: var(--text-dim);
+  --color-text-soft: var(--text-soft);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-text-ghost: var(--text-ghost);
+
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-line: var(--brand-line);
+  --color-on-brand: var(--on-brand);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-on-accent: var(--on-accent);
+
+  --color-success: var(--success);
+  --color-success-bright: var(--success-bright);
+  --color-success-soft: var(--success-soft);
+  --color-success-line: var(--success-line);
+  --color-success-text: var(--success-text);
+
+  --color-warn: var(--warn);
+  --color-warn-bright: var(--warn-bright);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-line: var(--warn-line);
+  --color-warn-text: var(--warn-text);
+  --color-warn-text-soft: var(--warn-text-soft);
+
+  --color-danger: var(--danger);
+  --color-danger-bright: var(--danger-bright);
+  --color-danger-on-dark: var(--danger-on-dark);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-line: var(--danger-line);
+  --color-danger-text: var(--danger-text);
+
+  --color-accent-on-dark: var(--accent-on-dark);
+  --color-success-on-dark: var(--success-on-dark);
+
+  --color-code-bg: var(--code-bg);
+  --color-code-bar: var(--code-bar);
+  --color-code-line: var(--code-line);
+  --color-code-text: var(--code-text);
+  --color-code-meta: var(--code-meta);
+  --color-code-dim: var(--code-dim);
+
+  --shadow-frame: var(--shadow-frame);
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-segment: var(--shadow-segment);
+  --shadow-pop: var(--shadow-pop);
+  --shadow-lift: var(--shadow-lift);
+  --shadow-sheet: var(--shadow-sheet);
+
+  --color-inverse: var(--inverse);
+  --color-inverse-hover: var(--inverse-hover);
+  --color-on-inverse: var(--on-inverse);
+  --color-chip: var(--chip);
+}
+
+@theme {
+  /* Inter for everything a person reads, in the app and on the page alike.
+     While it is on the wire, "Inter Fallback" paints — a local Arial resized
+     to its measurements (see the @font-face rules in the landing block). */
+  --font-sans: "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Cobalt is round: 18px block cards, 12–16px inset rows, pills for every
+     button. Still not the landing's 36px slabs — a 40-row list of those is
+     soup — but a card in the app and a card on the page are one family. */
+  --radius-xs: 7px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-3xl: 28px;
+
+  --animate-pulse-dot: pulse-dot 1.6s ease-in-out infinite;
+  --animate-blink: blink 1.2s ease-in-out infinite;
+  --animate-rise: rise 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-fade: fade 0.2s ease both;
+  --animate-sheet: sheet 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-spin-slow: spin 1s linear infinite;
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes sheet {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes shimmer {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Base
+-------------------------------------------------------------------------- */
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--text);
+  }
+
+  /* Set for one frame by `useTheme` while the palette swaps, so a page full of
+     `transition-colors` re-colours at once instead of in a ripple. */
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Sliders drive the playground blocks, so they are a content element here,
+     not a form control. Styled to match the accent rather than the OS. */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border-field);
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid var(--accent-strong);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid var(--accent-strong);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+    cursor: pointer;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Primitives Tailwind utilities can't express cleanly
+-------------------------------------------------------------------------- */
+
+/**
+ * The label above a block or a stat. Small, quiet, never shouty — uppercase is
+ * reserved for the few places that genuinely need a warning voice.
+ */
+@utility eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-faint);
+}
+
+/** Uppercase variant: "WHERE THE ANALOGY BREAKS DOWN", "COMMON MISTAKES". */
+@utility eyebrow-loud {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/**
+ * Any figure that should line up column-wise across rows.
+ *
+ * Tabular figures only — no monospace family. This used to set the mono face,
+ * and because "30 min", "Mon 3 Aug" and "0/14" all went through it, every
+ * screen in the product picked up a run of typewriter text and read like a
+ * build log. Mono is a signal that something is *code*; a duration is not code.
+ */
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/** Figures that genuinely are code: line counts, timers, editor gutters. */
+@utility mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/**
+ * Scroll regions inside the frame. The overlay scrollbar keeps panel widths
+ * stable, which matters when three of them sit side by side.
+ */
+.om-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #dcdce0 transparent;
+}
+
+.om-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.om-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.om-scroll::-webkit-scrollbar-thumb {
+  background: #dcdce0;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+.om-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c9c9cf;
+  background-clip: padding-box;
+}
+
+/** The tab strip scrolls, but a visible bar there would read as a divider. */
+.om-tabs {
+  scrollbar-width: none;
+}
+
+.om-tabs::-webkit-scrollbar {
+  height: 0;
+}
+
+/**
+ * The reading column, as a grid rather than a single max-width.
+ *
+ * One `max-width` on the container forces the same measure on prose, a
+ * comparison table, a Mermaid flowchart and a video. Three named tracks let a
+ * block widen itself without the container having to know which block it is.
+ *
+ * `min(…, 100%)` on the text track matters because this pane already shares its
+ * width with a 274px sidebar and a 320px assistant dock: on a 1366px laptop the
+ * pane is ~772px, so the wide track has to be bounded by the pane, not by
+ * 1040px, or the lesson scrolls sideways.
+ */
+.lesson {
+  --measure-text: 760px;
+  --measure-wide: 1040px;
+
+  display: grid;
+  grid-template-columns:
+    [wide-start] minmax(0, calc((var(--measure-wide) - var(--measure-text)) / 2))
+    [text-start] min(var(--measure-text), 100%) [text-end]
+    minmax(0, calc((var(--measure-wide) - var(--measure-text)) / 2)) [wide-end];
+  justify-content: center;
+}
+
+.lesson > * {
+  grid-column: text;
+  min-width: 0;
+}
+
+.lesson > .is-wide {
+  grid-column: wide;
+}
+
+/**
+ * Where a jump lands. Search (workstream D) scrolls to `#block-{id}`, and that
+ * id sits on this same element on purpose: split them and every search hit
+ * arrives underneath the sticky header.
+ *
+ * The height is measured and published by NodeView rather than guessed, because
+ * the header is ~113px on a desktop with a one-line title and ~200px on a 390px
+ * phone where the context line, the title and the meta row all wrap. The single
+ * hardcoded 112px this replaces was right for exactly one of those.
+ */
+.lesson-section {
+  scroll-margin-top: calc(var(--lesson-header-h, 7rem) + 1rem);
+}
+
+/** Inline code inside generated prose. */
+@utility code-chip {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--surface-sunken);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+}
+
+/* Faint blueprint grid, used behind hero areas. */
+.blueprint {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center;
+}
+
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+}
+
+/* Entrance used by list-shaped views; each row sets its own --d delay. */
+.rise {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.42s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+}
+
+.fade-in {
+  animation: fade 0.18s ease both;
+}
+
+.pop-in {
+  animation: rise 0.22s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The landing page
+
+   Everything below is used only by `components/marketing/*`. It lives here
+   rather than in scoped blocks because the page's whole visual argument is one
+   motif — a prerequisite graph drawing itself on a blueprint desk — and that
+   motif is shared by six different sections.
+
+   The marketing surface is allowed to be louder than the app: bigger type,
+   more accent, a full-bleed dark section. It is *not* allowed to introduce a
+   colour. Every value below resolves to a token defined at the top of this
+   file, so the page cannot drift away from the product it is selling.
+-------------------------------------------------------------------------- */
+
+@theme {
+  --animate-marquee: marquee 46s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-caret: caret 1.1s step-end infinite;
+  --animate-travel: travel 3.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  --animate-sheen: sheen 2.6s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      /* The track renders its content twice; half a track is a seamless loop. */
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+
+  @keyframes caret {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes travel {
+    0% {
+      offset-distance: 0%;
+      opacity: 0;
+    }
+    12%,
+    88% {
+      opacity: 1;
+    }
+    100% {
+      offset-distance: 100%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes sheen {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
+/**
+ * Scroll reveal.
+ *
+ * Every rule here is gated on `.has-js`, which an inline head script adds
+ * before the body paints. Without that gate the page would be a wall of
+ * `opacity: 0` for anyone whose JavaScript failed — including a crawler that
+ * skips rendering, which for a page whose whole job is being found is not a
+ * trade worth making. With it, the no-JS fallback is simply the finished page.
+ *
+ * Only opacity and transform animate. Elements are laid out in their final
+ * position from the first paint, so revealing never reflows the document.
+ */
+.has-js .reveal {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .has-js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 0.84, 0.44, 1),
+      transform 0.7s cubic-bezier(0.16, 0.84, 0.44, 1);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .has-js .reveal[data-shown='true'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/**
+ * An edge that strokes itself in. The graph illustrations measure each path at
+ * mount and set `--len` to its length, so one rule covers every connector
+ * whatever its shape.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .has-js .edge-draw {
+    stroke-dasharray: var(--len, 240);
+    stroke-dashoffset: var(--len, 240);
+    transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .has-js [data-shown='true'] .edge-draw {
+    stroke-dashoffset: 0;
+  }
+}
+
+/** A node that pops onto the graph once the edge feeding it has arrived. */
+@media (prefers-reduced-motion: no-preference) {
+  .has-js .node-pop {
+    opacity: 0;
+    transform: scale(0.72);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      opacity 0.4s ease,
+      transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .has-js [data-shown='true'] .node-pop {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/** Wider blueprint for full-bleed marketing sections. */
+.blueprint-lg {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center;
+}
+
+/** Same grid, inverted, for the near-black sections. */
+.blueprint-dark {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center;
+}
+
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 9%,
+    #000 91%,
+    transparent
+  );
+  mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+}
+
+.mask-fade-b-soft {
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+}
+
+/** Pauses the topic marquee for anyone who wants to read a single row. */
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/**
+ * Display type. The landing is the only place in the product that goes above
+ * 25px, and Geist needs the tracking pulled in hard at that size or the
+ * headline reads as loose. 600 rather than 700 — Geist's bold goes chunky.
+ */
+@utility display {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+/** Section eyebrow: a small node-and-label pair, matching the graph motif. */
+@utility eyebrow-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   The landing page  ·  `components/landing/*`  ·  `components/prompt/*`
+   ---------------------------------------------------------------------------
+
+   COBALT. Built to `design/hero-v7/11-cobalt-landing.html` (sources in
+   `design/hero-v7/11/`) and the site that grew out of it
+   (`bilimind-desktop/site/`): a cool grey page with full-width rounded
+   *slabs* cut into it — a cobalt one with light beams and grain for the hero
+   and the close, ink ones for the proof, a lime one for the numbers — big
+   uppercase Space Grotesk headlines with round chips sitting inline in the
+   words, glossy cobalt-chrome-lime 3D objects breaking out of the slab edges,
+   and the product's own screens, redrawn in these tokens, doing the talking.
+   No photographs. No monospace outside code.
+
+   The old names (`cream`, `paper`, `sky`, `amber`) are kept so nothing that
+   still says them breaks; they now resolve into cobalt's grounds and lights.
+   New work names the cobalt tokens directly.
+--------------------------------------------------------------------------- */
+
+:root {
+  /* -- Cobalt ------------------------------------------------------------ */
+
+  /** The page behind the slabs. Cool light grey. */
+  --page: #eceef2;
+  /** The dotted canvas: the story ground, the path board. */
+  --canvas: #f6f7fa;
+  /** Brand. The hero slab, links, "alternative" marks, `.cob` words. */
+  --cobalt: #2340e6;
+  /** Darker cobalt: gradient start, pressed state. */
+  --cobalt-2: #1b33cf;
+  /** Lighter cobalt: hover on cobalt surfaces. */
+  --cobalt-3: #3253f4;
+  /** Deepest blue, for shadows cast by cobalt. */
+  --navy: #0d1660;
+  /** Tinted fill: file chips, "further" chips, avatars, block-kind tiles. */
+  --cobalt-soft: #eef1fe;
+  /** Lime as a line or a dot: "written", tab underline, the spine run. */
+  --lime-2: #b4e03a;
+  /** The only lime legible as text — on white and on `--lime-soft`. */
+  --lime-ink: #4e6a08;
+
+  --cobalt-grad:
+    radial-gradient(70% 90% at 82% 18%, rgb(120 150 255 / 0.4), transparent 60%),
+    radial-gradient(60% 70% at 10% 110%, rgb(10 20 120 / 0.55), transparent 70%),
+    linear-gradient(118deg, #1b33cf 0%, #2442ea 38%, #2d4cf2 56%, #2340e6 72%, #1a2fc4 100%);
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+
+  /** Slab inset from the viewport edge. */
+  --gut: 20px;
+  /** Content inset inside a section. */
+  --pad-x: clamp(20px, 4.2vw, 76px);
+  /** Vertical rhythm between landing sections. */
+  --sec-y: clamp(88px, 10.5vw, 168px);
+  --r-card: 36px;
+  --r-md: 28px;
+  --r-sm: 18px;
+
+  /* -- Grounds (old names) ------------------------------------------------ */
+
+  /** The page. */
+  --cream: var(--page);
+  /** A panel on the page: sidebars, window chrome, wells. */
+  --cream-2: var(--canvas);
+  /** A card well on the page. */
+  --cream-3: #eef0f4;
+  /** A pressed thing on the page. */
+  --cream-4: #e5e7ee;
+
+  /** The ink. Nearly black: text, dark slabs, primary buttons, code. */
+  --ink: #0b0d10;
+  /** A raised surface on the ink. */
+  --ink-2: #1a1d23;
+  /** A well on the ink; also body text inside the app. */
+  --ink-3: #2a2e37;
+
+  /* -- Ink on the page --------------------------------------------------- */
+
+  --ink-text: #0b0d10;
+  --ink-text-2: #565b68;
+  --ink-text-3: #8b909c;
+  --ink-text-4: #c3c6cf;
+  --line-day: rgb(11 13 16 / 0.08);
+  --line-day-2: rgb(11 13 16 / 0.14);
+  --line-day-3: rgb(11 13 16 / 0.25);
+
+  /* -- White on a slab (ink or cobalt) ----------------------------------- */
+
+  --paper: #ffffff;
+  --paper-2: rgb(255 255 255 / 0.78);
+  --paper-3: rgb(255 255 255 / 0.6);
+  --paper-4: rgb(255 255 255 / 0.38);
+  --line-ink: rgb(255 255 255 / 0.12);
+  --line-ink-2: rgb(255 255 255 / 0.22);
+  --line-ink-3: rgb(255 255 255 / 0.35);
+
+  /* -- The lights --------------------------------------------------------- */
+
+  /** Go. The one loud accent: the send arrow, "recommended", done. Carries ink. */
+  --lime: #c6f24e;
+  --lime-deep: var(--lime-2);
+  --lime-text: var(--lime-ink);
+  --lime-soft: #eef9cf;
+
+  /** The one thing that's wrong; the recording dot. */
+  --coral: #ff5a3c;
+  --coral-light: #ff8a72;
+  --coral-text: #cf3d1d;
+  --coral-soft: #ffe8df;
+
+  /** The calm blue is cobalt now: links, "alternative", the brand. */
+  --sky: #6f86ff;
+  --sky-text: var(--cobalt);
+  --sky-soft: var(--cobalt-soft);
+
+  /** Time, and the mentor's notes. */
+  --amber: #f2bd2c;
+  --amber-text: #8a650d;
+  --amber-soft: #fff6da;
+}
+
+/* Cobalt on a dark ground, for the many `bg-cobalt-soft` / `text-cobalt` in the
+   app. It has to sit after the block above: same specificity, so the later one
+   wins. Words on a cobalt fill use `dark:bg-brand-strong`, as lifted cobalt is
+   too pale for small white text. Warm keeps a light page in a dark app. */
+:root,
+.reading-theme-dim {
+  @variant dark {
+    --cobalt: var(--brand);
+    --cobalt-soft: var(--brand-soft);
+  }
+}
+
+.reading-theme-warm {
+  --cobalt: #2340e6;
+  --cobalt-soft: #eef1fe;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --gut: 10px;
+    --r-card: 28px;
+    --r-md: 22px;
+    --r-sm: 16px;
+  }
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-canvas: var(--canvas);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-2: var(--cobalt-2);
+  --color-cobalt-3: var(--cobalt-3);
+  --color-navy: var(--navy);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-lime-2: var(--lime-2);
+  --color-lime-ink: var(--lime-ink);
+
+  --color-cream: var(--cream);
+  --color-cream-2: var(--cream-2);
+  --color-cream-3: var(--cream-3);
+  --color-cream-4: var(--cream-4);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  --color-ink-text: var(--ink-text);
+  --color-ink-text-2: var(--ink-text-2);
+  --color-ink-text-3: var(--ink-text-3);
+  --color-ink-text-4: var(--ink-text-4);
+  --color-line-day: var(--line-day);
+  --color-line-day-2: var(--line-day-2);
+  --color-line-day-3: var(--line-day-3);
+
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-paper-4: var(--paper-4);
+  --color-line-ink: var(--line-ink);
+  --color-line-ink-2: var(--line-ink-2);
+  --color-line-ink-3: var(--line-ink-3);
+
+  --color-lime: var(--lime);
+  --color-lime-deep: var(--lime-deep);
+  --color-lime-text: var(--lime-text);
+  --color-lime-soft: var(--lime-soft);
+
+  --color-coral: var(--coral);
+  --color-coral-light: var(--coral-light);
+  --color-coral-text: var(--coral-text);
+  --color-coral-soft: var(--coral-soft);
+
+  --color-sky: var(--sky);
+  --color-sky-text: var(--sky-text);
+  --color-sky-soft: var(--sky-soft);
+
+  --color-amber: var(--amber);
+  --color-amber-text: var(--amber-text);
+  --color-amber-soft: var(--amber-soft);
+}
+
+@theme {
+  --font-display:
+    "Space Grotesk", "Space Grotesk Fallback", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, sans-serif;
+  --font-body:
+    "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+}
+
+/*
+ * What paints before the web fonts arrive: a LOCAL face, resized to occupy
+ * the same space, so the swap changes the letters and not the layout.
+ *
+ * Measured with fontTools against English letter frequency (the capsize /
+ * next/font method), on the weights and case the page actually sets:
+ *   Space Grotesk 700, UPPERCASE, averages 0.6079em a character; Arial Bold
+ *     uppercase 0.6738 → size-adjust 90.2%. Ascent 0.984 and descent 0.292
+ *     of the em, divided by the same factor.
+ *   Inter 400 lowercase averages 0.5163em; Arial 0.4775 → 108.1%. Ascent
+ *     0.969, descent 0.241.
+ * Liberation Sans is metric-identical to Arial, so Linux lands in the same
+ * place. Re-measure if either face changes.
+ */
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'),
+    local('LiberationSans-Bold'), local('Helvetica Neue Bold'), local('HelveticaNeue-Bold');
+  font-weight: 700;
+  size-adjust: 90.2%;
+  ascent-override: 109.1%;
+  descent-override: 32.4%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans'),
+    local('Helvetica Neue'), local('HelveticaNeue');
+  size-adjust: 108.1%;
+  ascent-override: 89.6%;
+  descent-override: 22.3%;
+  line-gap-override: 0%;
+}
+
+/* ---------------------------------------------------------------------------
+   Type
+--------------------------------------------------------------------------- */
+
+/** The body face. Set once on the layout; nothing else names it. */
+@utility t-body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/**
+ * Display. Space Grotesk 700, UPPERCASE, tracked in hard and set solid — the
+ * cobalt headline. A word in it may be `.lime` / `.cob` / `.dim`, and a round
+ * chip (`cb-hchip`) may sit inline at cap height.
+ */
+@utility t-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/** Section headlines. Same voice, a hair more air. */
+@utility t-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/**
+ * Card titles, page titles inside the app, anything under ~40px in the
+ * display face. Sentence case: cobalt only shouts on the slabs.
+ */
+@utility t-head {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+/** Small tracked label. Sans, never mono. */
+@utility t-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------------------
+   Surfaces
+--------------------------------------------------------------------------- */
+
+/** A white card on the grey page: a hairline inset, no drop. */
+@utility card-day {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--line-day);
+}
+
+/** A card on an ink slab: a whisper of white over the ink. */
+@utility card-ink {
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+/** Frosted, for things floating over a cobalt slab. */
+@utility glass-ink {
+  background: rgb(255 255 255 / 0.1);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid rgb(255 255 255 / 0.22);
+}
+
+/** A product window: white, a hairline ring, a long low drop. */
+@utility win {
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: 0 0 0 1px var(--line-day), 0 40px 90px -40px rgb(11 13 16 / 0.42);
+  overflow: hidden;
+}
+
+/**
+ * A tag: the white pill that floats over a slab with an icon dot. Cobalt's
+ * stickers sit straight; `--r` still tilts one if a layout wants it.
+ */
+@utility sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 6px 15px 6px 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: rotate(var(--r, 0deg));
+}
+
+/** The hero headline's container: `100cqi` is its width. */
+@utility hero-measure {
+  container-type: inline-size;
+}
+
+@utility hero-display {
+  font-size: min(15cqi, clamp(56px, 7vw, 132px));
+}
+
+/** Fine dots on an ink or cobalt slab, fading toward the edges. */
+@utility dots-ink {
+  background-image: radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1.3px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000, transparent);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000, transparent);
+}
+
+/** Cobalt's dotted canvas, on the page. */
+@utility dots-day {
+  background-image: radial-gradient(rgb(11 13 16 / 0.13) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000, transparent);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   Controls. Cobalt's buttons are pills: ink commits, lime is the ask, white
+   is the quiet one. `.cb-pill` below is the full set with the arrow chip.
+--------------------------------------------------------------------------- */
+
+/** The lime pill. The page's one ask, and the composer's send. */
+@utility btn-lime {
+  background: var(--lime);
+  color: var(--ink);
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-lime:hover {
+  background: #d2f86a;
+}
+
+.btn-lime:active {
+  transform: scale(0.97);
+}
+
+/** Outline on a slab: a translucent white pill. */
+@utility btn-outline-ink {
+  color: #fff;
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.btn-outline-ink:hover {
+  background: rgb(255 255 255 / 0.18);
+  border-color: rgb(255 255 255 / 0.45);
+}
+
+/** The quiet pill on the page: white, a hairline, a soft lift on hover. */
+@utility btn-outline-day {
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid rgb(11 13 16 / 0.1);
+  box-shadow: 0 1px 2px rgb(11 13 16 / 0.05);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.btn-outline-day:hover {
+  box-shadow: 0 4px 14px rgb(11 13 16 / 0.08);
+}
+
+/** The ink pill. Commits. */
+@utility btn-ink {
+  background: var(--ink);
+  color: #fff;
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+}
+
+.btn-ink:hover {
+  background: #22262e;
+}
+
+/** A 3D lean toward the cursor; `plugins/landing-fx.ts` writes the angles. */
+@utility tilt {
+  transform: perspective(1400px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Cobalt building blocks  ·  `cb-*`
+
+   The global patterns every cobalt section shares, lifted from
+   `design/hero-v7/11/base.css`. Plain classes in the components layer, so a
+   Tailwind utility on the same element still wins.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /** A slab: a full-width rounded card inset by the gutter. */
+  .cb-slab {
+    margin-inline: var(--gut);
+    border-radius: var(--r-card);
+    position: relative;
+    isolation: isolate;
+  }
+
+  .cb-slab.cobalt,
+  .cb-cobalt {
+    background: var(--cobalt-grad);
+    color: #fff;
+  }
+
+  .cb-slab.cobalt {
+    box-shadow: 0 34px 70px -34px rgb(20 40 200 / 0.5);
+  }
+
+  .cb-slab.ink {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .cb-slab.white {
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .cb-slab.lime {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  /** Grain over a cobalt or ink slab. Put it on an empty child. */
+  .cb-grain {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    background-image: var(--grain);
+  }
+
+  /** Two blurred light beams across a cobalt slab. Put it on an empty child. */
+  .cb-beams {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .cb-beams::before,
+  .cb-beams::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    bottom: -40%;
+    width: 22%;
+    transform: rotate(28deg);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.1) 45%,
+      rgb(255 255 255 / 0.16) 50%,
+      rgb(255 255 255 / 0.1) 55%,
+      transparent
+    );
+    filter: blur(18px);
+  }
+
+  .cb-beams::before {
+    left: 42%;
+  }
+
+  .cb-beams::after {
+    left: 64%;
+    width: 10%;
+    opacity: 0.7;
+  }
+
+  /** Eyebrow pill. Light by default; `.on-dark` on a cobalt or ink slab. */
+  .cb-eb {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    height: 34px;
+    padding: 0 14px 0 8px;
+    border-radius: 99px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--line-day), 0 1px 2px rgb(11 13 16 / 0.04);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+
+  .cb-eb .dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .cb-eb .dot svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .cb-eb.on-dark {
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+    color: rgb(255 255 255 / 0.92);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  /** The section headline: uppercase grotesk, tight, with inline chips. */
+  .cb-h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(44px, 6.1vw, 108px);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .cb-h2 .lime,
+  .t-display .lime,
+  .t-title .lime {
+    color: var(--lime);
+  }
+
+  .cb-h2 .cob,
+  .t-display .cob,
+  .t-title .cob {
+    color: var(--cobalt);
+  }
+
+  .cb-h2 .dim,
+  .t-display .dim,
+  .t-title .dim {
+    color: var(--ink-text-3);
+  }
+
+  /** A round chip sitting inline in a headline, cap-height tall. */
+  .cb-hchip {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    vertical-align: 0;
+    width: 0.74em;
+    height: 0.74em;
+    border-radius: 50%;
+    margin: 0 0.04em;
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  /* An in-flow svg would set the chip's baseline at its own bottom edge and
+     drop the chip below the caps; keep it out of flow. */
+  .cb-hchip svg {
+    position: absolute;
+    inset: 27%;
+    width: 46%;
+    height: 46%;
+  }
+
+  .cb-hchip.ink {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .cb-hchip.cobalt {
+    background: var(--cobalt);
+    color: #fff;
+  }
+
+  .cb-hchip.white {
+    background: #fff;
+    color: var(--cobalt);
+  }
+
+  .cb-hchip.pill {
+    width: auto;
+    padding: 0 0.28em;
+    border-radius: 99px;
+    font-size: 0.5em;
+    height: 1.5em;
+    letter-spacing: -0.02em;
+  }
+
+  .cb-lede {
+    margin: 0;
+    max-width: 560px;
+    font-size: clamp(16.5px, 1.3vw, 19.5px);
+    line-height: 1.5;
+    color: var(--ink-text-2);
+    text-wrap: pretty;
+  }
+
+  .cb-lede b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .cb-slab.cobalt .cb-lede,
+  .cb-slab.ink .cb-lede,
+  .on-dark .cb-lede {
+    color: rgb(255 255 255 / 0.74);
+  }
+
+  .cb-slab.cobalt .cb-lede b,
+  .cb-slab.ink .cb-lede b,
+  .on-dark .cb-lede b {
+    color: #fff;
+  }
+
+  /** Pills: buttons and links. `.dark` commits, `.lime` asks, `.light` waits. */
+  .cb-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 46px;
+    padding: 0 22px;
+    border-radius: 99px;
+    border: 1px solid transparent;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      transform 0.15s,
+      background 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .cb-pill:active {
+    transform: scale(0.97);
+  }
+
+  .cb-pill.dark {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .cb-pill.dark:hover {
+    background: #22262e;
+  }
+
+  .cb-pill.light {
+    background: #fff;
+    color: var(--ink);
+    border-color: rgb(11 13 16 / 0.1);
+    box-shadow: 0 1px 2px rgb(11 13 16 / 0.05);
+  }
+
+  .cb-pill.light:hover {
+    box-shadow: 0 4px 14px rgb(11 13 16 / 0.08);
+  }
+
+  .cb-pill.lime {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .cb-pill.lime:hover {
+    background: #d2f86a;
+  }
+
+  .cb-pill.glass {
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
+    border-color: rgb(255 255 255 / 0.26);
+  }
+
+  .cb-pill.glass:hover {
+    background: rgb(255 255 255 / 0.2);
+  }
+
+  .cb-pill .arr {
+    width: 30px;
+    height: 30px;
+    margin-right: -12px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .cb-pill.lime .arr {
+    background: var(--ink);
+    color: var(--lime);
+  }
+
+  .cb-pill .arr svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /**
+   * A tag floating over a slab: white pill, a round icon dot, a lifted drop.
+   * The dot is cobalt by default; `.lime` turns it.
+   */
+  .cb-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 42px;
+    padding: 0 18px 0 7px;
+    border-radius: 99px;
+    background: rgb(255 255 255 / 0.96);
+    color: var(--ink);
+    font-size: 14.5px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 12px 26px -8px rgb(5 10 60 / 0.45);
+  }
+
+  .cb-tag .ic {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--cobalt);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .cb-tag .ic svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .cb-tag.lime .ic {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  /** The dotted canvas ground: the story, the path board. */
+  .cb-dots {
+    background-color: var(--canvas);
+    background-image: radial-gradient(rgb(11 13 16 / 0.12) 1px, transparent 1.3px);
+    background-size: 20px 20px;
+  }
+
+  /** A glossy 3D object breaking out of a slab edge. */
+  .cb-obj {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 30px 40px rgb(5 10 60 / 0.35));
+  }
+
+  .cb-obj.on-light {
+    filter: drop-shadow(0 24px 30px rgb(11 13 16 / 0.18));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. Everything ambient is slow enough to read as weather; everything
+   triggered is under a second; everything is wrapped for reduced motion.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --animate-floaty: floaty 7s ease-in-out infinite;
+  --animate-floaty-slow: floaty 10s ease-in-out infinite;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-blink: blink 1.1s step-end infinite;
+  --animate-bars: bars 1s ease-in-out infinite;
+  --animate-pulse-lime: pulse-lime 1.6s ease-out infinite;
+  --animate-pulse-coral: pulse-coral 1.6s ease-out infinite;
+  --animate-rise-in: rise-in 0.8s ease both;
+  --animate-pop: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-spin-slow: spin-slow 1.1s linear infinite;
+  --animate-shimmer-x: shimmer-x 1.6s linear infinite;
+  --animate-breathe: breathe 3.2s ease-in-out infinite;
+  --animate-wobble: wobble 6s ease-in-out infinite;
+
+  @keyframes floaty {
+    0%,
+    100% {
+      transform: translateY(0) rotate(var(--r, 0deg));
+    }
+    50% {
+      transform: translateY(-14px) rotate(var(--r, 0deg));
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    50%,
+    95% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bars {
+    0%,
+    100% {
+      transform: scaleY(0.3);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes pulse-lime {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgb(198 242 78 / 0.55);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgb(198 242 78 / 0);
+    }
+  }
+
+  @keyframes pulse-coral {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgb(255 107 74 / 0.55);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgb(255 107 74 / 0);
+    }
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes draw-path {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes shimmer-x {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.85;
+    }
+    50% {
+      transform: scale(1.06);
+      opacity: 1;
+    }
+  }
+
+  @keyframes wobble {
+    0%,
+    100% {
+      transform: rotate(var(--r, -2deg));
+    }
+    50% {
+      transform: rotate(calc(var(--r, -2deg) * -1));
+    }
+  }
+}
+
+/** A skeleton line that shimmers while "thinking". */
+@utility shimmer-day {
+  background: linear-gradient(
+    90deg,
+    rgb(11 13 16 / 0.05) 0%,
+    rgb(11 13 16 / 0.12) 50%,
+    rgb(11 13 16 / 0.05) 100%
+  );
+  background-size: 200% 100%;
+}
+
+@utility shimmer-ink {
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.06) 0%,
+    rgb(255 255 255 / 0.18) 50%,
+    rgb(255 255 255 / 0.06) 100%
+  );
+  background-size: 200% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shimmer-day,
+  .shimmer-ink {
+    animation: var(--animate-shimmer-x);
+  }
+}
+
+/**
+ * Reveal-on-scroll, driven by GSAP in `landing/Reveal.vue`. The gate is
+ * `.has-js`, which the head script adds before paint: without JavaScript the
+ * page is simply already revealed, which is the correct fallback for a page
+ * whose job is being found by crawlers.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .has-js .rv:not(.is-in) {
+    opacity: 0;
+  }
+}
+
+/** Marquee rails pause for anyone reading them. */
+.rail:hover .rail-track {
+  animation-play-state: paused;
+}
+
+.no-bar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.mask-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.mask-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+
+/** Native `<details>`: no marker, and the chevron turns. */
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------------------------------------------------------------------------
+   The prompt composer  ·  `components/prompt/Composer.vue`
+
+   Two skins, one component. The default is cobalt's field — a solid white
+   pill lifted off a cobalt slab by a navy drop, with a lime halo on focus —
+   on the hero, the closing card and /start; `day` is the same field on a
+   light page (the dashboard, /create). Everything the skins
+   disagree on is a variable set on the root, so the component's template
+   never branches on tone — and so a clone of it, lifted out of the page and
+   flown across a route change, keeps looking like itself.
+--------------------------------------------------------------------------- */
+
+.composer {
+  --cp-bg: #fff;
+  --cp-bg-solid: #fff;
+  --cp-border: rgb(11 13 16 / 0.05);
+  --cp-border-focus: rgb(198 242 78 / 0.95);
+  --cp-text: var(--ink);
+  --cp-muted: #8e93a0;
+  --cp-faint: #b4b8c2;
+  --cp-chip-bg: #f3f4f7;
+  --cp-chip-border: rgb(11 13 16 / 0.08);
+  --cp-chip-text: var(--ink-3);
+  --cp-chip-hover: var(--cobalt);
+  --cp-file-bg: var(--cobalt-soft);
+  --cp-shadow: 0 14px 34px -10px rgb(5 10 60 / 0.42);
+  --cp-blur: none;
+
+  position: relative;
+  color: var(--cp-text);
+  background: var(--cp-bg);
+  backdrop-filter: var(--cp-blur);
+  -webkit-backdrop-filter: var(--cp-blur);
+  border: 1px solid var(--cp-border);
+  border-radius: 28px;
+  box-shadow: var(--cp-shadow);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.composer:focus-within {
+  border-color: var(--cp-border-focus);
+  box-shadow: var(--cp-shadow), 0 0 0 4px rgb(198 242 78 / 0.6);
+}
+
+.composer.is-day {
+  --cp-border: rgb(11 13 16 / 0.1);
+  --cp-border-focus: var(--lime-2);
+  --cp-shadow: 0 1px 2px rgb(11 13 16 / 0.04), 0 24px 50px -28px rgb(11 13 16 / 0.28);
+}
+
+/* The composer in the dark app (Today's two; the landing's never get here,
+   public pages are always light). The skin variables move to the app's
+   tokens; the few colours `Composer.vue` writes directly are restated after
+   them. `:root` lifts each rule above the component's own. */
+:root .composer {
+  @variant dark {
+    --cp-bg: var(--surface-sunken);
+    --cp-bg-solid: var(--surface-sunken);
+    --cp-border: rgb(255 255 255 / 0.1);
+    --cp-text: var(--text);
+    --cp-muted: var(--text-faint);
+    --cp-faint: var(--text-ghost);
+    --cp-chip-bg: var(--surface-track);
+    --cp-chip-border: rgb(255 255 255 / 0.08);
+    --cp-chip-text: var(--text-dim);
+    --cp-chip-hover: var(--brand);
+    --cp-file-bg: var(--brand-soft);
+    --cp-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  }
+}
+
+:root .composer .cp-attach {
+  @variant dark {
+    background: var(--surface-track);
+    color: var(--text-dim);
+
+    &:hover {
+      background: rgb(255 255 255 / 0.12);
+    }
+  }
+}
+
+:root .composer .cp-build {
+  @variant dark {
+    background: var(--inverse);
+    color: var(--on-inverse);
+
+    &:hover {
+      background: var(--inverse-hover);
+    }
+  }
+}
+
+:root .composer .cp-file {
+  @variant dark {
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+}
+
+:root .composer .cp-file.is-lost {
+  @variant dark {
+    background: var(--surface);
+    color: var(--text-soft);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+  }
+}
+
+:root .composer .cp-notes textarea {
+  @variant dark {
+    background: var(--surface-mute);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+}
+
+:root .composer.is-day .cp-door {
+  @variant dark {
+    background: var(--surface-sunken);
+    color: var(--text-dim);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+
+    &:hover {
+      color: var(--brand);
+    }
+
+    &.is-on {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      box-shadow: inset 0 0 0 1px var(--accent-line);
+    }
+
+    &.is-live {
+      color: var(--danger-text);
+    }
+  }
+}
+
+:root .composer.is-day .cp-hint {
+  @variant dark {
+    color: var(--warn-text);
+  }
+}
+
+.composer textarea {
+  color: var(--cp-text);
+  caret-color: var(--cobalt);
+}
+
+.composer textarea::placeholder {
+  color: var(--cp-muted);
+}
+
+.composer .cp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--cp-chip-bg);
+  border: 1px solid var(--cp-chip-border);
+  color: var(--cp-chip-text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.composer .cp-chip:hover,
+.composer .cp-chip.is-on {
+  border-color: var(--cp-chip-hover);
+  color: var(--cp-chip-hover);
+}
+
+.composer .cp-chip.is-live {
+  border-color: var(--coral);
+  color: var(--coral-text);
+}
+
+.composer .cp-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  background: var(--cp-file-bg);
+  border: 1px solid var(--cp-chip-border);
+  color: var(--cp-chip-text);
+  border-radius: 12px;
+  padding: 6px 8px 6px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/** The ghost of a composer in flight, and the veil under it. */
+#prompt-ghost {
+  position: fixed;
+  z-index: 9999;
+  margin: 0;
+  pointer-events: none;
+  will-change: top, left, width, height;
+}
+
+#prompt-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  /* Cobalt, because the door it opens onto (/start) is a cobalt slab. */
+  background: var(--cobalt-2);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* READING — zoom, typeface and background for the lesson column.             */
+/* Set by useReadingSettings on the pane that holds a lesson. The themes      */
+/* override the base token names (`--surface`, not `--color-surface`): the    */
+/* `@theme inline` map compiles `bg-surface` to `var(--surface)`, so an       */
+/* override of a `--color-*` name reaches nothing. Until 2026-10-25 that is   */
+/* what these did, and Warm and Dim changed nothing but their own swatch.     */
+/*                                                                            */
+/* Paper is no override: it is the app's own palette, light or dark. Dim is   */
+/* the dark palette (it is named in that block). Warm is a sepia page over    */
+/* the light palette, which it takes even in the dark app.                    */
+/* -------------------------------------------------------------------------- */
+
+.reading-surface .lesson,
+.reading-surface .lesson-heading {
+  zoom: var(--reading-zoom, 1);
+}
+
+.reading-font-serif .lesson,
+.reading-font-serif .lesson-heading,
+.reading-font-serif {
+  --font-reading: Charter, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+}
+
+.reading-font-serif .lesson,
+.reading-font-serif .lesson-heading h1,
+.reading-font-serif .lesson-heading input {
+  font-family: var(--font-reading);
+}
+
+.reading-theme-warm {
+  --bg: #f1e9da;
+  --surface: #f8f2e6;
+  --surface-chrome: #f3ecdd;
+  --surface-raised: #f3ecdd;
+  --surface-sunken: #ede4d3;
+  --surface-track: #e9dfcc;
+  --surface-mute: #f3ecdd;
+  --border: #e6dbc7;
+  --border-strong: #dccfb8;
+  --border-field: #d9ccb4;
+  --border-rule: #ece2d0;
+  --border-dashed: #c9bba1;
+  --text: #2a2318;
+  --text-body: #33291c;
+  --text-dim: #3f3527;
+  --text-soft: #5b4f3e;
+  --text-muted: #76695a;
+  --text-faint: #9c8f7d;
+  --text-ghost: #c2b6a5;
+  /* The lime, warmed to sit on sepia. `--accent` and `-strong` are not
+     overridden: the brand's lime and its readable weight both work on paper. */
+  --accent-soft: #eef3d4;
+  --accent-line: #d6e5a2;
+}
