@@ -108,7 +108,7 @@ Totals: 1 rejected (shift_routines q1), 1 rewritten (q6), 2 "Beyond your slides"
 dialogue opener in ms-MY-YasminNeural. The CLI's `--langs` only selects voices for speaking/dialogue blocks: there is
 one narration track per lesson, so "lesson 1 also in Malay" is NOT supported and was not faked.
 
-## Browser gate (`hackathon/runs/g2/shoot.mjs`, headless Edge, file://)
+## Browser gate (`a headless-browser script`, headless Edge, file://)
 
 Gate run (home + food_handler_law + hygiene_rules at 1440 and 390): 0 console errors, 0 page errors, 0 error
 boundaries; screenshots in `showcase/courses/_shots/boba-day-one/`. Extra run over the other 5 lessons: same, 0 overflow.

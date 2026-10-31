@@ -1,5 +1,5 @@
 // @bilimind/core types: one source of truth for every stage of the engine, the CLI and the player.
-// Ported from hackathon/research/engine-port.md §1.1, plus the PLAN.md §2.3 additions.
+// Ported from the hosted API's shapes, plus what the course file adds.
 // Course (course.json, the player contract) types are inferred from the zod schemas in
 // course-schema.ts and re-exported at the bottom of this file.
 import type { Narration, PlanDay } from './course-schema.ts';

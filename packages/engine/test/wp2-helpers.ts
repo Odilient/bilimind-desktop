@@ -9,7 +9,7 @@ import type { Archetype, Chunk, Goal, IngestResult, Lesson, OutlineResult, Sourc
 import type { Ctx, LlmRequest, LlmResult } from '../src/contracts.ts';
 import { coursePaths, writeJson } from '../src/course.ts';
 
-export const SAMPLES = fileURLToPath(new URL('../../../hackathon/research/engine-port-samples/', import.meta.url));
+export const SAMPLES = fileURLToPath(new URL('./fixtures/engine-port-samples/', import.meta.url));
 export const DS_FINAL = fileURLToPath(new URL('../../../showcase/sources/ds-final/', import.meta.url));
 export const sample = (name: string): any => JSON.parse(readFileSync(join(SAMPLES, name), 'utf8'));
 

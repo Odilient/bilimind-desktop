@@ -1,6 +1,6 @@
 // Tests for the BiliMind skill (WP7) and the Expert Team package (WP16).
 //   node --test skills/bilimind/test/
-// Dev-only: excluded from the skill zip, from install.ps1 and from the team package copy.
+// Dev-only: excluded from the skill zip and from install.ps1.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -9,7 +9,7 @@ import os from 'node:os';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { spawnSync } from 'node:child_process';
-import { SKILL, TEAM, problems, skillFiles, teamFiles, writeZip, syncedAgent, playbookBlock } from '../scripts/zip-skill.mjs';
+import { SKILL, problems, skillFiles, writeZip } from '../scripts/zip-skill.mjs';
 
 const read = (p) => fs.readFileSync(p, 'utf8');
 const skillMd = read(path.join(SKILL, 'SKILL.md'));
@@ -17,8 +17,8 @@ const BUNDLE = path.join(SKILL, 'scripts', 'bilimind.mjs');
 const docs = ['SKILL.md', 'references/writer.md', 'references/coder.md', 'references/checker.md',
   'references/planning.md', 'references/troubleshooting.md'].map((f) => ({ f, text: read(path.join(SKILL, f)) }));
 
-test('skill and team package are consistent (zip-skill --check)', () => {
-  assert.deepEqual(problems({ team: true }), []);
+test('the skill is consistent (zip-skill --check)', () => {
+  assert.deepEqual(problems(), []);
 });
 
 test('SKILL.md frontmatter: name, trigger words, version', () => {
@@ -76,94 +76,6 @@ ${r.stderr}`; };
   }
 });
 
-test('playbook blocks: member agents carry exactly the reference text', () => {
-  for (const [id, ref] of [['bilimind-writer', 'writer'], ['bilimind-coder', 'coder'], ['bilimind-checker', 'checker']]) {
-    const agent = read(path.join(TEAM, 'agents', `${id}.md`));
-    const refText = read(path.join(SKILL, 'references', `${ref}.md`));
-    assert.equal(playbookBlock(agent, id), playbookBlock(refText, ref));
-    assert.equal(syncedAgent(agent, refText, id), agent);
-    assert.match(agent, /SendMessage/);
-    const lines = playbookBlock(refText, ref).split('\n').length;
-    assert.ok(lines >= 15 && lines <= 45, `${ref}.md playbook is ${lines} lines (15-40 wanted)`);
-  }
-});
-
-test('agent files: LF, name == file name, no tools field, bilingual display names', () => {
-  const plugin = JSON.parse(read(path.join(TEAM, '.codebuddy-plugin', 'plugin.json')));
-  for (const rel of plugin.agents) {
-    const file = path.join(TEAM, rel);
-    const text = read(file);
-    assert.ok(!text.includes('\r'), `${rel} uses LF`);
-    const fm = text.match(/^---\n([\s\S]*?)\n---/)?.[1];
-    assert.ok(fm, `${rel} frontmatter`);
-    assert.match(fm, new RegExp(`^name: ${path.basename(rel, '.md')}$`, 'm'));
-    assert.ok(!/^tools:/m.test(fm), `${rel} has no tools field`);
-    assert.match(fm, /^displayName:\n {2}en: ".+"\n {2}zh: ".+"$/m);
-    assert.match(fm, /^profession:\n {2}en: ".+"\n {2}zh: ".+"$/m);
-    assert.match(fm, /^maxTurns: \d+$/m);
-  }
-  const lead = read(path.join(TEAM, 'agents', 'bilimind-crew-team-lead.md'));
-  for (const s of ['TeamCreate', 'SendMessage', 'present_files', '`subagent_type`', 'In ONE message', '- bilimind'])
-    assert.ok(lead.includes(s), `lead prompt mentions ${s}`);
-});
-
-test('plugin.json follows the team spec', () => {
-  const p = JSON.parse(read(path.join(TEAM, '.codebuddy-plugin', 'plugin.json')));
-  assert.equal(p.name, 'bilimind-crew');
-  assert.equal(p.plugin, p.name);
-  assert.equal(p.expertType, 'team');
-  assert.equal(p.agentName, 'bilimind-crew-team-lead');
-  assert.equal(JSON.parse(read(path.join(TEAM, 'settings.json'))).agent, p.agentName);
-  assert.deepEqual(p.teamInfo.memberAgents, ['bilimind-writer', 'bilimind-coder', 'bilimind-checker']);
-  assert.deepEqual(p.profession, p.displayName);
-  assert.equal(p.tags.length, 3);
-  assert.equal(p.quickPrompts.length, 3);
-  assert.deepEqual(p.defaultInitPrompt, p.quickPrompts[0]);
-  const zh = [...p.displayDescription.zh].length;
-  assert.ok(zh >= 40 && zh <= 50, `displayDescription.zh is ${zh} characters`);
-  assert.ok(['09-OperationsHR', '04-DataAI'].includes(p.categoryId));
-  assert.deepEqual(p.skills, ['./skills/bilimind']);
-  assert.ok(fs.existsSync(path.join(TEAM, 'skills', 'bilimind', 'SKILL.md')));
-  assert.deepEqual(p.members.map((m) => m.id).sort(), [p.agentName, ...p.teamInfo.memberAgents].sort());
-  assert.equal(p.members.filter((m) => m.role === 'lead').length, 1);
-  for (const m of p.members) {
-    assert.ok(m.displayName.en && m.displayName.zh && m.profession.en && m.profession.zh);
-    assert.notEqual(m.displayName.en, m.profession.en);
-    assert.notEqual(m.displayName.en, m.id);
-  }
-});
-
-test('avatars: N+1 PNGs, 512x512, at most 500 KB', () => {
-  const p = JSON.parse(read(path.join(TEAM, '.codebuddy-plugin', 'plugin.json')));
-  const files = [p.avatar, ...p.members.map((m) => m.avatar)];
-  assert.equal(new Set(files).size, p.members.length + 1);
-  for (const rel of files) {
-    const buf = fs.readFileSync(path.join(TEAM, rel));
-    assert.equal(buf.subarray(1, 4).toString('latin1'), 'PNG', `${rel} is a PNG`);
-    assert.equal(buf.readUInt32BE(16), 512); assert.equal(buf.readUInt32BE(20), 512);
-    assert.ok(buf.length <= 500 * 1024, `${rel} is ${buf.length} bytes`);
-  }
-});
-
-// A tiny zip reader: entries from the central directory, inflated and compared with the sources.
-function readZip(file) {
-  const buf = fs.readFileSync(file);
-  const eocd = buf.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
-  const count = buf.readUInt16LE(eocd + 10);
-  let p = buf.readUInt32LE(eocd + 16);
-  const out = new Map();
-  for (let i = 0; i < count; i++) {
-    const method = buf.readUInt16LE(p + 10), csize = buf.readUInt32LE(p + 20), nlen = buf.readUInt16LE(p + 28);
-    const elen = buf.readUInt16LE(p + 30), clen = buf.readUInt16LE(p + 32), off = buf.readUInt32LE(p + 42);
-    const name = buf.subarray(p + 46, p + 46 + nlen).toString('utf8');
-    const start = off + 30 + buf.readUInt16LE(off + 26) + buf.readUInt16LE(off + 28);
-    const body = buf.subarray(start, start + csize);
-    out.set(name, method === 8 ? zlib.inflateRawSync(body) : body);
-    p += 46 + nlen + elen + clen;
-  }
-  return out;
-}
-
 test('skill zip: SKILL.md at the root, forward slashes, no dev files, contents intact', () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'bm-zip-'));
   const files = skillFiles();
@@ -177,23 +89,7 @@ test('skill zip: SKILL.md at the root, forward slashes, no dev files, contents i
   }
   for (const f of files) assert.ok(entries.get(f.rel).equals(fs.readFileSync(f.abs)), `${f.rel} round-trips`);
   assert.ok(fs.statSync(zip).size < 10 * 1024 * 1024, 'zip under 10 MB');
-  const team = teamFiles().map((f) => f.rel);
-  assert.ok(team.includes('.codebuddy-plugin/plugin.json'));
-  assert.ok(!team.some((r) => r.startsWith('avatars/src/')));
   fs.rmSync(tmp, { recursive: true, force: true });
-});
-
-const PY = 'C:\\Program Files\\WorkBuddyAI\\resources\\vendor\\python\\python.exe';
-const VALIDATE = 'C:\\Program Files\\WorkBuddyAI\\resources\\app.asar.unpacked\\resources\\plugins\\workbuddy-builtin\\skills\\expert-manager\\scripts\\validate_expert.py';
-test('WorkBuddy validate_expert.py passes (scratch config folder, nothing registered)', { skip: !(fs.existsSync(PY) && fs.existsSync(VALIDATE)) && 'WorkBuddy not installed' }, () => {
-  const cfg = fs.mkdtempSync(path.join(os.tmpdir(), 'bm-wbcfg-'));
-  const dest = path.join(cfg, 'plugins', 'marketplaces', 'my-experts', 'plugins', 'bilimind-crew');
-  fs.cpSync(TEAM, dest, { recursive: true });
-  const r = spawnSync(PY, [VALIDATE, dest], { encoding: 'utf8', env: { ...process.env, WORKBUDDY_CONFIG_DIR: cfg, PYTHONUTF8: '1' } });
-  fs.rmSync(cfg, { recursive: true, force: true });
-  assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /Expert package is valid/);
-  assert.ok(!/warning/i.test(r.stdout), r.stdout);
 });
 
 test('install.ps1 copies the runtime files only', { skip: process.platform !== 'win32' && 'Windows only' }, () => {

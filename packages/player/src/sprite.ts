@@ -1,4 +1,4 @@
-// The icon sprite (one 2px stroke family, from hackathon/research/player-proto.html / the landing sprite).
+// The icon sprite (one 2px stroke family, from the player prototype / the landing sprite).
 // Injected once at boot; use <Icon name="i-play"/> or <svg><use href="#i-play"/></svg>.
 export const SPRITE = `<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs>
 <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z" fill="currentColor"/></symbol>

@@ -16,18 +16,14 @@ Thumbs.db
 /vaults/
 film/out/
 film/frames/
-# hackathon scratch + local generated courses (showcase courses are committed under showcase/)
-hackathon/scratch/
+# local generated courses (showcase courses are committed under showcase/)
 /courses/
 .npmrc.local
 # organiser material and private hero/shop material: local only, never committed (WP8)
-showcase/sources/dormathon-briefing/*.pdf
 showcase/sources/private/
 # python build caches
 __pycache__/
 
-# local test runs (audio-heavy); summaries are copied into hackathon/
-hackathon/runs/
 
 # caches and screenshot dumps (keep the repo light)
 **/crew/cache/

@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 // skills/bilimind/scripts/zip-skill.mjs (dev tool, not shipped in the zip)
 //
-// Packages the BiliMind skill and keeps the Expert Team package in sync with it.
+// Packages the BiliMind skill.
 //
 //   node skills/bilimind/scripts/zip-skill.mjs            check, then write skills/dist/bilimind-skill.zip
-//   node skills/bilimind/scripts/zip-skill.mjs --team     also sync workbuddy/bilimind-crew (playbooks into the
-//                                                         member agents, a copy of the skill in skills/bilimind)
-//                                                         and write skills/dist/bilimind-crew.zip
 //   node skills/bilimind/scripts/zip-skill.mjs --check    verify only (no writes); exit 1 on any problem
 //   --out <dir>                                           zip folder (default <repo>/skills/dist)
 //
 // Zips use forward-slash entry names (WorkBuddy's own package_expert.py writes backslashes on Windows).
-// The skill zip has SKILL.md at its root (for "Upload skill"); the team zip has bilimind-crew/ at its root.
+// The skill zip has SKILL.md at its root (for "Upload skill").
 // Never reads or writes a key. Runs on Node 22+ (WorkBuddy's bundled Node included).
 
 import fs from 'node:fs';
@@ -22,10 +19,6 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const SKILL = path.resolve(HERE, '..');
 export const REPO = path.resolve(SKILL, '..', '..');
-export const TEAM = path.join(REPO, 'workbuddy', 'bilimind-crew');
-const MEMBERS = { 'bilimind-writer': 'writer', 'bilimind-coder': 'coder', 'bilimind-checker': 'checker' };
-const START = '<!-- playbook:start -->';
-const END = '<!-- playbook:end -->';
 
 // ---------- file lists ----------
 const SKILL_DEV_ONLY = new Set(['STATUS.md', 'install.ps1', 'scripts/zip-skill.mjs']);
@@ -44,28 +37,8 @@ function walk(dir, base = dir, keepDot = () => false) {
 export function skillFiles() {
   return walk(SKILL).filter((f) => !SKILL_DEV_ONLY.has(f.rel) && !f.rel.startsWith('test/') && !f.rel.endsWith('.map'));
 }
-/** The files that ship in the team package (avatars/src and dotfiles other than .codebuddy-plugin stay out). */
-export function teamFiles() {
-  return walk(TEAM, TEAM, (n) => n === '.codebuddy-plugin')
-    .filter((f) => !f.rel.startsWith('avatars/src/') && f.rel !== 'STATUS.md');
-}
-
-// ---------- playbook sync ----------
-export function playbookBlock(text, where) {
-  const a = text.indexOf(START), b = text.indexOf(END);
-  if (a < 0 || b < a) throw new Error(`${where}: missing ${START} ... ${END}`);
-  return text.slice(a, b + END.length);
-}
-/** Returns the agent file with its playbook block replaced by the reference's block (LF endings). */
-export function syncedAgent(agentText, refText, where) {
-  const block = playbookBlock(refText.replace(/\r\n/g, '\n'), `references (${where})`);
-  const agent = agentText.replace(/\r\n/g, '\n');
-  const old = playbookBlock(agent, where);
-  return agent.replace(old, block);
-}
-
 // ---------- checks ----------
-export function problems({ team = true } = {}) {
+export function problems() {
   const out = [];
   const need = ['SKILL.md', 'references/writer.md', 'references/coder.md', 'references/checker.md',
     'references/planning.md', 'references/output-spec.md', 'references/troubleshooting.md'];
@@ -76,57 +49,12 @@ export function problems({ team = true } = {}) {
   if (skillMd.split('\n').length > 260) out.push(`SKILL.md: ${skillMd.split('\n').length} lines (keep it under ~250)`);
   if (!skillMd.includes('present_files')) out.push('SKILL.md: must end the run with present_files');
   if (!skillMd.includes('${CODEBUDDY_SKILL_DIR}')) out.push('SKILL.md: must use ${CODEBUDDY_SKILL_DIR}');
-  if (!team) return out;
-  for (const [id, ref] of Object.entries(MEMBERS)) {
-    const agentPath = path.join(TEAM, 'agents', `${id}.md`);
-    if (!fs.existsSync(agentPath)) { out.push(`missing agents/${id}.md`); continue; }
-    const raw = fs.readFileSync(agentPath, 'utf8');
-    if (raw.includes('\r')) out.push(`agents/${id}.md has CRLF line endings (the validator needs LF)`);
-    try {
-      const want = syncedAgent(raw, fs.readFileSync(path.join(SKILL, 'references', `${ref}.md`), 'utf8'), `agents/${id}.md`);
-      if (want !== raw) out.push(`agents/${id}.md playbook is out of sync with references/${ref}.md (run --team)`);
-    } catch (e) { out.push(e.message); }
-  }
-  const lead = path.join(TEAM, 'agents', 'bilimind-crew-team-lead.md');
-  if (fs.existsSync(lead) && fs.readFileSync(lead, 'utf8').includes('\r')) out.push('agents/bilimind-crew-team-lead.md has CRLF line endings');
-  const copy = path.join(TEAM, 'skills', 'bilimind');
-  for (const f of skillFiles()) {
-    const dst = path.join(copy, ...f.rel.split('/'));
-    if (!fs.existsSync(dst) || !fs.readFileSync(dst).equals(fs.readFileSync(f.abs))) {
-      out.push(`workbuddy/bilimind-crew/skills/bilimind/${f.rel} is missing or stale (run --team)`);
-      break;
-    }
-  }
   return out;
 }
 
 /** SKILL.md and references/*.md: WorkBuddy's frontmatter parser and the playbook sync expect LF. */
 function markdownFiles() {
   return walk(SKILL).filter((f) => f.rel === 'SKILL.md' || (f.rel.startsWith('references/') && f.rel.endsWith('.md')));
-}
-
-// ---------- team sync ----------
-export function syncTeam() {
-  for (const f of markdownFiles()) {
-    const text = fs.readFileSync(f.abs, 'utf8');
-    if (text.includes('\r')) fs.writeFileSync(f.abs, text.replace(/\r\n/g, '\n'));
-  }
-  for (const [id, ref] of Object.entries(MEMBERS)) {
-    const agentPath = path.join(TEAM, 'agents', `${id}.md`);
-    const next = syncedAgent(fs.readFileSync(agentPath, 'utf8'), fs.readFileSync(path.join(SKILL, 'references', `${ref}.md`), 'utf8'), id);
-    fs.writeFileSync(agentPath, next);
-  }
-  const leadPath = path.join(TEAM, 'agents', 'bilimind-crew-team-lead.md');
-  fs.writeFileSync(leadPath, fs.readFileSync(leadPath, 'utf8').replace(/\r\n/g, '\n'));
-  const copy = path.join(TEAM, 'skills', 'bilimind');
-  fs.rmSync(copy, { recursive: true, force: true });
-  const files = skillFiles();
-  for (const f of files) {
-    const dst = path.join(copy, ...f.rel.split('/'));
-    fs.mkdirSync(path.dirname(dst), { recursive: true });
-    fs.copyFileSync(f.abs, dst);
-  }
-  return files.length;
 }
 
 // ---------- zip (deflate, no dependencies) ----------
@@ -182,15 +110,13 @@ function main(argv) {
   const has = (f) => argv.includes(f);
   const outIdx = argv.indexOf('--out');
   const outDir = outIdx >= 0 ? path.resolve(argv[outIdx + 1]) : path.join(REPO, 'skills', 'dist');
-  const team = has('--team');
   if (has('--check')) {
-    const p = problems({ team: true });
+    const p = problems();
     if (!fs.existsSync(path.join(SKILL, 'scripts', 'bilimind.mjs'))) console.warn('note: scripts/bilimind.mjs not built yet (WP6: node apps/cli/scripts/bundle.mjs)');
     if (p.length) { console.error(p.map((x) => `- ${x}`).join('\n')); process.exitCode = 1; } else console.log('ok: skill and team package are consistent');
     return;
   }
-  if (team) console.log(`synced team package: ${syncTeam()} skill files copied into workbuddy/bilimind-crew/skills/bilimind`);
-  const p = problems({ team });
+  const p = problems();
   if (p.length) { console.error(p.map((x) => `- ${x}`).join('\n')); process.exitCode = 1; return; }
   const files = skillFiles();
   if (!files.some((f) => f.rel === 'scripts/bilimind.mjs')) console.warn('warning: scripts/bilimind.mjs is missing: build it first (node apps/cli/scripts/bundle.mjs); the zip will not run');
@@ -199,12 +125,6 @@ function main(argv) {
   const size = writeZip(skillZip, files.map((f) => ({ name: f.rel, data: fs.readFileSync(f.abs) })));
   console.log(`zip ${skillZip} (${(size / 1024).toFixed(1)} KB, ${files.length} files)`);
   if (size > 10 * 1024 * 1024) { console.error('the skill zip is over 10 MB'); process.exitCode = 1; }
-  if (team) {
-    const tf = teamFiles();
-    const teamZip = path.join(outDir, 'bilimind-crew.zip');
-    const tsize = writeZip(teamZip, tf.map((f) => ({ name: `bilimind-crew/${f.rel}`, data: fs.readFileSync(f.abs) })));
-    console.log(`zip ${teamZip} (${(tsize / 1024).toFixed(1)} KB, ${tf.length} files)`);
-  }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main(process.argv.slice(2));

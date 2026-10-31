@@ -1,5 +1,5 @@
 // fromSaasLesson(): turn a SaaS/engine-shaped lesson ({blocks:[{id?, type, payload, source_material_ids, assessments}]},
-// e.g. hackathon/research/engine-port-samples/lesson-bst-*.json or crew/lessons/<key>.json) into a course.json
+// e.g. packages/engine/test/fixtures/engine-port-samples/lesson-bst-*.json or crew/lessons/<key>.json) into a course.json
 // lesson. Minimal deterministic normalisation so the result validates; the full BlockPayloadNormaliser port
 // lives in packages/engine/src/normalise (WP2).
 //

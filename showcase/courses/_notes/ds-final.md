@@ -32,7 +32,7 @@ narrate (106 s); export; build.
 - Checks 80/80 passed (4 repaired, 0 flagged); code tests 14/14 (reference passes every test, and each starter fails at least one)
 - Auto-marked quiz items checked against the slides: 11/11; rejected 3, rewritten 3, labelled "Beyond your slides" 0
 - Narration 24.3 min (map 9:26, BST 5:34, heaps 8:06) plus a 1:09 "Hear the plan"
-- Gate (`hackathon/runs/g2/shoot.mjs`, 8 page loads): **0 console errors, 0 page errors, 0 error boundaries, 0 horizontal overflow**.
+- Gate (`a headless-browser script`, 8 page loads): **0 console errors, 0 page errors, 0 error boundaries, 0 horizontal overflow**.
   The only failed requests are 3 mp3 preloads aborted when the tab closes (a known effect of how the gate runs, not a bug in the page).
 
 ## Plan (team review decisions after the run, logged under the Lead's name)

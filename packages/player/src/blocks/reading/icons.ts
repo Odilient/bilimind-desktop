@@ -1,5 +1,5 @@
 // Inline icon set for the reading/visual blocks (same 2px stroke family as the landing sprite,
-// paths copied from hackathon/research/player-proto.html). Inlined per use so a block never depends on
+// paths copied from the player prototype). Inlined per use so a block never depends on
 // the shell's sprite being on the page. Every string here is a constant written by us (safe for v-html).
 export const ICONS: Record<string, string> = {
   'i-spark': '<path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z" fill="currentColor"/>',

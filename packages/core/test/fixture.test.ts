@@ -9,7 +9,7 @@ import type { Cite, Course } from '../src/index.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixture = JSON.parse(readFileSync(join(here, '..', 'fixtures', 'course-ds-mini.json'), 'utf8')) as Course;
-const samplesDir = join(here, '..', '..', '..', 'hackathon', 'research', 'engine-port-samples');
+const samplesDir = join(here, '..', '..', 'engine', 'test', 'fixtures', 'engine-port-samples');
 
 describe('fixtures/course-ds-mini.json', () => {
   it('validates against the course schema', () => {

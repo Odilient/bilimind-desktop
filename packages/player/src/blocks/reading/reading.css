@@ -1,4 +1,4 @@
-/* Reading + visual blocks (WP5b), cobalt spec: hackathon/research/player-design.md §5.
+/* Reading + visual blocks (WP5b), cobalt spec: player-design.md §5.
    Uses only the tokens from cobalt-tokens.css (the shell inlines them). Shared block-shell rules (.blk,
    .blk-h, .blk-t, .blk-foot, .cite) repeat §5.0/§5.17 verbatim, so they agree with the shell's copy. */
 

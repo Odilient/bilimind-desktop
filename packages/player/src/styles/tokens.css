@@ -1,14 +1,7 @@
-/* Cobalt tokens + base patterns: copied from hackathon/research/cobalt-tokens.css (fonts live in fonts.css). */
+/* Cobalt tokens + base patterns (fonts live in fonts.css). */
 /* ════════════════════════════════════════════════════════════════════
    cobalt-tokens.css: the BiliMind course PLAYER's tokens + base patterns.
 
-   Extracted from the landing source of truth:
-     plan/reference/design/hero-v7/11/base.css   (palette, radii, gradient, .slab/.eb/.h2/.hchip/.pill)
-     plan/reference/design/hero-v7/11/page.css   (hero light beams, grain, field, shadows, easings)
-     plan/reference/design/hero-v7/11/story.css  (the app redrawn in cobalt: dot grid, milestones,
-                                                  marks, notes, quiz options, lesson cards)
-     plan/reference/design/hero-v7/11/parts/checks.html (ink code stage, speaking drill)
-   Literal greys that recur in those files are named here (see des-cobalt.md §1.1).
 
    Rules this file encodes (do not break them in components):
    1. Lime is a FILL that carries INK text. Never white on lime (1.3:1), never lime text on

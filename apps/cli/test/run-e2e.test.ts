@@ -1,5 +1,5 @@
 // `run` end to end with NO real model: a local mock of the OpenAI-compatible API (BILIMIND_BASE_URL) answers every call
-// with one superset reply built from the recorded samples (hackathon/research/engine-port-samples): outline nodes,
+// with one superset reply built from the recorded samples (packages/engine/test/fixtures/engine-port-samples): outline nodes,
 // lesson blocks and higher-order items in one object; each stage reads its own keys. Free and offline, so it can run
 // on every change: it proves the wiring (init -> ... -> build), not the content quality.
 import { spawn } from 'node:child_process';
@@ -15,7 +15,7 @@ import { writeSourceFolder } from './seed.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLI = process.env.BILIMIND_CLI ? resolve(process.env.BILIMIND_CLI) : join(here, '..', 'src', 'main.ts');
-const SAMPLES = join(here, '..', '..', '..', 'hackathon', 'research', 'engine-port-samples');
+const SAMPLES = join(here, '..', '..', '..', 'packages', 'engine', 'test', 'fixtures', 'engine-port-samples');
 const sample = (f: string) => JSON.parse(readFileSync(join(SAMPLES, f), 'utf8'));
 
 let server: ReturnType<typeof createServer>;
