@@ -1,6 +1,6 @@
 /**
  * How much AI is left: `GET /companion/usage`, the same numbers the server refuses
- * from. Percentages and resets, never dollars, the way Claude Code shows it.
+ * from. Percentages and resets, never dollars.
  *
  * One state for the whole app, because the composer's warning and the Usage screen
  * must not disagree. The server is the authority, so a usage we could not read

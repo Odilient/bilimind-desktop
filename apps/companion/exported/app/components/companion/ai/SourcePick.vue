@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * "Answers from ▾ / All your courses": the chat's course picker, a chip in
- * the composer's row of controls (Claude Design's "Design system ▾" chip).
+ * the composer's row of controls (the usual "Design system ▾" chip).
  * A small thumbnail on the left in the picked course's colour, the label
  * above, the choice below. Pressed, it lists all your courses and each
  * course with what it holds; picking one narrows every answer to it (the

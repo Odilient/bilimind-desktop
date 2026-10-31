@@ -39,7 +39,7 @@
  * is in.
  *
  * Two shapes. In a panel (`md`) it is one line: +, the field, send. On a
- * page (`lg`, the chat page's empty state and its thread) it is Claude
+ * page (`lg`, the chat page's empty state and its thread) it is the usual
  * Design's: the field first, the chips under it, then one row of square
  * 44px controls, the +, "Answers from ▾ / All your courses" (`sources`,
  * the chat's course picker), the picked tile as a chip, and the lime send

@@ -18,7 +18,7 @@
  * here mid-conversation, and the assistant's button steps aside on this
  * page because the page is the assistant.
  *
- * Empty, it is Claude Design's home in BiliMind's ink: one big question,
+ * Empty, it is the usual home in BiliMind's ink: one big question,
  * the box (field, chips, then a row of square controls: +, "Answers from",
  * send), "Choose what to make" tucked under it like a drawer (tiles, the
  * first ones read off the learner's week; make.ts), and "Recent" below:

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * "Recent", under a new chat's box: the way back into what the learner was
- * doing, in three tabs, Chats, Courses and Notes, as Claude Design lists
+ * doing, in three tabs, Chats, Courses and Notes.
  * recent projects under its own box. A search over the tab's names, and a
  * list or a grid.
  *

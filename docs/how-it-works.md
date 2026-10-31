@@ -33,9 +33,8 @@ Renderer (Vue)  --window.bilimind-->  Main process  --utilityProcess.fork-->  Wo
 Every step appends one line to `crew/log.jsonl`, so `REPORT.md` and the course's receipts are computed from
 what actually ran.
 
-The same engine also runs as a CLI, which the WorkBuddy skill and Expert Team call (see the README). They
-are designed so that WorkBuddy's agents make the Lead's and the Checker's judgement calls in a visible
-transcript; in the desktop app the engine makes them unattended.
+The same engine also runs as a CLI, which the skill in `skills/bilimind` calls. In the desktop app the engine
+makes the Lead's and the Checker's judgement calls unattended.
 
 ## The pipeline
 

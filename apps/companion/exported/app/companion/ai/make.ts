@@ -1,6 +1,6 @@
 /**
  * "Choose what to make": the chat's starting points, as tiles under the
- * box on a new chat (and a row of small ones in the dock). Claude Design's
+ * box on a new chat (and a row of small ones in the dock). the usual
  * home, in BiliMind's words: one box for anything, and under it the things
  * a learner most often makes, the first few predicted from their own week.
  *
