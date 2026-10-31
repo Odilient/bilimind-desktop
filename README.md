@@ -10,17 +10,17 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Odilient/bilimind-desktop/releases/latest"><img src="https://img.shields.io/github/v/release/Odilient/bilimind-desktop?label=download&color=2340E6" alt="Latest release"></a>
-  <a href="https://github.com/Odilient/bilimind-desktop/actions/workflows/ci.yml"><img src="https://github.com/Odilient/bilimind-desktop/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/bilimind/desktop/releases/latest"><img src="https://img.shields.io/github/v/release/bilimind/desktop?label=download&color=2340E6" alt="Latest release"></a>
+  <a href="https://github.com/bilimind/desktop/actions/workflows/ci.yml"><img src="https://github.com/bilimind/desktop/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-2340E6" alt="AGPL-3.0"></a>
   <img src="https://img.shields.io/badge/platforms-Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-555" alt="Windows, macOS, Linux">
 </p>
 
 <p align="center">
-  <a href="https://github.com/Odilient/bilimind-desktop/releases/latest"><b>Download</b></a> ·
-  <a href="https://odilient.github.io/bilimind-desktop/courses/ds-final/">Try a course in your browser</a> ·
+  <a href="https://github.com/bilimind/desktop/releases/latest"><b>Download</b></a> ·
+  <a href="https://bilimind.github.io/desktop/courses/ds-final/">Try a course in your browser</a> ·
   <a href="#run-from-source">Run from source</a> ·
-  <a href="https://github.com/Odilient/bilimind-desktop/discussions">Discussions</a> ·
+  <a href="https://github.com/bilimind/desktop/discussions">Discussions</a> ·
   <a href="https://bilimind.com">bilimind.com</a>
 </p>
 
@@ -76,17 +76,17 @@
 
 ## Try a course it made
 
-These play in your browser, no install: [Data Structures final](https://odilient.github.io/bilimind-desktop/courses/ds-final/)
+These play in your browser, no install: [Data Structures final](https://bilimind.github.io/desktop/courses/ds-final/)
 (5 PDFs, 63 pages, 3 lessons for the 3 days left) ·
-[Boba shop: day one for new crew](https://odilient.github.io/bilimind-desktop/courses/boba-day-one/)
+[Boba shop: day one for new crew](https://bilimind.github.io/desktop/courses/boba-day-one/)
 (an SOP and a hygiene regulation, narrated in English and Malay) ·
-[Survival Malay](https://odilient.github.io/bilimind-desktop/courses/bm-survival/) (speaking drills, 20 minutes a day).
+[Survival Malay](https://bilimind.github.io/desktop/courses/bm-survival/) (speaking drills, 20 minutes a day).
 Each one has a report of what the agents did: [ds-final](showcase/courses/ds-final/REPORT.md),
 [boba-day-one](showcase/courses/boba-day-one/REPORT.md), [bm-survival](showcase/courses/bm-survival/REPORT.md).
 
 ## Install
 
-Download from the [latest release](https://github.com/Odilient/bilimind-desktop/releases/latest). Every file is
+Download from the [latest release](https://github.com/bilimind/desktop/releases/latest). Every file is
 named `BiliMind-Desktop-<version>-…`:
 
 | System | File | Then |
@@ -111,8 +111,8 @@ and click **Open Anyway**, or run `xattr -dr com.apple.quarantine "/Applications
 
 macOS and Linux builds are new in 0.2.0. CI builds them, the Linux app passes our launch test, and the Windows
 app is the one we have used most. If something breaks on your system, please
-[open an issue](https://github.com/Odilient/bilimind-desktop/issues/new/choose); Mac owners, see
-[#8](https://github.com/Odilient/bilimind-desktop/issues/8).
+[open an issue](https://github.com/bilimind/desktop/issues/new/choose); Mac owners, see
+[#8](https://github.com/bilimind/desktop/issues/8).
 
 Then open **Settings**, pick a provider and paste your key (next section), drop in your files, type a
 sentence and click **Build my course**.
@@ -143,7 +143,7 @@ the caps, edit the file:
 ```
 
 `DEEPSEEK_API_KEY`, `OPENROUTER_API_KEY` and `BILIMIND_PROVIDER` work as environment variables too. Local models
-(Ollama, LM Studio) and more providers are on the [roadmap](#roadmap) ([#5](https://github.com/Odilient/bilimind-desktop/issues/5)). More detail:
+(Ollama, LM Studio) and more providers are on the [roadmap](#roadmap) ([#5](https://github.com/bilimind/desktop/issues/5)). More detail:
 [docs/DEVELOPERS.md](docs/DEVELOPERS.md#ai-providers-and-the-config-file).
 
 ## Where your files live
@@ -168,7 +168,7 @@ You need [Node.js](https://nodejs.org) 22 or newer (CI uses 24), Git, and pnpm 1
 from `package.json`).
 
 ```bash
-git clone --depth 1 https://github.com/Odilient/bilimind-desktop.git
+git clone --depth 1 https://github.com/bilimind/desktop.git
 cd bilimind-desktop
 corepack enable
 pnpm install
@@ -254,20 +254,20 @@ sentence in, a course built to your deadline out, checked against your files and
 
 What we plan next, roughly in order. Comments and pull requests welcome on any of them.
 
-- Local models and any OpenAI-compatible endpoint (Ollama, LM Studio, OpenAI, Groq), set up from Settings ([#5](https://github.com/Odilient/bilimind-desktop/issues/5)).
-- Keys in the operating system's keychain instead of a plain-text file ([#6](https://github.com/Odilient/bilimind-desktop/issues/6)).
-- Code-signed Windows installers and a notarized macOS app ([#9](https://github.com/Odilient/bilimind-desktop/issues/9)).
-- More sources: EPUB first ([#4](https://github.com/Odilient/bilimind-desktop/issues/4)), then scanned PDFs (OCR) and web links.
-- Your own time zone and language everywhere: the CLI's dates ([#1](https://github.com/Odilient/bilimind-desktop/issues/1)) and native narrator voices for more languages ([#2](https://github.com/Odilient/bilimind-desktop/issues/2)).
-- Windows on ARM and Linux arm64 ([#7](https://github.com/Odilient/bilimind-desktop/issues/7)), and the macOS build tried on real Macs ([#8](https://github.com/Odilient/bilimind-desktop/issues/8)).
+- Local models and any OpenAI-compatible endpoint (Ollama, LM Studio, OpenAI, Groq), set up from Settings ([#5](https://github.com/bilimind/desktop/issues/5)).
+- Keys in the operating system's keychain instead of a plain-text file ([#6](https://github.com/bilimind/desktop/issues/6)).
+- Code-signed Windows installers and a notarized macOS app ([#9](https://github.com/bilimind/desktop/issues/9)).
+- More sources: EPUB first ([#4](https://github.com/bilimind/desktop/issues/4)), then scanned PDFs (OCR) and web links.
+- Your own time zone and language everywhere: the CLI's dates ([#1](https://github.com/bilimind/desktop/issues/1)) and native narrator voices for more languages ([#2](https://github.com/bilimind/desktop/issues/2)).
+- Windows on ARM and Linux arm64 ([#7](https://github.com/bilimind/desktop/issues/7)), and the macOS build tried on real Macs ([#8](https://github.com/bilimind/desktop/issues/8)).
 
-See all [open issues](https://github.com/Odilient/bilimind-desktop/issues) and the [changelog](CHANGELOG.md).
+See all [open issues](https://github.com/bilimind/desktop/issues) and the [changelog](CHANGELOG.md).
 
 ## Contributing
 
 Bug reports, ideas and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md); issues labelled
-[good first issue](https://github.com/Odilient/bilimind-desktop/labels/good%20first%20issue) are a good way in.
-Questions and ideas go to [Discussions](https://github.com/Odilient/bilimind-desktop/discussions). Please follow
+[good first issue](https://github.com/bilimind/desktop/labels/good%20first%20issue) are a good way in.
+Questions and ideas go to [Discussions](https://github.com/bilimind/desktop/discussions). Please follow
 the [Code of Conduct](CODE_OF_CONDUCT.md), and report security problems privately as described in
 [SECURITY.md](SECURITY.md).
 

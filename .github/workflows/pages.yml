@@ -1,5 +1,5 @@
-# Publish the landing page (site/) to GitHub Pages: https://odilient.github.io/bilimind-desktop/
-# Every path in site/index.html is relative, so the page works under the /bilimind-desktop/ sub-path.
+# Publish the landing page (site/) to GitHub Pages: https://bilimind.github.io/desktop/
+# Every path in site/index.html is relative, so the page works under the /desktop/ sub-path.
 name: pages
 
 on:

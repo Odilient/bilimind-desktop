@@ -4,9 +4,9 @@
 
 - **First run asks for your own key.** Before the first build, the home screen asks for a DeepSeek key (the cheapest) or an OpenRouter key, with links to where you get each one. A course costs 2 to 9 cents of your own credit in our runs.
 - **BiliMind free is paused.** The key-less service no longer answers, so the app stops offering it instead of failing at the first step.
-- **Time zones:** the app reads "Wednesday 9am" and writes the review calendar in your computer's time zone (since 0.2.0). The same default for the command line is in review in [#11](https://github.com/Odilient/bilimind-desktop/pull/11).
+- **Time zones:** the app reads "Wednesday 9am" and writes the review calendar in your computer's time zone (since 0.2.0). The same default for the command line is in review in [#11](https://github.com/bilimind/desktop/pull/11).
 
-Full list: [changelog](https://github.com/Odilient/bilimind-desktop/blob/main/CHANGELOG.md).
+Full list: [changelog](https://github.com/bilimind/desktop/blob/main/CHANGELOG.md).
 
 ## Download
 

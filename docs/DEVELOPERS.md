@@ -196,7 +196,7 @@ powershell -ExecutionPolicy Bypass -File skills\bilimind\install.ps1
 
 It copies the skill into `%WORKBUDDY_CONFIG_DIR%\skills\bilimind` (by default
 `%USERPROFILE%\.workbuddy-ai\skills\bilimind`), the folder WorkBuddy watches. The skill is also a zip on
-the website: [bilimind-skill.zip](https://odilient.github.io/bilimind-desktop/downloads/bilimind-skill.zip).
+the website: [bilimind-skill.zip](https://bilimind.github.io/desktop/downloads/bilimind-skill.zip).
 Expert Team notes: [hackathon/EXPERT-TEAM.md](../hackathon/EXPERT-TEAM.md),
 [workbuddy/bilimind-crew/README.md](../workbuddy/bilimind-crew/README.md). How we used WorkBuddy during the
 event: [workbuddy.md](workbuddy.md).

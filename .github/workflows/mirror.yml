@@ -19,7 +19,7 @@ concurrency:
 jobs:
   gitlab:
     runs-on: ubuntu-latest
-    if: github.repository == 'Odilient/bilimind-desktop'
+    if: github.repository == 'bilimind/desktop'
     env:
       KEY: ${{ secrets.GITLAB_MIRROR_SSH_KEY }}
     steps:
