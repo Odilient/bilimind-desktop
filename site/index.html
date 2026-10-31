@@ -1188,7 +1188,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
     <li class="only-phone"><a href="https://github.com/bilimind/desktop">GitHub</a></li>
   </ul>
   <div class="nav-end">
-    <a class="pill dark signin gh" href="https://github.com/bilimind/desktop" aria-label="BiliMind Desktop on GitHub"><svg aria-hidden="true" style="width:17px;height:17px"><use href="#i-github"/></svg>GitHub<span class="gh-stars" hidden style="margin-left:2px;padding:3px 9px;border-radius:99px;background:rgb(255 255 255 / .14);font-size:.86em">&#9733; <b class="gh-n" style="font-weight:600"></b></span></a>
+    <a class="pill dark signin gh" href="https://github.com/bilimind/desktop" aria-label="BiliMind Desktop on GitHub"><svg aria-hidden="true" style="width:17px;height:17px"><use href="#i-github"/></svg>GitHub</a>
     <a class="pill light" href="https://github.com/bilimind/desktop/releases/latest">Download</a>
     <button class="menu" id="menu" type="button" aria-expanded="false" aria-controls="links" aria-label="Menu"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 5h14M1 11h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </div>
@@ -5997,17 +5997,6 @@ if (renderer) {
   window.__objShot = () => { renderer.render(scene, camera); return canvas.toDataURL('image/png'); };
 }
 
-</script>
-<script>
-(function () {
-  var el = document.querySelector('.gh-stars'); if (!el) return;
-  function show(n) { if (typeof n === 'number') { el.querySelector('.gh-n').textContent = n; el.hidden = false; } }
-  try { var c = sessionStorage.getItem('bm-gh-stars'); if (c !== null) { show(+c); return; } } catch (e) {}
-  fetch('https://api.github.com/repos/bilimind/desktop').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
-    if (!j) return; show(j.stargazers_count);
-    try { sessionStorage.setItem('bm-gh-stars', String(j.stargazers_count)); } catch (e) {}
-  }).catch(function () {});
-})();
 </script>
 </body>
 </html>
