@@ -1,7 +1,7 @@
 {
   "name": "@bilimind/companion",
   "productName": "BiliMind",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "BiliMind on your computer: your courses, plan, notes and whiteboards in a local database, with your own AI key.",
@@ -9,7 +9,7 @@
     "name": "BiliMind team",
     "email": "oybek@bilimind.com"
   },
-  "homepage": "https://github.com/Odilient/bilimind-desktop",
+  "homepage": "https://github.com/bilimind/desktop",
   "desktopName": "com.bilimind.companion.desktop",
   "license": "AGPL-3.0-only",
   "main": "dist/main/main.cjs",

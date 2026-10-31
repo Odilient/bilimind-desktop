@@ -88,7 +88,7 @@ come from the team's existing BiliMind web app.
 - Broken JSON from the model is repaired locally (raw newlines and bad escapes in strings, miscounted
   brackets) before asking again. Replies that still cannot be decoded are saved to
   `crew/cache/bad-replies/` for diagnosis.
-- Spend caps: $0.25 per run and $2 per day by default (`caps` in `~/.bilimind/config.json`), plus a balance
+- Spend caps: $1 per course and $2 per day by default (`caps` in `~/.bilimind/config.json`), plus a balance
   floor (`reserve_usd`).
 
 ## Timing and cost (measured)

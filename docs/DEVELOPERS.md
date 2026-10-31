@@ -21,10 +21,10 @@ flowchart LR
    your sentence (exam date and time, minutes a day, audience, language), weights each topic by the past
    paper's marks, keeps and cuts topics with one reason each, and plans the days you have. In the app and
    the CLI's `run`, keep and cut are computed (marks per minute over the days available,
-   `chooseLessons` in [packages/engine/src/run.ts](../packages/engine/src/run.ts)). The WorkBuddy skill is
-   written so that WorkBuddy's own agent is the Lead and decides with
+   `chooseLessons` in [packages/engine/src/run.ts](../packages/engine/src/run.ts)). The skill is
+   written so that the host's own agent is the Lead and decides with
    [references/planning.md](../skills/bilimind/references/planning.md).
-2. **Writers**, one per lesson, write in parallel (up to 4 at a time in the app; the WorkBuddy skill asks for up to 6). The
+2. **Writers**, one per lesson, write in parallel (up to 4 at a time in the app; the skill asks for up to 6). The
    kind of knowledge decides the lesson format: a procedure gets a walkthrough, a formula gets a worked
    example, a language gets speaking drills. A lesson that fails its checks is re-drafted once with the
    failures as notes. A draft that fails twice is dropped and the run goes on with the other lessons.
@@ -72,7 +72,7 @@ Your own key: **DeepSeek** (direct API) or **OpenRouter**; pick it in Settings a
 Then text goes straight to that provider, not through BiliMind. Narration needs no key.
 
 The key is stored in `~/.bilimind/config.json` (`%USERPROFILE%\.bilimind\config.json` on Windows), the same
-file the CLI and the WorkBuddy skill read. It is plain text, readable by your user account. It never reaches the
+file the CLI and the skill read. It is plain text, readable by your user account. It never reaches the
 app's window, and the app never logs it. `BILIMIND_HOME` points the app and the CLI at another folder.
 
 ```json
@@ -86,26 +86,14 @@ app's window, and the app never logs it. `BILIMIND_HOME` points the app and the 
 paused). With a key and no provider the app and the CLI use that key's pool; with no key at all they use
 `"bilimind"` while it is on, and `"deepseek"` (which then asks for a key) while it is paused.
 
-Optional fields: `models`, `caps` (`{"run_usd": 0.25, "day_usd": 2}` by default) and `reserve_usd` (a
+Optional fields: `models`, `caps` (`{"run_usd": 1, "day_usd": 2}` by default) and `reserve_usd` (a
 balance floor; set it to `0` for normal use; BiliMind free has none). Environment variables `DEEPSEEK_API_KEY`,
 `OPENROUTER_API_KEY` and `BILIMIND_PROVIDER` also work; `BILIMIND_FREE_URL` (or `"free_base_url"`) points
 BiliMind free at another server, for tests. Never commit a key: `.env` and `.env.*` are git-ignored.
 
 ## Measured runs
 
-Only numbers we measured on our own runs.
-
-- Unattended CLI pipeline (DeepSeek direct, sample Data Structures folder): 268 s and 289 s, $0.046 and
-  $0.047 in text-model calls.
-- The desktop app, three runs clicked through its own window (DeepSeek, narration on, the same sample
-  folder; two in the dev build, one in the packaged exe): 3 min 23 s, 4 min 42 s and 3 min 37 s, $0.036,
-  $0.049 and $0.032, checks 91/91, 98/100 and 79/80. Every step's time and cost:
-  [hackathon/proof/desktop-run-timings.json](../hackathon/proof/desktop-run-timings.json).
-- The three showcase courses in [showcase/courses](../showcase/courses/) each started as an unattended run
-  of the same pipeline (bundled CLI, DeepSeek direct), then had a review pass by our team with an AI coding
-  agent acting as Lead, Coder, Checker and lecturer: re-planning, fixing exercises and tests, correcting
-  lesson text, ruling on answers with verbatim quotes. Every change is in the course's `crew/log.jsonl` and
-  in [showcase/courses/_notes](../showcase/courses/_notes/), including the bugs the pass found in the engine.
+One real folder build on DeepSeek: a 16-slide PDF, 5 lessons, 165 seconds, $0.038 (engine `runPipeline`, narration off). One rubric mark: $0.0004.
 
 ## Develop and build
 
@@ -157,13 +145,10 @@ packages/core      shared types, course.json schema (bilimind.course/1), archety
 packages/engine    ingest, outline, exam map, planner, drafts, checks, code tests, verdicts, narration, exports, build
 packages/player    the offline course page (Vue + Vite, built into one self-contained HTML file)
 server/free-proxy  BiliMind free: the Cloudflare Worker behind desktop-api.bilimind.com
-skills/bilimind    the WorkBuddy skill
-workbuddy/bilimind-crew   the WorkBuddy Expert Team package
+skills/bilimind    a skill built on the CLI
 showcase           sample source folders (with licences) and the courses built from them
 site               the website (GitHub Pages)
-pitch              the pitch deck (PDF and its HTML source)
 docs               this documentation
-hackathon          Dormathon proof, runbook, slides brief, research and notes
 ```
 
 ## The command line
@@ -175,36 +160,3 @@ Commands: `doctor`, `init`, `goal`, `ingest`, `outline`, `exam-map`, `plan`, `no
 `due`, `grade`, `plant`, `plant-score` and `run`. `doctor` checks the provider (never printing a key) and the
 narration voices; `run` builds a whole course unattended. CI runs the CLI's tests on Linux, Windows and
 macOS.
-
-## WorkBuddy skill and Expert Team
-
-`skills/bilimind/` is a WorkBuddy skill and `workbuddy/bilimind-crew/` is an Expert Team ("BiliMind Crew":
-a Lead, Writers, a Coder and a Checker) validated with WorkBuddy's own `validate_expert.py` and registered
-with `register_expert.py` on our laptop, where it shows in My Experts. How it is meant to run: WorkBuddy's
-agent acts as the Lead: it makes a nine-item task checklist, launches one Writer sub-agent per lesson in
-parallel, then the Coder and the Checker in parallel, runs the bundled `bilimind.mjs` for every step (the
-same engine as the desktop app; the CLI enforces formats, schemas, tests and verbatim quotes), and ends with
-`present_files`, which opens the course in WorkBuddy's Preview panel. It publishes with
-`workbuddy_sites_deploy` only when the user asks. Three demo courses were built by the app and the CLI;
-`showcase/courses/ds-workbuddy/` was built inside WorkBuddy from one sentence ([how](../hackathon/proof/workbuddy-run/)). The playbook: [skills/bilimind/SKILL.md](../skills/bilimind/SKILL.md).
-
-Install the skill (Windows, PowerShell):
-
-```powershell
-powershell -ExecutionPolicy Bypass -File skills\bilimind\install.ps1
-```
-
-It copies the skill into `%WORKBUDDY_CONFIG_DIR%\skills\bilimind` (by default
-`%USERPROFILE%\.workbuddy-ai\skills\bilimind`), the folder WorkBuddy watches. The skill is also a zip on
-the website: [bilimind-skill.zip](https://bilimind.github.io/desktop/downloads/bilimind-skill.zip).
-Expert Team notes: [hackathon/EXPERT-TEAM.md](../hackathon/EXPERT-TEAM.md),
-[workbuddy/bilimind-crew/README.md](../workbuddy/bilimind-crew/README.md). How we used WorkBuddy during the
-event: [workbuddy.md](workbuddy.md).
-
-## Built at Dormathon and before
-
-BiliMind already existed before Dormathon as a web app (Laravel + Nuxt, bilimind.com) that the BiliMind team
-(Oybek, Ulugbek, Sharif and Abdugaffor Odilov) works on. From it we reused the pedagogy: the lesson prompts and the rules that map each
-kind of knowledge to its lesson formats. The Node engine, the Checker and Coder loops, the past-paper
-planner, the offline player, the exports, the WorkBuddy skill and team, BiliMind free and the desktop app
-were built during Dormathon (10-11 October 2026), with AI coding agents.

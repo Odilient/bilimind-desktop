@@ -195,7 +195,7 @@ var init_config = __esm({
     DEFAULT_RESERVE_USD = { deepseek: 0, openrouter: 0, bilimind: 0 };
     FREE_TIER_ON = false;
     FREE_BASE_URL = PRESETS.bilimind.baseUrl;
-    ENGINE_VERSION = "0.2.1";
+    ENGINE_VERSION = "1.0.0";
     DEFAULT_CAPS = { runUsd: 1, dayUsd: 2 };
     loadConfig = (opts = {}) => {
       const env = opts.env ?? process.env;

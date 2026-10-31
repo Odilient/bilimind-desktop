@@ -1,6 +1,6 @@
 {
   "name": "@bilimind/cli",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "bilimind CLI (commander). Bundled by esbuild into skills/bilimind/scripts/bilimind.mjs.",

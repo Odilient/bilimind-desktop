@@ -17,19 +17,17 @@ Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 You need Node.js 22 or newer (CI uses 24), Git and pnpm 10.
 
 ```bash
-git clone https://github.com/<you>/bilimind-desktop.git
-cd bilimind-desktop
+git clone https://github.com/<you>/desktop.git
+cd desktop
 corepack enable
 pnpm install
 pnpm start          # build everything and open the app
-pnpm dev            # the app with the renderer on Vite (hot reload) and the showcase courses in the library
 ```
 
 On Ubuntu 24.04 and later, run the development app with `ELECTRON_DISABLE_SANDBOX=1` (the OS blocks the user
 namespaces Chromium's sandbox needs; the packaged app handles this itself).
 
-You do not need an AI key to work on most of the code. The tests never call a provider, and the renderer runs in
-a browser with a mock that replays a recorded run: run `pnpm dev` and open the `renderer:` URL it prints.
+You do not need an AI key to work on most of the code. The tests never call a provider.
 
 ## Where things are
 
@@ -40,11 +38,10 @@ a browser with a mock that replays a recorded run: run `pnpm dev` and open the `
 | `packages/player` | The offline course page (Vue + Vite, built into one HTML file) |
 | `apps/companion` | The Electron app: a Nuxt SPA exported from the hosted app, an in-process API on SQLite, a worker that runs the engine. [README](apps/companion/README.md) |
 | `apps/cli` | The `bilimind` command line; bundled into `skills/bilimind/scripts/bilimind.mjs` |
-| `skills/bilimind`, `workbuddy/` | The WorkBuddy skill and Expert Team |
+| `skills/bilimind` | A skill built on the CLI |
 | `server/free-proxy` | BiliMind free, the Cloudflare Worker behind `desktop-api.bilimind.com` |
 | `showcase/` | Sample source folders (with their licences) and the courses built from them |
 | `site/` | The website on GitHub Pages |
-| `hackathon/`, `pitch/`, `plan/` | History: the Dormathon entry, the pitch deck and the original plans |
 
 More: [docs/DEVELOPERS.md](docs/DEVELOPERS.md), [docs/how-it-works.md](docs/how-it-works.md),
 [docs/course-format.md](docs/course-format.md).
@@ -61,12 +58,12 @@ node --test "skills/bilimind/test/*.test.mjs"
 CI runs the same on Linux, Windows and macOS, plus the app end to end on Linux
 (`apps/companion/test/e2e.mjs`, with nothing on screen and a fake AI provider).
 
-If you change the engine or the CLI, rebuild the bundled CLI and the Expert Team copy, and commit them with your
+If you change the engine or the CLI, rebuild the bundled CLI, and commit them with your
 change (the skill tests fail otherwise):
 
 ```bash
 cd apps/cli && node scripts/bundle.mjs && cd ../..
-node skills/bilimind/scripts/zip-skill.mjs --team
+node skills/bilimind/scripts/zip-skill.mjs
 ```
 
 ## How we write code here

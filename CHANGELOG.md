@@ -5,6 +5,26 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0]
+
+The desktop app is now the whole study companion, on your computer, with your own AI key. It replaces the earlier app.
+
+### Added
+
+- Chat, courses drafted from a chat, lessons, marking, history, notes, whiteboards, Today and a planner.
+- Checks from memory, readiness from those checks, and the comparison with your real grade.
+- Calendar links, exam timetable PDFs, pasted announcements, search, narration, offline course pages, backup and restore.
+- Build from a folder runs the earlier pipeline, Checker and report included, and brings the result in as a course.
+
+### Changed
+
+- The default spending limit is $1 a course (was $0.25). The daily limit stays at $2.
+- The repository is now github.com/bilimind/desktop.
+
+### Removed
+
+- The earlier Vue renderer, the WorkBuddy Expert Team package, and the event-era folders.
+
 ## [0.2.1] - 2026-10-21
 
 ### Changed
@@ -40,13 +60,12 @@ The first release for macOS and Linux, and the first one built for contributors.
 
 - Dates in your sentence ("Wednesday 9am") and the review calendar now use your computer's time zone in the
   desktop app. They were Malaysian time (`Asia/Kuala_Lumpur`) for everyone. The CLI keeps that default for now.
-- No balance reserve by default. The Dormathon build kept $3 (DeepSeek) and $4 (OpenRouter) back for its demo and
+- No balance reserve by default. The earlier build kept $3 (DeepSeek) and $4 (OpenRouter) back for its demo and
   refused calls below that; set `reserve_usd` in the config file to keep a floor.
 - Messages name the config file as it is on your system: `~/.bilimind/config.json` on macOS and Linux,
   `%USERPROFILE%\.bilimind\config.json` on Windows.
-- Installs from source use the public npm registry and Electron's GitHub downloads again (the Dormathon build
+- Installs from source use the public npm registry and Electron's GitHub downloads again (the earlier build
   pointed at a mirror because of the venue's firewall).
-- The README is rewritten for users and contributors; the Dormathon entry moved to [hackathon/README.md](hackathon/README.md).
 - Settings: the About text names the BiliMind team.
 
 ### Known issues
@@ -58,7 +77,7 @@ The first release for macOS and Linux, and the first one built for contributors.
 
 ## [0.1.0] - 2026-10-10
 
-The Dormathon 2026 build, for Windows (a portable `.exe` and an installer).
+The first build, for Windows (a portable `.exe` and an installer).
 
 - One sentence and a folder of files in, a narrated course out: a Lead that plans to your exam date and weighs the
   past paper, Writers in parallel, a Coder that runs every exercise, a Checker that re-solves every auto-marked

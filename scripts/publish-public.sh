@@ -14,7 +14,7 @@ for a in "$@"; do
   esac
 done
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-DEST="${PUBLIC_REMOTE:-ssh://git@ssh.github.com:443/Odilient/bilimind-desktop.git}"
+DEST="${PUBLIC_REMOTE:-ssh://git@ssh.github.com:443/bilimind/desktop.git}"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
