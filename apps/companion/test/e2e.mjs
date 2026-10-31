@@ -1,7 +1,7 @@
 // The app end to end: no account, no network, and everything still there after a restart. Nothing reaches the screen
 // (Chromium's headless Ozone platform, no X or Wayland) and nothing plays sound. Needs `pnpm spa` and `pnpm build` first.
 
-import { mkdtempSync, rmSync, statSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -13,11 +13,33 @@ const require = createRequire(import.meta.url)
 const appDir = join(dirname(fileURLToPath(import.meta.url)), '..')
 const home = mkdtempSync(join(tmpdir(), 'bm-companion-e2e-'))
 
+const folder = join(home, 'a-folder')
+mkdirSync(folder)
+writeFileSync(join(folder, 'notes.md'), '# Heaps\n\nA heap keeps the smallest key at the root. '.repeat(40))
+
 // Nothing here spends money: the "provider" is this script.
 const block = (actions) => `\n\`\`\`actions\n${JSON.stringify(actions)}\n\`\`\``
 const svg = '<svg viewBox="0 0 800 500"><rect x="40" y="40" width="200" height="100" fill="#2740E0"/></svg>'
+const PROPOSAL = {
+  title: 'Italian basics', kind: 'self', summary: 'You will order food in Italian.', finish: { kind: 'none', label: '' }, minutes_per_week: 120,
+  units: [{ title: 'First words', topics: [{ title: 'Ordering food', summary: 'Asking for what you want.' }, { title: 'Numbers and prices', summary: 'Paying the bill.' }] }],
+  deadlines: [],
+}
+const LESSON = { blocks: [
+  { type: 'explainer', payload: { markdown: 'Vorrei is the polite way to ask: it means I would like.' } },
+  { type: 'diagram', payload: { format: 'mermaid', source: 'flowchart TD\n  A[Vorrei] --> B[un caffe]', caption: 'Asking' } },
+  { type: 'analogy', payload: { markdown: 'Vorrei is the please of Italian.', breaks_down_when: 'It is a verb, not a courtesy word.' } },
+  { type: 'quiz', payload: { intro: 'Check it.' }, assessments: [
+    { kind: 'mcq', prompt: 'How do you politely ask for a coffee?', bloom: 'apply', grader: 'deterministic', options: [{ id: 'a', text: 'Voglio un caffe' }, { id: 'b', text: 'Vorrei un caffe' }], answer_key: { correct_option_ids: ['b'] }, max_score: 100 },
+  ] },
+] }
 const llm = await fakeProvider((body) => {
+  const system = body.messages[0].content
   const last = body.messages.at(-1).content
+  if (system.includes('You turn what a learner gives you')) return { pieces: inPieces(JSON.stringify(PROPOSAL)), delayMs: 5 }
+  if (system.includes('You classify one lesson')) return { pieces: [JSON.stringify({ archetype: 'conceptual' })] }
+  if (last.includes('ARCHETYPE:')) return { pieces: inPieces(JSON.stringify(LESSON), 24), thinking: ['What to ask for'], delayMs: 60 }
+  if (/QUESTION\nMake me an Italian course/.test(last)) return { pieces: inPieces(`Let me draft Italian basics from what you told me.${block([{ type: 'propose_course' }])}`) }
   if (body.messages[0].content.startsWith('You draw one teaching graphic')) return { pieces: inPieces(svg, 16), delayMs: 40 }
   if (/QUESTION\nExplain joins/.test(last)) return { pieces: inPieces('A join combines rows from two tables. It matches them on a key.\n'), delayMs: 10 }
   if (/QUESTION\nKeep a note/.test(last)) return { pieces: inPieces(`Here is a note to keep.${block([{ type: 'create_page', title: 'Joins cheat sheet', markdown: '# Joins\nInner keeps matches.', subject_id: null }])}`), delayMs: 10 }
@@ -31,6 +53,7 @@ const env = {
   ...process.env,
   BILIMIND_LLM_BASE_URL: llm.url,
   BILIMIND_E2E: '1',
+  BILIMIND_E2E_FOLDER: folder,
   BILIMIND_USER_DATA: join(home, 'profile'),
   BILIMIND_HOME: join(home, 'settings'),
   BILIMIND_NATIVE_TRAY: '0',
@@ -264,6 +287,49 @@ try {
   await page.getByText('Ok.').first().waitFor({ timeout: 20_000 })
   const threads = await page.evaluate(async () => (await (await fetch('/api/companion/ask/threads')).json()).data)
   check('the chats are listed', threads.some((x) => x.title === 'Explain joins'))
+
+  // ---------- a course from the chat, through to a marked answer ----------
+  await page.goto('app://bilimind/app/chat')
+  await ask('Make me an Italian course')
+  await page.getByRole('button', { name: /^Create/ }).first().click({ timeout: 30_000 })
+  await page.waitForFunction(async () => {
+    const { data } = await (await fetch('/api/companion/subjects')).json()
+    return data.some((s) => s.title === 'Italian basics')
+  }, undefined, { timeout: 15_000, polling: 300 })
+  check('a draft in the chat becomes a course', true)
+  const made = await page.evaluate(async () => {
+    const subjects = (await (await fetch('/api/companion/subjects')).json()).data
+    const topics = (await (await fetch('/api/companion/topics')).json()).data
+    const subject = subjects.find((x) => x.title === 'Italian basics')
+    return { subject: subject.id, topic: topics.find((t) => t.subject_id === subject.id && t.title === 'Ordering food').id }
+  })
+  await page.goto(`app://bilimind/app/courses/${made.subject}`)
+  await page.getByText('Ordering food').first().click({ timeout: 30_000 })
+  await page.getByRole('button', { name: /Write (this|the) lesson/ }).first().click({ timeout: 20_000 })
+  await page.getByText('Vorrei is the polite way').first().waitFor({ timeout: 60_000 })
+  check('a lesson is written and appears on its page', true)
+  await page.getByRole('radio', { name: 'Vorrei un caffe' }).first().click({ timeout: 30_000 }).catch(async () => { await page.getByText('Vorrei un caffe').first().click() })
+  await page.getByRole('button', { name: /^Submit/ }).first().click({ timeout: 10_000 })
+  await page.getByText('Passed').first().waitFor({ timeout: 15_000 })
+  check('an answer is marked on the lesson page', true)
+
+  await page.goto('app://bilimind/app/settings?section=spending')
+  await page.getByText('Writing a lesson').first().waitFor({ timeout: 20_000 })
+  check('the Spending screen shows what the lesson cost', (await page.locator('body').innerText()).includes('Italian basics'))
+
+  // ---------- a folder, through the pipeline's own process ----------
+  const folderReply = await page.evaluate(async () => {
+    const picked = (await (await fetch('/api/companion/folders/pick', { method: 'POST' })).json()).data
+    const res = await fetch('/api/companion/ask', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'text/event-stream' },
+      body: JSON.stringify({ message: 'Get me ready', scope: 'everything', context: { kind: 'everything' }, attachments: [{ kind: 'moodle', label: picked.title, subject_id: picked.id }] }),
+    })
+    return res.text()
+  })
+  // The fake provider can't write a course, so the build stops at the outline: what this proves is that the
+  // process starts from where packaging puts it, reads the folder and reports back in words.
+  check('building from a folder runs its own process and reports back', folderReply.includes('Reading your files') && folderReply.includes('finish building'), folderReply.slice(-300))
 
   await stop(app)
 

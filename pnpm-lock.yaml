@@ -238,51 +238,6 @@ importers:
         specifier: ^13.6.33
         version: 13.6.33
 
-  apps/desktop:
-    devDependencies:
-      '@bilimind/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@bilimind/engine':
-        specifier: workspace:*
-        version: link:../../packages/engine
-      '@fontsource/inter':
-        specifier: ^5.3.0
-        version: 5.3.0
-      '@fontsource/space-grotesk':
-        specifier: ^5.3.0
-        version: 5.3.0
-      '@types/node':
-        specifier: ^24.0.0
-        version: 24.19.2
-      '@vitejs/plugin-vue':
-        specifier: 6.0.10
-        version: 6.0.10(vite@8.3.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vue@3.5.43(typescript@5.9.3))
-      electron:
-        specifier: 44.7.0
-        version: 44.7.0
-      electron-builder:
-        specifier: 26.15.3
-        version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
-      esbuild:
-        specifier: 0.28.2
-        version: 0.28.2
-      puppeteer-core:
-        specifier: 25.13.0
-        version: 25.13.0
-      vite:
-        specifier: 8.3.4
-        version: 8.3.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)
-      vitest:
-        specifier: 5.0.3
-        version: 5.0.3(@types/node@24.19.2)(vite@8.3.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
-      vue:
-        specifier: 3.5.43
-        version: 3.5.43(typescript@5.9.3)
-      vue-tsc:
-        specifier: 3.3.12
-        version: 3.3.12(typescript@5.9.3)
-
   packages/core:
     dependencies:
       ts-fsrs:
@@ -3144,11 +3099,6 @@ packages:
   electron-winstaller@5.4.0:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
-
-  electron@44.7.0:
-    resolution: {integrity: sha512-aUq9/zLAAFYc+a9gy6cd0C3Y/N/RmovLCD8TV8LhIzNhuND6HEgsu96jJz9cbAxvckSPv+Trf2PKEjktoZgFkw==}
-    engines: {node: '>= 22.12.0'}
-    hasBin: true
 
   electron@45.0.0:
     resolution: {integrity: sha512-yjz4uhMBcO6L5X7CWgRMobf2EMJPnb9j4zuf+nu/TU/6E4Sqfx7fn/a2eACo4qngjml/0JnsoZhxYroJLxLd2w==}
@@ -9225,14 +9175,6 @@ snapshots:
       temp: 0.9.4
     optionalDependencies:
       '@electron/windows-sign': 1.2.2
-    transitivePeerDependencies:
-      - supports-color
-
-  electron@44.7.0:
-    dependencies:
-      '@electron-internal/extract-zip': 1.0.5
-      '@electron/get': 5.1.0
-      '@types/node': 24.19.2
     transitivePeerDependencies:
       - supports-color
 

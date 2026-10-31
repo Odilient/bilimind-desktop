@@ -21,7 +21,7 @@ import type { createWriter } from './writer.ts'
 import { NO_KEY_LESSON } from './writer.ts'
 
 const WRITING = 'This lesson is being written right now. Try again when it is done.'
-const KINDS = ['highlight', 'note', 'ink', 'whiteboard']
+const KINDS = ['highlight', 'note', 'ink', 'board', 'label']
 const MAX_ANNOTATIONS = 500
 const STATES = ['available', 'in_progress', 'completed', 'skipped']
 
@@ -244,7 +244,8 @@ export function lessonApi(store: Store, filesDir: string, writer: ReturnType<typ
     items.forEach((a: any, i: number) => {
       if (!a || typeof a.uuid !== 'string' || !UUID.test(a.uuid)) throw new Invalid({ [`annotations.${i}.uuid`]: ['The uuid field must be a valid UUID.'] })
       if (!KINDS.includes(a.kind)) throw new Invalid({ [`annotations.${i}.kind`]: ['The selected kind is invalid.'] })
-      if (a.block_id != null && !own.has(a.block_id)) throw new Invalid({ [`annotations.${i}.block_id`]: ['That part is not in this lesson.'] })
+      // A whiteboard belongs to the lesson; everything else to one part of it.
+      if (a.kind === 'board' ? a.block_id != null : !own.has(a.block_id)) throw new Invalid({ [`annotations.${i}.block_id`]: ['That part is not in this lesson.'] })
       if (!a.anchor || typeof a.anchor !== 'object' || !a.data || typeof a.data !== 'object') throw new Invalid({ [`annotations.${i}.anchor`]: ['The anchor and data fields are required.'] })
     })
     const saved = items.map((a: any) => {

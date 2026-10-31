@@ -38,7 +38,7 @@ a browser with a mock that replays a recorded run: run `pnpm dev` and open the `
 | `packages/core` | Shared types, the course schema (`bilimind.course/1`), lesson archetypes and formats, graders, FSRS |
 | `packages/engine` | Ingest, outline, exam map, planner, drafts, checks, code tests, verdicts, narration, exports, build |
 | `packages/player` | The offline course page (Vue + Vite, built into one HTML file) |
-| `apps/desktop` | The Electron app: main process, preload, the worker that runs the engine, the Vue renderer. [CONTRACT.md](apps/desktop/CONTRACT.md) is the main-to-window API |
+| `apps/companion` | The Electron app: a Nuxt SPA exported from the hosted app, an in-process API on SQLite, a worker that runs the engine. [README](apps/companion/README.md) |
 | `apps/cli` | The `bilimind` command line; bundled into `skills/bilimind/scripts/bilimind.mjs` |
 | `skills/bilimind`, `workbuddy/` | The WorkBuddy skill and Expert Team |
 | `server/free-proxy` | BiliMind free, the Cloudflare Worker behind `desktop-api.bilimind.com` |
@@ -58,8 +58,8 @@ pnpm build
 node --test "skills/bilimind/test/*.test.mjs"
 ```
 
-CI runs the same on Linux, Windows and macOS, plus a hidden-window smoke test of the desktop app
-(`apps/desktop/scripts/e2e-main.mjs`; it needs a display, so on a Linux server use `xvfb-run -a`).
+CI runs the same on Linux, Windows and macOS, plus the app end to end on Linux
+(`apps/companion/test/e2e.mjs`, with nothing on screen and a fake AI provider).
 
 If you change the engine or the CLI, rebuild the bundled CLI and the Expert Team copy, and commit them with your
 change (the skill tests fail otherwise):

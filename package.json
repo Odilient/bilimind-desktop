@@ -6,11 +6,13 @@
   "license": "AGPL-3.0-only",
   "repository": "github:Odilient/bilimind-desktop",
   "packageManager": "pnpm@10.18.1",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "dev": "pnpm --filter @bilimind/desktop dev",
-    "start": "pnpm build && pnpm --filter @bilimind/desktop start",
-    "dist": "pnpm --filter @bilimind/player build && pnpm --filter @bilimind/desktop dist",
+    "dev": "pnpm --filter @bilimind/companion spa && pnpm --filter @bilimind/companion build && pnpm --filter @bilimind/companion start",
+    "start": "pnpm --filter @bilimind/companion spa && pnpm --filter @bilimind/companion build && pnpm --filter @bilimind/companion start",
+    "dist": "pnpm --filter @bilimind/companion dist",
     "test": "pnpm -r --if-present test",
     "build": "pnpm -r --if-present build",
     "typecheck": "pnpm -r --if-present typecheck"

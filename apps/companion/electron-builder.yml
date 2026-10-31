@@ -23,7 +23,7 @@ buildDependenciesFromSource: false
 electronVersion: 45.0.0
 publish: null
 # Linux: a launcher in front of the binary so the AppImage starts on Ubuntu 24.04+ (see the script)
-afterPack: ../desktop/scripts/after-pack.cjs
+afterPack: scripts/after-pack.cjs
 
 linux:
   icon: resources/icon-1024.png
@@ -35,7 +35,12 @@ linux:
   target:
     - target: AppImage
       arch: [x64]
+    - target: deb
+      arch: [x64]
   artifactName: BiliMind-${version}-linux-${arch}.${ext}
+deb:
+  # The AppImage's launcher can't help a .deb; a profile lets it keep Chromium's sandbox on Ubuntu 24.04+.
+  appArmorProfile: resources/apparmor-profile.tpl
 
 win:
   icon: resources/icon.ico

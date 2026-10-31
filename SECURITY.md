@@ -22,8 +22,8 @@ Security fixes go into the latest release. Please check that the problem is stil
 
 ## In scope
 
-- The desktop app (`apps/desktop`): the boundary between the window and the main process (`window.bilimind`,
-  see [CONTRACT.md](apps/desktop/CONTRACT.md)), opening links and files, reading and writing outside the course
+- The desktop app (`apps/companion`): the boundary between the window and the main process (the in-process API on
+  `app://bilimind/api`, and `window.bilimind`), opening links and files, reading and writing outside the course
   and source folders, anything that would let a course page or a source file run code on your computer.
 - The engine and the CLI (`packages/engine`, `apps/cli`): key handling (a key must never be logged, printed,
   written into a course or sent anywhere but the provider), path handling, and the course files they write.

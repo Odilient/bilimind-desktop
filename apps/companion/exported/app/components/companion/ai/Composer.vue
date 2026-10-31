@@ -313,7 +313,11 @@ function choose(choice: AttachChoice): void {
   else if (choice === 'notes') notesOpen.value = true
   else if (choice === 'link') openLink()
   else if (choice === 'paste') openPaste()
-  else if (choice === 'moodle') void pickFolder().then((folder) => { if (folder) { tray.addMoodle(folder as never); void nextTick(focus) } }) else if (choice === 'calendar') calendarOpen.value = true
+  else if (choice === 'moodle') {
+    void pickFolder().then((folder) => {
+      if (folder) tray.addMoodle(folder as never)
+    })
+  } else if (choice === 'calendar') calendarOpen.value = true
   else openConnect(choice.slice('connect:'.length) as ConnectKind)
 }
 

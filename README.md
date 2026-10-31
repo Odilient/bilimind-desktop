@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="apps/desktop/resources/icon.png" width="88" height="88" alt="BiliMind Desktop">
+  <img src="apps/companion/resources/icon.png" width="88" height="88" alt="BiliMind Desktop">
 </p>
 
 <h1 align="center">BiliMind Desktop</h1>
@@ -181,7 +181,7 @@ Other commands:
 pnpm dev            # the app with the renderer on Vite (hot reload)
 pnpm test           # 338 tests (Vitest) across the packages
 pnpm typecheck
-pnpm dist           # installers for the OS you are on, in apps/desktop/release/
+pnpm dist           # installers for the OS you are on, in apps/companion/release/
 ```
 
 **Linux:** if `pnpm start` stops with "The SUID sandbox helper binary was found, but is not configured
@@ -193,7 +193,7 @@ them. Open the `renderer:` URL it prints in a browser to get the whole UI with a
 run, which is how [docs/img/demo.webp](docs/img/demo.webp) was made.
 
 How the pieces fit, the config file, the test mode and the repository layout:
-[docs/DEVELOPERS.md](docs/DEVELOPERS.md). The main-to-window API: [apps/desktop/CONTRACT.md](apps/desktop/CONTRACT.md).
+[docs/DEVELOPERS.md](docs/DEVELOPERS.md).
 
 ## How it works
 
@@ -209,7 +209,7 @@ flowchart LR
 
 The engine ([packages/engine](packages/engine/)) is TypeScript on Node. It reads files with no native
 dependencies, searches your text without embeddings, and keeps every step in `crew/log.jsonl`. The desktop app
-([apps/desktop](apps/desktop/)) is Electron with a Vue renderer; the course page ([packages/player](packages/player/))
+([apps/companion](apps/companion/)) is Electron with a Nuxt SPA and an in-process API; the course page ([packages/player](packages/player/))
 is Vue built into one self-contained HTML file. More: [docs/how-it-works.md](docs/how-it-works.md).
 
 ## Why you can trust it

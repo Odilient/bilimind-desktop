@@ -23,15 +23,14 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            files: apps/desktop/release/*.exe
+            files: apps/companion/release/*.exe
           - os: macos-latest
             files: |
-              apps/desktop/release/*.dmg
-              apps/desktop/release/*.zip
-          - os: ubuntu-latest
+              apps/companion/release/*.dmg
+                        - os: ubuntu-latest
             files: |
-              apps/desktop/release/*.AppImage
-              apps/desktop/release/*.deb
+              apps/companion/release/*.AppImage
+              apps/companion/release/*.deb
     runs-on: ${{ matrix.os }}
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
@@ -50,20 +49,17 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build the course player
-        run: pnpm --filter @bilimind/player build
-
-      - name: Package the desktop app
-        working-directory: apps/desktop
+      - name: Package the app
+        working-directory: apps/companion
         run: node scripts/dist.mjs
 
       - name: Bundle the CLI (one file, Node 22+)
         if: runner.os == 'Linux'
         run: |
           node apps/cli/scripts/bundle.mjs
-          mkdir -p apps/desktop/release
-          cp skills/bilimind/scripts/bilimind.mjs apps/desktop/release/bilimind-cli.mjs
-          cp skills/bilimind/scripts/sql-wasm.wasm apps/desktop/release/sql-wasm.wasm
+          mkdir -p apps/companion/release
+          cp skills/bilimind/scripts/bilimind.mjs apps/companion/release/bilimind-cli.mjs
+          cp skills/bilimind/scripts/sql-wasm.wasm apps/companion/release/sql-wasm.wasm
 
       - uses: actions/upload-artifact@v4
         with:
@@ -71,8 +67,8 @@ jobs:
           if-no-files-found: error
           path: |
             ${{ matrix.files }}
-            apps/desktop/release/bilimind-cli.mjs
-            apps/desktop/release/sql-wasm.wasm
+            apps/companion/release/bilimind-cli.mjs
+            apps/companion/release/sql-wasm.wasm
 
   release:
     needs: build

@@ -74,7 +74,7 @@ export function spendView(store: Store, key: KeyState, configDir: string) {
       return {
         at: e.ts,
         what: WORDS[e.cmd] ?? (e.course ? 'Building from a folder' : e.cmd),
-        course: id !== null ? store.rec('course', id)?.title ?? null : e.course ? basename(e.course) : null,
+        course: id !== null ? store.rec('course', id)?.title ?? null : e.course && !/[\\/]drafts[\\/]/.test(e.course) ? basename(e.course) : null,
         model: e.model,
         cost_usd: money(Number(e.cost_usd) || 0),
         today: String(e.ts).slice(0, 10) === today,

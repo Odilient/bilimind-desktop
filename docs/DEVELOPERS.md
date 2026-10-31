@@ -43,8 +43,8 @@ Every step is logged to `<course>/crew/log.jsonl` (agent, command, result, time,
 [showcase/courses/ds-final/crew/log.jsonl](../showcase/courses/ds-final/crew/log.jsonl).
 
 More detail: [how-it-works.md](how-it-works.md). Output format: [course-format.md](course-format.md).
-The main-to-window contract of the desktop app, including the course workspace and the assistant:
-[apps/desktop/CONTRACT.md](../apps/desktop/CONTRACT.md).
+The window talks to the main process through an in-process API on `app://bilimind/api/*`:
+[apps/companion/README.md](../apps/companion/README.md).
 
 ## The course workspace and the assistant
 
@@ -53,8 +53,7 @@ on the right. The assistant answers from the open lesson, the whole course or al
 the text of your files (no embeddings), sends about 12,000 characters of excerpts to the provider's fast
 model, and answers with numbered citations (file, slide or page, quote). When your files do not cover the
 question, it says so and answers after "Beyond your files:". Each answer shows its cost and is written to
-`<course>/crew/assistant.jsonl` and the spend ledger. Details: the "Course workspace" section of
-[apps/desktop/CONTRACT.md](../apps/desktop/CONTRACT.md).
+`<course>/crew/assistant.jsonl` and the spend ledger.
 
 ## AI providers and the config file
 
@@ -116,14 +115,15 @@ Requirements: Node 22 or newer (Node 24 runs the TypeScript sources directly; CI
 ```bash
 pnpm i
 pnpm --filter @bilimind/player build     # the offline course player -> packages/player/dist/player.html
-pnpm --filter @bilimind/desktop build    # renderer, main, preload and worker -> apps/desktop/dist/
-pnpm --filter @bilimind/desktop start    # run the app
-pnpm --filter @bilimind/desktop dist     # installers for this OS: Windows portable + NSIS, macOS dmg + zip, Linux AppImage + deb
+pnpm --filter @bilimind/companion spa    # the app's screens -> apps/companion/spa/
+pnpm --filter @bilimind/companion build  # main, preload and worker -> apps/companion/dist/
+pnpm --filter @bilimind/companion start  # run the app
+pnpm --filter @bilimind/companion dist   # installers for this OS: Windows NSIS, macOS dmg, Linux AppImage + deb
 pnpm test                                # all packages (vitest)
 pnpm typecheck
 ```
 
-Every push and pull request runs install, typecheck, tests, the build and a hidden-window smoke test on Linux,
+Every push and pull request runs install, typecheck, tests, the build and (on Linux) the app end to end, on Linux,
 Windows and macOS ([.github/workflows/ci.yml](../.github/workflows/ci.yml)). Pushing a tag such as `v0.2.0`
 builds the installers on all three OSes plus the one-file CLI and attaches them, with `SHA256SUMS.txt`, to a
 GitHub release whose notes are [.github/release-notes.md](../.github/release-notes.md)
@@ -132,16 +132,15 @@ pre-release. The website in `site/` is published to
 GitHub Pages by [.github/workflows/pages.yml](../.github/workflows/pages.yml), which copies the showcase
 courses to `/courses/<slug>/` ([site/scripts/assemble.mjs](../site/scripts/assemble.mjs)).
 
-Test mode for screenshots and end-to-end checks: `BILIMIND_E2E=1` creates hidden windows and
-`BILIMIND_CDP_PORT` opens a debugging port; see
-[apps/desktop/scripts/e2e-main.mjs](../apps/desktop/scripts/e2e-main.mjs) (`node scripts/e2e-main.mjs` after a build,
-or `--exe <packaged app>`). It needs a display; on a Linux server use `xvfb-run -a`.
+End-to-end checks: [apps/companion/test/e2e.mjs](../apps/companion/test/e2e.mjs) (`pnpm e2e` after `pnpm spa` and
+`pnpm build`, or with `BILIMIND_E2E_EXE=<packaged app>`). It drives the real app with nothing on screen, against a
+fake AI provider.
 
 On Ubuntu 24.04 and later, the development Electron stops with "The SUID sandbox helper binary was found, but
 is not configured correctly", because the OS blocks the user namespaces Chromium's sandbox uses. For
 development, run with `ELECTRON_DISABLE_SANDBOX=1`. The packaged apps handle it: the AppImage's launcher adds
-`--no-sandbox` only in that case ([scripts/after-pack.cjs](../apps/desktop/scripts/after-pack.cjs)), and the
-`.deb` installs an AppArmor profile ([resources/apparmor-profile.tpl](../apps/desktop/resources/apparmor-profile.tpl)).
+`--no-sandbox` only in that case ([scripts/after-pack.cjs](../apps/companion/scripts/after-pack.cjs)), and the
+`.deb` installs an AppArmor profile ([resources/apparmor-profile.tpl](../apps/companion/resources/apparmor-profile.tpl)).
 
 ## Tests
 
@@ -152,7 +151,7 @@ built CLI.
 ## Repository layout
 
 ```
-apps/desktop       the Electron app (main, preload, worker running the engine, Vue renderer); CONTRACT.md
+apps/companion     the Electron app: a Nuxt SPA, an in-process API on SQLite, and a worker running the engine
 apps/cli           the bilimind CLI; bundled into skills/bilimind/scripts/bilimind.mjs
 packages/core      shared types, course.json schema (bilimind.course/1), archetypes and formats, graders, FSRS
 packages/engine    ingest, outline, exam map, planner, drafts, checks, code tests, verdicts, narration, exports, build

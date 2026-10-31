@@ -21,7 +21,7 @@ Renderer (Vue)  --window.bilimind-->  Main process  --utilityProcess.fork-->  Wo
 - The worker reports every step (who, what, how long, cost) as it happens; the building screen shows them in
   plain words, plus the plan (kept and cut topics) as soon as it exists.
 - The course is shown in the app from its own `index.html`, the same file you can open in any browser.
-- The exact interface between the window and the main process is in `apps/desktop/CONTRACT.md`.
+- The window talks to the main process through an in-process API on `app://bilimind/api/*` (`apps/companion/overlay/shell/src/api/`), with no port for anything else on the computer to reach.
 
 ## Two halves: judgement and rules
 

@@ -17,7 +17,7 @@ import type { Rec, Store } from '../store.ts'
 import { attachAssessments, retireOrDelete, replaceContent, type WrittenBlock } from './blocks.ts'
 import { planned } from './path.ts'
 import { ensureCurrent, record } from './revisions.ts'
-import { blockLabel, byPosition, isLive, neighboursOf } from './wire.ts'
+import { blockLabel, byPlace, byPosition, isLive } from './wire.ts'
 
 const POOL = 2
 const FORMAT_ATTEMPTS = 2
@@ -268,7 +268,7 @@ export function createWriter(store: Store, deps: WriterDeps) {
       const chunks = deps.chunksFor?.(course, node) ?? []
       const brief = briefOf(course, chunks.length > 0)
       const lesson = nodeForPrompt(node, archetype)
-      const { before, after } = neighboursOf(store, node)
+      const { before, after } = readingNeighbours(store, node)
       const options = { key: node.key, allowsCode: Boolean(course.allows_code), suppliedChunkIds: chunks.map((c) => c.id), language: course.language }
 
       let blocks: DraftBlock[] = []
@@ -440,6 +440,13 @@ export function createWriter(store: Store, deps: WriterDeps) {
       else idle.push(resolve)
     }),
   }
+}
+
+/** What's read right before and after this lesson, so a lesson among its siblings doesn't teach what they teach. */
+function readingNeighbours(store: Store, node: Rec): { before: Rec[]; after: Rec[] } {
+  const line = store.recs('node', node.course_id).sort(byPlace)
+  const at = line.findIndex((n) => n.id === node.id)
+  return { before: at > 0 ? [line[at - 1]!] : [], after: at >= 0 && at < line.length - 1 ? [line[at + 1]!] : [] }
 }
 
 const round6 = (n: number) => Math.round(n * 1e6) / 1e6

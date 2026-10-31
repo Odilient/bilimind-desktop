@@ -206,6 +206,11 @@ describe('writing a lesson', () => {
     expect(node.current_revision_id).toBeTruthy()
     expect(node.draft).toBeUndefined()
 
+    // The prompt names the lessons either side of this one on the line, its siblings included.
+    const written = provider.requests.find((r) => String(r.body.messages.at(-1).content).includes('ARCHETYPE:'))!.body.messages.at(-1).content
+    expect(written).toContain('Passato prossimo with essere')
+    expect(written).toContain('Moving on')
+
     // Nothing the page is handed can give an answer away.
     expect(JSON.stringify(node)).not.toContain('correct_option_ids')
     expect(JSON.stringify(node)).not.toContain('reference_answer')

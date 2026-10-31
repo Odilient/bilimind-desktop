@@ -1,5 +1,5 @@
 # CI: install, typecheck, test and build on every push to main and every pull request, on Linux, Windows and macOS.
-# On Linux it also starts the built desktop app hidden and checks its window API (scripts/e2e-main.mjs). That never
+# On Linux it also runs the app end to end against a fake AI provider (apps/companion/test/e2e.mjs). That never
 # runs a generation: the one test run uses a fake key and must fail cleanly at the first AI call.
 name: ci
 
@@ -44,19 +44,19 @@ jobs:
       - name: Test
         run: pnpm test
 
-      - name: Build (course player, desktop app)
+      - name: Build (course player, CLI, app shell)
         run: pnpm build
 
       - name: Skill playbooks match the CLI
         run: node --test "skills/bilimind/test/*.test.mjs"
 
-      - name: Desktop smoke test (hidden window, fake key, no generation)
+      - name: App end to end (nothing on screen, fake AI provider, nothing leaves the machine)
         if: runner.os == 'Linux'
-        working-directory: apps/desktop
+        working-directory: apps/companion
         run: |
           # Ubuntu 24.04 blocks the unprivileged user namespaces Chromium's sandbox uses
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           node node_modules/electron/install.js
-          # Electron needs a display (its headless Ozone backend crashes): a virtual X server
-          command -v xvfb-run >/dev/null || { sudo apt-get update -q && sudo apt-get install -yq xvfb; }
-          xvfb-run -a node scripts/e2e-main.mjs
+          pnpm spa
+          pnpm build
+          pnpm e2e

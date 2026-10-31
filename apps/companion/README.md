@@ -1,8 +1,14 @@
 # BiliMind
 
-The whole study companion on your computer: courses, Today, the planner, notes, whiteboards and your own tasks, in a
-local database, with no account. The chat runs on your own DeepSeek or OpenRouter key, called directly from this
-computer; everything that doesn't need a model works offline. Courses and lessons arrive in the next release.
+The whole study companion on your computer: courses, written lessons, Today, the planner, notes, whiteboards and your
+own tasks, in a local database, with no account. The chat, lessons and essay marking run on your own DeepSeek or
+OpenRouter key, called directly from this computer, and stop at limits you set in Settings; everything that doesn't
+need a model works offline.
+
+A course starts in the chat, as a draft you review. A lesson is written when you ask for it: the model says what kind
+of knowledge it is, and the code decides which formats that kind must be taught in. "Build from a folder" runs the
+older pipeline in its own process and brings the result in as an ordinary course, with the report of every answer
+checked against your files.
 
 ```sh
 pnpm install                                # from the repo root
