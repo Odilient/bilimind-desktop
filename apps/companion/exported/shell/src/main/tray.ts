@@ -46,7 +46,6 @@ export function trayTemplate(next: NextDeadline | null, actions: TrayActions, sh
     { id: 'open', label: 'Open BiliMind', click: actions.open },
     // the accelerator is only a hint here: the global shortcut itself is registered in shortcut.ts
     { id: 'capture', label: 'Capture', click: actions.capture, ...(shortcut ? { accelerator: shortcut, registerAccelerator: false } : {}) },
-    { id: 'record', label: 'Record', click: actions.record },
     { type: 'separator' },
     { id: 'quit', label: 'Quit BiliMind', click: actions.quit },
   ]
