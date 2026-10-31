@@ -1,0 +1,64 @@
+# BiliMind packaging. Build first: `pnpm dist` does SPA + shell + package. Main and preload are esbuild bundles and the
+# SPA ships inside the asar as spa/, so no node_modules are packaged. Unsigned: Windows SmartScreen and macOS Gatekeeper
+# warn on first launch (macOS gets an ad-hoc signature only, because Apple Silicon refuses a fully unsigned app).
+appId: com.bilimind.companion
+productName: BiliMind
+copyright: Copyright (C) 2026 the BiliMind team.
+directories:
+  output: release
+  buildResources: resources
+files:
+  - package.json
+  - dist/**
+  - spa/**
+  - resources/icon.png
+  - "!**/*.map"
+asar: true
+npmRebuild: false
+nodeGypRebuild: false
+buildDependenciesFromSource: false
+electronVersion: 45.0.0
+publish: null
+# Linux: a launcher in front of the binary so the AppImage starts on Ubuntu 24.04+ (see the script)
+afterPack: ../desktop/scripts/after-pack.cjs
+
+linux:
+  icon: resources/icon-1024.png
+  executableName: bilimind
+  syncDesktopName: true
+  category: Education
+  synopsis: Your courses, plan and notes, on your computer
+  maintainer: BiliMind team <oybek@bilimind.com>
+  target:
+    - target: AppImage
+      arch: [x64]
+  artifactName: BiliMind-${version}-linux-${arch}.${ext}
+
+win:
+  icon: resources/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+nsis:
+  artifactName: BiliMind-${version}-${arch}-setup.exe
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: BiliMind
+
+mac:
+  icon: resources/icon-1024.png
+  category: public.app-category.education
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  identity: "-"
+  hardenedRuntime: false
+  extendInfo:
+    NSMicrophoneUsageDescription: BiliMind records your lectures when you press Record.
+    NSCameraUsageDescription: BiliMind takes photos of the board and your notes when you ask it to.
+    NSAudioCaptureUsageDescription: BiliMind records the sound of an online lecture when you ask it to.
+  artifactName: BiliMind-${version}-mac-${arch}.${ext}
+dmg:
+  artifactName: BiliMind-${version}-mac-${arch}.${ext}

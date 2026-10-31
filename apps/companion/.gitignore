@@ -1,0 +1,8 @@
+merged/
+.nuxt/
+.output/
+.data/
+spa/
+dist/
+release/
+test/shots/
