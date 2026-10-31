@@ -1,0 +1,469 @@
+// The /api contract the SPA already speaks, answered in-process: one (Request) => Response, handed to the app://
+// protocol by main. No port, so nothing else on this computer can reach it. Same shapes as the hosted API.
+import { createReadStream, mkdirSync, statSync, writeFileSync } from 'node:fs'
+import { Readable } from 'node:stream'
+import { basename, join } from 'node:path'
+import { computeReadiness } from '../../../app/companion/readiness.ts'
+import { currentZone, dayKey, setZone, shiftDay } from '../../../app/companion/time.ts'
+import { credentials } from './credentials.ts'
+import { rebuild } from './planner.ts'
+import { Invalid, UUID } from './rules.ts'
+import { createRow, deleteRow, instantOf, isWritable, listRows, updateRow, validated, wire, worldOf } from './rows.ts'
+import { COLLECTIONS, openStore, wireTime, type Collection, type Row, type Store } from './store.ts'
+import { todayView } from './today.ts'
+import { zoneFor } from './zone.ts'
+
+const NOT_YET = "This isn't in the desktop app yet."
+const MAX_UPLOAD_BYTES = 51_200 * 1024
+const MAX_UPDATE_BYTES = 2_000_000
+const OVERLAP_MS = 5000
+const WEEK = 7 * 86_400_000
+const BASE64 = /^[A-Za-z0-9+/]*={0,2}$/
+
+export interface ApiOptions {
+  /** Where the database and uploaded files live. */
+  dataDir: string
+  /** The folder of the shared settings file with the AI keys. */
+  configDir: string
+  userName: string
+}
+
+export const json = (data: unknown, status = 200) =>
+  new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } })
+const ok = (data: unknown, status = 200) => json({ data }, status)
+const empty = () => new Response(null, { status: 204 })
+const message = (text: string, status: number) => json({ message: text }, status)
+const notFound = (text = 'Not found.') => message(text, 404)
+
+// ---------- the one local user ----------
+
+interface LocalUser {
+  id: number
+  name: string
+  email: string
+  has_password: boolean
+  locale: string
+  avatar_url: string | null
+  preferences: Record<string, any>
+  current_organization_id: number
+}
+
+function userOf(store: Store, name: string): LocalUser {
+  return store.getMeta<LocalUser>('user') ?? { id: 1, name, email: '', has_password: false, locale: 'en', avatar_url: null, preferences: {}, current_organization_id: 1 }
+}
+
+function me(store: Store, name: string) {
+  return {
+    user: userOf(store, name),
+    organization: { id: 1, name: 'This computer', slug: null, type: 'individual', is_owner: true, is_current: true, role: 'owner', plan: 'local' },
+    subscription: { status: 'active', plan: 'local', plan_label: 'Local', interval: null, is_active: true },
+  }
+}
+
+/** `reading` and `companion` merge key by key, so turning one switch never resets another; the rest replaces. */
+function updateProfile(store: Store, name: string, input: Record<string, any>) {
+  const user = userOf(store, name)
+  if (typeof input.name === 'string' && input.name.trim() && input.name.length <= 120) user.name = input.name.trim()
+  if (typeof input.locale === 'string' && input.locale && input.locale.length <= 12) user.locale = input.locale
+  const prefs = input.preferences
+  if (prefs && typeof prefs === 'object' && !Array.isArray(prefs)) {
+    for (const [key, value] of Object.entries(prefs)) {
+      const mergeable = (key === 'reading' || key === 'companion') && value && typeof value === 'object'
+      user.preferences[key] = mergeable ? { ...user.preferences[key], ...(value as object) } : value
+    }
+  }
+  store.setMeta('user', user)
+  return me(store, name)
+}
+
+// ---------- snapshots ----------
+
+const SNAPSHOT_KEYS: [string, Collection][] = [
+  ['goals', 'goals'], ['subjects', 'subjects'], ['slots', 'slots'], ['sessions', 'sessions'], ['topics', 'topics'],
+  ['deadlines', 'deadlines'], ['items', 'items'], ['cards', 'cards'], ['plan_tasks', 'plan-tasks'], ['signals', 'signals'],
+  ['connections', 'connections'], ['checks', 'checks'],
+]
+
+function cardCounts(store: Store, now: number) {
+  const by: Record<string, { total: number; due: number }> = {}
+  const notebook = { total: 0, due: 0 }
+  for (const card of store.live('cards')) {
+    if (card.suspended) continue
+    const counts = card.subject_id ? (by[card.subject_id] ??= { total: 0, due: 0 }) : notebook
+    counts.total++
+    if (Date.parse(card.due_at) <= now) counts.due++
+  }
+  const sum = (key: 'total' | 'due') => Object.values(by).reduce((n, c) => n + c[key], 0) + notebook[key]
+  return { total: sum('total'), due: sum('due'), by_subject: by, notebook }
+}
+
+const serverTime = (at: number) => new Date(at).toISOString().replace('Z', '+00:00')
+
+/** Bounded where a table grows without limit: classes 8 weeks back to 16 ahead, tasks 21 days back to 7 ahead, signals pending or from 30 days, due cards. */
+function bootstrap(store: Store) {
+  const now = Date.now()
+  const today = dayKey(now)
+  const keep: Partial<Record<Collection, (row: Row) => boolean>> = {
+    sessions: (s) => Date.parse(s.starts_at) >= now - 8 * WEEK && Date.parse(s.starts_at) <= now + 16 * WEEK,
+    'plan-tasks': (t) => t.date >= shiftDay(today, -21) && t.date <= shiftDay(today, 7),
+    signals: (s) => s.status === 'pending' || Date.parse(s.updated_at) >= now - 30 * 86_400_000,
+    cards: (c) => !c.suspended && Date.parse(c.due_at) <= now,
+    checks: (c) => !c.answered_at || Date.parse(c.asked_at) >= now - 60 * 86_400_000,
+  }
+  const out: Record<string, unknown> = {}
+  for (const [key, collection] of SNAPSHOT_KEYS) {
+    const rows = store.live(collection)
+    const filter = keep[collection]
+    out[key] = (filter ? rows.filter(filter) : rows).map((r) => wire(collection, r))
+  }
+  return { ...out, card_counts: cardCounts(store, now), server_time: serverTime(now) }
+}
+
+function changes(store: Store, since: number) {
+  const now = Date.now()
+  const out: Record<string, unknown> = {}
+  // Reach a little past the cursor, as the hosted API does; the client upserts what it gets twice.
+  for (const [key, collection] of SNAPSHOT_KEYS) out[key] = store.changedSince(collection, since - OVERLAP_MS).map((r) => wire(collection, r))
+  return { ...out, card_counts: cardCounts(store, now), server_time: serverTime(now) }
+}
+
+function dateParam(params: URLSearchParams): string {
+  const date = params.get('date')
+  if (!date) return dayKey(Date.now())
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date) {
+    throw new Invalid({ date: ['Give the date as YYYY-MM-DD.'] })
+  }
+  return date
+}
+
+// ---------- files ----------
+
+const ACCEPTED = 'We cannot attach that kind of file. PDFs, images, audio, video, Office documents, text and zip files are fine.'
+const TEXT_TYPES: Record<string, string> = { txt: 'text/plain', md: 'text/markdown', csv: 'text/csv' }
+const OFFICE_TYPES: Record<string, string> = {
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  zip: 'application/zip',
+}
+
+/**
+ * The type from the bytes, never from the name or what the sender claimed, and nothing that can carry script (SVG,
+ * HTML): this origin is the app's own. Null when it isn't on the list.
+ */
+export function sniff(b: Buffer, name: string): { mime: string; extension: string } | null {
+  const ext = name.includes('.') ? name.split('.').pop()!.toLowerCase() : ''
+  const starts = (...bytes: number[]) => bytes.every((v, i) => b[i] === v)
+  const ascii = (at: number, s: string) => b.toString('latin1', at, at + s.length) === s
+  if (starts(0x89, 0x50, 0x4e, 0x47)) return { mime: 'image/png', extension: 'png' }
+  if (starts(0xff, 0xd8, 0xff)) return { mime: 'image/jpeg', extension: 'jpg' }
+  if (ascii(0, 'GIF8')) return { mime: 'image/gif', extension: 'gif' }
+  if (ascii(0, 'RIFF') && ascii(8, 'WEBP')) return { mime: 'image/webp', extension: 'webp' }
+  if (ascii(0, 'RIFF') && ascii(8, 'WAVE')) return { mime: 'audio/wav', extension: 'wav' }
+  if (ascii(0, '%PDF-')) return { mime: 'application/pdf', extension: 'pdf' }
+  if (ascii(0, 'ID3') || (b[0] === 0xff && ((b[1] ?? 0) & 0xe0) === 0xe0)) return { mime: 'audio/mpeg', extension: 'mp3' }
+  if (ascii(0, 'OggS')) return { mime: 'audio/ogg', extension: 'ogg' }
+  if (starts(0x1a, 0x45, 0xdf, 0xa3)) return { mime: 'video/webm', extension: 'webm' }
+  if (ascii(4, 'ftyp')) return ascii(8, 'M4A') ? { mime: 'audio/mp4', extension: 'm4a' } : { mime: 'video/mp4', extension: 'mp4' }
+  if (ascii(0, 'PK\x03\x04')) return OFFICE_TYPES[ext] ? { mime: OFFICE_TYPES[ext]!, extension: ext } : null
+  if (!TEXT_TYPES[ext] || b.includes(0)) return null
+  const head = b.toString('utf8', 0, 512).trimStart().toLowerCase()
+  if (/^<(!doctype|html|svg|script)/.test(head)) return null
+  return { mime: TEXT_TYPES[ext]!, extension: ext }
+}
+
+function cleanName(name: string, extension: string): string {
+  const base = basename(name.replace(/\\/g, '/')).replace(/[\x00-\x1F\x7F"]/g, '').replace(/\s+/g, ' ').trim()
+  return base && base !== '.' && base !== '..' ? base.slice(0, 255) : `attachment.${extension}`
+}
+
+function serveFile(path: string, item: Row, range: string | null): Response {
+  let size: number
+  try { size = statSync(path).size } catch { return notFound('That file is no longer here.') }
+  const mime = String(item.meta?.mime ?? 'application/octet-stream')
+  const inline = /^(image|audio|video)\//.test(mime) || mime === 'application/pdf'
+  const headers: Record<string, string> = {
+    'content-type': mime,
+    'x-content-type-options': 'nosniff',
+    'cache-control': 'private, max-age=3600',
+    'accept-ranges': 'bytes',
+    'content-disposition': `${inline ? 'inline' : 'attachment'}; filename*=UTF-8''${encodeURIComponent(item.title || 'file')}`,
+  }
+  const part = range?.match(/^bytes=(\d*)-(\d*)$/)
+  if (part && (part[1] || part[2])) {
+    const start = part[1] ? Number(part[1]) : Math.max(0, size - Number(part[2]))
+    const end = part[1] && part[2] ? Math.min(size - 1, Number(part[2])) : size - 1
+    if (start > end || start >= size) return new Response(null, { status: 416, headers: { 'content-range': `bytes */${size}` } })
+    return new Response(Readable.toWeb(createReadStream(path, { start, end })) as ReadableStream, {
+      status: 206,
+      headers: { ...headers, 'content-range': `bytes ${start}-${end}/${size}`, 'content-length': String(end - start + 1) },
+    })
+  }
+  return new Response(Readable.toWeb(createReadStream(path)) as ReadableStream, { headers: { ...headers, 'content-length': String(size) } })
+}
+
+// ---------- the handler ----------
+
+export function createApi(options: ApiOptions) {
+  mkdirSync(options.dataDir, { recursive: true })
+  const filesDir = join(options.dataDir, 'files')
+  mkdirSync(filesDir, { recursive: true })
+  const store = openStore(join(options.dataDir, 'companion.db'))
+  const keys = credentials(options.configDir)
+  const name = options.userName
+
+  /** A row of the collection, or the 404 the hosted API gives for one that isn't there. */
+  function byId(collection: Collection, id: string, what = 'Not found.'): Row | Response {
+    if (!UUID.test(id)) return notFound(what)
+    return store.get(collection, id) ?? notFound(what)
+  }
+
+  async function route(req: Request, url: URL, path: string): Promise<Response> {
+    const method = req.method
+    const params = url.searchParams
+
+    // Files first: the only route with a body that isn't JSON, and the only streams.
+    if (method === 'POST' && path === '/companion/items/upload') return uploadItem(req)
+    const fileMatch = path.match(/^\/companion-files\/([^/]+)$/)
+    if (fileMatch && (method === 'GET' || method === 'HEAD')) {
+      const item = byId('items', fileMatch[1]!, 'That file is no longer here.')
+      if (item instanceof Response) return item
+      if (!item.meta?.path) return notFound('That file is no longer here.')
+      // Only the name: `meta` is client-writable, and this must never reach outside the files folder.
+      return serveFile(join(filesDir, basename(String(item.meta.path))), item, req.headers.get('range'))
+    }
+
+    let input: Record<string, any> = {}
+    if (method !== 'GET' && method !== 'HEAD') {
+      const text = await req.text()
+      if (text) {
+        try {
+          input = JSON.parse(text) as Record<string, any>
+        } catch {
+          return message('That request could not be read.', 400)
+        }
+      }
+    }
+
+    // From here everything is synchronous, in one transaction.
+    return store.tx(() => {
+      setZone(zoneFor(store))
+      return answer(method, path, params, input)
+    })
+  }
+
+  async function uploadItem(req: Request): Promise<Response> {
+    let form: FormData
+    try {
+      form = await req.formData()
+    } catch {
+      throw new Invalid({ file: ['The file field is required.'] })
+    }
+    const file = form.get('file')
+    if (!(file instanceof File)) throw new Invalid({ file: ['The file field is required.'] })
+    if (file.size > MAX_UPLOAD_BYTES) throw new Invalid({ file: ['That file is over the 50 MB limit.'] })
+    const bytes = Buffer.from(await file.arrayBuffer())
+    const kind = sniff(bytes, file.name)
+    if (!kind) throw new Invalid({ file: [ACCEPTED] })
+
+    return store.tx(() => {
+      const refOf = (field: string, collection: Collection) => {
+        const id = form.get(field)
+        if (typeof id !== 'string' || !id) return null
+        const row = UUID.test(id) ? store.get(collection, id) : null
+        if (!row) throw new Invalid({ [field]: [`The selected ${field} is invalid.`] })
+        return row
+      }
+      const subject = refOf('subject_id', 'subjects')
+      const session = refOf('session_id', 'sessions')
+      const id = crypto.randomUUID()
+      const stored = `${id}.${kind.extension}`
+      // Written before the row, so a failed write leaves no row pointing at nothing.
+      writeFileSync(join(filesDir, stored), bytes)
+      // Filed only where the learner said; a class without a course is a suggestion, never a filing.
+      const suggested = !subject && session ? session.subject_id : null
+      const item = createRow(store, 'items', {
+        id,
+        subject_id: subject?.id ?? null,
+        session_id: session?.id ?? null,
+        kind: kind.mime.startsWith('image/') ? 'photo' : 'file',
+        title: cleanName(file.name, kind.extension),
+        meta: { path: stored, mime: kind.mime, size: bytes.length, ...(suggested ? { suggested_subject_id: suggested } : {}) },
+        source: 'made',
+      })
+      return ok(wire('items', item), 201)
+    })
+  }
+
+  function answer(method: string, path: string, params: URLSearchParams, input: Record<string, any>): Response {
+    const zone = currentZone()
+    const key = `${method} ${path}`
+
+    // The local user and the stubs that make the hosted app's account screens stand down.
+    if (key === 'GET /auth/me') return json(me(store, name))
+    if (key === 'PATCH /auth/profile') return json(updateProfile(store, name, input))
+    if (key === 'POST /auth/logout') return empty()
+    if (key === 'GET /allowance') {
+      const meter = (m: string) => ({ meter: m, metered: false, plan_limit: null, plan_used: 0, plan_remaining: 0, topup_remaining: 0, remaining: null, percent_used: 0, unmetered: true })
+      return ok({ lessons: meter('node_expansion'), illustrations: meter('illustration'), packs: [] })
+    }
+    if (key === 'GET /companion/usage') {
+      const window = { percent: 0, resets_at: null }
+      return ok({ session: window, week: window, credits: 0, credits_expire_at: null, on: [], own_key: true, plan: 'local', packs: [] })
+    }
+    if (key === 'GET /notifications') return ok([])
+    if (key === 'GET /search') return json({ groups: [], retrieval: 'none', degraded: false })
+    if (key === 'GET /companion/ask/threads') return ok([])
+    if (key === 'GET /companion/checks/writing') return ok(null)
+
+    if (key === 'GET /credentials') return ok(keys.list())
+    if (key === 'POST /credentials') return ok(keys.add(input), 201)
+    const credential = path.match(/^\/credentials\/(\d+)(\/activate)?$/)
+    if (credential) {
+      const id = Number(credential[1])
+      if (method === 'POST' && credential[2]) return keys.activate(id) ? ok(keys.list().find((c) => c.id === id)) : notFound()
+      if (method === 'DELETE' && !credential[2]) return keys.remove(id) ? empty() : notFound()
+    }
+
+    // The plan and Today.
+    if (key === 'GET /companion/bootstrap') return ok(bootstrap(store))
+    if (key === 'GET /companion/changes') {
+      const since = instantOf(params.get('since') ?? '')
+      if (since === null) throw new Invalid({ since: ['Send the server_time of your last bootstrap or changes call.'] })
+      return ok(changes(store, since))
+    }
+    if (key === 'GET /companion/today') return ok(todayView(store, dateParam(params), zone))
+    if (key === 'POST /companion/plan/rebuild') {
+      const date = dateParam(params)
+      const tasks = rebuild(store, date)
+      return ok({ date, minutes: tasks.reduce((sum, t) => sum + t.minutes, 0), tasks })
+    }
+
+    const deadline = path.match(/^\/companion\/deadlines\/([^/]+)\/(readiness|class)$/)
+    if (deadline && method === 'GET') {
+      const row = byId('deadlines', deadline[1]!, 'Deadline not found.')
+      if (row instanceof Response) return row
+      if (deadline[2] === 'readiness') return ok(computeReadiness(row as never, worldOf(store) as never, Date.now()))
+      // No classmates on one computer: the screen shows nothing about a class.
+      return ok({ possible: false, members: 0, shown: false, preparing: null, readiness_median: null, hardest: [], sharing: false, invite: { title: '', text: '', url: '' } })
+    }
+
+    const dismiss = path.match(/^\/companion\/signals\/([^/]+)\/dismiss$/)
+    if (dismiss && method === 'POST') {
+      const signal = byId('signals', dismiss[1]!, 'Signal not found.')
+      if (signal instanceof Response) return signal
+      if (signal.status === 'applied' || signal.status === 'auto') return message('This was already applied.', 409)
+      return ok(store.put('signals', { ...signal, status: 'dismissed' }))
+    }
+
+    const review = path.match(/^\/companion\/cards\/([^/]+)\/review$/)
+    if (review && method === 'POST') return reviewCard(review[1]!, input)
+
+    const doc = path.match(/^\/companion\/items\/([^/]+)\/(doc|updates)$/)
+    if (doc) {
+      const item = byId('items', doc[1]!, 'Item not found.')
+      if (item instanceof Response) return item
+      if (doc[2] === 'doc' && method === 'GET') return ok(documentOf(item))
+      if (doc[2] === 'updates' && method === 'POST') return pushUpdate(item, input)
+    }
+
+    // The generic collections last, so the named routes above win.
+    const row = path.match(/^\/companion\/([a-z-]+)(?:\/([^/]+))?$/)
+    const written = method === 'POST' && (row?.[2] || row?.[1] === 'checks')
+    if (row && (COLLECTIONS as readonly string[]).includes(row[1]!) && !written) {
+      return collection(method, row[1] as Collection, row[2], params, input)
+    }
+
+    // Everything that needs a model, a server or a later milestone. The SPA shows the sentence and carries on.
+    return message(NOT_YET, 503)
+  }
+
+  function collection(method: string, name: Collection, id: string | undefined, params: URLSearchParams, input: Record<string, any>): Response {
+    if (method === 'GET') {
+      if (!id) return ok(listRows(store, name, params))
+      const row = byId(name, id)
+      return row instanceof Response ? row : ok(wire(name, row))
+    }
+    if (!isWritable(name)) return message('Method not allowed.', 405)
+
+    if (method === 'POST' && !id) {
+      // The client mints ids so it can create offline, and an offline client retries: an id already here is the
+      // update it now is. A deleted one is refused, because quietly bringing back what was removed is worse than asking.
+      const existing = typeof input.id === 'string' && UUID.test(input.id) ? store.find(name, input.id) : null
+      if (existing?.deleted_at) return message('This was deleted.', 409)
+      if (existing) return ok(wire(name, updateRow(store, name, existing, validated(store, name, input, false))))
+      return ok(wire(name, createRow(store, name, validated(store, name, input, true))), 201)
+    }
+    if (!id) return message('Method not allowed.', 405)
+
+    const row = byId(name, id)
+    if (row instanceof Response) return row
+    if (method === 'PATCH') return ok(wire(name, updateRow(store, name, row, validated(store, name, input, false))))
+    if (method === 'DELETE') {
+      deleteRow(store, name, row)
+      return empty()
+    }
+    return message('Method not allowed.', 405)
+  }
+
+  /** The device scheduled it with ts-fsrs; this keeps the result and the log. A retry lands once, and an older review never overwrites a newer one. */
+  function reviewCard(id: string, input: Record<string, any>): Response {
+    const card = byId('cards', id, 'Card not found.')
+    if (card instanceof Response) return card
+    const errors: Record<string, string[]> = {}
+    if (!Number.isInteger(input.rating) || input.rating < 1 || input.rating > 4) errors.rating = ['The rating field is invalid.']
+    if (!input.fsrs || typeof input.fsrs !== 'object') errors.fsrs = ['The fsrs field is required.']
+    for (const field of ['due_at', 'reviewed_at']) if (typeof input[field] !== 'string' || Number.isNaN(Date.parse(input[field]))) errors[field] = [`The ${field} field is invalid.`]
+    if (input.id != null && !(typeof input.id === 'string' && UUID.test(input.id))) errors.id = ['The id field must be a valid UUID.']
+    if (Object.keys(errors).length) throw new Invalid(errors)
+
+    const logId = (input.id as string | null | undefined) ?? crypto.randomUUID()
+    const logged = store.db.prepare('SELECT 1 FROM card_reviews WHERE id = ? AND card_id = ?').get(logId, id)
+    if (logged) return ok(wire('cards', card))
+    store.db.prepare('INSERT INTO card_reviews (id, card_id, rating, reviewed_at, fsrs_before) VALUES (?, ?, ?, ?, ?)')
+      .run(logId, id, input.rating, wireTime(input.reviewed_at), JSON.stringify(card.fsrs))
+    if (!card.last_review_at || Date.parse(input.reviewed_at) >= Date.parse(card.last_review_at)) {
+      return ok(wire('cards', store.put('cards', { ...card, fsrs: input.fsrs, due_at: wireTime(input.due_at), last_review_at: wireTime(input.reviewed_at) })))
+    }
+    return ok(wire('cards', card))
+  }
+
+  /** Snapshot plus every update since. The API never decodes Yjs: applying them all is correct in any order, with duplicates. */
+  function documentOf(item: Row) {
+    const snapshot = store.db.prepare('SELECT snapshot FROM item_snapshots WHERE item_id = ?').get(item.id) as { snapshot: string | null } | undefined
+    const updates = store.db.prepare('SELECT id, body, created_at FROM item_updates WHERE item_id = ? ORDER BY seq').all(item.id) as { id: string; body: string; created_at: string }[]
+    return { snapshot: snapshot?.snapshot ?? null, updates: updates.map((u) => ({ id: u.id, update: u.body, created_at: u.created_at })) }
+  }
+
+  function pushUpdate(item: Row, input: Record<string, any>): Response {
+    if (typeof input.update !== 'string' || !input.update || input.update.length > MAX_UPDATE_BYTES || !BASE64.test(input.update)) throw new Invalid({ update: ['The update field is invalid.'] })
+    if (input.id != null && !(typeof input.id === 'string' && UUID.test(input.id))) throw new Invalid({ id: ['The id field must be a valid UUID.'] })
+    if (item.kind !== 'page' && item.kind !== 'board') throw new Invalid({ update: ['Only pages and boards have documents.'] })
+    const id = (input.id as string | null | undefined) ?? crypto.randomUUID()
+    const existing = store.db.prepare('SELECT id, body, created_at FROM item_updates WHERE id = ? AND item_id = ?').get(id, item.id) as { id: string; body: string; created_at: string } | undefined
+    if (existing) return ok({ id: existing.id, update: existing.body, created_at: existing.created_at }, 201)
+    const createdAt = wireTime(Date.now())
+    store.db.prepare('INSERT INTO item_updates (id, item_id, body, created_at) VALUES (?, ?, ?, ?)').run(id, item.id, input.update, createdAt)
+    // The page's row moves too, so `/changes` says this document has something new.
+    store.put('items', item)
+    return ok({ id, update: input.update, created_at: createdAt }, 201)
+  }
+
+  return {
+    store,
+
+    async handle(req: Request): Promise<Response> {
+      const url = new URL(req.url)
+      const path = url.pathname.replace(/^\/api/, '').replace(/\/+$/, '') || '/'
+      try {
+        return await route(req, url, path)
+      } catch (error) {
+        if (error instanceof Invalid) return json({ message: error.message, errors: error.errors }, 422)
+        console.error('api', req.method, path, error)
+        return message('Something went wrong on this computer.', 500)
+      }
+    },
+
+    close: () => store.close(),
+  }
+}
