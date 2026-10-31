@@ -3,6 +3,7 @@
 import { extractFile } from '@bilimind/engine/ingest/index'
 import { htmlToSections } from '@bilimind/engine/ingest/html'
 import { basename, join } from 'node:path'
+import { publicFetch } from './public-fetch.ts'
 import type { Row, Store } from '../store.ts'
 import { dayKey } from '../../../../app/companion/time.ts'
 
@@ -100,7 +101,7 @@ const clip = (text: string): string => {
   return flat.length > EXCERPT_CHARS ? `${flat.slice(0, EXCERPT_CHARS - 1)}…` : flat
 }
 
-export function materialReader(store: Store, filesDir: string, fetcher: typeof fetch = fetch) {
+export function materialReader(store: Store, filesDir: string, fetcher: typeof fetch = publicFetch) {
   let next = 0
   const id = () => `E${++next}`
 
@@ -181,10 +182,10 @@ export function materialReader(store: Store, filesDir: string, fetcher: typeof f
     return out
   }
 
-  const links = new Map<string, { at: number; page: { title: string | null; text: string } | null }>()
+  const links = new Map<string, { at: number; page: { title: string | null; text: string; calendar?: boolean } | null }>()
 
   /** A web page or calendar feed the learner attached, kept for a while: every later answer in the thread reads it again. */
-  async function readLink(url: string): Promise<{ title: string | null; text: string } | null> {
+  async function readLink(url: string): Promise<{ title: string | null; text: string; calendar?: boolean } | null> {
     const hit = links.get(url)
     if (hit && Date.now() - hit.at < LINK_TTL_MS) return hit.page
     const page = await fetchLink(url).catch(() => null)
@@ -192,10 +193,10 @@ export function materialReader(store: Store, filesDir: string, fetcher: typeof f
     return page
   }
 
-  async function fetchLink(url: string): Promise<{ title: string | null; text: string } | null> {
+  async function fetchLink(url: string): Promise<{ title: string | null; text: string; calendar?: boolean } | null> {
     const target = url.replace(/^webcal(s?):/i, 'https:')
     if (!/^https?:\/\//i.test(target)) return null
-    const res = await fetcher(target, { signal: AbortSignal.timeout(15_000), redirect: 'follow', headers: { Accept: 'text/html, text/calendar, text/plain;q=0.9' } })
+    const res = await fetcher(target, { signal: AbortSignal.timeout(15_000), headers: { Accept: 'text/html, text/calendar, text/plain;q=0.9' } })
     if (!res.ok || !res.body) return null
     const reader = res.body.getReader()
     const chunks: Uint8Array[] = []
@@ -209,7 +210,10 @@ export function materialReader(store: Store, filesDir: string, fetcher: typeof f
     reader.cancel().catch(() => undefined)
     const body = Buffer.concat(chunks).toString('utf8')
     const type = res.headers.get('content-type') ?? ''
-    if (/^webcal/i.test(url) || /\.ics(\?|$)/i.test(url) || type.includes('text/calendar') || body.startsWith('BEGIN:VCALENDAR')) return calendarOf(body)
+    if (/^webcal/i.test(url) || /\.ics(\?|$)/i.test(url) || type.includes('text/calendar') || body.startsWith('BEGIN:VCALENDAR')) {
+      const calendar = calendarOf(body)
+      return calendar ? { ...calendar, calendar: true } : null
+    }
     if (type.includes('html') || /^\s*<(!doctype|html)/i.test(body)) {
       const title = body.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1]?.trim() || null
       const text = htmlToSections(body).map((s) => s.text).join('\n\n').slice(0, LINK_CHARS)
@@ -264,7 +268,23 @@ export function materialReader(store: Store, filesDir: string, fetcher: typeof f
     return { excerpts: fit(bySource, terms), unread, itemIds }
   }
 
-  return { excerpts, attached, readLink }
+  /** All of an item's words, with each page or slide marked: what a course is drafted from. */
+  async function itemText(item: Row): Promise<string> {
+    if (item.kind === 'file') {
+      const deck = isDeck(item)
+      const text = (await sections(item)).map((s) => `${s.n !== null ? `[${deck ? 'slide ' : 'p. '}${s.n}]\n` : ''}${s.text}`).join('\n\n')
+      return text.trim() ? text : String(item.preview ?? '').trim()
+    }
+    if (item.kind === 'recording' && Array.isArray(item.meta?.transcript)) {
+      return item.meta.transcript.map((s: any) => (typeof s?.text === 'string' ? s.text : '')).join(' ').trim()
+    }
+    return String(item.preview ?? '').trim()
+  }
+
+  /** What a link was read as, without fetching it again. */
+  const linkInfo = (url: string) => links.get(url)?.page ?? null
+
+  return { excerpts, attached, readLink, itemText, linkInfo }
 }
 
 export function shortUrl(url: string): string {

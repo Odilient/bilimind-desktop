@@ -1,14 +1,19 @@
 // The /api contract the SPA already speaks, answered in-process: one (Request) => Response, handed to the app://
 // protocol by main. No port, so nothing else on this computer can reach it. Same shapes as the hosted API.
 import { BilimindError } from '@bilimind/engine/contracts'
-import { createReadStream, mkdirSync, statSync, writeFileSync } from 'node:fs'
-import { Readable } from 'node:stream'
+import { mkdirSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { computeReadiness } from '../../../app/companion/readiness.ts'
 import { currentZone, dayKey, setZone, shiftDay } from '../../../app/companion/time.ts'
 import { createAsker, readInput } from './ask/asker.ts'
 import { materialReader } from './ask/material.ts'
 import { credentials, type Vault } from './credentials.ts'
+import { ACCEPTED, cleanName, MAX_UPLOAD_BYTES, serveFile, sniff } from './files.ts'
+import { lessonApi } from './lessons/routes.ts'
+import { createWriter } from './lessons/writer.ts'
+import { empty, json, message, notFound, ok } from './respond.ts'
+import { removeStarterKit, seedStarterKit } from './starter.ts'
+import { setCaps, spendView } from './spend.ts'
 import { rebuild } from './planner.ts'
 import { Invalid, UUID } from './rules.ts'
 import { createRow, deleteRow, instantOf, isWritable, listRows, updateRow, validated, wire, worldOf } from './rows.ts'
@@ -17,11 +22,12 @@ import { todayView } from './today.ts'
 import { zoneFor } from './zone.ts'
 
 const NOT_YET = "This isn't in the desktop app yet."
-const MAX_UPLOAD_BYTES = 51_200 * 1024
 const MAX_UPDATE_BYTES = 2_000_000
 const OVERLAP_MS = 5000
 const WEEK = 7 * 86_400_000
 const BASE64 = /^[A-Za-z0-9+/]*={0,2}$/
+
+export { json }
 
 export interface ApiOptions {
   /** Where the database and uploaded files live. */
@@ -34,14 +40,9 @@ export interface ApiOptions {
   baseUrl?: string
   /** Tried once when a provider's certificate doesn't verify. */
   fallbackFetch?: typeof fetch
+  /** False in tests, which want an empty world. */
+  seedStarter?: boolean
 }
-
-export const json = (data: unknown, status = 200) =>
-  new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } })
-const ok = (data: unknown, status = 200) => json({ data }, status)
-const empty = () => new Response(null, { status: 204 })
-const message = (text: string, status: number) => json({ message: text }, status)
-const notFound = (text = 'Not found.') => message(text, 404)
 
 // ---------- the one local user ----------
 
@@ -144,72 +145,6 @@ function dateParam(params: URLSearchParams): string {
   return date
 }
 
-// ---------- files ----------
-
-const ACCEPTED = 'We cannot attach that kind of file. PDFs, images, audio, video, Office documents, text and zip files are fine.'
-const TEXT_TYPES: Record<string, string> = { txt: 'text/plain', md: 'text/markdown', csv: 'text/csv' }
-const OFFICE_TYPES: Record<string, string> = {
-  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  zip: 'application/zip',
-}
-
-/**
- * The type from the bytes, never from the name or what the sender claimed, and nothing that can carry script (SVG,
- * HTML): this origin is the app's own. Null when it isn't on the list.
- */
-export function sniff(b: Buffer, name: string): { mime: string; extension: string } | null {
-  const ext = name.includes('.') ? name.split('.').pop()!.toLowerCase() : ''
-  const starts = (...bytes: number[]) => bytes.every((v, i) => b[i] === v)
-  const ascii = (at: number, s: string) => b.toString('latin1', at, at + s.length) === s
-  if (starts(0x89, 0x50, 0x4e, 0x47)) return { mime: 'image/png', extension: 'png' }
-  if (starts(0xff, 0xd8, 0xff)) return { mime: 'image/jpeg', extension: 'jpg' }
-  if (ascii(0, 'GIF8')) return { mime: 'image/gif', extension: 'gif' }
-  if (ascii(0, 'RIFF') && ascii(8, 'WEBP')) return { mime: 'image/webp', extension: 'webp' }
-  if (ascii(0, 'RIFF') && ascii(8, 'WAVE')) return { mime: 'audio/wav', extension: 'wav' }
-  if (ascii(0, '%PDF-')) return { mime: 'application/pdf', extension: 'pdf' }
-  if (ascii(0, 'ID3') || (b[0] === 0xff && ((b[1] ?? 0) & 0xe0) === 0xe0)) return { mime: 'audio/mpeg', extension: 'mp3' }
-  if (ascii(0, 'OggS')) return { mime: 'audio/ogg', extension: 'ogg' }
-  if (starts(0x1a, 0x45, 0xdf, 0xa3)) return { mime: 'video/webm', extension: 'webm' }
-  if (ascii(4, 'ftyp')) return ascii(8, 'M4A') ? { mime: 'audio/mp4', extension: 'm4a' } : { mime: 'video/mp4', extension: 'mp4' }
-  if (ascii(0, 'PK\x03\x04')) return OFFICE_TYPES[ext] ? { mime: OFFICE_TYPES[ext]!, extension: ext } : null
-  if (!TEXT_TYPES[ext] || b.includes(0)) return null
-  const head = b.toString('utf8', 0, 512).trimStart().toLowerCase()
-  if (/^<(!doctype|html|svg|script)/.test(head)) return null
-  return { mime: TEXT_TYPES[ext]!, extension: ext }
-}
-
-function cleanName(name: string, extension: string): string {
-  const base = basename(name.replace(/\\/g, '/')).replace(/[\x00-\x1F\x7F"]/g, '').replace(/\s+/g, ' ').trim()
-  return base && base !== '.' && base !== '..' ? base.slice(0, 255) : `attachment.${extension}`
-}
-
-function serveFile(path: string, item: Row, range: string | null): Response {
-  let size: number
-  try { size = statSync(path).size } catch { return notFound('That file is no longer here.') }
-  const mime = String(item.meta?.mime ?? 'application/octet-stream')
-  const inline = /^(image|audio|video)\//.test(mime) || mime === 'application/pdf'
-  const headers: Record<string, string> = {
-    'content-type': mime,
-    'x-content-type-options': 'nosniff',
-    'cache-control': 'private, max-age=3600',
-    'accept-ranges': 'bytes',
-    'content-disposition': `${inline ? 'inline' : 'attachment'}; filename*=UTF-8''${encodeURIComponent(item.title || 'file')}`,
-  }
-  const part = range?.match(/^bytes=(\d*)-(\d*)$/)
-  if (part && (part[1] || part[2])) {
-    const start = part[1] ? Number(part[1]) : Math.max(0, size - Number(part[2]))
-    const end = part[1] && part[2] ? Math.min(size - 1, Number(part[2])) : size - 1
-    if (start > end || start >= size) return new Response(null, { status: 416, headers: { 'content-range': `bytes */${size}` } })
-    return new Response(Readable.toWeb(createReadStream(path, { start, end })) as ReadableStream, {
-      status: 206,
-      headers: { ...headers, 'content-range': `bytes ${start}-${end}/${size}`, 'content-length': String(end - start + 1) },
-    })
-  }
-  return new Response(Readable.toWeb(createReadStream(path)) as ReadableStream, { headers: { ...headers, 'content-length': String(size) } })
-}
-
 // ---------- the handler ----------
 
 export function createApi(options: ApiOptions) {
@@ -229,7 +164,22 @@ export function createApi(options: ApiOptions) {
     },
     tryFirstEverywhere: () => userOf(store, name).preferences.companion?.try_first === true,
     fallbackFetch: options.fallbackFetch,
+    draftLedger: () => join(options.dataDir, 'drafts', crypto.randomUUID()),
   })
+  const writer = createWriter(store, { key: () => keys.keyState(), dataDir: options.dataDir, fallbackFetch: options.fallbackFetch })
+  const lessons = lessonApi(store, filesDir, writer, { key: () => keys.keyState(), dataDir: options.dataDir, fallbackFetch: options.fallbackFetch, reader, zone: () => {
+    const zone = zoneFor(store)
+    setZone(zone)
+    return zone
+  } })
+  // A new computer gets the sample to look around in. Once: removing it stays removed.
+  if (options.seedStarter !== false && !store.getMeta('starter_seeded')) {
+    store.tx(() => {
+      store.setMeta('starter_seeded', true)
+      setZone(zoneFor(store))
+      seedStarterKit(store)
+    })
+  }
 
   /** A row of the collection, or the 404 the hosted API gives for one that isn't there. */
   function byId(collection: Collection, id: string, what = 'Not found.'): Row | Response {
@@ -244,6 +194,8 @@ export function createApi(options: ApiOptions) {
     // Files first: the only route with a body that isn't JSON, and the only streams.
     if (method === 'POST' && path === '/companion/items/upload') return uploadItem(req)
     if (method === 'POST' && path === '/companion/ask') return ask(req)
+    const early = await lessons.early(req, method, path)
+    if (early) return early
     const fileMatch = path.match(/^\/companion-files\/([^/]+)$/)
     if (fileMatch && (method === 'GET' || method === 'HEAD')) {
       const item = byId('items', fileMatch[1]!, 'That file is no longer here.')
@@ -301,6 +253,8 @@ export function createApi(options: ApiOptions) {
           status: (text) => emit('status', { text }),
           delta: (text) => emit('delta', { text }),
           making: (actions) => emit('making', { actions }),
+          proposal: (state) => emit('proposal', state),
+          step: (key, label, state) => emit('status', { text: label, step: { key, label, state } }),
         }, stop.signal).then((answer) => {
           emit('done', { thread_id: turn.thread.id, message: asker.messageWire(answer) })
         }).catch((error: unknown) => {
@@ -394,6 +348,14 @@ export function createApi(options: ApiOptions) {
       if (method === 'DELETE') return asker.remove(id) ? empty() : notFound('Thread not found.')
     }
     if (key === 'GET /companion/checks/writing') return ok(null)
+    if (key === 'DELETE /companion/samples') {
+      removeStarterKit(store)
+      return empty()
+    }
+    if (key === 'GET /companion/spending') return ok(spendView(store, keys.keyState(), options.configDir))
+    if (key === 'PUT /companion/spending/caps') return ok(setCaps(options.configDir, input))
+    const lesson = lessons.answer(method, path, params, input)
+    if (lesson) return lesson
 
     if (key === 'GET /credentials') return ok(keys.list())
     if (key === 'GET /credentials/storage') return ok(keys.storage())
@@ -543,6 +505,9 @@ export function createApi(options: ApiOptions) {
         return message('Something went wrong on this computer.', 500)
       }
     },
+
+    /** Let lessons being written finish, for tests. */
+    settled: () => writer.settled(),
 
     close: () => store.close(),
   }

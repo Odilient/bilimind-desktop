@@ -7,6 +7,10 @@ export type Row = Record<string, any> & { id: string }
 export const COLLECTIONS = ['goals', 'subjects', 'slots', 'sessions', 'items', 'topics', 'deadlines', 'cards', 'plan-tasks', 'signals', 'connections', 'checks'] as const
 export type Collection = (typeof COLLECTIONS)[number]
 
+export type RecordKind = 'course' | 'node' | 'block' | 'assessment' | 'attempt' | 'revision' | 'annotation' | 'attachment'
+export type Rec = Record<string, any> & { id: number }
+export type Raw = Record<string, any>
+
 /** ISO 8601 in UTC, to the second, as the hosted API sends every time. */
 export const wireTime = (at: number | string): string =>
   new Date(at).toISOString().replace(/\.\d+Z$/, '+00:00')
@@ -52,6 +56,15 @@ export function openStore(path: string) {
       body TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS messages_by_thread ON messages (thread_id, seq);
+    -- Courses, lessons and what hangs off them. The SPA and the prompts count in integers here, so one table hands out one counter.
+    CREATE TABLE IF NOT EXISTS records (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      kind TEXT NOT NULL,
+      parent INTEGER,
+      uuid TEXT UNIQUE,
+      body TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS records_by_parent ON records (kind, parent);
   `)
 
   const parse = (rows: unknown[]) => rows.map((r) => JSON.parse((r as { body: string }).body) as Row)
@@ -93,6 +106,44 @@ export function openStore(path: string) {
 
     /** A tombstone instead of a delete, so `/changes` can tell the screens. */
     bury: (c: Collection, row: Row): Row => store.put(c, { ...row, deleted_at: wireTime(Date.now()) }),
+
+    /** A new record. Its id is the database's, written back into the body so a body read alone is whole. */
+    add(kind: RecordKind, parent: number | null, fields: Record<string, any>, uuid: string | null = null): Rec {
+      const now = wireTime(Date.now())
+      const row = { created_at: now, updated_at: now, ...fields }
+      const id = Number(db.prepare('INSERT INTO records (kind, parent, uuid, body) VALUES (?, ?, ?, ?)').run(kind, parent, uuid, JSON.stringify(row)).lastInsertRowid)
+      const whole = { ...row, id } as Rec
+      db.prepare('UPDATE records SET body = ? WHERE id = ?').run(JSON.stringify(whole), id)
+      return whole
+    },
+
+    rec(kind: RecordKind, id: number): Rec | null {
+      const row = db.prepare('SELECT body FROM records WHERE id = ? AND kind = ?').get(id, kind) as { body: string } | undefined
+      return row ? JSON.parse(row.body) as Rec : null
+    },
+
+    recByUuid(kind: RecordKind, uuid: string): Rec | null {
+      const row = db.prepare('SELECT body FROM records WHERE uuid = ? AND kind = ?').get(uuid, kind) as { body: string } | undefined
+      return row ? JSON.parse(row.body) as Rec : null
+    },
+
+    /** Oldest first; of one parent, or every one of the kind. */
+    recs(kind: RecordKind, parent?: number): Rec[] {
+      const rows = parent === undefined
+        ? db.prepare('SELECT body FROM records WHERE kind = ? ORDER BY id').all(kind)
+        : db.prepare('SELECT body FROM records WHERE kind = ? AND parent = ? ORDER BY id').all(kind, parent)
+      return (rows as { body: string }[]).map((r) => JSON.parse(r.body) as Rec)
+    },
+
+    save(kind: RecordKind, row: Rec, touch = true): Rec {
+      const next = touch ? { ...row, updated_at: wireTime(Date.now()) } : row
+      db.prepare('UPDATE records SET body = ? WHERE id = ? AND kind = ?').run(JSON.stringify(next), row.id, kind)
+      return next
+    },
+
+    drop(kind: RecordKind, id: number): void {
+      db.prepare('DELETE FROM records WHERE id = ? AND kind = ?').run(id, kind)
+    },
 
     getMeta<T>(key: string): T | null {
       const row = db.prepare('SELECT value FROM meta WHERE key = ?').get(key) as { value: string } | undefined

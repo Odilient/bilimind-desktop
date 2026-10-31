@@ -6,6 +6,7 @@
 //
 // Ids in actions are aliases (S1 a course, T4 a topic, D2 a deadline): a model copies "T4" correctly every time and a
 // uuid only most of the time, and an alias it invents resolves to nothing instead of to the wrong row.
+import { lessonDigest } from '@bilimind/engine/prompts/expand'
 import { computeReadiness } from '../../../../app/companion/readiness.ts'
 import { clock as clockOf, dayKey, dayLabel, longDayLabel, mondayOf, shiftDay } from '../../../../app/companion/time.ts'
 import { tasksFor } from '../planner.ts'
@@ -25,6 +26,8 @@ export interface AskInput {
   subjectId: string | null
   itemId: string | null
   topicId: string | null
+  nodeId: number | null
+  courseId: number | null
   deadlineId: string | null
   excerpt: string | null
   attachments: Record<string, any>[]
@@ -49,6 +52,7 @@ export interface Grounding {
 }
 
 export const EXCERPT_CHARS = 16_000
+const LESSON_CHARS = 12_000
 const BUDGET = { here: 5000, course: 14_000, everything: 14_000 }
 const ITEMS = { here: 6, course: 10, everything: 12 }
 const MAX_FILES = 6
@@ -279,7 +283,7 @@ function pick(excerpts: Excerpt[], terms: string[], week: string[], budget: numb
   return kept.sort((a, b) => a.i - b.i).map((r) => r.excerpt)
 }
 
-export interface Reader { excerpts: ReturnType<typeof materialReader>['excerpts']; attached: ReturnType<typeof materialReader>['attached'] }
+export type Reader = ReturnType<typeof materialReader>
 
 async function materialFor(store: Store, reader: Reader, input: AskInput, focus: Row | null, subjects: Row[], terms: string[], now: number, status: (t: string) => void, attachedIds: string[]) {
   const scope = input.scope
@@ -317,6 +321,15 @@ async function materialFor(store: Store, reader: Reader, input: AskInput, focus:
   return { excerpts: pick(read, terms, week, BUDGET[scope], relevantOnly), items: new Map(chosen.map((i) => [i.id, i])) }
 }
 
+/** A written lesson's prose. Never its questions' keys: `lessonDigest` reads only what a learner already sees. */
+function lessonText(store: Store, nodeId: number, courseId: number | null): { title: string; text: string } | null {
+  const node = store.rec('node', nodeId)
+  if (!node || (courseId !== null && node.course_id !== courseId)) return null
+  const blocks = store.recs('block', nodeId).sort((a, b) => (a.position ?? 0) - (b.position ?? 0)).slice(0, 60)
+  const text = lessonDigest(blocks as never).slice(0, LESSON_CHARS)
+  return text.trim() ? { title: node.title, text } : null
+}
+
 export async function buildGrounding(store: Store, reader: Reader, input: AskInput, status: (t: string) => void, attached: Record<string, any>[], zone: string, tryFirstEverywhere: boolean, now = Date.now()): Promise<Grounding> {
   const aliases = new AliasBook()
   const subjects = store.live('subjects').sort(byPlace).slice(0, 40)
@@ -337,6 +350,11 @@ export async function buildGrounding(store: Store, reader: Reader, input: AskInp
   if (input.excerpt) {
     const limit = input.scope === 'everything' ? 8000 : EXCERPT_CHARS
     screen.push([{ id: '', kind: 'file', itemId: input.itemId ?? '', title: input.label ?? 'On their screen', text: input.excerpt.slice(0, limit) }, screenTarget(store, input, focus)])
+  }
+  // The lesson behind the screen, when the screen sent little of it.
+  if (input.nodeId !== null && (input.excerpt ?? '').length < 500) {
+    const lesson = lessonText(store, input.nodeId, input.courseId)
+    if (lesson) screen.push([{ id: '', kind: 'file', itemId: '', title: `Lesson · ${lesson.title}`, text: lesson.text }, { kind: 'lesson', id: String(input.nodeId), label: input.label ?? lesson.title, at_seconds: null, subject_id: null }])
   }
   const material = await materialFor(store, reader, input, focus, subjects, terms, now, status, given.itemIds)
 

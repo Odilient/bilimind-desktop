@@ -7,6 +7,7 @@
 //   topics     deleting a topic tombstones its checks and leaves deadlines' scopes
 //   goals      deleting a goal keeps its courses, released from it
 import { computeReadiness } from '../../../app/companion/readiness.ts'
+import { lessonsDone } from './lessons/attempts.ts'
 import { Invalid, RULES, UUID, validate } from './rules.ts'
 import { wireTime, type Collection, type Row, type Store } from './store.ts'
 import { zoneFor } from './zone.ts'
@@ -33,6 +34,7 @@ export function worldOf(store: Store) {
     cards: store.live('cards') as any[],
     checks: store.live('checks') as any[],
     deadlines: store.live('deadlines') as any[],
+    lessonsDone: lessonsDone(store),
   }
 }
 

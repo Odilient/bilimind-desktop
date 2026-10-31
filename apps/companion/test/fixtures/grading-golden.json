@@ -1,0 +1,1834 @@
+[
+    {
+        "name": "mcq right",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_id": "c"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq wrong",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_id": "a"
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "Not quite. Re-read the lesson section this question came from, then try again — the wording of the options matters here.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq alias selected",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "selected": "c"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq key alias answer",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "answer": "b"
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_id": "b"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq key single id",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_id": "b"
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_id": "b"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq no key",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": null,
+            "max_score": 100
+        },
+        "response": {
+            "option_id": "b"
+        },
+        "expect": {
+            "score": null,
+            "passed": null,
+            "feedback": null,
+            "rule": null,
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq empty",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": [],
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "Not quite. Re-read the lesson section this question came from, then try again — the wording of the options matters here.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "mcq max 3",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "c"
+                ]
+            },
+            "max_score": 3
+        },
+        "response": {
+            "option_id": "c"
+        },
+        "expect": {
+            "score": 3,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "exact_option_id",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi exact",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_ids": [
+                "c",
+                "a"
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct — you found every option that applies and included none that do not.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi partial",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_ids": [
+                "a"
+            ]
+        },
+        "expect": {
+            "score": 50,
+            "passed": false,
+            "feedback": "You identified 1 of the 2 options that apply. 1 is still missing.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi spurious",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_ids": [
+                "a",
+                "c",
+                "d"
+            ]
+        },
+        "expect": {
+            "score": 67,
+            "passed": false,
+            "feedback": "You identified 2 of the 2 options that apply. You also selected 1 option that does not belong — partial credit is the overlap between your set and the correct set, so over-selecting costs marks.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi alias",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "selected": [
+                "a",
+                "b"
+            ]
+        },
+        "expect": {
+            "score": 33,
+            "passed": false,
+            "feedback": "You identified 1 of the 2 options that apply. 1 is still missing. You also selected 1 option that does not belong — partial credit is the overlap between your set and the correct set, so over-selecting costs marks.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi none",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": [],
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "You identified 0 of the 2 options that apply. 2 are still missing.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi dupes",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "option_ids": [
+                "a",
+                "a",
+                "c"
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct — you found every option that applies and included none that do not.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "multi max 7 rounding",
+        "assessment": {
+            "kind": "multi_select",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a",
+                    "b",
+                    "c"
+                ]
+            },
+            "max_score": 7
+        },
+        "response": {
+            "option_ids": [
+                "a",
+                "b"
+            ]
+        },
+        "expect": {
+            "score": 5,
+            "passed": true,
+            "feedback": "You identified 2 of the 3 options that apply. 1 is still missing.",
+            "rule": "jaccard_partial_credit",
+            "scored": null
+        }
+    },
+    {
+        "name": "order right",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_order": [
+                    "a",
+                    "b",
+                    "c",
+                    "d"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "order": [
+                "a",
+                "b",
+                "c",
+                "d"
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct — the whole sequence is in the right order.",
+            "rule": "consecutive_pair_order",
+            "scored": null
+        }
+    },
+    {
+        "name": "order one swap",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_order": [
+                    "a",
+                    "b",
+                    "c",
+                    "d"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "order": [
+                "a",
+                "c",
+                "b",
+                "d"
+            ]
+        },
+        "expect": {
+            "score": 67,
+            "passed": false,
+            "feedback": "2 of the 3 consecutive pairs are in the right relative order. Work out which step cannot happen until another one is finished, and move that pair first.",
+            "rule": "consecutive_pair_order",
+            "scored": null
+        }
+    },
+    {
+        "name": "order partial placed",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_order": [
+                    "a",
+                    "b",
+                    "c",
+                    "d"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "order": [
+                "a",
+                "b"
+            ]
+        },
+        "expect": {
+            "score": 50,
+            "passed": false,
+            "feedback": "Only 2 of the 4 steps were placed, so this cannot score full marks. Every step belongs somewhere in the sequence.",
+            "rule": "consecutive_pair_order",
+            "scored": null
+        }
+    },
+    {
+        "name": "order alias",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_order": [
+                    "a",
+                    "b",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "sequence": [
+                "a",
+                "b",
+                "c"
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct — the whole sequence is in the right order.",
+            "rule": "consecutive_pair_order",
+            "scored": null
+        }
+    },
+    {
+        "name": "order empty",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_order": [
+                    "a",
+                    "b",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": [],
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "Nothing was submitted for this ordering item.",
+            "rule": "consecutive_pair_order",
+            "scored": null
+        }
+    },
+    {
+        "name": "order unknown ids",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_order": [
+                    "a",
+                    "b",
+                    "c"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "order": [
+                "x",
+                "y",
+                "a"
+            ]
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "Only 1 of the 3 steps were placed, so this cannot score full marks. Every step belongs somewhere in the sequence.",
+            "rule": "consecutive_pair_order",
+            "scored": null
+        }
+    },
+    {
+        "name": "order no key",
+        "assessment": {
+            "kind": "ordering",
+            "grader": "deterministic",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": [],
+            "max_score": 100
+        },
+        "response": {
+            "order": [
+                "a",
+                "b"
+            ]
+        },
+        "expect": {
+            "score": null,
+            "passed": null,
+            "feedback": null,
+            "rule": null,
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric right",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 13.04
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "13,04"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric thousands",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 1234.5
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "1.234,5"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric low",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 10,
+                "unit": "m"
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "9"
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "That is too low. Re-check the units (the answer is expected in m) and the order of operations — an answer off by a factor of ten is almost always a unit conversion, and an answer off by a little is usually a rounding step taken too early.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric high",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 10
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": 12
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "That is too high. Re-check the units and the order of operations — an answer off by a factor of ten is almost always a unit conversion, and an answer off by a little is usually a rounding step taken too early.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric within tolerance",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 10,
+                "tolerance": 0.5
+            },
+            "max_score": 100
+        },
+        "response": {
+            "answer": "10.4"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric pct",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 200,
+                "tolerance_pct": 5
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "209"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric words",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 10
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "ten"
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "That could not be read as a number. Enter digits only — units and words are not needed.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric empty",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 10
+            },
+            "max_score": 100
+        },
+        "response": [],
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "Nothing was submitted for this item.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric zero",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 0
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": 0
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric unit suffix",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 5
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "5 kg"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric float noise",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "value": 0.3
+            },
+            "max_score": 100
+        },
+        "response": {
+            "value": "0.30000000000000004"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "numeric_tolerance",
+            "scored": null
+        }
+    },
+    {
+        "name": "numeric no key",
+        "assessment": {
+            "kind": "numeric",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": [],
+            "max_score": 100
+        },
+        "response": {
+            "value": 1
+        },
+        "expect": {
+            "score": null,
+            "passed": null,
+            "feedback": null,
+            "rule": null,
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze right",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "accepted": [
+                    "Mitochondria"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "text": "mitochondria!"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze apostrophe",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "accepted": [
+                    "don't"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "text": "dont"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze wrong",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "accepted": [
+                    "x"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "text": "y"
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "That is not one of the accepted answers. Spelling, spacing, capitalisation and punctuation are all ignored, so check the term itself rather than its formatting.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze blanks",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "blanks": [
+                    [
+                        "a"
+                    ],
+                    [
+                        "b",
+                        "bee"
+                    ]
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "blanks": [
+                "a",
+                "bee"
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct — all 2 blanks match an accepted answer.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze blanks partial",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "blanks": [
+                    [
+                        "a"
+                    ],
+                    [
+                        "b"
+                    ]
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "blanks": [
+                "a",
+                "z"
+            ]
+        },
+        "expect": {
+            "score": 50,
+            "passed": false,
+            "feedback": "1 of 2 blanks are right. Blank 2 did not match an accepted answer — capitalisation, spacing and punctuation are ignored, so re-check the terms themselves.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze blanks obj",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "blanks": [
+                    {
+                        "accepted": [
+                            "a"
+                        ]
+                    },
+                    "b"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "answers": [
+                "a",
+                "b"
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct — all 2 blanks match an accepted answer.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze key alias",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "answers": [
+                    "yes"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "answer": "yes"
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "Correct.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze empty",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "accepted": [
+                    "x"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": [],
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "That is not one of the accepted answers. Spelling, spacing, capitalisation and punctuation are all ignored, so check the term itself rather than its formatting.",
+            "rule": "normalised_string_match",
+            "scored": null
+        }
+    },
+    {
+        "name": "cloze no key",
+        "assessment": {
+            "kind": "cloze",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": [],
+            "max_score": 100
+        },
+        "response": {
+            "text": "x"
+        },
+        "expect": {
+            "score": null,
+            "passed": null,
+            "feedback": null,
+            "rule": null,
+            "scored": null
+        }
+    },
+    {
+        "name": "code all pass",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "tests": [
+                    "t1",
+                    "t2"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "t1",
+                    "passed": true
+                },
+                {
+                    "name": "t2",
+                    "passed": true
+                }
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "All 2 tests passed.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "code one fail",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "tests": [
+                    "t1",
+                    "t2"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "t1",
+                    "passed": true
+                },
+                {
+                    "name": "t2",
+                    "passed": false
+                }
+            ]
+        },
+        "expect": {
+            "score": 50,
+            "passed": false,
+            "feedback": "1 of 2 tests passed. Still failing: \"t2\". Run them again after each change — the first failing test is usually the one worth fixing.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "code missing report",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "tests": [
+                    "t1",
+                    "t2"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "t1",
+                    "passed": true
+                }
+            ]
+        },
+        "expect": {
+            "score": 50,
+            "passed": false,
+            "feedback": "1 of 2 tests passed. Still failing: \"t2\". Run them again after each change — the first failing test is usually the one worth fixing.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "code object tests",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "tests": [
+                    {
+                        "name": "adds",
+                        "call": "add(1,2)"
+                    },
+                    {
+                        "call": "add(0,0)"
+                    }
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "adds",
+                    "passed": true
+                },
+                {
+                    "name": "add(0,0)",
+                    "pass": true
+                }
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "All 2 tests passed.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "code timeout",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "tests": [
+                    "t1"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "t1",
+                    "passed": false
+                }
+            ],
+            "timed_out": true
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "Your code ran past the time limit and was stopped, so no test could complete. Look for a loop that never ends or a recursive call with no base case.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "code undeclared reported",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": [],
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "mine",
+                    "passed": true
+                }
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "All 1 test passed.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "code nothing declared",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": [],
+            "max_score": 100
+        },
+        "response": {
+            "code": "x"
+        },
+        "expect": {
+            "score": null,
+            "passed": true,
+            "feedback": "There is nothing here that can be checked automatically, so this counts as done when you say it is. Read your work back against what the exercise asked for before you move on.",
+            "rule": "no_declared_checks",
+            "scored": false
+        }
+    },
+    {
+        "name": "code unrecognised extra",
+        "assessment": {
+            "kind": "code",
+            "grader": "deterministic",
+            "options": null,
+            "answer_key": {
+                "tests": [
+                    "t1"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "tests": [
+                {
+                    "name": "t1",
+                    "passed": true
+                },
+                {
+                    "name": "zz",
+                    "passed": false
+                }
+            ]
+        },
+        "expect": {
+            "score": 100,
+            "passed": true,
+            "feedback": "All 1 test passed.",
+            "rule": "declared_test_results",
+            "scored": null
+        }
+    },
+    {
+        "name": "self plain",
+        "assessment": {
+            "kind": "short_answer",
+            "grader": "self",
+            "options": null,
+            "answer_key": null,
+            "max_score": 100
+        },
+        "response": [],
+        "expect": {
+            "score": null,
+            "passed": true,
+            "feedback": "Marked complete by you. Nothing was auto-graded here — revisit it later if you want to check yourself again.",
+            "rule": null,
+            "scored": false
+        }
+    },
+    {
+        "name": "self note",
+        "assessment": {
+            "kind": "short_answer",
+            "grader": "self",
+            "options": null,
+            "answer_key": null,
+            "max_score": 100
+        },
+        "response": {
+            "note": "did it"
+        },
+        "expect": {
+            "score": null,
+            "passed": true,
+            "feedback": "Marked complete by you, with your note kept on the attempt: \"did it\"",
+            "rule": null,
+            "scored": false
+        }
+    },
+    {
+        "name": "self text",
+        "assessment": {
+            "kind": "short_answer",
+            "grader": "self",
+            "options": null,
+            "answer_key": null,
+            "max_score": 100
+        },
+        "response": {
+            "text": "  my text  "
+        },
+        "expect": {
+            "score": null,
+            "passed": true,
+            "feedback": "Marked complete by you, with your note kept on the attempt: \"my text\"",
+            "rule": null,
+            "scored": false
+        }
+    },
+    {
+        "name": "self on mcq",
+        "assessment": {
+            "kind": "mcq",
+            "grader": "self",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A"
+                },
+                {
+                    "id": "b",
+                    "text": "B"
+                },
+                {
+                    "id": "c",
+                    "text": "C"
+                },
+                {
+                    "id": "d",
+                    "text": "D"
+                }
+            ],
+            "answer_key": {
+                "correct_option_ids": [
+                    "a"
+                ]
+            },
+            "max_score": 100
+        },
+        "response": {
+            "note": "n"
+        },
+        "expect": {
+            "score": null,
+            "passed": true,
+            "feedback": "Marked complete by you, with your note kept on the attempt: \"n\"",
+            "rule": null,
+            "scored": false
+        }
+    },
+    {
+        "name": "self on code",
+        "assessment": {
+            "kind": "code",
+            "grader": "self",
+            "options": null,
+            "answer_key": [],
+            "max_score": 100
+        },
+        "response": {
+            "complete": true
+        },
+        "expect": {
+            "score": null,
+            "passed": true,
+            "feedback": "Marked complete by you. Nothing was auto-graded here — revisit it later if you want to check yourself again.",
+            "rule": null,
+            "scored": false
+        }
+    },
+    {
+        "name": "rubric empty",
+        "assessment": {
+            "kind": "short_answer",
+            "grader": "llm_rubric",
+            "options": null,
+            "answer_key": null,
+            "max_score": 100
+        },
+        "response": {
+            "text": "   "
+        },
+        "expect": {
+            "score": 0,
+            "passed": false,
+            "feedback": "There was nothing to grade — your submission came through empty. Write your answer out in full and submit it again; even a partial attempt gives you something to build on.",
+            "rule": null,
+            "scored": null
+        }
+    }
+]

@@ -5,10 +5,11 @@
 // Nothing the learner didn't press is created here. Actions are offers on the stored message. Attachments are stored
 // on the question and read for every answer in the thread after it, so "what does slide 4 say?" two turns after
 // attaching the deck still has the deck.
-import { BilimindError, type EngineConfig } from '@bilimind/engine/contracts'
-import { streamChat, type Msg } from '@bilimind/engine/llm'
+import { BilimindError, type Ctx, type EngineConfig } from '@bilimind/engine/contracts'
+import { checkBudget } from '@bilimind/engine/ledger'
+import { estimateCost, streamChat, type Msg } from '@bilimind/engine/llm'
 import { Invalid, UUID } from '../rules.ts'
-import { wireTime, type Row, type Store } from '../store.ts'
+import { wireTime, type Raw, type Row, type Store } from '../store.ts'
 import { inProgress } from './actions.ts'
 import { finishedSvg, partialSvg, SCENE_PROMPT, sceneOf, SVG_PROMPT } from './drawing.ts'
 import { FenceGate } from './fence.ts'
@@ -16,6 +17,7 @@ import { finishAnswer } from './finish.ts'
 import { buildGrounding, EXCERPT_CHARS, type AskInput, type Reader } from './grounding.ts'
 import { shortUrl } from './material.ts'
 import { systemPrompt, userPrompt } from './prompt.ts'
+import { courseSummary, DOWN, draftSentence, propose } from './propose.ts'
 
 const HISTORY = 12
 const TURN_CHARS = 3000
@@ -29,8 +31,6 @@ const MAKING_EVERY_MS = 250
 const KINDS = ['file', 'note', 'link', 'calendar', 'text', 'moodle']
 const CONTEXT_KINDS = ['everything', 'today', 'course', 'lesson', 'page', 'board', 'deadline', 'notes']
 
-/** Until courses can be drafted here, an honest failed card: a failed draft is still an answer, never an error event. */
-const COURSE_NOT_YET = "Making a course from the chat isn't in the desktop app yet. It's coming in the next update."
 export const NO_KEY = "BiliMind answers with your own AI key, and you haven't added one yet. Add a DeepSeek or OpenRouter key in Settings and ask again. It stays on this computer, and everything that doesn't need AI keeps working without one."
 const KEY_UNREADABLE = "Your AI key couldn't be unlocked on this computer. Add it again in Settings."
 
@@ -38,6 +38,9 @@ export interface Sink {
   status(text: string): void
   delta(text: string): void
   making(actions: Record<string, unknown>[]): void
+  /** The course card as it changes. */
+  proposal(state: Record<string, unknown>): void
+  step(key: string, label: string, state: string): void
 }
 
 export type KeyState = { state: 'ok'; config: EngineConfig } | { state: 'none' } | { state: 'unreadable' }
@@ -58,6 +61,10 @@ function titleFor(question: string): string {
   return `${(space > 30 ? cut.slice(0, space) : cut).replace(/[ ,;:.-]+$/, '')}…`
 }
 
+const shortText = (text: string) => {
+  const flat = text.replace(/\s+/gu, ' ').trim()
+  return flat.length > 60 ? `${flat.slice(0, 59).trimEnd()}…` : flat
+}
 const short = (v: unknown, max: number) => (typeof v === 'string' && v.replace(/\s+/gu, ' ').trim() ? v.replace(/\s+/gu, ' ').trim().slice(0, max) : null)
 const optional = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null)
 
@@ -117,6 +124,8 @@ export function readInput(store: Store, body: Record<string, any>): AskInput {
     subjectId: optional(context.subject_id),
     itemId: optional(context.item_id),
     topicId: optional(context.topic_id),
+    nodeId: Number.isInteger(context.node_id) ? context.node_id : null,
+    courseId: Number.isInteger(context.course_id) ? context.course_id : null,
     deadlineId: optional(context.deadline_id),
     excerpt: excerpt ? excerpt.slice(0, EXCERPT_CHARS) : null,
     attachments,
@@ -124,7 +133,7 @@ export function readInput(store: Store, body: Record<string, any>): AskInput {
   }
 }
 
-export function createAsker(store: Store, reader: Reader, deps: { key: () => KeyState; zone: () => string; tryFirstEverywhere: () => boolean; fallbackFetch?: typeof fetch }) {
+export function createAsker(store: Store, reader: Reader, deps: { key: () => KeyState; zone: () => string; tryFirstEverywhere: () => boolean; fallbackFetch?: typeof fetch; draftLedger: () => string }) {
   const db = store.db
   const insertMessage = db.prepare('INSERT INTO messages (id, thread_id, role, body) VALUES (?, ?, ?, ?)')
   const putThread = db.prepare(`INSERT INTO threads (id, body, updated_ms, deleted) VALUES (?, ?, ?, ?)
@@ -210,9 +219,11 @@ export function createAsker(store: Store, reader: Reader, deps: { key: () => Key
       ...fields,
       created_at: wireTime(Date.now()),
     } as Row
+    // A thread whose first answer is a ready draft is named after the course.
+    const title = answer.proposal?.state === 'ready' && turn.seq === messagesOf(turn.thread.id)[0]?.seq ? String(answer.proposal.proposal?.title ?? '').trim() : ''
     store.tx(() => {
       insertMessage.run(answer.id, turn.thread.id, 'assistant', JSON.stringify(answer))
-      saveThread(turn.thread)
+      saveThread(title ? { ...turn.thread, title: title.slice(0, TITLE_MAX) } : turn.thread)
     })
     return answer
   }
@@ -235,6 +246,10 @@ export function createAsker(store: Store, reader: Reader, deps: { key: () => Key
         content = `${press}${content}`.trim()
         if (row.quote) content = `About this passage: "${String(row.quote).slice(0, 600)}"\n\n${content}`
         if (row.attachments?.length) content = `${content}\n\n(Attached: ${row.attachments.map((a: Row) => a.label ?? '').join(', ')})`.trim()
+      }
+      // What was drafted, by name: the draft is the card's, not prose.
+      if (role === 'assistant' && row.proposal?.state === 'ready' && row.proposal.proposal) {
+        content += `\n\n(Drafted a course, shown as a card${row.proposal.created ? ' and created' : ''}: ${courseSummary(row.proposal.proposal)})`
       }
       content = content.slice(0, TURN_CHARS)
       if (turns.at(-1)?.role === role) turns[turns.length - 1] = { role, content }
@@ -302,11 +317,69 @@ export function createAsker(store: Store, reader: Reader, deps: { key: () => Key
     return { ...done, actions: [{ ...action, graphic }, ...others] }
   }
 
-  async function answer(turn: Turn, sink: Sink, signal: AbortSignal): Promise<Row> {
-    if (turn.input.intent === 'course') {
-      return keep(turn, { text: COURSE_NOT_YET, proposal: { state: 'failed', error: COURSE_NOT_YET }, context: { scope: turn.input.scope, intent: 'course' } })
-    }
+  /** The newest ready draft in the thread that hasn't become a course. */
+  function openDraft(threadId: string): Row | null {
+    return messagesOf(threadId).map((m) => m.row).filter((m) => m.role === 'assistant' && m.proposal?.state === 'ready' && !m.proposal.created).at(-1) ?? null
+  }
 
+  /** The whole chat and every attachment become the draft. A failed draft is still an answer, never an error event. */
+  async function draftCourse(turn: Turn, revise: boolean, change: string | null, sink: Sink, signal: AbortSignal): Promise<{ text: string; proposal: Raw }> {
+    const current = revise ? openDraft(turn.thread.id) : null
+    const replaces = current ? { replaces: current.id } : {}
+    sink.proposal({ state: 'drafting', ...replaces })
+    const messages = messagesOf(turn.thread.id).map((m) => m.row)
+    const said = [...new Set(messages.filter((m) => m.role === 'user').map((m) => String(m.text ?? '').trim()).filter(Boolean))]
+    const itemIds: string[] = []
+    const links: string[] = []
+    const pasted: string[] = []
+    const extra: Raw[] = []
+    let texts = 0
+    for (const a of attachedInThread(turn)) {
+      const label = String(a.label ?? '')
+      if (a.kind === 'file' || a.kind === 'note') itemIds.push(a.item_id)
+      else if (a.kind === 'link' || a.kind === 'calendar') links.push(a.url)
+      else if (a.kind === 'text') {
+        const stepKey = `source:text-${++texts}`
+        sink.step(stepKey, `Reading ${label}`, 'active')
+        pasted.push(`--- Pasted text: ${label} ---\n${a.text}`)
+        extra.push({ label, kind: 'text', item_id: null, read: true })
+        sink.step(stepKey, `Read ${label}`, 'done')
+      } else {
+        // No Moodle here: named, so the card says it wasn't read.
+        extra.push({ label: `${label} (Moodle)`, kind: 'text', item_id: null, read: false })
+      }
+    }
+    const text = [...said, ...pasted].join('\n\n')
+    const failed = (error: string) => {
+      const wire = { state: 'failed', error }
+      sink.proposal(wire)
+      return { text: error, proposal: wire }
+    }
+    try {
+      const proposal = await propose({ store, reader, key: deps.key, zone: deps.zone, fallbackFetch: deps.fallbackFetch, ledgerCourse: deps.draftLedger }, {
+        text,
+        links,
+        itemIds,
+        draft: current?.proposal?.proposal ?? null,
+        change,
+        step: (k, label, state) => { if (!signal.aborted) sink.step(k, label, state) },
+        partial: (p) => { if (!signal.aborted) sink.proposal({ state: 'drafting', partial: p, ...replaces }) },
+      })
+      // Pasted text was read inside `text`; listed on its own, so the card's sources name it. The proposer's own text source goes.
+      const given = (proposal.sources as Raw[]).filter((s) => s.kind !== 'text')
+      const words = said.length ? [{ label: shortText(said.join(' ')), kind: 'text', item_id: null, read: true }] : []
+      const wire = { state: 'ready', proposal: { ...proposal, sources: [...given, ...extra, ...words] }, ...replaces }
+      sink.proposal(wire)
+      return { text: draftSentence(String(proposal.title), [...given, ...extra], current !== null), proposal: wire }
+    } catch (error) {
+      if (error instanceof Invalid) return failed(Object.values(error.errors).flat()[0] ?? DOWN)
+      if (error instanceof BilimindError) return failed(/\bcap\b|would cross/i.test(error.message) ? `${error.message} You can change the limit in Settings, under Spending.` : error.message)
+      console.error('draft', error)
+      return failed(DOWN)
+    }
+  }
+
+  async function answer(turn: Turn, sink: Sink, signal: AbortSignal): Promise<Row> {
     const key = deps.key()
     if (key.state !== 'ok') {
       // Not stored: the question stays unanswered, so asking again once there is a key answers it.
@@ -324,12 +397,20 @@ export function createAsker(store: Store, reader: Reader, deps: { key: () => Key
       }
     }
 
+    if (turn.input.intent === 'course') {
+      const draft = await draftCourse(turn, false, null, sink, signal)
+      return keep(turn, { text: draft.text, proposal: draft.proposal, context: { scope: turn.input.scope, intent: 'course' } })
+    }
+
     const grounding = await buildGrounding(store, reader, turn.input, (t) => sink.status(t), attachedInThread(turn), deps.zone(), deps.tryFirstEverywhere())
+    const open = openDraft(turn.thread.id)
     const messages: Msg[] = [
-      { role: 'system', content: systemPrompt(grounding) },
+      { role: 'system', content: systemPrompt(grounding, open?.proposal?.proposal ? courseSummary(open.proposal.proposal) : null) },
       ...history(turn),
       { role: 'user', content: userPrompt(grounding, turn.input.message, turn.input.quote, turn.input.intent, turn.input.attachments.map((a) => String(a.label ?? '').trim()).filter(Boolean)) },
     ]
+
+    await guardChat(key.config, messages)
 
     const gate = new FenceGate()
     let madeAt = 0
@@ -363,14 +444,26 @@ export function createAsker(store: Store, reader: Reader, deps: { key: () => Key
     const guard = turn.input.intent === 'stuck' ? previousGuard(turn) ?? done.guard
       : turn.input.intent === 'attempt' ? done.guard ?? previousGuard(turn)
         : done.guard
+    const draft = done.draft ? await draftCourse(turn, done.draft.revise, done.draft.change, sink, signal) : null
     return keep(turn, {
-      text: done.draft && !done.text ? COURSE_NOT_YET : done.text,
+      text: done.text || (draft?.text ?? ''),
       citations: done.citations,
       actions: done.actions,
-      proposal: done.draft ? { state: 'failed', error: COURSE_NOT_YET } : null,
+      proposal: draft?.proposal ?? null,
       guard,
       context: { scope: turn.input.scope, excerpts: grounding.excerpts.length, attached: grounding.attached },
     })
+  }
+
+  /** The day's cap covers talking too, and it says so before spending anything. */
+  async function guardChat(config: EngineConfig, messages: Msg[]): Promise<void> {
+    const ctx: Ctx = { course: '', agent: 'Companion', noCache: true, spend: { usd: 0, calls: 0 }, now: () => new Date(), progress: () => undefined }
+    try {
+      await checkBudget(ctx, config, estimateCost(config.provider, config.models.fast, messages.reduce((n, m) => n + m.content.length, 0), 8192, false))
+    } catch (error) {
+      if (error instanceof BilimindError && /\bcap\b|would cross/i.test(error.message)) throw new BilimindError(`${error.message} You can change the limit in Settings, under Spending.`)
+      throw error
+    }
   }
 
   return {

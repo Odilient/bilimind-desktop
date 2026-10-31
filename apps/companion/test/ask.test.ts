@@ -371,33 +371,6 @@ describe('actions', () => {
   })
 })
 
-describe('what needs a course says not yet', () => {
-  beforeEach(withKey)
-
-  it('asking for a course outright: a failed card, no model call', async () => {
-    const message = done((await t.ask({ message: 'Teach me Italian', intent: 'course' })).events).message
-    expect(message.proposal).toMatchObject({ state: 'failed' })
-    expect(message.proposal.error).toMatch(/isn't in the desktop app yet/)
-    expect(provider.requests).toHaveLength(0)
-  })
-
-  it('the model deciding to draft one: its sentence stays, and the card says not yet', async () => {
-    answer('Let me draft Italian to B1.\n```actions\n[{"type":"propose_course"},{"type":"create_course","title":"X","topics":["a"]}]\n```')
-    const message = done((await t.ask({ message: 'I want Italian to B1' })).events).message
-    expect(message.text).toBe('Let me draft Italian to B1.')
-    expect(message.proposal).toMatchObject({ state: 'failed' })
-    expect(message.actions).toEqual([])
-  })
-
-  it('the routes behind lessons and proposals answer in words', async () => {
-    for (const path of ['/companion/courses/propose', '/companion/courses', `/companion/topics/${uuid()}/lesson`]) {
-      const res = await t.post(path, {})
-      expect(res.status).toBe(503)
-      expect(res.json.message).toMatch(/isn't in the desktop app yet/)
-    }
-  })
-})
-
 describe('live graphics', () => {
   beforeEach(withKey)
 

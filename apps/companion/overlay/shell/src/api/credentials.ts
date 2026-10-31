@@ -10,6 +10,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSy
 import { dirname, join } from 'node:path'
 import type { KeyState } from './ask/asker.ts'
 import { Invalid } from './rules.ts'
+import { capsOf } from './spend.ts'
 
 export const PROVIDERS = ['openrouter', 'deepseek'] as const
 type Provider = (typeof PROVIDERS)[number]
@@ -166,7 +167,7 @@ export function credentials(dataDir: string, configDir: string, vault: Vault, ba
         models: { fast: preset.fast, reasoning: preset.smart },
         userDir: configDir,
         ledgerPath: join(configDir, 'ledger.jsonl'),
-        caps: DEFAULT_CAPS,
+        caps: capsOf(configDir),
         reserveUsd: DEFAULT_RESERVE_USD,
         demoDay: false,
       }

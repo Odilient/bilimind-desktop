@@ -16,7 +16,7 @@ export const fakeVault = (available = true): Vault => ({
 
 export function testApi(options: { baseUrl?: string; vault?: Vault } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'bm-api-'))
-  const open = (vault = options.vault ?? fakeVault()) => createApi({ dataDir: join(dir, 'data'), configDir: join(dir, 'config'), userName: 'Ada', vault, baseUrl: options.baseUrl })
+  const open = (vault = options.vault ?? fakeVault()) => createApi({ seedStarter: false, dataDir: join(dir, 'data'), configDir: join(dir, 'config'), userName: 'Ada', vault, baseUrl: options.baseUrl })
   let api = open()
 
   async function call(method: string, path: string, body?: unknown, headers: Record<string, string> = {}) {
@@ -68,6 +68,7 @@ export function testApi(options: { baseUrl?: string; vault?: Vault } = {}) {
     patch: (path: string, body: unknown) => call('PATCH', path, body),
     del: (path: string) => call('DELETE', path),
     get store() { return api.store },
+    settled: () => api.settled(),
     dir,
     /** Close and open again, as quitting the app does. */
     restart(vault?: Vault) {
