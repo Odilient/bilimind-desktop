@@ -329,7 +329,7 @@ ${content.slice(0, 200_000)}`);
 }
 
 // ---------------------------------------------------------------- the call
-type Msg = { role: 'system' | 'user' | 'assistant'; content: string };
+export type Msg = { role: 'system' | 'user' | 'assistant'; content: string };
 
 interface CachedReply { data: unknown; model: string; provider: ProviderId; usage: LlmResult<unknown>['usage'] }
 
@@ -559,3 +559,158 @@ export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest)
   }
   throw lastFailure ?? new BilimindError(FAILURE.http, 'Run the same command again in a minute.');
 };
+
+// ---------------------------------------------------------------- streaming, for a reply someone is watching
+export interface StreamRequest {
+  /** What the ledger calls this call. */
+  stage: string;
+  messages: Msg[];
+  model?: string;
+  temperature?: number;
+  maxTokens?: number;
+  /** Thinking off: a graphic drawn in a conversation can't take half a minute. */
+  fast?: boolean;
+  signal?: AbortSignal;
+  /** Tried once when the provider's certificate doesn't verify: a TLS-inspecting network, where Electron's stack knows the system store. */
+  fallbackFetch?: typeof fetch;
+  onDelta: (piece: string) => void;
+}
+
+export interface StreamResult { text: string; model: string; usage: RawUsage; cost_usd: number }
+
+function streamBody(cfg: EngineConfig, model: string, req: StreamRequest, drop: Set<string>): Record<string, unknown> {
+  const body: Record<string, unknown> = {
+    model, messages: req.messages, stream: true, stream_options: { include_usage: true },
+    temperature: req.temperature ?? 0.5, max_tokens: req.maxTokens ?? 8192,
+  };
+  if (cfg.provider === 'deepseek') {
+    if (req.fast) body.thinking = { type: 'disabled' };
+  } else {
+    body.usage = { include: true };
+    if (req.fast) body.reasoning = { enabled: false };
+    // the price pin (requestBody above)
+    if (model.startsWith('deepseek/')) body.provider = { require_parameters: true, max_price: { prompt: 0.2, completion: 0.4 }, allow_fallbacks: true };
+  }
+  for (const k of drop) delete body[k];
+  return body;
+}
+
+const STREAM_OPTIONAL: [string, RegExp][] = [['stream_options', /stream[_ ]?options|include[_ ]?usage/i], ['thinking', /thinking/i], ['reasoning', /reasoning/i]];
+
+function isCertError(e: unknown): boolean {
+  const err = e as { message?: string; code?: string; cause?: { code?: string; message?: string } };
+  return /CERT|SELF_SIGNED|UNABLE_TO_VERIFY|LEAF_SIGNATURE|certificate/i.test(`${err?.code ?? ''} ${err?.message ?? ''} ${err?.cause?.code ?? ''} ${err?.cause?.message ?? ''}`);
+}
+
+/** The learner reads these, in a chat on their own key: what happened and what to do, never "on our side". */
+function streamFailure(who: string, status: number): BilimindError {
+  if (status === 401 || status === 403) return new BilimindError(`${who} did not accept your key. Check it in Settings.`);
+  if (status === 402) return new BilimindError(`Your ${who} balance is empty. Top it up, or add another key in Settings.`);
+  if (status === 429) return new BilimindError(`${who} is busy right now. Try again in a minute.`);
+  if (status >= 500) return new BilimindError(`${who} had a problem answering. Try again in a minute.`);
+  return new BilimindError(`${who} refused the question (${status}). Try a shorter question.`);
+}
+
+/**
+ * One OpenAI-compatible chat call, streamed. Pieces go to `onDelta` as they arrive and the whole text comes back.
+ * Transport errors, 429 and 5xx retry (3 attempts) only while nothing has been shown: a retry after that would write
+ * the answer twice. An abort stops at once. Never reads reasoning_content.
+ */
+export async function streamChat(cfg: EngineConfig, req: StreamRequest): Promise<StreamResult> {
+  const who = providerLabel(cfg.provider);
+  if (!cfg.apiKey && needsKey(cfg.provider)) throw new BilimindError(`No ${who} API key found.`, 'Add one in Settings.');
+  const model = req.model ?? cfg.models.fast;
+  const url = `${cfg.baseUrl}/chat/completions`;
+  const timeoutMs = Number(process.env.BILIMIND_LLM_TIMEOUT_MS) || 240_000;
+  const signal = req.signal ? AbortSignal.any([req.signal, AbortSignal.timeout(timeoutMs)]) : AbortSignal.timeout(timeoutMs);
+  const drop = new Set<string>();
+  let doFetch: typeof fetch = fetch;
+  let text = '';
+  let failure: BilimindError = new BilimindError(`Could not reach ${who}. Check the internet connection and try again.`);
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    let res: Response;
+    try {
+      res = await doFetch(url, {
+        method: 'POST',
+        headers: { ...providerHeaders(cfg), Accept: 'text/event-stream' },
+        body: JSON.stringify(streamBody(cfg, model, req, drop)),
+        signal,
+      });
+    } catch (e) {
+      if (req.signal?.aborted) throw e;
+      if (req.fallbackFetch && doFetch !== req.fallbackFetch && isCertError(e)) { doFetch = req.fallbackFetch; attempt--; continue; }
+      if (isCertError(e)) failure = new BilimindError(`This network blocked the secure connection to ${who}. Try another network.`);
+      await sleep(backoffMs(attempt));
+      continue;
+    }
+    if (!res.ok || !res.body) {
+      const detail = await res.text().catch(() => '');
+      failure = streamFailure(who, res.status);
+      if (res.status === 400) {
+        const param = STREAM_OPTIONAL.find(([k, re]) => !drop.has(k) && re.test(detail))?.[0];
+        if (param) { drop.add(param); attempt--; continue; }
+      }
+      if (res.status >= 400 && res.status < 500 && res.status !== 429) throw failure;
+      const retryAfter = Number(res.headers.get('retry-after'));
+      await sleep(res.status === 429 && retryAfter > 0 ? Math.min(20_000, retryAfter * 1000) : backoffMs(attempt));
+      continue;
+    }
+
+    let usage: RawUsage | null = null;
+    let served = model;
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let finished = false;
+    const onLine = (line: string): void => {
+      if (!line.startsWith('data:')) return;    // ": OPENROUTER PROCESSING" keep-alives, blank lines
+      const raw = line.slice(5).trim();
+      if (!raw) return;
+      if (raw === '[DONE]') { finished = true; return; }
+      let chunk: { choices?: { delta?: { content?: string | null } }[]; usage?: RawUsage; model?: string; error?: unknown };
+      try { chunk = JSON.parse(raw) as typeof chunk; } catch { return; }
+      if (chunk.error) throw new BilimindError(`${who} stopped while answering. Try again.`);
+      if (chunk.usage) usage = chunk.usage;
+      if (typeof chunk.model === 'string' && chunk.model) served = chunk.model;
+      const piece = chunk.choices?.[0]?.delta?.content;
+      if (typeof piece === 'string' && piece) { text += piece; req.onDelta(piece); }
+    };
+    try {
+      while (!finished) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let i: number;
+        while ((i = buffer.indexOf('\n')) >= 0) {
+          const line = buffer.slice(0, i).trim();
+          buffer = buffer.slice(i + 1);
+          onLine(line);
+        }
+      }
+      if (buffer.trim()) onLine(buffer.trim());
+    } catch (e) {
+      if (req.signal?.aborted || e instanceof BilimindError) throw e;
+      if (text) throw new BilimindError('The answer was cut off. Try again.');
+      await sleep(backoffMs(attempt));
+      continue;
+    } finally {
+      reader.cancel().catch(() => undefined);
+    }
+
+    if (!text) { failure = new BilimindError(`${who} sent an empty answer. Try again.`); await sleep(backoffMs(attempt)); continue; }
+
+    const at = res.headers.get('date');
+    const billed: RawUsage = usage ?? {
+      prompt_tokens: Math.ceil(req.messages.reduce((n, m) => n + m.content.length, 0) / 3.2),
+      completion_tokens: Math.ceil(text.length / 3.2),
+    };
+    const cost = round6(costOf(cfg.provider, model, billed, at ? new Date(at) : null));
+    try {
+      recordSpend(cfg, { ts: new Date().toISOString(), course: '', cmd: req.stage, provider: cfg.provider, model,
+        prompt_tokens: billed.prompt_tokens ?? 0, completion_tokens: billed.completion_tokens ?? 0, cost_usd: cost, cached: false });
+    } catch { /* the ledger is best effort */ }
+    return { text, model: served, usage: billed, cost_usd: cost };
+  }
+  throw failure;
+}
