@@ -221,8 +221,10 @@ export function useSpeech() {
   }
 
   async function startRecording(): Promise<void> {
-    abort("Speaking practice needs a speech-to-text service, and BiliMind's DeepSeek and OpenRouter keys don't include one. Listen to the phrase and say it aloud, or type your reply.")
-    return
+    if (import.meta.client) {
+      abort("Speaking practice needs a speech-to-text service, and BiliMind's DeepSeek and OpenRouter keys don't include one. Listen to the phrase and say it aloud, or type your reply.")
+      return
+    }
     if (!navigator.mediaDevices?.getUserMedia) {
       abort('This browser cannot record audio. Type your reply instead.')
       return
