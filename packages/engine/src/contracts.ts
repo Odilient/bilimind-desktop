@@ -83,6 +83,12 @@ export interface LlmRequest {
   maxTokens?: number;                        // default 32768
   temperature?: number;                      // default 0.6
   model?: string;
+  /** Stream the reply: called with everything written so far, for a screen that shows the work as it happens. */
+  onContent?: (soFar: string) => void;
+  /** With onContent: the model's reasoning, piece by piece. Never parsed, only shown as progress. */
+  onThinking?: (piece: string) => void;
+  /** Tried once when the provider's certificate doesn't verify (see StreamRequest.fallbackFetch). */
+  fallbackFetch?: typeof fetch;
 }
 export interface LlmResult<T> {
   data: T;

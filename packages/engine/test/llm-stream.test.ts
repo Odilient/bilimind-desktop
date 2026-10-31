@@ -2,8 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { EngineConfig } from '../src/contracts.ts';
-import { streamChat } from '../src/llm.ts';
+import type { Ctx, EngineConfig } from '../src/contracts.ts';
+import { callJson, setEngineConfig, streamChat } from '../src/llm.ts';
 
 const dir = mkdtempSync(join(tmpdir(), 'bm-stream-'));
 const cfg: EngineConfig = {
@@ -87,5 +87,46 @@ describe('streamChat', () => {
     const bodies = fetchOnce(Object.assign(new Error('aborted'), { name: 'AbortError' }));
     await expect(call({ signal: ctl.signal }).run).rejects.toThrow('aborted');
     expect(bodies).toHaveLength(1);
+  });
+});
+
+describe('callJson streaming', () => {
+  afterEach(() => setEngineConfig(null));
+  const ctx = (): Ctx => ({ course: join(dir, 'c'), agent: 't', noCache: true, spend: { usd: 0, calls: 0 }, now: () => new Date(), progress: () => undefined });
+  const chunks = (...rows: unknown[]) => new Response(`${rows.map(r => `data: ${JSON.stringify(r)}\n\n`).join('')}data: [DONE]\n\n`, { headers: { 'content-type': 'text/event-stream' } });
+  const answer = (...pieces: string[]) => chunks(
+    { choices: [{ delta: { reasoning_content: 'hm' } }] },
+    ...pieces.map(p => ({ choices: [{ delta: { content: p } }] })),
+    { choices: [{ delta: {}, finish_reason: 'stop' }] },
+    { choices: [], usage: { prompt_tokens: 10, completion_tokens: 5 }, model: 'served' },
+  );
+
+  it('shows the work as it comes, and returns the same result as a whole reply', async () => {
+    setEngineConfig(cfg);
+    const bodies = fetchOnce(answer('{"a"', ':1}'));
+    const seen: string[] = [];
+    const thoughts: string[] = [];
+    const out = await callJson<{ a: number }>(ctx(), { stage: 'expand', system: 'Reply in JSON', user: 'x', schema: { type: 'object', required: ['a'], properties: { a: { type: 'number' } } }, onContent: s => seen.push(s), onThinking: p => thoughts.push(p) });
+    expect(out.data).toEqual({ a: 1 });
+    expect(out.model).toBe('served');
+    expect(out.usage.completion_tokens).toBe(5);
+    expect(seen).toEqual(['{"a"', '{"a":1}']);
+    expect(thoughts).toEqual(['hm']);
+    expect(bodies[0]).toMatchObject({ stream: true, stream_options: { include_usage: true } });
+  });
+
+  it('stays a whole-reply call without a watcher', async () => {
+    setEngineConfig(cfg);
+    const bodies = fetchOnce(new Response(JSON.stringify({ choices: [{ message: { content: '{"a":1}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 1, completion_tokens: 1 } })));
+    await callJson(ctx(), { stage: 'expand', system: 'Reply in JSON', user: 'x' });
+    expect(bodies[0]!.stream).toBe(false);
+  });
+
+  it('drops a stream option the provider refuses, then retries', async () => {
+    setEngineConfig(cfg);
+    const bodies = fetchOnce(new Response('stream_options is not supported', { status: 400 }), answer('{"a":1}'));
+    await callJson(ctx(), { stage: 'expand', system: 'Reply in JSON', user: 'x', onContent: () => undefined });
+    expect(bodies[0]!.stream_options).toBeTruthy();
+    expect(bodies[1]!.stream_options).toBeUndefined();
   });
 });

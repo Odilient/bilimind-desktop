@@ -340,9 +340,10 @@ const MAX_ATTEMPTS = 3;
 function requestBody(cfg: EngineConfig, model: string, messages: Msg[], req: LlmRequest, thinking: boolean): Record<string, unknown> {
   const maxTokens = req.maxTokens ?? 32768;
   const temperature = req.temperature ?? 0.6;
+  const stream = req.onContent ? { stream: true, stream_options: { include_usage: true } } : {};
   if (cfg.provider === 'deepseek') {
     const body: Record<string, unknown> = {
-      model, messages, max_tokens: maxTokens, stream: false,
+      model, messages, max_tokens: maxTokens, stream: false, ...stream,
       response_format: { type: 'json_object' },
       thinking: { type: thinking ? 'enabled' : 'disabled' },
     };
@@ -355,6 +356,7 @@ function requestBody(cfg: EngineConfig, model: string, messages: Msg[], req: Llm
     response_format: { type: 'json_object' },
     usage: { include: true },
     reasoning: { enabled: thinking },
+    ...stream,
   };
   // Pin the route price for DeepSeek models (PLAN §6.3): never the $1.28/M-output endpoints.
   if (model.startsWith('deepseek/')) body.provider = { require_parameters: true, max_price: { prompt: 0.2, completion: 0.4 }, allow_fallbacks: true };
@@ -363,7 +365,7 @@ function requestBody(cfg: EngineConfig, model: string, messages: Msg[], req: Llm
 
 /** Request keys that may be dropped (once) when the endpoint refuses them with a 400. */
 // Never 'provider': OpenRouter 400s often say "Provider returned error", and dropping the price pin could land on a $1.28/M route.
-const OPTIONAL_PARAMS: [string, RegExp][] = [['response_format', /response[_ ]?format|json[_ ]?object|json mode/i], ['thinking', /thinking/i], ['reasoning_effort', /reasoning[_ ]?effort/i]];
+const OPTIONAL_PARAMS: [string, RegExp][] = [['stream_options', /stream[_ ]?options|include[_ ]?usage/i], ['response_format', /response[_ ]?format|json[_ ]?object|json mode/i], ['thinking', /thinking/i], ['reasoning_effort', /reasoning[_ ]?effort/i]];
 function withoutKeys(body: Record<string, unknown>, drop: Set<string>): Record<string, unknown> {
   if (!drop.size) return body;
   return Object.fromEntries(Object.entries(body).filter(([k]) => !drop.has(k)));
@@ -422,6 +424,45 @@ function checkAll(data: Record<string, unknown>, req: LlmRequest): string[] {
   try { return req.validate ? req.validate(data) : []; } catch (e) { return [`$: ${(e as Error).message}`]; }
 }
 
+/** A streamed reply put back together in the shape of a whole one, so everything after the read is the same call. */
+async function readStreamedReply(res: Response, req: LlmRequest) {
+  let content = '';
+  let finish: string | undefined;
+  let usage: RawUsage | undefined;
+  let model: string | undefined;
+  const reader = res.body!.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  const onLine = (line: string): void => {
+    if (!line.startsWith('data:')) return;
+    const raw = line.slice(5).trim();
+    if (!raw || raw === '[DONE]') return;
+    let chunk: { choices?: { delta?: { content?: string | null; reasoning_content?: string | null; reasoning?: string | null }; finish_reason?: string | null }[]; usage?: RawUsage; model?: string; error?: unknown };
+    try { chunk = JSON.parse(raw) as typeof chunk; } catch { return; }
+    if (chunk.error) throw new Error('provider error inside the stream');
+    if (chunk.usage) usage = chunk.usage;
+    if (typeof chunk.model === 'string' && chunk.model) model = chunk.model;
+    const choice = chunk.choices?.[0];
+    if (choice?.finish_reason) finish = choice.finish_reason;
+    const thought = choice?.delta?.reasoning_content ?? choice?.delta?.reasoning;
+    if (typeof thought === 'string' && thought) req.onThinking?.(thought);
+    const piece = choice?.delta?.content;
+    if (typeof piece === 'string' && piece) { content += piece; req.onContent!(content); }
+  };
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let i: number;
+    while ((i = buffer.indexOf('\n')) >= 0) {
+      onLine(buffer.slice(0, i).trim());
+      buffer = buffer.slice(i + 1);
+    }
+  }
+  if (buffer.trim()) onLine(buffer.trim());
+  return { choices: content ? [{ message: { content }, finish_reason: finish }] : [], usage, model };
+}
+
 export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest): Promise<LlmResult<T>> => {
   const cfg = activeConfig();
   const who = providerLabel(cfg.provider);
@@ -456,7 +497,9 @@ export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest)
   let lastFailure: BilimindError | null = null;
   let servedModel = model;
   const url = cfg.baseUrl + '/chat/completions';
-  const timeoutMs = Number(process.env.BILIMIND_LLM_TIMEOUT_MS) || 240_000;
+  // A streamed lesson spends minutes reasoning before its first word, and every byte proves the call is alive.
+  const timeoutMs = Number(process.env.BILIMIND_LLM_TIMEOUT_MS) || (req.onContent ? 600_000 : 240_000);
+  let doFetch: typeof fetch = fetch;
 
   while (attempts < MAX_ATTEMPTS) {
     attempts++;
@@ -465,9 +508,10 @@ export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest)
 
     let res: Response;
     try {
-      res = await fetch(url, { method: 'POST', headers: providerHeaders(cfg), body: JSON.stringify(withoutKeys(requestBody(cfg, model, messages, req, thinking), dropped)),
+      res = await doFetch(url, { method: 'POST', headers: providerHeaders(cfg), body: JSON.stringify(withoutKeys(requestBody(cfg, model, messages, req, thinking), dropped)),
         signal: AbortSignal.timeout(timeoutMs) });
     } catch (e) {
+      if (req.fallbackFetch && doFetch !== req.fallbackFetch && isCertError(e)) { doFetch = req.fallbackFetch; attempts--; continue; }
       lastFailure = new BilimindError(FAILURE.transport, `${who} did not answer (${redact((e as Error).message).slice(0, 120)}). Run the command again.`);
       ctx.progress(`llm: ${req.stage} · attempt ${attempts} transport error`);
       await sleep(backoffMs(attempts));
@@ -498,7 +542,7 @@ export const callJson: CallJson = async <T = unknown>(ctx: Ctx, req: LlmRequest)
     }
 
     let body: { choices?: { message?: { content?: string | null }; finish_reason?: string }[]; usage?: RawUsage; error?: unknown; model?: string };
-    try { body = await res.json() as typeof body; } catch {
+    try { body = req.onContent ? await readStreamedReply(res, req) : await res.json() as typeof body; } catch {
       lastFailure = new BilimindError(FAILURE.http, 'The reply was not JSON. Run the command again.');
       await sleep(backoffMs(attempts));
       continue;

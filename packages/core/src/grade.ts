@@ -92,16 +92,13 @@ const strList = (v: unknown): string[] =>
 
 export function expectedOptionIds(item: GradableItem): string[] {
   const k = (item.answer_key ?? {}) as Record<string, unknown>;
-  for (const c of ['correct_option_ids', 'correct', 'option_ids', 'accepted', 'values']) {
-    const ids = strList(k[c]);
+  for (const c of ['correct_option_ids', 'correct_option_id', 'option_ids', 'option_id', 'correct', 'accepted', 'values', 'value', 'ids', 'id', 'answer', 'answers']) {
+    const v = k[c];
+    const ids = (typeof v === 'string' || typeof v === 'number') && String(v).trim() ? [String(v).trim()] : strList(v);
     if (ids.length) return [...new Set(ids)];
   }
-  for (const c of ['correct_option_id', 'option_id', 'value']) {
-    const v = k[c];
-    if ((typeof v === 'string' || typeof v === 'number') && String(v).trim()) return [String(v).trim()];
-  }
-  // last resort: options flagged correct: true
-  return (item.options ?? []).filter(o => (o as unknown as { correct?: unknown }).correct === true).map(o => o.id);
+  // last resort: options flagged correct
+  return (item.options ?? []).filter(o => { const f = o as unknown as { correct?: unknown; is_correct?: unknown }; return (f.correct ?? f.is_correct) === true; }).map(o => o.id);
 }
 
 export function expectedOrder(item: GradableItem): string[] {
@@ -120,8 +117,12 @@ export function expectedBlanks(item: GradableItem): string[][] {
       : b && typeof b === 'object' ? strList((b as Record<string, unknown>).accepted)
       : strList([b]))).filter(b => b.length);
   }
-  const acc = strList(k.accepted);
-  return acc.length ? [acc] : [];
+  for (const c of ['accepted', 'answers', 'correct', 'value', 'values', 'text', 'answer']) {
+    const v = k[c];
+    const acc = (typeof v === 'string' || typeof v === 'number') && String(v).trim() ? [String(v).trim()] : strList(v);
+    if (acc.length) return [acc];
+  }
+  return [];
 }
 
 // ---------- graders ----------
