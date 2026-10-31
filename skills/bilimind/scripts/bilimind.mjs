@@ -119570,7 +119570,7 @@ function resolveAssetsDir() {
     process.env.BILIMIND_ASSETS,
     join12(HERE, "..", "assets"),
     findUp("assets"),
-    findUp(join12("plan", "reference", "design", "hero-v7", "img", "11"), HERE, 8)
+    findUp(join12("packages", "player", "public", "img"), HERE, 8)
   ].filter((p2) => !!p2);
   return candidates.find((p2) => existsSync14(join12(p2, "obj-book.webp"))) ?? null;
 }

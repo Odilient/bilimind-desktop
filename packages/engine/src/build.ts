@@ -359,7 +359,7 @@ export function resolveAssetsDir(): string | null {
     process.env.BILIMIND_ASSETS,
     join(HERE, '..', 'assets'),
     findUp('assets'),
-    findUp(join('plan', 'reference', 'design', 'hero-v7', 'img', '11'), HERE, 8),
+    findUp(join('packages', 'player', 'public', 'img'), HERE, 8),
   ].filter((p): p is string => !!p);
   return candidates.find(p => existsSync(join(p, 'obj-book.webp'))) ?? null;
 }

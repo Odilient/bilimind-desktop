@@ -113,7 +113,7 @@ function main(argv) {
   if (has('--check')) {
     const p = problems();
     if (!fs.existsSync(path.join(SKILL, 'scripts', 'bilimind.mjs'))) console.warn('note: scripts/bilimind.mjs not built yet (WP6: node apps/cli/scripts/bundle.mjs)');
-    if (p.length) { console.error(p.map((x) => `- ${x}`).join('\n')); process.exitCode = 1; } else console.log('ok: skill and team package are consistent');
+    if (p.length) { console.error(p.map((x) => `- ${x}`).join('\n')); process.exitCode = 1; } else console.log('ok: the skill is consistent');
     return;
   }
   const p = problems();
