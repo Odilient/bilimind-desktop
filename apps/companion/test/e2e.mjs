@@ -1,19 +1,35 @@
 // The app end to end: no account, no network, and everything still there after a restart. Nothing reaches the screen
 // (Chromium's headless Ozone platform, no X or Wayland) and nothing plays sound. Needs `pnpm spa` and `pnpm build` first.
 
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, rmSync, statSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { _electron as electron } from 'playwright-core'
+import { fakeProvider, inPieces } from './fake-provider.ts'
 
 const require = createRequire(import.meta.url)
 const appDir = join(dirname(fileURLToPath(import.meta.url)), '..')
 const home = mkdtempSync(join(tmpdir(), 'bm-companion-e2e-'))
 
+// Nothing here spends money: the "provider" is this script.
+const block = (actions) => `\n\`\`\`actions\n${JSON.stringify(actions)}\n\`\`\``
+const svg = '<svg viewBox="0 0 800 500"><rect x="40" y="40" width="200" height="100" fill="#2740E0"/></svg>'
+const llm = await fakeProvider((body) => {
+  const last = body.messages.at(-1).content
+  if (body.messages[0].content.startsWith('You draw one teaching graphic')) return { pieces: inPieces(svg, 16), delayMs: 40 }
+  if (/QUESTION\nExplain joins/.test(last)) return { pieces: inPieces('A join combines rows from two tables. It matches them on a key.\n'), delayMs: 10 }
+  if (/QUESTION\nKeep a note/.test(last)) return { pieces: inPieces(`Here is a note to keep.${block([{ type: 'create_page', title: 'Joins cheat sheet', markdown: '# Joins\nInner keeps matches.', subject_id: null }])}`), delayMs: 10 }
+  if (/QUESTION\nShow me a join/.test(last)) return { pieces: inPieces(`Here it is.${block([{ type: 'draw', title: 'A join', mode: '2d', caption: 'Two tables', brief: 'Two tables meeting on a key' }])}`) }
+  if (/QUESTION\nWrite my essay/.test(last)) return { pieces: inPieces(`This is graded work, so have a go first.${block([{ type: 'attempt_first', deadline_id: null, subject_id: null }])}`) }
+  if (/QUESTION\nTell me everything/.test(last)) return { pieces: inPieces('word '.repeat(2000), 5), delayMs: 5 }
+  return { pieces: ['Ok.'] }
+})
+
 const env = {
   ...process.env,
+  BILIMIND_LLM_BASE_URL: llm.url,
   BILIMIND_E2E: '1',
   BILIMIND_USER_DATA: join(home, 'profile'),
   BILIMIND_HOME: join(home, 'settings'),
@@ -28,6 +44,21 @@ let failed = 0
 const check = (name, ok, extra = '') => {
   if (!ok) failed++
   console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${extra ? `  ${extra}` : ''}`)
+}
+
+const TINY_PDF = `%PDF-1.4
+1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj
+2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj
+3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 400 200]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj
+4 0 obj<</Length 44>>stream
+BT /F1 14 Tf 20 100 Td (Phantom reads) Tj ET
+endstream endobj
+5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj
+trailer<</Root 1 0 R>>
+%%EOF`
+const FAKE_KEY = `sk-${'f'.repeat(20)}wxyz`
+const waitFor = async (ok) => {
+  for (let i = 0; i < 50 && !ok(); i++) await new Promise((r) => setTimeout(r, 100))
 }
 
 const problems = []
@@ -151,14 +182,88 @@ try {
   await page.getByRole('button', { name: 'Preferences' }).click()
   await page.getByText('Make me try first').first().waitFor({ timeout: 10_000 })
 
-  // ---------- AI answers "not yet" and the SPA stays up ----------
+  // ---------- the chat, with no key ----------
+  const ask = async (words) => {
+    const box = page.getByLabel('Ask BiliMind').first()
+    await box.waitFor({ timeout: 20_000 })
+    await box.fill(words)
+    await box.press('Enter')
+  }
   await page.goto('app://bilimind/app/chat')
-  const composer = page.locator('textarea').first()
-  await composer.waitFor({ timeout: 20_000 })
-  await composer.fill('Explain joins')
-  await composer.press('Enter')
-  await page.getByText("isn't in the desktop app yet").first().waitFor({ timeout: 20_000 })
-  check('the chat says AI is not here yet, without crashing', true)
+  await ask('Explain joins')
+  await page.getByText('Add a DeepSeek or OpenRouter key in Settings').first().waitFor({ timeout: 20_000 })
+  check('with no key the chat says how to add one, and calls nobody', llm.requests.length === 0)
+  await page.getByRole('button', { name: 'Open' }).first().click()
+  await page.waitForURL(/\/app\/settings\?section=keys/, { timeout: 10_000 })
+  check('its link opens the key screen', true)
+
+  // ---------- the key screen ----------
+  // Headless, with no session bus: Chromium's basic_text backend, which is what "no keychain" looks like here.
+  await page.getByText('This computer has no system keychain').waitFor({ timeout: 10_000 })
+  check('with no keychain the screen says so', true)
+  await page.getByRole('button', { name: 'Add a key' }).click()
+  await page.locator('#cred-provider').selectOption('deepseek')
+  await page.getByLabel('Secret key').fill(FAKE_KEY)
+  await page.getByRole('button', { name: 'Save key' }).click()
+  await page.getByText('In use').waitFor({ timeout: 10_000 })
+  const screen = await page.locator('body').innerText()
+  check('the key shows by its last four, never whole', screen.includes('wxyz') && !screen.includes(FAKE_KEY))
+  const keyFile = join(home, 'profile', 'data', 'keys.json')
+  check('the key file is this user\'s alone', (statSync(keyFile).mode & 0o777) === 0o600)
+
+  // ---------- the chat, with one ----------
+  await page.goto('app://bilimind/app/chat')
+  await ask('Explain joins')
+  await page.getByText('It matches them on a key').first().waitFor({ timeout: 20_000 })
+  check('an answer streams in', llm.requests.at(-1).authorization === `Bearer ${FAKE_KEY}`)
+  check('the model reads the learner\'s week', llm.requests.at(-1).body.messages[0].content.includes('Lab 4'))
+
+  await page.goto('app://bilimind/app/chat')
+  await ask('Keep a note')
+  await page.getByRole('button', { name: 'Save note' }).first().click({ timeout: 20_000 })
+  await page.waitForFunction(async () => {
+    const { data } = await (await fetch('/api/companion/items?kind=page')).json()
+    return data.some((i) => i.title === 'Joins cheat sheet')
+  }, undefined, { timeout: 15_000, polling: 300 })
+  check('an action card makes the note when pressed', true)
+  check('the actions block never reached the screen', !(await page.locator('body').innerText()).includes('create_page'))
+
+  await page.goto('app://bilimind/app/chat')
+  await ask('Show me a join')
+  await page.locator('img[src^="data:image/svg"], img[src^="blob:"]').first().waitFor({ timeout: 20_000 })
+  check('a graphic is drawn under the answer', llm.requests.at(-1).body.thinking?.type === 'disabled')
+
+  await page.goto('app://bilimind/app/chat')
+  await ask('Write my essay')
+  await page.getByRole('button', { name: 'Check my attempt' }).first().waitFor({ timeout: 20_000 })
+  check('graded work asks for an attempt first', await page.getByRole('button', { name: "I'm stuck, show me" }).first().isVisible())
+
+  await page.goto('app://bilimind/app/chat')
+  await ask('Tell me everything')
+  await page.getByText('word word').first().waitFor({ timeout: 20_000 })
+  await page.getByLabel('Stop answering').first().click()
+  await waitFor(() => llm.dropped() > 0)
+  check('Stop cuts the provider\'s reply off', llm.dropped() > 0)
+
+  // The PDF reader is bundled into main, so this is the one place it can break that the unit tests can't see.
+  const threadId = await page.evaluate(async (pdf) => {
+    const form = new FormData()
+    form.append('file', new File([pdf], 'lecture.pdf'))
+    const { data: item } = await (await fetch('/api/companion/items/upload', { method: 'POST', body: form })).json()
+    const res = await fetch('/api/companion/ask', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'text/event-stream' },
+      body: JSON.stringify({ message: 'Teach me from this', scope: 'everything', context: { kind: 'everything' }, attachments: [{ kind: 'file', item_id: item.id, label: 'lecture.pdf' }] }),
+    })
+    return (await res.text()).match(/"thread_id":"([^"]+)"/)[1]
+  }, TINY_PDF)
+  check('a PDF attachment is read', Boolean(threadId) && llm.requests.at(-1).body.messages.at(-1).content.includes('Phantom reads'))
+
+  await page.goto('app://bilimind/app/chat')
+  await ask('Teach me Italian')
+  await page.getByText('Ok.').first().waitFor({ timeout: 20_000 })
+  const threads = await page.evaluate(async () => (await (await fetch('/api/companion/ask/threads')).json()).data)
+  check('the chats are listed', threads.some((x) => x.title === 'Explain joins'))
 
   await stop(app)
 
@@ -166,6 +271,8 @@ try {
   ;({ app, page } = await launch())
   await page.getByText('Read chapter 3').first().waitFor({ timeout: 30_000 })
   check('after a restart the own task is there', true)
+  const kept = await page.evaluate(async () => (await (await fetch('/api/companion/ask/threads')).json()).data)
+  check('after a restart the chats are there', kept.some((x) => x.title === 'Explain joins'))
   await page.getByText('Work on Lab 4').first().waitFor({ timeout: 10_000 })
   check('after a restart the plan is there', true)
   await page.goto(`app://bilimind/app/notes/${noteId}`)
@@ -186,11 +293,11 @@ try {
 // shortcut: the code sandbox still fetches its Python and SQL runtimes from a CDN, and only that page does. Vendor them with offline export.
 const left = [...new Set(outside)].filter((url) => !url.startsWith('https://cdn.jsdelivr.net/'))
 check('nothing tried to leave this computer', left.length === 0, left.slice(0, 5).join(' '))
-// The chat's "not yet" is the point of that step, and Chromium logs any failed request.
-const unexpected = [...new Set(problems)].filter((p) => !p.includes('/api/companion/ask') && !p.includes('status of 503'))
+const unexpected = [...new Set(problems)]
 check('no failed requests or page errors', unexpected.length === 0)
 for (const p of unexpected) console.log(`     ${p}`)
 
+await llm.close()
 rmSync(home, { recursive: true, force: true })
 console.log(failed ? `${failed} FAILED` : 'ALL PASS')
 process.exit(failed ? 1 : 0)

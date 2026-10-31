@@ -26,7 +26,7 @@ describe('the local user and the stubs', () => {
   })
 
   it('says "not yet" for what needs a model, in the shape the SPA reads', async () => {
-    for (const path of ['/companion/ask', '/companion/ingest/text', '/companion/checks', '/companion/goals/from-sentence', '/speech/transcribe']) {
+    for (const path of ['/companion/ingest/text', '/companion/checks', '/companion/goals/from-sentence', '/speech/transcribe']) {
       const res = await t.post(path, {})
       expect(res.status).toBe(503)
       expect(res.json.message).toMatch(/isn't in the desktop app yet/)
@@ -213,21 +213,6 @@ describe('files', () => {
     const item = (await t.post('/companion/items', { id: uuid(), kind: 'file', meta: { path: '../companion.db', mime: 'text/plain' } })).data
     expect((await t.get(`/companion-files/${item.id}`)).status).toBe(404)
     readFileSync(join(t.dir, 'data', 'companion.db'))
-  })
-})
-
-describe('keys', () => {
-  it('keeps the secret in the settings file, and only ever shows the last four', async () => {
-    const key = `sk-${'a'.repeat(20)}wxyz`
-    expect((await t.post('/credentials', { provider: 'deepseek', key: 'nope' })).status).toBe(422)
-    const made = await t.post('/credentials', { provider: 'deepseek', key })
-    expect(made.status).toBe(201)
-    expect(made.data).toMatchObject({ provider: 'deepseek', last_four: 'wxyz', active: true })
-    expect(JSON.stringify((await t.get('/credentials')).data)).not.toContain(key)
-    const file = JSON.parse(readFileSync(join(t.dir, 'config', 'config.json'), 'utf8'))
-    expect(file).toMatchObject({ provider: 'deepseek', keys: { deepseek: key } })
-    expect((await t.del(`/credentials/${made.data.id}`)).status).toBe(204)
-    expect((await t.get('/credentials')).data).toEqual([])
   })
 })
 
