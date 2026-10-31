@@ -11,6 +11,8 @@ const run = (cmd, args) => {
   if (r.status !== 0) process.exit(r.status ?? 1)
 }
 if (!argv.includes('--no-spa')) run("pnpm", ["run", "spa"])
+// The offline player ships beside the app, for exporting a course.
+run('pnpm', ['--filter', '@bilimind/player', 'build'])
 run('node', ['scripts/build.mjs', '--minify'])
 const target = argv.find((a) => ['--linux', '--win', '--mac'].includes(a))
   ?? { linux: '--linux', win32: '--win', darwin: '--mac' }[process.platform]

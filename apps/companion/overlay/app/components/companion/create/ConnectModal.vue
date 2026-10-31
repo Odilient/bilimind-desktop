@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** The chat's "connect your school" door. On this computer it can only say why it isn't open. */
+/** The chat's "connect your school" door: a calendar and a PDF work here, what needs a server says so. */
 import type { ConnectKind } from '~/companion/create'
 
 const props = defineProps<{ kind: ConnectKind | null }>()
@@ -16,12 +16,17 @@ const open = computed({
 <template>
   <UiModal
     v-model:open="open"
-    title="Not in the desktop app yet"
+    :title="kind === 'ics' ? 'Timetable link' : kind === 'photo' ? 'Exam timetable PDF' : 'Needs an account on bilimind.com'"
     size="md"
   >
-    <p class="text-[15px] leading-relaxed text-text-body">
-      Calendar links are coming to the desktop app. Connecting Moodle or forwarding email needs an account on
-      bilimind.com, because they run on a server.
+    <CompanionCreateIcsForm v-if="kind === 'ics'" />
+    <CompanionCreatePhotoImport v-else-if="kind === 'photo'" />
+    <p
+      v-else
+      class="text-[15px] leading-relaxed text-text-body"
+    >
+      Connecting Moodle or forwarding email runs on a server, so it's part of bilimind.com. A calendar link and an exam
+      timetable PDF both work here.
     </p>
   </UiModal>
 </template>

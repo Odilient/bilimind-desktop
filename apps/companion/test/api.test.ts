@@ -25,8 +25,8 @@ describe('the local user and the stubs', () => {
     expect((await t.get(`/companion/deadlines/${d.id}/class`)).data.possible).toBe(false)
   })
 
-  it('says "not yet" for what needs a model, in the shape the SPA reads', async () => {
-    for (const path of ['/companion/ingest/text', '/companion/checks', '/companion/goals/from-sentence', '/speech/transcribe']) {
+  it('says "not yet" for what only runs on a server, in the shape the SPA reads', async () => {
+    for (const path of ['/companion/connect/moodle/sync', '/organizations']) {
       const res = await t.post(path, {})
       expect(res.status).toBe(503)
       expect(res.json.message).toMatch(/isn't in the desktop app yet/)

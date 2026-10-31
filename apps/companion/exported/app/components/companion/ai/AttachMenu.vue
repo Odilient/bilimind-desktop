@@ -79,7 +79,7 @@ const SCHOOL: { kind: ConnectKind; icon: string; title: string; hint: string }[]
   { kind: 'moodle', icon: 'cap', title: 'Moodle', hint: 'Every course, its files and deadlines' },
   { kind: 'ics', icon: 'calendar', title: 'Timetable link', hint: 'Your classes and rooms, kept current' },
   // shortcut: hidden until the inbound worker is live (docs/inbound-worker.md); restore this row then.
-  { kind: 'photo', icon: 'camera', title: 'Photo of a timetable', hint: 'Any school; you check it first' },
+  { kind: 'photo', icon: 'camera', title: 'Exam timetable PDF', hint: 'The rows about your courses; you check them first' },
 ]
 
 function choose(key: AttachChoice): void {

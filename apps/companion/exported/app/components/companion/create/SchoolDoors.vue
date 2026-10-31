@@ -17,7 +17,7 @@ const DOORS: { kind: ConnectKind; icon: string; title: string; body: string }[] 
   { kind: 'moodle', icon: 'cap', title: 'Moodle', body: 'Every course, its files by week and its deadlines, at once' },
   { kind: 'ics', icon: 'calendar', title: 'Timetable link', body: 'Your classes and rooms, from the student portal' },
   // shortcut: hidden until the inbound worker is live (docs/inbound-worker.md); restore this row then.
-  { kind: 'photo', icon: 'camera', title: 'Photo of a timetable', body: 'Any school, any format. You check it first' },
+  { kind: 'photo', icon: 'camera', title: 'Exam timetable PDF', body: 'The rows about your courses. You check them first.' },
 ]
 
 function state(kind: ConnectKind): { word: string; tone: string } | null {

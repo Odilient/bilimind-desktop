@@ -305,13 +305,13 @@ describe('writing a lesson', () => {
     const { courseId, node } = await writtenLesson(t)
     const spending = (await t.get('/companion/spending')).data
     expect(spending.today_usd).toBeGreaterThan(0)
-    expect(spending.caps).toEqual({ run_usd: 0.25, day_usd: 2 })
+    expect(spending.caps).toEqual({ run_usd: 1, day_usd: 2 })
     const course = spending.courses.find((c: any) => c.id === courseId)
     expect(course.lessons[0].title).toBe(node.title)
     expect(course.lessons[0].cost_usd).toBeGreaterThan(0)
     expect(spending.recent.map((r: any) => r.what)).toContain('Writing a lesson')
 
-    await t.call('PUT', '/companion/spending/caps', { run_usd: 0.25, day_usd: 0.01 })
+    await t.call('PUT', '/companion/spending/caps', { run_usd: 1, day_usd: 0.01 })
     appendFileSync(join(t.dir, 'config', 'ledger.jsonl'), `${JSON.stringify({ ts: new Date().toISOString(), course: '', cmd: 'companion_ask', provider: 'deepseek', model: 'm', prompt_tokens: 1, completion_tokens: 1, cost_usd: 0.02, cached: false })}\n`)
     const blocked = await t.ask({ message: 'hello' })
     expect(blocked.events!.find((e) => e.event === 'error')!.data.message).toContain('Settings')

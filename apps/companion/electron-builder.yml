@@ -17,6 +17,12 @@ asar: true
 # utilityProcess loads the worker from disk
 asarUnpack:
   - dist/worker/**
+# The offline player a course is exported into, and its images
+extraResources:
+  - from: ../../packages/player/dist/player.html
+    to: templates/player.html
+  - from: ../../packages/player/dist/img
+    to: templates/img
 npmRebuild: false
 nodeGypRebuild: false
 buildDependenciesFromSource: false

@@ -1,5 +1,6 @@
 // Attempts and progress. A lesson with questions completes itself when all of them are passed; one without is marked by hand.
 import type { Rec, Store } from '../store.ts'
+import { seedReview } from './reviews.ts'
 import { attemptWire, assessmentWire, isLive, nodeSummary } from './wire.ts'
 
 const stats = (store: Store, nodeId: number) => {
@@ -19,6 +20,7 @@ export function syncProgress(store: Store, nodeId: number): Rec {
   if (total > 0 && passed >= total && progress.state !== 'completed') {
     progress.state = 'completed'
     progress.completed_at ??= progress.last_seen_at
+    seedReview(store, node)
   }
   return store.save('node', { ...node, progress })
 }
@@ -33,6 +35,7 @@ export function setProgress(store: Store, node: Rec, input: { state?: string; ti
   const now = new Date().toISOString()
   progress.completed_at = progress.state === 'completed' ? progress.completed_at ?? now : null
   progress.last_seen_at = now
+  if (progress.state === 'completed' && node.progress?.state !== 'completed') seedReview(store, node)
   store.save('node', { ...node, progress })
   return { node_id: node.id, ...progress }
 }

@@ -7,7 +7,12 @@ import { computeReadiness } from '../../../app/companion/readiness.ts'
 import { currentZone, dayKey, setZone, shiftDay } from '../../../app/companion/time.ts'
 import { createAsker, readInput } from './ask/asker.ts'
 import { materialReader } from './ask/material.ts'
+import type { edgeSynthesize } from '@bilimind/engine/tts-edge'
+import { applyPendingRestore, isBackup, stageRestore, writeBackup } from './backup.ts'
 import { credentials, type Vault } from './credentials.ts'
+import { exportHtml } from './export-course.ts'
+import { proofApi } from './proof/routes.ts'
+import { createSearch } from './search.ts'
 import { chunksForLesson, folderBuilds, type FolderDeps } from './lessons/folder.ts'
 import { ACCEPTED, cleanName, MAX_UPLOAD_BYTES, serveFile, sniff } from './files.ts'
 import { lessonApi } from './lessons/routes.ts'
@@ -45,6 +50,13 @@ export interface ApiOptions {
   seedStarter?: boolean
   /** The folder dialog and the pipeline that runs in a process of its own. Absent, building from a folder says so. */
   folders?: FolderDeps
+  /** The player page and where it's saved, for a course as an offline folder. */
+  exporter?: { template: () => string; save: (name: string, html: string) => Promise<string | null> }
+  /** Start again, which is when a restored backup takes over. */
+  relaunch?: () => void
+  /** What reads calendars and speaks, in the tests. */
+  fetcher?: typeof fetch
+  synthesize?: typeof edgeSynthesize
 }
 
 // ---------- the one local user ----------
@@ -154,6 +166,7 @@ export function createApi(options: ApiOptions) {
   mkdirSync(options.dataDir, { recursive: true })
   const filesDir = join(options.dataDir, 'files')
   mkdirSync(filesDir, { recursive: true })
+  applyPendingRestore(options.dataDir)
   const store = openStore(join(options.dataDir, 'companion.db'))
   const keys = credentials(options.dataDir, options.configDir, options.vault, options.baseUrl)
   const name = options.userName
@@ -177,6 +190,37 @@ export function createApi(options: ApiOptions) {
     setZone(zone)
     return zone
   } })
+  const proof = proofApi(store, { key: () => keys.keyState(), fallbackFetch: options.fallbackFetch, reader, dataDir: options.dataDir, ...(options.fetcher ? { fetcher: options.fetcher } : {}), ...(options.synthesize ? { synthesize: options.synthesize } : {}) })
+  const search = createSearch(store)
+
+  /** Backup, restore and export: each opens a dialog the system draws, so none of them is in a transaction. */
+  async function dataRoutes(method: string, path: string): Promise<Response | null> {
+    if (method !== 'POST') return null
+    if (path === '/companion/data/backup') {
+      const folder = await options.folders?.pick('Choose where to save the backup')
+      return ok(folder ? { path: writeBackup(store, options.dataDir, folder) } : null)
+    }
+    if (path === '/companion/data/restore') {
+      const folder = await options.folders?.pick('Choose a BiliMind backup folder')
+      if (!folder) return ok(null)
+      if (!isBackup(folder)) return message("That folder isn't a BiliMind backup, or its database doesn't open.", 422)
+      stageRestore(options.dataDir, folder)
+      setTimeout(() => options.relaunch?.(), 300)
+      return ok({ restarting: true })
+    }
+    const exported = path.match(/^\/courses\/(\d+)\/export$/)
+    if (exported) {
+      const course = store.rec('course', Number(exported[1]))
+      if (!course) return notFound('Course not found.')
+      if (!options.exporter) return message('Exporting is only in the desktop app.', 422)
+      if (!store.recs('node', course.id).some((n) => n.status === 'ready')) return message('Write a lesson first: a course with nothing written has nothing to export.', 422)
+      const html = exportHtml(store, course, options.exporter.template())
+      const saved = await options.exporter.save(String(course.title).replace(/[^\p{L}\p{N} _-]+/gu, '').trim() || 'course', html)
+      return ok(saved ? { path: saved } : null)
+    }
+    return null
+  }
+
   // A new computer gets the sample to look around in. Once: removing it stays removed.
   if (options.seedStarter !== false && !store.getMeta('starter_seeded')) {
     store.tx(() => {
@@ -200,6 +244,10 @@ export function createApi(options: ApiOptions) {
     if (method === 'POST' && path === '/companion/items/upload') return uploadItem(req)
     if (method === 'POST' && path === '/companion/ask') return ask(req)
     if (method === 'POST' && path === '/companion/folders/pick') return ok(await folders.pick())
+    const data = await dataRoutes(method, path)
+    if (data) return data
+    const proved = await proof.early(req, method, path)
+    if (proved) return proved
     const early = await lessons.early(req, method, path)
     if (early) return early
     const fileMatch = path.match(/^\/companion-files\/([^/]+)$/)
@@ -338,7 +386,7 @@ export function createApi(options: ApiOptions) {
       return ok({ session: window, week: window, credits: 0, credits_expire_at: null, on: [], own_key: true, plan: 'local', packs: [] })
     }
     if (key === 'GET /notifications') return ok([])
-    if (key === 'GET /search') return json({ groups: [], retrieval: 'none', degraded: false })
+    if (key === 'GET /search') return ok(search(params.get('q') ?? '', Number(params.get('course_id')) || null))
     if (key === 'GET /companion/ask/threads') return ok(asker.threads())
     const thread = path.match(/^\/companion\/ask\/threads\/([^/]+)$/)
     if (thread) {
@@ -353,7 +401,7 @@ export function createApi(options: ApiOptions) {
       }
       if (method === 'DELETE') return asker.remove(id) ? empty() : notFound('Thread not found.')
     }
-    if (key === 'GET /companion/checks/writing') return ok(null)
+    if (key === 'GET /companion/checks/writing') return ok(proof.writing())
     if (key === 'DELETE /companion/samples') {
       removeStarterKit(store)
       return empty()
@@ -512,6 +560,8 @@ export function createApi(options: ApiOptions) {
         return message('Something went wrong on this computer.', 500)
       }
     },
+
+    refreshCalendars: () => proof.refreshCalendars(),
 
     /** Let lessons being written finish, for tests. */
     settled: () => writer.settled(),

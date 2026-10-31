@@ -5,7 +5,7 @@ import { rebuild } from './planner.ts'
 import { emptyFsrs, createRow } from './rows.ts'
 import { wireTime, type Raw, type Row, type Store } from './store.ts'
 import { dayKey, shiftDay } from '../../../app/companion/time.ts'
-import { attachAssessments } from './lessons/blocks.ts'
+import { attachAssessments, dropCourse } from './lessons/blocks.ts'
 import { courseFor, MARKER, nodeForTopic, planned } from './lessons/path.ts'
 import { record } from './lessons/revisions.ts'
 
@@ -105,15 +105,7 @@ export function removeStarterKit(store: Store): void {
         store.put('items', { ...item, subject_id: null, session_id: null, topic_id: null })
       }
       for (const course of store.recs('course').filter((c) => c.settings?.[MARKER] === subject.id)) {
-        for (const node of store.recs('node', course.id)) {
-          for (const kind of ['annotation', 'attachment', 'revision', 'block'] as const) for (const r of store.recs(kind, node.id)) store.drop(kind, r.id)
-          for (const a of store.recs('assessment', node.id)) {
-            for (const t of store.recs('attempt', a.id)) store.drop('attempt', t.id)
-            store.drop('assessment', a.id)
-          }
-          store.drop('node', node.id)
-        }
-        store.drop('course', course.id)
+        dropCourse(store, course)
       }
       for (const collection of ['topics', 'cards', 'plan-tasks', 'checks', 'deadlines', 'sessions', 'slots'] as const) {
         for (const row of store.live(collection).filter((r) => r.subject_id === subject.id)) store.bury(collection, row)

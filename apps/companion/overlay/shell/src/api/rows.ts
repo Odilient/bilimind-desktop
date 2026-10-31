@@ -8,6 +8,7 @@
 //   goals      deleting a goal keeps its courses, released from it
 import { computeReadiness } from '../../../app/companion/readiness.ts'
 import { lessonsDone } from './lessons/attempts.ts'
+import { dropCourse } from './lessons/blocks.ts'
 import { Invalid, RULES, UUID, validate } from './rules.ts'
 import { wireTime, type Collection, type Row, type Store } from './store.ts'
 import { zoneFor } from './zone.ts'
@@ -30,7 +31,9 @@ export function worldOf(store: Store) {
   return {
     topics: store.live('topics') as any[],
     sessions: store.live('sessions') as any[],
-    items: store.live('items') as any[],
+    // A finished lesson is study, dated when it was finished, which is what the readiness code reads made things for.
+    items: [...store.live('items'), ...store.recs('node').filter((n) => n.progress?.completed_at && n.topic_id)
+      .map((n) => ({ id: `lesson:${n.id}`, kind: 'page', source: 'made', topic_id: n.topic_id, session_id: null, updated_at: n.progress.completed_at, deleted_at: null }))] as any[],
     cards: store.live('cards') as any[],
     checks: store.live('checks') as any[],
     deadlines: store.live('deadlines') as any[],
@@ -42,6 +45,11 @@ export function worldOf(store: Store) {
 export function wire(collection: Collection, row: Row): Row {
   if (collection === 'items') return { ...row, file_url: row.meta?.path ? `${ORIGIN}/api/companion-files/${row.id}` : null }
   if (collection === 'subjects') return { ...row, sample: String(row.source_ref ?? '').startsWith(STARTER_REF) }
+  if (collection === 'checks') {
+    // What would give the answer away stays here until it's marked, when `revealed` carries it.
+    const { expected: _expected, rubric: _rubric, material: _material, ...rest } = row
+    return rest as Row
+  }
   if (collection === 'connections') {
     const { token, ...rest } = row
     return { ...rest, has_token: token != null }
@@ -213,6 +221,7 @@ export function deleteRow(store: Store, collection: Writable, row: Row): void {
     for (const child of ['slots', 'sessions', 'items', 'topics', 'deadlines', 'cards', 'plan-tasks', 'checks'] as const) {
       for (const r of store.live(child)) if (r.subject_id === row.id) store.bury(child, r)
     }
+    for (const course of store.recs('course')) if (course.settings?.companion_subject_id === row.id) dropCourse(store, course)
   }
   if (collection === 'topics') {
     for (const check of store.live('checks')) if (check.topic_id === row.id) store.bury('checks', check)

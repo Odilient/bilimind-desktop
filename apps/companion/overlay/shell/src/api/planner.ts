@@ -14,10 +14,10 @@
 // Stable on re-run: a task's identity is what it is for. Done tasks are never touched and satisfy their key for the
 // day, a pending task the plan still wants keeps its row and is only written if it changed, and the rest are tombstoned.
 //
-// shortcut: no check sitting and no "go back over" task, the hosted planner's steps 0 and 1b, because nothing can write
-// or mark a check yet. Port them with the checks (milestone 4).
-import { computeReadiness, scopeOf } from '../../../app/companion/readiness.ts'
+// Before all of them, today's check when one is due; after the close reviews, going back over what a check found missing.
+import { computeReadiness, scopeOf, SITTING_TOPICS, sittingSize, topicCheck } from '../../../app/companion/readiness.ts'
 import { clock, currentZone, dayKey, dayLabel, daysBetween, shiftDay, weekdayOf, weekdayShort } from '../../../app/companion/time.ts'
+import { dueTopics, leavesOf, standingOf, type Standing } from './proof/checks.ts'
 import { worldOf } from './rows.ts'
 import { wireTime, type Row, type Store } from './store.ts'
 import { dayEnd, dayStart } from './zone.ts'
@@ -33,6 +33,8 @@ const MIN_REVIEW_MINUTES = 5
 const REVIEW_FOCUS_DAYS = 7
 const DEFAULT_WEIGHT_PCT = 10
 const RECALL = ['quiz', 'midterm', 'final', 'exam']
+const MISS_MINUTES = 15
+const MAX_MISSES = 2
 /** Study weekdays for a goal with no slots, by sessions per week: no two back to back when they need not be. */
 const DEFAULT_STUDY_DAYS: Record<number, number[]> = {
   1: [3], 2: [2, 5], 3: [1, 3, 5], 4: [1, 2, 4, 6], 5: [1, 2, 3, 4, 6], 6: [1, 2, 3, 4, 5, 6], 7: [1, 2, 3, 4, 5, 6, 7],
@@ -212,7 +214,66 @@ function candidates(store: Store, date: string, now: number): Candidate[] {
     return { task, score: ((d.weight_pct ?? DEFAULT_WEIGHT_PCT) * need) / daysLeft, due: at(d.due_at) }
   }).sort((a, b) => b.score - a.score || a.due - b.due).map((w) => w.task)
 
-  return [...scoped, ...lessons(store, subjects, date), ...work, ...other]
+  const standing = standingOf(store, leavesOf(world.topics.filter((t: Row) => shelf.has(t.subject_id))), reference)
+  return [...checkTask(store, date, standing, reference), ...scoped, ...misses(store, standing, date, reference), ...lessons(store, subjects, date), ...work, ...other]
+}
+
+/** Today's check, or nothing: none due, or one already done today. */
+function checkTask(store: Store, date: string, standing: Standing[], now: number): Candidate[] {
+  const due = dueTopics(standing, now, SITTING_TOPICS)
+  const doneToday = store.live('plan-tasks').some((t) => t.date === date && t.kind === 'check' && t.done_at)
+  if (!due.length || doneToday) return []
+  const titles = due.map((s) => s.topic.title)
+  const { questions, minutes } = sittingSize(due.length, 'cold')
+  const subjects = [...new Set(due.map((s) => s.topic.subject_id))]
+  const dueDeadlines = [...new Set(due.map((s) => s.nearestDeadline ?? ''))]
+  return [{
+    kind: 'check',
+    title: `Check yourself on ${titles.length > 2 ? `${titles[0]}, ${titles[1]} and ${titles.length - 2} more` : titles.join(' and ')}`,
+    detail: `${questions} questions · no notes, no help`,
+    minutes,
+    floor: minutes,
+    subject_id: subjects.length === 1 ? subjects[0]! : null,
+    deadline_id: dueDeadlines.length === 1 && dueDeadlines[0] ? dueDeadlines[0] : null,
+    topic_id: due[0]!.topic.id,
+  }]
+}
+
+/** "today's check", "yesterday's check", "Tuesday's check", "the check on 3 Oct". */
+function checkDay(answered: string, date: string): string {
+  const day = dayKey(answered)
+  const days = daysBetween(day, date)
+  if (days <= 0) return "today's check"
+  if (days === 1) return "yesterday's check"
+  if (days < 7) return `${new Date(`${day}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' })}'s check`
+  return `the check on ${dayLabel(day)}`
+}
+
+/** Reading for what a check found missing and they haven't gone back over since: at most two, the nearest deadline's first. */
+function misses(store: Store, standing: Standing[], date: string, now: number): Candidate[] {
+  // What they did since the check, not the check itself: the check would count as study.
+  const noChecks = { ...worldOf(store), checks: [] }
+  const gone = standing.filter((s) => {
+    if (s.check.state !== 'missed' || !s.latest) return false
+    const worked = topicCheck(s.topic as never, noChecks as never, now).last_studied_at
+    return !worked || at(worked) <= at(s.latest.answered_at)
+  }).sort((a, b) => (a.nearestDue === null ? 1 : 0) - (b.nearestDue === null ? 1 : 0) || (a.nearestDue ?? 0) - (b.nearestDue ?? 0) || at(b.latest!.answered_at) - at(a.latest!.answered_at))
+  return gone.slice(0, MAX_MISSES).map(({ topic, latest }) => {
+    const when = checkDay(latest!.answered_at, date)
+    const unseen = latest!.studied_days_ago === null
+    const source = typeof latest!.source?.label === 'string' ? latest!.source.label.split(' · ')[0] : null
+    return {
+      kind: 'read',
+      title: `${unseen ? 'Start on' : 'Go back over'} ${topic.title}`,
+      detail: unseen ? `New to you in ${when}` : detail([`Missed in ${when}`, source]),
+      minutes: MISS_MINUTES,
+      floor: MISS_MINUTES,
+      subject_id: topic.subject_id,
+      deadline_id: null,
+      topic_id: topic.id,
+      item_id: typeof latest!.source?.item_id === 'string' ? latest!.source.item_id : null,
+    }
+  })
 }
 
 function dailyMinutes(store: Store): number {

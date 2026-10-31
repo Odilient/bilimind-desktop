@@ -15,12 +15,13 @@ import { replaceContent, type WrittenBlock } from './blocks.ts'
 import { planned } from './path.ts'
 import { record } from './revisions.ts'
 
+const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
 const READABLE = /\.(pdf|docx|pptx|xlsx|txt|md|csv|html?)$/i
 const MAX_SCAN = 500
 
 export interface FolderDeps {
   /** The system's folder dialog. */
-  pick(): Promise<string | null>
+  pick(title?: string): Promise<string | null>
   /** Run the pipeline to the end. Rejects with what went wrong. */
   build(input: { src: string; sentence: string; outRoot: string; config: EngineConfig; progress: (text: string) => void }): Promise<{ course: string }>
   /** Kill a running build. */
@@ -90,34 +91,8 @@ export function importBuilt(store: Store, built: Raw, folder: string, zone: stri
   store.put('subjects', { ...subject, generated_course_id: course.id })
 
   const lessons = new Map<string, Raw>((built.lessons ?? []).map((l: Raw) => [l.id, l]))
-  const places: Raw[] = (built.path?.length ? built.path : (built.lessons ?? []).map((l: Raw) => ({ id: l.id, title: l.title, summary: l.summary, lesson: l.id, minutes: l.minutes, archetype: l.archetype, section: l.section })))
-  let previous: string | null = null
-  places.forEach((place: Raw, position: number) => {
-    const lesson = place.lesson ? lessons.get(place.lesson) : null
-    const topic = createRow(store, 'topics', { subject_id: subject.id, title: String(place.title).slice(0, 300), summary: place.summary ?? lesson?.summary ?? null, position, source: 'extracted' })
-    const section = place.section && place.section !== previous ? place.section : null
-    previous = place.section ?? previous
-    const archetype = lesson?.archetype ?? place.archetype ?? null
-    const node = store.add('node', course.id, {
-      course_id: course.id,
-      key: String(place.id),
-      title: String(lesson?.title ?? place.title),
-      summary: lesson?.summary ?? place.summary ?? null,
-      concept_key: String(place.title),
-      archetype,
-      planned_block_types: archetype ? planned(archetype) : [],
-      track: 'core',
-      branch_of_node_id: null,
-      section,
-      note: place.note ?? null,
-      layer: position,
-      position: 0,
-      estimated_minutes: Number(lesson?.minutes ?? place.minutes) > 0 ? Number(lesson?.minutes ?? place.minutes) : minutes,
-      status: lesson ? 'ready' : 'stub',
-      topic_id: topic.id,
-    })
-    store.put('topics', { ...store.get('topics', topic.id)!, node_id: node.id })
-    if (!lesson) return
+  const places: Raw[] = built.path?.length ? built.path : (built.lessons ?? []).map((l: Raw) => ({ id: l.id, title: l.title, summary: l.summary, lesson: l.id, minutes: l.minutes, archetype: l.archetype, section: l.section }))
+  const writeLesson = (node: Rec, lesson: Raw) => {
     const blocks: WrittenBlock[] = (lesson.blocks as Raw[]).map((b) => {
       // A block's sources by which file, so its chip counts them: the quotes themselves are in the report.
       const files = [...new Set((b.cites ?? []).map((c: Raw) => c.file))] as string[]
@@ -131,6 +106,42 @@ export function importBuilt(store: Store, built: Raw, folder: string, zone: stri
     })
     replaceContent(store, node, blocks)
     record(store, store.rec('node', node.id)!, 'generated')
+  }
+  const place = (entry: Raw, layer: number, position: number, parent: { topic: Raw; node: Rec } | null) => {
+    const lesson = entry.lesson ? lessons.get(entry.lesson) : null
+    const topic = createRow(store, 'topics', { subject_id: subject.id, parent_id: parent?.topic.id ?? null, title: String(entry.title).slice(0, 300), summary: entry.summary ?? lesson?.summary ?? null, position, source: 'extracted' })
+    const archetype = lesson?.archetype ?? entry.archetype ?? null
+    const node = store.add('node', course.id, {
+      course_id: course.id,
+      key: String(entry.id),
+      title: String(lesson?.title ?? entry.title),
+      summary: lesson?.summary ?? entry.summary ?? null,
+      concept_key: String(entry.title),
+      archetype,
+      planned_block_types: archetype ? planned(archetype) : [],
+      track: parent ? 'subtopic' : 'core',
+      branch_of_node_id: parent?.node.id ?? null,
+      mark: entry.mark ?? null,
+      group: entry.group ?? null,
+      section: parent ? null : entry.section ?? null,
+      note: entry.note ?? null,
+      layer,
+      position: parent ? position + 1 : 0,
+      estimated_minutes: Number(lesson?.minutes ?? entry.minutes) > 0 ? Number(lesson?.minutes ?? entry.minutes) : minutes,
+      status: lesson ? 'ready' : 'stub',
+      topic_id: topic.id,
+    })
+    store.put('topics', { ...store.get('topics', topic.id)!, node_id: node.id })
+    if (lesson) writeLesson(node, lesson)
+    return { topic, node }
+  }
+  let previous: string | null = null
+  places.forEach((entry: Raw, layer: number) => {
+    // A chapter heading once, on the step that opens it.
+    const section = entry.section && entry.section !== previous ? entry.section : null
+    previous = entry.section ?? previous
+    const step = place({ ...entry, section }, layer, layer, null)
+    ;(entry.items ?? []).forEach((item: Raw, position: number) => place(item, layer, position, step))
   })
 
   if (goalIn.exam_at && Date.parse(goalIn.exam_at) > Date.now()) {
@@ -220,7 +231,7 @@ export function folderBuilds(store: Store, deps: { dataDir: string; filesDir: st
         const { subject, report } = store.tx(() => importBuilt(store, built, out.course, deps.zone(), deps.filesDir))
         const r = built.receipts ?? {}
         const lines = [
-          `**${built.title}** is ready: ${r.lessons ?? built.lessons?.length ?? 0} lessons from ${r.files ?? 0} files.`,
+          `**${built.title}** is ready: ${count(r.lessons ?? built.lessons?.length ?? 0, 'lesson')} from ${count(r.files ?? 0, 'file')}.`,
           r.quiz_items ? `I checked ${r.quiz_checked ?? 0} of its ${r.quiz_items} auto-marked answers against your files${r.rejected ? `, threw out ${r.rejected} they contradicted` : ''}${r.rewritten ? ` and rewrote ${r.rewritten}` : ''}.` : null,
           typeof r.cost_usd === 'number' ? `It cost $${r.cost_usd.toFixed(2)} on your key.` : null,
         ]

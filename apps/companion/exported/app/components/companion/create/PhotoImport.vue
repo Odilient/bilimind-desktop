@@ -23,7 +23,7 @@ async function onPick(event: Event): Promise<void> {
   try {
     found.value = (await c.ingestFile(file)).length
   } catch {
-    toast.error('Couldn\'t read that photo. A straight, well-lit shot works best.')
+    toast.error('Couldn\'t read that PDF. If it is a scan with no text in it, type the dates in instead.')
   } finally {
     busy.value = false
   }
@@ -43,7 +43,7 @@ async function onPick(event: Event): Promise<void> {
           name="camera"
           :size="17"
         />
-        Choose a photo or PDF
+        Choose a PDF
       </UiBtn>
     </div>
     <p
@@ -51,14 +51,14 @@ async function onPick(event: Event): Promise<void> {
       class="text-[15px] text-text-muted"
       role="status"
     >
-      Reading the photo…
+      Reading the PDF…
     </p>
     <p
       v-else-if="found !== null"
       class="text-[15px] font-medium"
       role="status"
     >
-      {{ found ? `Found ${found} thing${found === 1 ? '' : 's'} to check.` : 'Nothing new in that photo.' }}
+      {{ found ? `Found ${found} thing${found === 1 ? '' : 's'} to check.` : 'Nothing new in that PDoto.' }}
       <NuxtLink
         v-if="found"
         to="/app/inbox"
@@ -68,7 +68,7 @@ async function onPick(event: Event): Promise<void> {
     <input
       ref="input"
       type="file"
-      accept="image/*,application/pdf"
+      accept="application/pdf"
       class="hidden"
       @change="onPick"
     >

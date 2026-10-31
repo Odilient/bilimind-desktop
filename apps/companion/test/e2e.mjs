@@ -1,7 +1,7 @@
 // The app end to end: no account, no network, and everything still there after a restart. Nothing reaches the screen
 // (Chromium's headless Ozone platform, no X or Wayland) and nothing plays sound. Needs `pnpm spa` and `pnpm build` first.
 
-import { mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -36,6 +36,8 @@ const LESSON = { blocks: [
 const llm = await fakeProvider((body) => {
   const system = body.messages[0].content
   const last = body.messages.at(-1).content
+  if (system.includes('You write a check for one learner')) return { pieces: inPieces(JSON.stringify({ questions: [...last.matchAll(/^(T\d+) · /gm)].map((m) => ({ topic: m[1], kind: 'why', prompt: 'Why does a left join keep unmatched rows?', expected: 'Because it keeps every row of the left table.', rubric: ['keeps left rows'], source: null })) })), delayMs: 20 }
+  if (system.includes('You mark one answer')) return { pieces: [JSON.stringify({ points: [{ point: 1, verdict: 'met' }], feedback: 'You said it keeps the left rows, which holds.', tempting: '' })] }
   if (system.includes('You turn what a learner gives you')) return { pieces: inPieces(JSON.stringify(PROPOSAL)), delayMs: 5 }
   if (system.includes('You classify one lesson')) return { pieces: [JSON.stringify({ archetype: 'conceptual' })] }
   if (last.includes('ARCHETYPE:')) return { pieces: inPieces(JSON.stringify(LESSON), 24), thinking: ['What to ask for'], delayMs: 60 }
@@ -317,6 +319,51 @@ try {
   await page.getByText('Writing a lesson').first().waitFor({ timeout: 20_000 })
   check('the Spending screen shows what the lesson cost', (await page.locator('body').innerText()).includes('Italian basics'))
 
+  // ---------- a cold check, from Today through to a mark ----------
+  const cold = await page.evaluate(async () => {
+    const post = async (path, body) => (await (await fetch(`/api/companion/${path}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })).json()).data
+    const subject = await post('subjects', { id: crypto.randomUUID(), title: 'Query planning' })
+    const topic = await post('topics', { id: crypto.randomUUID(), subject_id: subject.id, title: 'Left joins' })
+    const ago = (days) => new Date(Date.now() - days * 86_400_000).toISOString()
+    await post('sessions', { id: crypto.randomUUID(), subject_id: subject.id, topic_id: topic.id, title: 'Joins class', starts_at: ago(5.1), ends_at: ago(5) })
+    await fetch('/api/companion/plan/rebuild', { method: 'POST' })
+    return { subject: subject.id, topic: topic.id }
+  })
+  await page.goto('app://bilimind/app')
+  await page.getByText('Check yourself on').first().waitFor({ timeout: 30_000 })
+  check('Today asks for a check once a topic has gone cold', true)
+  const sitting = await page.evaluate(async () => (await (await fetch('/api/companion/checks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ purpose: 'cold' }) })).json()).data)
+  check('a check is written, with nothing that gives it away', sitting.checks.length > 0 && !JSON.stringify(sitting).includes('every row of the left table'))
+  await page.goto('app://bilimind/app/check?purpose=cold')
+  await page.getByText('Why does a left join keep unmatched rows?').first().waitFor({ timeout: 30_000 }).catch(async () => {
+    await page.getByRole('button', { name: /Start|Begin|Go/ }).first().click({ timeout: 10_000 })
+    await page.getByText('Why does a left join keep unmatched rows?').first().waitFor({ timeout: 20_000 })
+  })
+  check('the check screen asks it', true)
+  const answered = await page.evaluate(async (id) => (await (await fetch(`/api/companion/checks/${id}/answer`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ answer: 'It keeps the left rows.' }) })).json()).data, sitting.checks[0].id)
+  check('the answer is marked, and only now shows the model answer', answered.result === 'right' && answered.revealed.includes('every row of the left table'))
+
+  // ---------- a calendar, search, an offline course, a backup ----------
+  const when = (days) => new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10).replace(/-/g, '')
+  const calendar = await page.evaluate(async (ics) => (await (await fetch('/api/companion/ingest/ics', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ics_text: ics }) })).json()).data, `BEGIN:VCALENDAR\nX-WR-CALNAME:Timetable\nBEGIN:VEVENT\nUID:q\nSUMMARY:CSC2103 Quiz 2\nDTSTART:${when(6)}T090000Z\nDTEND:${when(6)}T090000Z\nEND:VEVENT\nBEGIN:VEVENT\nUID:l\nSUMMARY:CSC2103 Lecture - Data Structures\nDTSTART:${when(-7)}T090000Z\nDTEND:${when(-7)}T100000Z\nRRULE:FREQ=WEEKLY;COUNT=4\nEND:VEVENT\nEND:VCALENDAR`)
+  check('a calendar file becomes a course, classes and a deadline', calendar.created.subjects === 1 && calendar.created.deadlines === 1 && calendar.created.sessions === 4)
+  const found = await page.evaluate(async () => (await (await fetch('/api/search?q=vorrei')).json()).data)
+  check('search finds what a lesson says', found.retrieval === 'fts' && found.groups.some((g) => g.key === 'content'))
+
+  await page.goto('app://bilimind/app/settings?section=data')
+  await page.getByRole('button', { name: 'Back up' }).click({ timeout: 20_000 })
+  await page.waitForFunction(() => document.body.innerText.includes('Saved to'), undefined, { timeout: 15_000 })
+  const backups = readdirSync(folder).filter((n) => n.startsWith('BiliMind backup'))
+  check('a backup is written, without the keys', backups.length === 1 && existsSync(join(folder, backups[0], 'companion.db')) && !existsSync(join(folder, backups[0], 'keys.json')))
+  await page.goto(`app://bilimind/app/courses/${made.subject}`)
+  await page.goto('app://bilimind/app/settings?section=data')
+  await page.locator('li', { hasText: 'Italian basics' }).getByRole('button', { name: 'Save as a page' }).click({ timeout: 20_000 })
+  await waitFor(() => existsSync(join(folder, 'Italian basics', 'index.html')))
+  const page1 = existsSync(join(folder, 'Italian basics', 'index.html')) ? readFileSync(join(folder, 'Italian basics', 'index.html'), 'utf8') : ''
+  check('a course saves as one offline page, on the real player', page1.includes('Vorrei is the polite way') && page1.includes('bm-course') && page1.length > 100_000 && existsSync(join(folder, 'Italian basics', 'img', 'obj-book.webp')))
+  // Backups and exports went in the folder the build below reads: clear them so it reads the notes alone.
+  for (const name of readdirSync(folder)) if (name !== 'notes.md') rmSync(join(folder, name), { recursive: true, force: true })
+
   // ---------- a folder, through the pipeline's own process ----------
   const folderReply = await page.evaluate(async () => {
     const picked = (await (await fetch('/api/companion/folders/pick', { method: 'POST' })).json()).data
@@ -339,8 +386,12 @@ try {
   check('after a restart the own task is there', true)
   const kept = await page.evaluate(async () => (await (await fetch('/api/companion/ask/threads')).json()).data)
   check('after a restart the chats are there', kept.some((x) => x.title === 'Explain joins'))
-  await page.getByText('Work on Lab 4').first().waitFor({ timeout: 10_000 })
-  check('after a restart the plan is there', true)
+  // The day has filled up since Lab 4 first showed: what must survive is the plan and the deadline, not its place in it.
+  const after = await page.evaluate(async () => {
+    const get = async (path) => (await (await fetch(`/api/companion/${path}`)).json()).data
+    return { tasks: await get('plan-tasks'), deadlines: await get('deadlines') }
+  })
+  check('after a restart the plan is there', after.tasks.some((t) => t.title === 'Work on Lab 4') && after.deadlines.some((d) => d.title === 'Lab 4'))
   await page.goto(`app://bilimind/app/notes/${noteId}`)
   await page.locator('.ProseMirror').getByText(NOTE).first().waitFor({ timeout: 30_000 })
   check('after a restart the note has its words', true)

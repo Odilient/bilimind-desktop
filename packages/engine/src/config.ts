@@ -82,7 +82,7 @@ export function clientHeader(env: Record<string, string | undefined> = process.e
 }
 
 /** PLAN §6.3: $0.25 per course run, $2.00 per day. */
-export const DEFAULT_CAPS = { runUsd: 0.25, dayUsd: 2 };
+export const DEFAULT_CAPS = { runUsd: 1, dayUsd: 2 };
 
 interface UserConfigFile {
   provider?: string;

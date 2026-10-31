@@ -1,5 +1,6 @@
 // The local database. One table of JSON rows per the SPA's collections rather than a column per field: the rows are
 // the wire shape already, one person's data fits in memory, and the planner and readiness work on arrays anyway.
+import { dirname, join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 
 export type Row = Record<string, any> & { id: string }
@@ -7,7 +8,7 @@ export type Row = Record<string, any> & { id: string }
 export const COLLECTIONS = ['goals', 'subjects', 'slots', 'sessions', 'items', 'topics', 'deadlines', 'cards', 'plan-tasks', 'signals', 'connections', 'checks'] as const
 export type Collection = (typeof COLLECTIONS)[number]
 
-export type RecordKind = 'course' | 'node' | 'block' | 'assessment' | 'attempt' | 'revision' | 'annotation' | 'attachment'
+export type RecordKind = 'course' | 'node' | 'block' | 'assessment' | 'attempt' | 'revision' | 'annotation' | 'attachment' | 'review'
 export type Rec = Record<string, any> & { id: number }
 export type Raw = Record<string, any>
 
@@ -166,6 +167,9 @@ export function openStore(path: string) {
         throw error
       }
     },
+
+    /** Where uploaded files live, beside the database. */
+    filesDir: join(dirname(path), 'files'),
 
     close: () => db.close(),
   }

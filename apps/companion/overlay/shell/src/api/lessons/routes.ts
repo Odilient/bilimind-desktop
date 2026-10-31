@@ -15,6 +15,7 @@ import { attemptEnvelope, attemptsList, setProgress, syncProgress } from './atte
 import { syncBlocks, type BlockSpec } from './blocks.ts'
 import { markerOf, markExact, markWithRubric, rubricUnavailable, selfMarked } from './grading.ts'
 import { courseFor, nodeForTopic } from './path.ts'
+import { reviewStats, reviewsToday, submitReview } from './reviews.ts'
 import { ensureCurrent, fieldDiff, record, restore, revisionDetail, revisionWire } from './revisions.ts'
 import { attachmentWire, byPosition, courseWire, nodeWire } from './wire.ts'
 import type { createWriter } from './writer.ts'
@@ -64,6 +65,12 @@ export function lessonApi(store: Store, filesDir: string, writer: ReturnType<typ
         return json({ data: courseWire(store, store.rec('course', row.id)!), meta: { node_ids: claimed } }, 202)
       }
     }
+
+    if (key === 'GET /reviews/today') return json(reviewsToday(store))
+    if (key === 'GET /reviews/stats') return ok(reviewStats(store))
+    if (key === 'POST /reviews') return json(submitReview(store, input))
+    // Nothing in this app plans a course week by week: Today does that. Same answer as a hosted course with no schedule.
+    if (method === 'GET' && /^\/courses\/\d+\/schedule$/.test(path)) return notFound('This course has no schedule yet.')
 
     const nodeRoute = path.match(/^\/nodes\/(\d+)(?:\/(progress|regenerate|revisions|annotations|attachments)|\/blocks\/(\d+)\/rewrite)?$/)
     if (nodeRoute) {

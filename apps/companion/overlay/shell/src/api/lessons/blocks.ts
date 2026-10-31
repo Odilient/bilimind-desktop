@@ -1,8 +1,26 @@
 // A lesson's parts and the questions they carry. A question with attempts is retired, never deleted: it is the learner's
 // history, parked where no block points at it and completion no longer counts it.
 import { CARRIES_ASSESSMENTS, type BlockType } from '@bilimind/core'
+import { rmSync } from 'node:fs'
+import { basename, dirname, join } from 'node:path'
 import type { Rec, Store } from '../store.ts'
 import { RETIRED, scrub } from './wire.ts'
+
+/** A course and all that hangs off it, its files and its pipeline folder too. Spend stays in the ledger: it was spent. */
+export function dropCourse(store: Store, course: Rec): void {
+  for (const node of store.recs('node', course.id)) {
+    for (const file of store.recs('attachment', node.id)) rmSync(join(store.filesDir, basename(file.path)), { force: true })
+    for (const kind of ['annotation', 'attachment', 'revision', 'block', 'review'] as const) for (const r of store.recs(kind, node.id)) store.drop(kind, r.id)
+    for (const a of store.recs('assessment', node.id)) {
+      for (const t of store.recs('attempt', a.id)) store.drop('attempt', t.id)
+      store.drop('assessment', a.id)
+    }
+    store.drop('node', node.id)
+  }
+  // Only a folder the app made: `built` under the data folder, never the learner's own.
+  if (course.folder && dirname(course.folder) === join(dirname(store.filesDir), 'built')) rmSync(course.folder, { recursive: true, force: true })
+  store.drop('course', course.id)
+}
 
 export const carries = (type: string) => CARRIES_ASSESSMENTS.includes(type as BlockType)
 

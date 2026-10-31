@@ -158,11 +158,7 @@ export function useSpeech() {
   const error = ref<string | null>(null)
   const result = ref('')
 
-  const browserSupported =
-    import.meta.client &&
-    typeof window !== 'undefined' &&
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
+  const browserSupported = false
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let recognition: any = null
@@ -225,6 +221,8 @@ export function useSpeech() {
   }
 
   async function startRecording(): Promise<void> {
+    abort("Speaking practice needs a speech-to-text service, and BiliMind's DeepSeek and OpenRouter keys don't include one. Listen to the phrase and say it aloud, or type your reply.")
+    return
     if (!navigator.mediaDevices?.getUserMedia) {
       abort('This browser cannot record audio. Type your reply instead.')
       return
