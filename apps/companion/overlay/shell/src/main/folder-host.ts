@@ -12,28 +12,6 @@ const KEY_ENV = { deepseek: 'DEEPSEEK_API_KEY', openrouter: 'OPENROUTER_API_KEY'
 const template = () => (app.isPackaged ? join(process.resourcesPath, 'templates', 'player.html') : join(app.getAppPath(), '..', '..', 'packages', 'player', 'dist', 'player.html'))
 const assets = () => join(dirname(template()), 'img')
 
-export function exporter(windowOf: () => BrowserWindow | null) {
-  return {
-    template() {
-      if (!existsSync(template())) throw new BilimindError('The offline player is missing from this build.')
-      return readFileSync(template(), 'utf8')
-    },
-    /** A folder of their choosing gets `<course>/index.html` and the player's images. */
-    async save(name: string, html: string): Promise<string | null> {
-      const win = windowOf()
-      const options = { title: 'Choose where to save the course', properties: ['openDirectory', 'createDirectory'] as ('openDirectory' | 'createDirectory')[] }
-      const folder = process.env.BILIMIND_E2E && process.env.BILIMIND_E2E_FOLDER ? process.env.BILIMIND_E2E_FOLDER
-        : (await (win ? dialog.showOpenDialog(win, options) : dialog.showOpenDialog(options))).filePaths[0]
-      if (!folder) return null
-      const target = join(folder, name)
-      mkdirSync(target, { recursive: true })
-      writeFileSync(join(target, 'index.html'), html)
-      if (existsSync(assets())) cpSync(assets(), join(target, 'img'), { recursive: true })
-      return target
-    },
-  }
-}
-
 export function folderHost(windowOf: () => BrowserWindow | null, settingsDir: string): FolderDeps {
   let proc: UtilityProcess | null = null
   return {

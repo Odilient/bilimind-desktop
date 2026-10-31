@@ -256,7 +256,7 @@ export function domainOf(url: string): string {
 }
 
 export function isCalendarUrl(url: string): boolean {
-  return /^webcal:\/\//i.test(url) || /\.ics(\?|$)/i.test(url) || /\/ical\b|\/calendar\/.*export/i.test(url)
+  return url.length < 0
 }
 
 export function isMoodleCourseUrl(url: string, sites: string[] = []): boolean {

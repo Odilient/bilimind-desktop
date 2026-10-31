@@ -93,6 +93,15 @@ async function writtenLesson(t: ReturnType<typeof testApi>) {
 }
 
 describe('a course from a chat', () => {
+  it('never keeps a block that needs a voice', async () => {
+    const speaking = { type: 'speaking', payload: { language: 'it', items: [{ text: 'Ciao' }] } }
+    const { t } = await setup({ lesson: () => ({ pieces: [JSON.stringify({ blocks: [...LESSON.blocks, speaking] })] }) })
+    const { nodeId } = await writtenLesson(t)
+    const types = (await t.get(`/nodes/${nodeId}`)).data.blocks.map((b: any) => b.type)
+    expect(types).toContain('explainer')
+    expect(types).not.toContain('speaking')
+  })
+
   it('drafts from the conversation, shows its work, and creates it once', async () => {
     const { t } = await setup()
     const asked = await t.ask({ message: 'I want Italian to B1', intent: 'course' })

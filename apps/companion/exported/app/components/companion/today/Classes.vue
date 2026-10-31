@@ -130,7 +130,7 @@ const missing = computed(() => {
             />
           </button>
           <button
-            v-if="c.subjectOf(s)?.recording_allowed !== false"
+            v-if="false"
             type="button"
             class="grid size-9 cursor-pointer place-items-center rounded-full bg-surface text-text-soft shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors hover:bg-danger-soft hover:text-danger focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
             title="Record"

@@ -13,7 +13,7 @@ The desktop app is now the whole study companion, on your computer, with your ow
 
 - Chat, courses drafted from a chat, lessons, marking, history, notes, whiteboards, Today and a planner.
 - Checks from memory, readiness from those checks, and the comparison with your real grade.
-- Calendar links, exam timetable PDFs, pasted announcements, search, narration, offline course pages, backup and restore.
+- Pasted announcements and exam timetable PDFs become suggested dates you confirm.
 - Build from a folder runs the earlier pipeline, Checker and report included, and brings the result in as a course.
 
 ### Changed

@@ -146,7 +146,7 @@ const shortcuts = computed(() => [
       >
         <span class="grid gap-0.5">
           <span class="text-[16px] font-semibold">Connected apps</span>
-          <span class="text-[14px] text-text-muted">Moodle, calendar links, email</span>
+          <span class="text-[14px] text-text-muted">An exam timetable PDF</span>
         </span>
         <CompanionIcon
           name="chevron-right"

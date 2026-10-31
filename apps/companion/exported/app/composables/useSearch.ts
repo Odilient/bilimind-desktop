@@ -441,13 +441,13 @@ export function useSearch() {
       case 'course':
         return hit.course ? courseUrl(hit.course) : null
       case 'node':
-        return hit.course && hit.node ? `${hit.course.path}?open=lesson:${hit.node.id}` : null
+        return hit.course && hit.node ? nodeUrl(hit.course, hit.node.key) : null
       case 'block':
         return hit.course && hit.node && hit.block
-          ? `${hit.course.path}?open=lesson:${hit.node.id}#block-${hit.block.id}`
+          ? `${nodeUrl(hit.course, hit.node.key)}#block-${hit.block.id}`
           : null
       case 'material':
-        return hit.material ? `/app/notes/${hit.material.id}` : null
+        return hit.material ? `/materials?material=${hit.material.id}` : null
     }
   }
 

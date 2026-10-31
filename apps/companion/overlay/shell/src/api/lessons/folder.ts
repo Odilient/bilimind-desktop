@@ -2,6 +2,7 @@
 // (ingest, outline, write, re-solve every auto-marked answer against the files, build), then lands in the database as
 // an ordinary course. The Checker's report comes with it, as a file in the course. The folder comes only from the
 // app's own dialog: the chat holds a token for it, never a path it could have been handed.
+import { NEEDS_VOICE } from './writer.ts'
 import { BilimindError, type EngineConfig } from '@bilimind/engine/contracts'
 import { readIngest } from '@bilimind/engine/ingest/index'
 import { lessonSources, teachingChunks } from '@bilimind/engine/prompts/context'
@@ -93,7 +94,7 @@ export function importBuilt(store: Store, built: Raw, folder: string, zone: stri
   const lessons = new Map<string, Raw>((built.lessons ?? []).map((l: Raw) => [l.id, l]))
   const places: Raw[] = built.path?.length ? built.path : (built.lessons ?? []).map((l: Raw) => ({ id: l.id, title: l.title, summary: l.summary, lesson: l.id, minutes: l.minutes, archetype: l.archetype, section: l.section }))
   const writeLesson = (node: Rec, lesson: Raw) => {
-    const blocks: WrittenBlock[] = (lesson.blocks as Raw[]).map((b) => {
+    const blocks: WrittenBlock[] = (lesson.blocks as Raw[]).filter((b) => !NEEDS_VOICE.has(String(b.type))).map((b) => {
       // A block's sources by which file, so its chip counts them: the quotes themselves are in the report.
       const files = [...new Set((b.cites ?? []).map((c: Raw) => c.file))] as string[]
       const titled = b.title && b.type === 'explainer' ? { ...b.payload, markdown: `## ${b.title}\n\n${b.payload.markdown ?? ''}` } : b.payload

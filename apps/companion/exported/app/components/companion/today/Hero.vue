@@ -150,7 +150,7 @@ const subject = computed(() => {
 })
 
 const notes = computed(() => (lecture.value ? notesOf(c, lecture.value) : null))
-const canRecord = computed(() => mode.value === 'class' && subject.value?.recording_allowed !== false)
+const canRecord = computed(() => false)
 
 const VERB: Record<PlanTask['kind'], string> = {
   lesson: 'Resume',

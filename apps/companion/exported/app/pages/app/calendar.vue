@@ -286,14 +286,14 @@ const agenda = computed(() => {
               />
             </span>
             <p class="min-w-0 flex-1 text-[14.5px] leading-snug text-text-body">
-              Your classes show up here, with their rooms, once your timetable is in.
+              Exam dates from a timetable PDF show up here.
             </p>
             <UiBtn
               to="/app/connect"
               variant="secondary"
               size="lg"
             >
-              Add my timetable
+              Add an exam timetable
             </UiBtn>
           </div>
 

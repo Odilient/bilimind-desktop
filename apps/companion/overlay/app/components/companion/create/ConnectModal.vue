@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** The chat's "connect your school" door: a calendar and a PDF work here, what needs a server says so. */
+/** The chat's "connect your school" door: a PDF works here, what needs a server says so. */
 import type { ConnectKind } from '~/companion/create'
 
 const props = defineProps<{ kind: ConnectKind | null }>()
@@ -16,17 +16,16 @@ const open = computed({
 <template>
   <UiModal
     v-model:open="open"
-    :title="kind === 'ics' ? 'Timetable link' : kind === 'photo' ? 'Exam timetable PDF' : 'Needs an account on bilimind.com'"
+    :title="kind === 'photo' ? 'Exam timetable PDF' : 'Needs an account on bilimind.com'"
     size="md"
   >
-    <CompanionCreateIcsForm v-if="kind === 'ics'" />
-    <CompanionCreatePhotoImport v-else-if="kind === 'photo'" />
+    <CompanionCreatePhotoImport v-if="kind === 'photo'" />
     <p
       v-else
       class="text-[15px] leading-relaxed text-text-body"
     >
-      Connecting Moodle or forwarding email runs on a server, so it's part of bilimind.com. A calendar link and an exam
-      timetable PDF both work here.
+      Timetable links, Moodle and forwarded email are part of bilimind.com. An exam
+      timetable PDF works here.
     </p>
   </UiModal>
 </template>

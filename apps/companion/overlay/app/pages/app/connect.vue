@@ -10,15 +10,11 @@ useSeoMeta({ title: 'Connected apps · BiliMind' })
       Connected apps
     </h1>
     <section class="grid gap-3">
-      <h2 class="font-display text-[17px] font-semibold text-text">Timetable link</h2>
-      <CompanionCreateIcsForm />
-    </section>
-    <section class="grid gap-3">
       <h2 class="font-display text-[17px] font-semibold text-text">Exam timetable PDF</h2>
       <CompanionCreatePhotoImport />
     </section>
     <p class="max-w-[60ch] text-[15px] leading-relaxed text-text-muted">
-      Connecting Moodle or forwarding email runs on a server, so it's part of bilimind.com.
+      Timetable links, Moodle and forwarded email are part of bilimind.com.
     </p>
   </div>
 </template>

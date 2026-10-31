@@ -13,7 +13,6 @@
  *  - The `#block-{id}` anchor, so a link into one paragraph of one lesson lands
  *    on that paragraph however it was arrived at.
  */
-useSearchHotkey()
 useBlockAnchor()
 </script>
 
@@ -24,6 +23,5 @@ useBlockAnchor()
       <NuxtPage />
     </NuxtLayout>
     <UiToast />
-    <ShellSearchPalette />
   </div>
 </template>

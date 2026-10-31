@@ -62,7 +62,6 @@ const ADD: Row[] = [
   { key: 'link', icon: 'link', title: 'Add a link', hint: 'A web page, read when you send' },
   { key: 'paste', icon: 'paste', title: 'Paste text', hint: 'A syllabus, an announcement, an email' },
   { key: 'moodle', icon: 'folder', title: 'Build from a folder', hint: 'Every answer checked against your files' },
-  { key: 'calendar', icon: 'calendar', title: 'A calendar link', hint: 'An .ics or webcal:// link' },
 ]
 
 /** A way already connected says so, so the learner sees what is already flowing in. */
@@ -76,8 +75,6 @@ function connected(kind: ConnectKind): { word: string; tone: string } | null {
 }
 
 const SCHOOL: { kind: ConnectKind; icon: string; title: string; hint: string }[] = [
-  { kind: 'moodle', icon: 'cap', title: 'Moodle', hint: 'Every course, its files and deadlines' },
-  { kind: 'ics', icon: 'calendar', title: 'Timetable link', hint: 'Your classes and rooms, kept current' },
   // shortcut: hidden until the inbound worker is live (docs/inbound-worker.md); restore this row then.
   { kind: 'photo', icon: 'camera', title: 'Exam timetable PDF', hint: 'The rows about your courses; you check them first' },
 ]

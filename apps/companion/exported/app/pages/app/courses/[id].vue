@@ -150,7 +150,7 @@ const liveSession = computed<Session | null>(
 const nextSession = computed<Session | null>(
   () => sessions.value.find((s) => !s.cancelled && Date.parse(s.starts_at) > now.value) ?? null,
 )
-const canRecord = computed(() => Boolean(subject.value && !isPath.value && subject.value.recording_allowed))
+const canRecord = computed(() => false)
 
 /** The chip in the top bar: the nearest date that counts, and how ready for it. */
 const due = computed<{ deadline: Deadline; words: string; ready: boolean } | null>(() => {

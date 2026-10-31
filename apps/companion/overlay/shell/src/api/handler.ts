@@ -7,12 +7,8 @@ import { computeReadiness } from '../../../app/companion/readiness.ts'
 import { currentZone, dayKey, setZone, shiftDay } from '../../../app/companion/time.ts'
 import { createAsker, readInput } from './ask/asker.ts'
 import { materialReader } from './ask/material.ts'
-import type { edgeSynthesize } from '@bilimind/engine/tts-edge'
-import { applyPendingRestore, isBackup, stageRestore, writeBackup } from './backup.ts'
 import { credentials, type Vault } from './credentials.ts'
-import { exportHtml } from './export-course.ts'
 import { proofApi } from './proof/routes.ts'
-import { createSearch } from './search.ts'
 import { chunksForLesson, folderBuilds, type FolderDeps } from './lessons/folder.ts'
 import { ACCEPTED, cleanName, MAX_UPLOAD_BYTES, serveFile, sniff } from './files.ts'
 import { lessonApi } from './lessons/routes.ts'
@@ -27,7 +23,6 @@ import { COLLECTIONS, openStore, wireTime, type Collection, type Row, type Store
 import { todayView } from './today.ts'
 import { zoneFor } from './zone.ts'
 
-const NOT_YET = "This isn't in the desktop app yet."
 const MAX_UPDATE_BYTES = 2_000_000
 const OVERLAP_MS = 5000
 const WEEK = 7 * 86_400_000
@@ -50,13 +45,6 @@ export interface ApiOptions {
   seedStarter?: boolean
   /** The folder dialog and the pipeline that runs in a process of its own. Absent, building from a folder says so. */
   folders?: FolderDeps
-  /** The player page and where it's saved, for a course as an offline folder. */
-  exporter?: { template: () => string; save: (name: string, html: string) => Promise<string | null> }
-  /** Start again, which is when a restored backup takes over. */
-  relaunch?: () => void
-  /** What reads calendars and speaks, in the tests. */
-  fetcher?: typeof fetch
-  synthesize?: typeof edgeSynthesize
 }
 
 // ---------- the one local user ----------
@@ -166,7 +154,6 @@ export function createApi(options: ApiOptions) {
   mkdirSync(options.dataDir, { recursive: true })
   const filesDir = join(options.dataDir, 'files')
   mkdirSync(filesDir, { recursive: true })
-  applyPendingRestore(options.dataDir)
   const store = openStore(join(options.dataDir, 'companion.db'))
   const keys = credentials(options.dataDir, options.configDir, options.vault, options.baseUrl)
   const name = options.userName
@@ -190,36 +177,7 @@ export function createApi(options: ApiOptions) {
     setZone(zone)
     return zone
   } })
-  const proof = proofApi(store, { key: () => keys.keyState(), fallbackFetch: options.fallbackFetch, reader, dataDir: options.dataDir, ...(options.fetcher ? { fetcher: options.fetcher } : {}), ...(options.synthesize ? { synthesize: options.synthesize } : {}) })
-  const search = createSearch(store)
-
-  /** Backup, restore and export: each opens a dialog the system draws, so none of them is in a transaction. */
-  async function dataRoutes(method: string, path: string): Promise<Response | null> {
-    if (method !== 'POST') return null
-    if (path === '/companion/data/backup') {
-      const folder = await options.folders?.pick('Choose where to save the backup')
-      return ok(folder ? { path: writeBackup(store, options.dataDir, folder) } : null)
-    }
-    if (path === '/companion/data/restore') {
-      const folder = await options.folders?.pick('Choose a BiliMind backup folder')
-      if (!folder) return ok(null)
-      if (!isBackup(folder)) return message("That folder isn't a BiliMind backup, or its database doesn't open.", 422)
-      stageRestore(options.dataDir, folder)
-      setTimeout(() => options.relaunch?.(), 300)
-      return ok({ restarting: true })
-    }
-    const exported = path.match(/^\/courses\/(\d+)\/export$/)
-    if (exported) {
-      const course = store.rec('course', Number(exported[1]))
-      if (!course) return notFound('Course not found.')
-      if (!options.exporter) return message('Exporting is only in the desktop app.', 422)
-      if (!store.recs('node', course.id).some((n) => n.status === 'ready')) return message('Write a lesson first: a course with nothing written has nothing to export.', 422)
-      const html = exportHtml(store, course, options.exporter.template())
-      const saved = await options.exporter.save(String(course.title).replace(/[^\p{L}\p{N} _-]+/gu, '').trim() || 'course', html)
-      return ok(saved ? { path: saved } : null)
-    }
-    return null
-  }
+  const proof = proofApi(store, { key: () => keys.keyState(), fallbackFetch: options.fallbackFetch, reader, dataDir: options.dataDir })
 
   // A new computer gets the sample to look around in. Once: removing it stays removed.
   if (options.seedStarter !== false && !store.getMeta('starter_seeded')) {
@@ -244,8 +202,6 @@ export function createApi(options: ApiOptions) {
     if (method === 'POST' && path === '/companion/items/upload') return uploadItem(req)
     if (method === 'POST' && path === '/companion/ask') return ask(req)
     if (method === 'POST' && path === '/companion/folders/pick') return ok(await folders.pick())
-    const data = await dataRoutes(method, path)
-    if (data) return data
     const proved = await proof.early(req, method, path)
     if (proved) return proved
     const early = await lessons.early(req, method, path)
@@ -386,7 +342,6 @@ export function createApi(options: ApiOptions) {
       return ok({ session: window, week: window, credits: 0, credits_expire_at: null, on: [], own_key: true, plan: 'local', packs: [] })
     }
     if (key === 'GET /notifications') return ok([])
-    if (key === 'GET /search') return ok(search(params.get('q') ?? '', Number(params.get('course_id')) || null))
     if (key === 'GET /companion/ask/threads') return ok(asker.threads())
     const thread = path.match(/^\/companion\/ask\/threads\/([^/]+)$/)
     if (thread) {
@@ -471,8 +426,7 @@ export function createApi(options: ApiOptions) {
       return collection(method, row[1] as Collection, row[2], params, input)
     }
 
-    // Everything that needs a model, a server or a later milestone. The SPA shows the sentence and carries on.
-    return message(NOT_YET, 503)
+    return notFound('Not found.')
   }
 
   function collection(method: string, name: Collection, id: string | undefined, params: URLSearchParams, input: Record<string, any>): Response {
@@ -561,7 +515,6 @@ export function createApi(options: ApiOptions) {
       }
     },
 
-    refreshCalendars: () => proof.refreshCalendars(),
 
     /** Let lessons being written finish, for tests. */
     settled: () => writer.settled(),

@@ -172,7 +172,7 @@ function newHref(kind: 'p' | 'b', s: Session): string {
 
 function actionsFor(s: Session): MenuAction[] {
   const list: MenuAction[] = []
-  if (props.subject.recording_allowed && Date.parse(s.ends_at) > now) {
+  if (false) {
     list.push({ label: 'Record this class', icon: 'mic', run: () => capture.show('record', props.subject.id, s.id) })
   }
   list.push(

@@ -57,14 +57,6 @@ const steps = computed(() =>
       cta: 'Add notes',
       to: '/app/notes',
     },
-    {
-      key: 'school',
-      title: 'Connect your school',
-      body: 'Moodle or your timetable link, and classes and deadlines come in by themselves.',
-      done: c.connections.value.some((x) => x.kind === 'moodle' || x.kind === 'ics'),
-      cta: 'Connect',
-      to: '/app/connect',
-    },
   ].filter((s) => !(quiet.value && s.key === 'ask')),
 )
 

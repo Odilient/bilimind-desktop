@@ -343,26 +343,14 @@ try {
   const answered = await page.evaluate(async (id) => (await (await fetch(`/api/companion/checks/${id}/answer`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ answer: 'It keeps the left rows.' }) })).json()).data, sitting.checks[0].id)
   check('the answer is marked, and only now shows the model answer', answered.result === 'right' && answered.revealed.includes('every row of the left table'))
 
-  // ---------- a calendar, search, an offline course, a backup ----------
-  const when = (days) => new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10).replace(/-/g, '')
-  const calendar = await page.evaluate(async (ics) => (await (await fetch('/api/companion/ingest/ics', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ics_text: ics }) })).json()).data, `BEGIN:VCALENDAR\nX-WR-CALNAME:Timetable\nBEGIN:VEVENT\nUID:q\nSUMMARY:CSC2103 Quiz 2\nDTSTART:${when(6)}T090000Z\nDTEND:${when(6)}T090000Z\nEND:VEVENT\nBEGIN:VEVENT\nUID:l\nSUMMARY:CSC2103 Lecture - Data Structures\nDTSTART:${when(-7)}T090000Z\nDTEND:${when(-7)}T100000Z\nRRULE:FREQ=WEEKLY;COUNT=4\nEND:VEVENT\nEND:VCALENDAR`)
-  check('a calendar file becomes a course, classes and a deadline', calendar.created.subjects === 1 && calendar.created.deadlines === 1 && calendar.created.sessions === 4)
-  const found = await page.evaluate(async () => (await (await fetch('/api/search?q=vorrei')).json()).data)
-  check('search finds what a lesson says', found.retrieval === 'fts' && found.groups.some((g) => g.key === 'content'))
-
-  await page.goto('app://bilimind/app/settings?section=data')
-  await page.getByRole('button', { name: 'Back up' }).click({ timeout: 20_000 })
-  await page.waitForFunction(() => document.body.innerText.includes('Saved to'), undefined, { timeout: 15_000 })
-  const backups = readdirSync(folder).filter((n) => n.startsWith('BiliMind backup'))
-  check('a backup is written, without the keys', backups.length === 1 && existsSync(join(folder, backups[0], 'companion.db')) && !existsSync(join(folder, backups[0], 'keys.json')))
-  await page.goto(`app://bilimind/app/courses/${made.subject}`)
-  await page.goto('app://bilimind/app/settings?section=data')
-  await page.locator('li', { hasText: 'Italian basics' }).getByRole('button', { name: 'Save as a page' }).click({ timeout: 20_000 })
-  await waitFor(() => existsSync(join(folder, 'Italian basics', 'index.html')))
-  const page1 = existsSync(join(folder, 'Italian basics', 'index.html')) ? readFileSync(join(folder, 'Italian basics', 'index.html'), 'utf8') : ''
-  check('a course saves as one offline page, on the real player', page1.includes('Vorrei is the polite way') && page1.includes('bm-course') && page1.length > 100_000 && existsSync(join(folder, 'Italian basics', 'img', 'obj-book.webp')))
-  // Backups and exports went in the folder the build below reads: clear them so it reads the notes alone.
-  for (const name of readdirSync(folder)) if (name !== 'notes.md') rmSync(join(folder, name), { recursive: true, force: true })
+  // ---------- every screen: nothing calls an API that isn't here ----------
+  const dead = []
+  page.on('response', (r) => { if (r.url().includes('/api/') && [404, 503].includes(r.status())) dead.push(`${r.status()} ${r.url()}`) })
+  for (const to of ['', '/chat', '/notes', '/courses', '/calendar', '/practice', '/inbox', '/connect', '/settings', '/check', '/new', '/ask']) {
+    await page.goto(`app://bilimind/app${to}`)
+    await page.waitForTimeout(500)
+  }
+  check('no screen calls an API that is not here', dead.length === 0, dead.slice(0, 5).join(' '))
 
   // ---------- a folder, through the pipeline's own process ----------
   const folderReply = await page.evaluate(async () => {

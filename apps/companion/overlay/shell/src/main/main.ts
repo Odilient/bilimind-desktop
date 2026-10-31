@@ -16,7 +16,7 @@ import type { Vault } from '../api/credentials.ts'
 import { createApi } from '../api/handler.ts'
 import { IPC, type CaptureRequest, type NextDeadline } from '../shared/contract.ts'
 import { allowSystemAudio } from './audio.ts'
-import { exporter, folderHost } from './folder-host.ts'
+import { folderHost } from './folder-host.ts'
 import { ORIGIN, registerScheme, serveSpa } from './protocol.ts'
 import { changeShortcut, initShortcut, releaseShortcut, shortcutState } from './shortcut.ts'
 import { DesktopTray } from './tray.ts'
@@ -207,13 +207,10 @@ function start(): void {
     vault: keyVault(),
     fallbackFetch: net.fetch as typeof fetch,
     folders: folderHost(() => win, settingsDir()),
-    exporter: exporter(() => win),
-    relaunch: () => { app.relaunch(); app.exit(0) },
     ...(E2E && process.env.BILIMIND_LLM_BASE_URL ? { baseUrl: process.env.BILIMIND_LLM_BASE_URL } : {}),
   })
   app.on('will-quit', () => api.close())
   // Calendars given by link move: read them again when the app opens, in the background.
-  if (!E2E) void api.refreshCalendars().catch(() => undefined)
   serveSpa(spaRoot, api.handle, (process.env.BILIMIND_CSP_CONNECT ?? '').split(/\s+/).filter(Boolean))
   allowSystemAudio()
   registerIpc()

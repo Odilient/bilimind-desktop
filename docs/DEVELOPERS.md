@@ -93,7 +93,7 @@ BiliMind free at another server, for tests. Never commit a key: `.env` and `.env
 
 ## Measured runs
 
-One real folder build on DeepSeek: a 16-slide PDF, 5 lessons, 165 seconds, $0.038 (engine `runPipeline`, narration off). One rubric mark: $0.0004.
+One real folder build on DeepSeek: one PDF, 5 lessons, 165 seconds, $0.038. One rubric mark: $0.0004.
 
 ## Develop and build
 

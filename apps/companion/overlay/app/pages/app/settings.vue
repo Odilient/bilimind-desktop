@@ -9,7 +9,6 @@ const router = useRouter()
 const sections = [
   { id: 'keys', label: 'AI key' },
   { id: 'spending', label: 'Spending' },
-  { id: 'data', label: 'Your data' },
   { id: 'preferences', label: 'Preferences' },
 ] as const
 
@@ -51,7 +50,6 @@ function open(id: string): void {
         <AccountApiKeys />
       </template>
       <CompanionSettingsSpending v-else-if="active === 'spending'" />
-      <CompanionSettingsData v-else-if="active === 'data'" />
       <CompanionSettingsPreferences v-else />
     </div>
   </div>

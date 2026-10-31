@@ -286,9 +286,6 @@ export const INSERT_GROUPS: Array<{ title: string; choices: InsertChoice[] }> = 
       { type: 'code', label: 'Code exercise', blurb: 'Write code, run tests.', ai: true, needsCode: true },
       { type: 'project', label: 'Project', blurb: 'Something to build and hand in.', ai: true },
       { type: 'exam', label: 'Exam', blurb: 'A longer, timed check.', ai: true },
-      { type: 'speaking', label: 'Speaking', blurb: 'Say it out loud and be heard.' },
-      { type: 'dialogue', label: 'Role-play', blurb: 'A conversation with the tutor.' },
-      { type: 'audio', label: 'Listen', blurb: 'A narrated version.' },
     ],
   },
 ]

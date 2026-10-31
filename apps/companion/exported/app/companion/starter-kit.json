@@ -364,8 +364,8 @@
       "<div data-type=\"page-link\" data-item-id=\"{board}\" data-kind=\"board\" data-title=\"How learning sticks\"></div>",
       "<h2>Flashcards</h2>",
       "<p>Each card comes back just before you would forget it, so a few minutes a day keeps what you have learnt. Today counts the ones due; <a href=\"/app/practice\">Practice</a> runs through them.</p>",
-      "<h2>Connect your school</h2>",
-      "<p>If your school uses Moodle, <a href=\"/app/connect\">connect it</a>: your courses, files, timetable and deadlines arrive by themselves and stay current. A timetable link or forwarded emails work too.</p>"
+      "<h2>Your exam dates</h2>",
+      "<p>Add an exam timetable PDF under <a href=\"/app/connect\">Connected apps</a>, and you check the dates before they go in.</p>"
     ]
   },
   "board": {

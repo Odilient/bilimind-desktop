@@ -28,8 +28,7 @@ describe('the local user and the stubs', () => {
   it('says "not yet" for what only runs on a server, in the shape the SPA reads', async () => {
     for (const path of ['/companion/connect/moodle/sync', '/organizations']) {
       const res = await t.post(path, {})
-      expect(res.status).toBe(503)
-      expect(res.json.message).toMatch(/isn't in the desktop app yet/)
+      expect(res.status).toBe(404)
     }
   })
 })

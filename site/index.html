@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BiliMind Desktop — your files in, a course out</title>
-<meta name="description" content="BiliMind Desktop: a free, open-source app that turns your own slides, past papers or shop SOP into a narrated course whose answers are checked against your files.">
+<meta name="description" content="BiliMind Desktop: a free, open-source app that turns your own slides, past papers or shop SOP into a course whose answers are checked against your files.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%232340E6'/%3E%3Cpath d='M28.6 13.4A11 11 0 1 0 31 20' fill='none' stroke='%23fff' stroke-width='5.2' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='20' r='4.4' fill='%230B0D10'/%3E%3Ccircle cx='29.6' cy='14.9' r='3.6' fill='%23C6F24E'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1294,7 +1294,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
     <div class="card k-lime" id="c3">
       <div class="face front">
         <span class="ebs"><i aria-hidden="true"></i>Taught your way</span>
-        <p class="ct">22 lesson formats.<br>Your own files.</p>
+        <p class="ct">19 lesson formats.<br>Your own files.</p>
         <div class="fmts" aria-hidden="true"><span>Explainers</span><span>Speaking drills</span><span>Role-play</span><span>Code</span></div>
         <svg class="plant" viewBox="0 0 240 260" aria-hidden="true">
           <defs>
@@ -1681,7 +1681,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
           <span><b>No questions</b> — level, aim and time, read from your one sentence.</span>
           <span><b>It plans the course:</b> topics in order, with what hangs off each one.</span>
           <span><b>Every lesson</b> is written in the formats its knowledge needs.</span>
-          <span><b>Then it keeps you going:</b> a study plan, an Anki deck, a calendar.</span>
+          <span><b>Then it keeps you going:</b> a study plan, flashcards, checks from memory.</span>
         </p>
         <div class="rail" id="rail">
           <span class="sp"><i><b>1</b><svg><use href="#i-check"/></svg></i><span>Say it</span></span>
@@ -1696,7 +1696,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
 
 <!-- ═══ part: formats ═══ -->
 <style>
-/* ── #formats — 22 lesson formats in a physics pit ───────────────────
+/* ── #formats — 19 lesson formats in a physics pit ───────────────────
    The pills are DOM (crisp text), placed every frame from matter.js
    bodies. Without JS they sit in a wrapped heap at the bottom of the pit. */
 #formats { padding-block: calc(var(--sec-y) / 2); }
@@ -1867,7 +1867,8 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
     <header class="fm-head">
       <div class="fm-titles">
         <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>Taught the way it’s learned</span>
-        <h2 class="h2" id="formats-h">22 formats. <span class="hchip cobalt" aria-hidden="true"><svg><use href="#i-steps"/></svg></span> <span class="cob">One that fits.</span></h2>
+        <h2 class="h2" id="formats-h">19 formats. <span class="hchip cobalt" aria-hidden="true"><svg><use href="#i-steps"/></svg></span> <span class="cob">One that fits.</span></h2>
+        <p class="lede">Narration, speaking drills and role-play need a voice service, so they are on bilimind.com, with sync, mobile and classes.</p>
       </div>
       <p class="lede">BiliMind first decides <b>what kind of knowledge</b> a lesson holds, then teaches it the way that kind is learned. A procedure gets steps, a mix-up gets a side-by-side, a phrase gets said out loud.</p>
     </header>
@@ -1899,7 +1900,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
       <div class="fm-pit" id="fmPit">
         <span class="fm-pit-label" aria-hidden="true"><b>27</b><span>lesson formats, every one a real block</span></span>
         <p class="fm-hint" aria-hidden="true"><svg><use href="#i-spark"/></svg><span class="t-mouse">Drag them · click one</span><span class="t-touch">Tap one</span></p>
-        <ul class="fm-tray" aria-label="The 22 lesson formats">
+        <ul class="fm-tray" aria-label="The 19 lesson formats">
           <li><button class="fm-pill s-ink" type="button" data-t="explainer" data-b="The idea, written at the level you asked for — no filler."><span class="fi" aria-hidden="true"><svg><use href="#i-book"/></svg></span>Explainers</button></li>
           <li><button class="fm-pill s-white" type="button" data-t="walkthrough" data-b="Numbered steps you follow one at a time, ticking as you go."><span class="fi" aria-hidden="true"><svg><use href="#i-steps"/></svg></span>Walkthroughs</button></li>
           <li><button class="fm-pill s-lime" type="button" data-t="checklist" data-b="Keep it open while your hands are busy doing the thing."><span class="fi" aria-hidden="true"><svg><use href="#i-list"/></svg></span>Checklists</button></li>
@@ -1913,9 +1914,6 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
           <li><button class="fm-pill s-white" type="button" data-t="reference_table" data-b="The part you will come back and look up, searchable."><span class="fi" aria-hidden="true"><svg><use href="#i-table"/></svg></span>Reference tables</button></li>
           <li><button class="fm-pill s-ink" type="button" data-t="playground" data-b="Move a number and watch the result move. Break it on purpose."><span class="fi" aria-hidden="true"><svg><use href="#i-sliders"/></svg></span>Playgrounds</button></li>
           <li><button class="fm-pill s-cobalt" type="button" data-t="flashcards" data-b="The few facts you simply have to know — made for you, no deck-building."><span class="fi" aria-hidden="true"><svg><use href="#i-cards"/></svg></span>Flashcards</button></li>
-          <li><button class="fm-pill s-white" type="button" data-t="audio" data-b="The lesson read aloud, sentence by sentence, for the commute and the washing-up."><span class="fi" aria-hidden="true"><svg><use href="#i-speaker"/></svg></span>Narrated audio</button></li>
-          <li><button class="fm-pill s-lime" type="button" data-t="speaking" data-b="Hear it read, then say it out loud. Hearing you back needs bilimind.com."><span class="fi" aria-hidden="true"><svg><use href="#i-mic"/></svg></span>Speaking drills</button></li>
-          <li><button class="fm-pill s-ink" type="button" data-t="dialogue" data-b="A scene with a role and a goal. The partner answers back, in character."><span class="fi" aria-hidden="true"><svg><use href="#i-chat"/></svg></span>Role-play dialogues</button></li>
           <li><button class="fm-pill s-cobalt" type="button" data-t="quiz" data-b="Answer, get marked for real, and learn why the wrong one was tempting."><span class="fi" aria-hidden="true"><svg><use href="#i-quiz"/></svg></span>Quizzes</button></li>
           <li><button class="fm-pill s-ink" type="button" data-t="project" data-b="Build the real thing and hand it in — graded against a rubric written first."><span class="fi" aria-hidden="true"><svg><use href="#i-rocket"/></svg></span>Projects</button></li>
           <li><button class="fm-pill s-lime" type="button" data-t="code" data-b="Write it in the browser. The tests decide, not you."><span class="fi" aria-hidden="true"><svg><use href="#i-code"/></svg></span>Code exercises</button></li>
@@ -1956,9 +1954,6 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
     { label: 'Numbers to feel', icon: 'i-sliders', types: ['worked_example', 'playground', 'diagram'],
       note: 'You don’t understand a formula until you’ve dragged its inputs around.',
       blocks: [['Worked example', 'Solved line by line, nothing skipped.'], ['Playground', 'Drag a number, watch the result move.'], ['Numeric practice', 'Your 3,5 counts the same as 3.5.'], ['Diagram', 'The shape behind the formula, drawn crisp.']] },
-    { label: 'Said out loud', icon: 'i-mic', types: ['audio', 'speaking', 'dialogue'],
-      note: 'No other course generator lets you talk. This one coaches what actually came out of your mouth.',
-      blocks: [['Narrated audio', 'Lessons read to you — the sentence lit as it’s read.'], ['Speaking drill', 'Hear the phrase, then say it yourself.'], ['Role-play', 'Order the meal. Take the history. Close the deal.'], ['Recording', 'Hear yourself — the fastest teacher there is.']] },
   ];
 
   const pit = $('#fmPit'), bubble = $('.fm-bubble');
@@ -2043,7 +2038,7 @@ dialog.film[open] .film-box { animation: pop .42s cubic-bezier(.2, .9, .25, 1.1)
     wakeLoop();
   }
 
-  /* The drop: one at a time from above, shuffled, until all 22 have landed. */
+  /* The drop: one at a time from above, shuffled, until all 19 have landed. */
   function drop() {
     if (dropped) return;
     dropped = true;
@@ -3650,11 +3645,11 @@ html.still #checks .aq-form { display: none; }
       <p class="lede"><b>The breadth, stated once.</b> Every format, voice and cost cap below is in the product today — the first one is counted straight from the engine code.</p>
     </div>
     <ul class="nm-grid">
-      <li class="nm-cell" data-n="22"><div class="nm-top"><span class="nm-idx">01</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-cards"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">27 </span>lesson formats</p><p class="nm-note">From speaking drills to code the tests mark.</p></li>
+      <li class="nm-cell" data-n="19"><div class="nm-top"><span class="nm-idx">01</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-cards"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">27 </span>lesson formats</p><p class="nm-note">From speaking drills to code the tests mark.</p></li>
       <li class="nm-cell" data-n="11"><div class="nm-top"><span class="nm-idx">02</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-bulb"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">11 </span>kinds of knowledge</p><p class="nm-note">Each lesson is sorted first, then taught to fit.</p></li>
       <li class="nm-cell" data-n="9"><div class="nm-top"><span class="nm-idx">03</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-quiz"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">9 </span>question types, all graded</p><p class="nm-note">Your 3,5 counts the same as 3.5.</p></li>
       <li class="nm-cell" data-n="4"><div class="nm-top"><span class="nm-idx">04</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-code"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">4 </span>live code runtimes</p><p class="nm-note">Write it in the browser. The tests decide.</p></li>
-      <li class="nm-cell" data-n="3"><div class="nm-top"><span class="nm-idx">05</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-speaker"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">3 </span>narration voices</p><p class="nm-note">English, Malay and Burmese, each lesson read aloud.</p></li>
+      <li class="nm-cell" data-n="2"><div class="nm-top"><span class="nm-idx">05</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-speaker"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">2 </span>AI providers</p><p class="nm-note">DeepSeek and OpenRouter, on your own key.</p></li>
       <li class="nm-cell" data-n="1"><div class="nm-top"><span class="nm-idx">06</span><span class="nm-ic" aria-hidden="true"><svg><use href="#i-globe"/></svg></span></div><div class="nm-num" aria-hidden="true"></div><p class="nm-label"><span class="sr-only">1 </span>dollar a course</p><p class="nm-note">At most, by default. One measured run: 4 cents.</p></li>
     </ul>
   </div>
@@ -4025,7 +4020,7 @@ html.still #checks .aq-form { display: none; }
   <div class="ev-head">
     <span class="eb"><span class="dot"><svg aria-hidden="true"><use href="#i-globe"/></svg></span>Desktop · CLI · Browser</span>
     <h2 class="h2" id="everywhere-h">Wherever <span class="hchip cobalt" aria-hidden="true"><svg><use href="#i-phone"/></svg></span><span class="cob">you</span> are.</h2>
-    <p class="lede"><b>Same engine, every door.</b> The desktop app or the command line — and a course saves as one HTML file that plays in any browser. No account at all.</p>
+    <p class="lede"><b>Same engine, every door.</b> The desktop app or the command line — and the command line saves a course as one HTML file that plays in any browser. No account at all.</p>
     <div class="ev-doors" aria-hidden="true">
       <span><i><svg><use href="#i-globe"/></svg></i>Any browser</span>
       <span><i><svg><use href="#i-phone"/></svg></i>On your phone</span>
@@ -4152,7 +4147,7 @@ html.still #checks .aq-form { display: none; }
   <div class="ev-lang">
     <div>
       <p class="ev-say"><span>Taught in</span><span class="ev-slot" aria-hidden="true"><span class="in"></span></span></p>
-      <p class="ev-sub"><b>Written, taught and narrated in the language you ask for</b> — not translated into it. Narrated by Microsoft Edge voices.</p>
+      <p class="ev-sub"><b>Written and taught in the language you ask for</b> — not translated into it.</p>
     </div>
     <div class="ev-chips" role="list" aria-label="Languages"></div>
   </div>
@@ -4555,7 +4550,7 @@ html.still #checks .aq-form { display: none; }
           <li data-free="on"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>BiliMind free pays for the AI</li>
           <li data-free="paused"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>No account, no card</li>
           <li data-free="paused"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Stored on your computer; only what a model reads goes to your AI provider</li>
-          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Narration, code, quizzes — all included</li>
+          <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Code, quizzes, checks — all included</li>
           <li><i><svg aria-hidden="true"><use href="#i-check"/></svg></i><b>Open source — AGPL-3.0, for good</b></li>
         </ul>
         <div class="cta"><a class="pill light" href="https://github.com/bilimind/desktop/releases/latest">Download</a></div>
@@ -4609,7 +4604,7 @@ html.still #checks .aq-form { display: none; }
           <div class="slot" id="slotEnd"><div class="ghost-field" aria-hidden="true">What do you want to learn?</div></div>
           <button class="play" data-film type="button" aria-haspopup="dialog" aria-controls="film" aria-label="Watch the intro film, 1 minute 12 seconds"><svg aria-hidden="true"><use href="#i-play"/></svg><span class="pl-lbl" aria-hidden="true">Watch the intro · 1:12</span></button>
         </div>
-        <span class="free"><i aria-hidden="true"></i>22 lesson formats · Linux tested; Windows and macOS builds untested; command line</span>
+        <span class="free"><i aria-hidden="true"></i>19 lesson formats · Linux tested; Windows and macOS builds untested; command line</span>
       </div>
     </div>
   </section>

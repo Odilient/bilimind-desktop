@@ -31,7 +31,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => clearInterval(timer))
 
-const canRecord = computed(() => props.subject.recording_allowed)
+const canRecord = computed(() => false)
 
 const ownSessions = computed(() => c.sessions.value.filter((s) => s.subject_id === props.subject.id && !s.cancelled))
 const liveSession = computed(

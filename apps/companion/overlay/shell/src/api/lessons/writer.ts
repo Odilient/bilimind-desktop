@@ -24,6 +24,8 @@ const FORMAT_ATTEMPTS = 2
 const THINKING_CHARS = 1200
 const WRITE_EVERY_MS = 800
 const FALLBACK_ARCHETYPE: Archetype = 'conceptual'
+// Nothing here can read aloud or hear, so these blocks would be dead ends.
+export const NEEDS_VOICE: ReadonlySet<string> = new Set(['audio', 'speaking', 'dialogue'])
 const SHOWN = ['explainer', 'key_points', 'example', 'walkthrough', 'worked_example', 'comparison', 'analogy', 'misconception', 'timeline', 'reference_table']
 
 export const NO_KEY_LESSON = "BiliMind writes lessons with your own AI key, and there isn't one yet. Add a DeepSeek or OpenRouter key in Settings, then try again."
@@ -263,7 +265,7 @@ export function createWriter(store: Store, deps: WriterDeps) {
     try {
       const { ctx } = contextFor(course, 'Writer')
       const archetype = await classify(ctx, course, queued)
-      const mandatory = mandatoryFormats(archetype)
+      const mandatory = mandatoryFormats(archetype).filter((t) => !NEEDS_VOICE.has(t))
       const node = store.save('node', { ...store.rec('node', nodeId)!, archetype, planned_block_types: planned(archetype) }, false)
       const chunks = deps.chunksFor?.(course, node) ?? []
       const brief = briefOf(course, chunks.length > 0)
@@ -296,10 +298,10 @@ export function createWriter(store: Store, deps: WriterDeps) {
           onThinking: draft.thinking,
           fallbackFetch: deps.fallbackFetch,
         })
-        const candidate = normaliseRawBlocks(out.data?.blocks, options, [])
+        const candidate: DraftBlock[] = normaliseRawBlocks(out.data?.blocks, options, []).filter((b) => !NEEDS_VOICE.has(b.type))
         // Keep the best attempt so far: a lesson merely missing a format beats whatever a second attempt might fail to return.
         if (candidate.length) blocks = candidate
-        const missing = missingFormats(archetype, candidate)
+        const missing: string[] = missingFormats(archetype, candidate).filter((t) => !NEEDS_VOICE.has(t))
         correction = missing.length ? formatViolation(candidate.map((b) => b.type), missing) : null
         if (!correction) break
       }

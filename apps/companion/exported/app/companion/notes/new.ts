@@ -91,14 +91,6 @@ export const NEW_NOTE_TYPES: NewNoteType[] = [
     letter: 'l',
   },
   {
-    key: 'record',
-    label: 'Record audio',
-    hint: 'A lecture, a seminar or a thought out loud',
-    icon: 'mic',
-    tone: 'bg-danger-soft text-danger',
-    letter: 'r',
-  },
-  {
     key: 'photo',
     label: 'Scan or photo',
     hint: 'The board, a slide, a page of a book',
