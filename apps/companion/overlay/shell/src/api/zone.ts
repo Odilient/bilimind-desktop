@@ -30,10 +30,15 @@ function offsetMs(at: number, zone: string): number {
   return Date.UTC(part('year'), part('month') - 1, part('day'), part('hour'), part('minute'), part('second')) - Math.floor(at / 1000) * 1000
 }
 
+/** The instant of a wall-clock `HH:MM` on a `YYYY-MM-DD` in a zone. */
+export function localInstant(key: string, hm: string, zone: string): number {
+  const utc = Date.parse(`${key}T${hm}:00Z`)
+  return utc - offsetMs(utc - offsetMs(utc, zone), zone)
+}
+
 /** The instant a `YYYY-MM-DD` starts in a zone. */
 export function dayStart(key: string, zone: string): number {
-  const utc = Date.parse(`${key}T00:00:00Z`)
-  return utc - offsetMs(utc - offsetMs(utc, zone), zone)
+  return localInstant(key, '00:00', zone)
 }
 
 /** The last millisecond of a `YYYY-MM-DD` in a zone. */

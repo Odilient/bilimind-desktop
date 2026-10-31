@@ -43,6 +43,15 @@ export function openStore(path: string) {
       fsrs_before TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS threads (id TEXT PRIMARY KEY, body TEXT NOT NULL, updated_ms INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS messages (
+      seq INTEGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT NOT NULL UNIQUE,
+      thread_id TEXT NOT NULL,
+      role TEXT NOT NULL,
+      body TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS messages_by_thread ON messages (thread_id, seq);
   `)
 
   const parse = (rows: unknown[]) => rows.map((r) => JSON.parse((r as { body: string }).body) as Row)

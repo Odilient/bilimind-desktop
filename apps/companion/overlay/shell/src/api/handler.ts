@@ -1,11 +1,14 @@
 // The /api contract the SPA already speaks, answered in-process: one (Request) => Response, handed to the app://
 // protocol by main. No port, so nothing else on this computer can reach it. Same shapes as the hosted API.
+import { BilimindError } from '@bilimind/engine/contracts'
 import { createReadStream, mkdirSync, statSync, writeFileSync } from 'node:fs'
 import { Readable } from 'node:stream'
 import { basename, join } from 'node:path'
 import { computeReadiness } from '../../../app/companion/readiness.ts'
 import { currentZone, dayKey, setZone, shiftDay } from '../../../app/companion/time.ts'
-import { credentials } from './credentials.ts'
+import { createAsker, readInput } from './ask/asker.ts'
+import { materialReader } from './ask/material.ts'
+import { credentials, type Vault } from './credentials.ts'
 import { rebuild } from './planner.ts'
 import { Invalid, UUID } from './rules.ts'
 import { createRow, deleteRow, instantOf, isWritable, listRows, updateRow, validated, wire, worldOf } from './rows.ts'
@@ -23,9 +26,14 @@ const BASE64 = /^[A-Za-z0-9+/]*={0,2}$/
 export interface ApiOptions {
   /** Where the database and uploaded files live. */
   dataDir: string
-  /** The folder of the shared settings file with the AI keys. */
+  /** The folder of the settings file the CLI shares, and the spend ledger. */
   configDir: string
   userName: string
+  vault: Vault
+  /** A provider's address other than its own, for the tests' fake one. */
+  baseUrl?: string
+  /** Tried once when a provider's certificate doesn't verify. */
+  fallbackFetch?: typeof fetch
 }
 
 export const json = (data: unknown, status = 200) =>
@@ -209,8 +217,19 @@ export function createApi(options: ApiOptions) {
   const filesDir = join(options.dataDir, 'files')
   mkdirSync(filesDir, { recursive: true })
   const store = openStore(join(options.dataDir, 'companion.db'))
-  const keys = credentials(options.configDir)
+  const keys = credentials(options.dataDir, options.configDir, options.vault, options.baseUrl)
   const name = options.userName
+  const reader = materialReader(store, filesDir)
+  const asker = createAsker(store, reader, {
+    key: () => keys.keyState(),
+    zone: () => {
+      const zone = zoneFor(store)
+      setZone(zone)
+      return zone
+    },
+    tryFirstEverywhere: () => userOf(store, name).preferences.companion?.try_first === true,
+    fallbackFetch: options.fallbackFetch,
+  })
 
   /** A row of the collection, or the 404 the hosted API gives for one that isn't there. */
   function byId(collection: Collection, id: string, what = 'Not found.'): Row | Response {
@@ -224,6 +243,7 @@ export function createApi(options: ApiOptions) {
 
     // Files first: the only route with a body that isn't JSON, and the only streams.
     if (method === 'POST' && path === '/companion/items/upload') return uploadItem(req)
+    if (method === 'POST' && path === '/companion/ask') return ask(req)
     const fileMatch = path.match(/^\/companion-files\/([^/]+)$/)
     if (fileMatch && (method === 'GET' || method === 'HEAD')) {
       const item = byId('items', fileMatch[1]!, 'That file is no longer here.')
@@ -250,6 +270,52 @@ export function createApi(options: ApiOptions) {
       setZone(zoneFor(store))
       return answer(method, path, params, input)
     })
+  }
+
+  /**
+   * The body is read and the question written first, so a bad one is still a status. After that the answer streams
+   * outside any transaction, because it awaits the model; a reply that stops being read aborts the provider's call.
+   */
+  async function ask(req: Request): Promise<Response> {
+    let body: Record<string, any>
+    try {
+      body = JSON.parse(await req.text()) as Record<string, any>
+    } catch {
+      return message('That question could not be read.', 400)
+    }
+    const input = readInput(store, body)
+    const thread = input.threadId ? asker.threadOf(input.threadId) : null
+    if (input.threadId && !thread) return notFound('Thread not found.')
+    const turn = store.tx(() => asker.begin(input, thread))
+
+    const stop = new AbortController()
+    const encoder = new TextEncoder()
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        const emit = (event: string, data: unknown) => {
+          if (stop.signal.aborted) return
+          controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`))
+        }
+        emit('start', { thread_id: turn.thread.id, message_id: turn.answerId })
+        asker.answer(turn, {
+          status: (text) => emit('status', { text }),
+          delta: (text) => emit('delta', { text }),
+          making: (actions) => emit('making', { actions }),
+        }, stop.signal).then((answer) => {
+          emit('done', { thread_id: turn.thread.id, message: asker.messageWire(answer) })
+        }).catch((error: unknown) => {
+          if (stop.signal.aborted) return
+          if (!(error instanceof BilimindError)) console.error('ask', error)
+          emit('error', { message: error instanceof BilimindError ? error.message : "That answer didn't come through. Try again in a minute." })
+        }).finally(() => {
+          if (!stop.signal.aborted) controller.close()
+        })
+      },
+      cancel() {
+        stop.abort()
+      },
+    })
+    return new Response(stream, { headers: { 'content-type': 'text/event-stream', 'cache-control': 'no-cache' } })
   }
 
   async function uploadItem(req: Request): Promise<Response> {
@@ -313,10 +379,24 @@ export function createApi(options: ApiOptions) {
     }
     if (key === 'GET /notifications') return ok([])
     if (key === 'GET /search') return json({ groups: [], retrieval: 'none', degraded: false })
-    if (key === 'GET /companion/ask/threads') return ok([])
+    if (key === 'GET /companion/ask/threads') return ok(asker.threads())
+    const thread = path.match(/^\/companion\/ask\/threads\/([^/]+)$/)
+    if (thread) {
+      const id = thread[1]!
+      if (method === 'GET') {
+        const found = asker.thread(id)
+        return found ? ok(found) : notFound('Thread not found.')
+      }
+      if (method === 'PATCH') {
+        const renamed = asker.rename(id, input.title)
+        return renamed ? ok(renamed) : notFound('Thread not found.')
+      }
+      if (method === 'DELETE') return asker.remove(id) ? empty() : notFound('Thread not found.')
+    }
     if (key === 'GET /companion/checks/writing') return ok(null)
 
     if (key === 'GET /credentials') return ok(keys.list())
+    if (key === 'GET /credentials/storage') return ok(keys.storage())
     if (key === 'POST /credentials') return ok(keys.add(input), 201)
     const credential = path.match(/^\/credentials\/(\d+)(\/activate)?$/)
     if (credential) {

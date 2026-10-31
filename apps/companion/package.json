@@ -25,6 +25,7 @@
     "dist": "node scripts/dist.mjs"
   },
   "devDependencies": {
+    "@bilimind/engine": "workspace:*",
     "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.5.0",
     "@codemirror/commands": "^6.10.4",

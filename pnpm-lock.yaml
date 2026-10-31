@@ -45,6 +45,9 @@ importers:
 
   apps/companion:
     devDependencies:
+      '@bilimind/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
       '@capacitor/app':
         specifier: ^8.1.1
         version: 8.1.2(@capacitor/core@8.6.0)

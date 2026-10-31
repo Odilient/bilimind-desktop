@@ -15,6 +15,13 @@ const common = {
   minifyWhitespace: minify, minifySyntax: minify, external: ['electron'],
   define: { 'process.env.NODE_ENV': '"production"' },
 }
-await build({ ...common, platform: 'node', target: 'node22', entryPoints: [join(src, 'main/main.ts')], outfile: join(dist, 'main/main.cjs') })
+await build({
+  ...common, platform: 'node', target: 'node22', entryPoints: [join(src, 'main/main.ts')], outfile: join(dist, 'main/main.cjs'),
+  // ESM deps read import.meta.url (unpdf, the engine's own dir): give the CJS bundle a real file URL.
+  define: { ...common.define, 'import.meta.url': '__bmImportMetaUrl' },
+  banner: { js: "var __bmImportMetaUrl = require('node:url').pathToFileURL(__filename).href;" },
+  logOverride: { 'empty-import-meta': 'silent' },
+  external: ['electron', 'bufferutil', 'utf-8-validate'],
+})
 await build({ ...common, platform: 'browser', target: 'chrome140', entryPoints: [join(src, 'preload/local.ts')], outfile: join(dist, 'preload/preload.cjs') })
 for (const f of ['main/main.cjs', 'preload/preload.cjs']) console.log(`dist/${f} ${Math.round(statSync(join(dist, f)).size / 1024)} KB`)
