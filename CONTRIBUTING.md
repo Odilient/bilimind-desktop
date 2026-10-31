@@ -3,11 +3,11 @@
 Thank you for helping. Bug reports, tests on your system, docs fixes and code are all welcome, and small pull
 requests are the easiest to review.
 
-- **Questions and ideas:** [Discussions](https://github.com/Odilient/bilimind-desktop/discussions).
-- **Bugs and concrete feature requests:** [issues](https://github.com/Odilient/bilimind-desktop/issues/new/choose).
+- **Questions and ideas:** [Discussions](https://github.com/bilimind/desktop/discussions).
+- **Bugs and concrete feature requests:** [issues](https://github.com/bilimind/desktop/issues/new/choose).
 - **Security problems:** not in public; see [SECURITY.md](SECURITY.md).
-- **A first task:** issues labelled [good first issue](https://github.com/Odilient/bilimind-desktop/labels/good%20first%20issue)
-  are small and self-contained; [help wanted](https://github.com/Odilient/bilimind-desktop/labels/help%20wanted) ones are bigger.
+- **A first task:** issues labelled [good first issue](https://github.com/bilimind/desktop/labels/good%20first%20issue)
+  are small and self-contained; [help wanted](https://github.com/bilimind/desktop/labels/help%20wanted) ones are bigger.
   Comment on an issue before you start, so two people don't build the same thing.
 
 Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).

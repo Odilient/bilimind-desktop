@@ -4,7 +4,7 @@
 
 Please do not open a public issue for a security problem. Report it privately, in either of these ways:
 
-- **GitHub:** [report a vulnerability](https://github.com/Odilient/bilimind-desktop/security/advisories/new)
+- **GitHub:** [report a vulnerability](https://github.com/bilimind/desktop/security/advisories/new)
   (Security tab → "Report a vulnerability").
 - **Email:** [oybek@bilimind.com](mailto:oybek@bilimind.com), with "security" in the subject.
 
@@ -18,7 +18,7 @@ you publish details.
 ## Supported versions
 
 Security fixes go into the latest release. Please check that the problem is still there in the
-[latest version](https://github.com/Odilient/bilimind-desktop/releases/latest) before you report it.
+[latest version](https://github.com/bilimind/desktop/releases/latest) before you report it.
 
 ## In scope
 

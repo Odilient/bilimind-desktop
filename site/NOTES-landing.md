@@ -12,18 +12,18 @@
 
 | line | before | after |
 |---|---|---|
-| 1206 | href https://bilimind.com/start (nav "Start free") | https://github.com/Odilient/bilimind-desktop/releases/latest |
-| 1236 | form action https://bilimind.com/start (hero field) | https://github.com/Odilient/bilimind-desktop/releases/latest |
-| 4443 | href https://bilimind.com/for-institutions | https://github.com/Odilient/bilimind-desktop |
-| 4574 | href https://bilimind.com/start (pricing Free) | https://github.com/Odilient/bilimind-desktop/releases/latest |
-| 4590 | href https://bilimind.com/register?plan=pro (pricing "Go Pro") | https://github.com/Odilient/bilimind-desktop/releases/latest |
-| 4636 | href https://bilimind.com/start (footer) | https://github.com/Odilient/bilimind-desktop/releases/latest |
-| 4636 | href https://bilimind.com/for-institutions (footer) | https://github.com/Odilient/bilimind-desktop |
-| 4637 | href https://bilimind.com/terms | https://github.com/Odilient/bilimind-desktop/blob/main/LICENSE |
-| 4637 | href https://bilimind.com/privacy | https://github.com/Odilient/bilimind-desktop/blob/main/LICENSE |
-| 4637 | href https://bilimind.com/refunds | https://github.com/Odilient/bilimind-desktop/blob/main/LICENSE |
+| 1206 | href https://bilimind.com/start (nav "Start free") | https://github.com/bilimind/desktop/releases/latest |
+| 1236 | form action https://bilimind.com/start (hero field) | https://github.com/bilimind/desktop/releases/latest |
+| 4443 | href https://bilimind.com/for-institutions | https://github.com/bilimind/desktop |
+| 4574 | href https://bilimind.com/start (pricing Free) | https://github.com/bilimind/desktop/releases/latest |
+| 4590 | href https://bilimind.com/register?plan=pro (pricing "Go Pro") | https://github.com/bilimind/desktop/releases/latest |
+| 4636 | href https://bilimind.com/start (footer) | https://github.com/bilimind/desktop/releases/latest |
+| 4636 | href https://bilimind.com/for-institutions (footer) | https://github.com/bilimind/desktop |
+| 4637 | href https://bilimind.com/terms | https://github.com/bilimind/desktop/blob/main/LICENSE |
+| 4637 | href https://bilimind.com/privacy | https://github.com/bilimind/desktop/blob/main/LICENSE |
+| 4637 | href https://bilimind.com/refunds | https://github.com/bilimind/desktop/blob/main/LICENSE |
 | 4657 | video src ../pitch/out/bilimind-pitch-v2.mp4 | vid/bilimind-pitch-v2.mp4 |
-| 4675 | script `const START = 'https://bilimind.com/start'` (Build my course goes here, + `?topic=`) | https://github.com/Odilient/bilimind-desktop/releases/latest |
+| 4675 | script `const START = 'https://bilimind.com/start'` (Build my course goes here, + `?topic=`) | https://github.com/bilimind/desktop/releases/latest |
 
 Not changed on purpose: line 4060 `bilimind.com/you/espresso-at-home` is visible text in a mock browser bar (not a link); `#signin` anchors (in-page); cdnjs / Google Fonts URLs (libraries, same as design).
 
@@ -40,7 +40,7 @@ Not changed on purpose: line 4060 `bilimind.com/you/espresso-at-home` is visible
 
 ## GitHub Pages
 - .github/workflows/pages.yml: push to main + workflow_dispatch, ubuntu-latest, node 22, assemble.mjs, rsync site/ -> _site (excluding shots/, scripts/, NOTES*), upload-pages-artifact@v3, deploy-pages@v4, permissions pages: write + id-token: write.
-- All asset paths in index.html are relative (img/09, img/11, vid/), so https://odilient.github.io/bilimind-desktop/ works.
+- All asset paths in index.html are relative (img/09, img/11, vid/), so https://bilimind.github.io/desktop/ works.
 - Repo setting needed once: Settings > Pages > Source = GitHub Actions.
 
 ## Owner-approved change (02:35)

@@ -11,7 +11,7 @@ async function pickOut() {
   const p = await window.bilimind.pickFolder();
   if (p) state.settings = await window.bilimind.settings.save({ outRoot: p });
 }
-const GH = 'https://github.com/Odilient/bilimind-desktop';
+const GH = 'https://github.com/bilimind/desktop';
 const openGh = () => window.bilimind.openExternal(GH);
 const close = () => { state.settingsOpen = false; };
 </script>
