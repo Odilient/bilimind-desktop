@@ -18,7 +18,9 @@ import { buildGrounding, EXCERPT_CHARS, type AskInput, type Reader } from './gro
 import { shortUrl } from './material.ts'
 import { systemPrompt, userPrompt } from './prompt.ts'
 import { courseSummary, DOWN, draftSentence, propose } from './propose.ts'
+import type { folderBuilds } from '../lessons/folder.ts'
 
+const FOLDER = 'folder:'
 const HISTORY = 12
 const TURN_CHARS = 3000
 const MAX_ATTACHED = 12
@@ -133,7 +135,7 @@ export function readInput(store: Store, body: Record<string, any>): AskInput {
   }
 }
 
-export function createAsker(store: Store, reader: Reader, deps: { key: () => KeyState; zone: () => string; tryFirstEverywhere: () => boolean; fallbackFetch?: typeof fetch; draftLedger: () => string }) {
+export function createAsker(store: Store, reader: Reader, deps: { key: () => KeyState; zone: () => string; tryFirstEverywhere: () => boolean; fallbackFetch?: typeof fetch; draftLedger: () => string; folders: ReturnType<typeof folderBuilds> }) {
   const db = store.db
   const insertMessage = db.prepare('INSERT INTO messages (id, thread_id, role, body) VALUES (?, ?, ?, ?)')
   const putThread = db.prepare(`INSERT INTO threads (id, body, updated_ms, deleted) VALUES (?, ?, ?, ?)
@@ -395,6 +397,15 @@ export function createAsker(store: Store, reader: Reader, deps: { key: () => Key
         guard: null,
         created_at: wireTime(Date.now()),
       }
+    }
+
+    // Named by the folder dialog: picked on this screen, built by the old pipeline with its Checker.
+    const folder = turn.input.attachments.find((a) => a.kind === 'moodle' && String(a.subject_id ?? '').startsWith(FOLDER))
+    if (folder) {
+      const built = await deps.folders.build(String(folder.subject_id).slice(FOLDER.length), turn.input.message, key.config, (text) => {
+        if (!signal.aborted) sink.status(text)
+      })
+      return keep(turn, { text: built.text, actions: built.actions, context: { scope: turn.input.scope, intent: 'folder' } })
     }
 
     if (turn.input.intent === 'course') {

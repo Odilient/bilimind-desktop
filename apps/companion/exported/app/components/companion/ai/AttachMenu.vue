@@ -61,7 +61,7 @@ const ADD: Row[] = [
   { key: 'notes', icon: 'notebook', title: 'Attach notes', hint: 'Pages, whiteboards and files from Notes' },
   { key: 'link', icon: 'link', title: 'Add a link', hint: 'A web page, read when you send' },
   { key: 'paste', icon: 'paste', title: 'Paste text', hint: 'A syllabus, an announcement, an email' },
-  { key: 'moodle', icon: 'cap', title: 'A Moodle course', hint: 'Its weeks, topics and deadlines' },
+  { key: 'moodle', icon: 'folder', title: 'Build from a folder', hint: 'Every answer checked against your files' },
   { key: 'calendar', icon: 'calendar', title: 'A calendar link', hint: 'An .ics or webcal:// link' },
 ]
 

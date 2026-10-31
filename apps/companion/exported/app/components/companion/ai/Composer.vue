@@ -57,6 +57,7 @@ import { draggingFiles, LONG_PASTE, useAiAttachments } from '~/companion/ai/atta
 import { useAiThread } from '~/companion/ai/thread'
 import { ATTEMPT_TILE, COURSE_TILE } from '~/companion/ai/make'
 import type { Subject } from '~/companion/types'
+import { pickFolder } from '~/companion/folder'
 import { useCompanion } from '~/companion/store'
 import type { AttachChoice } from './AttachMenu.vue'
 import { resetsIn, useUsage } from '~/companion/usage'
@@ -312,10 +313,7 @@ function choose(choice: AttachChoice): void {
   else if (choice === 'notes') notesOpen.value = true
   else if (choice === 'link') openLink()
   else if (choice === 'paste') openPaste()
-  else if (choice === 'moodle') {
-    if (c.connections.value.some((x) => x.kind === 'moodle')) moodlePick.value = true
-    else openConnect('moodle')
-  } else if (choice === 'calendar') calendarOpen.value = true
+  else if (choice === 'moodle') void pickFolder().then((folder) => { if (folder) { tray.addMoodle(folder as never); void nextTick(focus) } }) else if (choice === 'calendar') calendarOpen.value = true
   else openConnect(choice.slice('connect:'.length) as ConnectKind)
 }
 

@@ -45,6 +45,9 @@ importers:
 
   apps/companion:
     devDependencies:
+      '@bilimind/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@bilimind/engine':
         specifier: workspace:*
         version: link:../../packages/engine

@@ -14,6 +14,9 @@ files:
   - resources/icon.png
   - "!**/*.map"
 asar: true
+# utilityProcess loads the worker from disk
+asarUnpack:
+  - dist/worker/**
 npmRebuild: false
 nodeGypRebuild: false
 buildDependenciesFromSource: false

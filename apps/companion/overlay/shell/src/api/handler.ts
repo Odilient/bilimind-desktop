@@ -8,6 +8,7 @@ import { currentZone, dayKey, setZone, shiftDay } from '../../../app/companion/t
 import { createAsker, readInput } from './ask/asker.ts'
 import { materialReader } from './ask/material.ts'
 import { credentials, type Vault } from './credentials.ts'
+import { chunksForLesson, folderBuilds, type FolderDeps } from './lessons/folder.ts'
 import { ACCEPTED, cleanName, MAX_UPLOAD_BYTES, serveFile, sniff } from './files.ts'
 import { lessonApi } from './lessons/routes.ts'
 import { createWriter } from './lessons/writer.ts'
@@ -42,6 +43,8 @@ export interface ApiOptions {
   fallbackFetch?: typeof fetch
   /** False in tests, which want an empty world. */
   seedStarter?: boolean
+  /** The folder dialog and the pipeline that runs in a process of its own. Absent, building from a folder says so. */
+  folders?: FolderDeps
 }
 
 // ---------- the one local user ----------
@@ -155,6 +158,7 @@ export function createApi(options: ApiOptions) {
   const keys = credentials(options.dataDir, options.configDir, options.vault, options.baseUrl)
   const name = options.userName
   const reader = materialReader(store, filesDir)
+  const folders = folderBuilds(store, { dataDir: options.dataDir, filesDir, zone: () => zoneFor(store), ...(options.folders ? { host: options.folders } : {}) })
   const asker = createAsker(store, reader, {
     key: () => keys.keyState(),
     zone: () => {
@@ -165,8 +169,9 @@ export function createApi(options: ApiOptions) {
     tryFirstEverywhere: () => userOf(store, name).preferences.companion?.try_first === true,
     fallbackFetch: options.fallbackFetch,
     draftLedger: () => join(options.dataDir, 'drafts', crypto.randomUUID()),
+    folders,
   })
-  const writer = createWriter(store, { key: () => keys.keyState(), dataDir: options.dataDir, fallbackFetch: options.fallbackFetch })
+  const writer = createWriter(store, { key: () => keys.keyState(), dataDir: options.dataDir, fallbackFetch: options.fallbackFetch, chunksFor: chunksForLesson })
   const lessons = lessonApi(store, filesDir, writer, { key: () => keys.keyState(), dataDir: options.dataDir, fallbackFetch: options.fallbackFetch, reader, zone: () => {
     const zone = zoneFor(store)
     setZone(zone)
@@ -194,6 +199,7 @@ export function createApi(options: ApiOptions) {
     // Files first: the only route with a body that isn't JSON, and the only streams.
     if (method === 'POST' && path === '/companion/items/upload') return uploadItem(req)
     if (method === 'POST' && path === '/companion/ask') return ask(req)
+    if (method === 'POST' && path === '/companion/folders/pick') return ok(await folders.pick())
     const early = await lessons.early(req, method, path)
     if (early) return early
     const fileMatch = path.match(/^\/companion-files\/([^/]+)$/)
@@ -352,7 +358,8 @@ export function createApi(options: ApiOptions) {
       removeStarterKit(store)
       return empty()
     }
-    if (key === 'GET /companion/spending') return ok(spendView(store, keys.keyState(), options.configDir))
+    if (key === 'GET /companion/spending') return ok({ ...spendView(store, keys.keyState(), options.configDir), building_from_folder: folders.running() })
+    if (key === 'DELETE /companion/folders/build') return folders.stop() ? empty() : notFound('Nothing is being built.')
     if (key === 'PUT /companion/spending/caps') return ok(setCaps(options.configDir, input))
     const lesson = lessons.answer(method, path, params, input)
     if (lesson) return lesson

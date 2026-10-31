@@ -1,15 +1,19 @@
 // Courses and lessons against a fake provider: a chat draft becomes a course, a topic becomes a written lesson whose page
 // polls its draft, answers get marked or say why not, and history and files hang off the lesson.
-import { appendFileSync, readFileSync } from 'node:fs'
+import { BilimindError } from '@bilimind/engine/contracts'
+import { appendFileSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { createServer } from 'node:http'
 import type { AddressInfo } from 'node:net'
+import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { topicSignal } from '../merged/app/companion/readiness.ts'
 import { isPrivateAddress, publicFetch } from '../merged/shell/src/api/ask/public-fetch.ts'
+import { createApi } from '../merged/shell/src/api/handler.ts'
+import { chunksForLesson, type FolderDeps } from '../merged/shell/src/api/lessons/folder.ts'
 import { worldOf } from '../merged/shell/src/api/rows.ts'
 import { fakeProvider, inPieces, type FakeReply } from './fake-provider.ts'
-import { testApi } from './helpers.ts'
+import { fakeVault, testApi } from './helpers.ts'
 
 const PROPOSAL = {
   title: 'Italian to B1',
@@ -56,7 +60,7 @@ function replyFor(overrides: Partial<Record<string, () => FakeReply>> = {}) {
     if (system.includes('You classify one lesson')) return overrides.classify?.() ?? { pieces: [JSON.stringify({ archetype: 'conceptual' })] }
     if (system.includes('exacting but generous teacher')) return overrides.mark?.() ?? { pieces: [JSON.stringify(MARKING)] }
     if (user.includes('THE PART TO REWRITE')) return overrides.rewrite?.() ?? { pieces: [JSON.stringify({ blocks: [{ type: 'analogy', payload: { markdown: 'A new mirror.', breaks_down_when: 'Never quite.' } }] })] }
-    if (body.response_format && body.messages[0].content.includes('OUTPUT CONTRACT')) return overrides.lesson?.() ?? { pieces: inPieces(JSON.stringify(LESSON), 40), thinking: ['Which verbs', ' take essere'] }
+    if (user.includes('ARCHETYPE:')) return overrides.lesson?.() ?? { pieces: inPieces(JSON.stringify(LESSON), 40), thinking: ['Which verbs', ' take essere'] }
     return overrides.chat?.() ?? { pieces: inPieces('Let me draft Italian to B1 from what you told me.\n```actions\n[{"type":"propose_course"}]\n```') }
   }
 }
@@ -214,7 +218,7 @@ describe('writing a lesson', () => {
     const { t, provider } = await setup({ lesson: () => (++calls === 1 ? { pieces: [JSON.stringify(partial)] } : { pieces: [JSON.stringify(LESSON)] }) })
     const { node } = await writtenLesson(t)
     expect(calls).toBe(2)
-    const second = provider.requests.filter((r) => r.body.messages[0].content.includes('OUTPUT CONTRACT') && r.body.stream).at(-1)!
+    const second = provider.requests.filter((r) => String(r.body.messages.at(-1).content).includes('ARCHETYPE:')).at(-1)!
     expect(second.body.messages.at(-1).content).toContain('The lesson was missing a mandatory format')
     expect(node.blocks.map((b: any) => b.type)).toContain('diagram')
   })
@@ -440,7 +444,7 @@ describe('marking', () => {
     expect(done.progress.completed_at).toBeTruthy()
 
     // A finished lesson counts as having studied its topic.
-    expect(topicSignal(topic, worldOf(t.store) as never, Date.now()).seen).toBe(1)
+    expect(topicSignal(t.store.get('topics', topic.id) as never, worldOf(t.store) as never, Date.now()).seen).toBe(1)
   })
 
   it('asks again for feedback that ignores the answer, and never lets the model set the score', async () => {
@@ -496,7 +500,6 @@ describe('talking about a lesson', () => {
 
 describe('the sample course', () => {
   it('seeds a new computer once, from the kit alone, and removes cleanly', async () => {
-    const { createApi } = await import('../merged/shell/src/api/handler.ts')
     const t = testApi()
     cleanups.push(async () => t.done())
     t.restart()
@@ -521,6 +524,88 @@ describe('the sample course', () => {
     const reopened = createApi({ dataDir: join(t.dir, 'seeded'), configDir: join(t.dir, 'cfg'), userName: 'You', vault: { available: false, seal: (s) => s, open: (s) => s } })
     expect(reopened.store.live('subjects')).toEqual([])
     reopened.close()
+  })
+})
+
+describe('building from a folder', () => {
+  const showcase = join(__dirname, '../../../showcase/courses/ds-final')
+
+  function withFolders(host: Partial<FolderDeps>) {
+    return (async () => {
+      const provider = await fakeProvider(replyFor())
+      const dir = mkdtempSync(join(tmpdir(), 'bm-folder-'))
+      const api = createApi({ seedStarter: false, dataDir: join(dir, 'data'), configDir: join(dir, 'config'), userName: 'Ada', vault: fakeVault(), baseUrl: provider.url, folders: { pick: async () => showcase, build: async () => ({ course: showcase }), stop: () => undefined, ...host } })
+      cleanups.push(async () => { api.close(); rmSync(dir, { recursive: true, force: true }); await provider.close() })
+      const call = async (method: string, path: string, body?: unknown) => {
+        const res = await api.handle(new Request(`app://bilimind/api${path}`, { method, headers: { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) }))
+        return res.status === 204 ? null : (await res.json() as any)
+      }
+      await call('POST', '/credentials', { provider: 'deepseek', key: 'sk-test-0123456789abcdef' })
+      const ask = async (message: string, attachments: unknown[]) => {
+        const res = await api.handle(new Request('app://bilimind/api/companion/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message, scope: 'everything', context: { kind: 'everything' }, attachments }) }))
+        const text = await res.text()
+        return text.split('\n\n').filter(Boolean).map((block) => ({ event: block.match(/^event: (.*)$/m)![1]!, data: JSON.parse(block.match(/^data: (.*)$/m)![1]!) }))
+      }
+      return { api, call, ask, provider }
+    })()
+  }
+
+  it('lands as an ordinary course, with what was checked kept and its lessons markable', async () => {
+    const lines: string[] = []
+    const { call, ask, provider } = await withFolders({ build: async ({ progress, sentence }) => { progress('Reading your files…'); lines.push(sentence); return { course: showcase } } })
+    const picked = (await call('POST', '/companion/folders/pick')).data
+    expect(picked.id).toMatch(/^folder:/)
+    expect(picked.title).toBe('ds-final')
+    expect(JSON.stringify(picked)).not.toContain(showcase)
+
+    const before = provider.requests.length
+    const events = await ask('Get me ready for the final', [{ kind: 'moodle', label: picked.title, subject_id: picked.id }])
+    expect(lines).toEqual(['Get me ready for the final'])
+    expect(events.filter((e) => e.event === 'status').map((e) => e.data.text)).toContain('Reading your files…')
+    const done = events.find((e) => e.event === 'done')!.data.message
+    expect(done.text).toContain('lessons from 5 files')
+    expect(done.text).toContain('against your files')
+    expect(done.actions.map((a: any) => a.label)).toEqual(['Open the course', 'See what was checked'])
+    // The pipeline spends in its own process; the chat itself made no call.
+    expect(provider.requests.length).toBe(before)
+
+    const subject = (await call('GET', '/companion/subjects')).data[0]
+    expect(subject.format).toBe('path')
+    const course = (await call('GET', `/courses/${subject.generated_course_id}`)).data
+    const ready = course.nodes.filter((n: any) => n.status === 'ready')
+    expect(ready).toHaveLength(3)
+    expect(course.nodes.filter((n: any) => n.status === 'stub').length).toBeGreaterThan(0)
+    expect(course.folder).toBe(showcase)
+    const topics = (await call('GET', '/companion/topics')).data
+    expect(topics.filter((t: any) => t.node_id !== null)).toHaveLength(course.nodes.length)
+
+    const node = (await call('GET', `/nodes/${ready[0].id}`)).data
+    expect(node.blocks.length).toBeGreaterThan(3)
+    expect(node.archetype).toBeTruthy()
+    expect(JSON.stringify(node)).not.toContain('answer_key')
+    const mcq = node.assessments.find((a: any) => a.kind === 'mcq')
+    const quiz = node.blocks.find((b: any) => b.payload.assessment_ids?.includes(mcq.id))
+    expect(quiz).toBeTruthy()
+
+    const report = (await call('GET', '/companion/items')).data.find((i: any) => i.subject_id === subject.id && i.kind === 'file')
+    expect(report.title).toContain('What was checked')
+    const shown = await call('GET', `/companion/items/${report.id}`)
+    expect(shown.data.meta.mime).toBe('text/markdown')
+  })
+
+  it('says what went wrong, and needs the folder picked in this sitting', async () => {
+    const { call, ask } = await withFolders({ build: async () => { throw new BilimindError('The build was stopped before it finished.') } })
+    const picked = (await call('POST', '/companion/folders/pick')).data
+    const failed = (await ask('go', [{ kind: 'moodle', label: picked.title, subject_id: picked.id }])).find((e) => e.event === 'done')!.data.message
+    expect(failed.text).toContain('The build was stopped')
+    const forgotten = (await ask('go', [{ kind: 'moodle', label: 'x', subject_id: 'folder:not-one-i-gave-out' }])).find((e) => e.event === 'done')!.data.message
+    expect(forgotten.text).toContain('needs picking again')
+  })
+
+  it('a later lesson of that course reads the same files', () => {
+    const chunks = chunksForLesson({ id: 1, folder: showcase }, { id: 2, title: 'Hash tables and collisions', summary: 'Chaining and probing', concept_key: 'hash tables' })
+    expect(chunks.length).toBeGreaterThan(0)
+    expect(chunksForLesson({ id: 1 }, { id: 2, title: 'x' })).toEqual([])
   })
 })
 

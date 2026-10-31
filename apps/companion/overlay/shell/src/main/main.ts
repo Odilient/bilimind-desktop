@@ -16,6 +16,7 @@ import type { Vault } from '../api/credentials.ts'
 import { createApi } from '../api/handler.ts'
 import { IPC, type CaptureRequest, type NextDeadline } from '../shared/contract.ts'
 import { allowSystemAudio } from './audio.ts'
+import { folderHost } from './folder-host.ts'
 import { ORIGIN, registerScheme, serveSpa } from './protocol.ts'
 import { changeShortcut, initShortcut, releaseShortcut, shortcutState } from './shortcut.ts'
 import { DesktopTray } from './tray.ts'
@@ -205,6 +206,7 @@ function start(): void {
     userName: localName(),
     vault: keyVault(),
     fallbackFetch: net.fetch as typeof fetch,
+    folders: folderHost(() => win, settingsDir()),
     ...(E2E && process.env.BILIMIND_LLM_BASE_URL ? { baseUrl: process.env.BILIMIND_LLM_BASE_URL } : {}),
   })
   app.on('will-quit', () => api.close())

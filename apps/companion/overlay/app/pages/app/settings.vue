@@ -8,6 +8,7 @@ const router = useRouter()
 
 const sections = [
   { id: 'keys', label: 'AI key' },
+  { id: 'spending', label: 'Spending' },
   { id: 'preferences', label: 'Preferences' },
 ] as const
 
@@ -48,6 +49,7 @@ function open(id: string): void {
         <CompanionSettingsKeyStorage />
         <AccountApiKeys />
       </template>
+      <CompanionSettingsSpending v-else-if="active === 'spending'" />
       <CompanionSettingsPreferences v-else />
     </div>
   </div>
