@@ -15,6 +15,7 @@ and the project uses [semantic versioning](https://semver.org/).
   ([server/free-proxy/README.md](server/free-proxy/README.md)).
 - The website says "free and open source, bring your own key", with the measured 2 to 9 cents a course, and notes
   that BiliMind free is paused. `data-free-tier` on its `<html>` element flips the copy back.
+- Use the computer's IANA time zone for engine and CLI defaults, while keeping explicit `--timezone` overrides.
 
 ## [0.2.0] - 2026-10-21
 

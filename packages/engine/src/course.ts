@@ -5,6 +5,7 @@ import { basename, dirname, extname, join, relative, resolve, sep } from 'node:p
 import type { CodeLanguage, Goal } from '@bilimind/core';
 import { BilimindError } from './contracts.ts';
 import type { CoursePathsFn, Init, ResolveCourse, SetGoal, Status, StatusData } from './contracts.ts';
+import { defaultTimeZone } from './export/time.ts';
 
 export const OUT_DIR_NAME = 'bilimind-out';
 
@@ -134,7 +135,7 @@ const CODE_LANG: Record<string, CodeLanguage | null> = {
   py: 'python', python: 'python', sql: 'sql', html: 'html', none: null, no: null, off: null, '': null,
 };
 
-/** "+08:00" for a zone on a date (Intl longOffset); falls back to +08:00 (Malaysia). */
+/** Offset for a zone on a date (Intl longOffset); falls back to UTC. */
 export function zoneOffset(timeZone: string, isoDate: string, time = '12:00'): string {
   try {
     const d = new Date(`${isoDate}T${time}:00Z`);
@@ -143,7 +144,7 @@ export function zoneOffset(timeZone: string, isoDate: string, time = '12:00'): s
     if (m) return `${m[1]}:${m[2] ?? '00'}`;
     if (part?.value === 'GMT') return '+00:00';
   } catch { /* unknown zone */ }
-  return '+08:00';
+  return '+00:00';
 }
 
 /** Today's date (YYYY-MM-DD) in a time zone. */
@@ -156,7 +157,7 @@ export function todayIn(timeZone: string, now: Date): string {
 export const setGoal: SetGoal = async (ctx, input) => {
   const p = coursePaths(ctx.course);
   const prev = readJsonOrNull<Partial<Goal>>(p.goal) ?? {};
-  const timezone = input.timezone || prev.timezone || 'Asia/Kuala_Lumpur';
+  const timezone = input.timezone || prev.timezone || defaultTimeZone();
   const assumptions = [...(prev.assumptions ?? [])];
   const assume = (s: string) => { if (s.trim() && !assumptions.includes(s.trim())) assumptions.push(s.trim()); };
 

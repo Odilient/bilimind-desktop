@@ -2,6 +2,7 @@
 // Retrieval uses WP1's retrieve.ts (minisearch, SaaS term recipe); if that module is unavailable it falls back to
 // a small local keyword scorer with the same recipe, so outline/draft never die on a missing index.
 import type { Chunk, CourseBrief, Goal, IngestResult, Lesson, OutlineResult, PlanResult } from '@bilimind/core';
+import { defaultTimeZone } from '../export/time.ts';
 import { buildIndex, retrieveForLesson } from '../retrieve.ts';
 import { isFrontMatter } from '../sources.ts';
 import type { Neighbour } from './expand.ts';
@@ -15,7 +16,7 @@ export function goalDefaults(g: Partial<Goal> | null | undefined): Goal {
     deadline: g?.deadline ?? (g?.exam_at ? g.exam_at.slice(0, 10) : null),
     exam_time: g?.exam_time ?? null,
     exam_at: g?.exam_at ?? null,
-    timezone: g?.timezone ?? 'Asia/Kuala_Lumpur',
+    timezone: g?.timezone ?? defaultTimeZone(),
     minutes_per_day: g?.minutes_per_day && g.minutes_per_day > 0 ? g.minutes_per_day : 45,
     audience: g?.audience ?? 'student',
     language: g?.language || 'en',

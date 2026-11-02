@@ -12,13 +12,14 @@ import { loadCrew, readCrewLog } from './crew.ts';
 import { ics } from './ics.ts';
 import { toMarkdown } from './markdown.ts';
 import { report } from './report.ts';
-import { longDay } from './time.ts';
+import { defaultTimeZone, longDay } from './time.ts';
 
 export { toMarkdown } from './markdown.ts';
 export { ankiCsv } from './anki-csv.ts';
 export { ics } from './ics.ts';
 export { report } from './report.ts';
 export { computeReceipts } from './receipts.ts';
+export { defaultTimeZone } from './time.ts';
 
 /** plan.md fallback when `plan` did not write one (WP2 owns the real one; never overwritten here). */
 function fallbackPlanMd(course: Course): string {
@@ -36,7 +37,7 @@ function fallbackPlanMd(course: Course): string {
 /** A PlanResult stand-in built from course.plan when crew/plan.json is missing (the .ics needs one). */
 function planFromCourse(course: Course): PlanResult {
   return {
-    goal: { deadline: course.goal.deadline, exam_at: course.goal.exam_at, minutes_per_day: course.goal.minutes_per_day, timezone: course.goal.timezone ?? 'Asia/Kuala_Lumpur' },
+    goal: { deadline: course.goal.deadline, exam_at: course.goal.exam_at, minutes_per_day: course.goal.minutes_per_day, timezone: course.goal.timezone ?? defaultTimeZone() },
     start: course.plan.days[0]?.date ?? course.built_at.slice(0, 10),
     days: course.plan.days, lessons: course.lessons.map((l, i) => ({ key: l.id, title: l.title, day: l.day ?? '', minutes: l.minutes, weight: null, order: i })),
     cut: course.plan.cut.map(c => ({ ...c, weight: null })), capacity_min: course.plan.capacity_min,

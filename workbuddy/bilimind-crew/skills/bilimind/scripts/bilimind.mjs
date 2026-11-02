@@ -386,6 +386,85 @@ var init_ledger = __esm({
   }
 });
 
+// ../../packages/engine/src/export/time.ts
+function defaultTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+}
+function formatter(tz) {
+  if (fmtCache.has(tz)) return fmtCache.get(tz);
+  try {
+    const f2 = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      hourCycle: "h23",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      weekday: "short"
+    });
+    fmtCache.set(tz, f2);
+    return f2;
+  } catch {
+    return null;
+  }
+}
+function tzOffsetMinutes(tz, at2) {
+  const f2 = formatter(tz);
+  if (!f2) return 0;
+  const p2 = Object.fromEntries(f2.formatToParts(at2).map((x3) => [x3.type, x3.value]));
+  const asUtc = Date.UTC(+p2.year, +p2.month - 1, +p2.day, +p2.hour % 24, +p2.minute, +p2.second);
+  return Math.round((asUtc - Math.floor(at2.getTime() / 1e3) * 1e3) / 6e4);
+}
+function zoned(at2, tz = DEFAULT_TIMEZONE) {
+  const off = tzOffsetMinutes(tz, at2);
+  const local = new Date(at2.getTime() + off * 6e4);
+  const date5 = local.toISOString().slice(0, 10);
+  const time3 = local.toISOString().slice(11, 19);
+  return { date: date5, time: time3, hm: time3.slice(0, 5), offset: offsetText(off), weekday: local.getUTCDay() };
+}
+function isoInZone(at2, tz = DEFAULT_TIMEZONE) {
+  const z3 = zoned(at2, tz);
+  return `${z3.date}T${z3.time}${z3.offset}`;
+}
+function zonedToDate(date5, hm, tz = DEFAULT_TIMEZONE) {
+  const [h2, m2] = hm.split(":").map(Number);
+  const wall = Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10), h2 ?? 0, m2 ?? 0);
+  let t2 = wall - tzOffsetMinutes(tz, new Date(wall)) * 6e4;
+  t2 = wall - tzOffsetMinutes(tz, new Date(t2)) * 6e4;
+  return new Date(t2);
+}
+function addDays(date5, n3) {
+  return new Date(Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10)) + n3 * DAY_MS).toISOString().slice(0, 10);
+}
+function longDay(date5) {
+  const d2 = new Date(Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10)));
+  return `${WEEKDAYS[d2.getUTCDay()]} ${d2.getUTCDate()} ${MONTHS[d2.getUTCMonth()]}`;
+}
+function shortDay(date5) {
+  const d2 = new Date(Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10)));
+  return `${WEEKDAYS[d2.getUTCDay()].slice(0, 3)} ${d2.getUTCDate()} ${MONTHS[d2.getUTCMonth()].slice(0, 3)}`;
+}
+function localOf(iso2, tz = DEFAULT_TIMEZONE) {
+  const z3 = zoned(new Date(iso2), tz);
+  return { date: z3.date, hm: z3.hm };
+}
+var DEFAULT_TIMEZONE, DAY_MS, fmtCache, pad, offsetText, WEEKDAYS, MONTHS, clockText;
+var init_time = __esm({
+  "../../packages/engine/src/export/time.ts"() {
+    "use strict";
+    DEFAULT_TIMEZONE = defaultTimeZone();
+    DAY_MS = 864e5;
+    fmtCache = /* @__PURE__ */ new Map();
+    pad = (n3, w2 = 2) => String(Math.abs(n3)).padStart(w2, "0");
+    offsetText = (min2) => `${min2 < 0 ? "-" : "+"}${pad(Math.floor(Math.abs(min2) / 60))}:${pad(Math.abs(min2) % 60)}`;
+    WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    clockText = (hm) => hm.replace(/^0(\d)/, "$1");
+  }
+});
+
 // ../../packages/engine/src/course.ts
 import { copyFileSync, existsSync as existsSync3, mkdirSync as mkdirSync2, readFileSync as readFileSync3, readdirSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname as dirname3, extname, join as join2, relative, resolve as resolve3, sep } from "node:path";
@@ -441,7 +520,7 @@ function zoneOffset(timeZone, isoDate2, time3 = "12:00") {
     if (part?.value === "GMT") return "+00:00";
   } catch {
   }
-  return "+08:00";
+  return "+00:00";
 }
 function todayIn(timeZone, now) {
   try {
@@ -455,6 +534,7 @@ var init_course = __esm({
   "../../packages/engine/src/course.ts"() {
     "use strict";
     init_contracts();
+    init_time();
     OUT_DIR_NAME = "bilimind-out";
     coursePaths = (course) => {
       const root2 = resolve3(course);
@@ -559,7 +639,7 @@ var init_course = __esm({
     setGoal = async (ctx, input2) => {
       const p2 = coursePaths(ctx.course);
       const prev = readJsonOrNull(p2.goal) ?? {};
-      const timezone = input2.timezone || prev.timezone || "Asia/Kuala_Lumpur";
+      const timezone = input2.timezone || prev.timezone || defaultTimeZone();
       const assumptions = [...prev.assumptions ?? []];
       const assume = (s6) => {
         if (s6.trim() && !assumptions.includes(s6.trim())) assumptions.push(s6.trim());
@@ -94337,7 +94417,7 @@ function goalDefaults(g3) {
     deadline: g3?.deadline ?? (g3?.exam_at ? g3.exam_at.slice(0, 10) : null),
     exam_time: g3?.exam_time ?? null,
     exam_at: g3?.exam_at ?? null,
-    timezone: g3?.timezone ?? "Asia/Kuala_Lumpur",
+    timezone: g3?.timezone ?? defaultTimeZone(),
     minutes_per_day: g3?.minutes_per_day && g3.minutes_per_day > 0 ? g3.minutes_per_day : 45,
     audience: g3?.audience ?? "student",
     language: g3?.language || "en",
@@ -94474,6 +94554,7 @@ var STOPWORDS2, countWords, indexCache, THIN_WORDS2;
 var init_context = __esm({
   "../../packages/engine/src/prompts/context.ts"() {
     "use strict";
+    init_time();
     init_retrieve();
     init_sources();
     STOPWORDS2 = new Set("the and for with from that this these those what when how why into onto your you are was were will shall can its his her their about over under between introduction intro overview basics fundamentals part chapter lesson module section".split(" "));
@@ -95126,82 +95207,6 @@ var init_exam = __esm({
       return Object.assign(data, { zero_mark_topics: zero, ...Object.keys(folded).length ? { counted_in_parent: folded } : {}, report: "crew/exam-map.md", ...reapplied.length ? { reapplied } : {} });
     };
     readExamMap = (course) => readJsonOrNull(coursePaths(course).examMap);
-  }
-});
-
-// ../../packages/engine/src/export/time.ts
-function formatter(tz) {
-  if (fmtCache.has(tz)) return fmtCache.get(tz);
-  try {
-    const f2 = new Intl.DateTimeFormat("en-US", {
-      timeZone: tz,
-      hourCycle: "h23",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      weekday: "short"
-    });
-    fmtCache.set(tz, f2);
-    return f2;
-  } catch {
-    return null;
-  }
-}
-function tzOffsetMinutes(tz, at2) {
-  const f2 = formatter(tz);
-  if (!f2) return 480;
-  const p2 = Object.fromEntries(f2.formatToParts(at2).map((x3) => [x3.type, x3.value]));
-  const asUtc = Date.UTC(+p2.year, +p2.month - 1, +p2.day, +p2.hour % 24, +p2.minute, +p2.second);
-  return Math.round((asUtc - Math.floor(at2.getTime() / 1e3) * 1e3) / 6e4);
-}
-function zoned(at2, tz = DEFAULT_TIMEZONE) {
-  const off = tzOffsetMinutes(tz, at2);
-  const local = new Date(at2.getTime() + off * 6e4);
-  const date5 = local.toISOString().slice(0, 10);
-  const time3 = local.toISOString().slice(11, 19);
-  return { date: date5, time: time3, hm: time3.slice(0, 5), offset: offsetText(off), weekday: local.getUTCDay() };
-}
-function isoInZone(at2, tz = DEFAULT_TIMEZONE) {
-  const z3 = zoned(at2, tz);
-  return `${z3.date}T${z3.time}${z3.offset}`;
-}
-function zonedToDate(date5, hm, tz = DEFAULT_TIMEZONE) {
-  const [h2, m2] = hm.split(":").map(Number);
-  const wall = Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10), h2 ?? 0, m2 ?? 0);
-  let t2 = wall - tzOffsetMinutes(tz, new Date(wall)) * 6e4;
-  t2 = wall - tzOffsetMinutes(tz, new Date(t2)) * 6e4;
-  return new Date(t2);
-}
-function addDays2(date5, n3) {
-  return new Date(Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10)) + n3 * DAY_MS).toISOString().slice(0, 10);
-}
-function longDay(date5) {
-  const d2 = new Date(Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10)));
-  return `${WEEKDAYS[d2.getUTCDay()]} ${d2.getUTCDate()} ${MONTHS[d2.getUTCMonth()]}`;
-}
-function shortDay(date5) {
-  const d2 = new Date(Date.UTC(+date5.slice(0, 4), +date5.slice(5, 7) - 1, +date5.slice(8, 10)));
-  return `${WEEKDAYS[d2.getUTCDay()].slice(0, 3)} ${d2.getUTCDate()} ${MONTHS[d2.getUTCMonth()].slice(0, 3)}`;
-}
-function localOf(iso2, tz = DEFAULT_TIMEZONE) {
-  const z3 = zoned(new Date(iso2), tz);
-  return { date: z3.date, hm: z3.hm };
-}
-var DEFAULT_TIMEZONE, DAY_MS, fmtCache, pad, offsetText, WEEKDAYS, MONTHS, clockText;
-var init_time = __esm({
-  "../../packages/engine/src/export/time.ts"() {
-    "use strict";
-    DEFAULT_TIMEZONE = "Asia/Kuala_Lumpur";
-    DAY_MS = 864e5;
-    fmtCache = /* @__PURE__ */ new Map();
-    pad = (n3, w2 = 2) => String(Math.abs(n3)).padStart(w2, "0");
-    offsetText = (min2) => `${min2 < 0 ? "-" : "+"}${pad(Math.floor(Math.abs(min2) / 60))}:${pad(Math.abs(min2) % 60)}`;
-    WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    clockText = (hm) => hm.replace(/^0(\d)/, "$1");
   }
 });
 
@@ -119637,7 +119642,7 @@ function firstReviewDay(crew, l2, today) {
   const fromPlan = crew.plan?.review_dates?.[l2.id]?.[0];
   if (fromPlan && /^\d{4}-\d{2}-\d{2}$/.test(fromPlan)) return fromPlan;
   const learned = l2.day ?? today;
-  return reviewDatesBackwardsFromExam(learned, crew.goal.exam_at ?? crew.goal.deadline, 4)[0] ?? addDays2(learned, 1);
+  return reviewDatesBackwardsFromExam(learned, crew.goal.exam_at ?? crew.goal.deadline, 4)[0] ?? addDays(learned, 1);
 }
 function reviewLessons(crew, ctx) {
   return plannedLessons(crew, (m2) => ctx?.progress(`review: ${m2}`)).map((e2) => toCourseLesson(e2));
@@ -123317,7 +123322,7 @@ var PLAN_REVIEW_MINUTES = 5;
 var DAY2 = 864e5;
 var dayNum2 = (d2) => Date.UTC(+d2.slice(0, 4), +d2.slice(5, 7) - 1, +d2.slice(8, 10));
 var isoDay2 = (t2) => new Date(t2).toISOString().slice(0, 10);
-var addDays = (d2, n3) => isoDay2(dayNum2(d2) + n3 * DAY2);
+var addDays2 = (d2, n3) => isoDay2(dayNum2(d2) + n3 * DAY2);
 function planToday(now, timeZone) {
   try {
     return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
@@ -123375,13 +123380,13 @@ function buildPlan(inp) {
   const start = inp.start;
   let studyDays;
   if (!examDay) {
-    studyDays = daysBetween(start, addDays(start, 6));
+    studyDays = daysBetween(start, addDays2(start, 6));
     warnings.push("No exam date in the goal: planned 7 study days and reviews counted forward from each lesson.");
   } else if (dayNum2(start) >= dayNum2(examDay)) {
     studyDays = [start];
     warnings.push(`The exam (${examDay}) is not after the start day (${start}): everything is planned for one day.`);
   } else {
-    studyDays = daysBetween(start, addDays(examDay, -1));
+    studyDays = daysBetween(start, addDays2(examDay, -1));
   }
   const capacity = studyDays.length * goal.minutes_per_day;
   const cap2 = Math.max(10, Math.round(goal.minutes_per_day * 0.7 / 5) * 5);
@@ -127853,6 +127858,7 @@ init_time();
 init_anki_csv();
 init_ics();
 init_receipts();
+init_time();
 function fallbackPlanMd(course) {
   const L2 = [`# Plan: ${course.title}`, "", `> ${course.goal.sentence}`, ""];
   if (course.goal.assumptions.length) L2.push("## Assumptions", "", ...course.goal.assumptions.map((a2) => `- ${a2}`), "");
@@ -127866,7 +127872,7 @@ function fallbackPlanMd(course) {
 }
 function planFromCourse(course) {
   return {
-    goal: { deadline: course.goal.deadline, exam_at: course.goal.exam_at, minutes_per_day: course.goal.minutes_per_day, timezone: course.goal.timezone ?? "Asia/Kuala_Lumpur" },
+    goal: { deadline: course.goal.deadline, exam_at: course.goal.exam_at, minutes_per_day: course.goal.minutes_per_day, timezone: course.goal.timezone ?? defaultTimeZone() },
     start: course.plan.days[0]?.date ?? course.built_at.slice(0, 10),
     days: course.plan.days,
     lessons: course.lessons.map((l2, i3) => ({ key: l2.id, title: l2.title, day: l2.day ?? "", minutes: l2.minutes, weight: null, order: i3 })),
@@ -127923,6 +127929,7 @@ init_build();
 // ../../packages/engine/src/run.ts
 init_contracts();
 init_course();
+init_time();
 init_ingest();
 init_outline3();
 init_exam();
@@ -128368,7 +128375,7 @@ var addDays3 = (date5, k2) => {
   t2.setUTCDate(t2.getUTCDate() + k2);
   return t2.toISOString().slice(0, 10);
 };
-function parseSentence(sentence, now, timezone = "Asia/Kuala_Lumpur") {
+function parseSentence(sentence, now, timezone = defaultTimeZone()) {
   const s6 = sentence.toLowerCase();
   const assume = [];
   const today = todayIn(timezone, now);
@@ -128459,7 +128466,7 @@ function chooseLessons(topics, weights, goal, now, maxLessons = 6, ctx) {
   const byKey = new Map(topics.map((t2) => [t2.key, t2]));
   const chunkDeck = new Map((ctx?.ingest?.chunks ?? []).map((c2) => [c2.id, c2.material_id]));
   const deck = (k2) => deckOf(ctx?.outline?.lessons ?? null, k2, chunkDeck);
-  const today = todayIn(goal.timezone ?? "Asia/Kuala_Lumpur", now);
+  const today = todayIn(goal.timezone ?? defaultTimeZone(), now);
   const g3 = goalDefaults(goal);
   const fits = (keys2) => {
     if (!ctx?.outline) {
@@ -128616,7 +128623,7 @@ async function runPipeline(o2) {
   const out = await step("outline", "Lead", (ctx) => outline(ctx, {}));
   if (!ing || !out || !g3) throw new BilimindError("run stopped before planning", "See the steps above.");
   const em = ing.files.some((f2) => f2.role === "past_paper") ? await step("exam-map", "Lead", (ctx) => examMap(ctx, {}), { optional: true }) : null;
-  const startNow = o2.start ? /* @__PURE__ */ new Date(`${o2.start}T12:00:00${zoneOffset(goalInput.timezone ?? "Asia/Kuala_Lumpur", o2.start)}`) : now();
+  const startNow = o2.start ? /* @__PURE__ */ new Date(`${o2.start}T12:00:00${zoneOffset(goalInput.timezone ?? defaultTimeZone(), o2.start)}`) : now();
   const { keep, cut, order } = chooseLessons(
     out.topics,
     em?.weights ?? null,
@@ -128888,7 +128895,7 @@ function registerSetup(program3, g3) {
     args: argSummary({ src: o2.src, slug: o2.slug }),
     logCourse: (d2) => d2.course
   }));
-  program3.command("goal").description("record the Lead's reading of the sentence in crew/goal.json").option("--deadline <iso>", "exam or deadline date, e.g. 2026-10-14 (or 2026-10-14T09:00)").option("--exam-time <HH:MM>", "exam time, 24 h, local time").requiredOption("--minutes-per-day <n>", "study minutes per day").option("--audience <who>", "student | staff", "student").option("--lang <code>", "course language", "en").option("--code-lang <lang>", "js | none", "js").option("--timezone <tz>", "IANA time zone", "Asia/Kuala_Lumpur").option("--assume <text>", "an assumption you made (repeatable)", collect, []).action((o2) => runCommand("goal", g3(), (ctx) => {
+  program3.command("goal").description("record the Lead's reading of the sentence in crew/goal.json").option("--deadline <iso>", "exam or deadline date, e.g. 2026-10-14 (or 2026-10-14T09:00)").option("--exam-time <HH:MM>", "exam time, 24 h, local time").requiredOption("--minutes-per-day <n>", "study minutes per day").option("--audience <who>", "student | staff", "student").option("--lang <code>", "course language", "en").option("--code-lang <lang>", "js | none", "js").option("--timezone <tz>", "IANA time zone", defaultTimeZone()).option("--assume <text>", "an assumption you made (repeatable)", collect, []).action((o2) => runCommand("goal", g3(), (ctx) => {
     const lang = String(o2.codeLang ?? "").trim().toLowerCase();
     if (!["js", "javascript", "none"].includes(lang)) throw new BilimindError(`--code-lang must be js or none (got "${o2.codeLang}")`, "Use --code-lang js for programming subjects, --code-lang none otherwise.");
     return setGoal(ctx, {
@@ -129024,7 +129031,7 @@ function registerPackage(program3, g3) {
   program3.command("grade").description("(P2) grade typed answers to the last `due`, reschedule, refresh reviews.ics").requiredOption("--answers <reply>", 'e.g. "1 b, 2 chaining, 3 O(n)"').action((o2) => runCommand("grade", g3(), (ctx) => grade(ctx, { answers: o2.answers }), { args: argSummary(o2) }));
   program3.command("plant").description("(benchmark) flip N answer keys in a COPY of a course, record them in a hidden key").option("--lesson <key>", "only this lesson").option("--n <n>", "how many errors to plant", "10").action((o2) => runCommand("plant", g3(), (ctx) => plant(ctx, { lesson: o2.lesson, n: int2(o2.n, "--n", 1, 200) }), { args: argSummary(o2), lesson: o2.lesson }));
   program3.command("plant-score").description("(benchmark) score the Checker's verdicts against the planted key").action(() => runCommand("plant-score", g3(), (ctx) => plantScore(ctx)));
-  program3.command("run").description("(builders only) the whole pipeline without agents: fixtures, regression, cost").requiredOption("--src <folder>", "source folder").requiredOption("--sentence <text>", "the user's request").option("--slug <slug>", "course folder name").option("--out <dir>", "output root (default: ./bilimind-out)").option("--concurrency <n>", "parallel lesson drafts", "4").option("--max-lessons <n>", "most lessons to keep", "6").option("--repair-rounds <n>", "re-draft rounds for lessons that fail checks", "1").option("--no-narrate", "skip Edge TTS").option("--template <html>", "player template").action((o2) => runCommand("run", g3(), async (ctx) => {
+  program3.command("run").description("(builders only) the whole pipeline without agents: fixtures, regression, cost").requiredOption("--src <folder>", "source folder").requiredOption("--sentence <text>", "the user's request").option("--timezone <tz>", "IANA time zone", defaultTimeZone()).option("--slug <slug>", "course folder name").option("--out <dir>", "output root (default: ./bilimind-out)").option("--concurrency <n>", "parallel lesson drafts", "4").option("--max-lessons <n>", "most lessons to keep", "6").option("--repair-rounds <n>", "re-draft rounds for lessons that fail checks", "1").option("--no-narrate", "skip Edge TTS").option("--template <html>", "player template").action((o2) => runCommand("run", g3(), async (ctx) => {
     const gl = g3();
     const template2 = findTemplate(o2.template);
     const d2 = await runPipeline({
@@ -129039,7 +129046,8 @@ function registerPackage(program3, g3) {
       narrate: o2.narrate,
       template: template2,
       model: gl.model,
-      maxUsd: maxUsdOf(gl)
+      maxUsd: maxUsdOf(gl),
+      timezone: o2.timezone
     });
     ctx.spend.usd = d2.cost_usd;
     return d2;

@@ -1,8 +1,11 @@
-// Time-zone helpers shared by WP4 (build, review, .ics, receipts). Course times are shown in the goal's zone
-// (default Asia/Kuala_Lumpur, UTC+8, no DST), never the machine's: the demo PC's own clock/zone is unreliable.
+// Time-zone helpers shared by WP4 (build, review, .ics, receipts). Course times are shown in the goal's zone.
 // Owner: WP4.
 
-export const DEFAULT_TIMEZONE = 'Asia/Kuala_Lumpur';
+export function defaultTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+}
+
+export const DEFAULT_TIMEZONE = defaultTimeZone();
 const DAY_MS = 86_400_000;
 
 const fmtCache = new Map<string, Intl.DateTimeFormat>();
@@ -20,10 +23,10 @@ function formatter(tz: string): Intl.DateTimeFormat | null {
   }
 }
 
-/** Minutes east of UTC for `tz` at instant `at` (+480 for Kuala Lumpur). Falls back to +480 when Intl lacks the zone. */
+/** Minutes east of UTC for `tz` at instant `at`. Falls back to UTC when Intl lacks the zone. */
 export function tzOffsetMinutes(tz: string, at: Date): number {
   const f = formatter(tz);
-  if (!f) return 480;
+  if (!f) return 0;
   const p = Object.fromEntries(f.formatToParts(at).map(x => [x.type, x.value]));
   const asUtc = Date.UTC(+p.year!, +p.month! - 1, +p.day!, +p.hour! % 24, +p.minute!, +p.second!);
   return Math.round((asUtc - Math.floor(at.getTime() / 1000) * 1000) / 60_000);
