@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url'
 const app = join(dirname(fileURLToPath(import.meta.url)), '..')
 const argv = process.argv.slice(2)
 const run = (cmd, args) => {
-  const r = spawnSync(cmd, args, { cwd: app, stdio: 'inherit', env: { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: 'false' } })
+  // shell on Windows: pnpm is pnpm.cmd there, which Node won't spawn directly
+  const r = spawnSync(cmd, args, { cwd: app, stdio: 'inherit', shell: process.platform === 'win32', env: { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: 'false' } })
+  if (r.error) console.error(r.error)
   if (r.status !== 0) process.exit(r.status ?? 1)
 }
 if (!argv.includes('--no-spa')) run("pnpm", ["run", "spa"])
