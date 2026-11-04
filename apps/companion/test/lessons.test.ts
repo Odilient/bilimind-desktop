@@ -270,7 +270,7 @@ describe('writing a lesson', () => {
     expect(kept.status).toBe('ready')
     expect(kept.blocks.length).toBeGreaterThan(0)
     expect(kept.failure_reason).toBeTruthy()
-  })
+  }, 20_000) // the Windows runner is slow
 
   it('without a key it says what to do', async () => {
     const t = testApi()

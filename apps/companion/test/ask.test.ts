@@ -426,7 +426,7 @@ describe('keys', () => {
     const raw = readFileSync(file(), 'utf8')
     expect(raw).not.toContain(KEY)
     expect(raw).toContain('sealed:')
-    expect(statSync(file()).mode & 0o777).toBe(0o600)
+    if (process.platform !== 'win32') expect(statSync(file()).mode & 0o777).toBe(0o600) // Windows has no POSIX modes
     expect((await t.get('/credentials/storage')).data).toEqual({ encrypted: true, shared_file_has_key: false })
     expect((await t.del(`/credentials/${made.data.id}`)).status).toBe(204)
     expect((await t.get('/credentials')).data).toEqual([])
@@ -450,7 +450,7 @@ describe('keys', () => {
     expect((await plain.get('/credentials/storage')).data.encrypted).toBe(false)
     const path = join(plain.dir, 'data', 'keys.json')
     expect(readFileSync(path, 'utf8')).toContain(KEY)
-    expect(statSync(path).mode & 0o777).toBe(0o600)
+    if (process.platform !== 'win32') expect(statSync(path).mode & 0o777).toBe(0o600) // Windows has no POSIX modes
     answer('ok')
     expect(done((await plain.ask({ message: 'Hi' })).events).message.text).toBe('ok')
     plain.restart(fakeVault(true))

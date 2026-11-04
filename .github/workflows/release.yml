@@ -27,7 +27,7 @@ jobs:
           - os: macos-latest
             files: |
               apps/companion/release/*.dmg
-                        - os: ubuntu-latest
+          - os: ubuntu-latest
             files: |
               apps/companion/release/*.AppImage
               apps/companion/release/*.deb
