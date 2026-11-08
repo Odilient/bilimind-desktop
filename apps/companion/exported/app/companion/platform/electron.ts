@@ -9,7 +9,7 @@
  * `moodlemobile://token=…` address it ends on.
  */
 import type { useApi } from '~/composables/useApi'
-import { audioOnly, listenForFileDrops } from './web'
+import { audioOnly, downloadFile, listenForFileDrops } from './web'
 import { PlatformError, type DesktopBridge, type Platform, type PlatformErrorCode } from './types'
 
 type Api = ReturnType<typeof useApi>
@@ -26,14 +26,24 @@ interface MoodleLaunch {
   site?: { url?: string }
 }
 
-const CODES: PlatformErrorCode[] = ['cancelled', 'timeout', 'busy', 'invalid']
+// `unsupported`, `denied` and `failed` come from the recording handlers (desktop/src/main/{audio,recordings}.ts)
+const CODES: PlatformErrorCode[] = ['cancelled', 'timeout', 'busy', 'invalid', 'unsupported', 'denied', 'failed']
 
 /** The shell sends "cancelled: The Moodle sign-in window was closed." — an Error loses any other field over IPC. */
 function fromShell(error: unknown): PlatformError {
   const message = String((error as Error)?.message ?? error)
   const match = message.match(/^(\w+): ([\s\S]*)$/)
-  const code = match && (CODES as string[]).includes(match[1]!) ? (match[1] as PlatformErrorCode) : 'failed'
-  return new PlatformError(code, match && code !== 'failed' ? match[2]! : message)
+  const known = Boolean(match && (CODES as string[]).includes(match[1]!))
+  return new PlatformError(known ? (match![1] as PlatformErrorCode) : 'failed', known ? match![2]! : message)
+}
+
+/** A shell call, its error turned into a PlatformError with the shell's own words. */
+async function shell<T>(run: () => Promise<T>): Promise<T> {
+  try {
+    return await run()
+  } catch (error) {
+    throw fromShell(error)
+  }
 }
 
 export function createElectronPlatform(bridge: DesktopBridge, api: () => Api): Platform {
@@ -45,6 +55,36 @@ export function createElectronPlatform(bridge: DesktopBridge, api: () => Api): P
       moodleSignIn: true,
       systemAudio: true,
       revealInFolder: true,
+      // recording
+      screenRecording: true,
+      transcribe: true,
+    },
+
+    // -- recording: the shell lists the screens and keeps the files (desktop/src/main/audio.ts, recordings.ts)
+
+    screenSources() {
+      return shell(() => bridge.screen.sources())
+    },
+
+    async captureScreen(sourceId, sound) {
+      await shell(() => bridge.screen.choose(sourceId, sound))
+      try {
+        // Two frames a second is enough to read a slide or follow a board, and keeps an hour to about
+        // 150 MB; 1080p is plenty for text and spares the encoder a 5K screen.
+        return await navigator.mediaDevices.getDisplayMedia({
+          video: { frameRate: { ideal: 2, max: 2 }, width: { max: 1920 }, height: { max: 1080 } },
+          audio: sound,
+        })
+      } catch {
+        throw new PlatformError('failed', 'That screen couldn\'t be recorded. Pick it again.')
+      }
+    },
+
+    recordings: {
+      append: (id, name, bytes) => shell(() => bridge.recordings.append(id, name, bytes)),
+      files: (id) => shell(() => bridge.recordings.files(id)),
+      url: (id, name) => `${window.location.origin}/_recordings/${id}/${name}`,
+      remove: (id) => shell(() => bridge.recordings.remove(id)),
     },
 
     setNextDeadline(next) {
@@ -95,5 +135,9 @@ export function createElectronPlatform(bridge: DesktopBridge, api: () => Api): P
     async openExternal(url) {
       await bridge.openExternal(url)
     },
+
+    // -- exports: a download shows the shell's Save dialog; the PDF is made with no print dialog
+    saveFile: downloadFile,
+    ...(bridge.printToPdf ? { printToPdf: () => bridge.printToPdf!() } : {}),
   }
 }

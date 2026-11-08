@@ -7,7 +7,9 @@
  * pressed. After it, the card says where the thing went and links there.
  *
  * A quiz isn't a thing to make, so it is drawn straight in (`Quiz.vue`).
- * Opening a page only navigates, so its button goes.
+ * Opening a page only navigates, so it is one row that is itself the link.
+ * "OK, create it" (`create_draft`) is the learner's words pressing Create on
+ * the draft above: that card creates it, and this one shows how it went.
  *
  * `live` is the same card while the answer is still writing it: it fills in as
  * the words come and has nothing to press yet. A note shows its words, in live
@@ -25,7 +27,7 @@ import { madeFor, rememberMade } from '~/companion/ai/made'
 import { openBoard } from '~/companion/board/active'
 import type { AiAction } from '~/companion/ai/types'
 import { useAi } from '~/companion/ai/state'
-import { useAiThread } from '~/companion/ai/thread'
+import { draftPress, draftsCreating, useAiThread } from '~/companion/ai/thread'
 import { useCompanion } from '~/companion/store'
 import { courseColor } from '~/companion/colors'
 import { dayKey, relativeDay, whenLabel } from '~/companion/time'
@@ -134,7 +136,14 @@ const look = computed<Look | null>(() => {
         button: 'Draft the course',
       }
     case 'write_lesson':
-      return { icon: 'book', title: `Write “${a.title}” as a lesson`, detail: a.instruction || 'Explanation, worked examples and a short quiz', button: 'Write lesson' }
+      return a.rewrite
+        ? {
+            icon: 'book',
+            title: `Rewrite “${store.get('topics', a.topic_id)?.title ?? a.title}”`,
+            detail: a.instruction || 'The same lesson, written again',
+            button: 'Rewrite lesson',
+          }
+        : { icon: 'book', title: `Write “${a.title}” as a lesson`, detail: a.instruction || 'Explanation, worked examples and a short quiz', button: 'Write lesson' }
     case 'add_tasks': {
       const day = relativeDay(a.date || dayKey())
       const when = day === 'today' ? 'today\'s' : day === 'tomorrow' ? 'tomorrow\'s' : `${day}'s`
@@ -143,8 +152,6 @@ const look = computed<Look | null>(() => {
     }
     case 'add_deadline':
       return { icon: 'flag', title: `Add “${a.title}”`, detail: `${where} · ${whenLabel(a.due_at)}`, button: 'Add deadline' }
-    case 'open':
-      return { icon: 'arrow-up-right', title: a.label, detail: '', button: 'Open' }
     default:
       return null
   }
@@ -216,12 +223,39 @@ async function press(): Promise<void> {
 function openDone(): void {
   if (!ai.wide.value) ai.hide()
 }
+
+/** A place to open is a link, not a thing to make: one row, its icon by where it goes. */
+const openIcon = computed(() => {
+  const to = props.action.type === 'open' ? props.action.to : ''
+  if (to.startsWith('/app/notes')) return 'notebook'
+  if (to.startsWith('/app/courses')) return 'path'
+  if (to.startsWith('/app/calendar')) return 'calendar'
+  if (to.startsWith('/app/practice')) return 'cards'
+  return 'arrow-up-right'
+})
+
+/** "OK, create it": the draft it pressed, as the card above it now has it. */
+const pressed = computed(() => {
+  const a = props.action
+  if (a.type !== 'create_draft') return null
+  const msg = t.messages.value.find((m) => m.id === a.message_id)
+  return {
+    title: msg?.proposal?.proposal?.title || 'your course',
+    created: msg?.proposal?.created ?? null,
+    busy: draftsCreating.has(a.message_id) || draftPress.value === a.message_id,
+    gone: !msg?.proposal,
+  }
+})
+
+function pressDraft(): void {
+  if (props.action.type === 'create_draft') draftPress.value = props.action.message_id
+}
 </script>
 
 <template>
   <div
     v-if="action.type === 'draw'"
-    class="overflow-hidden rounded-[16px] bg-surface shadow-[inset_0_0_0_1px_var(--border)]"
+    class="overflow-hidden rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)]"
   >
     <CompanionAiGraphic
       v-if="action.graphic"
@@ -242,7 +276,7 @@ function openDone(): void {
       <NuxtLink
         v-if="state === 'done' && done?.to"
         :to="done.to"
-        class="inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-[13px] font-semibold text-cobalt"
+        class="inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-[13px] font-semibold text-brand"
         @click="openDone"
       >
         Open
@@ -259,6 +293,74 @@ function openDone(): void {
     </div>
   </div>
 
+  <NuxtLink
+    v-else-if="action.type === 'open'"
+    :to="action.to"
+    class="group flex items-center gap-2.5 rounded-[14px] bg-surface px-3 py-2.5 shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-colors hover:bg-surface-chrome focus-visible:bg-surface-chrome"
+    @click="openDone"
+  >
+    <span
+      class="grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface-sunken text-text-dim transition-colors group-hover:bg-surface"
+      aria-hidden="true"
+    >
+      <CompanionIcon
+        :name="openIcon"
+        :size="16"
+      />
+    </span>
+    <span class="min-w-0 flex-1 truncate text-[13.5px] font-semibold text-text">{{ action.label }}</span>
+    <UiIcon
+      name="arrow-right"
+      :size="14"
+      :stroke="2"
+      class="shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5"
+    />
+  </NuxtLink>
+
+  <div
+    v-else-if="pressed && !pressed.gone"
+    :class="[
+      'flex min-h-[52px] items-center gap-2.5 rounded-[14px] bg-surface px-3 py-2 shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-colors duration-300',
+      pressed.created && 'bg-leaf-soft shadow-[0_0_0_1px_var(--success-line)]',
+    ]"
+  >
+    <span
+      class="grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface-sunken text-text-dim"
+      aria-hidden="true"
+    >
+      <CompanionIcon
+        name="path"
+        :size="16"
+      />
+    </span>
+    <template v-if="pressed.created">
+      <span class="animate-fade min-w-0 flex-1 truncate text-[13px] font-semibold text-success-text">{{ pressed.title }} is in your courses</span>
+      <NuxtLink
+        :to="`/app/courses/${pressed.created.subject_id}`"
+        class="inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-[13px] font-semibold text-brand transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
+        @click="openDone"
+      >
+        Open
+        <UiIcon
+          name="arrow-right"
+          :size="13"
+          :stroke="2"
+        />
+      </NuxtLink>
+    </template>
+    <template v-else>
+      <span class="min-w-0 flex-1 truncate text-[13.5px] font-semibold text-text">{{ pressed.busy ? `Creating ${pressed.title}…` : `Create “${pressed.title}”` }}</span>
+      <UiBtn
+        size="sm"
+        variant="primary"
+        :loading="pressed.busy"
+        @click="pressDraft"
+      >
+        Create course
+      </UiBtn>
+    </template>
+  </div>
+
   <CompanionAiQuiz
     v-else-if="action.type === 'quiz' && !live"
     :questions="action.questions"
@@ -270,13 +372,13 @@ function openDone(): void {
   <div
     v-else-if="look"
     :class="[
-      'rounded-[16px] bg-surface shadow-[inset_0_0_0_1px_var(--border)] transition-shadow duration-200',
-      state === 'done' && 'shadow-[inset_0_0_0_1px_var(--success-line)]',
+      'rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-shadow duration-200',
+      state === 'done' && 'shadow-[0_0_0_1px_var(--success-line),var(--shadow-card)]',
     ]"
   >
     <div class="flex items-start gap-2.5 px-3 pt-3">
       <span
-        class="relative grid size-8 shrink-0 place-items-center rounded-[10px] bg-surface-sunken text-text-dim"
+        class="relative grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface-sunken text-text-dim"
         aria-hidden="true"
       >
         <CompanionIcon
@@ -371,9 +473,14 @@ function openDone(): void {
 
     <p
       v-if="live"
-      class="animate-pulse-dot px-3 pt-2 pb-3 text-[12.5px] text-text-muted"
+      class="flex items-center gap-2 px-3 pt-2 pb-3 text-[12.5px] text-text-muted"
     >
-      Writing…
+      <span class="animate-pulse-dot">Writing</span>
+      <UiIcon
+        name="loader"
+        :size="13"
+        class="animate-spin-slow text-text-faint"
+      />
     </p>
 
     <div
@@ -392,7 +499,7 @@ function openDone(): void {
         <NuxtLink
           v-if="done.to"
           :to="done.to"
-          class="inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-[13px] font-semibold text-cobalt transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
+          class="inline-flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-[13px] font-semibold text-brand transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
           @click="openDone"
         >
           Open

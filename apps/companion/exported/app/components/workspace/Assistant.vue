@@ -124,7 +124,7 @@ watch(
       />
       <span class="font-display text-[15px] font-semibold tracking-[-0.01em]">Assistant</span>
       <span
-        class="rounded-full bg-brand-soft px-2 py-0.5 text-[10.5px] font-semibold tracking-[0.04em] text-brand uppercase"
+        class="rounded-full bg-brand-soft px-2 py-0.5 text-[12px] font-semibold text-brand"
         >Floating</span
       >
       <span class="flex-1" />

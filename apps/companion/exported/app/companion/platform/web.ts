@@ -50,6 +50,26 @@ export function audioOnly(stream: MediaStream, why: string): MediaStream {
   return stream
 }
 
+// -- exports --
+
+/**
+ * A made file, saved the browser's way: a link with `download`, clicked.
+ * The desktop shell takes the same click and shows its Save dialog (Electron's
+ * default for a download nobody handles), so both platforms share this.
+ * The address is let go a minute later, not at once: Safari starts the
+ * download after the click returns.
+ */
+export async function downloadFile(blob: Blob, name: string): Promise<void> {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = name
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 60_000)
+}
+
 export function createWebPlatform(): Platform {
   return {
     kind: 'web',
@@ -59,6 +79,20 @@ export function createWebPlatform(): Platform {
       moodleSignIn: false,
       systemAudio: typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getDisplayMedia,
       revealInFolder: false,
+      // recording: the web records sound and uploads it; the screen and transcription are the desktop's
+      screenRecording: false,
+      transcribe: false,
+    },
+
+    // recording: a web recording is uploaded when it stops (recording.ts), so there is no folder here
+    recordings: null,
+
+    async screenSources() {
+      throw new PlatformError('unsupported', 'Recording the screen is in the BiliMind app for your computer.')
+    },
+
+    async captureScreen() {
+      throw new PlatformError('unsupported', 'Recording the screen is in the BiliMind app for your computer.')
     },
 
     setNextDeadline() {},
@@ -107,5 +141,8 @@ export function createWebPlatform(): Platform {
     async openExternal(url) {
       window.open(url, '_blank', 'noopener,noreferrer')
     },
+
+    // exports: no `printToPdf` here; the page opens the print dialog, whose "Save as PDF" does it
+    saveFile: downloadFile,
   }
 }

@@ -1,0 +1,120 @@
+{
+  "time": {
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "yesterday": "yesterday",
+    "now": "now",
+    "inMin": "in {n} min",
+    "inH": "in {n} h",
+    "inDays": "in {n} days",
+    "minAgo": "{n} min ago",
+    "hAgo": "{n} h ago",
+    "daysAgo": "{n} days ago",
+    "dh": "{d} d {h} h",
+    "hMin": "{h} h {m} min",
+    "min": "{n} min",
+    "hm": "{h} h {m} m",
+    "h": "{n} h",
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
+  },
+  "classes": "{n} class | {n} classes",
+  "deadlines": "{n} deadline | {n} deadlines",
+  "month": {
+    "study": "{time} of study",
+    "openWeek": "Open the week of {day}",
+    "moreDue": "{n} more due"
+  },
+  "grid": {
+    "dueTitle": "Due · {title}",
+    "done": "Done",
+    "dueAt": "Due {time}: {title}",
+    "hShort": "h",
+    "mShort": "{n}m",
+    "min": "{n} min",
+    "more": "{n} more",
+    "ofStudy": "{time} of study",
+    "showLess": "Show less",
+    "todo": "To do",
+    "todoOn": "To do on {day}"
+  },
+  "views": {
+    "week": "Week",
+    "month": "Month",
+    "agenda": "All deadlines"
+  },
+  "summary": {
+    "nothingThisWeek": "Nothing on this week",
+    "nothingOn": "Nothing on",
+    "studyOf": "{time} of study",
+    "and": "{list} and {last}"
+  },
+  "nav": {
+    "prevMonth": "Previous month",
+    "prevWeek": "Previous week",
+    "nextMonth": "Next month",
+    "nextWeek": "Next week",
+    "today": "Today"
+  },
+  "behind": {
+    "line": "{n} thing from earlier days isn't done. | {n} things from earlier days aren't done.",
+    "moveToToday": "Move to today",
+    "movedSuccess": "{n} thing moved to today | {n} things moved to today"
+  },
+  "plan": {
+    "myWeek": "Plan my week",
+    "nextWeek": "Plan next week",
+    "thatWeek": "Plan that week",
+    "planned": "Your week is planned",
+    "plannedThat": "That week is planned",
+    "plannedBody": "Anything you moved stays where you put it.",
+    "planError": "Couldn't plan the week. Check your connection and try again."
+  },
+  "timetable": {
+    "notice": "Exam dates from a timetable PDF show up here.",
+    "add": "Add an exam timetable"
+  },
+  "agenda": {
+    "termDesc": "How much is due each week. Tap a week to see it.",
+    "busyTitle": "Week {n} is the busiest:",
+    "busyBody": "{list}. Your daily plan starts on them before it arrives.",
+    "seeWeek": "See week {n}",
+    "nothingDue": "Nothing due from here on",
+    "nothingDueDesc": "Dates arrive from Moodle, your email and the lectures. Or paste a message that mentions one.",
+    "pasteBtn": "Paste a message"
+  },
+  "sync": {
+    "addBtn": "Add to your calendar",
+    "addTitle": "Add to Google, Apple or Outlook calendar",
+    "modalDesc": "Your classes, deadlines and plan in Google, Apple or Outlook calendar, kept up to date."
+  },
+  "add": "Add",
+  "close": "Close",
+  "open": "Open",
+  "undo": "Undo",
+  "peek": {
+    "added": "Added to {day}",
+    "addedAt": "Added to {day} at {time}",
+    "cancelled": "Cancelled",
+    "clearTime": "Clear time",
+    "doneToast": "Marked {title} done",
+    "due": "Due {when}",
+    "newTask": "New task",
+    "ofGrade": "{n}% of grade",
+    "placeholder": "Add a task…",
+    "set": "Set",
+    "setTime": "Set time",
+    "time": "Time",
+    "unconfirmed": "Not confirmed yet",
+    "whatToDo": "What do you need to do?",
+    "notHandedIn": "Not handed in",
+    "notDone": "Not done",
+    "markHandedIn": "Mark handed in",
+    "markDone": "Mark done",
+    "handedInToast": "Marked {title} handed in",
+    "moveToday": "Move to today",
+    "moveTomorrow": "Move to tomorrow",
+    "dayLater": "Move later"
+  }
+}

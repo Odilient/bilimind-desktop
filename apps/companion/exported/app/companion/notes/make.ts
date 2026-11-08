@@ -203,8 +203,8 @@ export async function makePage(input: MakePageInput = {}): Promise<string> {
     kind: 'page',
     title: input.title?.trim() || pageTitle(template, ctx),
     preview: seed ? plainText(seed).slice(0, 240) || null : null,
-    // `fresh`: it starts as the bare template, never as the demo's written-up
-    // notes; `seed_html` (when given) is what it starts with instead.
+    // `fresh`: it starts as the bare template, never as its preview line;
+    // `seed_html` (when given) is what it starts with instead.
     meta: { template, props: { fresh: true }, ...(seed ? { seed_html: seed } : {}), ...suggested },
     source: 'made',
     source_ref: null,

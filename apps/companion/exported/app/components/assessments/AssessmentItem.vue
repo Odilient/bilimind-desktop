@@ -39,6 +39,7 @@ import AttemptResult from './AttemptResult.vue'
  * There is no `answer_key` anywhere in this component because the API never
  * sends one (SPEC §8) — everything the learner sees comes back from grading.
  */
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     assessment: Assessment
@@ -77,25 +78,12 @@ const emit = defineEmits<{ graded: [payload: GradedPayload] }>()
 const api = useApi()
 const toast = useToast()
 
-const KIND_LABEL: Record<string, string> = {
-  mcq: 'Multiple choice',
-  multi_select: 'Select all that apply',
-  short_answer: 'Short answer',
-  cloze: 'Fill the blanks',
-  essay: 'Essay',
-  project: 'Project',
-  code: 'Code',
-  ordering: 'Put in order',
-  numeric: 'Numeric answer',
-}
+// Labels live in check.assess.kind.* / check.assess.grader.*; these are the ids that have one.
+const KIND_IDS = ['mcq', 'multi_select', 'short_answer', 'cloze', 'essay', 'project', 'code', 'ordering', 'numeric']
 
 /* Said as what happens to the answer, not which grader class runs: a home
    baker does not know what "rubric-graded" means, and should not have to. */
-const GRADER_LABEL: Record<string, string> = {
-  deterministic: 'Checked instantly',
-  llm_rubric: 'Marked by AI',
-  self: 'You mark it',
-}
+const GRADER_IDS = ['deterministic', 'llm_rubric', 'self']
 
 const history = ref<Attempt[]>([...props.attempts])
 const response = ref<AttemptResponse | null>(null)
@@ -177,19 +165,19 @@ const extraProps = computed<Record<string, unknown>>(() => {
  * written.
  */
 const codeSubmitHint = computed(() => {
-  if ((props.tests?.length ?? 0) === 0) return 'Write something to enable submission.'
-  if (props.mode === 'build') return 'Check the page to enable submission.'
-  return 'Run it once to enable submission.'
+  if ((props.tests?.length ?? 0) === 0) return t('check.assess.codeHintNoTests')
+  if (props.mode === 'build') return t('check.assess.codeHintBuild')
+  return t('check.assess.codeHintRun')
 })
 
 const submitLabel = computed(() => {
-  if (isSelf.value) return 'Mark done'
-  if (props.assessment.kind === 'code') return 'Submit results'
+  if (isSelf.value) return t('check.assess.markDone')
+  if (props.assessment.kind === 'code') return t('check.assess.submitResults')
   // An ordering item is pre-populated with the scrambled order, so "Submit" alone
   // reads as though nothing has been done yet.
-  if (props.assessment.kind === 'ordering' && history.value.length === 0) return 'Check the order'
-  if (history.value.length > 0) return 'Submit again'
-  return 'Submit'
+  if (props.assessment.kind === 'ordering' && history.value.length === 0) return t('check.assess.checkOrder')
+  if (history.value.length > 0) return t('check.assess.submitAgain')
+  return t('check.assess.submit')
 })
 
 /* -- Submission ------------------------------------------------------------ */
@@ -261,9 +249,9 @@ async function submit(): Promise<void> {
     const message =
       error instanceof ApiError
         ? (error.allMessages[0] ?? error.message)
-        : 'That submission could not be graded.'
+        : t('check.assess.cantGrade')
     failure.value = message
-    toast.error({ title: 'Submission failed', body: message })
+    toast.error({ title: t('check.assess.submissionFailed'), body: message })
   } finally {
     submitting.value = false
   }
@@ -282,10 +270,10 @@ onBeforeUnmount(() => {
 <template>
   <article
     :class="[
-      'rounded-[18px] px-4 py-4 transition-[background-color,box-shadow] duration-300 sm:px-5 sm:py-4.5',
+      'rounded-[14px] px-4 py-4 transition-[background-color,box-shadow] duration-300 sm:px-[18px]',
       passed
-        ? 'bg-[#fcfef6] dark:bg-accent-soft shadow-[inset_0_0_0_1.5px_rgb(141_181_30/0.6)]'
-        : 'bg-surface shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.09)]',
+        ? 'bg-leaf-soft shadow-[0_0_0_1.5px_var(--leaf)]'
+        : 'bg-surface shadow-[0_0_0_1px_var(--border)]',
     ]"
   >
     <header class="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -295,10 +283,10 @@ onBeforeUnmount(() => {
           :class="[
             'num grid size-[26px] place-items-center rounded-full font-display text-[12px] font-semibold',
             passed
-              ? 'bg-accent text-on-accent'
-              : 'text-text-soft shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.14)]',
+              ? 'bg-leaf text-white'
+              : 'bg-[rgb(var(--wash-rgb)/0.065)] text-text-soft',
           ]"
-          :aria-label="passed ? 'Passed' : `Question ${index}`"
+          :aria-label="passed ? t('check.assess.passedAria') : t('check.assess.questionN', { n: index })"
         >
           <UiIcon
             v-if="passed"
@@ -311,14 +299,14 @@ onBeforeUnmount(() => {
         <UiBadge
           size="xs"
           tone="outline"
-          >{{ KIND_LABEL[assessment.kind] ?? assessment.kind }}</UiBadge
+          >{{ KIND_IDS.includes(assessment.kind) ? t(`check.assess.kind.${assessment.kind}`) : assessment.kind }}</UiBadge
         >
         <UiBadge
-          v-if="GRADER_LABEL[assessment.grader]"
+          v-if="GRADER_IDS.includes(assessment.grader)"
           size="xs"
           :tone="assessment.grader === 'llm_rubric' ? 'accent' : 'neutral'"
         >
-          {{ GRADER_LABEL[assessment.grader] }}
+          {{ t(`check.assess.grader.${assessment.grader}`) }}
         </UiBadge>
       </div>
 
@@ -326,7 +314,7 @@ onBeforeUnmount(() => {
         v-if="history.length"
         class="num text-[11px] text-text-faint"
       >
-        {{ history.length }} {{ history.length === 1 ? 'attempt' : 'attempts' }}
+        {{ t('check.assess.attempts', history.length) }}
       </span>
     </header>
 
@@ -366,7 +354,7 @@ onBeforeUnmount(() => {
         v-if="assessment.rubric?.length"
         class="mt-2.5 text-[11.5px] text-text-faint"
       >
-        Graded on {{ assessment.rubric.map((row) => row.criterion).join(' · ') }}
+        {{ t('check.assess.gradedOn', { list: assessment.rubric.map((row) => row.criterion).join(' · ') }) }}
       </p>
     </div>
 
@@ -397,13 +385,13 @@ onBeforeUnmount(() => {
             size="sm"
             @click="editing = false"
           >
-            Cancel
+            {{ t('common.cancel') }}
           </UiBtn>
           <p
             v-if="response === null && !submitting"
             class="text-[11.5px] text-text-faint"
           >
-            {{ assessment.kind === 'code' ? codeSubmitHint : 'Answer to enable submission.' }}
+            {{ assessment.kind === 'code' ? codeSubmitHint : t('check.assess.answerToEnable') }}
           </p>
         </div>
       </div>
@@ -436,16 +424,13 @@ onBeforeUnmount(() => {
             icon="refresh"
             @click="retry"
           >
-            {{ passed ? 'Try a different answer' : 'Try again' }}
+            {{ passed ? t('check.assess.tryDifferent') : t('common.retry') }}
           </UiBtn>
           <span
             v-if="history.length > 1"
             class="num text-[11.5px] text-text-faint"
           >
-            best
-            {{
-              Math.max(...history.map((attempt) => attempt.score ?? 0))
-            }}/{{ assessment.max_score }}
+            {{ t('check.assess.best', { score: Math.max(...history.map((attempt) => attempt.score ?? 0)), max: assessment.max_score }) }}
           </span>
         </div>
       </div>

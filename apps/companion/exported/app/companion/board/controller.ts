@@ -28,7 +28,7 @@ import {
 } from './geometry'
 import { drawConnector, drawMindLink, drawObject, mindSize, pageHeight, stickyHeight, textHeight, type DrawEnv } from './draw'
 import { coalesced, eventTime, predicted, pressureOf, strokePath } from './ink'
-import { PEN, STICKY, type PenColor, type ShapeFill, type StickyColor } from './palette'
+import { ink, paint, pen, sticky, type PenColor, type ShapeFill, type StickyColor } from './palette'
 import type { LayerName, Scene } from './scene'
 import type { BoardPresence } from './presence'
 import { depthOf, rootOf, subtreeIds } from './mindmap'
@@ -249,6 +249,19 @@ export class BoardController {
 
   // ---- rendering ------------------------------------------------------------
 
+  /**
+   * Draw everything again, in the theme `palette.ts` paints in now: the light
+   * or dark theme changed. Objects are marked dirty and ink is put afresh, so
+   * the next frame repaints all of it.
+   */
+  repaint() {
+    for (const id of this.cache.keys()) this.dirty.add(id)
+    for (const id of this.drawnStrokes.keys()) this.scene.drop('ink', id)
+    this.drawnStrokes.clear()
+    this.strokesDirty = true
+    this.schedule()
+  }
+
   private schedule() {
     if (!this.raf) this.raf = requestAnimationFrame(() => this.flush())
   }
@@ -304,7 +317,7 @@ export class BoardController {
     }
     if (o.kind === 'connector') {
       const selected = this.ui.selection.includes(id)
-      this.scene.put('links', id, 0, 0, o.z, drawConnector(o, this.env, selected ? '#2340e6' : undefined))
+      this.scene.put('links', id, 0, 0, o.z, drawConnector(o, this.env, selected ? ink().cobalt : undefined))
       return
     }
     this.scene.put(this.layerOf(o), id, o.x, o.y, o.z, drawObject(o, this.env))
@@ -330,7 +343,7 @@ export class BoardController {
       const key = `${m.dx},${m.dy}`
       if (this.drawnStrokes.get(s.id) === key) return
       if (this.drawnStrokes.has(s.id)) this.scene.move('ink', s.id, m.dx, m.dy)
-      else this.scene.put('ink', s.id, m.dx, m.dy, i, [{ t: 'path', d: strokePath(unpackPoints(s), { size: s.size, pen: s.pen }), fill: PEN[s.color as PenColor] ?? s.color }])
+      else this.scene.put('ink', s.id, m.dx, m.dy, i, [{ t: 'path', d: strokePath(unpackPoints(s), { size: s.size, pen: s.pen }), fill: paint(s.color) }])
       this.drawnStrokes.set(s.id, key)
     })
     for (const id of [...this.drawnStrokes.keys()]) {
@@ -1394,7 +1407,7 @@ export class BoardController {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, this.ui.size.w, this.ui.size.h)
     ctx.setTransform(dpr * cam.scale, 0, 0, dpr * cam.scale, dpr * cam.x, dpr * cam.y)
-    ctx.fillStyle = PEN[this.ui.penColor]
+    ctx.fillStyle = pen()[this.ui.penColor]
     ctx.fill(new Path2D(strokePath(points, { size: g.size, pen: g.pen }, false)))
   }
 
@@ -1534,7 +1547,7 @@ export class BoardController {
     for (const o of this.cache.values()) {
       if (o.kind === 'connector') continue
       const v = this.get(o.id)!
-      items.push({ r: objectRect(v), kind: o.kind, color: o.kind === 'sticky' ? STICKY[o.color] : o.kind === 'mind' ? o.color : undefined })
+      items.push({ r: objectRect(v), kind: o.kind, color: o.kind === 'sticky' ? sticky()[o.color] : o.kind === 'mind' ? paint(o.color) : undefined })
     }
     for (const id of this.strokes.keys()) items.push({ r: this.rectOf(id)!, kind: 'stroke' })
     return { bounds, items, view }

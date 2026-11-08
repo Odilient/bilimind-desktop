@@ -14,15 +14,17 @@ const props = defineProps<{
   streak?: number
 }>()
 
+const { t } = useI18n()
+
 const headline = computed(() =>
-  props.reviewed === 0 ? 'Nothing to review right now' : 'All caught up',
+  t(props.reviewed === 0 ? 'check.review.nothing' : 'check.review.caughtUp'),
 )
 
 const body = computed(() => {
   if (props.reviewed === 0) {
-    return 'Come back when a lesson is due — spacing the gaps is what makes it stick.'
+    return t('check.review.comeBack')
   }
-  return `You brought back ${plural(props.reviewed, 'lesson')}. That's the part that makes it last.`
+  return t('check.review.broughtBack', props.reviewed)
 })
 </script>
 
@@ -54,7 +56,7 @@ const body = computed(() => {
         class="text-warn"
       />
       <span class="text-[13px] font-medium text-warn-text">
-        {{ plural(streak, 'day') }} in a row
+        {{ t('check.review.streak', streak) }}
       </span>
     </div>
 
@@ -65,7 +67,7 @@ const body = computed(() => {
         size="lg"
         trailing-icon="arrow-right"
       >
-        Back to today
+        {{ t('check.review.backToToday') }}
       </UiBtn>
     </div>
   </div>

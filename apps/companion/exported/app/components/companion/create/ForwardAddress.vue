@@ -5,7 +5,7 @@
  * in the Inbox for a yes. Lifted out of the old /app/start.
  */
 import { useCompanion } from '~/companion/store'
-import { FORWARD_DOMAIN } from '~/companion/demo-seed'
+import { FORWARD_DOMAIN } from '~/companion/signals'
 
 const c = useCompanion()
 const toast = useToast()

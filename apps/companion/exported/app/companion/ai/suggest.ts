@@ -10,7 +10,7 @@ import { computed, type ComputedRef } from 'vue'
 import { useCompanion, type CompanionStore } from '../store'
 import type { Deadline, Session, Subject, Topic } from '../types'
 import { clock, dayKey, dayMonthLong, daysBetween } from '../time'
-import { KIND_WORD } from '../words'
+import { kindWord } from '../words'
 import { useAi } from './state'
 import type { AiContext } from './types'
 
@@ -234,8 +234,8 @@ export function chatStarters(store: CompanionStore, now = Date.now()): AiSuggest
 /** Sentences that make good courses, cycled in the empty box and offered as starters. */
 export const COURSE_EXAMPLES = [
   'Italian to B1 by June',
-  'Databases, 2nd-year CS with Prof. Karimov',
-  'Become a backend developer by March',
+  'Psychology 101 with Dr. Rahimova',
+  'Pass my driving theory test in March',
   'IELTS 7.0 on 14 December',
 ]
 
@@ -256,7 +256,7 @@ export function nextExam(
   })
   const subject = deadline ? store.subjectOf(deadline) : null
   if (!deadline || !subject) return null
-  const word = KIND_WORD[deadline.kind].toLowerCase()
+  const word = kindWord(deadline.kind).toLowerCase()
   return {
     deadline,
     subject,

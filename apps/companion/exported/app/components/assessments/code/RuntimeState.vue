@@ -9,6 +9,7 @@ import { LANG_MARKS } from '~/composables/useCodeExercise'
  * for eight seconds concludes the exercise is broken, so the wait says what it
  * is for and — the part that matters — that it happens once.
  */
+const { t } = useI18n()
 const props = defineProps<{
   lang: RunLang
   /** `failed` shows the loader's own stderr, which already explains a blocked CDN. */
@@ -24,11 +25,11 @@ const mark = computed(() => LANG_MARKS[props.lang])
  * needs no runtime at all — so only the two CDN runtimes are named.
  */
 const DOWNLOAD_SIZE: Partial<Record<RunLang, string>> = {
-  python: 'about 10 MB',
-  sql: 'about 1.5 MB',
+  python: 'check.assess.code.sizePython',
+  sql: 'check.assess.code.sizeSql',
 }
 
-const size = computed(() => DOWNLOAD_SIZE[props.lang])
+const size = computed(() => (DOWNLOAD_SIZE[props.lang] ? t(DOWNLOAD_SIZE[props.lang]!) : ''))
 </script>
 
 <template>
@@ -42,9 +43,9 @@ const size = computed(() => DOWNLOAD_SIZE[props.lang])
     >
 
     <div v-if="phase === 'warming'">
-      <p class="text-[12.5px] font-medium text-code-dim">Preparing the {{ mark.label }} runtime</p>
+      <p class="text-[12.5px] font-medium text-code-dim">{{ t('check.assess.code.preparing', { lang: mark.label }) }}</p>
       <p class="mt-0.5 text-[11px] text-code-meta">
-        Downloads <template v-if="size">{{ size }}, </template>once — then every run is instant.
+        {{ size ? t('check.assess.code.downloadsSize', { size }) : t('check.assess.code.downloadsOnce') }}
       </p>
     </div>
 
@@ -53,7 +54,7 @@ const size = computed(() => DOWNLOAD_SIZE[props.lang])
       class="max-w-[38ch]"
     >
       <p class="text-[12.5px] font-medium text-danger-on-dark">
-        The {{ mark.label }} runtime could not be loaded.
+        {{ t('check.assess.code.loadFailed', { lang: mark.label }) }}
       </p>
       <p
         v-if="message"

@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* The public pages' Daylight 2 primitives (`ds-*`). Imported here, not in nuxt.config, so
+   adding it never restarted the dev server everyone shares. */
+@import "./site.css";
 @source "../../";
 
 /* ---------------------------------------------------------------------------
@@ -72,21 +75,24 @@
   /* -- Surfaces ---------------------------------------------------------- */
 
   /** The page. Cobalt's cool grey; the white frame floats on it. */
-  --bg: #eceef2;
+  --bg: #f3efe6;
   /** Content. Where prose and blocks live. */
-  --surface: #ffffff;
+  --surface: #fffefb;
   /** Chrome: sidebar, tab bar. A breath off white, so white tabs read as on. */
-  --surface-chrome: #fafafc;
+  --surface-chrome: #f8f5ee;
   /** The rail, one step further from the content than the sidebar. */
-  --surface-rail: #f4f5f9;
+  --surface-rail: #f3efe6;
   /** Quiet fills: code chips, segmented items, avatar wells. */
-  --surface-sunken: #f3f4f7;
+  --surface-sunken: #f1ede4;
   /** Tracks: progress bars, segmented backgrounds. */
-  --surface-track: #eef0f4;
+  --surface-track: #ebe6db;
   /** Status pills, quiet inset rows. */
-  --surface-mute: #f7f8fb;
+  --surface-mute: #faf8f2;
   /** The dotted canvas the path is drawn on. */
-  --surface-canvas: #f6f7fa;
+  --surface-canvas: #f8f5ee;
+  /** Menus and popovers. White in the light; one step up in the dark, so a
+      dropdown over the sidebar never melts into it. */
+  --surface-pop: #fffefb;
 
   /* Compatibility aliases — `raised` reads as chrome in a light system. */
   --surface-raised: var(--surface-chrome);
@@ -97,15 +103,15 @@
      white content *and* on the grey chrome. */
 
   /** Hairline: panel splits, section rules. Almost invisible, always present. */
-  --border: rgb(11 13 16 / 0.08);
+  --border: rgb(31 28 23 / 0.09);
   /** Controls: buttons, cards that need to read as liftable. */
-  --border-strong: rgb(11 13 16 / 0.12);
+  --border-strong: rgb(31 28 23 / 0.14);
   /** Inputs, which want slightly more definition than a button. */
-  --border-field: rgb(11 13 16 / 0.15);
+  --border-field: rgb(31 28 23 / 0.18);
   /** Row dividers inside a list. Lighter than the panel hairline. */
-  --border-rule: rgb(11 13 16 / 0.05);
+  --border-rule: rgb(31 28 23 / 0.06);
   /** Dashed drop targets, diagram nodes, glyph strokes. */
-  --border-dashed: rgb(11 13 16 / 0.22);
+  --border-dashed: rgb(31 28 23 / 0.24);
 
   /* -- Text -------------------------------------------------------------- */
 
@@ -113,28 +119,28 @@
      cast that makes the page feel cool next to the lime. */
 
   /** Headings, and any number the eye should land on. */
-  --text: #0b0d10;
+  --text: #1f1c17;
   /** Long-form prose. A hair lighter than headings so paragraphs settle. */
-  --text-body: #2a2e37;
+  --text-body: #38332b;
   /** Button labels, secondary controls. */
-  --text-dim: #3a3f4a;
+  --text-dim: #48423a;
   /** Supporting copy inside cards. */
-  --text-soft: #565b68;
+  --text-soft: #615a50;
   /** Descriptions, captions. */
-  --text-muted: #636877;
+  --text-muted: #6f685d;
   /** Labels, metadata, eyebrows. */
-  --text-faint: #8b909c;
+  --text-faint: #958e82;
   /** Tier headings, unit suffixes, "click to flip". Nearly decorative. */
-  --text-ghost: #b9bdc8;
+  --text-ghost: #c4beb2;
 
   /* -- Brand ------------------------------------------------------------- */
 
   /* Cobalt. The slab colour, the link colour, the "alternative" mark on the
      path. It carries white, never ink. */
-  --brand: var(--cobalt);
-  --brand-strong: var(--cobalt-2);
-  --brand-soft: var(--cobalt-soft);
-  --brand-line: rgb(35 64 230 / 0.22);
+  --brand: #2d64b8;
+  --brand-strong: #24539c;
+  --brand-soft: #e1ebfb;
+  --brand-line: rgb(45 100 184 / 0.22);
   --on-brand: #ffffff;
 
   /* -- Accent ------------------------------------------------------------ */
@@ -146,11 +152,11 @@
      `--accent` is the loud fill and carries INK, never white; `--accent-strong`
      is the only one legible as text on a light ground (cobalt's `--lime-ink`,
      6.1:1 on white and 5.5:1 on `--accent-soft`). */
-  --accent: var(--lime);
-  --accent-strong: var(--lime-ink);
-  --accent-soft: var(--lime-soft);
-  --accent-line: rgb(141 181 30 / 0.45);
-  --on-accent: var(--ink);
+  --accent: #ffe27a;
+  --accent-strong: #6b5200;
+  --accent-soft: #fff3c4;
+  --accent-line: rgb(232 186 40 / 0.5);
+  --on-accent: #1f1c17;
 
   /* Compatibility alias — `dim` is the design file's name for `strong`. */
   --accent-dim: var(--accent-strong);
@@ -164,44 +170,44 @@
   /* Green means the content is written, not that the learner passed. Kept a
      true green rather than folded into the lime: on a 9px dot an olive and a
      lime are the same dot. */
-  --success: #0f7a3c;
-  --success-bright: #12a150;
-  --success-soft: #e9f7ef;
-  --success-line: #c8ead6;
-  --success-text: #0d6b35;
+  --success: #2f7a47;
+  --success-bright: #5bb276;
+  --success-soft: #e2f0dc;
+  --success-line: #c9e4c0;
+  --success-text: #2f7a47;
 
   /* Amber carries missed sessions and the mentor's notes — never alarm. These
      are cobalt's note colours: a butter fill, a brown word, a gold icon. */
-  --warn: #9a6f0e;
-  --warn-bright: #d9a21b;
-  --warn-soft: #fff6da;
-  --warn-line: rgb(214 168 40 / 0.35);
-  --warn-text: #6e5410;
-  --warn-text-soft: #85660f;
+  --warn: #9a6512;
+  --warn-bright: #e0a028;
+  --warn-soft: #fff1c7;
+  --warn-line: rgb(201 134 26 / 0.3);
+  --warn-text: #7a5310;
+  --warn-text-soft: #8f6418;
 
   /* Coral. The recording dot, the wavy misspelling, the one thing wrong. */
-  --danger: #cf3d1d;
-  --danger-bright: var(--coral);
+  --danger: #c4452f;
+  --danger-bright: #e0644c;
   /* Reds on the dark code panel, where the light-surface values disappear. */
-  --danger-on-dark: #ff8a72;
-  --danger-soft: #ffe8df;
-  --danger-line: #ffcdbd;
-  --danger-text: #b33a16;
+  --danger-on-dark: #f59a85;
+  --danger-soft: #fde4dc;
+  --danger-line: #f6c9bc;
+  --danger-text: #a8381f;
 
   /* -- The code sandbox -------------------------------------------------- */
 
   /* The one dark region in a light product: cobalt's ink stage. A code editor
      that isn't dark reads as a text field, and a text field invites prose. */
-  --code-bg: var(--ink);
-  --code-bar: var(--ink-2);
-  --code-line: var(--ink-3);
-  --code-text: #e8eaf0;
-  --code-meta: rgb(255 255 255 / 0.45);
-  --code-dim: rgb(255 255 255 / 0.72);
+  --code-bg: #221f1a;
+  --code-bar: #2a2620;
+  --code-line: #36312a;
+  --code-text: #efe9dd;
+  --code-meta: rgb(255 250 240 / 0.45);
+  --code-dim: rgb(255 250 240 / 0.72);
 
   /* Lifted hues for small text on the ink panel. Lime needs no lifting. */
-  --accent-on-dark: var(--lime);
-  --success-on-dark: #6fd394;
+  --accent-on-dark: #ffe27a;
+  --success-on-dark: #8fd6a5;
 
   /* -- Elevation --------------------------------------------------------- */
 
@@ -209,20 +215,20 @@
      window: a hairline ring and a long low shadow. */
 
   /** The frame itself: lifts the whole app off the page. */
-  --shadow-frame: 0 0 0 1px rgb(11 13 16 / 0.06), 0 40px 90px -48px rgb(11 13 16 / 0.36);
+  --shadow-frame: 0 0 0 1px rgb(31 28 23 / 0.06), 0 40px 90px -48px rgb(70 50 20 / 0.3);
   /** Buttons and inline cards. Barely there — enough to catch an edge. */
-  --shadow-card: 0 1px 2px rgb(11 13 16 / 0.05);
-  --shadow-raised: 0 4px 14px rgb(11 13 16 / 0.07);
+  --shadow-card: 0 1px 2px rgb(70 50 20 / 0.06), 0 1px 1px rgb(70 50 20 / 0.03);
+  --shadow-raised: 0 1px 2px rgb(70 50 20 / 0.05), 0 6px 18px -6px rgb(70 50 20 / 0.12);
   /** The active item in a segmented control. */
-  --shadow-segment: 0 1px 2px rgb(11 13 16 / 0.08), 0 0 0 1px rgb(11 13 16 / 0.08);
+  --shadow-segment: 0 1px 2px rgb(70 50 20 / 0.08), 0 0 0 1px rgb(31 28 23 / 0.08);
   /** Floating assistant, modals. */
-  --shadow-pop: 0 30px 70px -20px rgb(11 13 16 / 0.32);
+  --shadow-pop: 0 0 0 1px rgb(31 28 23 / 0.09), 0 12px 32px -10px rgb(70 50 20 / 0.28);
   /** The closed-assistant pill and other things that hover over content. */
-  --shadow-lift: 0 20px 40px -12px rgb(11 13 16 / 0.25);
+  --shadow-lift: 0 2px 6px rgb(70 50 20 / 0.05), 0 22px 48px -18px rgb(70 50 20 / 0.24);
   /** Mobile bottom sheets, which throw upward. */
-  --shadow-sheet: 0 -14px 44px rgb(11 13 16 / 0.2);
+  --shadow-sheet: 0 -14px 44px rgb(70 50 20 / 0.16);
 
-  --grid-line: rgb(11 13 16 / 0.045);
+  --grid-line: rgb(31 28 23 / 0.045);
 
   /* -- Inverse, chip and wash ------------------------------------------- */
 
@@ -231,18 +237,18 @@
 
   /** The ink pill that commits: `primary` buttons, the selected answer. It
       inverts in the dark, a near-white pill, because ink on ink is no button. */
-  --inverse: var(--ink);
-  --inverse-hover: #22262e;
-  --on-inverse: #ffffff;
+  --inverse: #1f1c17;
+  --inverse-hover: #34302a;
+  --on-inverse: #fffdf8;
   /** The ink chip that carries a lime glyph or white words: step numbers,
       the done disc, the selected tool, the toast and the floating toolbar. It
       stays dark in the dark, one step above the surface so it keeps an edge. */
-  --chip: var(--ink);
+  --chip: #1f1c17;
 
   /** The ink's channels, for one-off hairline rings and hover washes at an
       alpha: `shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.1)]`. White in the
       dark. Never for a drop shadow, which stays black in both themes. */
-  --wash-rgb: 11 13 16;
+  --wash-rgb: 31 28 23;
 }
 
 /* ---------------------------------------------------------------------------
@@ -268,60 +274,69 @@
   @variant dark {
     color-scheme: dark;
 
-    --bg: #08090c;
-    --surface: #14171c;
-    --surface-chrome: #101217;
-    --surface-rail: #0c0e12;
-    --surface-sunken: #1d2026;
-    --surface-track: #262a32;
-    --surface-mute: #1a1d23;
-    --surface-canvas: #0e1014;
+    /* Warm neutral greys, not browns: the first dark was so brown that every
+       gold line on it looked muddy (user, 7 Nov 2026). The warmth is a hint
+       in the hue now, the way paper is under a desk lamp. */
+    --bg: #131312;
+    --surface: #1e1e1c;
+    --surface-chrome: #191918;
+    --surface-rail: #161615;
+    --surface-sunken: #2d2d2a;
+    --surface-track: #363632;
+    --surface-mute: #232321;
+    --surface-canvas: #1a1a18;
+    --surface-pop: #242422;
     --surface-raised: var(--surface-chrome);
 
-    --border: rgb(255 255 255 / 0.08);
-    --border-strong: rgb(255 255 255 / 0.12);
-    --border-field: rgb(255 255 255 / 0.16);
-    --border-rule: rgb(255 255 255 / 0.055);
-    --border-dashed: rgb(255 255 255 / 0.24);
+    /* A touch stronger than before: on near-black a 8% hairline vanished. */
+    --border: rgb(240 238 232 / 0.1);
+    --border-strong: rgb(240 238 232 / 0.16);
+    --border-field: rgb(240 238 232 / 0.19);
+    --border-rule: rgb(240 238 232 / 0.065);
+    --border-dashed: rgb(240 238 232 / 0.28);
 
-    --text: #eef0f5;
-    --text-body: #cfd3dc;
-    --text-dim: #bdc2cc;
-    --text-soft: #a3a9b6;
-    --text-muted: #8d93a1;
-    --text-faint: #717786;
-    --text-ghost: #4b505c;
+    --text: #f3eee4;
+    --text-body: #ddd6ca;
+    --text-dim: #cdc5b8;
+    --text-soft: #b3ab9e;
+    --text-muted: #9a9387;
+    --text-faint: #7d776c;
+    --text-ghost: #55534d;
 
     /* Cobalt lifted until it reads as a link on the ink; `-strong` goes the
        other way, a deeper fill for white words. */
-    --brand: #6178ff;
-    --brand-strong: #4058f2;
-    --brand-soft: #171d40;
-    --brand-line: rgb(97 120 255 / 0.32);
+    --brand: #8fb6f7;
+    --brand-strong: #3d6fc0;
+    --brand-soft: #1c2433;
+    --brand-line: rgb(143 182 247 / 0.3);
 
     /* Lime fills exactly as it does in the light. `-strong` is the text
        weight, so on a dark ground it is the lime itself. */
-    --accent-strong: #c6f24e;
-    --accent-soft: #1e2510;
-    --accent-line: rgb(198 242 78 / 0.32);
+    --accent: #f4d265;
+    --accent-strong: #f4d265;
+    --accent-soft: #2b2818;
+    /* Neutral, not gold: the tinted fill says "highlighter" already, and a
+       gold edge on a dark ground reads as a warning stripe. */
+    --accent-line: rgb(240 238 232 / 0.13);
 
-    --success: #4cc985;
-    --success-bright: #2fd673;
-    --success-soft: #11241a;
-    --success-line: #1c3b2a;
-    --success-text: #6fd394;
+    --success: #6cc287;
+    --success-bright: #5bd086;
+    --success-soft: #17251b;
+    --success-line: #24402c;
+    --success-text: #8fd6a5;
 
-    --warn: #e0b03a;
-    --warn-bright: #f2bd2c;
-    --warn-soft: #2a2312;
-    --warn-line: rgb(242 189 44 / 0.3);
-    --warn-text: #f2c94c;
-    --warn-text-soft: #d6b04a;
+    --warn: #e6b04a;
+    --warn-bright: #f2c84b;
+    --warn-soft: #2a2516;
+    /* Neutral for the same reason as `--accent-line`. */
+    --warn-line: rgb(240 238 232 / 0.13);
+    --warn-text: #f2cd5c;
+    --warn-text-soft: #d9b452;
 
-    --danger: #ff6b4d;
-    --danger-soft: #2e1914;
-    --danger-line: #4d2a21;
-    --danger-text: #ff8a72;
+    --danger: #f07a62;
+    --danger-soft: #2f1a15;
+    --danger-line: #4f2b22;
+    --danger-text: #f59a85;
 
     /* The code panel keeps its ink (`--code-*` are not redefined). It is no
        longer the only dark thing on the page, but it is still darker than the
@@ -333,27 +348,27 @@
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
     --shadow-raised: 0 4px 14px rgb(0 0 0 / 0.4);
     --shadow-segment: 0 1px 2px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(255 255 255 / 0.08);
-    --shadow-pop: 0 0 0 1px rgb(255 255 255 / 0.07), 0 30px 70px -20px rgb(0 0 0 / 0.75);
+    --shadow-pop: 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 70px -20px rgb(0 0 0 / 0.75);
     --shadow-lift: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 40px -12px rgb(0 0 0 / 0.6);
     --shadow-sheet: 0 -14px 44px rgb(0 0 0 / 0.55);
 
-    --grid-line: rgb(255 255 255 / 0.04);
+    --grid-line: rgb(243 238 228 / 0.04);
 
-    --inverse: #eef0f5;
-    --inverse-hover: #ffffff;
-    --on-inverse: #0b0d10;
-    --chip: var(--ink-3);
-    --wash-rgb: 255 255 255;
+    --inverse: #f3eee4;
+    --inverse-hover: #fffaf0;
+    --on-inverse: #1a1814;
+    --chip: #2c2c29;
+    --wash-rgb: 243 238 228;
 
     /* The course map's greys (`RoadmapBoard`), which have no token: its
        scoped styles read these with the light value as the fallback. */
-    --rm-dot: rgb(255 255 255 / 0.07);
-    --rm-lead: #4b505c;
-    --rm-tie: #5a606d;
-    --rm-rail: #343843;
-    --rm-finish-line: rgb(255 255 255 / 0.16);
-    --rm-group: #111317;
-    --rm-link-hover: #1f2756;
+    --rm-dot: rgb(243 238 228 / 0.07);
+    --rm-lead: #55534d;
+    --rm-tie: #63615a;
+    --rm-rail: #383834;
+    --rm-finish-line: rgb(243 238 228 / 0.16);
+    --rm-group: #191918;
+    --rm-link-hover: #1f2a3d;
   }
 }
 
@@ -367,6 +382,7 @@
   --color-surface-mute: var(--surface-mute);
   --color-surface-rail: var(--surface-rail);
   --color-surface-canvas: var(--surface-canvas);
+  --color-surface-pop: var(--surface-pop);
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
@@ -443,7 +459,7 @@
   /* Inter for everything a person reads, in the app and on the page alike.
      While it is on the wire, "Inter Fallback" paints — a local Arial resized
      to its measurements (see the @font-face rules in the landing block). */
-  --font-sans: "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  --font-sans: "Figtree", "Figtree Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
@@ -705,8 +721,11 @@
  * 1040px, or the lesson scrolls sideways.
  */
 .lesson {
-  --measure-text: 760px;
-  --measure-wide: 1040px;
+  /* The reader's width (useReadingSettings) sets the track. Since the narrowest width is
+     960px, wide blocks (pictures, tables) share the text's edges: 40px sticking out either
+     side of a 960px column read as misaligned, not as room. The named lines stay. */
+  --measure-text: var(--reading-measure, 960px);
+  --measure-wide: var(--measure-text);
 
   display: grid;
   grid-template-columns:
@@ -768,8 +787,11 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* `backwards`, not `both`: the end state is the element's own, and a filling
+     opacity/transform animation keeps every row a stacking context for good,
+     which put a lesson part's ink under the next part's text. */
   .rise {
-    animation: rise 0.42s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+    animation: rise 0.42s cubic-bezier(0.16, 0.84, 0.44, 1) backwards;
     animation-delay: var(--d, 0ms);
   }
 }
@@ -1137,6 +1159,82 @@
   --cobalt-soft: #eef1fe;
 }
 
+/* Daylight 2's six course and feature colours (docs/design/daylight2/css/tokens.css),
+   each with a soft fill and an ink for words on that fill, plus `--hi-2`, the deeper
+   highlighter the status marks use for "learning". These sit after the cobalt block on
+   purpose: `--sky` and `--sky-soft` replace cobalt's. */
+:root,
+.reading-theme-warm {
+  /* Daylight's motion: calm and lively, the same curves everywhere. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --hi-2: #ffd447;
+  --leaf: #5bb276;
+  --sky: #5b9cf0;
+  --apricot: #f59a62;
+  --lilac: #9d8cf2;
+  --rose: #ec85a6;
+  --butter: #f2c84b;
+  --leaf-soft: #e2f0dc;
+  --sky-soft: #e1ebfb;
+  --apricot-soft: #fce6d6;
+  --lilac-soft: #ebe6fc;
+  --rose-soft: #fbe4eb;
+  --butter-soft: #fff1c7;
+  --leaf-ink: #2f7a47;
+  --sky-ink: #2d64b8;
+  --apricot-ink: #b2541c;
+  --lilac-ink: #5b49c2;
+  --rose-ink: #b23f68;
+  --butter-ink: #6b5200;
+}
+
+:root,
+.reading-theme-dim {
+  @variant dark {
+    --hi-2: #f0c53e;
+    --leaf: #6cc287;
+    --sky: #6fa9f5;
+    --apricot: #f5a674;
+    --lilac: #ab9cf5;
+    --rose: #f095b2;
+    --butter: #f2cd5c;
+    --leaf-soft: rgb(108 194 135 / 0.14);
+    --sky-soft: rgb(111 169 245 / 0.14);
+    --apricot-soft: rgb(245 166 116 / 0.14);
+    --lilac-soft: rgb(171 156 245 / 0.15);
+    --rose-soft: rgb(240 149 178 / 0.14);
+    --butter-soft: rgb(242 205 92 / 0.14);
+    --leaf-ink: #8fd6a5;
+    --sky-ink: #9cc3fa;
+    --apricot-ink: #f7bb92;
+    --lilac-ink: #c2b6fa;
+    --rose-ink: #f5afc6;
+    --butter-ink: #f4d265;
+  }
+}
+
+@theme inline {
+  --color-hi-2: var(--hi-2);
+  --color-leaf: var(--leaf);
+  --color-apricot: var(--apricot);
+  --color-lilac: var(--lilac);
+  --color-rose: var(--rose);
+  --color-butter: var(--butter);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-apricot-soft: var(--apricot-soft);
+  --color-lilac-soft: var(--lilac-soft);
+  --color-rose-soft: var(--rose-soft);
+  --color-butter-soft: var(--butter-soft);
+  --color-leaf-ink: var(--leaf-ink);
+  --color-sky-ink: var(--sky-ink);
+  --color-apricot-ink: var(--apricot-ink);
+  --color-lilac-ink: var(--lilac-ink);
+  --color-rose-ink: var(--rose-ink);
+  --color-butter-ink: var(--butter-ink);
+}
+
 @media (max-width: 900px) {
   :root {
     --gut: 10px;
@@ -1203,11 +1301,12 @@
 
 @theme {
   --font-display:
-    "Space Grotesk", "Space Grotesk Fallback", "Inter", -apple-system, BlinkMacSystemFont,
+    "Bricolage Grotesque", "Figtree", -apple-system, BlinkMacSystemFont,
     "Segoe UI", system-ui, sans-serif;
   --font-body:
-    "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    "Figtree", "Figtree Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
     sans-serif;
+  --font-hand: "Caveat", "Bricolage Grotesque", cursive;
 }
 
 /*
@@ -1235,8 +1334,10 @@
   line-gap-override: 0%;
 }
 
+/* shortcut: Figtree's fallback reuses Inter's measured Arial metrics, close enough to stop the
+   swap jumping; re-measure against Figtree if a layout shift shows up in Lighthouse. */
 @font-face {
-  font-family: 'Inter Fallback';
+  font-family: 'Figtree Fallback';
   src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans'),
     local('Helvetica Neue'), local('HelveticaNeue');
   size-adjust: 108.1%;
@@ -2267,8 +2368,8 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  /* Cobalt, because the door it opens onto (/start) is a cobalt slab. */
-  background: var(--cobalt-2);
+  /* The page ground: the field leaves warm paper and lands on it (/start, the chat). */
+  background: var(--bg);
   opacity: 0;
   pointer-events: none;
 }
@@ -2327,4 +2428,75 @@
      overridden: the brand's lime and its readable weight both work on paper. */
   --accent-soft: #eef3d4;
   --accent-line: #d6e5a2;
+}
+
+/* ---------------------------------------------------------------------------
+   DAYLIGHT 2 SCOPE — `class="d2"` on a root lets CSS written against
+   `docs/design/daylight2/css/*` run unchanged inside it. Those files use the
+   design's own names (`--paper`, `--card`, `--ink-2`, `--line`, `--hi`, the
+   radii `--r-xs` … `--r-2xl`). Inside the scope they point at the tokens above
+   wherever one exists, so the landing and the app share one paper, one ink and
+   one yellow; the rest are the design's values, light and dark. The six course
+   colours (`--leaf` … `--butter`, with `-soft` / `-ink`) are global, so the
+   scope simply inherits them.
+
+   A scope, not globals, because the cobalt block still owns `--paper`, `--ink`
+   and `--r-sm` on :root for the pages nobody has redone.
+--------------------------------------------------------------------------- */
+.d2 {
+  --paper: var(--bg);
+  --paper-2: #efeadf;
+  --paper-3: #e6e0d2;
+  --card: var(--surface);
+  --card-2: var(--surface-chrome);
+  --ink: var(--text);
+  --ink-2: rgb(var(--wash-rgb) / 0.7);
+  --ink-3: rgb(var(--wash-rgb) / 0.5);
+  --ink-4: rgb(var(--wash-rgb) / 0.3);
+  --line: var(--border);
+  --line-2: var(--border-strong);
+  --wash: rgb(var(--wash-rgb) / 0.035);
+  --wash-2: rgb(var(--wash-rgb) / 0.065);
+  --on-ink: var(--on-inverse);
+  --hi: var(--accent);
+  --hi-2: #ffd447;
+  --hi-soft: var(--accent-soft);
+  --hi-ink: var(--accent-strong);
+  --hl-mark: var(--accent);
+  --good: #3f9b5f;
+  --warn: #c9861a;
+  --bad: #d4553f;
+  /* the morning sky behind paintings */
+  --sky-top: #bcd3f0;
+  --sky-low: #f6ead3;
+  --sheet-ink: #1f1c17;
+  --shadow-1: var(--shadow-card);
+  --shadow-2: var(--shadow-raised);
+  --shadow-3: var(--shadow-lift);
+  --r-xs: 6px;
+  --r-sm: 9px;
+  --r: 12px;
+  --r-lg: 18px;
+  --r-xl: 26px;
+  --r-2xl: 34px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --font: var(--font-body);
+  --frame: 1280px;
+
+  @variant dark {
+    --paper-2: #1b1915;
+    --paper-3: #24211c;
+    --hi-2: #f0c53e;
+    --hl-mark: #ecc94f;
+    --hi-soft: rgb(244 210 101 / 0.16);
+    --sky-top: #1d2740;
+    --sky-low: #3a2f2a;
+    --sheet-ink: #f3eee4;
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-2: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 22px -8px rgb(0 0 0 / 0.5);
+    --shadow-3: 0 2px 6px rgb(0 0 0 / 0.3), 0 24px 50px -18px rgb(0 0 0 / 0.7);
+    --shadow-pop: 0 0 0 1px var(--line-2), 0 14px 36px -10px rgb(0 0 0 / 0.7);
+  }
 }

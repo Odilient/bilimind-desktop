@@ -42,7 +42,7 @@ defineProps<{ block: TimelineBlock }>()
             v-if="index < block.payload.events.length - 1"
             class="absolute top-4 -bottom-5 w-[2px] rounded-full bg-surface-track"
           />
-          <span class="relative z-10 mt-1 size-3 rounded-full bg-lime-2 ring-3 ring-surface" />
+          <span class="relative z-10 mt-1 size-3 rounded-full bg-hi-2 ring-3 ring-surface" />
         </span>
 
         <div class="min-w-0">

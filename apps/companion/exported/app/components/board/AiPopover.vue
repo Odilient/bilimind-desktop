@@ -7,13 +7,12 @@
  * toolbar gives it) rather than promising a chat, then one sentence and the
  * buttons: lime for the map it will most likely want, the other secondary.
  *
- * In demo mode the map is built from the course's own rows (see board/ai.ts).
- * Against the API it asks `POST /items/{id}/map`, which isn't built yet; a
- * 404 shows "coming soon" rather than an error.
+ * It asks `POST /items/{id}/map`, which isn't built yet; a 404 shows
+ * "coming soon" rather than an error.
  */
 import type { BoardController } from '~/companion/board/controller'
 import type { BoardContext } from '~/companion/board/context'
-import { planTopicMap, requestServerMap } from '~/companion/board/ai'
+import { requestServerMap } from '~/companion/board/ai'
 import type { MapPlan } from '~/companion/board/ops'
 import { objectRect, union } from '~/companion/board/geometry'
 import { subtreeIds } from '~/companion/board/mindmap'
@@ -23,7 +22,6 @@ import { useQuietAi } from '~/companion/quiet-ai'
 const props = defineProps<{
   ctl: BoardController
   itemId: string
-  demo: boolean
   context: () => BoardContext
   phone: boolean
 }>()
@@ -38,7 +36,6 @@ type State =
   | { k: 'working' }
   | { k: 'done'; plan: MapPlan; rootId: string; added: number }
   | { k: 'soon' }
-  | { k: 'empty'; why: string }
   | { k: 'error'; message: string }
 
 const state = ref<State>({ k: 'menu' })
@@ -46,21 +43,10 @@ const ctx = computed(() => props.context())
 
 async function map(scope: 'course' | 'deadline') {
   state.value = { k: 'working' }
-  let plan: MapPlan | null = null
-  if (props.demo) {
-    // A beat, so the map reads as made rather than pasted.
-    await new Promise((r) => setTimeout(r, 450))
-    plan = planTopicMap(ctx.value, scope)
-    if (!plan) {
-      state.value = { k: 'empty', why: 'No lectures have happened in this course yet, so there is nothing to map.' }
-      return
-    }
-  } else {
-    const res = await requestServerMap(props.itemId, scope)
-    if (res.kind === 'soon') return void (state.value = { k: 'soon' })
-    if (res.kind === 'error') return void (state.value = { k: 'error', message: res.message })
-    plan = res.plan
-  }
+  const res = await requestServerMap(props.itemId, scope)
+  if (res.kind === 'soon') return void (state.value = { k: 'soon' })
+  if (res.kind === 'error') return void (state.value = { k: 'error', message: res.message })
+  const plan = res.plan
   const { rootId, added } = props.ctl.applyMapPlan(plan, null)
   state.value = { k: 'done', plan, rootId, added }
   show(rootId)
@@ -192,12 +178,6 @@ function undo() {
       Mapping from your slides and recordings is coming soon. It will link every idea to its slide or the second it was said.
     </p>
     <p
-      v-else-if="state.k === 'empty'"
-      class="m"
-    >
-      {{ state.why }}
-    </p>
-    <p
       v-else
       class="m text-danger"
     >
@@ -211,14 +191,14 @@ function undo() {
   position: absolute; left: 66px; bottom: 60px; z-index: 7; width: 380px;
   display: grid; gap: 10px; padding: 14px 14px 14px 16px;
   background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-  box-shadow: 0 18px 36px -16px rgb(13 22 96 / 0.45); font-size: 14px;
+  box-shadow: var(--shadow-pop); font-size: 14px;
 }
 .aipop--phone { left: 10px; right: 10px; width: auto; bottom: calc(74px + env(safe-area-inset-bottom)); }
 .t {
   display: flex; gap: 8px; align-items: center;
   font-family: var(--font-display); font-weight: 600; font-size: 17px; letter-spacing: -0.015em;
 }
-.t > svg { color: var(--cobalt); }
+.t > svg { color: var(--brand); }
 .x {
   margin: -6px -6px 0 auto; width: 36px; height: 36px; border-radius: 999px;
   display: grid; place-items: center; color: var(--text-faint);

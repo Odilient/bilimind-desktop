@@ -27,11 +27,13 @@ import type { BoardPresence } from '~/companion/board/presence'
 import type { BoardContext } from '~/companion/board/context'
 import { BoardController } from '~/companion/board/controller'
 import { createScene, type Scene } from '~/companion/board/scene'
-import { courseHex, INK } from '~/companion/board/palette'
+import { courseHex, FONT, INK, setBoardTheme } from '~/companion/board/palette'
 import type { Camera, Pt } from '~/companion/board/geometry'
 import type * as Y from 'yjs'
 import { LOCAL } from '~/companion/board/model'
 import type { Item } from '~/companion/types'
+import { useCompanion } from '~/companion/store'
+import { shareWithClass } from '~/companion/shares'
 
 const props = defineProps<{
   sync: BoardSync
@@ -42,7 +44,6 @@ const props = defineProps<{
   fallbackColor?: string | null
   me: string
   presence: BoardPresence
-  demo: boolean
   context: () => BoardContext
   pages: Item[]
   /** A tab in the course workspace: it fills its pane, and the tab is the way back. */
@@ -80,11 +81,30 @@ function onPhone(e: MediaQueryList | MediaQueryListEvent) {
   phone.value = e.matches
 }
 
+/* The board paints in the app's theme (chosen, or the OS's under `system`), and
+   repaints when it changes; what's stored on it never depends on it. */
+const { preference } = useTheme()
+const osDark = ref(false)
+let darkMq: MediaQueryList | null = null
+const onOsTheme = (e: MediaQueryList | MediaQueryListEvent) => (osDark.value = e.matches)
+const darkBoard = computed(() => preference.value === 'dark' || (preference.value === 'system' && osDark.value))
+watch(darkBoard, (d) => {
+  setBoardTheme(d ? 'dark' : 'light')
+  ctl.value?.repaint()
+})
+
 onMounted(async () => {
   mq = window.matchMedia('(max-width: 639.98px)')
   onPhone(mq)
   mq.addEventListener('change', onPhone)
+  darkMq = window.matchMedia('(prefers-color-scheme: dark)')
+  onOsTheme(darkMq)
+  darkMq.addEventListener('change', onOsTheme)
+  setBoardTheme(darkBoard.value ? 'dark' : 'light')
   await props.sync.local
+  // Caveat isn't asked for until a sticky is painted, so `ready` alone would let the
+  // first notes wrap by the fallback face and re-wrap once it lands.
+  await document.fonts?.load(`600 20px ${FONT.hand}`).catch(() => undefined)
   await document.fonts?.ready
   const r = host.value!.getBoundingClientRect()
   try {
@@ -149,6 +169,7 @@ onBeforeUnmount(() => {
   saveView()
   if (saveTimer) clearTimeout(saveTimer)
   mq?.removeEventListener('change', onPhone)
+  darkMq?.removeEventListener('change', onOsTheme)
   ro?.disconnect()
   ctl.value?.destroy()
   scene?.destroy()
@@ -309,6 +330,24 @@ function finishRename() {
   if (t && t !== props.title) emit('rename', t)
 }
 
+/* Daylight 2 (gaps): a board in a course that's part of a class can be put in front of the class. */
+const store = useCompanion()
+const toaster = useToast()
+const classShare = computed(() => (props.subject ? store.get('subjects', props.subject.id)?.share_id ?? null : null))
+const giving = ref(false)
+async function giveToClass() {
+  if (!classShare.value || giving.value) return
+  giving.value = true
+  try {
+    await shareWithClass(classShare.value, props.itemId)
+    toaster.success({ title: 'Shared with the class', body: 'Everyone in it now has this board, live.' })
+  } catch {
+    toaster.error({ title: "Couldn't share it just now", body: 'Try again in a moment.' })
+  } finally {
+    giving.value = false
+  }
+}
+
 const shared = ref(false)
 async function share() {
   try {
@@ -373,8 +412,23 @@ defineExpose({ ctl })
           :y2="draft.b.y"
           class="ov-draft"
         />
+        <!-- The drag preview takes the picked shape so a diamond is a diamond from the first pixel. -->
+        <ellipse
+          v-if="box && ui?.tool === 'shape' && ui.shape === 'ellipse'"
+          :cx="box.x + box.w / 2"
+          :cy="box.y + box.h / 2"
+          :rx="box.w / 2"
+          :ry="box.h / 2"
+          class="ov-box ov-box--make"
+        />
+        <polygon
+          v-else-if="box && ui?.tool === 'shape' && ui.shape === 'diamond'"
+          :points="`${box.x + box.w / 2},${box.y} ${box.x + box.w},${box.y + box.h / 2}
+            ${box.x + box.w / 2},${box.y + box.h} ${box.x},${box.y + box.h / 2}`"
+          class="ov-box ov-box--make"
+        />
         <rect
-          v-if="box"
+          v-else-if="box"
           :x="box.x"
           :y="box.y"
           :width="box.w"
@@ -523,6 +577,17 @@ defineExpose({ ctl })
               Present
             </UiBtn>
             <UiBtn
+              v-if="classShare"
+              variant="secondary"
+              class="!h-10"
+              icon="users"
+              :loading="giving"
+              title="Put this board in front of everyone in the class"
+              @click="giveToClass"
+            >
+              Share with the class
+            </UiBtn>
+            <UiBtn
               variant="primary"
               class="!h-10"
               title="Copy a link to this board"
@@ -551,7 +616,6 @@ defineExpose({ ctl })
         v-if="aiOpen"
         :ctl="ctl"
         :item-id="itemId"
-        :demo="demo"
         :context="context"
         :phone="phone"
         @close="aiOpen = false"
@@ -644,18 +708,20 @@ defineExpose({ ctl })
   touch-action: none;
   overflow: hidden;
   -webkit-touch-callout: none;
-  background-image: radial-gradient(rgb(11 13 16 / 0.11) 1.2px, transparent 1.3px);
+  /* course.html's board: warm off-white with a dot every 24px. */
+  background-color: var(--surface-mute);
+  background-image: radial-gradient(var(--border-strong) 1.1px, transparent 1.4px);
 }
 .board--present .board-host { background-image: none; background-color: var(--surface-canvas); }
 .board-view, .board-wet { position: absolute; inset: 0; }
 .board-wet { width: 100%; height: 100%; pointer-events: none; }
 .board-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-.ov-sel { fill: none; stroke: var(--cobalt); stroke-width: 1.5; }
-.ov-handle { fill: #fff; stroke: var(--cobalt); stroke-width: 1.5; }
-.ov-box { fill: rgb(35 64 230 / 0.06); stroke: var(--cobalt); stroke-width: 1; stroke-dasharray: 4 3; }
-.ov-box--make { fill: rgb(35 64 230 / 0.04); stroke-dasharray: none; }
-.ov-draft { stroke: var(--cobalt); stroke-width: 2; stroke-dasharray: 5 4; }
-.ov-target { fill: none; stroke: var(--cobalt); stroke-width: 2; }
+.ov-sel { fill: none; stroke: var(--brand); stroke-width: 1.5; }
+.ov-handle { fill: #fff; stroke: var(--brand); stroke-width: 1.5; }
+.ov-box { fill: color-mix(in oklab, var(--sky) 8%, transparent); stroke: var(--brand); stroke-width: 1; stroke-dasharray: 4 3; }
+.ov-box--make { fill: color-mix(in oklab, var(--sky) 5%, transparent); stroke-dasharray: none; }
+.ov-draft { stroke: var(--brand); stroke-width: 2; stroke-dasharray: 5 4; }
+.ov-target { fill: none; stroke: var(--brand); stroke-width: 2; }
 
 .board-cursor {
   position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none;
@@ -675,9 +741,9 @@ defineExpose({ ctl })
 .board-top--bare { justify-content: flex-end; }
 .bpill {
   display: inline-flex; gap: 2px; align-items: center; min-width: 0; max-width: 100%; height: 40px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  padding: 0 4px; font-size: 14px; font-weight: 600;
-  box-shadow: 0 6px 16px -10px rgb(13 22 96 / 0.3);
+  background: var(--surface); border-radius: 12px;
+  padding: 0 4px; font-size: 13.5px; font-weight: 650;
+  box-shadow: 0 0 0 1px var(--border), var(--shadow-raised);
 }
 /* "‹ ● Databases": the way back, a link that lights up under the pointer. */
 .bback {
@@ -697,7 +763,7 @@ defineExpose({ ctl })
 .btitle:hover { background: var(--surface-mute); }
 .btitle-input {
   font: inherit; font-weight: 600; height: 32px; padding: 0 8px; border: 0; border-radius: 8px;
-  outline: 2px solid var(--cobalt); outline-offset: -2px; min-width: 160px; background: transparent;
+  outline: 2px solid var(--brand); outline-offset: -2px; min-width: 160px; background: transparent;
 }
 .bsync { flex: none; padding: 0 8px; font-size: 13px; font-weight: 500; color: var(--warn-text); white-space: nowrap; }
 .avs { display: flex; padding-left: 6px; }
@@ -709,14 +775,14 @@ defineExpose({ ctl })
 .board-present {
   position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 8;
   display: flex; align-items: center; gap: 6px; padding: 6px; max-width: calc(100% - 24px);
-  background: var(--ink); color: #fff; border-radius: 999px; box-shadow: var(--shadow-pop);
+  background: var(--chip); color: #fff; border-radius: 999px; box-shadow: var(--shadow-pop);
 }
 .bp-btn { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; }
 .bp-btn:disabled { opacity: 0.35; }
 .bp-btn:not(:disabled):hover { background: rgb(255 255 255 / 0.12); }
 .bp-label { font-size: 13px; color: rgb(255 255 255 / 0.78); padding: 0 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bp-label b { color: #fff; margin-right: 6px; font-variant-numeric: tabular-nums; }
-.bp-exit { height: 34px; padding: 0 14px; border-radius: 999px; background: var(--lime); color: var(--ink); font-size: 13px; font-weight: 600; }
+.bp-exit { height: 34px; padding: 0 14px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: 13px; font-weight: 600; }
 
 @media (max-width: 639.98px) {
   .board-top { top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; }

@@ -10,32 +10,22 @@
  *  - "Share my results with my class", on unless turned off: anonymous
  *    counts that make the class numbers on a deadline possible.
  * A switch moves at once and goes back, with a toast, if the save fails.
- * The sample has no account, so there they are kept in the tab and say
- * nothing.
  */
-import { useCompanion } from '~/companion/store'
 import { useQuietAi } from '~/companion/quiet-ai'
 import { currentZone } from '~/companion/time'
 
-const c = useCompanion()
 const { quiet, toggle } = useQuietAi()
 const auth = useAuth()
 const toast = useToast()
+const { t } = useI18n()
 
 type CompanionPrefs = NonNullable<NonNullable<AuthUser['preferences']>['companion']>
 type PrefKey = keyof CompanionPrefs
 
-const local = reactive<CompanionPrefs>({})
-const prefs = computed<CompanionPrefs>(() =>
-  c.status.mode === 'demo' ? local : auth.user.value?.preferences?.companion ?? {},
-)
+const prefs = computed<CompanionPrefs>(() => auth.user.value?.preferences?.companion ?? {})
 const saving = reactive<Partial<Record<PrefKey, boolean>>>({})
 
 async function setPref(key: PrefKey, on: boolean): Promise<void> {
-  if (c.status.mode === 'demo') {
-    local[key] = on
-    return
-  }
   const user = auth.user.value
   if (!user || saving[key]) return
   const before = user.preferences ?? null
@@ -46,7 +36,7 @@ async function setPref(key: PrefKey, on: boolean): Promise<void> {
     await auth.updateProfile({ preferences: { companion: { [key]: on } } })
   } catch {
     if (auth.user.value) auth.user.value = { ...auth.user.value, preferences: before }
-    toast.error('That setting didn\'t save. Try again.')
+    toast.error(t('settings.prefs.errSave'))
   } finally {
     saving[key] = false
   }
@@ -55,22 +45,22 @@ async function setPref(key: PrefKey, on: boolean): Promise<void> {
 const switches = computed(() => [
   {
     id: 'cp-quiet-label',
-    label: 'Quiet AI',
-    sub: 'No AI buttons in your pages and boards. Your notes stay exactly as you write them. Cards and the plan keep working.',
+    label: t('settings.prefs.quietLabel'),
+    sub: t('settings.prefs.quietSub'),
     on: quiet.value,
     flip: toggle,
   },
   {
     id: 'cp-try-first-label',
-    label: 'Make me try first',
-    sub: 'The assistant asks for your attempt before it answers, in every course. Graded work always works this way.',
+    label: t('settings.prefs.tryFirstLabel'),
+    sub: t('settings.prefs.tryFirstSub'),
     on: prefs.value.try_first === true,
     flip: () => setPref('try_first', prefs.value.try_first !== true),
   },
   {
     id: 'cp-share-label',
-    label: 'Share my results with my class',
-    sub: 'Anonymous: counts only, never your name or answers. Class numbers show once 5 classmates are here.',
+    label: t('settings.prefs.shareLabel'),
+    sub: t('settings.prefs.shareSub'),
     on: prefs.value.share_results !== false,
     flip: () => setPref('share_results', prefs.value.share_results === false),
   },
@@ -84,12 +74,14 @@ onMounted(() => {
   zone.value = currentZone().replace(/_/g, ' ')
 })
 const shortcuts = computed(() => [
-  { keys: mac.value ? '⌥Space' : 'Alt Space', what: 'New chat' },
-  { keys: mac.value ? '⌘K' : 'Ctrl K', what: 'Search, or ask BiliMind' },
-  { keys: mac.value ? '⌘J' : 'Ctrl J', what: 'Open or close the assistant' },
-  { keys: '[', what: 'Collapse or expand the sidebar' },
-  { keys: 'g t · g c · g n', what: 'Today, Courses, Notes' },
-  { keys: 'g k · g a', what: 'Calendar, the chat' },
+  { keys: mac.value ? '⌥Space' : 'Alt Space', what: t('settings.prefs.kNewChat') },
+  { keys: mac.value ? '⌘K' : 'Ctrl K', what: t('settings.prefs.kSearch') },
+  { keys: mac.value ? '⌘J' : 'Ctrl J', what: t('settings.prefs.kAssistant') },
+  { keys: '[', what: t('settings.prefs.kSidebar') },
+  { keys: 'g t · g c · g n', what: t('settings.prefs.kGoto1') },
+  { keys: 'g k · g a', what: t('settings.prefs.kGoto2') },
+  // Tasks and grades.
+  { keys: 'g d', what: t('settings.prefs.kGoto3') },
 ])
 </script>
 
@@ -117,51 +109,46 @@ const shortcuts = computed(() => [
         :aria-checked="row.on"
         :aria-labelledby="row.id"
         class="relative mt-0.5 h-7 w-12 shrink-0 cursor-pointer rounded-full transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none"
-        :class="row.on ? 'bg-ink dark:bg-brand-strong' : 'bg-cream-4 dark:bg-surface-track'"
+        :class="row.on ? 'bg-leaf' : 'bg-[rgb(var(--wash-rgb)/0.12)]'"
         @click="row.flip"
       >
         <span
-          class="absolute top-1 left-1 size-5 rounded-full bg-white shadow-[0_1px_3px_rgb(11_13_16/0.25)] transition-transform motion-reduce:transition-none"
+          class="absolute top-1 left-1 size-5 rounded-full bg-white shadow-[0_1px_3px_rgb(70_50_20/0.25)] transition-transform motion-reduce:transition-none"
           :class="row.on ? 'translate-x-5' : ''"
         />
       </button>
     </li>
-    <!-- Here, not under Account: it lives in a cookie on this device (see `useTheme`),
-         so the sample, which has no account, can change it too. -->
     <li class="grid gap-3 py-3.5">
       <div class="grid gap-1">
         <p class="text-[16px] font-semibold">
-          Theme
+          {{ t('common.language') }}
         </p>
         <p class="text-[14px] leading-relaxed text-text-muted">
-          System follows your device. The choice is saved on this device only.
+          {{ t('common.languageHint') }}
+        </p>
+      </div>
+      <UiLanguageSelect class="justify-self-start" />
+    </li>
+    <!-- Here, not under Account: it lives in a cookie on this device (see `useTheme`). -->
+    <li class="grid gap-3 py-3.5">
+      <div class="grid gap-1">
+        <p class="text-[16px] font-semibold">
+          {{ t('settings.prefs.theme') }}
+        </p>
+        <p class="text-[14px] leading-relaxed text-text-muted">
+          {{ t('settings.prefs.themeHint') }}
         </p>
       </div>
       <ShellThemeSwitch class="justify-self-start" />
     </li>
-    <li>
-      <NuxtLink
-        to="/app/connect"
-        class="group -mx-2 flex items-center justify-between gap-3 rounded-[12px] px-2 py-3.5 transition-colors hover:bg-surface-mute"
-      >
-        <span class="grid gap-0.5">
-          <span class="text-[16px] font-semibold">Connected apps</span>
-          <span class="text-[14px] text-text-muted">An exam timetable PDF</span>
-        </span>
-        <CompanionIcon
-          name="chevron-right"
-          :size="18"
-          class="text-text-faint transition-colors group-hover:text-text-soft"
-        />
-      </NuxtLink>
-    </li>
+    <!-- Connected apps, the calendar link and ChatGPT/Claude live in the Integrations tab. -->
     <li class="flex items-center justify-between gap-3 py-3.5 text-[15px]">
-      <span class="text-text-soft">Times are shown in</span>
+      <span class="text-text-soft">{{ t('settings.prefs.timezone') }}</span>
       <span class="font-semibold">{{ zone }}</span>
     </li>
     <li class="grid gap-2 py-3.5 max-[899px]:hidden">
       <p class="text-[15px] font-semibold">
-        Keyboard
+        {{ t('settings.prefs.keyboard') }}
       </p>
       <dl class="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-1.5 text-[13.5px]">
         <template

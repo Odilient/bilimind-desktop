@@ -1,0 +1,17 @@
+{
+  "readinessSaid": "Tayyorgarlik {readiness}% deb baholangan edi. Natijangiz: {got}%.",
+  "whatDidYouGet": "Qanday baho oldingiz?",
+  "save": "Saqlash",
+  "saveHint": "BiliMind oʻz tayyorgarlik bahosi qanchalik aniq boʻlganini koʻrishi uchun.",
+  "notConfirmed": "Hali tasdiqlanmagan.",
+  "heardInClass": "Darsda aytilgan",
+  "fromShared": "Ulashilgan xabardan",
+  "moodleHasnt": "; Moodleda bu sana belgilanmagan.",
+  "confirmDeadline": "Muddatni tasdiqlash",
+  "open": "Ochish",
+  "due": "Muddat: {when}",
+  "seoTitle": "Muddat · BiliMind",
+  "checkedRight": "Tekshirdim, hammasi toʻgʻri",
+  "whereCameFrom": "Sana qayerdan olingan",
+  "nothingLinked": "Hali mavzular bogʻlanmagan. Topshiriq tavsifida yoki oʻqituvchi tomonidan nimalar kiritilishi aytilgach, mavzular tayyorgarlik darajasi bilan bu yerda chiqadi."
+}

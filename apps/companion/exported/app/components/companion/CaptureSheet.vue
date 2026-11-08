@@ -15,18 +15,30 @@
  * Where it opens: from the rail's New it is a popover beside the button
  * (`capture.anchor`), so the eye stays where the hand was; from anywhere
  * else a small centred panel; on a phone a bottom sheet. On the Android app
- * Record drives the native recorder; everywhere else it is a preview of
- * that screen with no microphone behind it.
+ * Record drives the native recorder; on the web and the desktop it records
+ * through `recorder.ts`: the microphone, what the computer plays,
+ * or, in the desktop app, a screen. The desktop keeps what it records on the
+ * computer; the web uploads it when it stops. Either way closing the sheet
+ * only hides it, and the pill brings it back.
  */
 import type { Item, Signal } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { fileTarget, namedTarget, suggestionMeta, useCapture } from '~/companion/capture'
 import { courseColor } from '~/companion/colors'
-import { nowIso, timecode } from '~/companion/time'
+import { timecode } from '~/companion/time'
 import { useNativeRecorder } from '~/companion/native/recorder'
-import { PlatformError, usePlatform } from '~/companion/platform'
-import { fileRecording, forgetRecording, metaOf, recordingMeta, rememberRecording, type RecordingMeta } from '~/companion/recording'
+import { PlatformError, usePlatform, type ScreenSource } from '~/companion/platform'
+import {
+  fileMediaRecording, fileRecording, forgetRecording, metaOf, recordingMeta, rememberRecording, type RecordingMeta,
+} from '~/companion/recording'
+// recording: the web and desktop recorder, and the transcript that follows a desktop recording
+import {
+  elapsedMs, live as deviceLive, pauseRecording, resumeRecording, startRecording, stopRecording as stopDevice, takeAsked,
+  type RecordSource,
+} from '~/companion/recorder'
+import { agreed, transcribeItem } from '~/companion/transcribe'
 
+const { t } = useI18n()
 const c = useCompanion()
 const capture = useCapture()
 const toast = useToast()
@@ -82,7 +94,7 @@ watch(
     document.body.style.overflow = open ? 'hidden' : ''
     if (!open) {
       stopTimer()
-      releaseSystemAudio()
+      resetChoice()
       pasted.value = ''
       result.value = null
     }
@@ -108,11 +120,11 @@ const seconds = ref(0)
 let timer: ReturnType<typeof setInterval> | undefined
 
 function tick(): void {
-  seconds.value = rec.available ? Math.floor(rec.elapsedNow() / 1000) : seconds.value + 1
+  seconds.value = Math.floor((rec.available ? rec.elapsedNow() : elapsedMs()) / 1000)
 }
 function startTimer(): void {
   stopTimer()
-  seconds.value = rec.available ? Math.floor(rec.elapsedNow() / 1000) : 0
+  tick()
   timer = setInterval(tick, 1000)
 }
 function stopTimer(): void {
@@ -121,7 +133,7 @@ function stopTimer(): void {
 }
 onBeforeUnmount(stopTimer)
 
-const paused = computed(() => Boolean(rec.state.value?.paused))
+const paused = computed(() => Boolean(rec.state.value?.paused || deviceLive.paused))
 
 /** Where the running recording files: its own record if it was re-attached, else the guess. */
 const attached = ref<RecordingMeta | null>(null)
@@ -132,7 +144,7 @@ function targetMeta(): Omit<RecordingMeta, 'id'> {
     subject_id: target.value.subject?.id ?? null,
     session_id: target.value.session?.id ?? null,
     topic_id: target.value.session?.topic_id ?? null,
-    label: target.value.subject ? target.value.label : (guess.value?.session?.title ?? 'Voice memo'),
+    label: target.value.subject ? target.value.label : (guess.value?.session?.title ?? t('today.capture.voiceMemo')),
   }
 }
 
@@ -144,137 +156,178 @@ async function remember(item: Item | null): Promise<void> {
 }
 
 /** "Saved to My notes", with the way to it. */
-function saved(item: Item | null, body: string): void {
+function saved(item: Item | null, body: string, where = target.value.label): void {
   if (!item) return
   toast.success({
-    title: `Saved to ${target.value.label}`,
+    title: t('today.capture.savedTo', { where }),
     body,
-    action: { label: 'Open', handler: () => void navigateTo(`/app/notes/${item.id}`) },
+    action: { label: t('common.open'), handler: () => void navigateTo(`/app/notes/${item.id}`) },
   })
 }
 
 /*
  * What to record. A phone records the room. A computer may also record what
- * it plays — an online lecture — when the platform can capture that; then the
- * learner picks before anything starts. The captured stream is never played
- * back, and for now it is not kept either: this is the choice and the screen,
- * with the saving to follow.
+ * it plays (an online lecture) and, in the desktop app, a screen; then the
+ * learner picks before anything starts. Nothing captured is ever played
+ * back. Recording itself is recorder.ts's: the desktop keeps it on disk as it
+ * goes, the web uploads it when it stops (recording.ts).
  */
 const platform = usePlatform()
-const source = ref<'mic' | 'system' | null>(null)
-const offerSystem = computed(() => !rec.available && platform.can.systemAudio)
-let systemStream: MediaStream | null = null
+const source = ref<RecordSource | null>(null)
+const offerChoice = computed(() => !rec.available && (platform.can.systemAudio || platform.can.screenRecording))
+/** Still picking: what to record, or which screen. */
+const choosing = computed(() => offerChoice.value && !source.value)
+/** The screen picker, once "Your screen" was pressed. */
+const screens = ref<ScreenSource[] | null>(null)
+/** Over a screen, the learner's voice too: on for slides they talk over, off for a lecture played on screen. */
+const withMic = ref(true)
 
-function releaseSystemAudio(): void {
-  systemStream?.getTracks().forEach((track) => track.stop())
-  systemStream = null
-  source.value = null
+/** Closing the sheet hides a recording; only an unstarted choice is forgotten. */
+function resetChoice(): void {
+  if (!deviceLive.id) source.value = null
+  screens.value = null
 }
 
-async function chooseSource(kind: 'mic' | 'system'): Promise<void> {
-  if (kind === 'system') {
-    try {
-      systemStream = await platform.captureSystemAudio()
-    } catch (error) {
-      if (!(error instanceof PlatformError && error.code === 'cancelled')) {
-        toast.error(error instanceof Error ? error.message : 'This computer would not share its sound.')
-      }
-      return
-    }
-    // Stopping the share from the browser's own bar ends the recording too.
-    systemStream.getTracks().forEach((track) => track.addEventListener('ended', () => void stopRecording()))
+async function chooseSource(kind: RecordSource): Promise<void> {
+  if (kind !== 'screen') return startDevice(kind)
+  try {
+    const list = await platform.screenSources()
+    // Wayland's portal has already asked which one; there's nothing left to pick.
+    if (list.length === 1) return startDevice('screen', list[0]!.id)
+    screens.value = list
+  } catch (error) {
+    toast.error(error instanceof Error ? error.message : t('today.capture.noScreen'))
   }
+}
+
+async function startDevice(kind: RecordSource, screenId: string | null = null): Promise<void> {
+  // A fresh id per recording, as on the phone: it names the desktop's folder and the item it becomes.
+  const id = crypto.randomUUID()
+  const meta = targetMeta()
+  try {
+    await startRecording({
+      id,
+      label: meta.label,
+      keep: true,
+      mic: kind === 'mic' || (kind === 'screen' && withMic.value),
+      system: kind !== 'mic',
+      screen: screenId,
+      meta: { ...meta },
+      owner: 'sheet',
+      onEnded: (problem) => void stopRecording(problem),
+    })
+  } catch (error) {
+    if (!(error instanceof PlatformError && error.code === 'cancelled')) {
+      toast.error(error instanceof Error ? error.message : t('today.capture.noStart'))
+    }
+    // with no choice to go back to, there's nothing left on the sheet
+    if (!offerChoice.value) close()
+    return
+  }
+  attached.value = { id, ...meta }
   source.value = kind
+  screens.value = null
   startTimer()
 }
 
 async function beginRecording(): Promise<void> {
   attached.value = null
-  source.value = null
-  if (!rec.available && offerSystem.value) {
-    // Wait for the choice; the clock starts with it.
-    stopTimer()
-    seconds.value = 0
-    return
-  }
-  if (rec.available) {
-    try {
-      const live = await rec.refresh()
-      if (live?.recording && live.sessionId) {
-        // Already running (started before the app was closed, or from the
-        // pill): show that one, never start a second over it.
-        attached.value = metaOf(live)
-      } else {
-        // A fresh id per recording: the recorder continues any folder it
-        // already knows, so reusing the class's id would merge two lectures.
-        // It is also the id of the item this becomes.
-        const id = crypto.randomUUID()
-        const meta = targetMeta()
-        rememberRecording({ id, ...meta })
-        attached.value = recordingMeta(id)
-        await rec.start({ sessionId: id, title: meta.label, meta: { ...meta } })
-      }
-    } catch (error) {
-      if (attached.value && !rec.state.value?.recording) forgetRecording(attached.value.id)
-      attached.value = null
-      const code = (error as { code?: string }).code
-      toast.error(
-        code === 'permission-denied' || code === 'not-allowed'
-          ? 'BiliMind needs the microphone to record. Allow it in the phone\'s settings.'
-          : code === 'storage-full'
-            ? 'The phone is out of space, so recording can\'t start.'
-            : 'The recorder didn\'t start. Try again in a moment.',
-      )
-      capture.mode.value = 'menu'
+  if (!rec.available) {
+    if (deviceLive.id && deviceLive.owner === 'sheet') {
+      // Already running (hidden, then reopened from the pill): show that one, never start a second.
+      attached.value = { id: deviceLive.id, ...(deviceLive.meta as Omit<RecordingMeta, 'id'>) }
+      source.value = deviceLive.source
+      startTimer()
       return
     }
+    source.value = null
+    screens.value = null
+    stopTimer()
+    seconds.value = 0
+    // "Record screen" goes straight to which screen; with nothing to choose, the microphone starts.
+    if (takeAsked() === 'screen' && platform.can.screenRecording) return chooseSource('screen')
+    if (!offerChoice.value) return chooseSource('mic')
+    return
+  }
+  try {
+    const live = await rec.refresh()
+    if (live?.recording && live.sessionId) {
+      // Already running (started before the app was closed, or from the
+      // pill): show that one, never start a second over it.
+      attached.value = metaOf(live)
+    } else {
+      // A fresh id per recording: the recorder continues any folder it
+      // already knows, so reusing the class's id would merge two lectures.
+      // It is also the id of the item this becomes.
+      const id = crypto.randomUUID()
+      const meta = targetMeta()
+      rememberRecording({ id, ...meta })
+      attached.value = recordingMeta(id)
+      await rec.start({ sessionId: id, title: meta.label, meta: { ...meta } })
+    }
+  } catch (error) {
+    if (attached.value && !rec.state.value?.recording) forgetRecording(attached.value.id)
+    attached.value = null
+    const code = (error as { code?: string }).code
+    toast.error(
+      code === 'permission-denied' || code === 'not-allowed'
+        ? t('today.capture.needMic')
+        : code === 'storage-full'
+          ? t('today.capture.phoneFull')
+          : t('today.capture.noStart'),
+    )
+    capture.mode.value = 'menu'
+    return
   }
   startTimer()
 }
 
 async function togglePause(): Promise<void> {
-  if (!rec.available) return
+  if (!rec.available) {
+    if (deviceLive.paused) resumeRecording()
+    else pauseRecording()
+    return
+  }
   if (paused.value) await rec.resume()
   else await rec.pause()
 }
 
-async function stopRecording(): Promise<void> {
+/** `problem`: the recorder ended by itself (the disk filled up), said once what was kept is filed. */
+async function stopRecording(problem: string | null = null): Promise<void> {
   stopTimer()
   if (rec.available) {
     const state = await rec.stop()
     const item = await fileRecording(c, state, targetMeta())
     await remember(item)
-    saved(item, `Recording, ${timecode(Math.round(state.elapsedMs / 1000))}`)
+    saved(item, t('today.capture.recording', { time: timecode(Math.round(state.elapsedMs / 1000)) }))
     close()
     return
   }
-  const duration = seconds.value
-  releaseSystemAudio()
-  const meta: Record<string, unknown> = { duration_s: duration, segments: 0 }
-  // The preview only pretends to file in the demo: on a real account an
-  // empty recording row would be a lie in the course.
-  if (c.status.mode === 'demo' && duration > 0) {
-    const now = nowIso()
-    const named = target.value.session?.title ?? guess.value?.session?.title ?? 'Voice memo'
-    const item = await c.upsert<Item>('items', {
-      id: crypto.randomUUID(),
-      subject_id: target.value.subject?.id ?? null,
-      session_id: target.value.session?.id ?? null,
-      topic_id: target.value.session?.topic_id ?? null,
-      parent_id: null,
-      kind: 'recording',
-      title: `${named} recording`,
-      preview: null,
-      meta: { ...meta, ...(target.value.subject ? {} : suggestionMeta(guess.value)) },
-      source: 'made',
-      source_ref: null,
-      position: c.items.value.length,
-      pinned: false,
-      created_at: now,
-    })
-    saved(item, `Recording, ${timecode(duration)}`)
+  if (!deviceLive.id || deviceLive.owner !== 'sheet') {
+    close()
+    return
   }
+  const place: Omit<RecordingMeta, 'id'> = attached.value ? { ...attached.value } : targetMeta()
+  const where = place.subject_id ? place.label : t('today.capture.myNotes')
   close()
+  const done = await stopDevice()
+  if (!done) return
+  const item = await fileMediaRecording(c, done, place)
+  if (item) {
+    await remember(item)
+    // Once the learner has said yes to the speech model, every desktop recording gets its transcript.
+    const writing = done.speech && agreed()
+    const what = t(done.screen ? 'today.capture.screenRecording' : 'today.capture.recording', { time: timecode(done.duration_s) })
+    saved(
+      item,
+      done.blob
+        ? what
+        : `${what}. ${t('today.capture.keptHere')}${done.speech ? ` ${t(writing ? 'today.capture.writing' : 'today.capture.openToWrite')}` : ''}`,
+      where,
+    )
+    if (writing) void transcribeItem(c, item.id)
+  }
+  if (problem ?? done.problem) toast.error(problem ?? done.problem!)
 }
 
 /* -- Paste text ---------------------------------------------------------- */
@@ -292,7 +345,7 @@ async function readPasted(): Promise<void> {
     const [signal] = await c.ingestText(pasted.value, 'share', hint)
     result.value = signal ?? null
   } catch {
-    toast.error('Couldn\'t read that just now. It\'s still here; try again.')
+    toast.error(t('today.capture.readFailed'))
   } finally {
     reading.value = false
   }
@@ -314,7 +367,7 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
         :class="['fixed inset-0 z-[90]', !popover && 'grid items-end min-[900px]:place-items-center']"
         role="dialog"
         aria-modal="true"
-        :aria-label="capture.mode.value === 'record' ? 'Recording' : 'New'"
+        :aria-label="capture.mode.value === 'record' ? t('today.capture.recordingLabel') : t('today.capture.new')"
       >
         <!-- A popover dims nothing: it is a menu, not an interruption. -->
         <div
@@ -340,15 +393,15 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                 class="size-2.5 rounded-full bg-coral motion-reduce:animate-none"
                 :class="paused ? 'opacity-40' : 'animate-pulse-dot'"
               />
-              {{ paused ? 'Paused' : 'On this device' }}
+              {{ paused ? t('today.focus.paused') : rec.available || platform.recordings ? t('today.capture.onDevice') : t('today.capture.recordingLabel') }}
             </span>
           </header>
           <div
-            v-if="offerSystem && !source"
+            v-if="choosing && !screens"
             class="grid gap-2.5"
           >
             <p class="t-head text-[22px] text-white">
-              What are you recording?
+              {{ t('today.capture.whatRecording') }}
             </p>
             <button
               type="button"
@@ -360,11 +413,12 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                 :size="20"
               />
               <span class="grid gap-0.5">
-                <span class="text-[15px] font-semibold">The room, with the microphone</span>
-                <span class="text-[12.5px] text-[#a9aebd]">A lecture hall, a seminar, a tutor across the table</span>
+                <span class="text-[15px] font-semibold">{{ t('today.capture.room') }}</span>
+                <span class="text-[12.5px] text-[#a9aebd]">{{ t('today.capture.roomHint') }}</span>
               </span>
             </button>
             <button
+              v-if="platform.can.systemAudio"
               type="button"
               class="flex items-center gap-3.5 rounded-[16px] bg-[rgb(238_240_246/0.08)] p-4 text-left hover:bg-[rgb(238_240_246/0.14)]"
               @click="chooseSource('system')"
@@ -374,8 +428,24 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                 :size="20"
               />
               <span class="grid gap-0.5">
-                <span class="text-[15px] font-semibold">Record this computer's audio (online lecture)</span>
-                <span class="text-[12.5px] text-[#a9aebd]">Teams, Zoom, a recorded talk: what this computer plays, nothing else</span>
+                <span class="text-[15px] font-semibold">{{ t('today.capture.system') }}</span>
+                <span class="text-[12.5px] text-[#a9aebd]">{{ t('today.capture.systemHint') }}</span>
+              </span>
+            </button>
+            <!-- Recording: the desktop app records a screen too. -->
+            <button
+              v-if="platform.can.screenRecording"
+              type="button"
+              class="flex items-center gap-3.5 rounded-[16px] bg-[rgb(238_240_246/0.08)] p-4 text-left hover:bg-[rgb(238_240_246/0.14)]"
+              @click="chooseSource('screen')"
+            >
+              <CompanionIcon
+                name="monitor"
+                :size="20"
+              />
+              <span class="grid gap-0.5">
+                <span class="text-[15px] font-semibold">{{ t('today.capture.screen') }}</span>
+                <span class="text-[12.5px] text-[#a9aebd]">{{ t('today.capture.screenHint') }}</span>
               </span>
             </button>
             <button
@@ -383,7 +453,36 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
               class="justify-self-center px-3 py-2 text-[13.5px] font-medium text-[#a9aebd] hover:text-white"
               @click="close"
             >
-              Not now
+              {{ t('today.capture.notNow') }}
+            </button>
+          </div>
+          <!-- Recording: which screen, from the desktop's own list. -->
+          <div
+            v-else-if="choosing && screens"
+            class="grid gap-3"
+          >
+            <p class="t-head text-[22px] text-white">
+              {{ t('today.capture.whichScreen') }}
+            </p>
+            <CompanionRecordingScreenPicker
+              :sources="screens"
+              dark
+              @pick="(id: string) => startDevice('screen', id)"
+            />
+            <label class="flex cursor-pointer items-center gap-2.5 text-[14px] text-[#c3c7d3]">
+              <input
+                v-model="withMic"
+                type="checkbox"
+                class="size-4 accent-coral"
+              >
+              {{ t('today.capture.voiceToo') }}
+            </label>
+            <button
+              type="button"
+              class="justify-self-center px-3 py-2 text-[13.5px] font-medium text-[#a9aebd] hover:text-white"
+              @click="screens = null"
+            >
+              {{ t('common.back') }}
             </button>
           </div>
           <p
@@ -394,7 +493,7 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
             {{ timecode(seconds) }}
           </p>
           <div
-            v-if="!(offerSystem && !source)"
+            v-if="!choosing"
             class="flex h-10 items-center gap-[3px]"
             aria-hidden="true"
           >
@@ -409,32 +508,36 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
             v-if="rec.available"
             class="rounded-[14px] bg-[rgb(238_240_246/0.07)] p-3.5 text-[13.5px] leading-relaxed text-[#c3c7d3]"
           >
-            {{ paused ? 'Paused. Nothing is being recorded until you carry on.' : 'Recording on this phone. It keeps going with the screen off, and you can close this and come back.' }}
+            {{ t(paused ? 'today.capture.pausedNote' : 'today.capture.phoneNote') }}
           </p>
           <p
-            v-else-if="source === 'system'"
+            v-else-if="!choosing"
             class="rounded-[14px] bg-[rgb(238_240_246/0.07)] p-3.5 text-[13.5px] leading-relaxed text-[#c3c7d3]"
           >
-            Listening to what this computer plays; nothing is played back. Keep the lecture's own
-            window open. This is a preview: saving the sound comes next.
-          </p>
-          <p
-            v-else-if="source === 'mic' || !offerSystem"
-            class="rounded-[14px] bg-[rgb(238_240_246/0.07)] p-3.5 text-[13.5px] leading-relaxed text-[#c3c7d3]"
-          >
-            This is a preview of the recorder. In the app it keeps going with the screen off,
-            writes the transcript as the lecturer speaks, and catches "the quiz is on Thursday"
-            as a card you can add with one tap. Nothing is being recorded now.
+            <template v-if="paused">
+              {{ t('today.capture.pausedNote') }}
+            </template>
+            <template v-else-if="source === 'screen'">
+              {{ t('today.capture.screenNote') }}
+            </template>
+            <template v-else-if="source === 'system'">
+              {{ t('today.capture.systemNote') }}
+            </template>
+            <template v-else-if="platform.recordings">
+              {{ t('today.capture.deviceNote') }}
+            </template>
+            <template v-else>
+              {{ t('today.capture.tabNote') }}
+            </template>
           </p>
           <div
-            v-if="!(offerSystem && !source)"
+            v-if="!choosing"
             class="flex items-center justify-between"
           >
             <button
-              v-if="rec.available"
               type="button"
               class="grid size-11 place-items-center rounded-full bg-[rgb(238_240_246/0.1)]"
-              :aria-label="paused ? 'Carry on recording' : 'Pause'"
+              :aria-label="t(paused ? 'today.capture.carryOn' : 'today.capture.pause')"
               @click="togglePause"
             >
               <CompanionIcon
@@ -442,22 +545,18 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                 :size="18"
               />
             </button>
-            <span
-              v-else
-              class="w-11"
-            />
             <button
               type="button"
               class="grid size-16 place-items-center rounded-full bg-coral"
-              aria-label="Stop"
-              @click="stopRecording"
+              :aria-label="t('today.capture.stop')"
+              @click="stopRecording()"
             >
               <span class="block size-5 rounded-[5px] bg-white" />
             </button>
             <button
               type="button"
               class="grid size-11 place-items-center rounded-full bg-[rgb(238_240_246/0.1)]"
-              :aria-label="rec.available ? 'Hide; it keeps recording' : 'Close without saving'"
+              :aria-label="t('today.capture.hide')"
               @click="close"
             >
               <CompanionIcon
@@ -485,7 +584,7 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
           <header class="flex items-start justify-between gap-3">
             <div class="grid min-w-0 gap-1">
               <h2 :class="['t-head', popover ? 'text-[18px]' : 'text-[22px]']">
-                {{ capture.mode.value === 'paste' ? 'Paste a message' : capture.mode.value === 'signal' ? 'Shared to BiliMind' : 'New note' }}
+                {{ t(capture.mode.value === 'paste' ? 'today.changes.paste' : capture.mode.value === 'signal' ? 'today.capture.shared' : 'today.capture.newNote') }}
               </h2>
               <!-- Where it goes, said before anything is pressed: only when a button named it. -->
               <p
@@ -496,13 +595,13 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                   class="mt-[5px] size-2 shrink-0 rounded-full"
                   :style="{ background: courseColor(target.subject.color) }"
                 />
-                <span>Goes in <b class="font-semibold text-text">{{ target.label }}</b></span>
+                <i18n-t keypath="today.capture.goesIn" tag="span"><template #where><b class="font-semibold text-text">{{ target.label }}</b></template></i18n-t>
               </p>
             </div>
             <button
               type="button"
               class="-mt-1 -mr-2.5 grid size-11 shrink-0 place-items-center rounded-full text-text-muted hover:bg-surface-track hover:text-text"
-              aria-label="Close"
+              :aria-label="t('common.close')"
               @click="close"
             >
               <CompanionIcon
@@ -533,15 +632,14 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                 for="cp-paste"
                 class="text-[15px] leading-relaxed text-text-body"
               >
-                A group-chat message, an email, an announcement. BiliMind reads the date and the
-                course, and shows you the change before anything moves.
+                {{ t('today.capture.pasteHint') }}
               </label>
               <textarea
                 id="cp-paste"
                 v-model="pasted"
                 rows="5"
                 class="w-full resize-none rounded-[14px] border border-border-field bg-surface p-3.5 text-[15px] leading-relaxed outline-none focus:border-brand"
-                placeholder="guys the networks quiz moved to friday 10am"
+                :placeholder="t('today.capture.pastePlaceholder')"
               />
               <div class="flex flex-wrap gap-2">
                 <UiBtn
@@ -551,14 +649,14 @@ const bars = Array.from({ length: 28 }, (_, i) => 18 + ((i * 37) % 70))
                   :disabled="!pasted.trim()"
                   @click="readPasted"
                 >
-                  Read it
+                  {{ t('today.capture.readIt') }}
                 </UiBtn>
                 <UiBtn
                   variant="ghost"
                   size="lg"
                   @click="capture.mode.value = 'menu'"
                 >
-                  Back
+                  {{ t('common.back') }}
                 </UiBtn>
               </div>
             </template>

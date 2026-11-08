@@ -19,7 +19,8 @@
  * open beside it, so choosing a colour is one tap from the tool.
  */
 import type { BoardController, Tool } from '~/companion/board/controller'
-import { PEN, STICKY, type PenColor, type StickyColor } from '~/companion/board/palette'
+// Swatches show the colour as the board paints it now (`pen()`, `sticky()` follow the theme).
+import { PEN, STICKY, pen, sticky, type PenColor, type StickyColor } from '~/companion/board/palette'
 import type { ShapeKind } from '~/companion/board/model'
 
 const props = defineProps<{ ctl: BoardController; phone: boolean; aiOpen: boolean }>()
@@ -300,7 +301,7 @@ const optionsTop = computed(() => {
         type="button"
         class="swatch"
         :class="{ on: ui.stickyColor === c }"
-        :style="{ background: STICKY[c] }"
+        :style="{ background: sticky()[c] }"
         :aria-label="`${c} sticky`"
         :title="`${c[0]!.toUpperCase()}${c.slice(1)}`"
         @click="ctl.setStickyColor(c)"
@@ -327,7 +328,7 @@ const optionsTop = computed(() => {
         type="button"
         class="swatch swatch--ink"
         :class="{ on: ui.penColor === c && !ui.eraser }"
-        :style="{ background: PEN[c] }"
+        :style="{ background: pen()[c] }"
         :aria-label="`${c} ink`"
         :title="`${c[0]!.toUpperCase()}${c.slice(1)} ink`"
         @click="ui.penColor = c; ui.eraser = false"
@@ -369,27 +370,30 @@ const optionsTop = computed(() => {
 
 <style scoped>
 .btool {
+  /* course.html's tray: frosted paper, a hairline, the armed tool the one ink cell. */
   position: absolute; left: 14px; top: 64px; z-index: 6;
-  display: grid; gap: 3px; padding: 5px;
-  background: var(--ink); color: #fff; border-radius: 999px;
-  box-shadow: 0 20px 40px -14px rgb(11 13 16 / 0.55);
+  display: grid; gap: 1px; padding: 5px;
+  background: color-mix(in oklab, var(--surface) 92%, transparent); color: var(--text-soft);
+  border-radius: 14px;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-lift);
 }
 .btool button {
   position: relative;
-  width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center;
-  color: rgb(255 255 255 / 0.6); transition: background-color 120ms, color 120ms;
+  width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
+  color: var(--text-soft); transition: background-color 200ms, color 200ms;
 }
-.btool button:hover:not(.on):not(:disabled) { background: rgb(255 255 255 / 0.1); color: #fff; }
-.btool button.on { background: var(--lime); color: var(--ink); }
-.btool button:disabled { opacity: 0.35; }
+.btool button:hover:not(.on):not(:disabled) { background: rgb(var(--wash-rgb) / 0.065); color: var(--text); }
+.btool button.on { background: var(--inverse); color: var(--on-inverse); }
+.btool button:disabled { opacity: 0.3; }
 .btool--undo { top: auto; bottom: 14px; grid-auto-flow: column; }
-.btool-sep { height: 1px; margin: 2px 6px; background: rgb(255 255 255 / 0.15); }
+.btool-sep { height: 1px; margin: 3px 6px; background: var(--border-strong); }
 
 /* The tool's name, key and how it's used, beside it the moment it's pointed at. */
 .tip {
   position: absolute; left: calc(100% + 12px); top: 50%; z-index: 9;
   display: none; gap: 2px; width: max-content; max-width: 260px; padding: 7px 11px 8px;
-  background: var(--ink); color: #fff; border-radius: 10px; text-align: left;
+  background: var(--chip); color: #fff; border-radius: 10px; text-align: left;
   transform: translateY(-50%); pointer-events: none; box-shadow: var(--shadow-pop);
 }
 .tip b { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; }
@@ -409,7 +413,9 @@ const optionsTop = computed(() => {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 7;
   height: calc(62px + env(safe-area-inset-bottom)); padding: 0 4px env(safe-area-inset-bottom);
   display: flex; justify-content: space-around; align-items: center;
-  background: var(--ink); color: rgb(255 255 255 / 0.6);
+  background: color-mix(in oklab, var(--surface) 94%, transparent); color: var(--text-muted);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  box-shadow: 0 -1px 0 var(--border);
 }
 .kbar button {
   flex: 1; min-width: 44px; max-width: 64px; height: 52px; border-radius: 12px;
@@ -417,19 +423,19 @@ const optionsTop = computed(() => {
 }
 .kbar .glyph { display: grid; place-items: center; height: 18px; line-height: 1; }
 .kbar .name { font-size: 11.5px; font-weight: 500; line-height: 1.2; white-space: nowrap; }
-.kbar button.on { background: var(--lime); color: var(--ink); }
+.kbar button.on { background: var(--inverse); color: var(--on-inverse); }
 
 .sheet {
   position: absolute; left: 8px; right: 8px; bottom: calc(70px + env(safe-area-inset-bottom)); z-index: 8;
   display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 8px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-sheet);
+  background: var(--surface); border-radius: 16px; box-shadow: 0 0 0 1px var(--border), var(--shadow-sheet);
 }
 .sheet-item {
   display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 12px; border-radius: 10px;
   font-size: 15px; font-weight: 600; color: var(--text); text-align: left;
 }
 .sheet-item svg { color: var(--text-soft); }
-.sheet-item.on { background: var(--ink); color: var(--lime); }
+.sheet-item.on { background: var(--inverse); color: var(--on-inverse); }
 .sheet-item.on svg { color: inherit; }
 .sheet-item:active:not(.on) { background: var(--surface-sunken); }
 .sheet-item:disabled { opacity: 0.4; }
@@ -437,19 +443,19 @@ const optionsTop = computed(() => {
 .bopts {
   position: absolute; left: 66px; z-index: 6;
   display: flex; align-items: center; gap: 4px; padding: 5px 6px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  box-shadow: 0 10px 24px -14px rgb(13 22 96 / 0.35);
+  background: var(--surface); border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-raised);
 }
 /* On a phone the options sit above "Show all" (bottom right), not across it. */
 .bopts--phone {
   left: 50%; transform: translateX(-50%); bottom: calc(130px + env(safe-area-inset-bottom)); top: auto;
   max-width: calc(100% - 16px); padding: 6px 8px; gap: 6px;
 }
-.swatch { width: 24px; height: 24px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.12); }
+.swatch { width: 24px; height: 24px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1); }
 .swatch--ink { border-radius: 50%; width: 22px; height: 22px; }
-.swatch.on { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink); }
+.swatch.on { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--text); }
 .opt { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; color: var(--text-soft); }
-.opt.on { background: var(--ink); color: var(--lime); }
+.opt.on { background: var(--inverse); color: var(--on-inverse); }
 .dotsize { display: block; border-radius: 50%; background: currentColor; }
 .sep { width: 1px; height: 20px; background: var(--border-strong); margin: 0 3px; }
 .hint { font-size: 13px; color: var(--text-muted); padding: 0 6px; white-space: nowrap; }

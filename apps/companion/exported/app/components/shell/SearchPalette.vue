@@ -40,6 +40,7 @@ const {
   choose,
 } = useSearch()
 
+const { t } = useI18n()
 const input = useTemplateRef<HTMLInputElement>('input')
 const list = useTemplateRef<HTMLElement>('list')
 
@@ -73,9 +74,9 @@ const busy = computed(() => state.value === 'loading' || state.value === 'slow')
  * result list a screen reader user has no way of knowing arrived.
  */
 const announcement = computed(() => {
-  if (state.value === 'ready') return plural(flat.value.length, 'result')
-  if (state.value === 'empty') return 'No results'
-  if (state.value === 'failed') return 'Search failed'
+  if (state.value === 'ready') return t('shell.spResults', flat.value.length)
+  if (state.value === 'empty') return t('shell.spNone')
+  if (state.value === 'failed') return t('shell.spFailed')
 
   return ''
 })
@@ -196,7 +197,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
             class="pop-in relative flex max-h-full w-full max-w-[640px] flex-col overflow-hidden rounded-b-[22px] bg-surface shadow-pop ring-1 ring-border sm:rounded-[24px]"
             role="dialog"
             aria-modal="true"
-            aria-label="Search"
+            :aria-label="t('shell.search')"
           >
             <!-- The field ------------------------------------------------- -->
             <div class="relative flex items-center gap-2 border-b border-border px-4 py-3">
@@ -216,14 +217,14 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                 class="flex max-w-[45%] shrink-0 items-center gap-1 rounded-full bg-brand-soft py-[3px] pr-[3px] pl-2.5 text-[12px] font-semibold text-brand"
               >
                 <span class="truncate">
-                  <span class="font-medium opacity-70">In</span>
+                  <span class="font-medium opacity-70">{{ t('shell.spIn') }}</span>
                   {{ within.title }}
                 </span>
                 <button
                   type="button"
                   class="grid size-5 shrink-0 cursor-pointer place-items-center rounded-full transition-colors hover:bg-brand hover:text-white"
-                  :title="`Search everywhere, not only in ${within.title}`"
-                  aria-label="Search everywhere"
+                  :title="t('shell.spEverywhereTitle', { name: within.title })"
+                  :aria-label="t('shell.spEverywhere')"
                   @click="widen(); input?.focus()"
                 >
                   <UiIcon
@@ -240,7 +241,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                 v-else-if="offered"
                 type="button"
                 class="flex max-w-[38%] shrink-0 cursor-pointer items-center gap-1 rounded-full py-[3px] pr-2.5 pl-2 text-[12px] font-medium text-text-faint shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.16)] transition-colors hover:text-brand hover:shadow-[inset_0_0_0_1px_var(--brand)]"
-                :title="`Search only in ${offered.title}`"
+                :title="t('shell.spOnlyTitle', { name: offered.title })"
                 @click="narrow(); input?.focus()"
               >
                 <UiIcon
@@ -248,21 +249,21 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   :size="11"
                   :stroke="2.4"
                 />
-                <span class="truncate">Only {{ offered.title }}</span>
+                <span class="truncate">{{ t('shell.spOnly', { name: offered.title }) }}</span>
               </button>
 
               <input
                 ref="input"
                 :value="query"
                 type="text"
-                class="min-w-0 flex-1 bg-transparent py-1 text-[15.5px] text-text outline-none placeholder:text-[#8e93a0] dark:placeholder:text-text-faint"
-                :placeholder="within ? 'Search this course' : 'Search courses, lessons and files'"
+                class="min-w-0 flex-1 bg-transparent py-1 text-[15.5px] text-text outline-none placeholder:text-text-faint"
+                :placeholder="within ? t('shell.spPhCourse') : t('shell.spPhAll')"
                 autocomplete="off"
                 autocorrect="off"
                 spellcheck="false"
                 role="combobox"
                 aria-expanded="true"
-                :aria-label="within ? `Search in ${within.title}` : 'Search everything'"
+                :aria-label="within ? t('shell.spInAria', { name: within.title }) : t('shell.spAllAria')"
                 :aria-controls="`${uid}-list`"
                 :aria-activedescendant="flat.length ? optionId(activeIndex) : undefined"
                 @input="setQuery(($event.target as HTMLInputElement).value)"
@@ -272,7 +273,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                 v-if="query"
                 type="button"
                 class="grid size-6 shrink-0 place-items-center rounded-md text-text-faint hover:bg-surface-sunken hover:text-text-soft"
-                aria-label="Clear search"
+                :aria-label="t('shell.spClear')"
                 @click="setQuery('')"
               >
                 <UiIcon
@@ -285,7 +286,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
               <button
                 type="button"
                 class="grid size-7 shrink-0 place-items-center rounded-md text-text-faint hover:bg-surface-sunken hover:text-text-soft sm:hidden"
-                aria-label="Close search"
+                :aria-label="t('shell.spClose')"
                 @click="close()"
               >
                 <UiIcon
@@ -321,7 +322,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
               :id="`${uid}-list`"
               ref="list"
               role="listbox"
-              aria-label="Search results"
+              :aria-label="t('shell.spResultsAria')"
               :class="[
                 'min-h-0 max-h-[min(58vh,25rem)] flex-1 overflow-y-auto overscroll-contain px-1.5 pb-1.5 transition-opacity duration-150',
                 stale && busy ? 'opacity-55' : 'opacity-100',
@@ -333,7 +334,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   :key="section.key"
                 >
                   <p
-                    class="sticky top-0 z-1 bg-surface px-2 pt-2.5 pb-1 text-[11px] font-semibold tracking-[0.08em] text-text-faint uppercase"
+                    class="sticky top-0 z-1 bg-surface px-2 pt-2.5 pb-1 text-[12px] font-semibold text-text-faint"
                   >
                     {{ section.label }}
                   </p>
@@ -360,7 +361,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                     v-if="section.hasMore"
                     class="px-3 pt-0.5 pb-1.5 text-[11.5px] text-text-ghost"
                   >
-                    More in {{ section.label.toLowerCase() }} — narrow the search to see them.
+                    {{ t('shell.spMore', { group: section.label.toLowerCase() }) }}
                   </p>
                 </div>
               </template>
@@ -369,9 +370,9 @@ function pick(hit: SearchHit, event: MouseEvent): void {
               <template v-else-if="state === 'idle'">
                 <template v-if="recent.length">
                   <p
-                    class="px-2 pt-2.5 pb-1 text-[11px] font-semibold tracking-[0.08em] text-text-faint uppercase"
+                    class="px-2 pt-2.5 pb-1 text-[12px] font-semibold text-text-faint"
                   >
-                    Recent
+                    {{ t('shell.spRecent') }}
                   </p>
                   <button
                     v-for="term in recent"
@@ -395,7 +396,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   v-else
                   class="px-3 py-6 text-center text-[13px] leading-relaxed text-text-muted"
                 >
-                  Search across every course, every lesson and every file you have added.
+                  {{ t('shell.spHint') }}
                 </p>
               </template>
 
@@ -404,7 +405,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                 v-else-if="state === 'short'"
                 class="px-3 py-6 text-center text-[13px] text-text-muted"
               >
-                Keep typing — two letters is enough.
+                {{ t('shell.spShort') }}
               </p>
 
               <!-- The first search of a session: nothing to keep on screen -->
@@ -422,7 +423,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   v-if="state === 'slow'"
                   class="pt-1 text-center text-[12.5px] text-text-muted"
                 >
-                  Still looking. A large library takes a moment.
+                  {{ t('shell.spSlow') }}
                 </p>
               </div>
 
@@ -432,20 +433,20 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                 class="px-3 py-7 text-center"
               >
                 <p class="text-[13.5px] text-text-soft">
-                  Nothing matches
+                  {{ t('shell.spNothing') }}
                   <span class="font-medium text-text">“{{ query.trim() }}”</span>
                 </p>
                 <p
                   v-if="within"
                   class="mt-1 text-[12.5px] text-text-muted"
                 >
-                  This search is limited to {{ within.title }}.
+                  {{ t('shell.spLimited', { name: within.title }) }}
                 </p>
                 <p
                   v-else
                   class="mt-1 text-[12.5px] text-text-muted"
                 >
-                  Lessons nobody has written yet have nothing to search.
+                  {{ t('shell.spUnwritten') }}
                 </p>
                 <UiBtn
                   v-if="within"
@@ -453,7 +454,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   size="sm"
                   class="mt-3"
                   @click="widen(); input?.focus()"
-                  >Search everywhere</UiBtn
+                  >{{ t('shell.spEverywhere') }}</UiBtn
                 >
               </div>
 
@@ -468,7 +469,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   class="mx-auto text-warn"
                 />
                 <p class="mt-2 text-[13.5px] text-text-soft">
-                  {{ failure ?? 'Search could not run.' }}
+                  {{ failure ?? t('shell.spCouldNot') }}
                 </p>
                 <UiBtn
                   variant="secondary"
@@ -476,7 +477,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                   icon="refresh"
                   class="mt-3"
                   @click="retry()"
-                  >Try again</UiBtn
+                  >{{ t('common.retry') }}</UiBtn
                 >
               </div>
             </div>
@@ -488,15 +489,15 @@ function pick(hit: SearchHit, event: MouseEvent): void {
               <span class="hidden items-center gap-1 sm:flex">
                 <kbd class="rounded-[6px] bg-surface px-1.5 py-px shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]">↑</kbd>
                 <kbd class="rounded-[6px] bg-surface px-1.5 py-px shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]">↓</kbd>
-                to move
+                {{ t('shell.spToMove') }}
               </span>
               <span class="hidden items-center gap-1 sm:flex">
                 <kbd class="rounded-[6px] bg-surface px-1.5 py-px shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]">↵</kbd>
-                to open
+                {{ t('shell.spToOpen') }}
               </span>
               <span class="hidden items-center gap-1 sm:flex">
                 <kbd class="rounded-[6px] bg-surface px-1.5 py-px shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]">esc</kbd>
-                to close
+                {{ t('shell.spToClose') }}
               </span>
               <!-- Only while it would work: Backspace widens from an empty box. -->
               <span
@@ -504,7 +505,7 @@ function pick(hit: SearchHit, event: MouseEvent): void {
                 class="hidden items-center gap-1 sm:flex"
               >
                 <kbd class="rounded-[6px] bg-surface px-1.5 py-px shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]">⌫</kbd>
-                to search everywhere
+                {{ t('shell.spToWiden') }}
               </span>
 
               <span class="flex-1" />
@@ -518,9 +519,9 @@ function pick(hit: SearchHit, event: MouseEvent): void {
               <span
                 v-if="degraded"
                 class="truncate"
-                title="The search index is rebuilding. Results are still real, just narrower."
+                :title="t('shell.spRebuildTitle')"
               >
-                Index rebuilding — results may be incomplete
+                {{ t('shell.spRebuild') }}
               </span>
             </div>
           </div>

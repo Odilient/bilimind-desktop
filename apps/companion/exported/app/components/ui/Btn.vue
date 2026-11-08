@@ -42,13 +42,13 @@ const props = withDefaults(
 
 const variants: Record<Variant, string> = {
   primary: 'bg-inverse text-on-inverse border-transparent hover:bg-inverse-hover font-semibold',
-  accent: 'bg-accent text-on-accent border-transparent hover:bg-[#d2f86a] font-semibold',
+  accent: 'bg-accent text-on-accent border-transparent hover:bg-hi-2 font-semibold',
   secondary:
-    'bg-surface text-text border-[rgb(var(--wash-rgb)/0.1)] font-semibold shadow-card hover:shadow-[0_4px_14px_rgb(11_13_16/0.08)]',
+    'bg-surface text-text border-[rgb(var(--wash-rgb)/0.1)] font-semibold shadow-card hover:shadow-raised',
   ghost:
     'bg-transparent text-text-muted border-transparent hover:bg-[rgb(var(--wash-rgb)/0.06)] hover:text-text',
   subtle:
-    'bg-accent-soft text-accent-strong border-transparent shadow-[inset_0_0_0_1px_var(--accent-line)] font-semibold hover:bg-[#e6f6b9] dark:hover:brightness-125',
+    'bg-accent-soft text-accent-strong border-transparent shadow-[inset_0_0_0_1px_var(--accent-line)] font-semibold hover:bg-[color-mix(in_oklab,var(--accent-soft)_70%,var(--accent))]',
   danger: 'bg-surface text-danger border-danger-line font-semibold hover:bg-danger-soft shadow-card',
   success: 'bg-success-soft text-success-text border-success-line font-semibold hover:bg-success-line',
 }

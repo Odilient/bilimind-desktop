@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * The header's "Ask": the old assistant's ink pill with its lime spark, at
+ * The header's "Ask": an ink pill with Bili in it, at
  * the right end of every workspace and page top bar. It opens and closes
  * the companion (the dock where there is one, the drawer or the phone's
  * sheet where there isn't), and says so: pressed while it's open, when it
@@ -52,35 +52,22 @@ const hidden = computed(() => mounted.value && (quiet.value || onChatPage(route.
     v-if="!hidden"
     type="button"
     :aria-pressed="pressed"
-    :aria-label="compact ? 'Ask BiliMind' : undefined"
-    :title="`${pressed ? 'Close' : 'Ask'} BiliMind (${keys})`"
+    :aria-label="compact ? 'Ask Bili' : undefined"
+    :title="`${pressed ? 'Close' : 'Ask'} Bili (${keys})`"
     :class="[
       'relative inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full font-semibold transition-[background-color,color,box-shadow,transform] duration-150 select-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:outline-none active:scale-[0.97]',
       'before:absolute before:-inset-[5px]',
       compact ? 'size-[34px]' : 'h-[34px] gap-2 pr-3.5 pl-1 text-[13.5px]',
       pressed
         ? 'bg-surface-sunken text-text shadow-[inset_0_0_0_1px_var(--border)] hover:bg-surface-track'
-        : 'bg-ink text-paper hover:bg-ink-2',
+        : 'bg-inverse text-on-inverse hover:bg-inverse-hover',
     ]"
     @click="ai.toggle()"
   >
-    <span
-      v-if="!compact"
-      :class="[
-        'grid size-[26px] place-items-center rounded-full transition-colors duration-150',
-        pressed ? 'bg-ink text-lime' : 'bg-accent text-on-accent',
-      ]"
-    >
-      <UiIcon
-        name="spark"
-        :size="13"
-      />
-    </span>
-    <UiIcon
-      v-else
-      name="spark"
-      :size="15"
-      :class="pressed ? 'text-text' : 'text-lime'"
+    <CompanionAiBilim
+      :size="compact ? 20 : 22"
+      :mood="pressed ? 'happy' : 'idle'"
+      :class="!compact && 'ml-0.5'"
     />
     <span v-if="!compact">Ask</span>
   </button>

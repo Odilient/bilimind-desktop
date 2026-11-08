@@ -55,7 +55,7 @@ function add(): void {
         autocomplete="off"
         autofocus
         placeholder="webcal://… or https://… .ics"
-        class="h-12 w-full min-w-0 rounded-full border border-border-field bg-surface px-5 text-[16px] outline-none placeholder:text-text-faint focus:border-cobalt focus:ring-3 focus:ring-brand-line"
+        class="h-12 w-full min-w-0 rounded-full border border-border-field bg-surface px-5 text-[16px] outline-none placeholder:text-text-faint focus:border-brand focus:ring-3 focus:ring-brand-line"
         @input="problem = null"
       >
       <p
@@ -68,7 +68,7 @@ function add(): void {
       <div class="flex flex-wrap items-center justify-between gap-3">
         <button
           type="button"
-          class="inline-flex min-h-11 cursor-pointer items-center rounded-full text-left text-[14px] font-semibold text-cobalt outline-none hover:underline focus-visible:ring-2 focus-visible:ring-brand-line"
+          class="inline-flex min-h-11 cursor-pointer items-center rounded-full text-left text-[14px] font-semibold text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-brand-line"
           @click="emit('connect')"
         >
           Import my whole timetable instead

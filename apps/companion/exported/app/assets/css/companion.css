@@ -18,25 +18,22 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  --c-db: #0f9488;
-  --c-net: #e07a1f;
-  --c-prg: #7357e8;
-  --c-mth: #d9466f;
-  --c-seg: #3a9a3f;
-  --c-eng: #2f86d6;
-  --c-ita: #a86f08;
-  --c-c8: #5b6b82;
+  /* Daylight 2's course colours (main.css: leaf, apricot, lilac, rose, sky,
+     butter, each already light and dark), plus a sea green and a warm stone
+     of the course's own, so eight courses never repeat. */
+  --c-db: var(--leaf);
+  --c-net: var(--apricot);
+  --c-prg: var(--lilac);
+  --c-mth: var(--rose);
+  --c-seg: #4fae9e;
+  --c-eng: var(--sky);
+  --c-ita: var(--butter);
+  --c-c8: #a39a8c;
 }
 
 :root[data-theme="dark"] {
-  --c-db: #2cc3b4;
-  --c-net: #f59a45;
-  --c-prg: #9d86ff;
-  --c-mth: #f06b91;
-  --c-seg: #5cc062;
-  --c-eng: #5aa8ef;
-  --c-ita: #e3ad45;
-  --c-c8: #8fa0b8;
+  --c-seg: #62c2b2;
+  --c-c8: #b3aa9c;
 }
 
 /* The phone's bottom bar sits over the home indicator, never under it. */

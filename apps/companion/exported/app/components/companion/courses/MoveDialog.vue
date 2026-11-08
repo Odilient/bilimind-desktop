@@ -88,7 +88,7 @@ function create(): void {
         <button
           type="button"
           :disabled="name === here"
-          class="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[12px] px-2.5 text-left text-[14.5px] font-medium text-text transition-colors outline-none hover:bg-surface-mute focus-visible:bg-surface-mute focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-default disabled:hover:bg-transparent"
+          class="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[12px] px-2.5 text-left text-[14.5px] font-medium text-text transition-colors outline-none hover:bg-surface-mute focus-visible:bg-surface-mute focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-default disabled:hover:bg-transparent"
           @click="choose(name)"
         >
           <UiIcon
@@ -106,7 +106,7 @@ function create(): void {
       <li v-if="here">
         <button
           type="button"
-          class="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[12px] px-2.5 text-left text-[14.5px] font-medium text-text transition-colors outline-none hover:bg-surface-mute focus-visible:bg-surface-mute focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+          class="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[12px] px-2.5 text-left text-[14.5px] font-medium text-text transition-colors outline-none hover:bg-surface-mute focus-visible:bg-surface-mute focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]"
           @click="choose(null)"
         >
           <span
@@ -136,7 +136,7 @@ function create(): void {
           type="text"
           :maxlength="60"
           placeholder="Year 2 · Autumn"
-          class="h-10 min-w-0 flex-1 rounded-[12px] bg-surface-sunken px-3 text-[14px] text-text outline-none placeholder:text-text-faint focus:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+          class="h-10 min-w-0 flex-1 rounded-[12px] bg-surface-sunken px-3 text-[14px] text-text outline-none placeholder:text-text-faint focus:shadow-[inset_0_0_0_2px_var(--brand)]"
           autofocus
         >
         <UiBtn

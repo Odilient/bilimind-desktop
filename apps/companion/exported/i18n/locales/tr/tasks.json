@@ -1,0 +1,153 @@
+{
+  "title": "Görevler",
+  "col": {
+    "todo": "Yapılacak",
+    "doing": "Yapılıyor",
+    "done": "Bitti"
+  },
+  "group": {
+    "overdue": "Gecikmiş",
+    "today": "Bugün",
+    "week": "Bu hafta",
+    "later": "Daha sonra",
+    "none": "Tarihsiz",
+    "done": "Bitenler"
+  },
+  "priority": {
+    "none": "Öncelik yok",
+    "low": "Düşük",
+    "medium": "Orta",
+    "high": "Yüksek",
+    "urgent": "Acil"
+  },
+  "kind": {
+    "assignment": "Ödev",
+    "quiz": "Mini sınav",
+    "lab": "Laboratuvar",
+    "midterm": "Vize",
+    "final": "Final",
+    "exam": "Sınav",
+    "project": "Proje",
+    "presentation": "Sunum",
+    "milestone": "Aşama",
+    "other": "Son tarih"
+  },
+  "day": {
+    "today": "Bugün",
+    "tomorrow": "Yarın",
+    "nextWeek": "Gelecek hafta",
+    "none": "Tarihsiz",
+    "noTime": "Saat yok",
+    "pick": "Tarih seç",
+    "pickDayFirst": "Önce bir gün seçin",
+    "noneYet": "Henüz tarih yok",
+    "addsItOn": "ekler, {day} için"
+  },
+  "field": {
+    "status": "Durum",
+    "priority": "Öncelik",
+    "course": "Kurs",
+    "day": "Gün",
+    "time": "Saat",
+    "length": "Süre",
+    "due": "Son tarih",
+    "kind": "Tür",
+    "properties": "Özellikler",
+    "note": "Not",
+    "task": "Görev",
+    "view": "Görünüm",
+    "column": "Sütun"
+  },
+  "course": {
+    "none": "Kurs yok",
+    "all": "Tüm kurslar"
+  },
+  "menu": {
+    "find": "Ara: {what}…",
+    "findAria": "Ara: {what}",
+    "nothing": "Eşleşen yok."
+  },
+  "add": {
+    "label": "Yapılacak bir şey",
+    "placeholder": "Görev ekle",
+    "moreTitle": "Daha fazlası: gün, saat, öncelik, not",
+    "moreAria": "Gün, saat, öncelik veya notla ekle",
+    "action": "Görev ekle"
+  },
+  "card": {
+    "moveTo": "Taşı: {col}",
+    "doToday": "Bugün yap",
+    "doTomorrow": "Yarın yap",
+    "markDone": "Bitti olarak işaretle",
+    "markHandedIn": "Teslim edildi olarak işaretle",
+    "notDone": "Aslında bitmedi",
+    "done": "Bitti",
+    "priority": "Öncelik: {name}",
+    "fromCourse": "Kursunuzdan: {kind}",
+    "steps": "{total} adımın {done} tanesi bitti",
+    "mark": "Notunuz",
+    "got": "Aldınız:",
+    "hasNote": "Notu var",
+    "moreFor": "{title} için daha fazlası",
+    "ofGrade": "notun"
+  },
+  "steps": {
+    "title": "Adımlar",
+    "step": "Adım: {text}",
+    "takeOut": "Çıkar: {text}",
+    "takeOutTitle": "Bu adımı çıkar",
+    "add": "Adım ekle"
+  },
+  "list": {
+    "newIn": "{col} içinde yeni görev",
+    "emptyTodo": "Yapılacak bir şey yok.",
+    "emptyDoing": "Başlanan bir şey yok.",
+    "emptyDone": "Son iki haftada biten bir şey yok."
+  },
+  "new": {
+    "heading": "Yeni görev",
+    "what": "Ne yapılacak",
+    "notePlaceholder": "Not ekleyin: ne için, nereden başlanır…",
+    "addedTo": "Eklendi: {col}",
+    "addsIt": "ekler",
+    "add": "Görev ekle"
+  },
+  "page": {
+    "missingTitle": "Bu görev artık burada değil",
+    "missingBody": "Silinmiş ya da Bugün sayfasındaki günün planına ait.",
+    "back": "Görevlere dön",
+    "sources": "Kaynakları ve geçmişi",
+    "rename": "Yeniden adlandır",
+    "openDeadline": "Son tarih sayfasını aç",
+    "added": "Eklendi",
+    "arrived": "Geldi",
+    "started": "Başlandı",
+    "handedIn": "Teslim edildi",
+    "notePlaceholder": "Ne için, nereden başlanır, ne sorulur…",
+    "ctrlSaves": "Ctrl + Enter kaydeder",
+    "noteEmpty": "Not ekleyin: ne için, nereden başlanır, ne sorulur…",
+    "covers": "Kursa göre kapsadığı konular:",
+    "breadcrumb": "Gezinti yolu"
+  },
+  "board": {
+    "subtitle": "Kendi yapılacaklarınız ve kurslarınızın son tarihleri. Bir göreve başlarken ya da bitirirken kartı sürükleyin.",
+    "newTask": "Yeni görev",
+    "newTaskKey": "Yeni görev (C)",
+    "board": "Pano",
+    "list": "Liste",
+    "find": "Görev ara",
+    "nothingFilter": "Bu filtre için burada bir şey yok.",
+    "emptyDoing": "Başladıklarınızı buraya sürükleyin.",
+    "emptyDone": "Bitirdikleriniz buraya düşer.",
+    "fromEarlier": "Önceki günlerden {n} görev",
+    "moveToday": "Bugüne taşı",
+    "movedToday": "{n} görev bugüne taşındı",
+    "showFewer": "Daha az göster",
+    "showAll": "Hepsini göster ({n})",
+    "bring": "Ödevlerinizi getirin",
+    "download": "Bu görevleri indir:",
+    "spreadsheet": "Hesap tablosu",
+    "eyebrow": "Bugün {n} iş var",
+    "eyebrowNone": "Bugün yapılacak bir şey yok"
+  }
+}

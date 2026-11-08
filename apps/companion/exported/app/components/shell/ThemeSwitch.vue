@@ -10,6 +10,11 @@ import { THEME_OPTIONS, type ThemePreference } from '~/composables/useTheme'
 withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
 
 const theme = useTheme()
+const { t } = useI18n()
+// The labels follow the language; the values and icons are the composable's.
+const options = computed(() =>
+  THEME_OPTIONS.map((o) => ({ ...o, label: t(`shell.theme${o.value[0]!.toUpperCase()}${o.value.slice(1)}`) })),
+)
 
 const model = computed({
   get: () => theme.preference.value,
@@ -21,11 +26,11 @@ const model = computed({
   <div
     v-if="compact"
     role="radiogroup"
-    aria-label="Theme"
-    class="inline-flex items-center gap-[3px] rounded-[12px] bg-surface-track p-[3px] dark:bg-surface-sunken"
+    :aria-label="t('shell.theme')"
+    class="inline-flex items-center gap-[2px] rounded-[10px] bg-[rgb(var(--wash-rgb)/0.065)] p-[3px]"
   >
     <button
-      v-for="option in THEME_OPTIONS"
+      v-for="option in options"
       :key="option.value"
       type="button"
       role="radio"
@@ -33,9 +38,9 @@ const model = computed({
       :aria-label="option.label"
       :title="option.label"
       :class="[
-        'grid size-[26px] cursor-pointer place-items-center rounded-[9px] transition-colors duration-150',
+        'grid size-[26px] cursor-pointer place-items-center rounded-[8px] transition-colors duration-150',
         model === option.value
-          ? 'bg-surface text-text shadow-segment dark:bg-surface-track'
+          ? 'bg-surface text-text shadow-segment'
           : 'text-text-faint hover:text-text-dim',
       ]"
       @click="model = option.value"
@@ -50,7 +55,7 @@ const model = computed({
   <UiSegmented
     v-else
     v-model="model"
-    :options="THEME_OPTIONS"
-    label="Theme"
+    :options="options"
+    :label="t('shell.theme')"
   />
 </template>

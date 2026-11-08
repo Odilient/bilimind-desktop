@@ -14,6 +14,7 @@
  * the document — remounting per keystroke would throw away scroll position and
  * flash white on every character.
  */
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     code: string
@@ -65,8 +66,8 @@ onBeforeUnmount(() => {
       <button
         type="button"
         class="browser-refresh"
-        title="Reload the preview"
-        aria-label="Reload the preview"
+        :title="t('check.assess.code.reload')"
+        :aria-label="t('check.assess.code.reload')"
         @click="nonce++"
       >
         <UiIcon
@@ -79,7 +80,7 @@ onBeforeUnmount(() => {
       :key="nonce"
       :srcdoc="rendered"
       sandbox="allow-scripts"
-      title="Preview of your page"
+      :title="t('check.assess.code.previewTitle')"
       class="min-h-0 w-full flex-1 border-0 bg-white"
     />
   </div>

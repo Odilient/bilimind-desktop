@@ -1,0 +1,153 @@
+{
+  "title": "Tareas",
+  "col": {
+    "todo": "Por hacer",
+    "doing": "En curso",
+    "done": "Hecho"
+  },
+  "group": {
+    "overdue": "Atrasadas",
+    "today": "Hoy",
+    "week": "Esta semana",
+    "later": "Más adelante",
+    "none": "Sin fecha",
+    "done": "Hechas"
+  },
+  "priority": {
+    "none": "Sin prioridad",
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "urgent": "Urgente"
+  },
+  "kind": {
+    "assignment": "Trabajo",
+    "quiz": "Cuestionario",
+    "lab": "Laboratorio",
+    "midterm": "Parcial",
+    "final": "Final",
+    "exam": "Examen",
+    "project": "Proyecto",
+    "presentation": "Presentación",
+    "milestone": "Hito",
+    "other": "Fecha límite"
+  },
+  "day": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "nextWeek": "Próxima semana",
+    "none": "Sin fecha",
+    "noTime": "Sin hora",
+    "pick": "Elegir una fecha",
+    "pickDayFirst": "Elige primero un día",
+    "noneYet": "Aún sin fecha",
+    "addsItOn": "la agrega, para el {day}"
+  },
+  "field": {
+    "status": "Estado",
+    "priority": "Prioridad",
+    "course": "Curso",
+    "day": "Día",
+    "time": "Hora",
+    "length": "Duración",
+    "due": "Vence",
+    "kind": "Tipo",
+    "properties": "Propiedades",
+    "note": "Nota",
+    "task": "Tarea",
+    "view": "Vista",
+    "column": "Columna"
+  },
+  "course": {
+    "none": "Sin curso",
+    "all": "Todos los cursos"
+  },
+  "menu": {
+    "find": "Buscar {what}…",
+    "findAria": "Buscar {what}",
+    "nothing": "No hay coincidencias."
+  },
+  "add": {
+    "label": "Algo por hacer",
+    "placeholder": "Agregar una tarea",
+    "moreTitle": "Más: un día, una hora, una prioridad, una nota",
+    "moreAria": "Agregar con un día, una hora, una prioridad o una nota",
+    "action": "Agregar una tarea"
+  },
+  "card": {
+    "moveTo": "Mover a {col}",
+    "doToday": "Hacerla hoy",
+    "doTomorrow": "Hacerla mañana",
+    "markDone": "Marcar como hecha",
+    "markHandedIn": "Marcar como entregada",
+    "notDone": "En realidad no está hecha",
+    "done": "Hecho",
+    "priority": "Prioridad: {name}",
+    "fromCourse": "De tu curso: {kind}",
+    "steps": "{done} de {total} pasos hechos",
+    "mark": "Tu nota",
+    "got": "Sacaste",
+    "hasNote": "Tiene una nota",
+    "moreFor": "Más opciones para {title}",
+    "ofGrade": "de la nota"
+  },
+  "steps": {
+    "title": "Pasos",
+    "step": "Paso: {text}",
+    "takeOut": "Quitar: {text}",
+    "takeOutTitle": "Quitar este paso",
+    "add": "Agregar un paso"
+  },
+  "list": {
+    "newIn": "Nueva tarea en {col}",
+    "emptyTodo": "Nada por hacer.",
+    "emptyDoing": "Nada empezado.",
+    "emptyDone": "Nada terminado en las últimas dos semanas."
+  },
+  "new": {
+    "heading": "Nueva tarea",
+    "what": "Qué hacer",
+    "notePlaceholder": "Agrega una nota: para qué sirve, por dónde empezar…",
+    "addedTo": "Agregada a {col}",
+    "addsIt": "la agrega",
+    "add": "Agregar tarea"
+  },
+  "page": {
+    "missingTitle": "Esta tarea ya no está aquí",
+    "missingBody": "Se eliminó o pertenece al plan del día, que está en Hoy.",
+    "back": "Volver a Tareas",
+    "sources": "Sus fuentes e historial",
+    "rename": "Cambiar nombre",
+    "openDeadline": "Abrir la página de la fecha límite",
+    "added": "Agregada",
+    "arrived": "Llegó",
+    "started": "Empezada",
+    "handedIn": "Entregada",
+    "notePlaceholder": "Para qué sirve, por dónde empezar, qué preguntar…",
+    "ctrlSaves": "Ctrl + Enter guarda",
+    "noteEmpty": "Agrega una nota: para qué sirve, por dónde empezar, qué preguntar…",
+    "covers": "Lo que abarca, según el curso:",
+    "breadcrumb": "Ruta de navegación"
+  },
+  "board": {
+    "subtitle": "Tus propias tareas y las fechas límite de tus cursos. Arrastra una tarjeta cuando la empieces o la termines.",
+    "newTask": "Nueva tarea",
+    "newTaskKey": "Nueva tarea (C)",
+    "board": "Tablero",
+    "list": "Lista",
+    "find": "Buscar una tarea",
+    "nothingFilter": "No hay nada para este filtro.",
+    "emptyDoing": "Arrastra aquí lo que ya empezaste.",
+    "emptyDone": "Lo que termines aparecerá aquí.",
+    "fromEarlier": "{n} tarea de días anteriores | {n} tareas de días anteriores",
+    "moveToday": "Pasar a hoy",
+    "movedToday": "{n} tarea pasó a hoy | {n} tareas pasaron a hoy",
+    "showFewer": "Mostrar menos",
+    "showAll": "Mostrar las {n}",
+    "bring": "Traer tus trabajos",
+    "download": "Descargar estas tareas:",
+    "spreadsheet": "Hoja de cálculo",
+    "eyebrow": "{n} cosa por hacer hoy | {n} cosas por hacer hoy",
+    "eyebrowNone": "Nada por hacer hoy"
+  }
+}

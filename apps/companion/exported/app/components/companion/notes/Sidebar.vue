@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Note } from '~/companion/notes/tree'
 import { byEdited, highlight, matchNotes, MINE, noteIcon, snippet } from '~/companion/notes/tree'
 import { NOTES_LIST, type DropZone, type NotesListContext } from '~/companion/notes/ui'
@@ -209,37 +210,37 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
     :is="variant === 'panel' ? 'aside' : 'div'"
     :class="
       variant === 'panel'
-        ? 'relative flex shrink-0 flex-col border-r border-border bg-surface-chrome'
+        ? 'relative flex shrink-0 flex-col'
         : 'flex flex-col'
     "
     :style="variant === 'panel' ? { width: size.css.value } : undefined"
-    aria-label="Notes"
+    :aria-label="t('notes.notes')"
   >
     <CompanionShellResizeHandle
       v-if="variant === 'panel'"
       panel="column"
       edge="right"
-      label="Resize the notes sidebar"
+      :label="t('notes.resizeSidebar')"
       class="right-0 translate-x-1/2"
     />
-    <!-- "Notes", New, and folding the panel away. -->
+    <!-- t('notes.notes'), New, and folding the panel away. -->
     <div
       v-if="variant === 'panel'"
       class="group/top flex items-center gap-1.5 pt-4 pr-3 pb-3 pl-[18px]"
     >
       <NuxtLink
         to="/app/notes"
-        class="rounded-[6px] font-display text-[15px] font-semibold tracking-[-0.01em] text-text outline-none hover:text-text-soft focus-visible:shadow-[0_0_0_2px_var(--cobalt)]"
-        title="Notes home"
+        class="rounded-[6px] font-display text-[15px] font-semibold tracking-[-0.01em] text-text outline-none hover:text-text-soft focus-visible:shadow-[0_0_0_2px_var(--brand)]"
+        :title="t('notes.notesHome')"
       >
-        Notes
+        {{ t('notes.notes') }}
       </NuxtLink>
       <span class="flex-1" />
       <button
         type="button"
-        class="grid size-[30px] cursor-pointer place-items-center rounded-[9px] text-text-faint opacity-0 transition hover:bg-surface-track hover:text-text-soft group-hover/top:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-cobalt"
-        title="Hide the sidebar (Ctrl+\)"
-        aria-label="Hide the sidebar"
+        class="grid size-[30px] cursor-pointer place-items-center rounded-[9px] text-text-faint opacity-0 transition hover:bg-surface-track hover:text-text-soft group-hover/top:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-brand"
+        :title="t('notes.hideSidebarKey')"
+        :aria-label="t('notes.hideSidebar')"
         @click="sidebar.set(false)"
       >
         <UiIcon
@@ -249,7 +250,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
         />
       </button>
       <CompanionNotesNewButton
-        label="New"
+        :label="t('notes.new')"
         size="md"
         align="end"
       />
@@ -259,7 +260,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
     <div :class="variant === 'panel' ? 'px-3 pb-2.5' : 'pb-3'">
       <label
         :class="[
-          'flex items-center gap-2 rounded-[10px] bg-surface px-2.5 text-text-faint shadow-[inset_0_0_0_1px_rgb(11_13_16/0.09)] transition-shadow focus-within:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+          'flex items-center gap-2 rounded-[10px] bg-surface px-2.5 text-text-faint shadow-[inset_0_0_0_1px_var(--border-strong)] transition-shadow focus-within:shadow-[inset_0_0_0_2px_var(--brand)]',
           roomy ? 'h-11' : 'h-[32px]',
         ]"
       >
@@ -273,8 +274,8 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
           ref="searchField"
           v-model="query"
           type="search"
-          placeholder="Find a note"
-          aria-label="Find a note"
+          :placeholder="t('notes.findNote')"
+          :aria-label="t('notes.findNote')"
           :class="[
             'min-w-0 flex-1 bg-transparent text-text outline-none placeholder:text-text-faint [&::-webkit-search-cancel-button]:hidden',
             roomy ? 'text-[16px]' : 'text-[13px]',
@@ -285,7 +286,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
           v-if="query"
           type="button"
           class="grid size-5 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint hover:bg-surface-track hover:text-text-soft"
-          aria-label="Clear"
+          :aria-label="t('notes.clear')"
           @click="query = ''; searchField?.focus()"
         >
           <UiIcon
@@ -306,24 +307,24 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
     >
       <div
         v-if="!roomy && picked.length"
-        class="mx-3 mb-2.5 flex h-9 items-center gap-0.5 rounded-[10px] bg-ink pr-1 pl-3 text-[12.5px] text-white"
+        class="mx-3 mb-2.5 flex h-9 items-center gap-0.5 rounded-[10px] bg-inverse pr-1 pl-3 text-[12.5px] text-on-inverse"
         role="toolbar"
-        :aria-label="`${picked.length} picked`"
+        :aria-label="t('notes.pickedN', picked.length)"
       >
-        <span class="min-w-0 flex-1 truncate font-semibold">{{ picked.length === 1 ? '1 note' : `${picked.length} notes` }}</span>
+        <span class="min-w-0 flex-1 truncate font-semibold">{{ t('notes.noteCount', picked.length) }}</span>
         <button
           type="button"
-          class="h-7 cursor-pointer rounded-[7px] px-2 font-semibold transition-colors hover:bg-[rgb(255_255_255/0.14)] focus-visible:outline-2 focus-visible:outline-lime"
-          title="Move them to a course, or to My notes"
+          class="h-7 cursor-pointer rounded-[7px] px-2 font-semibold transition-colors hover:bg-[rgb(255_255_255/0.14)] focus-visible:outline-2 focus-visible:outline-accent"
+          :title="t('notes.moveHint')"
           @click="movePicked"
         >
-          Move to…
+          {{ t('notes.moveTo') }}
         </button>
         <button
           type="button"
-          class="grid size-7 cursor-pointer place-items-center rounded-[7px] transition-colors hover:bg-[rgb(255_255_255/0.14)] focus-visible:outline-2 focus-visible:outline-lime"
-          aria-label="Delete them"
-          title="Delete them (Undo in the toast)"
+          class="grid size-7 cursor-pointer place-items-center rounded-[7px] transition-colors hover:bg-[rgb(255_255_255/0.14)] focus-visible:outline-2 focus-visible:outline-accent"
+          :aria-label="t('notes.deleteThem')"
+          :title="t('notes.deleteUndo')"
           @click="deletePicked"
         >
           <UiIcon
@@ -333,9 +334,9 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
         </button>
         <button
           type="button"
-          class="grid size-7 cursor-pointer place-items-center rounded-[7px] transition-colors hover:bg-[rgb(255_255_255/0.14)] focus-visible:outline-2 focus-visible:outline-lime"
-          aria-label="Clear the selection"
-          title="Clear (Esc)"
+          class="grid size-7 cursor-pointer place-items-center rounded-[7px] transition-colors hover:bg-[rgb(255_255_255/0.14)] focus-visible:outline-2 focus-visible:outline-accent"
+          :aria-label="t('notes.clearSelection')"
+          :title="t('notes.clearEsc')"
           @click="clearSelection()"
         >
           <UiIcon
@@ -356,7 +357,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
     <div
       ref="scroller"
       role="tree"
-      aria-label="Your notes"
+      :aria-label="t('notes.yourNotes')"
       :class="variant === 'panel' ? 'om-scroll min-h-0 flex-1 overflow-y-auto px-2 pb-6' : 'pb-6'"
       @keydown="onListKey"
     >
@@ -376,7 +377,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
       <!-- Results, while something is typed. -->
       <template v-else-if="query.trim()">
         <p class="px-2 pt-1 pb-1.5 text-[12px] font-semibold text-text-faint">
-          {{ results.length ? `${results.length === 40 ? '40+' : results.length} found` : 'Nothing found' }}
+          {{ results.length ? t('notes.found', { n: results.length === 40 ? '40+' : results.length }) : t('notes.nothingFound') }}
         </p>
         <NuxtLink
           v-for="note in results"
@@ -385,7 +386,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
           data-note-link
           :aria-current="note.id === activeId ? 'page' : undefined"
           :class="[
-            'grid gap-0.5 rounded-[8px] px-2 py-1.5 outline-none transition-colors focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+            'grid gap-0.5 rounded-[8px] px-2 py-1.5 outline-none transition-colors focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]',
             note.id === activeId ? 'bg-accent-soft' : 'hover:bg-surface-mute',
           ]"
         >
@@ -396,7 +397,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
               class="shrink-0 text-text-faint"
             />
             <span :class="['min-w-0 flex-1 truncate text-text', roomy ? 'text-[15px]' : 'text-[13px]']"><template
-              v-for="(piece, i) in highlight(note.title || 'Untitled', query)"
+              v-for="(piece, i) in highlight(note.title || t('notes.untitled'), query)"
               :key="i"
             ><mark
               v-if="piece.hit"
@@ -431,7 +432,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
       <template v-else>
         <CompanionNotesSection
           v-if="recent.length"
-          label="Recent"
+          :label="t('notes.recent')"
           fold-key="s:recent"
           default-open
         >
@@ -445,7 +446,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
 
         <CompanionNotesSection
           v-if="pinned.length"
-          label="Pinned"
+          :label="t('notes.pinned')"
           fold-key="s:pinned"
           default-open
         >
@@ -459,12 +460,12 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
 
         <div class="mt-3" />
         <CompanionNotesSection
-          label="My notes"
+          :label="t('notes.myNotes')"
           :fold-key="folderKey(null)"
           look="folder"
           default-open
           addable
-          add-label="New page in My notes"
+          :add-label="t('notes.newPageMine')"
           droppable
           @add="create.page({ subjectId: null })"
           @drop="dropOn(null, $event)"
@@ -478,7 +479,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
             v-if="!mine.length"
             :class="['py-1 pr-2 pl-[34px] leading-relaxed text-text-muted', roomy ? 'text-[14px]' : 'text-[12.5px]']"
           >
-            Everything you make lands here first. Drag it onto a course when it belongs to one.
+            {{ t('notes.mineEmpty') }}
           </p>
         </CompanionNotesSection>
 
@@ -486,7 +487,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
           v-if="courses.length"
           class="mt-4 px-1.5 pb-1 text-[12px] font-semibold text-text-faint"
         >
-          Courses
+          {{ t('notes.courses') }}
         </p>
         <CompanionNotesSection
           v-for="course in courses"
@@ -497,7 +498,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
           look="folder"
           :color="courseColor(course.subject.color)"
           addable
-          :add-label="`New page in ${course.subject.title}`"
+          :add-label="t('notes.newPageIn', { course: course.subject.title })"
           droppable
           @add="create.page({ subjectId: course.subject.id })"
           @drop="dropOn(course.subject.id, $event)"
@@ -517,7 +518,7 @@ defineExpose({ focusSearch: () => searchField.value?.focus() })
             v-if="!course.roots.length"
             :class="['py-1 pr-2 pl-[34px] leading-relaxed text-text-muted', roomy ? 'text-[14px]' : 'text-[12.5px]']"
           >
-            Nothing filed here yet. Drag a note onto this course, or press + for a page in it.
+            {{ t('notes.courseEmpty') }}
           </p>
         </CompanionNotesSection>
       </template>

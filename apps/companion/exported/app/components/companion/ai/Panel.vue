@@ -57,7 +57,7 @@ watch(shown, (now, before) => {
     <aside
       v-if="shown"
       class="ai-dock relative flex shrink-0 overflow-hidden border-l border-border bg-surface max-xl:hidden"
-      aria-label="Ask BiliMind"
+      aria-label="Bili, your study assistant"
       :style="{ '--ai-width': size.css.value }"
     >
       <CompanionShellResizeHandle
@@ -84,8 +84,8 @@ watch(shown, (now, before) => {
 .ai-dock-enter-active,
 .ai-dock-leave-active {
   transition:
-    width 220ms cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 180ms ease;
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease;
 }
 
 .ai-dock-enter-from,

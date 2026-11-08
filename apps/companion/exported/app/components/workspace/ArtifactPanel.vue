@@ -415,7 +415,7 @@ const overflow = computed<MenuAction[]>(() => {
   height: 26px;
   border-radius: 999px;
   border: 2.5px solid var(--color-border-strong);
-  border-top-color: var(--cobalt);
+  border-top-color: var(--brand);
   animation: art-spin 0.7s linear infinite;
 }
 @keyframes art-spin {

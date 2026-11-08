@@ -24,8 +24,8 @@ const { parse } = useMarkdown()
 const items = computed<MdToken[]>(() => props.tokens ?? parse(props.source ?? ''))
 
 const headingClass: Record<number, string> = {
-  1: 'mt-7 font-display text-[21px] font-semibold tracking-[-0.025em]',
-  2: 'mt-6 font-display text-[18px] font-semibold tracking-[-0.02em]',
+  1: 'mt-7 font-display text-[22px] leading-[1.2] font-semibold tracking-[-0.03em]',
+  2: 'mt-6 font-display text-[19px] leading-[1.25] font-semibold tracking-[-0.025em]',
   3: 'mt-5 font-display text-[15.5px] font-semibold tracking-[-0.015em]',
   4: 'mt-5 text-[13.5px] font-semibold',
   5: 'mt-4 text-[13px] font-semibold text-text-muted',
@@ -37,14 +37,14 @@ const alignClass = { left: 'text-left', center: 'text-center', right: 'text-righ
 
 <template>
   <!--
-    15.5px at 1.72 is the reading size for generated prose. It is larger than a
+    16px at 1.72 is the reading size for generated prose. It is larger than a
     typical app body size on purpose: this is the one place in the product
     someone reads for forty-five minutes at a stretch.
   -->
   <div
     :class="[
       'md flex flex-col',
-      size === 'sm' ? 'gap-2.5 text-[13px]' : 'gap-3.5 text-[15.5px]',
+      size === 'sm' ? 'gap-2.5 text-[13px]' : 'gap-3.5 text-[16px]',
     ]"
   >
     <template
@@ -83,7 +83,7 @@ const alignClass = { left: 'text-left', center: 'text-center', right: 'text-righ
           >
           <span
             v-else
-            class="absolute left-1 top-[0.62em] size-1.5 rounded-full bg-lime-2"
+            class="absolute left-1 top-[0.68em] size-[5px] rounded-full bg-text-muted"
           />
           <span v-html="item.html" />
         </li>
@@ -95,9 +95,10 @@ const alignClass = { left: 'text-left', center: 'text-center', right: 'text-righ
         :language="token.language"
       />
 
+      <!-- A quote is a wash-backed block, never a stripe down the side. -->
       <blockquote
         v-else-if="token.kind === 'quote'"
-        class="border-l-2 border-brand-line pl-4 text-text-soft italic"
+        class="rounded-[12px] bg-[rgb(var(--wash-rgb)/0.045)] px-4 py-3 text-text-soft"
       >
         <BlocksMarkdown
           :tokens="token.tokens"
@@ -126,7 +127,7 @@ const alignClass = { left: 'text-left', center: 'text-center', right: 'text-righ
                 v-for="(cell, i) in token.head"
                 :key="i"
                 :class="[
-                  'border-b border-border px-3 py-2.5 text-[11px] font-semibold tracking-[0.06em] text-text-faint uppercase',
+                  'border-b border-border px-3 py-2.5 text-[12px] font-semibold text-text-faint',
                   alignClass[token.align[i] ?? 'left'],
                 ]"
                 v-html="cell"

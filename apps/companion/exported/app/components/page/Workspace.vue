@@ -19,7 +19,8 @@ import { usePageEditor } from '~/companion/doc/editor/usePageEditor'
 import { insertUpload, type PageActions } from '~/companion/doc/editor/slash'
 import { momentNow } from '~/companion/doc/transcript'
 import { useCoarsePointer, useKeyboardInset, usePhoneWidth } from '~/companion/doc/editor/viewport'
-import { downloadMarkdown } from '~/companion/doc/markdown'
+import { useExport } from '~/companion/export/use-export'
+import { googleDocsActions } from '~/companion/google/docs'
 import { timecode } from '~/companion/time'
 import { useNoteInk } from '~/companion/doc/ink'
 import { makeBoard } from '~/companion/board/make'
@@ -47,7 +48,7 @@ import './page.css'
  * Then the title, one muted line saying which class it's from, and the text.
  *
  * An empty page offers how to start, quietly, under its first line: a few
- * templates (filled from where the page is filed) and "Ask BiliMind to draft
+ * templates (filled from where the page is filed) and "Ask Bili to draft
  * it". They go as soon as there's anything on the page. A page made a moment
  * ago opens with the cursor in its title.
  *
@@ -153,8 +154,9 @@ const actions: PageActions = {
       return null
     }
   },
-  momentNow: () => momentNow(ctx.value, repo.mode === 'demo'),
-  codeLanguage: () => (ctx.value.subject?.color === 'db' ? 'sql' : 'python'),
+  momentNow: () => momentNow(ctx.value),
+  // A colour key says nothing about the subject (Italian wears 'db' now), so code blocks start plain.
+  codeLanguage: () => 'python',
   subjectId: () => page.value.subject_id,
 }
 
@@ -279,7 +281,7 @@ async function compare(): Promise<void> {
   if (gaps.loading) return
   gaps.loading = true
   try {
-    gaps.result = await findGaps(repo, page.value, ctx.value, editor.getText({ blockSeparator: '\n' }))
+    gaps.result = await findGaps(page.value, editor.getText({ blockSeparator: '\n' }))
   } finally {
     gaps.loading = false
   }
@@ -368,22 +370,54 @@ function askAboutPage(): void {
 
 const noteActions = useNoteActions()
 
+/*
+ * Imports and links: the page's links, under its text once it has
+ * one (`CompanionLinksAttached`, `parent_id` = this page), and "Add a link" in
+ * both "…" menus to put one there, so an empty page grows no button for it.
+ */
+const pageLinks = ref<{ open: () => void } | null>(null)
+const addLinkItem = { label: 'Add a link', icon: 'plus', run: () => pageLinks.value?.open() }
+
 const docMenu = computed<NoteMenuItem[]>(() => {
   const all = noteActions.menuFor(page.value as Note, { rename: focusTitle })
   const remove = all.filter((a) => a.destructive)
   return [
     ...all.filter((a) => !a.destructive),
-    { label: 'Download as Markdown', icon: 'download', run: () => downloadMarkdown(titleValue.value, editor.getJSON()) },
-    { label: 'Print or save as PDF', icon: 'file', run: () => window.print() },
+    // imports
+    addLinkItem,
+    ...exportItems.value,
     ...remove,
   ]
 })
 
 /* -- Export ------------------------------------------------------------------ */
 
+/*
+ * Every way out of the page, the same in Notes' "…" and in a course tab's
+ *: Word, Markdown and plain text from the editor's own
+ * document, so what's on screen is what's saved, and a PDF through the print
+ * stylesheet below (a file straight away on the desktop, the print dialog's
+ * "Save as PDF" in a browser). Free on every plan.
+ */
+const exp = useExport()
+const exportItems = computed<NoteMenuItem[]>(() => [
+  // A rule above the downloads in Notes' "…" (CompanionNotesMenu); a course tab's menu has none.
+  { label: 'Download as Word', icon: 'download', divider: true, run: () => void exp.page('docx', titleValue.value, editor.getJSON()) },
+  // Google: "Save to Google Docs", or Open / Update once saved; none where Google isn't offered.
+  ...googleDocsActions(page.value),
+  { label: 'Download as Markdown', icon: 'download', run: () => void exp.page('md', titleValue.value, editor.getJSON()) },
+  { label: 'Download as plain text', icon: 'download', run: () => void exp.page('txt', titleValue.value, editor.getJSON()) },
+  {
+    label: exp.savesPdf ? 'Save as PDF' : 'Print or save as PDF',
+    icon: 'file',
+    run: () => void exp.pagePdf(titleValue.value, beforePrint, afterPrint),
+  },
+])
+
 const menu = computed<MenuAction[]>(() => [
-  { label: 'Download as Markdown', icon: 'download', run: () => downloadMarkdown(titleValue.value, editor.getJSON()) },
-  { label: 'Print or save as PDF', icon: 'file', run: () => window.print() },
+  // imports
+  addLinkItem,
+  ...exportItems.value,
   {
     label: 'Copy link',
     icon: 'link',
@@ -402,7 +436,8 @@ const menu = computed<MenuAction[]>(() => [
 const article = ref<HTMLElement | null>(null)
 
 function beforePrint(): void {
-  if (!article.value) return
+  // Once only: "Save as PDF" sets the page out itself, and the print dialog's own event may follow it.
+  if (!article.value || document.querySelector('.pg-printroot')) return
   const copy = article.value.cloneNode(true) as HTMLElement
   const from = article.value.querySelectorAll('textarea, input')
   copy.querySelectorAll('textarea, input').forEach((field, i) => {
@@ -559,7 +594,7 @@ function addBelow(): void {
             variant="secondary"
             size="sm"
             class="shrink-0"
-            :class="{ '!border-transparent !bg-cobalt-soft !text-cobalt !shadow-none': panelOpen && !phone }"
+            :class="{ '!border-transparent !bg-brand-soft !text-brand !shadow-none': panelOpen && !phone }"
             :aria-pressed="phone ? undefined : panelOpen"
             title="Compare these notes with the class's slides and recording"
             @click="toggleGaps"
@@ -567,7 +602,7 @@ function addBelow(): void {
             <UiIcon
               name="spark"
               :size="14"
-              class="text-cobalt"
+              class="text-brand"
             />
             What did I miss?
           </UiBtn>
@@ -575,7 +610,7 @@ function addBelow(): void {
             variant="secondary"
             size="sm"
             class="pg-tool shrink-0"
-            :class="{ '!border-transparent !bg-ink !text-white !shadow-none': markupOpen }"
+            :class="{ '!border-transparent !bg-inverse !text-on-inverse !shadow-none': markupOpen }"
             :aria-pressed="markupOpen"
             aria-label="Draw"
             title="Draw, write and highlight on this page"
@@ -710,11 +745,19 @@ function addBelow(): void {
                   name="spark"
                   :size="12"
                 />
-                Ask BiliMind
+                Ask Bili
               </button>
             </template>
           </div>
         </Transition>
+        <!-- Imports and links: what's linked from this page; not printed. -->
+        <CompanionLinksAttached
+          ref="pageLinks"
+          quiet
+          :on="{ parentId: page.id }"
+          :subject-id="page.subject_id"
+          class="mt-8"
+        />
         <PageInk
           :ink="ink"
           :tool="pen.tool.value"
@@ -872,7 +915,7 @@ function addBelow(): void {
   }
 }
 
-/* "Start with Lecture notes · Cornell · Reading notes · Ask BiliMind":
+/* "Start with Lecture notes · Cornell · Reading notes · Ask Bili":
    quiet text buttons, faint until pointed at. */
 .pg-starters {
   display: flex;
@@ -913,11 +956,11 @@ function addBelow(): void {
 }
 
 .pg-starter.is-ai {
-  color: var(--cobalt);
+  color: var(--brand);
 }
 
 .pg-starter.is-ai:hover {
-  background: var(--cobalt-soft);
+  background: var(--brand-soft);
 }
 
 @media (max-width: 899.98px) {

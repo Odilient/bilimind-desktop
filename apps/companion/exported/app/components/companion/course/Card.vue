@@ -4,6 +4,7 @@ import { useCompanion } from '~/companion/store'
 import { useCourseMenu } from '~/companion/course-menu'
 import { continueTarget, courseBeads, courseNextDate, courseWhere, type DateTone } from '~/companion/course-home'
 import { dayKey, shortDate } from '~/companion/time'
+import { gradeWords, runningGrade } from '~/companion/grades'
 
 /**
  * A course on the Courses shelf. The card it replaces was a dashboard tile
@@ -32,9 +33,9 @@ import { dayKey, shortDate } from '~/companion/time'
  * is no hover, it's always there.
  *
  * The "⋯" (`useCourseMenu`, the same menu a list row has) holds what can be
- * done to the course itself: rename it in place, recolour it from the course
- * palette (the swatches take the path's place on the cover until one is
- * picked), move it into one of the learner's groups, ask the assistant about
+ * done to the course itself: rename it in place, pick its icon and colour
+ * (`CompanionCoursesLookDialog`, also opened by clicking the cover's
+ * picture), move it into one of the learner's groups, ask the assistant about
  * it, open its original in Moodle, archive it (off the shelf, nothing lost),
  * or delete it, which keeps everything the learner made by moving it to My
  * notes first.
@@ -55,6 +56,8 @@ const home = computed(() => `/app/courses/${props.subject.id}`)
 const beads = computed(() => courseBeads(c, props.subject))
 const where = computed(() => courseWhere(c, props.subject))
 const date = computed(() => courseNextDate(c, props.subject))
+/** "Averaging 78%": tasks and grades. */
+const grade = computed(() => gradeWords(runningGrade(c.deadlines.value.filter((d) => d.subject_id === props.subject.id))))
 
 const next = computed(() => {
   const target = continueTarget(c, props.subject)
@@ -87,31 +90,26 @@ const standing = computed(() => {
 })
 
 const TONE_DOT: Record<DateTone, string> = {
-  good: 'bg-lime-2',
+  good: 'bg-leaf',
   mid: 'bg-warn-bright',
-  low: 'bg-coral',
+  low: 'bg-danger',
   calm: 'bg-border-dashed',
 }
 
 const NuxtLinkComponent = resolveComponent('NuxtLink')
 
-/* -- The menu: rename and colour in place, the rest through the page ------- */
+/* -- The menu: rename in place, the rest through dialogs and the page ------- */
 
 const field = ref<HTMLInputElement | null>(null)
-const swatches = ref<HTMLElement | null>(null)
 
-const { actions, renaming, draft, finishRename, colouring, recolour, confirming } = useCourseMenu(
+const { actions, renaming, draft, finishRename, looking, confirming } = useCourseMenu(
   () => props.subject,
-  { field, swatches, ask: (s) => emit('ask', s), group: (s) => emit('group', s) },
+  { field, ask: (s) => emit('ask', s), group: (s) => emit('group', s) },
 )
 
-/** The line under the cover's label: what's being done to it, or when it was put away. */
+/** The line under the cover's label: when it was put away. */
 const note = computed(() =>
-  colouring.value
-    ? 'Pick a colour'
-    : props.subject.archived_at
-      ? `Archived ${shortDate(dayKey(props.subject.archived_at))}`
-      : null,
+  props.subject.archived_at ? `Archived ${shortDate(dayKey(props.subject.archived_at))}` : null,
 )
 </script>
 
@@ -124,28 +122,18 @@ const note = computed(() =>
     <CompanionCourseCover
       :subject="subject"
       :note="note"
+      picker
       class="rounded-t-[22px]"
+      @look="looking = true"
     >
       <template #actions>
+        <!-- On the body (`float`): inside the card it went under the next one. -->
         <UiMenu
           :actions="actions"
           :title="subject.title"
           :label="`More for ${subject.title}`"
+          float
         />
-      </template>
-
-      <!-- Picking a colour: the swatches take the path's place. -->
-      <template
-        v-if="colouring"
-        #foot
-      >
-        <div ref="swatches">
-          <CompanionCoursesSwatches
-            :subject="subject"
-            @pick="recolour"
-            @close="colouring = false"
-          />
-        </div>
       </template>
 
       <!--
@@ -160,8 +148,8 @@ const note = computed(() =>
         <NuxtLink
           :to="next.to"
           :class="[
-            'absolute bottom-0 flex h-9 w-max max-w-[min(100%,250px)] translate-y-1 items-center gap-1.5 rounded-full pr-2.5 pl-3.5 text-[13px] font-semibold whitespace-nowrap opacity-0 shadow-[0_10px_22px_-12px_rgb(11_13_16/0.55)] transition-[opacity,translate,background-color] duration-150 ease-out before:absolute before:-inset-1.5 group-hover/card:pointer-events-auto group-hover/card:translate-y-0 group-hover/card:opacity-100 group-focus-within/card:pointer-events-auto group-focus-within/card:translate-y-0 group-focus-within/card:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cobalt pointer-coarse:pointer-events-auto pointer-coarse:translate-y-0 pointer-coarse:opacity-100 motion-reduce:translate-y-0',
-            next.live ? 'bg-lime text-ink hover:bg-[#d2f86a]' : 'bg-ink text-white hover:bg-[#22262e]',
+            'absolute bottom-0 flex h-9 w-max max-w-[min(100%,250px)] translate-y-1 items-center gap-1.5 rounded-full pr-2.5 pl-3.5 text-[13px] font-semibold whitespace-nowrap opacity-0 shadow-[0_10px_22px_-12px_rgb(11_13_16/0.55)] transition-[opacity,translate,background-color] duration-150 ease-out before:absolute before:-inset-1.5 group-hover/card:pointer-events-auto group-hover/card:translate-y-0 group-hover/card:opacity-100 group-focus-within/card:pointer-events-auto group-focus-within/card:translate-y-0 group-focus-within/card:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand pointer-coarse:pointer-events-auto pointer-coarse:translate-y-0 pointer-coarse:opacity-100 motion-reduce:translate-y-0',
+            next.live ? 'bg-accent text-on-accent hover:bg-hi-2' : 'bg-inverse text-on-inverse hover:bg-inverse-hover',
           ]"
           :style="{ left: `${standing * 100}%`, transform: `translateX(-${standing * 100}%)` }"
           :title="`${next.verb} · ${next.label} (${next.why})`"
@@ -169,7 +157,7 @@ const note = computed(() =>
           <span class="shrink-0">{{ next.verb }}</span>
           <span
             class="shrink-0"
-            :class="next.live ? 'text-ink/40' : 'text-white/40'"
+            :class="next.live ? 'text-on-accent/40' : 'text-white/40'"
           >·</span>
           <span class="min-w-0 truncate font-medium">{{ next.short }}</span>
           <UiIcon
@@ -192,7 +180,7 @@ const note = computed(() =>
           ref="field"
           v-model="draft"
           type="text"
-          class="relative z-10 -mx-1.5 w-[calc(100%+12px)] rounded-[8px] bg-surface-sunken px-1.5 py-0.5 outline-none focus:shadow-[inset_0_0_0_1.5px_var(--cobalt)]"
+          class="relative z-10 -mx-1.5 w-[calc(100%+12px)] rounded-[8px] bg-surface-sunken px-1.5 py-0.5 outline-none focus:shadow-[inset_0_0_0_1.5px_var(--brand)]"
           aria-label="Course name"
           @keydown.enter.prevent="finishRename(true)"
           @keydown.esc.prevent.stop="finishRename(false)"
@@ -202,7 +190,7 @@ const note = computed(() =>
         <NuxtLink
           v-else
           :to="home"
-          class="line-clamp-2 after:absolute after:inset-0 after:rounded-[22px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-cobalt"
+          class="line-clamp-2 after:absolute after:inset-0 after:rounded-[22px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
         >
           {{ subject.title }}
         </NuxtLink>
@@ -222,7 +210,7 @@ const note = computed(() =>
           :class="[
             'flex h-7 min-w-0 items-center gap-2 rounded-full bg-surface-sunken px-3',
             date.to &&
-              'relative z-10 transition-colors before:absolute before:-inset-y-2 before:inset-x-0 hover:bg-surface-track focus-visible:outline-2 focus-visible:outline-cobalt',
+              'relative z-10 transition-colors before:absolute before:-inset-y-2 before:inset-x-0 hover:bg-surface-track focus-visible:outline-2 focus-visible:outline-brand',
           ]"
           :title="`${date.title}: ${date.words}`"
         >
@@ -235,6 +223,11 @@ const note = computed(() =>
           v-else
           class="flex h-7 items-center text-[12.5px] text-text-faint"
         >Nothing due</span>
+        <!-- Tasks and grades: the running grade, quietly, in words. -->
+        <span
+          v-if="grade"
+          class="ml-auto flex h-7 shrink-0 items-center pl-3 text-[12.5px] text-text-faint"
+        >{{ grade }}</span>
       </div>
     </div>
 
@@ -246,6 +239,10 @@ const note = computed(() =>
 
     <CompanionCoursesDeleteDialog
       v-model:open="confirming"
+      :subject="subject"
+    />
+    <CompanionCoursesLookDialog
+      v-model:open="looking"
       :subject="subject"
     />
   </article>

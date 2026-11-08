@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 type Tone = 'accent' | 'success' | 'warn' | 'danger' | 'muted'
 
 const props = withDefaults(
@@ -18,7 +19,7 @@ const props = withDefaults(
 )
 
 const strokes: Record<Tone, string> = {
-  accent: 'var(--lime-2)',
+  accent: 'var(--leaf)',
   success: 'var(--success-bright)',
   warn: 'var(--warn)',
   danger: 'var(--danger)',
@@ -47,7 +48,7 @@ const offset = computed(() =>
     class="relative inline-grid shrink-0 place-items-center"
     :style="{ width: `${size}px`, height: `${size}px` }"
     role="img"
-    :aria-label="label ?? `${clamped}% complete`"
+    :aria-label="label ?? t('ui.complete', { n: clamped })"
   >
     <svg
       :width="size"

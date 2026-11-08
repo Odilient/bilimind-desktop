@@ -113,7 +113,7 @@ const interactive = computed(() => items.value.length > 0 && !props.readonly)
       v-if="symptom"
       class="mt-4 rounded-[14px] bg-warn-soft px-4 py-3.5 shadow-[inset_0_0_0_1px_var(--warn-line)]"
     >
-      <p class="eyebrow-loud mb-2 flex items-center gap-1.5 text-warn-text">
+      <p class="text-[12px] leading-none font-bold mb-2 flex items-center gap-1.5 text-warn-text">
         <UiIcon
           name="warning"
           :size="12"
@@ -156,7 +156,7 @@ const interactive = computed(() => items.value.length > 0 && !props.readonly)
         v-if="mode === 'build' && requirements.length"
         class="mt-4 rounded-[14px] bg-surface-mute p-4 shadow-[inset_0_0_0_1px_var(--border)]"
       >
-        <p class="eyebrow-loud mb-2.5 text-text-faint">Done when</p>
+        <p class="text-[12px] leading-none font-bold mb-2.5 text-text-faint">Done when</p>
         <ul class="flex flex-col gap-1.5">
           <li
             v-for="(requirement, index) in requirements"
@@ -172,7 +172,7 @@ const interactive = computed(() => items.value.length > 0 && !props.readonly)
         v-else-if="mode === 'query' && tables.length"
         class="mt-4 rounded-[14px] bg-surface-mute p-4 shadow-[inset_0_0_0_1px_var(--border)]"
       >
-        <p class="eyebrow-loud mb-2.5 text-text-faint">Tables you can query</p>
+        <p class="text-[12px] leading-none font-bold mb-2.5 text-text-faint">Tables you can query</p>
         <ul class="flex flex-col gap-1.5">
           <li
             v-for="table in tables"
@@ -189,7 +189,7 @@ const interactive = computed(() => items.value.length > 0 && !props.readonly)
         v-else-if="tests.length"
         class="mt-4 rounded-[14px] bg-surface-mute p-4 shadow-[inset_0_0_0_1px_var(--border)]"
       >
-        <p class="eyebrow-loud mb-2.5 text-text-faint">Your code must satisfy</p>
+        <p class="text-[12px] leading-none font-bold mb-2.5 text-text-faint">Your code must satisfy</p>
         <ul class="flex flex-col gap-1.5">
           <li
             v-for="(test, index) in tests.slice(0, 6)"

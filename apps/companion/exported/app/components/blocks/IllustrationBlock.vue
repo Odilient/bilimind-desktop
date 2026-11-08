@@ -290,7 +290,7 @@ function measure(event: Event): void {
             :key="index"
           >
             <span
-              class="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime shadow-[0_0_0_3px_rgb(var(--wash-rgb)/0.85)]"
+              class="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_0_3px_rgb(var(--wash-rgb)/0.85)]"
               :style="dotStyle(point)"
               aria-hidden="true"
             />

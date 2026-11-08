@@ -1,10 +1,14 @@
 <script setup lang="ts">
 /**
- * A drafted course's path, read in the chat: one line, as the course page
- * draws it ("a course is a path"), with a bead per unit and a small dot per
- * topic along the same rail. Units fold, so a 25-topic path is five rows in
- * a 380px panel and opens one unit at a time; the first is open, because
- * where you start is the part people check.
+ * A drafted course's path, read in the chat: one line, in the roadmap's own
+ * grammar (`cp-node`, docs/design/daylight2/css/04-cycler.css): a spine
+ * down the middle, each unit a pill on it, each topic a small card with its
+ * status mark. Nothing is learned yet, so every mark is the dashed "to do"
+ * and the spine is dotted, the way the course page draws what's ahead; the
+ * first topic is the highlighter's, because it is where you start. Units
+ * fold, so a 25-topic path is five pills in a 380px panel and opens one
+ * unit at a time; the first is open, because where you start is the part
+ * people check.
  *
  * Read-only on purpose. Editing is Edit's outline (create/PathEditor), or a
  * sentence in the chat ("drop joins"); a third way to change it here would
@@ -41,7 +45,17 @@ function toggleAll(): void {
 const total = computed(() => props.units.reduce((n, u) => n + u.topics.length, 0))
 
 const ink = computed(() => courseColor(props.color))
-const bead = computed(() => `color-mix(in srgb, ${ink.value} 16%, var(--surface))`)
+
+/** The topic's running number along the whole path, the way the course page counts. */
+const firstOf = computed(() => {
+  const starts: number[] = []
+  let n = 1
+  for (const u of props.units) {
+    starts.push(n)
+    n += u.topics.length
+  }
+  return starts
+})
 </script>
 
 <template>
@@ -66,51 +80,69 @@ const bead = computed(() => `color-mix(in srgb, ${ink.value} 16%, var(--surface)
 
     <ol
       v-if="units.length"
-      class="relative grid"
+      class="pp-path relative mx-auto grid w-full max-w-[380px] justify-items-center gap-2.5 py-1"
     >
-      <!-- The rail the beads sit on. -->
+      <!-- The spine: dotted, because all of it is still ahead. -->
       <span
-        class="pointer-events-none absolute top-5 bottom-5 left-[9.5px] w-px bg-border-strong"
+        class="pp-spine"
         aria-hidden="true"
       />
       <li
         v-for="(u, i) in units"
         :key="i"
-        class="relative"
+        class="relative z-[1] grid w-full justify-items-center gap-2"
       >
         <button
           type="button"
-          class="group/unit -ml-1 flex min-h-10 w-[calc(100%+4px)] cursor-pointer items-center gap-2.5 rounded-[10px] py-1 pr-1.5 pl-1 text-left transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:ring-2 focus-visible:ring-brand-line max-lg:min-h-11"
+          class="pp-part group/unit max-lg:min-h-11"
           :aria-expanded="isOpen(i)"
           @click="toggle(i)"
         >
-          <span
-            class="num relative z-[1] grid size-[19px] shrink-0 place-items-center rounded-full text-[10.5px] font-semibold text-text-soft"
-            :style="{ background: bead, boxShadow: `inset 0 0 0 1.5px ${ink}, 0 0 0 3px var(--surface)` }"
-          >{{ i + 1 }}</span>
-          <span class="min-w-0 flex-1 truncate text-[13.5px] font-semibold text-text">{{ u.title || `Unit ${i + 1}` }}</span>
-          <span class="shrink-0 text-[12px] text-text-faint tabular-nums">{{ u.topics.length }} {{ u.topics.length === 1 ? 'topic' : 'topics' }}</span>
+          <i
+            class="size-2 shrink-0 rounded-[3px]"
+            :style="{ background: ink }"
+            aria-hidden="true"
+          />
+          <span class="min-w-0 truncate">
+            <b class="font-bold text-text">Unit {{ i + 1 }}</b>
+            <template v-if="u.title"> · {{ u.title }}</template>
+          </span>
+          <span class="shrink-0 font-medium text-text-faint tabular-nums">{{ u.topics.length }}</span>
           <UiIcon
             name="chevron-down"
-            :size="14"
-            class="shrink-0 text-text-faint transition-transform duration-150 group-hover/unit:text-text-soft"
+            :size="13"
+            :stroke="2"
+            class="shrink-0 text-text-faint transition-transform duration-200 group-hover/unit:text-text-soft"
             :class="isOpen(i) && 'rotate-180'"
           />
         </button>
         <ul
           v-if="isOpen(i) && u.topics.length"
-          class="animate-fade grid pb-1.5 pl-[27px]"
+          class="animate-fade grid w-full gap-2.5"
         >
           <li
             v-for="(t, j) in u.topics"
             :key="j"
-            class="relative flex min-h-7 items-center text-[13px] leading-snug text-text-body"
+            :class="['pp-node', i === 0 && j === 0 && !live && 'is-cur']"
           >
-            <span
-              class="absolute top-1/2 -left-[20px] size-[5px] -translate-y-1/2 rounded-full bg-text-ghost shadow-[0_0_0_2.5px_var(--surface)]"
+            <svg
+              class="size-[15px] shrink-0 overflow-visible"
+              viewBox="0 0 15 15"
               aria-hidden="true"
-            />
-            <span class="min-w-0 truncate">{{ t.title }}</span>
+            >
+              <circle
+                cx="7.5"
+                cy="7.5"
+                r="6.3"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-dasharray="2.2 2.2"
+                class="pp-mk"
+              />
+            </svg>
+            <span class="min-w-0 flex-1 truncate">{{ t.title }}</span>
+            <span class="pp-nn">{{ (firstOf[i] ?? 1) + j }}</span>
           </li>
         </ul>
       </li>
@@ -123,3 +155,121 @@ const bead = computed(() => `color-mix(in srgb, ${ink.value} 16%, var(--surface)
     </p>
   </div>
 </template>
+
+<style scoped>
+.pp-spine {
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: repeating-linear-gradient(var(--text-ghost) 0 2px, transparent 2px 8px);
+}
+
+/* A unit: the roadmap's `cp-part`, a pill sitting on the spine. */
+.pp-part {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-height: 30px;
+  padding: 4px 10px 4px 11px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border-strong);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.pp-part:hover {
+  background: var(--surface-chrome);
+  box-shadow: 0 0 0 1px var(--border-field);
+}
+
+.pp-part:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand-line);
+}
+
+/* A topic: the roadmap's `cp-node`. */
+.pp-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px 8px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-card);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  animation: pp-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pp-mk {
+  color: var(--text-faint);
+}
+
+.pp-nn {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Where you start: the highlighter, once. */
+.pp-node.is-cur {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--hi-2) 80%, var(--accent-strong)),
+    0 10px 24px -10px color-mix(in oklab, var(--accent-strong) 55%, transparent);
+}
+
+.pp-node.is-cur .pp-mk,
+.pp-node.is-cur .pp-nn {
+  color: color-mix(in oklab, var(--on-accent) 55%, transparent);
+}
+
+.pp-node.is-cur::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: pp-pulse 1.4s ease-out 0.8s 3;
+}
+
+/* Each topic settles onto the spine as it arrives, so a draft visibly writes itself. */
+@keyframes pp-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes pp-pulse {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 90%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 11px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-node,
+  .pp-node.is-cur::after {
+    animation: none;
+  }
+}
+</style>

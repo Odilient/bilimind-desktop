@@ -82,7 +82,7 @@ async function explain(index: number): Promise<void> {
 
 function scoreTone(score: number): string {
   /* Cobalt's score pills: lime when it landed, coral-soft when it did not. */
-  if (score >= 80) return 'bg-lime text-ink'
+  if (score >= 80) return 'bg-accent text-on-accent'
   if (score >= 50) return 'bg-warn-soft text-warn-text'
   return 'bg-danger-soft text-danger-text'
 }
@@ -140,7 +140,7 @@ function scoreTone(score: number): string {
               :variant="recordingIndex === index ? 'primary' : 'secondary'"
               size="sm"
               :icon="recordingIndex === index ? 'x' : 'mic'"
-              :class="recordingIndex === index && '[&_svg]:text-coral'"
+              :class="recordingIndex === index && '[&_svg]:text-danger'"
               :loading="recordingIndex === index && speech.busy.value"
               :disabled="recordingIndex !== null && recordingIndex !== index"
               @click="toggleRecord(index)"
@@ -177,7 +177,7 @@ function scoreTone(score: number): string {
                   'text-[14.5px]',
                   w.ok
                     ? 'font-medium text-[#3f7d0c] dark:text-success-text'
-                    : 'text-text-faint underline decoration-coral decoration-wavy underline-offset-3',
+                    : 'text-text-faint underline decoration-danger decoration-wavy underline-offset-3',
                 ]"
               >
                 {{ w.word }}

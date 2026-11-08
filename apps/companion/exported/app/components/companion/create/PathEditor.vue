@@ -183,7 +183,7 @@ function onDragEnd(): void {
 }
 
 const ICON_BTN =
-  'grid size-8 cursor-pointer place-items-center rounded-full text-text-faint transition-colors duration-150 outline-none hover:bg-[rgb(11_13_16/0.06)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none disabled:opacity-30'
+  'grid size-8 cursor-pointer place-items-center rounded-full text-text-faint transition-colors duration-150 outline-none hover:bg-surface-sunken hover:text-text focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none disabled:opacity-30'
 </script>
 
 <template>
@@ -195,7 +195,7 @@ const ICON_BTN =
       <li
         v-for="(unit, u) in units"
         :key="keyOf(unit)"
-        class="rounded-[18px] border border-border bg-surface transition-shadow duration-150"
+        class="rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-shadow duration-150"
         :class="over?.u === u && dragging && dragging.u !== u && 'ring-2 ring-brand-line'"
         @dragover="onDragOverUnit($event, u)"
         @drop="onDrop"
@@ -286,12 +286,12 @@ const ICON_BTN =
           >
             <span
               v-if="over?.u === u && over.t === t && dragging"
-              class="pointer-events-none absolute inset-x-2 -top-px h-0.5 rounded-full bg-cobalt"
+              class="pointer-events-none absolute inset-x-2 -top-px h-0.5 rounded-full bg-brand"
               aria-hidden="true"
             />
             <span
               v-if="over?.u === u && over.t === t + 1 && t === unit.topics.length - 1 && dragging"
-              class="pointer-events-none absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-cobalt"
+              class="pointer-events-none absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-brand"
               aria-hidden="true"
             />
             <span
@@ -395,7 +395,7 @@ const ICON_BTN =
 
     <button
       type="button"
-      class="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[18px] border border-dashed border-border-dashed text-[14.5px] font-semibold text-text-soft transition-colors duration-150 outline-none hover:border-cobalt hover:bg-cobalt-soft hover:text-cobalt focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none disabled:opacity-50"
+      class="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[14px] border border-dashed border-border-dashed text-[14.5px] font-semibold text-text-soft transition-colors duration-150 outline-none hover:border-brand hover:bg-brand-soft hover:text-brand focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none disabled:opacity-50"
       :disabled="disabled"
       @click="addUnit"
     >

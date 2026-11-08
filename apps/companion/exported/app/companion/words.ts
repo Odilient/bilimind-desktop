@@ -5,18 +5,11 @@
  */
 import type { Deadline, DeadlineSource, Item, Session, Slot, Subject } from './types'
 import { clock, dayKey, dayLabel, durationLabel, relativeDay, timecode, weekdayShort } from './time'
+import { translate } from '~/utils/i18n'
 
-export const KIND_WORD: Record<Deadline['kind'], string> = {
-  assignment: 'Assignment',
-  quiz: 'Quiz',
-  lab: 'Lab',
-  midterm: 'Midterm',
-  final: 'Final',
-  exam: 'Exam',
-  project: 'Project',
-  presentation: 'Presentation',
-  milestone: 'Checkpoint',
-  other: 'Deadline',
+/** A deadline's kind, in the active language ("Quiz", "Midterm"). */
+export function kindWord(kind: Deadline['kind']): string {
+  return translate(`today.kind.${kind}`)
 }
 
 /** "heard in class, Moodle agrees" — how we know, in a few words. */
@@ -25,12 +18,12 @@ export function knownBy(d: Deadline): string | null {
   const heard = kinds.has('transcript')
   const official = d.sources.some((s) => s.confidence === 'official')
   if (d.tentative) {
-    if (d.confidence === 'heard') return 'heard in class, not confirmed yet'
-    if (d.confidence === 'shared') return 'from the group chat, not confirmed yet'
+    if (d.confidence === 'heard') return translate('today.known.heardPending')
+    if (d.confidence === 'shared') return translate('today.known.sharedPending')
   }
-  if (heard && official) return 'heard in class, Moodle agrees'
-  if (heard) return 'heard in class'
-  if (d.confidence === 'own') return 'your own'
+  if (heard && official) return translate('today.known.heardMoodle')
+  if (heard) return translate('today.known.heard')
+  if (d.confidence === 'own') return translate('today.known.own')
   return null
 }
 
@@ -41,7 +34,7 @@ export function deadlineMeta(d: Deadline, subject: Subject | null, withCourse = 
   if (d.scope_note) parts.push(d.scope_note)
   const known = knownBy(d)
   if (known) parts.push(known)
-  else if (d.weight_pct) parts.push(`${d.weight_pct}% of the grade`)
+  else if (d.weight_pct) parts.push(translate('today.weight', { n: d.weight_pct }))
   return parts.join(' · ')
 }
 
@@ -55,24 +48,24 @@ export function deadlineMeta(d: Deadline, subject: Subject | null, withCourse = 
  * `r.checked ? r.percent : null`.
  */
 export function readyWords(percent: number | null): string {
-  if (percent === null) return 'not checked yet'
-  if (percent >= 85) return 'ready'
-  if (percent <= 5) return 'not started'
-  return `${percent}% ready`
+  if (percent === null) return translate('today.ready.none')
+  if (percent >= 85) return translate('today.ready.done')
+  if (percent <= 5) return translate('today.ready.notStarted')
+  return translate('today.ready.percent', { n: percent })
 }
 
 /** Day and time, split for the right-hand column: ["Thu", "09:00"]. */
 export function dueParts(d: Deadline): [string, string] {
-  if (!d.due_at) return ['No date', '']
+  if (!d.due_at) return [translate('today.due.none'), '']
   const key = dayKey(d.due_at)
   const rel = relativeDay(key)
-  const day = rel === 'today' ? 'Today' : rel === 'tomorrow' ? 'Tomorrow' : rel.length <= 3 ? rel : dayLabel(key).slice(4)
+  const day = rel === 'today' ? translate('common.today') : rel === 'tomorrow' ? translate('common.tomorrow') : rel.length <= 3 ? rel : dayLabel(key).slice(4)
   return [day, d.all_day ? '' : clock(d.due_at)]
 }
 
 /** "Thu 29 Oct, 09:00". */
 export function dueLong(d: Deadline): string {
-  if (!d.due_at) return 'No date yet'
+  if (!d.due_at) return translate('today.due.noneYet')
   return `${dayLabel(dayKey(d.due_at))}${d.all_day ? '' : `, ${clock(d.due_at)}`}`
 }
 
@@ -84,32 +77,31 @@ export function sessionLine(s: Session): string {
 export function sessionWhen(s: Session): string {
   const key = dayKey(s.starts_at)
   const rel = relativeDay(key)
-  return `${rel === 'today' ? 'Today' : rel === 'tomorrow' ? 'Tomorrow' : weekdayShort(key)} ${clock(s.starts_at)}`
+  return `${rel === 'today' ? translate('common.today') : rel === 'tomorrow' ? translate('common.tomorrow') : weekdayShort(key)} ${clock(s.starts_at)}`
 }
 
-const SOURCE_WORD: Record<DeadlineSource['kind'], string> = {
+const BRAND_SOURCE: Partial<Record<DeadlineSource['kind'], string>> = {
   moodle: 'Moodle',
   teams: 'Teams',
   canvas: 'Canvas',
-  ics: 'Calendar feed',
-  email: 'Email',
-  transcript: 'Said in class',
-  share: 'Shared message',
-  classmate: 'A classmate',
-  user: 'You',
-  photo: 'Photo',
   pdf: 'PDF',
+  // Daylight 2 (gaps): set by the teacher in Google Classroom.
+  classroom: 'Google Classroom',
+}
+
+function sourceWord(kind: DeadlineSource['kind']): string {
+  return BRAND_SOURCE[kind] ?? translate(`today.source.${kind}`)
 }
 
 /** "Said in Lecture 7, Wed 10:47", "Moodle post, Mon 15:02". */
 export function sourceLine(s: DeadlineSource, recordingSession?: Session | null): string {
   const at = `${weekdayShort(dayKey(s.observed_at))} ${clock(s.observed_at)}`
   if (s.kind === 'transcript') {
-    return `Said in ${recordingSession?.title ?? 'class'}, ${at}`
+    return translate('today.line.said', { where: recordingSession?.title ?? translate('today.line.class'), at })
   }
-  if (s.kind === 'moodle') return `Moodle post, ${at}`
-  if (s.kind === 'user') return 'Set by you'
-  return `${SOURCE_WORD[s.kind]}, ${at}`
+  if (s.kind === 'moodle') return translate('today.line.moodle', { at })
+  if (s.kind === 'user') return translate('today.line.user')
+  return translate('today.line.other', { word: sourceWord(s.kind), at })
 }
 
 export function itemIcon(item: Item): string {
@@ -133,13 +125,8 @@ export function atLabel(seconds: number | null | undefined): string {
   return seconds == null ? '' : timecode(seconds)
 }
 
-export const SLOT_WORD: Record<Slot['kind'], string> = {
-  lecture: 'Lecture',
-  tutorial: 'Tutorial',
-  lab: 'Lab',
-  seminar: 'Seminar',
-  lesson: 'Lesson',
-  study: 'Study',
+export function slotWord(kind: Slot['kind']): string {
+  return translate(`today.slot.${kind}`)
 }
 
 /** File size as a person reads it. */

@@ -3,8 +3,7 @@
  *
  * The API signs a `file_url` on every item it sends, but signed URLs expire, so PowerSync doesn't sync them: an
  * item read from the local database has none. Opening one then asks the API
- * for the item, which signs a fresh link. The demo keeps its own data: or
- * object URL in `meta.url`.
+ * for the item, which signs a fresh link.
  */
 import { useApi } from '~/composables/useApi'
 import type { Item } from './types'

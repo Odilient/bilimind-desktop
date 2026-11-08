@@ -79,7 +79,7 @@ defineExpose({ image, words })
     >
       <div
         :class="enlarged
-          ? 'animate-fade fixed inset-0 z-[80] grid place-items-center bg-[rgb(6_9_30/0.45)] p-4 backdrop-blur-[4px] min-[900px]:p-10'
+          ? 'animate-fade fixed inset-0 z-[80] grid place-items-center bg-[rgb(30_24_14/0.32)] p-4 backdrop-blur-[2px] min-[900px]:p-10'
           : 'size-full'"
         @click.self="big = null"
       >

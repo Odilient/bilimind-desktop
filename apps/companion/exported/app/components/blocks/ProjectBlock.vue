@@ -59,7 +59,7 @@ const items = computed<Assessment[]>(() => {
       v-if="deliverables.length"
       class="mt-4 rounded-[16px] bg-surface-mute p-4 shadow-[inset_0_0_0_1px_var(--border)]"
     >
-      <p class="eyebrow-loud mb-3 text-text-faint">Deliverables</p>
+      <p class="text-[12px] leading-none font-bold mb-3 text-text-faint">Deliverables</p>
       <ul class="flex flex-col gap-2">
         <li
           v-for="(item, index) in deliverables"
@@ -67,7 +67,7 @@ const items = computed<Assessment[]>(() => {
           class="flex items-start gap-3 text-[14px] leading-relaxed text-text-body"
         >
           <span
-            class="num mt-0.5 grid h-[22px] w-[26px] shrink-0 place-items-center rounded-[7px] bg-chip font-display text-[11px] font-semibold text-lime"
+            class="num mt-0.5 grid h-[22px] w-[26px] shrink-0 place-items-center rounded-[7px] bg-chip font-display text-[11px] font-semibold text-accent"
             >{{ String(index + 1).padStart(2, '0') }}</span
           >
           <span class="min-w-0 flex-1">{{ item }}</span>

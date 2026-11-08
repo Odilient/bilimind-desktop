@@ -59,7 +59,7 @@ function toggle(index: number): void {
           class="absolute grid size-7 -translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full font-display text-[11.5px] font-semibold transition"
           :class="
             active === index
-              ? 'z-20 scale-110 bg-lime text-ink shadow-[0_0_0_3px_rgb(var(--wash-rgb)/0.85)]'
+              ? 'z-20 scale-110 bg-accent text-on-accent shadow-[0_0_0_3px_rgb(var(--wash-rgb)/0.85)]'
               : 'z-10 bg-ink/85 text-white shadow-[0_0_0_2px_rgb(255_255_255/0.7)] hover:scale-110'
           "
           :style="{ left: `${hotspot.x_pct}%`, top: `${hotspot.y_pct}%` }"
@@ -108,7 +108,7 @@ function toggle(index: number): void {
         >
           <span
             class="num mt-0.5 grid size-5 shrink-0 place-items-center rounded-full font-display text-[10.5px] font-semibold tabular-nums"
-            :class="active === index ? 'bg-lime text-ink' : 'bg-ink text-white'"
+            :class="active === index ? 'bg-accent text-on-accent' : 'bg-inverse text-on-inverse'"
             >{{ index + 1 }}</span
           >
           <span class="min-w-0 flex-1">

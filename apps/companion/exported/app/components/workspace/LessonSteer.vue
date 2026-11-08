@@ -22,7 +22,7 @@ const emit = defineEmits<{ submit: [] }>()
         maxlength="500"
         placeholder="How should it be written? Optional"
         aria-label="How the lesson should be written"
-        class="field-sizing-content min-h-11 min-w-0 flex-1 resize-none rounded-[12px] border border-border-field bg-surface px-3.5 py-[11px] text-[13.5px] leading-snug outline-none focus:border-lime-2 focus:shadow-[0_0_0_4px_rgb(198_242_78/0.35)]"
+        class="field-sizing-content min-h-11 min-w-0 flex-1 resize-none rounded-[12px] border border-border-field bg-surface px-3.5 py-[11px] text-[13.5px] leading-snug outline-none focus:border-hi-2 focus:shadow-[0_0_0_4px_rgb(255_212_71/0.35)]"
         @keydown.enter.prevent="emit('submit')"
       />
       <slot />

@@ -22,7 +22,8 @@
 - **Build from a folder.** Point it at your slides and past papers. The Checker re-solves every auto-marked answer against your files, throws out what they contradict, and leaves its report in the course. One measured run: one PDF, 5 lessons, 165 seconds, $0.04 on DeepSeek.
 - **Marking.** Exact answers are marked by code. Written answers are marked by your model against a rubric. If it can't be marked, it says so and scores nothing.
 - **Checks.** Questions from memory, days after you studied. Only those count toward readiness, and readiness is compared with your real grade.
-- **Today, a planner, notes, whiteboards, flashcards.** These work offline.
+- **Today, a planner, a tasks board, a calendar, notes, whiteboards, flashcards.** These work offline.
+- **Seven languages:** English, Spanish, French, Portuguese, Russian, Turkish and Uzbek.
 - **Reads from you:** pasted announcements, a syllabus or an exam timetable PDF become suggested dates you confirm.
 - **Spending limits:** $1 a course and $2 a day by default. You can change them in Settings, which also shows what each thing cost.
 

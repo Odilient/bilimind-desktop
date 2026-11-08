@@ -4,5 +4,5 @@
  * (the tray's deadline, the capture hotkey, dropped files). See ./types.
  */
 export * from './types'
-export { usePlatform } from './use-platform'
+export { isDesktopApp, usePlatform } from './use-platform'
 export { usePlatformHooks } from './hooks'

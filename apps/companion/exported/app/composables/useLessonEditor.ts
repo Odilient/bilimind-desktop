@@ -93,6 +93,8 @@ export function useLessonEditor(input: {
   let baseRevisionId: number | null = null
   /** The revision this session opened on; where Cancel goes back to. */
   let startRevisionId: number | null = null
+  /** The lesson had nothing in it (being written by hand); Cancel empties it again. */
+  let startedEmpty = false
   /** The selected block's payload as it was when it was selected. */
   let selectionWas: string | null = null
   let counter = 0
@@ -190,6 +192,7 @@ export function useLessonEditor(input: {
     draft.value = fromNode(node)
     baseRevisionId = node.current_revision_id ?? null
     startRevisionId = baseRevisionId
+    startedEmpty = (node.blocks ?? []).length === 0
     editing.value = true
     dirty.value = false
     persisted.value = false
@@ -255,6 +258,16 @@ export function useLessonEditor(input: {
 
       if (!persisted.value) {
         discard()
+        return true
+      }
+
+      // A first draft has no earlier version: going back is having nothing again,
+      // which the server reads as unwritten (a stub) once more.
+      if (startedEmpty) {
+        input.apply(await api.patch<PlayerNode>(`/nodes/${id.value}`, { blocks: [], base_revision_id: baseRevisionId }))
+        input.onSaved?.()
+        discard()
+        toast.success('Changes discarded')
         return true
       }
 

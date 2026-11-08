@@ -21,6 +21,7 @@ const props = withDefaults(
   { withCourse: true, showStanding: false },
 )
 
+const { t } = useI18n()
 const c = useCompanion()
 const subject = computed(() => c.subjectOf(props.deadline))
 const readiness = computed(() => c.readinessOf(props.deadline))
@@ -56,7 +57,7 @@ const official = computed(
         <span
           v-if="official"
           class="shrink-0 font-medium text-success-text"
-        >Official<template v-if="meta"> ·</template></span>
+        >{{ t('today.confidence.official') }}<template v-if="meta"> ·</template></span>
         <span class="truncate">{{ meta }}</span>
       </span>
     </span>

@@ -12,7 +12,8 @@ import { COURSE_PALETTE } from '~/companion/create'
  */
 withDefaults(
   defineProps<{
-    subject: Subject
+    /** The course, or one not made yet: only its name and colour are read. */
+    subject: Pick<Subject, 'title' | 'color'>
     compact?: boolean
   }>(),
   { compact: false },
@@ -22,14 +23,14 @@ const emit = defineEmits<{ pick: [tone: string]; close: [] }>()
 
 /** The palette's tokens in words, for the swatches' labels. */
 const COLOUR_NAMES: Record<string, string> = {
-  db: 'Teal',
-  net: 'Orange',
-  prg: 'Violet',
-  mth: 'Pink',
-  seg: 'Green',
-  eng: 'Blue',
-  ita: 'Amber',
-  c8: 'Slate',
+  db: 'Leaf',
+  net: 'Apricot',
+  prg: 'Lilac',
+  mth: 'Rose',
+  seg: 'Sea',
+  eng: 'Sky',
+  ita: 'Butter',
+  c8: 'Stone',
 }
 </script>
 

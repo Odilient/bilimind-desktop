@@ -11,6 +11,15 @@ const src = join(app, 'merged', 'shell', 'src')
 const minify = process.argv.includes('--minify')
 rmSync(dist, { recursive: true, force: true })
 
+// companion/time.ts names its day words through app/utils/i18n.ts, which needs Vite and Nuxt; the main
+// process gets the English-only stand-in instead.
+const i18nShell = {
+  name: 'i18n-shell',
+  setup(b) {
+    b.onResolve({ filter: /[\\/]utils[\\/]i18n(\.ts)?$/ }, () => ({ path: join(src, 'i18n-shell.ts') }))
+  },
+}
+
 const common = {
   bundle: true, format: 'cjs', sourcemap: false, legalComments: 'none', logLevel: 'warning',
   minifyWhitespace: minify, minifySyntax: minify, external: ['electron'],
@@ -23,6 +32,7 @@ await build({
   banner: { js: "var __bmImportMetaUrl = require('node:url').pathToFileURL(__filename).href;" },
   logOverride: { 'empty-import-meta': 'silent' },
   external: ['electron', 'bufferutil', 'utf-8-validate'],
+  plugins: [i18nShell],
 })
 await build({
   ...common, platform: 'node', target: 'node22', entryPoints: [join(src, 'worker/build.ts')], outfile: join(dist, 'worker/build.cjs'),
@@ -30,6 +40,7 @@ await build({
   banner: { js: "var __bmImportMetaUrl = require('node:url').pathToFileURL(__filename).href;" },
   logOverride: { 'empty-import-meta': 'silent' },
   external: ['electron', 'bufferutil', 'utf-8-validate'],
+  plugins: [i18nShell],
 })
 await build({ ...common, platform: 'browser', target: 'chrome140', entryPoints: [join(src, 'preload/local.ts')], outfile: join(dist, 'preload/preload.cjs') })
 // sql.js finds its wasm next to the bundle that loads it, for the pipeline's Anki deck.

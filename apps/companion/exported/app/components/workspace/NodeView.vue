@@ -18,6 +18,7 @@ import { INPUT } from '~/components/editor/fields/classes'
 import { useLessonEditor, type DraftBlock } from '~/composables/useLessonEditor'
 import { presentationOf } from '~/composables/useBlockPresentation'
 import { lessonSections } from '~/composables/useLessonSections'
+import { useUsage } from '~/companion/usage'
 
 /**
  * One open lesson: the title, one pinned strip, then the block sequence.
@@ -74,8 +75,12 @@ const props = withDefaults(
     preview?: RevisionDetail | null
     /** Bump to make the view refetch its lesson (after a restore). */
     refreshToken?: number
+    /** Open straight into writing it by hand, when there is nothing in it yet. */
+    compose?: boolean
+    /** More under the strip's paperclip, after "A file": the companion's "A link". */
+    attachActions?: MenuAction[]
   }>(),
-  { active: true, editable: false, author: true, allowsCode: false, preview: null, refreshToken: 0 },
+  { active: true, editable: false, author: true, allowsCode: false, preview: null, refreshToken: 0, compose: false, attachActions: () => [] },
 )
 
 const emit = defineEmits<{
@@ -90,6 +95,8 @@ const emit = defineEmits<{
   history: [nodeId: number]
   /** MARKUP — open (or create) a whiteboard for this lesson as a tab. */
   board: [nodeId: number, board: BoardAnnotation]
+  /** `compose` was acted on. */
+  composed: []
 }>()
 
 const player = useNodePlayer(
@@ -151,9 +158,7 @@ watch(
  * `MarkupBlock` gets "signed in" rather than `editable`.
  */
 const { isAuthenticated } = useAuth()
-// The companion's demo has nobody signed in, but its lessons (negative ids)
-// keep their marks in memory, so the pen is offered there too.
-const canMark = computed(() => isAuthenticated.value || (props.nodeId < 0 && isCompanionDemo()))
+const canMark = isAuthenticated
 const marks = useAnnotations(() => props.nodeId)
 const pen = useMarkupTool()
 
@@ -359,6 +364,54 @@ async function beginEditing(): Promise<void> {
   editor.begin()
 }
 
+/*
+ * Writing it yourself: a lesson with nothing in it opens in the editor with one
+ * empty text block. No model runs and nothing is spent, so it works on Free too.
+ * The block isn't committed, so nothing is sent (an empty one wouldn't save)
+ * until something is typed; the first save makes it a written lesson.
+ */
+const canWriteYourself = computed(
+  () => props.author && !props.preview && (node.value?.status === 'stub' || node.value?.status === 'failed'),
+)
+
+const usage = useUsage()
+if (import.meta.client && props.author) void usage.ensure()
+/** Out of AI (Free with no credits): writing it yourself is the way that works. */
+const noAi = computed(() => usage.limited.value)
+
+function writeYourself(): void {
+  if (!canWriteYourself.value) return
+  closeMarkup()
+  editor.begin()
+  draft.value?.blocks.push({
+    key: 'first',
+    id: null,
+    type: 'explainer',
+    payload: emptyPayload('explainer'),
+    source_material_ids: null,
+  })
+  editor.select('first')
+  // Straight to typing: the block's text field, once the editor has drawn it
+  // (opened from elsewhere, that is only after the new tab has mounted).
+  let tries = 0
+  const focusText = (): void => {
+    const field = lessonEl.value?.querySelector<HTMLTextAreaElement>('textarea')
+    if (field) field.focus()
+    else if (++tries < 30) requestAnimationFrame(focusText)
+  }
+  if (import.meta.client) requestAnimationFrame(focusText)
+}
+
+watch(
+  () => props.compose,
+  (wanted) => {
+    if (!wanted) return
+    writeYourself()
+    emit('composed')
+  },
+  { immediate: true },
+)
+
 /* Undo/redo shortcuts belong to the foreground pane only. */
 watch(
   [editing, () => props.active],
@@ -451,6 +504,8 @@ const track = computed(() => (node.value ? lessonTrack(node.value) : 'core'))
 /** The one lesson that actually follows this one, and what hangs off it. */
 const nextOnPath = computed(() => unlocks.value.filter((item) => (item.track ?? 'core') === 'core'))
 const detours = computed(() => unlocks.value.filter((item) => (item.track ?? 'core') !== 'core'))
+/** The step before this one (a subtopic's is the step it hangs from): the left half at the end. */
+const prevStep = computed(() => prerequisites.value.find((item) => (item.track ?? 'core') === 'core') ?? prerequisites.value[0] ?? null)
 
 /** The badge a subtopic wears on the map, said in words here. */
 function markOf(item: Placed): LessonMark | null {
@@ -505,6 +560,32 @@ const finishLine = computed(() => {
 
 const sections = computed(() => lessonSections(blocks.value))
 const outline = computed(() => sections.value.filter((section) => section.opens))
+
+/**
+ * Where the practice at the end of a lesson starts: the last run of task
+ * blocks (flashcards, a quiz, an exercise). The reading and the practice used
+ * to run on as one column, so nobody could tell where the lesson ended. An
+ * exercise the author put mid-lesson stays where it is; a lesson with no
+ * reading before its tasks, or no tasks, gets no break (-1).
+ */
+const practiceFrom = computed(() => {
+  let at = blocks.value.length
+  while (at > 0 && presentationOf(blocks.value[at - 1]!.type).voice === 'task') at--
+  return at > 0 && at < blocks.value.length ? at : -1
+})
+
+/** "Flashcards, then Check yourself." and what counts, under "Now practise". */
+const practiceLine = computed(() => {
+  if (practiceFrom.value < 0) return ''
+  const names = [
+    ...new Set(blocks.value.slice(practiceFrom.value).map((b) => presentationOf(b.type).label).filter(Boolean)),
+  ] as string[]
+  const parts = names.length > 1 ? `${names.slice(0, -1).join(', ')}, then ${names.at(-1)}` : (names[0] ?? 'A few tasks')
+  const counts = assessments.value.length
+    ? ' Your answers to the checks count towards finishing the lesson.'
+    : ' Nothing here is graded.'
+  return `${parts}: what you just read, from memory.${counts}`
+})
 
 /** The three facts under the title: how long, how many parts, how many checks. */
 const headChips = computed(() => {
@@ -661,6 +742,13 @@ async function submitRegen(): Promise<void> {
  * shares reads the lesson as it stands and has nothing to spend — the API
  * refuses both for them anyway.
  */
+/** The paperclip in the strip: files here, and whatever the host adds (a link). */
+const attachEl = ref<InstanceType<typeof LessonAttachments> | null>(null)
+const attachMenu = computed<MenuAction[]>(() => [
+  ...(props.editable ? [{ label: 'A file', icon: 'upload', run: () => attachEl.value?.pick() }] : []),
+  ...props.attachActions,
+])
+
 const stripActions = computed<MenuAction[]>(() => [
   ...(props.editable
     ? [{ label: 'History', icon: 'clock', run: () => emit('history', props.nodeId) }]
@@ -697,7 +785,7 @@ const workingNote = computed(() => {
 
 /** Lessons with no content to show: stub, queued, generating, failed. */
 const showsStateCard = computed(
-  () => !!node.value && (node.value.status !== 'ready' || blocks.value.length === 0),
+  () => !!node.value && !editing.value && (node.value.status !== 'ready' || blocks.value.length === 0),
 )
 
 /** Being written, and the server has something to show of it. */
@@ -734,7 +822,7 @@ watch(
     <!-- Loading -->
     <div
       v-if="loading"
-      class="mx-auto max-w-[760px] px-8 py-8"
+      class="mx-auto max-w-(--reading-measure) px-8 py-8"
     >
       <UiSkeleton
         w="14rem"
@@ -777,8 +865,8 @@ watch(
       <!-- ---------------------------------------------------------------- -->
       <!-- The lesson's heading. Scrolls away with the rest of the page.     -->
       <!-- ---------------------------------------------------------------- -->
-      <div class="lesson-heading mx-auto max-w-[760px] px-5 pt-5 pb-4 sm:px-8 sm:pt-7">
-        <p class="text-[12px] leading-snug text-text-faint">
+      <div class="lesson-heading mx-auto max-w-(--reading-measure) px-5 pt-5 pb-4 sm:px-8 sm:pt-7">
+        <p class="text-[12.5px] leading-snug font-medium text-text-muted">
           <span>{{ contextLead }}</span>
           <span class="num"> · {{ node.estimated_minutes }} min</span>
           <span v-if="afterTitle"> · after “{{ afterTitle }}”</span>
@@ -796,7 +884,7 @@ watch(
             :value="draft.title"
             type="text"
             aria-label="Lesson title"
-            class="mt-1.5 w-full border-0 border-b border-dashed border-border-strong bg-transparent px-0 py-0.5 text-[21px] leading-[1.15] t-head outline-none focus:border-lime-2 sm:text-[30px] sm:leading-[1.1]"
+            class="mt-1.5 w-full border-0 border-b border-dashed border-border-strong bg-transparent px-0 py-0.5 text-[21px] leading-[1.15] t-head outline-none focus:border-hi-2 sm:text-[30px] sm:leading-[1.1]"
             @input="editor.setTitle(($event.target as HTMLInputElement).value)"
           />
           <div class="mt-3 grid gap-3 sm:grid-cols-[1fr_9rem]">
@@ -824,7 +912,7 @@ watch(
         </template>
         <template v-else>
           <h1
-            class="mt-2 text-[23px] leading-[1.1] tracking-[-0.03em] t-head text-balance sm:text-[30px]"
+            class="mt-2.5 font-display text-[32px] leading-[1.02] font-semibold tracking-[-0.045em] text-balance text-text sm:text-[42px]"
           >
             {{ preview ? preview.snapshot.title : node.title }}
           </h1>
@@ -842,13 +930,13 @@ watch(
             <li
               v-for="chip in headChips"
               :key="chip.label"
-              class="inline-flex h-[28px] items-center gap-1.5 rounded-full bg-surface-rail px-3 text-[12.5px] font-semibold text-text-dim"
+              class="inline-flex h-6 items-center gap-1.5 rounded-full bg-[rgb(var(--wash-rgb)/0.065)] px-2.5 text-[12px] font-semibold text-text-soft"
             >
               <UiIcon
                 :name="chip.icon"
                 :size="13"
                 :stroke="2"
-                class="text-brand"
+                class="text-text-muted"
               />
               <span class="num">{{ chip.label }}</span>
             </li>
@@ -863,7 +951,7 @@ watch(
         v-if="preview"
         class="sticky top-0 z-5 border-y border-brand-line bg-brand-soft/92 backdrop-blur-[10px]"
       >
-        <div class="mx-auto flex max-w-[760px] flex-wrap items-center gap-x-3 gap-y-1 px-5 py-2.5 text-[12.5px] font-medium text-brand sm:px-8">
+        <div class="mx-auto flex max-w-(--reading-measure) flex-wrap items-center gap-x-3 gap-y-1 px-5 py-2.5 text-[12.5px] font-medium text-brand sm:px-8">
           <UiIcon
             name="clock"
             :size="13"
@@ -891,7 +979,7 @@ watch(
         ref="stripEl"
         class="sticky top-0 z-5 border-y border-border bg-surface/92 backdrop-blur-[10px]"
       >
-        <div class="mx-auto flex max-w-[760px] items-center gap-2 px-5 py-2.5 sm:px-8">
+        <div class="mx-auto flex max-w-(--reading-measure) items-center gap-2 px-5 py-2.5 sm:px-8">
           <LessonSpine
             :sections="outline"
             :active="activeOrdinal"
@@ -947,6 +1035,17 @@ watch(
           </template>
 
           <template v-else>
+            <!-- The companion's LessonPane: the reading settings ("Aa"), which
+                 the old course page keeps in its own header. -->
+            <slot name="strip" />
+            <!-- Attaching, as everywhere else: a paperclip, not a dropzone at the end of every lesson. -->
+            <UiMenu
+              v-if="attachMenu.length"
+              icon="paperclip"
+              :actions="attachMenu"
+              label="Attach to this lesson"
+              title="Attach to this lesson"
+            />
             <UiBtn
               v-if="canEdit"
               variant="secondary"
@@ -978,7 +1077,7 @@ watch(
         <!-- Highlights the lesson no longer has room for -->
         <div
           v-if="!editing && marks.orphans.value > 0"
-          class="mx-auto max-w-[760px] px-5 pb-3 sm:px-8"
+          class="mx-auto max-w-(--reading-measure) px-5 pb-3 sm:px-8"
         >
           <p class="text-[12px] text-text-faint">
             {{ marks.orphans.value === 1 ? 'One highlight' : `${marks.orphans.value} highlights` }} could not
@@ -989,7 +1088,7 @@ watch(
         <!-- Editing went wrong -->
         <div
           v-if="editing && (conflict || problem)"
-          class="mx-auto max-w-[760px] px-5 pb-3 sm:px-8"
+          class="mx-auto max-w-(--reading-measure) px-5 pb-3 sm:px-8"
         >
           <div
             :class="[
@@ -1026,7 +1125,7 @@ watch(
         <!-- Regenerate -->
         <div
           v-if="regenOpen"
-          class="mx-auto max-w-[760px] px-5 pb-3 sm:px-8"
+          class="mx-auto max-w-(--reading-measure) px-5 pb-3 sm:px-8"
         >
           <div class="pop-in rounded-[18px] bg-surface-mute p-4 shadow-[inset_0_0_0_1px_var(--border)]">
             <p class="mb-2.5 text-[12.5px] text-text-soft">
@@ -1053,7 +1152,7 @@ watch(
 
         <div
           v-if="regenNote"
-          class="mx-auto max-w-[760px] px-5 pb-3 sm:px-8"
+          class="mx-auto max-w-(--reading-measure) px-5 pb-3 sm:px-8"
         >
           <div
             class="pop-in flex items-center gap-2.5 rounded-[12px] bg-accent-soft px-3 py-2 shadow-[inset_0_0_0_1px_rgb(141_181_30/0.45)]"
@@ -1163,14 +1262,23 @@ watch(
             @submit="player.expand(instruction)"
           />
 
-          <div class="mt-5 flex justify-center gap-2">
+          <div class="mt-5 flex flex-wrap justify-center gap-2">
             <UiBtn
               v-if="node.status === 'stub' && author"
-              variant="accent"
+              :variant="noAi ? 'secondary' : 'accent'"
               size="lg"
+              icon="sparkles"
               :loading="player.working.value"
               @click="player.expand(instruction)"
               >Write this lesson</UiBtn
+            >
+            <UiBtn
+              v-if="canWriteYourself"
+              :variant="noAi ? 'accent' : 'secondary'"
+              size="lg"
+              icon="pencil"
+              @click="writeYourself()"
+              >Write it yourself</UiBtn
             >
             <UiBtn
               v-else-if="node.status === 'failed' && author"
@@ -1197,7 +1305,7 @@ watch(
           class="mt-6 grid gap-5 sm:grid-cols-2"
         >
           <div v-if="prerequisites.length">
-            <p class="mb-2 text-[11px] font-semibold tracking-[0.08em] text-text-faint uppercase">Comes before</p>
+            <p class="mb-2 text-[12px] font-semibold text-text-faint">Comes before</p>
             <button
               v-for="item in prerequisites"
               :key="item.id"
@@ -1219,7 +1327,7 @@ watch(
           </div>
 
           <div v-if="nextOnPath.length || detours.length">
-            <p class="mb-2 text-[11px] font-semibold tracking-[0.08em] text-text-faint uppercase">
+            <p class="mb-2 text-[12px] font-semibold text-text-faint">
               {{ nextOnPath.length ? 'Comes next' : 'Under this step' }}
             </p>
             <button
@@ -1270,13 +1378,13 @@ watch(
           :class="[
             'rounded-[18px]',
             presentationOf(block.type).measure === 'wide' && 'is-wide',
-            previewChange.get(block.id)?.change === 'added' && '-mx-3 px-3 py-2 ring-[1.5px] ring-lime-2',
+            previewChange.get(block.id)?.change === 'added' && '-mx-3 px-3 py-2 ring-[1.5px] ring-hi-2',
             previewChange.get(block.id)?.change === 'changed' && '-mx-3 px-3 py-2 ring-[1.5px] ring-brand',
           ]"
         >
           <p
             v-if="previewChange.get(block.id)?.change === 'added'"
-            class="mb-2 text-[11px] font-semibold tracking-[0.08em] text-accent-strong uppercase"
+            class="mb-2 text-[12px] font-semibold text-accent-strong"
           >
             Added in this version
           </p>
@@ -1284,7 +1392,7 @@ watch(
             v-else-if="previewChange.get(block.id)?.change === 'changed'"
             class="mb-2 flex items-center gap-2"
           >
-            <span class="text-[11px] font-semibold tracking-[0.08em] text-brand uppercase">
+            <span class="text-[12px] font-semibold text-brand">
               Changed{{ previewChange.get(block.id)?.moved ? ' · moved' : '' }}
             </span>
             <button
@@ -1298,7 +1406,7 @@ watch(
           </div>
           <p
             v-else-if="previewChange.get(block.id)?.moved"
-            class="mb-2 text-[11px] font-medium tracking-[0.04em] text-text-faint uppercase"
+            class="mb-2 text-[12px] font-medium text-text-faint"
           >
             Moved
           </p>
@@ -1446,53 +1554,96 @@ watch(
       >
         <!-- MarkupBlock takes the grid slot; the #block-{id} anchor stays on the
              renderer inside it, so search jumps and the section spine still land. -->
-        <MarkupBlock
+        <template
           v-for="(block, index) in blocks"
           :key="block.id"
-          :block-id="block.id"
-          :node-id="nodeId"
-          :annotations="marks.byBlock(block.id)"
-          :tool="pen.tool.value"
-          :color="pen.color.value"
-          :size="pen.size.value"
-          :armed="pen.armed.value"
-          :editable="canMark"
-          :class="['rise', presentationOf(block.type).measure === 'wide' && 'is-wide']"
-          :style="{ '--d': `${Math.min(index, 8) * 45}ms` }"
-          @upsert="marks.upsert"
-          @remove="marks.remove"
-          @orphans="(count) => marks.reportOrphans(block.id, count)"
         >
-          <BlockRenderer
-            :block="block"
-            :assessments="assessments"
-            :attempts="attempts"
-            :language="language"
-            :level="level"
-            @graded="player.onGraded"
-          />
-        </MarkupBlock>
+          <!-- Where reading ends and practice starts: one plain break says what the rest is. -->
+          <template v-if="index === practiceFrom">
+            <section
+              class="mt-6"
+              aria-labelledby="lesson-practice-head"
+            >
+              <div
+                class="flex items-center gap-3 text-[12px] font-semibold text-text-faint"
+                aria-hidden="true"
+              >
+                <span class="h-px flex-1 bg-border" />
+                End of reading
+                <span class="h-px flex-1 bg-border" />
+              </div>
+              <div class="mt-6 flex items-start gap-3.5 rounded-[18px] bg-surface-mute px-5 py-4">
+                <span class="grid size-10 shrink-0 place-items-center rounded-[11px] bg-inverse text-on-inverse">
+                  <UiIcon
+                    name="target"
+                    :size="19"
+                  />
+                </span>
+                <div class="min-w-0">
+                  <h2
+                    id="lesson-practice-head"
+                    class="font-display text-[21px] leading-tight font-semibold tracking-[-0.02em] text-text"
+                  >
+                    Now practise
+                  </h2>
+                  <p class="mt-1 text-[14.5px] leading-relaxed text-text-muted">
+                    {{ practiceLine }}
+                  </p>
+                </div>
+              </div>
+            </section>
+          </template>
+          <MarkupBlock
+            :block-id="block.id"
+            :node-id="nodeId"
+            :annotations="marks.byBlock(block.id)"
+            :tool="pen.tool.value"
+            :color="pen.color.value"
+            :size="pen.size.value"
+            :armed="pen.armed.value"
+            :editable="canMark"
+            :class="['rise', presentationOf(block.type).measure === 'wide' && 'is-wide']"
+            :style="{ '--d': `${Math.min(index, 8) * 45}ms` }"
+            @upsert="marks.upsert"
+            @remove="marks.remove"
+            @orphans="(count) => marks.reportOrphans(block.id, count)"
+          >
+            <BlockRenderer
+              :block="block"
+              :assessments="assessments"
+              :attempts="attempts"
+              :language="language"
+              :level="level"
+              @graded="player.onGraded"
+            />
+          </MarkupBlock>
+        </template>
 
+        <!-- What the owner attached (files, and the host's links), only when there is some:
+             adding is the strip's paperclip. -->
         <LessonAttachments
+          ref="attachEl"
           :node-id="nodeId"
           :attachments="lessonAttachments"
           :editable="editable"
+          quiet
           @changed="(list) => (lessonAttachments = list)"
         />
+        <slot name="attached" />
 
         <!--
-          The end of the lesson, then the way on. It used to be one card in the
-          lesson's own style — a heading, a bar, a button, two lists — and read
-          as another part of the lesson rather than as the door out of it. Now
-          a rule says the lesson is over, one row says whether it is done, and
-          what follows looks like what it is: a link to the next page.
+          The end of the lesson, then the way on. A rule says the lesson is over;
+          one row says whether it is done, with its one or two buttons; then the
+          way out as two halves, back on the left and on on the right. The next
+          lesson keeps the right half even on the first lesson, so it reads as
+          the next step and not as one more card in the column (11-09).
         -->
         <footer
           class="mt-4"
           aria-label="End of lesson"
         >
           <div
-            class="flex items-center gap-3 text-[11px] font-semibold tracking-[0.1em] text-text-faint uppercase"
+            class="flex items-center gap-3 text-[12px] font-semibold text-text-faint"
             aria-hidden="true"
           >
             <span class="h-px flex-1 bg-border" />
@@ -1500,14 +1651,15 @@ watch(
             <span class="h-px flex-1 bg-border" />
           </div>
 
-          <!-- Done -->
-          <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
-            <div class="min-w-0 flex-1">
+          <!-- Done, and the companion's "Explain it back" (LessonPane's `finish`) beside it. -->
+          <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-3">
+            <div class="min-w-0 flex-1 basis-[200px]">
               <p class="text-[15px] font-semibold text-text">
                 {{ completed ? 'You finished this lesson' : 'Finished this lesson?' }}
               </p>
               <p class="mt-0.5 text-[13px] text-text-faint">{{ finishLine }}</p>
             </div>
+            <slot name="finish" />
             <UiBtn
               :variant="completed ? 'accent' : 'primary'"
               size="md"
@@ -1517,39 +1669,62 @@ watch(
               >{{ completed ? 'Completed' : 'Mark complete' }}</UiBtn
             >
           </div>
-          <!-- The companion's LessonPane: "Explain it back", teach-back beside finishing the lesson. -->
-          <slot name="finish" />
 
-          <!-- Where to go: the next step, and what hangs off this one -->
+          <!-- Where to go: back on the left, on on the right, and what hangs off this step under them. -->
           <nav
-            v-if="nextOnPath.length || detours.length"
+            v-if="prevStep || nextOnPath.length || detours.length || track === 'core'"
             class="mt-6"
             aria-label="Where to go next"
           >
-            <button
-              v-for="item in nextOnPath"
-              :key="item.id"
-              type="button"
-              class="group mb-2 flex w-full cursor-pointer items-center gap-3 rounded-[16px] px-4 py-3.5 text-left shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] transition-[background-color,box-shadow] hover:bg-surface-mute hover:shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.2)]"
-              @click="goNext(item.id)"
-            >
-              <span class="min-w-0 flex-1">
-                <span class="block text-[11.5px] font-semibold text-text-faint">
-                  Next lesson<template v-if="item.status !== 'ready'">
-                    · {{ nodeStatusStyle(item.status).label.toLowerCase() }}</template
-                  >
+            <div class="grid gap-3 sm:grid-cols-2">
+              <button
+                v-if="prevStep"
+                type="button"
+                class="group flex min-w-0 cursor-pointer items-center gap-3 rounded-[16px] px-4 py-3.5 text-left shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] transition-[background-color,box-shadow] hover:bg-surface-mute hover:shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.2)] max-sm:order-last"
+                @click="goNext(prevStep.id)"
+              >
+                <UiIcon
+                  name="chevron-left"
+                  :size="18"
+                  :stroke="2"
+                  class="shrink-0 text-text-faint transition-[color,transform] group-hover:-translate-x-0.5 group-hover:text-text"
+                />
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[11.5px] font-semibold text-text-faint">Previous lesson</span>
+                  <span class="mt-0.5 block truncate text-[15px] font-semibold text-text">{{ prevStep.title }}</span>
                 </span>
-                <span class="mt-0.5 block truncate text-[15px] font-semibold text-text">{{
-                  item.title
-                }}</span>
-              </span>
-              <UiIcon
-                name="arrow-right"
-                :size="18"
-                :stroke="2"
-                class="shrink-0 text-text-faint transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-text"
-              />
-            </button>
+              </button>
+              <button
+                v-for="item in nextOnPath"
+                :key="item.id"
+                type="button"
+                class="group flex min-w-0 cursor-pointer items-center gap-3 rounded-[16px] bg-surface-mute px-4 py-3.5 text-right shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] transition-[background-color,box-shadow] hover:bg-surface-sunken hover:shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.2)] sm:col-start-2"
+                @click="goNext(item.id)"
+              >
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[11.5px] font-semibold text-text-faint">
+                    Next lesson<template v-if="item.status !== 'ready'">
+                      · {{ nodeStatusStyle(item.status).label.toLowerCase() }}</template
+                    >
+                  </span>
+                  <span class="mt-0.5 block truncate text-[15px] font-semibold text-text">{{
+                    item.title
+                  }}</span>
+                </span>
+                <UiIcon
+                  name="arrow-right"
+                  :size="18"
+                  :stroke="2"
+                  class="shrink-0 text-text-faint transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-text"
+                />
+              </button>
+              <p
+                v-if="!nextOnPath.length && track === 'core'"
+                class="flex items-center justify-end rounded-[16px] px-4 py-3.5 text-right text-[13px] text-text-faint shadow-[inset_0_0_0_1px_var(--border-dashed)] sm:col-start-2"
+              >
+                This is the last step on the path.
+              </p>
+            </div>
 
             <div
               v-if="detours.length"
@@ -1573,13 +1748,6 @@ watch(
               </button>
             </div>
           </nav>
-
-          <p
-            v-else-if="track === 'core'"
-            class="mt-6 text-[13px] text-text-faint"
-          >
-            This is the last step on the path.
-          </p>
         </footer>
       </div>
 
@@ -1614,7 +1782,7 @@ watch(
           type="button"
           title="Draw, write and highlight"
           aria-label="Draw, write and highlight"
-          class="pointer-events-auto grid size-12 cursor-pointer place-items-center rounded-full bg-chip text-white shadow-[0_10px_30px_-8px_rgb(11_13_16/0.5)] transition-transform hover:scale-105"
+          class="pointer-events-auto grid size-12 cursor-pointer place-items-center rounded-full bg-inverse text-on-inverse shadow-[var(--shadow-lift)] transition-transform duration-300 ease-[var(--spring)] hover:scale-105 active:scale-95"
           @click="openMarkup()"
         >
           <svg

@@ -48,12 +48,12 @@ import {
   threadAttachments,
   topicCount,
 } from '~/companion/ai/proposal'
-import { useAiThread } from '~/companion/ai/thread'
+import { draftPress, draftsCreating, useAiThread } from '~/companion/ai/thread'
 import { useAi } from '~/companion/ai/state'
 import { useCompanion } from '~/companion/store'
 import { courseColor } from '~/companion/colors'
 import { dayKey, dayMonthLong, daysBetween, shortDate } from '~/companion/time'
-import { KIND_WORD } from '~/companion/words'
+import { kindWord } from '~/companion/words'
 import { ApiError } from '~/composables/useApi'
 
 const props = withDefaults(
@@ -220,9 +220,8 @@ interface SourceChip {
 
 /**
  * What was read, as small chips, and what couldn't be, in warning colours.
- * Files and links as the draft reports them: the server marks each `read`;
- * the sample lists only what it read, so there a file the chat attached and
- * the draft doesn't name wasn't. Pasted text, Moodle courses and notes are
+ * Files and links as the draft reports them: the server marks each `read`.
+ * Pasted text, Moodle courses and notes are
  * words, always read, so they come from the chat's own chips; the draft's
  * text source is mostly the learner's sentence, which the chat already shows.
  */
@@ -319,6 +318,7 @@ async function create(from?: CourseProposal): Promise<void> {
     return
   }
   creating.value = true
+  draftsCreating.add(props.message.id)
   try {
     await landed()
     if (draft.value?.created) return
@@ -343,8 +343,20 @@ async function create(from?: CourseProposal): Promise<void> {
     })
   } finally {
     creating.value = false
+    draftsCreating.delete(props.message.id)
   }
 }
+
+// "OK, create it" in the chat: the learner's words were the press on this card.
+watch(
+  draftPress,
+  (id) => {
+    if (!id || id !== props.message.id) return
+    draftPress.value = null
+    if (phase.value === 'ready' && !newer.value) void create()
+  },
+  { immediate: true },
+)
 
 function onKey(event: KeyboardEvent): void {
   if (event.key !== 'Enter' || !(event.metaKey || event.ctrlKey) || event.isComposing) return
@@ -479,7 +491,7 @@ const BTN_TALL = 'max-lg:h-11'
     <button
       v-else-if="phase === 'replaced'"
       type="button"
-      class="flex min-h-10 w-full cursor-pointer items-center gap-2.5 rounded-[12px] px-3 text-left text-[12.5px] text-text-muted shadow-[inset_0_0_0_1px_var(--border)] transition-colors duration-150 outline-none hover:bg-surface-sunken hover:text-text-soft focus-visible:ring-2 focus-visible:ring-brand-line max-lg:min-h-11"
+      class="flex min-h-10 w-full cursor-pointer items-center gap-2.5 rounded-[12px] px-3 text-left text-[12.5px] text-text-muted shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors duration-150 outline-none hover:bg-surface-sunken hover:text-text-soft focus-visible:ring-2 focus-visible:ring-brand-line max-lg:min-h-11"
       :title="`Show the earlier draft of ${proposal?.title ?? 'this course'}`"
       @click="showOld = true"
     >
@@ -501,7 +513,7 @@ const BTN_TALL = 'max-lg:h-11'
     <NuxtLink
       v-else-if="phase === 'created' && draft?.created"
       :to="`/app/courses/${draft.created.subject_id}`"
-      class="group/made animate-fade flex min-h-12 items-center gap-3 rounded-[14px] bg-surface px-3 py-2 shadow-[inset_0_0_0_1px_var(--success-line)] transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:ring-2 focus-visible:ring-brand-line"
+      class="group/made animate-fade flex min-h-12 items-center gap-3 rounded-[14px] bg-surface px-3 py-2 shadow-[0_0_0_1px_var(--success-line),var(--shadow-card)] transition-colors duration-150 outline-none hover:bg-surface-chrome focus-visible:ring-2 focus-visible:ring-brand-line"
       @click.prevent="openCourse(draft.created.subject_id)"
     >
       <span
@@ -520,7 +532,7 @@ const BTN_TALL = 'max-lg:h-11'
         <span class="text-[12px] font-semibold text-success-text">Course created</span>
         <span class="truncate text-[13.5px] font-semibold text-text">{{ createdTitle }}</span>
       </span>
-      <span class="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-cobalt">
+      <span class="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-brand">
         Open
         <UiIcon
           name="arrow-right"
@@ -534,7 +546,7 @@ const BTN_TALL = 'max-lg:h-11'
     <!-- Ready: the course, before it exists. -->
     <section
       v-else-if="phase === 'ready' && proposal"
-      class="@container animate-rise max-w-[640px] overflow-hidden rounded-[18px] bg-surface shadow-[inset_0_0_0_1px_var(--border)] outline-none"
+      class="@container animate-rise max-w-[640px] overflow-hidden rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-raised)] outline-none"
       :aria-label="`Course draft: ${proposal.title}`"
       tabindex="-1"
       @keydown="onKey"
@@ -637,7 +649,7 @@ const BTN_TALL = 'max-lg:h-11'
                 </span>
                 <span class="flex min-w-0 items-baseline gap-2 text-[12px] text-text-muted">
                   <span class="min-w-0 truncate">
-                    {{ KIND_WORD[deadlineKind(d.kind)] }}<template v-if="d.weight_pct"> · {{ d.weight_pct }}%</template><template v-if="d.evidence"> · <span class="italic">“{{ d.evidence }}”</span></template><template v-if="foundIn(d.item_id)"> · {{ foundIn(d.item_id) }}</template>
+                    {{ kindWord(deadlineKind(d.kind)) }}<template v-if="d.weight_pct"> · {{ d.weight_pct }}%</template><template v-if="d.evidence"> · <span class="italic">“{{ d.evidence }}”</span></template><template v-if="foundIn(d.item_id)"> · {{ foundIn(d.item_id) }}</template>
                   </span>
                   <span class="ml-auto shrink-0">{{ deadlineWhen(d.due_at).away }}</span>
                 </span>
@@ -672,8 +684,8 @@ const BTN_TALL = 'max-lg:h-11'
               v-for="s in sources"
               :key="s.key"
               :class="[
-                'inline-flex h-7 max-w-[240px] items-center gap-1.5 rounded-full pr-2.5 pl-2 text-[12px]',
-                s.ok ? 'bg-surface-sunken text-text-body' : 'bg-warn-soft text-warn-text',
+                'inline-flex h-7 max-w-[240px] items-center gap-1.5 rounded-full pr-2.5 pl-2 text-[12px] font-medium',
+                s.ok ? 'bg-surface text-text shadow-[0_0_0_1px_var(--border-strong)]' : 'bg-warn-soft text-warn-text',
               ]"
               :title="s.ok ? `Read: ${s.label}` : `Couldn't open ${s.label}`"
             >

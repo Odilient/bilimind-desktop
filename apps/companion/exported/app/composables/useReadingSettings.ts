@@ -1,7 +1,7 @@
-import type { ReadingFont, ReadingSettings, ReadingTheme } from '~/types/api'
+import type { ReadingFont, ReadingSettings, ReadingTheme, ReadingWidth } from '~/types/api'
 
 /**
- * READING — zoom, typeface and background for the lesson column.
+ * READING — zoom, typeface, background and width for the lesson column.
  *
  * Two layers. The account holds the *default* (`users.preferences.reading`),
  * so it follows the person to every device. On top of it sits a session-local
@@ -11,7 +11,7 @@ import type { ReadingFont, ReadingSettings, ReadingTheme } from '~/types/api'
  * phone from silently overwriting the laptop's choice, and gives a
  * signed-out reader the same controls without anywhere to save them.
  */
-export const READING_DEFAULTS: ReadingSettings = { scale: 1, font: 'sans', theme: 'paper' }
+export const READING_DEFAULTS: ReadingSettings = { scale: 1, font: 'sans', theme: 'paper', width: 'normal' }
 
 export const READING_SCALE_MIN = 0.75
 export const READING_SCALE_MAX = 1.6
@@ -20,6 +20,17 @@ export const READING_SCALE_STEP = 0.05
 export const READING_FONTS: Array<{ value: ReadingFont; label: string }> = [
   { value: 'sans', label: 'Sans' },
   { value: 'serif', label: 'Serif' },
+]
+
+/**
+ * The column's widest; the pane beside a sidebar and the assistant may still be narrower.
+ * 760px read as cramped (11-09), so 960 is the normal one now and Full is the whole pane.
+ * The stored values didn't change, so a saved "normal" simply reads wider.
+ */
+export const READING_WIDTHS: Array<{ value: ReadingWidth; label: string; measure: string }> = [
+  { value: 'normal', label: 'Normal', measure: '960px' },
+  { value: 'wide', label: 'Wide', measure: '1240px' },
+  { value: 'full', label: 'Full', measure: '100%' },
 ]
 
 /** Paper is no theme of its own: it is the app's palette, so its swatch is too. */
@@ -45,6 +56,7 @@ export function useReadingSettings() {
       scale: typeof reading.scale === 'number' ? clampScale(reading.scale) : READING_DEFAULTS.scale,
       font: reading.font ?? READING_DEFAULTS.font,
       theme: reading.theme ?? READING_DEFAULTS.theme,
+      width: reading.width ?? READING_DEFAULTS.width,
     }
   })
 
@@ -57,7 +69,8 @@ export function useReadingSettings() {
     () =>
       settings.value.scale === saved.value.scale &&
       settings.value.font === saved.value.font &&
-      settings.value.theme === saved.value.theme,
+      settings.value.theme === saved.value.theme &&
+      settings.value.width === saved.value.width,
   )
 
   const saving = ref(false)
@@ -100,7 +113,10 @@ export function useReadingSettings() {
     `reading-theme-${settings.value.theme}`,
   ])
 
-  const style = computed(() => ({ '--reading-zoom': String(settings.value.scale) }))
+  const style = computed(() => ({
+    '--reading-zoom': String(settings.value.scale),
+    '--reading-measure': (READING_WIDTHS.find((w) => w.value === settings.value.width) ?? READING_WIDTHS[0]!).measure,
+  }))
 
   return {
     settings,

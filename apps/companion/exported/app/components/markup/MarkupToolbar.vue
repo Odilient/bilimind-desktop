@@ -6,9 +6,9 @@ import InkMixer from '~/components/markup/InkMixer.vue'
 /**
  * MARKUP — the pen tray. One floating pill: tools, inks, a size, undo, Done.
  *
- * It is a pill and not a sidebar because it must never be mistaken for the
- * lesson's own chrome. The app has one lime accent and it means "you do
- * something here"; the armed tool is the one place in this pill that wears it.
+ * It is a floating tray and not a sidebar because it must never be mistaken for
+ * the lesson's own chrome: frosted paper with a hairline (course.html .tray),
+ * the armed tool the one ink cell on it.
  *
  * Every tool is a toggle — picking the armed tool puts it down — and there is
  * a Done button anyway, because the reader who cannot find their way back to
@@ -422,7 +422,7 @@ onBeforeUnmount(() => {
     <div
       role="toolbar"
       aria-label="Pen and highlighter"
-      class="pop-in flex max-w-full items-center gap-0.5 overflow-x-auto rounded-full bg-chip px-1.5 py-1.5 text-white shadow-[0_20px_40px_-14px_rgb(11_13_16/0.55)] dark:ring-1 dark:ring-border-strong no-bar"
+      class="pop-in flex max-w-full items-center gap-px overflow-x-auto rounded-[14px] bg-[color-mix(in_oklab,var(--surface)_92%,transparent)] p-[5px] text-text-soft shadow-[0_0_0_1px_var(--border-strong),var(--shadow-lift)] backdrop-blur-[12px] no-bar"
     >
       <!-- Tools -->
       <button
@@ -432,12 +432,11 @@ onBeforeUnmount(() => {
         :aria-label="`${TOOL_META[candidate].label} — ${TOOL_META[candidate].hint}`"
         :aria-pressed="tool === candidate"
         :class="[
-          'grid size-8 shrink-0 cursor-pointer place-items-center rounded-full transition-colors',
-          // The ink tray, like the course player's listening bar: the armed
-          // tool is the one lime thing on it.
+          'grid size-8 shrink-0 cursor-pointer place-items-center rounded-[10px] transition-colors duration-200',
+          // course.html's tray: the armed tool is the one ink cell on it.
           tool === candidate
-            ? 'bg-lime text-ink'
-            : 'text-white/60 hover:bg-white/10 hover:text-white',
+            ? 'bg-inverse text-on-inverse'
+            : 'text-text-soft hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
         ]"
         @pointerenter="
           showHint(
@@ -472,7 +471,7 @@ onBeforeUnmount(() => {
         />
       </button>
 
-      <span class="mx-1 h-5 w-px shrink-0 bg-white/15" />
+      <span class="mx-[5px] h-5 w-px shrink-0 bg-border-strong" />
 
       <!-- Inks: the four, then the reader's own -->
       <button
@@ -481,7 +480,7 @@ onBeforeUnmount(() => {
         type="button"
         :aria-label="ink.name"
         :aria-pressed="color === ink.value"
-        class="grid size-7 shrink-0 cursor-pointer place-items-center rounded-full"
+        class="grid h-8 w-[26px] shrink-0 cursor-pointer place-items-center rounded-[8px]"
         @pointerenter="showHint($event, ink.name, 'The colour every tool draws with')"
         @pointerleave="hideHint()"
         @focus="showHint($event, ink.name, 'The colour every tool draws with')"
@@ -489,11 +488,13 @@ onBeforeUnmount(() => {
         @click="emit('update:color', ink.value)"
       >
         <span
-          class="block rounded-full transition-[width,height,box-shadow]"
-          :class="
-            color === ink.value ? 'size-4 ring-2 ring-offset-2 ring-offset-chip' : 'size-3.5'
-          "
-          :style="{ backgroundColor: ink.value, color: ink.value }"
+          class="block size-3.5 rounded-full transition-[box-shadow,transform] duration-200 ease-[var(--spring)] hover:scale-[1.15]"
+          :style="{
+            backgroundColor: ink.value,
+            boxShadow: color === ink.value
+              ? `0 0 0 2px var(--surface), 0 0 0 3.5px ${ink.value}`
+              : 'inset 0 0 0 1px rgb(0 0 0 / 0.1)',
+          }"
         />
       </button>
 
@@ -504,8 +505,8 @@ onBeforeUnmount(() => {
         aria-label="More colours"
         :aria-expanded="menu?.kind === 'mixer'"
         :class="[
-          'grid size-7 shrink-0 cursor-pointer place-items-center rounded-full transition-colors',
-          menu?.kind === 'mixer' ? 'bg-white/14' : 'hover:bg-white/10',
+          'grid h-8 w-[26px] shrink-0 cursor-pointer place-items-center rounded-[8px] transition-colors',
+          menu?.kind === 'mixer' ? 'bg-[rgb(var(--wash-rgb)/0.065)]' : 'hover:bg-[rgb(var(--wash-rgb)/0.065)]',
         ]"
         @pointerenter="showHint($event, 'More colours', 'Mix any colour, save the ones you keep using')"
         @pointerleave="hideHint()"
@@ -521,7 +522,7 @@ onBeforeUnmount(() => {
         >
           <span
             v-if="offTray"
-            class="block size-2.5 rounded-full ring-2 ring-chip"
+            class="block size-2.5 rounded-full ring-2 ring-surface"
             :style="{ backgroundColor: offTray }"
           />
           <UiIcon
@@ -529,18 +530,18 @@ onBeforeUnmount(() => {
             name="plus"
             :size="9"
             :stroke="3.2"
-            class="text-chip"
+            class="text-text"
           />
         </span>
       </button>
 
-      <span class="mx-1 h-5 w-px shrink-0 bg-white/15" />
+      <span class="mx-[5px] h-5 w-px shrink-0 bg-border-strong" />
 
       <!-- Size: one button, two states. Shows the width it will draw with. -->
       <button
         type="button"
         :aria-label="size === 'thin' ? 'Thin — click for thick' : 'Thick — click for thin'"
-        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-white/80 transition-colors hover:bg-white/10"
+        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-[10px] text-text-soft transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text"
         @pointerenter="showHint($event, 'Stroke width', 'Switches between thin and thick')"
         @pointerleave="hideHint()"
         @focus="showHint($event, 'Stroke width', 'Switches between thin and thick')"
@@ -553,7 +554,7 @@ onBeforeUnmount(() => {
         />
       </button>
 
-      <span class="mx-1 h-5 w-px shrink-0 bg-white/15" />
+      <span class="mx-[5px] h-5 w-px shrink-0 bg-border-strong" />
 
       <!-- Whiteboards: open one, or start a new one. -->
       <button
@@ -564,10 +565,10 @@ onBeforeUnmount(() => {
         aria-haspopup="menu"
         :aria-expanded="menu?.kind === 'boards'"
         :class="[
-          'grid size-8 shrink-0 cursor-pointer place-items-center rounded-full transition-colors',
+          'grid size-8 shrink-0 cursor-pointer place-items-center rounded-[10px] transition-colors',
           menu?.kind === 'boards'
-            ? 'bg-white/14 text-white'
-            : 'text-white/60 hover:bg-white/10 hover:text-white',
+            ? 'bg-[rgb(var(--wash-rgb)/0.065)] text-text'
+            : 'text-text-soft hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
         ]"
         @pointerenter="showHint($event, 'Whiteboards', 'A blank canvas for this lesson — open one, or start another')"
         @pointerleave="hideHint()"
@@ -590,14 +591,14 @@ onBeforeUnmount(() => {
 
       <span
         v-if="boards !== null"
-        class="mx-1 h-5 w-px shrink-0 bg-white/15"
+        class="mx-[5px] h-5 w-px shrink-0 bg-border-strong"
       />
 
       <button
         type="button"
         aria-label="Undo"
         :disabled="!canUndo"
-        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-default disabled:opacity-35 disabled:hover:bg-transparent"
+        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-[10px] text-text-soft transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
         @pointerenter="showHint($event, 'Undo', 'Takes back the last stroke', `${modKey}Z`)"
         @pointerleave="hideHint()"
         @focus="showHint($event, 'Undo', 'Takes back the last stroke', `${modKey}Z`)"
@@ -620,7 +621,7 @@ onBeforeUnmount(() => {
         type="button"
         aria-label="Redo"
         :disabled="!canRedo"
-        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-default disabled:opacity-35 disabled:hover:bg-transparent"
+        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-[10px] text-text-soft transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
         @pointerenter="showHint($event, 'Redo', 'Puts back what you just undid', `${modKey}⇧Z`)"
         @pointerleave="hideHint()"
         @focus="showHint($event, 'Redo', 'Puts back what you just undid', `${modKey}⇧Z`)"
@@ -640,11 +641,11 @@ onBeforeUnmount(() => {
         />
       </button>
 
-      <span class="mx-1 h-5 w-px shrink-0 bg-white/15" />
+      <span class="mx-[5px] h-5 w-px shrink-0 bg-border-strong" />
 
       <button
         type="button"
-        class="flex h-8 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-lime pr-3.5 pl-2.5 text-[12.5px] font-semibold text-ink transition-colors hover:bg-[#d2f86a]"
+        class="ml-0.5 flex h-8 shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] bg-accent pr-3 pl-2.5 text-[12.5px] font-semibold text-on-accent transition-colors hover:bg-hi-2"
         @pointerenter="showHint($event, 'Done', 'Puts the tools away and goes back to reading', 'Esc')"
         @pointerleave="hideHint()"
         @focus="showHint($event, 'Done', 'Puts the tools away and goes back to reading', 'Esc')"

@@ -56,24 +56,12 @@ async function render(): Promise<void> {
       theme: 'base',
       // Mermaid's own palettes read as a foreign object dropped into the lesson.
       // Hex, not `var()`: Mermaid computes shades from these in JS. They are
-      // cobalt's tokens, drawn the way the course player draws a diagram:
-      // white boxes ruled in ink on the dotted canvas, grey connectors, a
-      // cobalt-soft fill for the second kind of shape and lime-soft for the
-      // third. (Cream and Instrument Sans until the cobalt remake.)
-      themeVariables: {
-        background: '#f6f7fa',
-        primaryColor: '#ffffff',
-        primaryBorderColor: '#2a2e37',
-        primaryTextColor: '#0b0d10',
-        secondaryColor: '#eef1fe',
-        secondaryBorderColor: '#2340e6',
-        tertiaryColor: '#eef9cf',
-        tertiaryBorderColor: '#b4e03a',
-        lineColor: '#9da2ae',
-        textColor: '#2a2e37',
-        fontSize: '13px',
-      },
-      fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif',
+      // Daylight 2's tokens, light or dark as the page is drawn when the
+      // diagram renders: card boxes ruled in warm ink on the dotted paper,
+      // faint connectors, sky-soft for the second kind of shape and
+      // leaf-soft for the third.
+      themeVariables: { ...(darkPage() ? DARK : LIGHT), fontSize: '13px' },
+      fontFamily: '"Figtree", ui-sans-serif, system-ui, sans-serif',
       flowchart: { htmlLabels: false, curve: 'basis' },
     })
 
@@ -90,6 +78,38 @@ async function render(): Promise<void> {
   }
 }
 
+const LIGHT = {
+  background: '#faf8f2',
+  primaryColor: '#fffefb',
+  primaryBorderColor: '#615a50',
+  primaryTextColor: '#1f1c17',
+  secondaryColor: '#e1ebfb',
+  secondaryBorderColor: '#2d64b8',
+  tertiaryColor: '#e2f0dc',
+  tertiaryBorderColor: '#5bb276',
+  lineColor: '#958e82',
+  textColor: '#38332b',
+}
+
+const DARK = {
+  background: '#1c1a16',
+  primaryColor: '#201d19',
+  primaryBorderColor: '#9a9387',
+  primaryTextColor: '#f3eee4',
+  secondaryColor: '#1c2433',
+  secondaryBorderColor: '#8fb6f7',
+  tertiaryColor: '#17251b',
+  tertiaryBorderColor: '#6cc287',
+  lineColor: '#7d776c',
+  textColor: '#ddd6ca',
+}
+
+/** The page is on a dark ground: chosen, or the OS's under `system`. */
+function darkPage(): boolean {
+  const theme = document.documentElement.dataset.theme
+  return theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+}
+
 onMounted(render)
 watch(() => props.block.payload?.source, render)
 </script>
@@ -101,7 +121,7 @@ watch(() => props.block.payload?.source, render)
   >
     <div
       v-if="rendering"
-      class="cb-dots h-32 animate-pulse rounded-[14px]"
+      class="dots h-32 animate-pulse rounded-[14px]"
       aria-hidden="true"
     />
 
@@ -112,7 +132,7 @@ watch(() => props.block.payload?.source, render)
     <div
       v-else-if="!failed"
       ref="container"
-      class="diagram cb-dots overflow-x-auto rounded-[14px] px-4 py-5 shadow-[inset_0_0_0_1px_var(--border)]"
+      class="diagram dots overflow-x-auto rounded-[14px] px-4 py-5 shadow-[inset_0_0_0_1px_var(--border)]"
       role="img"
       :aria-label="block.payload?.alt_text ?? block.payload?.caption ?? 'Diagram'"
       v-html="svg"
@@ -142,6 +162,13 @@ watch(() => props.block.payload?.source, render)
 </template>
 
 <style scoped>
+/* course.html's board paper: warm off-white with a dot every 20px. */
+.dots {
+  background-color: var(--surface-mute);
+  background-image: radial-gradient(var(--border-strong) 1px, transparent 1.3px);
+  background-size: 20px 20px;
+}
+
 /* The player's diagram boxes are softly rounded; Mermaid draws square ones. */
 .diagram :deep(.node rect),
 .diagram :deep(.node .label-container) {

@@ -2,8 +2,8 @@
  * The one door every companion screen reads and writes through.
  *
  * Two implementations sit behind it: `http` (the REST contract in
- * the design notes) and `demo` (in memory, seeded with the
- * mockup semester). PowerSync replaces `http` later without touching screens.
+ * the design notes) and `powersync` (local-first, synced), and
+ * screens never know which.
  *
  */
 import type {
@@ -33,7 +33,7 @@ export interface IcsImportResult {
 }
 
 export interface CompanionRepo {
-  readonly mode: 'http' | 'demo' | 'powersync'
+  readonly mode: 'http' | 'powersync'
 
   /** Everything for the signed-in user. */
   bootstrap(): Promise<Snapshot>
@@ -49,7 +49,11 @@ export interface CompanionRepo {
   rebuildPlan(date: string): Promise<void>
   readiness(deadlineId: Uuid): Promise<Readiness>
 
-  applySignal(id: Uuid, factIndexes?: number[]): Promise<void>
+  /**
+   * `subjects`: fact index => the course the
+   * learner picked for a proposed deadline that names none of theirs.
+   */
+  applySignal(id: Uuid, factIndexes?: number[], subjects?: Record<number, Uuid>): Promise<void>
   dismissSignal(id: Uuid): Promise<void>
 
   reviewCard(id: Uuid, review: { rating: 1 | 2 | 3 | 4; fsrs: Record<string, unknown>; due_at: string; reviewed_at: string }): Promise<Card>
@@ -78,4 +82,16 @@ export interface CompanionRepo {
   ingestIcs(source: { url: string } | { ics_text: string }): Promise<IcsImportResult>
   ingestFile(file: File): Promise<Signal[]>
   goalFromSentence(sentence: string, answers?: Record<string, string>): Promise<GoalDraft>
+
+  // Google: a file picked in Drive, already downloaded by the browser
+  // (`google/drive.ts`), and the learner's calendar link (Settings → Calendar).
+  /** 201 a new item, or the one brought in from that Drive file before. */
+  importDriveFile(
+    file: File,
+    where: { drive_id: string; url?: string | null; subject_id?: Uuid; session_id?: Uuid; suggested_subject_id?: Uuid },
+  ): Promise<Item>
+  /** The link a calendar app subscribes to, or null until one is made. */
+  calendarFeed(): Promise<{ url: string | null }>
+  /** A new link; the old one stops working. */
+  newCalendarFeed(): Promise<{ url: string }>
 }

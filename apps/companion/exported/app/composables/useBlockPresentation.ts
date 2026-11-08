@@ -89,7 +89,7 @@ export const BLOCK_PRESENTATION: Record<BlockType, BlockPresentation> = {
   code: { voice: 'task', label: 'Exercise', frame: 'card', measure: 'text' },
   playground: { voice: 'task', label: 'Try it', frame: 'card', measure: 'wide' },
   scenario: { voice: 'task', label: 'Decide', frame: 'card', measure: 'text' },
-  flashcards: { voice: 'task', label: 'Practice', frame: 'none', measure: 'text' },
+  flashcards: { voice: 'task', label: 'Flashcards', frame: 'none', measure: 'text' },
   speaking: { voice: 'task', label: 'Say it', frame: 'card', measure: 'text' },
   dialogue: { voice: 'task', label: 'Role-play', frame: 'card', measure: 'text' },
 }

@@ -1,0 +1,15 @@
+/* sources strip: a calm two-row marquee of the places a course already lives */
+.d2 .src { display: grid; grid-template-columns: 300px minmax(0, 1fr); border-top: 1px solid var(--line); }
+.d2 .src-label { padding: 30px 32px; border-right: 1px solid var(--line); display: grid; gap: 8px; align-content: center; }
+.d2 .src-label p { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
+.d2 .src-rows { display: grid; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.d2 .src-row { display: flex; gap: 10px; width: max-content; padding: 14px 0; }
+.d2 .src-row + .src-row { border-top: 1px solid var(--line); }
+.d2 .src-rows .lg { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px 0 12px; border-radius: 12px; font-size: 14.5px; font-weight: 600; color: var(--ink-2); white-space: nowrap;
+  background: var(--card); box-shadow: 0 0 0 1px var(--line), var(--shadow-1); }
+.d2 .src-rows .lg svg { filter: grayscale(1); opacity: 0.7; transition: filter 0.3s, opacity 0.3s; }
+.d2 .src-rows:hover .lg svg, .d2 .src-rows .lg:hover svg { filter: none; opacity: 1; }
+.d2 .src-rows .lg .fi { width: 20px; height: 20px; display: grid; place-items: center; color: var(--ink-3); }
+.d2 .src-rows .lg .fi svg { width: 18px; height: 18px; filter: none; }
+@media (max-width: 900px) { .d2 .src { grid-template-columns: 1fr; } .d2 .src-label { border-right: 0; border-bottom: 1px solid var(--line); padding: 24px 28px; } }
+@media (max-width: 640px) { .d2 .src-label { padding: 22px 18px; } }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import { NOTES_LIST } from '~/companion/notes/ui'
 import { isExpanded, setExpanded } from '~/companion/notes/actions'
 
@@ -100,7 +101,7 @@ onBeforeUnmount(() => clearTimeout(opener))
         data-note-link
         :aria-expanded="open"
         :class="[
-          'flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 self-stretch rounded-[8px] pl-1.5 text-left outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+          'flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 self-stretch rounded-[8px] pl-1.5 text-left outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]',
           look === 'label'
             ? 'text-[12px] font-semibold text-text-faint hover:text-text-soft'
             : ['font-medium text-text-soft hover:text-text', list.roomy ? 'text-[15px]' : 'text-[13px]'],
@@ -153,7 +154,7 @@ onBeforeUnmount(() => clearTimeout(opener))
         v-if="over"
         class="mr-2 shrink-0 text-[11.5px] font-semibold text-brand"
         aria-hidden="true"
-      >Move here</span>
+      >{{ t('notes.moveHere') }}</span>
       <slot
         v-else
         name="extra"

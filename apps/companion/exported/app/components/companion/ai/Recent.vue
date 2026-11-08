@@ -188,7 +188,7 @@ const showAllTo = computed(() => (tab.value === 'courses' ? '/app/courses' : tab
 
 <template>
   <section
-    class="grid gap-3"
+    class="grid grid-cols-[minmax(0,1fr)] gap-3"
     aria-labelledby="ai-recent"
   >
     <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -274,7 +274,7 @@ const showAllTo = computed(() => (tab.value === 'courses' ? '/app/courses' : tab
 
     <p
       v-else-if="!filtered.length"
-      class="rounded-[14px] px-3 py-6 text-center text-[13.5px] text-text-muted shadow-[inset_0_0_0_1px_var(--border)]"
+      class="rounded-[14px] px-3 py-6 text-center text-[13.5px] text-text-muted shadow-[inset_0_0_0_1px_var(--border-strong)]"
     >
       {{ query ? 'Nothing here has those words in its name.' : EMPTY[tab as Tab] }}
     </p>
@@ -282,7 +282,7 @@ const showAllTo = computed(() => (tab.value === 'courses' ? '/app/courses' : tab
     <!-- List -->
     <ul
       v-else-if="view === 'list'"
-      class="grid"
+      class="grid grid-cols-[minmax(0,1fr)]"
     >
       <li
         v-for="r in shown"
@@ -344,10 +344,10 @@ const showAllTo = computed(() => (tab.value === 'courses' ? '/app/courses' : tab
       >
         <NuxtLink
           :to="r.to"
-          class="grid gap-2 rounded-[16px] p-2 shadow-[inset_0_0_0_1px_var(--border)] transition-[background-color,box-shadow] duration-150 outline-none hover:bg-surface-sunken hover:shadow-[inset_0_0_0_1px_transparent] focus-visible:shadow-[inset_0_0_0_1.5px_var(--brand-line)]"
+          class="grid gap-2 rounded-[14px] bg-surface p-2 shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-[background-color,box-shadow,transform] duration-200 outline-none hover:-translate-y-px hover:shadow-[0_0_0_1px_var(--border-field),var(--shadow-raised)] focus-visible:shadow-[inset_0_0_0_1.5px_var(--brand-line)]"
         >
           <span
-            class="grid h-[76px] place-items-center rounded-[11px] bg-surface-sunken text-text-faint"
+            class="grid h-[76px] place-items-center rounded-[9px] bg-surface-sunken text-text-faint"
             :style="r.subject ? { background: `color-mix(in srgb, ${courseColor(r.subject.color)} 14%, var(--surface))` } : undefined"
             aria-hidden="true"
           >
@@ -386,7 +386,7 @@ const showAllTo = computed(() => (tab.value === 'courses' ? '/app/courses' : tab
       <NuxtLink
         v-if="showAllTo"
         :to="showAllTo"
-        class="inline-flex min-h-10 items-center gap-1.5 rounded-full px-4 text-[13.5px] font-semibold text-cobalt transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
+        class="inline-flex min-h-10 items-center gap-1.5 rounded-full px-4 text-[13.5px] font-semibold text-brand transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
       >
         Show all
         <UiIcon
@@ -398,7 +398,7 @@ const showAllTo = computed(() => (tab.value === 'courses' ? '/app/courses' : tab
       <button
         v-else
         type="button"
-        class="inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[13.5px] font-semibold text-cobalt transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
+        class="inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[13.5px] font-semibold text-brand transition-colors hover:bg-brand-soft focus-visible:bg-brand-soft"
         @click="all = true"
       >
         Show all {{ filtered.length }}

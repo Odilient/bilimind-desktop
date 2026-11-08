@@ -26,6 +26,7 @@ import HintTrail from './code/HintTrail.vue'
  * hand-written copies of that panel and the phone copy had already drifted —
  * different buttons, no console, its own results list.
  */
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     assessment: Assessment
@@ -275,7 +276,7 @@ const canPopOut = computed(() => openSandboxTab !== null && spec.value.lang !== 
 function openInSandbox(): void {
   openSandboxTab?.({
     key: props.assessment.id,
-    title: `Sandbox · ${spec.value.lang}`,
+    title: t('check.assess.code.sandboxTab', { lang: spec.value.lang }),
     lang: spec.value.lang,
     code: code.value,
     tests: spec.value.checks
@@ -299,13 +300,13 @@ function openInSandbox(): void {
         name="refresh"
         :size="12"
       />
-      Restored the code you had open in this tab.
+      {{ t('check.assess.code.restored') }}
       <button
         type="button"
         class="cursor-pointer font-semibold text-brand underline underline-offset-2"
         @click="useStarterInstead"
       >
-        Use the starter instead
+        {{ t('check.assess.code.useStarter') }}
       </button>
     </p>
 
@@ -340,14 +341,14 @@ function openInSandbox(): void {
           v-if="canPopOut"
           type="button"
           class="strip-btn"
-          title="Open this exercise in its own sandbox tab"
+          :title="t('check.assess.code.popOutTitle')"
           @click="openInSandbox"
         >
           <UiIcon
             name="external"
             :size="12"
           />
-          <span class="hidden @[520px]:inline">Open in sandbox</span>
+          <span class="hidden @[520px]:inline">{{ t('check.assess.code.popOut') }}</span>
         </button>
       </template>
 
@@ -356,7 +357,7 @@ function openInSandbox(): void {
           :hints="spec.hints"
           :revealed="hintsRevealed"
           :locked="!attempted"
-          lock-reason="Have a go first — run it once, or write a few lines. A hint read before the attempt replaces the attempt."
+          :lock-reason="t('check.assess.code.lock')"
           @reveal="hintsRevealed += 1"
         />
       </template>
@@ -396,7 +397,7 @@ function openInSandbox(): void {
               :hints="spec.hints"
               :revealed="hintsRevealed"
               :locked="!attempted"
-              lock-reason="Have a go first — run it once, or write a few lines."
+              :lock-reason="t('check.assess.code.lockFocus')"
               @reveal="hintsRevealed += 1"
             />
           </template>
@@ -411,18 +412,13 @@ function openInSandbox(): void {
         class="mt-px"
       />
       <span v-if="spec.mode === 'build' && !spec.graded">
-        Your page is previewed in this browser and never executed on the server. Nothing here is
-        checked automatically — it is submitted as done when you say it is.
+        {{ t('check.assess.code.noteBuild') }}
       </span>
       <span v-else-if="!spec.graded">
-        Your code runs in a sandboxed WebAssembly worker in this browser, never on the server. This
-        exercise declares nothing that can be checked automatically, so it is recorded as done when
-        you say it is.
+        {{ t('check.assess.code.noteUngraded') }}
       </span>
       <span v-else>
-        Your code runs in a sandboxed WebAssembly worker in this browser, with a
-        {{ Math.round(exercise.TIMEOUT_MS / 1000) }}s timeout — never on the server. The results
-        above are what gets submitted.
+        {{ t('check.assess.code.noteGraded', { s: Math.round(exercise.TIMEOUT_MS / 1000) }) }}
       </span>
     </p>
   </div>

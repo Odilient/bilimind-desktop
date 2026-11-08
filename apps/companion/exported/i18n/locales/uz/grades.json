@@ -1,0 +1,50 @@
+{
+  "headline": {
+    "none": "Hali baholar yoʻq",
+    "final": "Yakuniy baho: {percent}%",
+    "sofar": "Hozircha {percent}%"
+  },
+  "fromMoodle": "Moodledan",
+  "aiming": "Maqsad",
+  "worth": "Vazni",
+  "mark": "Baho",
+  "whatItIs": "Nomi",
+  "worthPct": "Vazni, %",
+  "worthPctLabel": "Ishning vazni, umumiy bahoning %i",
+  "markPct": "Baho, %",
+  "markPctLabel": "Bahoyingiz, % (agar olingan boʻlsa)",
+  "add": "Qoʻshish",
+  "aimLabel": "Siz maqsad qilgan umumiy baho, %",
+  "yourGrade": "Bahoyingiz",
+  "assessments": "Topshiriqlar",
+  "participation": "Darsdagi ishtirok",
+  "addAssessment": "Topshiriq qoʻshish",
+  "download": "Baholarni yuklab olish:",
+  "spreadsheet": "Jadval",
+  "rest": {
+    "sofar": "Hozirgacha tekshirilgan {marked}% qismdan {sofar}% ballingiz bor.",
+    "secured": "Umumiy {target}% allaqachon kafolatlangan.",
+    "out": "Qolgan hamma topshiriqdan 100% olsangiz ham, umumiy {target}% ga yetib boʻlmaydi.",
+    "need": "Umumiy {target}% bilan tugatish uchun qolgan topshiriqlardan taxminan {need}% olish kerak."
+  },
+  "names": {
+    "more": "{list} va yana {n} ta",
+    "and": "{list} va {last}"
+  },
+  "marks": "{n} baho",
+  "line": {
+    "unweighted": "{marks} oʻrtacha balli. Hali vaznlar belgilanmagan, shuning uchun hammasi teng hisoblanadi: haqiqiy baho uchun quyida vaznlarni qoʻshing.",
+    "rest": "Hali topshirilishi kerak boʻlgan {weight}: {names}.",
+    "weighted": "{marks} boʻyicha bahoning {weight} qismi.{rest}",
+    "waiting": "Baholar chiqishi kutilmoqda.",
+    "empty": "Hali hech narsa baholanmagan."
+  },
+  "overallUntil": "umumiy, oʻzingiz belgilaguningizcha",
+  "overall": "umumiy",
+  "short": "Bu yerdagi vaznlar yigʻindisi umumiy bahodan kam: {share} qismi hali koʻrsatilmagan.",
+  "worthOf": "{title} vazni, bahoning %i",
+  "markFor": "{title} boʻyicha bahoyingiz, %",
+  "onceMarked": "Baho qoʻyilgach, bu yerda {title} boʻyicha kerakli ball hisoblab chiqiladi.",
+  "finishedWith": "{percent}% bilan yakunlandi",
+  "averaging": "Hozircha o’rtacha {percent}%"
+}

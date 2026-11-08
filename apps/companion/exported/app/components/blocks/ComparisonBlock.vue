@@ -41,13 +41,13 @@ function cell(values: string[], index: number): string {
         <table class="w-full border-collapse text-left text-[13px]">
           <thead>
             <tr>
-              <th class="px-3 pb-2.5 text-[10.5px] font-semibold tracking-[0.06em] text-text-faint uppercase">
+              <th class="px-3 pb-2.5 text-[12px] font-semibold text-text-faint">
                 &nbsp;
               </th>
               <th
                 v-for="(axis, index) in axes"
                 :key="index"
-                class="px-3 pb-2.5 align-bottom text-[10.5px] font-semibold tracking-[0.06em] text-text-faint uppercase"
+                class="px-3 pb-2.5 align-bottom text-[12px] font-semibold text-text-faint"
               >
                 {{ axis }}
               </th>
@@ -90,7 +90,7 @@ function cell(values: string[], index: number): string {
               :key="column"
               class="flex flex-col gap-0.5"
             >
-              <dt class="text-[10.5px] font-semibold tracking-[0.06em] text-text-faint uppercase">
+              <dt class="text-[12px] font-semibold text-text-faint">
                 {{ axis }}
               </dt>
               <dd

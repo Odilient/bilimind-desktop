@@ -1,0 +1,120 @@
+{
+  "time": {
+    "today": "aujourd'hui",
+    "tomorrow": "demain",
+    "yesterday": "hier",
+    "now": "maintenant",
+    "inMin": "dans {n} min",
+    "inH": "dans {n} h",
+    "inDays": "dans {n} jour | dans {n} jours",
+    "minAgo": "il y a {n} min",
+    "hAgo": "il y a {n} h",
+    "daysAgo": "il y a {n} jour | il y a {n} jours",
+    "dh": "{d} j {h} h",
+    "hMin": "{h} h {m} min",
+    "min": "{n} min",
+    "hm": "{h} h {m} min",
+    "h": "{n} h",
+    "morning": "Bonjour",
+    "afternoon": "Bon après-midi",
+    "evening": "Bonsoir"
+  },
+  "classes": "{n} séance | {n} séances",
+  "deadlines": "{n} échéance | {n} échéances",
+  "month": {
+    "study": "{time} d'étude",
+    "openWeek": "Ouvrir la semaine du {day}",
+    "moreDue": "{n} de plus"
+  },
+  "grid": {
+    "dueTitle": "Échéance · {title}",
+    "done": "Terminé",
+    "dueAt": "Pour {time} : {title}",
+    "hShort": "h",
+    "mShort": "{n} min",
+    "min": "{n} min",
+    "more": "{n} de plus",
+    "ofStudy": "{time} d’étude",
+    "showLess": "Voir moins",
+    "todo": "À faire",
+    "todoOn": "À faire le {day}"
+  },
+  "views": {
+    "week": "Semaine",
+    "month": "Mois",
+    "agenda": "Toutes les échéances"
+  },
+  "summary": {
+    "nothingThisWeek": "Rien cette semaine",
+    "nothingOn": "Rien de prévu",
+    "studyOf": "{time} d'étude",
+    "and": "{list} et {last}"
+  },
+  "nav": {
+    "prevMonth": "Mois précédent",
+    "prevWeek": "Semaine précédente",
+    "nextMonth": "Mois suivant",
+    "nextWeek": "Semaine suivante",
+    "today": "Aujourd'hui"
+  },
+  "behind": {
+    "line": "{n} élément des jours précédents n'est pas terminé. | {n} éléments des jours précédents ne sont pas terminés.",
+    "moveToToday": "Reporter à aujourd'hui",
+    "movedSuccess": "{n} élément reporté à aujourd'hui | {n} éléments reportés à aujourd'hui"
+  },
+  "plan": {
+    "myWeek": "Planifier ma semaine",
+    "nextWeek": "Planifier la semaine prochaine",
+    "thatWeek": "Planifier cette semaine-là",
+    "planned": "Votre semaine est planifiée",
+    "plannedThat": "Cette semaine est planifiée",
+    "plannedBody": "Tout ce que vous avez déplacé reste en place.",
+    "planError": "Impossible de planifier la semaine. Vérifiez la connexion et réessayez."
+  },
+  "timetable": {
+    "notice": "Vos séances apparaîtront ici avec horaires et salles une fois l'emploi du temps ajouté.",
+    "add": "Ajouter mon emploi du temps"
+  },
+  "agenda": {
+    "termDesc": "Ce qui est attendu chaque semaine. Appuyez sur une semaine pour voir.",
+    "busyTitle": "La semaine {n} est la plus chargée :",
+    "busyBody": "{list}. Votre plan quotidien commence avant qu'elle n'arrive.",
+    "seeWeek": "Voir la semaine {n}",
+    "nothingDue": "Aucune échéance à venir",
+    "nothingDueDesc": "Les dates proviennent de Moodle, de vos e-mails et des cours. Ou collez un message mentionnant une date.",
+    "pasteBtn": "Coller un message"
+  },
+  "sync": {
+    "addBtn": "Ajouter à votre calendrier",
+    "addTitle": "Ajouter au calendrier Google, Apple ou Outlook",
+    "modalDesc": "Vos séances, échéances et votre planning dans Google, Apple ou Outlook, toujours à jour."
+  },
+  "add": "Ajouter",
+  "close": "Fermer",
+  "open": "Ouvrir",
+  "undo": "Annuler",
+  "peek": {
+    "added": "Ajouté le {day}",
+    "addedAt": "Ajouté le {day} à {time}",
+    "cancelled": "Annulé",
+    "clearTime": "Effacer l’heure",
+    "doneToast": "{title} marqué comme terminé",
+    "due": "Pour {when}",
+    "newTask": "Nouvelle tâche",
+    "ofGrade": "{n} % de la note",
+    "placeholder": "Ajouter une tâche…",
+    "set": "Définir",
+    "setTime": "Définir l’heure",
+    "time": "Heure",
+    "unconfirmed": "Pas encore confirmé",
+    "whatToDo": "Que dois-tu faire ?",
+    "notHandedIn": "Non rendu",
+    "notDone": "Non terminé",
+    "markHandedIn": "Marquer comme rendu",
+    "markDone": "Marquer comme terminé",
+    "handedInToast": "{title} marqué comme rendu",
+    "moveToday": "Déplacer à aujourd’hui",
+    "moveTomorrow": "Déplacer à demain",
+    "dayLater": "Déplacer à plus tard"
+  }
+}

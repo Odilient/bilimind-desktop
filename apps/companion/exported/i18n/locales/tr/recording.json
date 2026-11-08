@@ -1,0 +1,72 @@
+{
+  "aloud": {
+    "sayOut": "Sesli söyle",
+    "orScreen": "ya da ekranının üzerinde anlat",
+    "agree": "BiliMind söylediklerini bu bilgisayarda yazıya döker. İlk seferde bir konuşma modeli{size} indirir ve burada saklar. Söylediklerin bu bilgisayardan asla çıkmaz.",
+    "aboutMb": " (yaklaşık {mb} MB)",
+    "downloadStart": "İndir ve başla",
+    "typeInstead": "Yerine yaz",
+    "whichScreen": "Hangi ekranın üzerinde anlatıyorsun? Sesin onunla birlikte kaydedilir.",
+    "cancel": "Vazgeç",
+    "recordingScreen": "Ekranın ve sesin kaydediliyor",
+    "listening": "Dinliyorum",
+    "stop": "Durdur",
+    "talk": "Bir sınıf arkadaşına anlatır gibi anlat. Durdurduğunda sözlerin kutuya gelir.",
+    "tryAgain": "Tekrar dene",
+    "done": "Sözlerin kutuda. Oku ve yanlış duyulanı düzelt.",
+    "again": "Tekrar söyle",
+    "screenFail": "Bu bilgisayar şu an ekranını paylaşamıyor.",
+    "explaining": "Anlatıyorum: {topic}",
+    "explainingBack": "Kendi sözlerimle anlatma",
+    "recFail": "Kayıt başlamadı. Birazdan tekrar dene.",
+    "noWords": "Hiç söz yakalanamadı. Mikrofonu kontrol et ya da yaz.",
+    "writeFail": "Söylediklerin yazıya dökülemedi.",
+    "modelReady": "Konuşma modeli hazırlanıyor…",
+    "modelProgress": "Konuşma modeli hazırlanıyor… {done} / {total} MB",
+    "writing": "Söylediklerin yazıya dökülüyor…"
+  },
+  "tr": {
+    "title": "Transkript",
+    "waiting": "Başka bir transkriptin bitmesi bekleniyor…",
+    "progress": "Transkript bu bilgisayarda yazılıyor… {done} / {total} dk",
+    "stopped": "Transkript durdu. {error}",
+    "agree": "BiliMind söylenenleri bu bilgisayarda yazıya dökebilir. Bir konuşma modelini bir kez{size} indirir ve burada saklar; kaydın kendisi bu bilgisayardan asla çıkmaz.",
+    "stoppedAt": "{at} noktasında durdu.",
+    "downloadWrite": "İndir ve yazıya dök",
+    "carryOn": "Devam et",
+    "write": "Transkripti yaz"
+  },
+  "pill": {
+    "recording": "Kayıt",
+    "paused": "Duraklatıldı",
+    "aria": "{label} kaydediliyor, {elapsed}. Kaydediciyi aç.",
+    "interrupted": "Kayıt kendiliğinden durdu",
+    "saved": "{time} {where} altına kaydedildi.",
+    "notebook": "defterin"
+  },
+  "picker": {
+    "screen": "Tüm ekran",
+    "window": "Bir pencere"
+  },
+  "err": {
+    "noMic": "Bu tarayıcı mikrofonu kullanamıyor.",
+    "denied": "Kayıt için BiliMind’ın mikrofona ihtiyacı var. Tarayıcıda ya da bilgisayarın gizlilik ayarlarında izin ver, sonra tekrar dene.",
+    "noMicAnswer": "Hiçbir mikrofon yanıt vermedi. Takılı olduğunu ve kullanımda olmadığını kontrol et.",
+    "saveFail": "Kayıt kaydedilemedi.",
+    "busy": "Zaten bir şey kaydediliyor.",
+    "noRecord": "Bu tarayıcı kayıt yapamıyor.",
+    "noSound": "Kaydedilecek ses yoktu.",
+    "itself": "Kayıt kendiliğinden durdu.",
+    "noStart": "Kayıt başlamadı. Birazdan tekrar dene."
+  },
+  "file": {
+    "voiceMemo": "Sesli not",
+    "recording": "{base} kaydı",
+    "screenRecording": "Ekran kaydı",
+    "baseScreen": "{base} ekran kaydı",
+    "uploadFail": "Kayıt yüklenmedi",
+    "tooLong": "Yüklemeye sığmayacak kadar uzun. Hiçbir şey kaybolmasın diye bu bilgisayara kaydet.",
+    "saveLocal": "Hiçbir şey kaybolmasın diye bu bilgisayara kaydet ve sonra Dosya yükle ile ekle.",
+    "saveIt": "Kaydet"
+  }
+}

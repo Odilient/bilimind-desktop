@@ -19,6 +19,7 @@ import { useAiAttachments } from '~/companion/ai/attach'
 import { newChatLink } from '~/companion/ai/routes'
 import { withWords, type MakeTile } from '~/companion/ai/make'
 
+const { t } = useI18n()
 const tray = useAiAttachments()
 const draft = ref('')
 const box = ref<{ focus: () => void } | null>(null)
@@ -50,14 +51,14 @@ defineExpose({ focus })
 <template>
   <section
     ref="root"
-    aria-label="Ask BiliMind"
+    :aria-label="t('today.ask.label')"
   >
     <CompanionAiComposer
       ref="box"
       v-model="draft"
       size="lg"
       menu-placement="down"
-      placeholder="Ask anything, attach your files, or say what you want to learn"
+      :placeholder="t('today.ask.placeholder')"
       @send="send"
     />
     <CompanionAiMakeTray

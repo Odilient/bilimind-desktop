@@ -70,7 +70,7 @@ function onContextMenu(event: MouseEvent): void {
     </span>
     <span
       v-else
-      class="mx-[4.5px] size-[4px] shrink-0 rounded-full bg-[#c3c6cf] dark:bg-text-ghost"
+      class="mx-[4.5px] size-[4px] shrink-0 rounded-full bg-text-ghost"
     />
 
     <span
@@ -79,7 +79,7 @@ function onContextMenu(event: MouseEvent): void {
         active ? 'font-semibold text-text' : 'text-text-soft',
         state === 'completed' && 'line-through text-text-faint',
         state === 'skipped' && 'line-through text-text-ghost',
-        state === 'in_progress' && 'underline decoration-lime-2 decoration-2 underline-offset-[3px]',
+        state === 'in_progress' && 'underline decoration-hi-2 decoration-2 underline-offset-[3px]',
       ]"
       >{{ node.title }}</span
     >

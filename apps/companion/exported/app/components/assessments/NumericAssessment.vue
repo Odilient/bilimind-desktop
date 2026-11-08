@@ -14,6 +14,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * It narrows nothing about the value and withholding it turns the question into a
  * guess about which unit we had in mind.
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -45,8 +46,8 @@ const value = computed<string>({
       spellcheck="false"
       :disabled="disabled"
       :aria-label="assessment.prompt"
-      placeholder="Your answer"
-      class="num h-11 w-44 rounded-[14px] border border-border-field bg-surface-mute px-4 font-display text-[16px] font-semibold tabular-nums transition outline-none focus:border-lime-2 focus:bg-surface focus:shadow-[0_0_0_4px_rgb(198_242_78/0.45)] disabled:cursor-not-allowed disabled:opacity-60"
+      :placeholder="t('check.assess.numericPlaceholder')"
+      class="num h-11 w-44 rounded-[14px] border border-border-field bg-surface-mute px-4 font-display text-[16px] font-semibold tabular-nums transition outline-none focus:border-hi-2 focus:bg-surface focus:shadow-[0_0_0_4px_rgb(255_212_71/0.45)] disabled:cursor-not-allowed disabled:opacity-60"
     />
     <span
       v-if="unit"

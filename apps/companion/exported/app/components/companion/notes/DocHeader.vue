@@ -1,7 +1,9 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Item } from '~/companion/types'
 import { noteWord } from '~/companion/notes/tree'
 import { useNoteActions } from '~/companion/notes/actions'
+import { useExport } from '~/companion/export/use-export'
 
 /**
  * The 48px bar over a whiteboard, a file, a photo, a link or a recording
@@ -25,11 +27,11 @@ const actions = useNoteActions()
 const statusLabel = computed(() => {
   switch (props.status) {
     case 'saving':
-      return 'Saving…'
+      return t('notes.saving')
     case 'saved':
-      return 'Saved'
+      return t('notes.saved')
     case 'offline':
-      return 'Offline, kept on this device'
+      return t('notes.offlineKept')
     default:
       return ''
   }
@@ -43,9 +45,20 @@ function startRename(): void {
 
 const word = computed(() => noteWord(props.item))
 
-const menu = computed(() =>
-  actions.menuFor(props.item, { rename: startRename }),
-)
+const exp = useExport()
+
+/* A whiteboard's "…" also downloads it, whole, as a picture or a printable page, above Delete. */
+const menu = computed(() => {
+  const all = actions.menuFor(props.item, { rename: startRename })
+  if (props.item.kind !== 'board') return all
+  const board = props.item
+  return [
+    ...all.filter((a) => !a.destructive),
+    { label: t('notes.downloadPng'), icon: 'image', divider: true, run: () => void exp.board('png', board) },
+    { label: t('notes.downloadPdf'), icon: 'file', run: () => void exp.board('pdf', board) },
+    ...all.filter((a) => a.destructive),
+  ]
+})
 </script>
 
 <template>
@@ -73,20 +86,20 @@ const menu = computed(() =>
           'shrink-0 text-[13px] whitespace-nowrap',
           status === 'offline' ? 'text-warn-text' : 'text-text-muted max-lg:hidden',
         ]"
-        :title="status === 'saved' ? 'Every change is saved as you go' : undefined"
+        :title="status === 'saved' ? t('notes.savedAsYouGo') : undefined"
       >{{ statusLabel }}</span>
 
       <CompanionNotesMenu
         :items="menu"
         align="end"
-        :label="`More for this ${word}`"
-        :title="title || 'Untitled'"
+        :label="t('notes.moreFor', { word })"
+        :title="title || t('notes.untitled')"
       >
         <template #default="{ toggle, open }">
           <button
             type="button"
-            :aria-label="`More for this ${word}`"
-            title="Rename, pin, move, delete"
+            :aria-label="t('notes.moreFor', { word })"
+            :title="t('notes.renamePinMove')"
             aria-haspopup="menu"
             :aria-expanded="open"
             :class="[

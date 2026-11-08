@@ -15,6 +15,7 @@ import type { Deadline, Item, PlanTask, Session, Subject, Topic } from './types'
 import type { CompanionStore } from './store'
 import { dayKey, dayLabel, daysBetween, shortDate, weekdayLong, weekdayOf, weekdayShort } from './time'
 import { checkHref } from './checks'
+import { translate } from '~/utils/i18n'
 
 /* -- The clock ------------------------------------------------------------ */
 
@@ -135,7 +136,7 @@ export async function takeNotes(store: CompanionStore, session: Session): Promis
     const id = await makePage({ subjectId: session.subject_id, sessionId: session.id, template: 'lecture' })
     await navigateTo(itemHref({ id }))
   } catch {
-    useToast().error({ title: "Couldn't start the page", body: 'Check the connection and try again.' })
+    useToast().error({ title: translate('today.startPage.title'), body: translate('today.startPage.body') })
   }
 }
 
@@ -180,9 +181,9 @@ export function deadlinesWithin(store: CompanionStore, at: number, days: number)
 export function dayWord(iso: string, at = Date.now()): string {
   const key = dayKey(iso)
   const diff = daysBetween(dayKey(at), key)
-  if (diff === 0) return 'today'
-  if (diff === 1) return 'tomorrow'
-  if (diff === -1) return 'yesterday'
+  if (diff === 0) return translate('today.day.today')
+  if (diff === 1) return translate('today.day.tomorrow')
+  if (diff === -1) return translate('today.day.yesterday')
   return Math.abs(diff) < 7 ? weekdayLong(weekdayOf(key)) : dayLabel(key)
 }
 
@@ -190,7 +191,7 @@ export function dayWord(iso: string, at = Date.now()): string {
 export function dayShort(iso: string, at = Date.now()): string {
   const key = dayKey(iso)
   const diff = daysBetween(dayKey(at), key)
-  if (diff === 0) return 'today'
-  if (diff === 1) return 'tomorrow'
+  if (diff === 0) return translate('today.day.today')
+  if (diff === 1) return translate('today.day.tomorrow')
   return Math.abs(diff) < 7 ? weekdayShort(key) : shortDate(key)
 }

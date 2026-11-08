@@ -21,7 +21,7 @@
  * "check" or "test" too; they exist only while something is due, because a
  * check that opens on nothing is a dead end.
  *
- * Typing puts "Ask BiliMind: …" first, because a question is the one thing a
+ * Typing puts "Ask Bili: …" first, because a question is the one thing a
  * search can't answer; it opens a new chat with the question already asked
  * (`newChatLink({ q })`). Enter still goes to a result when the words plainly
  * name one ("calendar", "sql joins"); a question ("why does…?") goes to the
@@ -41,12 +41,13 @@ import type { Deadline, Item, Session, Subject, Topic } from './types'
 import type { CompanionStore } from './store'
 import type { AiThread } from './ai/types'
 import { chatPath, newChatLink, type NewChatOptions } from './ai/routes'
-import { NEW_NOTE_TYPES, type NewKind } from './notes/new'
+import { NEW_NOTE_TYPES, offered, type NewKind } from './notes/new'
 import { FOCUS_MIN, useFocus } from './focus'
 import { clock, dayKey, dayLabel, relativeDay, untilLabel, whenLabel } from './time'
-import { KIND_WORD, itemIcon, readyWords } from './words'
+import { kindWord, itemIcon, readyWords } from './words'
 import { checkHref, dueTopics, sittingSize } from './checks'
 import { plural } from '../utils/words'
+import { translate } from '../utils/i18n'
 import {
   classHref,
   classNow,
@@ -137,19 +138,19 @@ export type PaletteGroup =
   | 'commands'
 
 export const GROUP_LABEL: Record<PaletteGroup, string> = {
-  ask: 'Ask',
-  suggested: 'Suggested',
-  create: 'Create',
-  recent: 'Recent searches',
-  chats: 'Chats',
-  courses: 'Courses',
-  lessons: 'Lessons',
-  notes: 'Notes',
-  boards: 'Whiteboards',
-  deadlines: 'Deadlines',
-  files: 'Files',
-  classes: 'Classes',
-  commands: 'Commands',
+  get ask() { return translate('palette.group.ask') },
+  get suggested() { return translate('palette.group.suggested') },
+  get create() { return translate('palette.group.create') },
+  get recent() { return translate('palette.group.recent') },
+  get chats() { return translate('palette.group.chats') },
+  get courses() { return translate('palette.group.courses') },
+  get lessons() { return translate('palette.group.lessons') },
+  get notes() { return translate('palette.group.notes') },
+  get boards() { return translate('palette.group.boards') },
+  get deadlines() { return translate('palette.group.deadlines') },
+  get files() { return translate('palette.group.files') },
+  get classes() { return translate('palette.group.classes') },
+  get commands() { return translate('palette.group.commands') },
 }
 
 export type CommandId = 'quiet-ai' | 'settings' | 'toggle-ai' | 'focus'
@@ -335,6 +336,15 @@ function commands(quiet: boolean): Command[] {
       action: { type: 'new-chat' },
     },
     { id: 'today', title: 'Go to Today', icon: 'home', kbd: 'g t', keywords: 'home plan day', action: go('/app') },
+    // Tasks and grades.
+    {
+      id: 'tasks',
+      title: 'Go to Tasks',
+      icon: 'check-circle',
+      kbd: 'g d',
+      keywords: 'to do todo list deadlines due homework',
+      action: go('/app/tasks'),
+    },
     {
       id: 'courses',
       title: 'Go to Courses',
@@ -360,14 +370,6 @@ function commands(quiet: boolean): Command[] {
       action: go('/app/calendar'),
     },
     {
-      id: 'inbox',
-      title: 'Waiting for your OK',
-      icon: 'inbox',
-      kbd: 'g i',
-      keywords: 'inbox changes moved deadline',
-      action: go('/app/inbox'),
-    },
-    {
       id: 'practice',
       title: 'Practise flashcards',
       icon: 'cards',
@@ -384,14 +386,14 @@ function commands(quiet: boolean): Command[] {
     },
     {
       id: 'connect',
-      title: 'Connect your school',
+      title: 'Integrations',
       icon: 'plug',
-      keywords: 'moodle timetable ics calendar link connected apps',
-      action: go('/app/connect'),
+      keywords: 'connect your school moodle classroom timetable ics calendar google drive notion youtube quizlet obsidian telegram whatsapp chatgpt claude connected apps',
+      action: go('/app/settings?section=integrations'),
     },
     {
       id: 'toggle-ai',
-      title: 'Open or close BiliMind',
+      title: 'Open or close Bili',
       icon: 'spark',
       kbd: '⌘J',
       verb: 'Toggle',
@@ -656,6 +658,10 @@ const NOTE_WORDS: Record<NewKind, string> = {
   record: 'record audio lecture class transcript voice microphone',
   photo: 'scan photo camera picture image board',
   draft: 'draft ai write generate note',
+  // recording
+  screen: 'record screen video slides board demo narrate desktop',
+  // imports
+  notion: 'notion import export zip pages workspace assignments tracker bring',
 }
 
 /** A typed address, so "Add link" can take it as it is. */
@@ -682,6 +688,8 @@ function makeRows(store: CompanionStore, ctx: PaletteContext, q = ''): { row: Pa
     if (type.key === 'draft' && ctx.quiet) continue
     // A link needs its address: offered once one has been typed.
     if (type.key === 'link' && !url) continue
+    // recording: "Record screen" is the desktop app's alone
+    if (!offered(type)) continue
     rows.push({
       words: NOTE_WORDS[type.key],
       row: {
@@ -690,7 +698,7 @@ function makeRows(store: CompanionStore, ctx: PaletteContext, q = ''): { row: Pa
         icon: type.icon,
         title: type.key === 'link' && url ? `Add link ${url.replace(/^https?:\/\//, '')}` : (NOTE_TITLE[type.key] ?? type.label),
         meta: type.hint,
-        verb: type.key === 'upload' || type.key === 'photo' ? 'Choose' : type.key === 'record' ? 'Record' : 'Create',
+        verb: type.key === 'upload' || type.key === 'photo' ? 'Choose' : type.key === 'record' || type.key === 'screen' ? 'Record' : 'Create',
         action: { type: 'note', kind: type.key, url: type.key === 'link' ? (url ?? undefined) : undefined },
         score: 0,
       },
@@ -810,16 +818,17 @@ function predicted(store: CompanionStore, ctx: PaletteContext, recentQueries: st
     })
   }
 
+  // Changes that wait for a yes, answered on Today.
   const waiting = store.pendingSignals.value.length
   if (waiting) {
     suggested.push({
       key: 'waiting',
       group: 'suggested',
-      icon: 'inbox',
-      title: waiting === 1 ? '1 change waiting for your OK' : `${waiting} changes waiting for your OK`,
-      meta: 'A date heard in class or moved in a chat',
+      icon: 'bell',
+      title: waiting === 1 ? '1 thing waiting for your OK' : `${waiting} things waiting for your OK`,
+      meta: 'On Today',
       verb: 'Check',
-      action: { type: 'go', to: '/app/inbox' },
+      action: { type: 'go', to: '/app' },
       score: 70,
     })
   }
@@ -900,7 +909,7 @@ function searched(store: CompanionStore, q: string, ctx: PaletteContext): Palett
   }
   for (const d of store.deadlines.value) {
     if (d.status === 'cancelled') continue
-    const m = match(q, d.title, `${subjectLine(store, d)} ${KIND_WORD[d.kind]}`)
+    const m = match(q, d.title, `${subjectLine(store, d)} ${kindWord(d.kind)}`)
     if (m) add(deadlineRow(store, d, m, now))
   }
   // Classes repeat every week: only the fortnight either side of today.
@@ -978,7 +987,7 @@ function searched(store: CompanionStore, q: string, ctx: PaletteContext): Palett
 
 /**
  * The palette's whole list for a query: predicted rows when it is empty,
- * otherwise "Ask BiliMind" first and then everything that matched.
+ * otherwise "Ask Bili" first and then everything that matched.
  */
 export function paletteSections(
   store: CompanionStore,
@@ -998,7 +1007,7 @@ export function paletteSections(
           key: 'ask',
           group: 'ask',
           icon: 'spark',
-          title: `Ask BiliMind: “${q.trim()}”`,
+          title: `Ask Bili: “${q.trim()}”`,
           meta: 'In a new chat, from all your courses and notes',
           verb: 'Ask',
           kbd: '⌘↵',

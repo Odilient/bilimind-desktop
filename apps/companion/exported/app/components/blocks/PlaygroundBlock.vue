@@ -121,7 +121,15 @@ function schedule(): void {
 }
 
 watch(values, schedule, { deep: true })
-onMounted(() => void evaluate())
+
+// The server has no Worker, so `supported` is false there and true here: whether this
+// browser can run the formula is only said once mounted, or the public page's SSR
+// markup and the hydrated one disagree.
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+  void evaluate()
+})
 onBeforeUnmount(() => {
   if (queued !== undefined) clearTimeout(queued)
 })
@@ -239,7 +247,7 @@ function fillOf(input: { key: string; min: number; max: number; default: number 
 
       <div class="mt-5 flex flex-wrap items-end gap-6 border-t border-dashed border-border-strong pt-5">
         <div class="shrink-0">
-          <p class="eyebrow-loud text-text-faint">
+          <p class="text-[12px] leading-none font-bold text-text-faint">
             {{ block.payload?.output_label ?? 'Result' }}
           </p>
 
@@ -271,7 +279,7 @@ function fillOf(input: { key: string; min: number; max: number; default: number 
             <svg
               :viewBox="`0 0 ${VIEW.w} ${VIEW.h}`"
               preserveAspectRatio="none"
-              class="cb-dots block h-[84px] w-full rounded-[12px]"
+              class="block h-[84px] w-full rounded-[12px] bg-surface-mute bg-[radial-gradient(var(--border-strong)_1px,transparent_1.3px)] bg-[length:20px_20px]"
               role="img"
               :aria-label="`${block.payload?.output_label ?? 'Output'} as ${swept.label} varies`"
             >
@@ -290,7 +298,7 @@ function fillOf(input: { key: string; min: number; max: number; default: number 
               :style="{ left: `${markerPercent}%` }"
             >
               <span
-                class="absolute top-1/2 -left-[6px] size-3 -translate-y-1/2 rounded-full bg-lime ring-2 ring-text"
+                class="absolute top-1/2 -left-[6px] size-3 -translate-y-1/2 rounded-full bg-accent ring-2 ring-text"
               />
             </span>
           </div>
@@ -298,7 +306,7 @@ function fillOf(input: { key: string; min: number; max: number; default: number 
       </div>
 
       <p
-        v-if="!runner.supported.value"
+        v-if="mounted && !runner.supported.value"
         class="mt-3 flex items-start gap-1.5 text-[11.5px] leading-relaxed text-text-faint"
       >
         <UiIcon
@@ -324,14 +332,14 @@ function fillOf(input: { key: string; min: number; max: number; default: number 
 .pg input[type='range']::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
-  background: var(--lime);
-  border: 2px solid var(--ink);
+  background: var(--accent);
+  border: 2px solid var(--text);
 }
 
 .pg input[type='range']::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: var(--lime);
-  border: 2px solid var(--ink);
+  background: var(--accent);
+  border: 2px solid var(--text);
 }
 </style>

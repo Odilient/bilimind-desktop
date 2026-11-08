@@ -1,0 +1,26 @@
+{
+  "moreActions": "Plus d’actions",
+  "hidePassword": "Masquer le mot de passe",
+  "showPassword": "Afficher le mot de passe",
+  "dismiss": "Ignorer",
+  "complete": "{n} % terminé",
+  "nothing": "(rien)",
+  "week": "searchPerson",
+  "upgrade": {
+    "message": "Inclus dans la formule Centre : 1 $ par élève et par mois (minimum 29 $), avec 30 jours d'essai.",
+    "seePlans": "Voir les formules",
+    "ownerChange": "Le propriétaire peut changer de formule dans les Paramètres."
+  },
+  "looking": "Recherche en cours…",
+  "nobody": "Personne à ce nom.",
+  "noDate": "Sans date",
+  "clearSearch": "Effacer la recherche",
+  "due": "Échéance",
+  "remove": "Supprimer {name}",
+  "search": "Rechercher",
+  "noData": "Aucune donnée",
+  "findPerson": "Trouver une personne",
+  "change": "Modifier",
+  "searchPerson": "Rechercher par nom ou e-mail",
+  "versus": "par rapport à la période précédente"
+}

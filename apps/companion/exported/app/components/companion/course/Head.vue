@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Subject } from '~/companion/types'
 import type { ContinueTarget, CourseProgress } from '~/companion/course-home'
-import { courseColor } from '~/companion/colors'
 
 /**
  * The top of a course's home, about a hundred pixels: its colour and name,
@@ -27,32 +26,35 @@ const emit = defineEmits<{ continue: [] }>()
 const percent = computed(() =>
   props.progress.total ? Math.round((props.progress.done / props.progress.total) * 100) : 0,
 )
-const color = computed(() => courseColor(props.subject.color))
 </script>
 
 <template>
-  <div class="flex items-end gap-6 px-4 pt-3 pb-3 lg:px-8 lg:pt-5 lg:pb-4">
+  <!-- Daylight's course head (course.html .rm-head): the cover, the name in the display face,
+       one line of where it stands and how far, and the one Continue that knows what's next. -->
+  <div class="flex items-center gap-3.5 px-4 pt-4 pb-1 lg:px-[30px] lg:pt-[22px]">
+    <CompanionCourseCover
+      :subject="subject"
+      size="sm"
+      :px="54"
+      class="max-lg:hidden"
+    />
     <div class="grid min-w-0 flex-1 gap-1">
-      <h1 class="t-head flex min-w-0 items-center gap-2.5 text-[24px] max-lg:hidden">
-        <span
-          class="size-3 shrink-0 rounded-full"
-          :style="{ background: color }"
-        />
-        <span class="truncate">{{ subject.title }}</span>
+      <h1 class="truncate font-display text-[30px] leading-[1.02] font-semibold tracking-[-0.04em] text-text max-lg:hidden">
+        {{ subject.title }}
       </h1>
       <p
         v-if="line"
-        class="truncate text-[13.5px] text-text-muted lg:text-[14px]"
+        class="truncate text-[13px] text-text-muted"
         :title="line"
       >
         {{ line }}
       </p>
       <div
         v-if="progress.words"
-        class="mt-1 flex min-w-0 items-center gap-3"
+        class="flex min-w-0 items-center gap-2.5"
       >
         <span
-          class="h-1.5 w-full max-w-[220px] shrink overflow-hidden rounded-full bg-surface-track"
+          class="h-1.5 w-full max-w-[160px] shrink overflow-hidden rounded-full bg-[rgb(var(--wash-rgb)/0.065)]"
           role="progressbar"
           :aria-valuenow="percent"
           aria-valuemin="0"
@@ -60,23 +62,23 @@ const color = computed(() => courseColor(props.subject.color))
           :aria-label="progress.words"
         >
           <span
-            class="block h-full rounded-full transition-[width] duration-500 ease-out"
-            :style="{ width: `${percent}%`, background: color }"
+            class="block h-full rounded-full bg-leaf transition-[width] duration-500 ease-[var(--ease)]"
+            :style="{ width: `${percent}%` }"
           />
         </span>
-        <span class="shrink-0 text-[13px] font-medium whitespace-nowrap text-text-soft">{{ progress.words }}</span>
+        <span class="shrink-0 text-[12.5px] font-medium whitespace-nowrap text-text-soft">{{ progress.words }}</span>
       </div>
 
       <!-- The phone: the button under the bar, the full width. -->
       <button
         v-if="next"
         type="button"
-        class="group mt-2.5 flex h-11 w-full min-w-0 cursor-pointer items-center gap-2 rounded-full bg-ink pr-4 pl-5 text-[14.5px] font-semibold text-white transition-colors active:bg-[#22262e] lg:hidden"
+        class="mt-2 flex h-11 w-full min-w-0 cursor-pointer items-center gap-2 rounded-[12px] bg-inverse pr-4 pl-4 text-[14px] font-semibold text-on-inverse transition-[background-color,transform] active:scale-[0.98] active:bg-inverse-hover lg:hidden"
         @click="emit('continue')"
       >
         <span class="shrink-0">{{ next.verb }}</span>
         <span
-          class="text-white/45"
+          class="opacity-45"
           aria-hidden="true"
         >·</span>
         <span class="min-w-0 flex-1 truncate text-left">{{ next.label }}</span>
@@ -90,27 +92,27 @@ const color = computed(() => courseColor(props.subject.color))
 
     <div
       v-if="next"
-      class="grid shrink-0 justify-items-end gap-1.5 max-lg:hidden"
+      class="grid shrink-0 justify-items-end gap-1 max-lg:hidden"
     >
       <button
         type="button"
-        class="group flex h-11 max-w-[min(440px,38vw)] cursor-pointer items-center gap-2 rounded-full bg-ink pr-4 pl-5 text-[14.5px] font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-[#22262e] active:scale-[0.98]"
+        class="group flex h-9 max-w-[min(400px,34vw)] cursor-pointer items-center gap-2 rounded-[10px] bg-inverse pr-3 pl-3.5 text-[13.5px] font-semibold text-on-inverse transition-[background-color,transform] duration-200 ease-[var(--ease)] hover:bg-inverse-hover active:scale-[0.97]"
         :title="`${next.verb}: ${next.label} (${next.why})`"
         @click="emit('continue')"
       >
         <span class="shrink-0">{{ next.verb }}</span>
         <span
-          class="text-white/45"
+          class="opacity-45"
           aria-hidden="true"
         >·</span>
         <span class="min-w-0 truncate">{{ next.label }}</span>
         <UiIcon
           name="arrow-right"
-          :size="16"
-          class="shrink-0 transition-transform duration-150 group-hover:translate-x-0.5"
+          :size="15"
+          class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
         />
       </button>
-      <span class="pr-4 text-[12px] text-text-muted">{{ next.why }}</span>
+      <span class="max-w-[min(400px,34vw)] truncate pr-1 text-[12px] text-text-muted">{{ next.why }}</span>
     </div>
   </div>
 </template>

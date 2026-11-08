@@ -5,6 +5,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * Single choice. Submits `{option_id}` — the shape SubmitAttemptRequest expects.
  * The correct option is never in the payload, so nothing here can reveal it.
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -26,8 +27,9 @@ function choose(id: string): void {
 </script>
 
 <template>
+  <!-- course.html's .opts: answers that look like buttons, two across when they are short. -->
   <div
-    class="flex flex-col gap-1.5"
+    :class="['grid gap-2', options.every((o) => o.text.length <= 48) && options.length > 1 && 'sm:grid-cols-2']"
     role="radiogroup"
     :aria-label="assessment.prompt"
   >
@@ -39,20 +41,20 @@ function choose(id: string): void {
       :aria-checked="selected === option.id"
       :disabled="disabled"
       :class="[
-        'flex min-h-[46px] w-full cursor-pointer items-center gap-3 rounded-[12px] px-3.5 py-2.5 text-left transition-[background-color,box-shadow] duration-200',
+        'flex min-h-[46px] w-full cursor-pointer items-center gap-2.5 rounded-[11px] bg-surface px-3 py-2.5 text-left transition-[box-shadow,transform] duration-200 ease-[var(--ease)]',
         selected === option.id
-          ? 'bg-surface shadow-[inset_0_0_0_1.5px_var(--ink)]'
-          : 'bg-surface shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] hover:bg-surface-mute hover:shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.22)]',
+          ? 'shadow-[0_0_0_1.5px_var(--text),var(--shadow-card)]'
+          : 'shadow-[0_0_0_1px_var(--border-strong)] enabled:hover:-translate-y-px enabled:hover:shadow-[0_0_0_1px_var(--text-faint),var(--shadow-card)]',
         disabled && 'cursor-not-allowed opacity-60',
       ]"
       @click="choose(option.id)"
     >
       <span
         :class="[
-          'num grid size-[22px] shrink-0 place-items-center rounded-full text-[11px] font-semibold',
+          'num grid size-6 shrink-0 place-items-center rounded-[7px] text-[12px] font-bold transition-colors duration-200',
           selected === option.id
             ? 'bg-inverse text-on-inverse'
-            : 'text-text-faint shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.16)]',
+            : 'bg-[rgb(var(--wash-rgb)/0.065)] text-text-soft',
         ]"
         :aria-hidden="true"
       >
@@ -60,7 +62,7 @@ function choose(id: string): void {
       </span>
       <span
         :class="[
-          'min-w-0 flex-1 text-[14px] leading-snug',
+          'min-w-0 flex-1 text-[14px] leading-[1.35]',
           selected === option.id ? 'font-medium text-text' : 'text-text-body',
         ]"
         >{{ option.text }}</span
@@ -71,7 +73,7 @@ function choose(id: string): void {
       v-if="options.length === 0"
       class="text-[13px] text-text-faint italic"
     >
-      This question has no options — regenerate the lesson to repair it.
+      {{ t('check.assess.noOptions') }}
     </p>
   </div>
 </template>

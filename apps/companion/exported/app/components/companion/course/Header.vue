@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import type { Deadline, Subject } from '~/companion/types'
 import type { MenuAction } from '~/components/ui/Menu.vue'
-import { courseColor } from '~/companion/colors'
+const { t } = useI18n()
 
 /**
- * The course's 56px bar on a desktop, the old workspace's top bar extended:
+ * The course's 46px bar on a desktop (course.html `.topbar`):
  *
- *   [sidebar] Courses / ● Databases / Lesson 3 · SQL joins     [Lab 4 report ·
+ *   [sidebar] [● | Lesson 3 · SQL joins ×| Notes ×]      [Lab 4 report ·
  *   in 3 days · 45% ready]  [+ New ▾]  [Ask]  […]
  *
- * The crumbs say where you are down to the document in front, and the
- * course's name in them goes back to its home. The chip is the nearest date
+ * The default slot is the course's tab strip (`CompanionCourseTabs`); the
+ * pinned home tab goes back to the course's home, and the sidebar's course
+ * switcher goes to the other courses, so the bar needs no crumbs. The chip is the nearest date
  * that counts, with how ready you are for it, and opens it. "+ New" is the
  * one way to make things here (`CompanionCourseNewMenu`), Record included,
  * for a school course that allows it; the AI's button and the course's "…"
@@ -45,85 +46,53 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <header class="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-surface pr-3 pl-3">
+  <header class="flex h-[46px] shrink-0 items-center gap-1.5 border-b border-border px-2">
     <button
       type="button"
-      :title="sidebarOpen ? 'Hide the course outline' : 'Show the course outline'"
-      :aria-label="sidebarOpen ? 'Hide the course outline' : 'Show the course outline'"
+      :title="sidebarOpen ? t('course.header.hide') : t('course.header.show')"
+      :aria-label="sidebarOpen ? t('course.header.hide') : t('course.header.show')"
       :aria-pressed="sidebarOpen"
       :class="[
-        'grid size-[34px] shrink-0 cursor-pointer place-items-center rounded-[10px] transition-colors',
+        'grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[8px] transition-colors',
         sidebarOpen
-          ? 'text-text-muted hover:bg-surface-sunken hover:text-text'
+          ? 'text-text-muted hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text'
           : 'bg-accent-soft text-accent-strong',
       ]"
       @click="sidebarOpen = !sidebarOpen"
     >
       <UiIcon
         name="panel-left"
-        :size="18"
+        :size="17"
         :stroke="1.9"
       />
     </button>
 
-    <nav
-      class="ml-1 flex min-w-0 items-center gap-2 text-[14px] whitespace-nowrap"
-      aria-label="Breadcrumb"
-    >
-      <NuxtLink
-        to="/app/courses"
-        class="shrink-0 rounded-[6px] text-text-faint transition-colors hover:text-text-soft"
-      >Courses</NuxtLink>
-      <span class="text-text-ghost">/</span>
-      <button
-        type="button"
-        :class="[
-          'flex min-w-0 cursor-pointer items-center gap-2 rounded-[6px] transition-colors',
-          docTitle ? 'shrink-[2] text-text-soft hover:text-text' : 'font-semibold text-text',
-        ]"
-        :aria-current="docTitle ? undefined : 'page'"
-        @click="emit('home')"
-      >
-        <span
-          class="size-2 shrink-0 rounded-full"
-          :style="{ background: courseColor(subject.color) }"
-        />
-        <span class="truncate">{{ subject.title }}</span>
-      </button>
-      <template v-if="docTitle">
-        <span class="text-text-ghost">/</span>
-        <span
-          class="min-w-0 truncate font-semibold text-text"
-          aria-current="page"
-        >{{ docTitle }}</span>
-      </template>
-    </nav>
+    <!-- The course's open things: the home pinned first, then each lesson, note and board. -->
+    <slot />
 
     <span
       v-if="archived"
       class="flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-surface-sunken pr-1 pl-2.5 text-[12.5px] font-medium text-text-muted"
     >
-      Archived
+      {{ t('course.header.archived') }}
       <button
         type="button"
-        class="h-5 cursor-pointer rounded-full px-2 font-semibold text-text transition-colors hover:bg-surface-track focus-visible:outline-2 focus-visible:outline-cobalt"
+        class="h-5 cursor-pointer rounded-full px-2 font-semibold text-text transition-colors hover:bg-surface-track focus-visible:outline-2 focus-visible:outline-brand"
         @click="emit('restore')"
       >
-        Restore
+        {{ t('course.header.restore') }}
       </button>
     </span>
-
-    <div class="min-w-4 flex-1" />
 
     <!-- The nearest date that counts, as the old bar drew its writing pill. -->
     <NuxtLink
       v-if="due"
       :to="`/app/d/${due.deadline.id}`"
-      class="flex h-[34px] min-w-0 shrink items-center gap-2 rounded-full bg-surface-rail px-3.5 transition-colors hover:bg-surface-track max-[1279px]:hidden"
-      :title="`${due.words}: open it`"
+      class="flex h-[30px] min-w-0 shrink items-center gap-2 rounded-full px-3 shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors hover:bg-[rgb(var(--wash-rgb)/0.035)] max-[1279px]:hidden"
+      :title="t('course.header.due', { words: due.words })"
     >
-      <span :class="['size-[7px] shrink-0 rounded-full', due.ready ? 'bg-lime-2' : 'bg-coral']" />
-      <span class="num truncate text-[13px] font-medium whitespace-nowrap text-text-soft">{{ due.words }}</span>
+      <span :class="['size-1.5 shrink-0 rounded-full', due.ready ? 'bg-leaf' : 'bg-rose']" />
+      <span class="num max-w-[220px] truncate text-[12.5px] font-semibold whitespace-nowrap text-text-soft">{{ due.words }}</span>
     </NuxtLink>
 
     <CompanionCourseNewMenu
@@ -145,7 +114,7 @@ const emit = defineEmits<{
       v-if="actions.length"
       :actions="actions"
       :title="subject.title"
-      label="Course actions"
+      :label="t('course.header.actions')"
     />
   </header>
 </template>

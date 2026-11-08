@@ -1,0 +1,17 @@
+{
+  "readinessSaid": "La préparation prévoyait {readiness}%. Vous avez obtenu {got}%.",
+  "whatDidYouGet": "Quelle note avez-vous obtenue ?",
+  "save": "Enregistrer",
+  "saveHint": "Pour que BiliMind vérifie la précision de son estimation.",
+  "notConfirmed": "Pas encore confirmé.",
+  "heardInClass": "Entendu en cours",
+  "fromShared": "D'un message partagé",
+  "moodleHasnt": "; absent de Moodle.",
+  "confirmDeadline": "Confirmer l'échéance",
+  "open": "Ouvrir",
+  "due": "Échéance : {when}",
+  "seoTitle": "Échéance · BiliMind",
+  "checkedRight": "J'ai vérifié, c'est exact",
+  "whereCameFrom": "D'où vient cette date",
+  "nothingLinked": "Aucun thème associé pour l'instant. Dès que les consignes ou l'enseignant préciseront le programme, les thèmes apparaîtront ici avec votre niveau de préparation."
+}

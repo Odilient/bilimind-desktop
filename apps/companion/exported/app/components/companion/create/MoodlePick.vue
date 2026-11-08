@@ -78,7 +78,7 @@ function pick(s: Subject): void {
           </span>
           <span
             v-else
-            class="text-[13px] font-semibold text-cobalt opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100 max-[899px]:opacity-100"
+            class="text-[13px] font-semibold text-brand opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100 max-[899px]:opacity-100"
           >Add</span>
         </button>
       </li>

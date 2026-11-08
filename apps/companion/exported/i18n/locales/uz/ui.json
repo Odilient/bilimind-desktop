@@ -1,0 +1,26 @@
+{
+  "moreActions": "Boshqa amallar",
+  "hidePassword": "Parolni yashirish",
+  "showPassword": "Parolni koʻrsatish",
+  "dismiss": "Yopish",
+  "complete": "{n}% bajarildi",
+  "nothing": "(hech narsa)",
+  "week": "search",
+  "upgrade": {
+    "message": "«Markaz» tarifida mavjud: oyiga har bir oʻquvchi uchun $1 (kamida $29), 30 kunlik sinov muddati bilan.",
+    "seePlans": "Tariflarni koʻrish",
+    "ownerChange": "Egasi tarifni Sozlamalarda oʻzgartirishi mumkin."
+  },
+  "looking": "Qidirilmoqda…",
+  "nobody": "Bunday ismli hech kim topilmadi.",
+  "noDate": "Sana belgilanmagan",
+  "clearSearch": "Qidiruvni tozalash",
+  "due": "Muddat",
+  "remove": "{name}ni oʻchirish",
+  "search": "Qidirish",
+  "noData": "Maʼlumot yoʻq",
+  "findPerson": "Shaxsni topish",
+  "change": "Oʻzgartirish",
+  "searchPerson": "Ism yoki email boʻyicha qidirish",
+  "versus": "oldingi davrga nisbatan"
+}

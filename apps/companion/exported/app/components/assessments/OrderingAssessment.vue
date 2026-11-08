@@ -12,6 +12,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * The options arrive scrambled from the generator and the correct sequence lives
  * only in the answer key, so nothing here can reveal it.
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -75,7 +76,7 @@ function move(index: number, delta: number): void {
       :class="disabled && 'opacity-60'"
     >
       <span
-        class="num grid size-[22px] shrink-0 place-items-center rounded-full bg-chip font-display text-[11px] font-semibold text-lime tabular-nums"
+        class="num grid size-[22px] shrink-0 place-items-center rounded-full bg-chip font-display text-[11px] font-semibold text-accent tabular-nums"
         aria-hidden="true"
       >
         {{ index + 1 }}
@@ -88,7 +89,7 @@ function move(index: number, delta: number): void {
           type="button"
           class="grid h-[17px] w-7 cursor-pointer place-items-center rounded-t-[7px] text-text-faint transition hover:bg-surface-sunken hover:text-text disabled:cursor-not-allowed disabled:opacity-30"
           :disabled="disabled || index === 0"
-          :aria-label="`Move “${byId[id]}” earlier`"
+          :aria-label="t('check.assess.moveEarlier', { item: byId[id] })"
           @click="move(index, -1)"
         >
           <svg
@@ -111,7 +112,7 @@ function move(index: number, delta: number): void {
           type="button"
           class="grid h-[17px] w-7 cursor-pointer place-items-center rounded-b-[7px] text-text-faint transition hover:bg-surface-sunken hover:text-text disabled:cursor-not-allowed disabled:opacity-30"
           :disabled="disabled || index === order.length - 1"
-          :aria-label="`Move “${byId[id]}” later`"
+          :aria-label="t('check.assess.moveLater', { item: byId[id] })"
           @click="move(index, 1)"
         >
           <svg

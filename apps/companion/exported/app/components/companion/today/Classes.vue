@@ -22,6 +22,7 @@ import { courseColor } from '~/companion/colors'
 import { clock, dayKey } from '~/companion/time'
 import { classHref, isStudy, notesOf, takeNotes, useNow } from '~/companion/today-layout'
 
+const { t } = useI18n()
 const c = useCompanion()
 const capture = useCapture()
 const now = useNow()
@@ -43,7 +44,7 @@ const missing = computed(() => {
   if (c.connections.value.some((x) => x.kind === 'ics')) return null
   const school = c.connections.value.find((x) => x.kind === 'moodle' || x.kind === 'teams')
   return school
-    ? `${school.kind === 'moodle' ? 'Moodle' : 'Teams'} doesn't send your timetable. Add its calendar link and your classes show up here with their rooms.`
+    ? t('today.classes.missing', { school: school.kind === 'moodle' ? 'Moodle' : 'Teams' })
     : null
 })
 </script>
@@ -56,21 +57,21 @@ const missing = computed(() => {
     <div class="mb-2.5 flex items-baseline justify-between px-0.5">
       <h2
         id="today-classes"
-        class="t-head text-[19px]"
+        class="font-display text-[18px] font-semibold tracking-[-0.02em]"
       >
-        Classes today
+        {{ t('today.classes.title') }}
       </h2>
       <NuxtLink
         to="/app/calendar"
         class="-my-[13px] inline-block py-[13px] text-[12.5px] font-semibold text-brand transition-colors hover:underline"
       >
-        Week
+        {{ t('today.classes.week') }}
       </NuxtLink>
     </div>
 
     <ul
       v-if="classes.length"
-      class="overflow-hidden rounded-[20px] bg-surface shadow-[inset_0_0_0_1px_var(--border),0_24px_48px_-36px_rgb(11_13_16/0.3)]"
+      class="overflow-hidden rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]"
     >
       <li
         v-for="(s, index) in classes"
@@ -92,8 +93,8 @@ const missing = computed(() => {
                 v-if="state(s) === 'now'"
                 class="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent-soft px-2 py-0.5 text-[11.5px] font-semibold text-accent-strong"
               >
-                <span class="size-1.5 animate-pulse-dot rounded-full bg-lime-ink motion-reduce:animate-none" />
-                Now
+                <span class="size-1.5 animate-pulse-dot rounded-full bg-leaf motion-reduce:animate-none" />
+                {{ t('today.classes.now') }}
               </span>
             </span>
             <span class="mt-0.5 flex min-w-0 items-center gap-1.5 text-[12px] text-text-faint">
@@ -120,8 +121,8 @@ const missing = computed(() => {
           <button
             type="button"
             class="grid size-9 cursor-pointer place-items-center rounded-full bg-surface text-text-soft shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors hover:bg-brand-soft hover:text-brand focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
-            :title="notesOf(c, s) ? 'Open your notes' : 'Take notes'"
-            :aria-label="`${notesOf(c, s) ? 'Open your notes for' : 'Take notes in'} ${s.title}`"
+            :title="t(notesOf(c, s) ? 'today.classes.openNotes' : 'today.classes.takeNotes')"
+            :aria-label="t(notesOf(c, s) ? 'today.classes.openNotesFor' : 'today.classes.takeNotesIn', { title: s.title })"
             @click="takeNotes(c, s)"
           >
             <UiIcon
@@ -133,8 +134,8 @@ const missing = computed(() => {
             v-if="false"
             type="button"
             class="grid size-9 cursor-pointer place-items-center rounded-full bg-surface text-text-soft shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors hover:bg-danger-soft hover:text-danger focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
-            title="Record"
-            :aria-label="`Record ${s.title}`"
+            :title="t('today.classes.record')"
+            :aria-label="t('today.classes.recordTitle', { title: s.title })"
             @click="capture.show('record', s.subject_id, s.id)"
           >
             <UiIcon
@@ -154,13 +155,13 @@ const missing = computed(() => {
         {{ missing }}
       </p>
       <UiBtn
-        to="/app/connect"
+        to="/app/settings?section=integrations"
         variant="secondary"
         size="md"
         class="mt-3 max-sm:h-11"
         icon="calendar"
       >
-        Add my timetable
+        {{ t('today.classes.addTimetable') }}
       </UiBtn>
     </div>
   </section>

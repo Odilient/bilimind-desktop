@@ -88,7 +88,8 @@ export function shelfSections(store: CompanionStore): ShelfSection[] {
   for (const s of store.shelf.value) {
     const name = s.group_name?.trim()
     if (!name) {
-      ;(s.format === 'path' ? own : school).push(s)
+      // A centre's class copy is a path that carries the centre's name as its code: it's taught, not one's own.
+      ;(s.format === 'path' && !(s.share_id && s.code) ? own : school).push(s)
       continue
     }
     const key = groupKey(name)

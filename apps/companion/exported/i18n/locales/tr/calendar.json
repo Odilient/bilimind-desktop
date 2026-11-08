@@ -1,0 +1,120 @@
+{
+  "time": {
+    "today": "bugün",
+    "tomorrow": "yarın",
+    "yesterday": "dün",
+    "now": "şimdi",
+    "inMin": "{n} dk sonra",
+    "inH": "{n} sa sonra",
+    "inDays": "{n} gün sonra",
+    "minAgo": "{n} dk önce",
+    "hAgo": "{n} sa önce",
+    "daysAgo": "{n} gün önce",
+    "dh": "{d} g {h} sa",
+    "hMin": "{h} sa {m} dk",
+    "min": "{n} dk",
+    "hm": "{h} sa {m} dk",
+    "h": "{n} sa",
+    "morning": "Günaydın",
+    "afternoon": "Tünaydın",
+    "evening": "İyi akşamlar"
+  },
+  "classes": "{n} ders saati",
+  "deadlines": "{n} son tarih",
+  "month": {
+    "study": "{time} çalışma",
+    "openWeek": "{day} haftasını aç",
+    "moreDue": "{n} son tarih daha"
+  },
+  "grid": {
+    "dueTitle": "Son tarih · {title}",
+    "done": "Bitti",
+    "dueAt": "Teslim {time}: {title}",
+    "hShort": "sa",
+    "mShort": "{n} dk",
+    "min": "{n} dk",
+    "more": "{n} daha",
+    "ofStudy": "{time} çalışma",
+    "showLess": "Daha az göster",
+    "todo": "Yapılacaklar",
+    "todoOn": "{day} günü yapılacaklar"
+  },
+  "views": {
+    "week": "Hafta",
+    "month": "Ay",
+    "agenda": "Tüm son tarihler"
+  },
+  "summary": {
+    "nothingThisWeek": "Bu hafta hiçbir şey yok",
+    "nothingOn": "Program boş",
+    "studyOf": "{time} çalışma",
+    "and": "{list} ve {last}"
+  },
+  "nav": {
+    "prevMonth": "Önceki ay",
+    "prevWeek": "Önceki hafta",
+    "nextMonth": "Sonraki ay",
+    "nextWeek": "Sonraki hafta",
+    "today": "Bugün"
+  },
+  "behind": {
+    "line": "Önceki günlerden {n} görev tamamlanmadı.",
+    "moveToToday": "Bugüne taşı",
+    "movedSuccess": "{n} görev bugüne taşındı"
+  },
+  "plan": {
+    "myWeek": "Haftamı planla",
+    "nextWeek": "Gelecek haftayı planla",
+    "thatWeek": "O haftayı planla",
+    "planned": "Haftanız planlandı",
+    "plannedThat": "O hafta planlandı",
+    "plannedBody": "Taşıdığınız her şey koyduğunuz yerde kalır.",
+    "planError": "Hafta planlanamadı. Bağlantınızı kontrol edip tekrar deneyin."
+  },
+  "timetable": {
+    "notice": "Ders programınızı eklediğinizde ders saatleriniz ve derslikler burada görünür.",
+    "add": "Programımı ekle"
+  },
+  "agenda": {
+    "termDesc": "Her hafta teslim edilecekler. Görmek için bir haftaya dokunun.",
+    "busyTitle": "{n}. hafta en yoğun hafta:",
+    "busyBody": "{list}. Günlük planınız o hafta gelmeden hazırlığa başlar.",
+    "seeWeek": "{n}. haftayı gör",
+    "nothingDue": "Buradan sonra son tarih yok",
+    "nothingDueDesc": "Tarihler Moodle, e-posta ve derslerden gelir. Ya da tarih içeren bir mesaj yapıştırın.",
+    "pasteBtn": "Mesaj yapıştır"
+  },
+  "sync": {
+    "addBtn": "Takviminize ekleyin",
+    "addTitle": "Google, Apple veya Outlook takviminize ekleyin",
+    "modalDesc": "Google, Apple veya Outlook takviminizde dersleriniz, son tarihleriniz ve planınız daima güncel kalır."
+  },
+  "add": "Ekle",
+  "close": "Kapat",
+  "open": "Aç",
+  "undo": "Geri al",
+  "peek": {
+    "added": "{day} gününe eklendi",
+    "addedAt": "{day} günü saat {time} için eklendi",
+    "cancelled": "İptal edildi",
+    "clearTime": "Saati temizle",
+    "doneToast": "{title} tamamlandı olarak işaretlendi",
+    "due": "Teslim: {when}",
+    "newTask": "Yeni görev",
+    "ofGrade": "Notun %{n} kadarı",
+    "placeholder": "Bir görev ekle…",
+    "set": "Ayarla",
+    "setTime": "Saat ayarla",
+    "time": "Saat",
+    "unconfirmed": "Henüz onaylanmadı",
+    "whatToDo": "Ne yapman gerekiyor?",
+    "notHandedIn": "Teslim edilmedi",
+    "notDone": "Tamamlanmadı",
+    "markHandedIn": "Teslim edildi olarak işaretle",
+    "markDone": "Tamamlandı olarak işaretle",
+    "handedInToast": "{title} teslim edildi olarak işaretlendi",
+    "moveToday": "Bugüne taşı",
+    "moveTomorrow": "Yarına taşı",
+    "dayLater": "Daha sonraya taşı"
+  }
+}

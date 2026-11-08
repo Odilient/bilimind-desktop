@@ -75,7 +75,7 @@ onBeforeUnmount(() => {
   >
     <span
       :class="[
-        'absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-cobalt transition-opacity duration-150 group-hover/resize:opacity-100 group-hover/resize:delay-150 group-focus-visible/resize:opacity-100',
+        'absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-brand transition-opacity duration-150 group-hover/resize:opacity-100 group-hover/resize:delay-150 group-focus-visible/resize:opacity-100',
         dragging ? 'opacity-100' : 'opacity-0',
       ]"
     />

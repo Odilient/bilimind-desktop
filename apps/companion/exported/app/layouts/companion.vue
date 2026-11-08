@@ -1,12 +1,11 @@
 <script setup lang="ts">
 /**
- * The companion sits in the product's own shell: the grey desk with the white
- * window floating on it (ShellFrame), the rail on the left (ShellRail) and,
- * on a phone, the bottom bar (ShellBottomNav). It used to draw a menu and a
- * tab bar of its own, which made one product look like two. Both know when
- * they are under `/app`. There the rail hands over to the companion's
- * sidebar (`CompanionShellSidebar`): New chat, Search, Today, Courses, Notes
- * with its "+", the Calendar, the chats, and you; 260px or the 60px rail,
+ * The companion's frame is Daylight 2's (docs/design/daylight2/course.html):
+ * the rail and the sidebar on the warm paper, the page a card on it with a
+ * 46px head, and on a phone the bottom bar (ShellBottomNav). Under `/app` the
+ * rail is the companion's sidebar (`CompanionShellSidebar`): New chat,
+ * Search, Today, Tasks, Courses, Notes with its "+", the Calendar, the
+ * chats, and you; 252px or the 58px rail,
  * floating over a workspace. The phone's bar is Today, Courses, the
  * assistant in the middle, Notes and the Calendar, and its top bar has the
  * menu button that opens the same sidebar as a drawer.
@@ -36,9 +35,6 @@
  * down, so a phone never shows two. A note on the phone is full screen, its toolbar resting
  * on the keyboard: it asks for that with `fullscreen: 'phone'`.
  *
- * In the sample account a one-line strip at the top of the window says so,
- * with the way back to your own.
- *
  * The store loads here once for every screen under `/app`, and what any
  * screen may summon is mounted here: capture (recording, a pasted message,
  * a share from another app), the ⌘K palette (search everything, run a
@@ -47,7 +43,7 @@
  *
  * Keyboard: ⌘K or Ctrl-K the palette (and `/` when nothing is being typed),
  * ⌥Space New chat, `[` the sidebar, g t Today, g c Courses, g n Notes,
- * g k Calendar, g a the chat, g i Waiting for your OK. The old product's own
+ * g k Calendar, g a the chat, g d Tasks. The old product's own
  * ⌘K stands aside here (`useSearchHotkey`), so the two palettes never open
  * together.
  */
@@ -59,7 +55,8 @@ import { usePlatformHooks } from '~/companion/platform'
 import { CHAT_PATH, onChatPage } from '~/companion/ai/routes'
 import { onCheckPage } from '~/companion/checks'
 import { isWorkspace, startNewChat, useSidebar } from '~/companion/sidebar'
-import { companionDemoKind } from '~/utils/companionDemo'
+import { useAi } from '~/companion/ai/state'
+import { setMode } from '~/institution/place'
 
 const c = useCompanion()
 const capture = useCapture()
@@ -71,6 +68,9 @@ const route = useRoute()
 // countdown, its capture hotkey, and files dropped anywhere on the window.
 usePlatformHooks()
 
+// ShellFrame used to do this; the frame is drawn here now (see the template).
+useAppTheme()
+
 useHead({
   title: 'BiliMind',
   meta: [{ name: 'robots', content: 'noindex' }],
@@ -79,21 +79,51 @@ useHead({
 const GO: Record<string, string> = {
   t: '/app',
   c: '/app/courses',
-  i: '/app/inbox',
   k: '/app/calendar',
   n: '/app/notes',
   a: CHAT_PATH,
+  // Tasks and grades: "g d", things to do.
+  d: '/app/tasks',
 }
 
-const demo = computed(() => c.status.mode === 'demo')
-/** Whose sample account: Kamila's semester, or the brand-new one of `?demo=new`. */
-const demoWho = computed(() =>
-  demo.value && companionDemoKind() === 'new'
-    ? 'a new learner on their first day'
-    : 'Kamila, a student in week 8',
-)
-
 const workspace = computed(() => isWorkspace(route))
+
+/*
+ * The card's 46px head on a computer (Daylight 2's `.ui-h`, the same head
+ * every app screen has on the landing): the sidebar's toggle, where you are
+ * (a course's cover first when the screen belongs to one), and the
+ * assistant's toggle. A phone has its own bar (below), so this one is
+ * desktop only.
+ */
+const { t } = useI18n()
+const ai = useAi()
+const PLACES = computed<[RegExp, string, string][]>(() => [
+  [/^\/app\/?$/, t('shell.today'), 'home'],
+  [/^\/app\/tasks/, t('shell.tasks'), 'check-circle'],
+  [/^\/app\/courses/, t('shell.courses'), 'workspace'],
+  [/^\/app\/calendar/, t('shell.calendar'), 'calendar'],
+  [/^\/app\/settings/, t('shell.settings'), 'settings'],
+  [/^\/app\/connect-assistant/, t('shell.placeConnect'), 'plug'],
+  [/^\/app\/openrouter/, 'OpenRouter', 'key'],
+  [/^\/app\/notion/, t('shell.placeNotion'), 'page'],
+  [/^\/app\/chat/, t('shell.placeChat'), 'chat'],
+  [/^\/app\/practice/, t('shell.placePractice'), 'cards'],
+  [/^\/app\/check/, t('shell.placeCheck'), 'check'],
+  [/^\/app\/d\//, t('shell.placeDeadline'), 'flag'],
+  [/^\/app\/(notes|p|b)\b/, t('shell.notes'), 'notebook'],
+  // A student's side of an institution (docs/institutions); staff and parents have their own layout (layouts/org.vue).
+  [/^\/app\/class/, t('shell.placeClass'), 'cap'],
+  [/^\/app\/messages/, t('shell.placeMessages'), 'chat'],
+])
+const here = computed(() => {
+  const hit = PLACES.value.find(([re]) => re.test(route.path))
+  const deadline = route.path.startsWith('/app/d/') ? c.get('deadlines', String(route.params.id ?? '')) : null
+  return {
+    label: deadline?.title ?? hit?.[1] ?? 'BiliMind',
+    icon: hit?.[2] ?? 'home',
+    course: deadline ? c.subjectOf(deadline) : null,
+  }
+})
 /** The chat page is the assistant; nothing of it is docked beside itself. */
 const onChat = computed(() => onChatPage(route.path))
 /** A check is answered without help, so nothing of the assistant is beside it. */
@@ -158,7 +188,7 @@ function onKey(event: KeyboardEvent): void {
  * Shared from another app (Android's share sheet; a no-op everywhere else).
  * One fact opens as the share card over whatever is on screen — the
  * mockup's "Move the deadline?" — so the yes is one tap from the chat it
- * came from. Several go to the Inbox; nothing usable says so and stops.
+ * came from. Several wait on Today; nothing usable says so and stops.
  */
 const toast = useToast()
 let offShare = () => {}
@@ -168,13 +198,13 @@ async function onShared(share: Parameters<Parameters<typeof onShare>[0]>[0]): Pr
   try {
     const signals = await ingestShare({ ingestText: c.ingestText, ingestFile: c.ingestFile }, share)
     // Chat that names no course and changes nothing ("anyone at the library?")
-    // isn't worth a yes: it is set aside rather than left in the Inbox.
+    // isn't worth a yes: it is set aside rather than left waiting on Today.
     const idle = signals.filter((s) => s.status === 'pending' && !s.subject_id && s.facts.every((f) => f.type === 'note'))
     for (const s of idle) void c.dismissSignal(s.id)
     const pending = signals.filter((s) => s.status === 'pending' && !idle.includes(s))
     if (pending.length === 1) capture.showSignal(pending[0]!)
     else if (pending.length > 1) {
-      await navigateTo('/app/inbox')
+      await navigateTo('/app')
       toast.info({ title: `${pending.length} things to check`, body: 'From what you just shared.' })
     } else if (signals.length && !idle.length) {
       toast.success('Already in: nothing needs your yes.')
@@ -188,6 +218,8 @@ async function onShared(share: Parameters<Parameters<typeof onShare>[0]>[0]): Pr
 }
 
 onMounted(() => {
+  // Staff and parents who come back to their own study open here next time (institution/place.ts).
+  setMode('study')
   window.addEventListener('keydown', onKey)
   offShare = onShare(onShared)
   // Dev builds only: `__bmShare('text')` in the console runs a share through
@@ -204,23 +236,33 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <ShellFrame>
+  <!-- Daylight 2's frame (docs/design/daylight2/course.html): the rail and the
+       sidebar sit on the warm paper, and the page is a card on it, 8px in
+       from the edges. A workspace draws its own card (its left column stays
+       on the paper beside it); a phone has no paper, the page is the screen. -->
+  <div class="flex h-dvh overflow-hidden bg-bg text-text">
     <!-- Under `/app` the rail is the companion's sidebar (it carries the bell). -->
     <ShellRail />
 
-    <div class="flex min-w-0 flex-1 flex-col">
+    <div
+      :class="[
+        'flex min-w-0 flex-1 flex-col',
+        !workspace &&
+          'bg-surface lg:my-2 lg:mr-2 lg:overflow-hidden lg:rounded-[14px] lg:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]',
+      ]"
+    >
       <!-- The phone's bar, drawn as the old pages draw theirs (ShellPageHead):
            where you are, and you. -->
       <header
         v-if="!workspace && pageHeads === 0"
-        :class="['cp-safe-top shrink-0 border-b border-border bg-surface/92 backdrop-blur-[14px] lg:hidden', phoneFull && 'max-[899px]:hidden']"
+        :class="['cp-safe-top shrink-0 border-b border-border bg-surface/94 backdrop-blur-[14px] lg:hidden', phoneFull && 'max-[899px]:hidden']"
       >
         <div class="flex h-[52px] items-center gap-1 px-2">
           <!-- The sidebar, as a drawer: New chat, the places, the chats. -->
           <button
             type="button"
             class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-text-soft transition-colors active:bg-surface-sunken"
-            aria-label="Menu"
+            :aria-label="t('shell.menu')"
             aria-haspopup="dialog"
             :aria-expanded="sidebar.drawer.value"
             @click="sidebar.drawer.value = true"
@@ -234,15 +276,19 @@ onBeforeUnmount(() => {
           <NuxtLink
             to="/app"
             class="flex min-h-11 min-w-0 flex-1 items-center gap-2"
-            aria-label="BiliMind, Today"
+            :aria-label="t('shell.todayAria')"
           >
-            <UiBrandMark class="size-[26px] shrink-0" />
+            <CompanionAiBilim
+              :size="24"
+              still
+              class="shrink-0"
+            />
             <span class="truncate font-display text-[18px] font-semibold tracking-[-0.025em]">BiliMind</span>
           </NuxtLink>
           <button
             type="button"
             class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-text-soft transition-colors active:bg-surface-sunken"
-            aria-label="Search, or ask"
+            :aria-label="t('shell.searchAsk')"
             @click="palette.show()"
           >
             <UiIcon
@@ -255,20 +301,74 @@ onBeforeUnmount(() => {
         </div>
       </header>
 
-      <div
-        v-if="demo"
-        class="flex shrink-0 items-center justify-center gap-3 border-b border-brand-line bg-brand-soft px-4 py-2 text-[13.5px] text-text-body"
+      <header
+        v-if="!workspace"
+        class="hidden h-[46px] shrink-0 items-center gap-1.5 border-b border-border px-2 text-[13px] whitespace-nowrap lg:flex"
       >
-        <span class="max-lg:hidden">Sample account: {{ demoWho }}. Nothing here is saved.</span>
-        <span class="lg:hidden">Sample account. Nothing is saved.</span>
-        <NuxtLink
-          to="/app?demo=0"
-          class="font-semibold text-brand underline underline-offset-4 hover:no-underline"
+        <button
+          type="button"
+          class="grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[8px] text-text-faint transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
+          :title="`${sidebar.pinned.value ? t('shell.hideSidebar') : t('shell.showSidebar')} ( [ )`"
+          :aria-label="sidebar.pinned.value ? t('shell.hideSidebar') : t('shell.showSidebar')"
+          :aria-expanded="sidebar.pinned.value"
+          @click="sidebar.toggle(false)"
         >
-          <span class="max-lg:hidden">Use my own account</span>
-          <span class="lg:hidden">Use mine</span>
-        </NuxtLink>
-      </div>
+          <UiIcon
+            name="panel-left"
+            :size="16"
+            :stroke="1.9"
+          />
+        </button>
+        <template v-if="here.course">
+          <NuxtLink
+            :to="`/app/courses/${here.course.id}`"
+            class="ml-1 flex min-w-0 items-center gap-1.5 text-text-faint transition-colors hover:text-text"
+          >
+            <CompanionCourseCover
+              :subject="here.course"
+              size="sm"
+              :px="18"
+            />
+            <span class="truncate">{{ here.course.title }}</span>
+          </NuxtLink>
+          <UiIcon
+            name="chevron-right"
+            :size="13"
+            class="shrink-0 text-text-ghost"
+          />
+        </template>
+        <span
+          v-else
+          class="ml-1 grid size-[22px] shrink-0 place-items-center rounded-[6px] bg-[rgb(var(--wash-rgb)/0.065)] text-text-soft"
+        >
+          <CompanionIcon
+            :name="here.icon"
+            :size="13"
+            :stroke="1.9"
+          />
+        </span>
+        <span class="min-w-0 truncate font-bold tracking-[-0.01em] text-text">{{ here.label }}</span>
+        <span class="flex-1" />
+        <!-- Daylight 2's assistant toggle: the chat and a check have none. -->
+        <button
+          v-if="!onChat && !onCheck"
+          type="button"
+          :class="[
+            'grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[8px] transition-colors focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none',
+            ai.visible.value ? 'bg-accent-soft text-accent-strong' : 'text-text-faint hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
+          ]"
+          :title="`${t('shell.askBilim')} (⌘J)`"
+          :aria-label="t('shell.askBilim')"
+          :aria-expanded="ai.visible.value"
+          @click="ai.toggle()"
+        >
+          <UiIcon
+            name="spark"
+            :size="16"
+            :stroke="1.9"
+          />
+        </button>
+      </header>
 
       <CompanionRecordingPill />
       <CompanionFocusPill />
@@ -292,18 +392,17 @@ onBeforeUnmount(() => {
           role="alert"
         >
           <h1 class="t-head text-[22px]">
-            Your courses didn't load
+            {{ t('shell.loadFailed') }}
           </h1>
           <p class="text-[14.5px] text-text-muted">
-            {{ c.status.error }} Nothing is lost: everything on this device is still here
-            once the connection is back.
+            {{ c.status.error }} {{ t('shell.loadFailedBody') }}
           </p>
           <div>
             <UiBtn
               variant="primary"
               @click="c.load(true)"
             >
-              Try again
+              {{ t('common.retry') }}
             </UiBtn>
           </div>
         </div>
@@ -319,10 +418,17 @@ onBeforeUnmount(() => {
     <!-- The assistant docked beside every screen that has no dock of its own:
          a workspace mounts its own, and the chat page and Today's box are
          the assistant (there the corner button opens it as a drawer). -->
-    <CompanionAiPanel v-if="!workspace && !onChat && !onToday && !onCheck" />
+    <!-- Its own card beside the page, as in the workspace mock; empty (the
+         dock closed) it takes no room at all. -->
+    <div
+      v-if="!workspace && !onChat && !onToday && !onCheck"
+      class="shrink-0 empty:hidden max-xl:hidden xl:my-2 xl:mr-2 xl:overflow-hidden xl:rounded-[14px] xl:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] [&>aside]:h-full [&>aside]:border-l-0"
+    >
+      <CompanionAiPanel />
+    </div>
 
     <CompanionCaptureSheet />
     <CompanionPalette />
     <CompanionAiHost />
-  </ShellFrame>
+  </div>
 </template>

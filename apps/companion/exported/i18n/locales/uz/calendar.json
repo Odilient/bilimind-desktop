@@ -1,0 +1,120 @@
+{
+  "time": {
+    "today": "bugun",
+    "tomorrow": "ertaga",
+    "yesterday": "kecha",
+    "now": "hozir",
+    "inMin": "{n} daqiqada",
+    "inH": "{n} soatda",
+    "inDays": "{n} kunda",
+    "minAgo": "{n} daqiqa oldin",
+    "hAgo": "{n} soat oldin",
+    "daysAgo": "{n} kun oldin",
+    "dh": "{d} k {h} s",
+    "hMin": "{h} s {m} daq",
+    "min": "{n} daq",
+    "hm": "{h} s {m} d",
+    "h": "{n} s",
+    "morning": "Xayrli tong",
+    "afternoon": "Xayrli kun",
+    "evening": "Xayrli kech"
+  },
+  "classes": "{n} mashgʻulot",
+  "deadlines": "{n} muddat",
+  "month": {
+    "study": "{time} oʻqish",
+    "openWeek": "{day} haftasini ochish",
+    "moreDue": "yana {n} ta"
+  },
+  "grid": {
+    "dueTitle": "Muddat · {title}",
+    "done": "Bajarildi",
+    "dueAt": "Muddati {time}: {title}",
+    "hShort": "soat",
+    "mShort": "{n} daq",
+    "min": "{n} daq",
+    "more": "Yana {n} ta",
+    "ofStudy": "{time} o’qish",
+    "showLess": "Kamroq ko’rsatish",
+    "todo": "Bajarish kerak",
+    "todoOn": "{day} kuni bajarish kerak"
+  },
+  "views": {
+    "week": "Hafta",
+    "month": "Oy",
+    "agenda": "Barcha muddatlar"
+  },
+  "summary": {
+    "nothingThisWeek": "Bu haftada hech narsa yoʻq",
+    "nothingOn": "Reja yoʻq",
+    "studyOf": "{time} oʻqish",
+    "and": "{list} va {last}"
+  },
+  "nav": {
+    "prevMonth": "Oldingi oy",
+    "prevWeek": "Oldingi hafta",
+    "nextMonth": "Keyingi oy",
+    "nextWeek": "Keyingi hafta",
+    "today": "Bugun"
+  },
+  "behind": {
+    "line": "Avvalgi kunlardan {n} ta vazifa bajarilmagan.",
+    "moveToToday": "Bugunga koʻchirish",
+    "movedSuccess": "{n} ta vazifa bugunga koʻchirildi"
+  },
+  "plan": {
+    "myWeek": "Haftamni rejalashtirish",
+    "nextWeek": "Keyingi haftani rejalashtirish",
+    "thatWeek": "Oʻsha haftani rejalashtirish",
+    "planned": "Haftangiz rejalashtirildi",
+    "plannedThat": "Oʻsha hafta rejalashtirildi",
+    "plannedBody": "Koʻchirilgan barcha narsalar oʻz joyida qoladi.",
+    "planError": "Haftani rejalashtirib boʻlmadi. Bogʻlanishni tekshirib qayta urining."
+  },
+  "timetable": {
+    "notice": "Dars jadvalingiz kiritilgach, mashgʻulotlar vaqti va xonalari bilan shu yerda koʻrinadi.",
+    "add": "Jadvalimni qoʻshish"
+  },
+  "agenda": {
+    "termDesc": "Har haftada qancha muddat bor. Koʻrish uchun haftani bosing.",
+    "busyTitle": "{n}-hafta eng band:",
+    "busyBody": "{list}. Kunlik reja ular kelishidan oldin tayyorgarlikni boshlaydi.",
+    "seeWeek": "{n}-haftani koʻrish",
+    "nothingDue": "Hozircha boshqa muddat yoʻq",
+    "nothingDueDesc": "Sanalar Moodle, xatlar va maʼruzalardan keladi. Yoki sana yozilgan xabarni qoʻying.",
+    "pasteBtn": "Xabarni qoʻyish"
+  },
+  "sync": {
+    "addBtn": "Taqvimga qoʻshish",
+    "addTitle": "Google, Apple yoki Outlook taqvimiga qoʻshish",
+    "modalDesc": "Google, Apple yoki Outlook taqvimida mashgʻulotlar, muddatlar va rejangiz har doim yangilanib turadi."
+  },
+  "add": "Qo’shish",
+  "close": "Yopish",
+  "open": "Ochish",
+  "undo": "Bekor qilish",
+  "peek": {
+    "added": "{day} kuniga qo’shildi",
+    "addedAt": "{day} soat {time} ga qo’shildi",
+    "cancelled": "Bekor qilindi",
+    "clearTime": "Vaqtni tozalash",
+    "doneToast": "{title} bajarildi deb belgilandi",
+    "due": "Muddati: {when}",
+    "newTask": "Yangi vazifa",
+    "ofGrade": "Bahoning {n}% qismi",
+    "placeholder": "Vazifa qo’shish…",
+    "set": "Belgilash",
+    "setTime": "Vaqtni belgilash",
+    "time": "Vaqt",
+    "unconfirmed": "Hali tasdiqlanmagan",
+    "whatToDo": "Nima qilishingiz kerak?",
+    "notHandedIn": "Topshirilmagan",
+    "notDone": "Bajarilmagan",
+    "markHandedIn": "Topshirildi deb belgilash",
+    "markDone": "Bajarildi deb belgilash",
+    "handedInToast": "{title} topshirildi deb belgilandi",
+    "moveToday": "Bugunga ko’chirish",
+    "moveTomorrow": "Ertaga ko’chirish",
+    "dayLater": "Keyinroqqa ko’chirish"
+  }
+}

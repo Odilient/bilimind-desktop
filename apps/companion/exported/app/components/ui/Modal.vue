@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     title?: string
@@ -71,14 +72,14 @@ onBeforeUnmount(() => {
       >
         <div
           v-if="open"
-          class="fixed inset-0 z-100 flex items-end justify-center overflow-y-auto p-0 sm:items-center sm:p-6"
+          class="fixed inset-0 z-100 flex justify-center overflow-y-auto p-0 sm:p-6"
           role="dialog"
           aria-modal="true"
           :aria-labelledby="title ? `${uid}-title` : undefined"
           @keydown="onKeydown"
         >
           <div
-            class="fixed inset-0 bg-[rgb(6_9_30/0.62)] backdrop-blur-[10px]"
+            class="fixed inset-0 bg-[rgb(30_24_14/0.32)] backdrop-blur-[4px]"
             @click="close"
           />
 
@@ -86,7 +87,9 @@ onBeforeUnmount(() => {
             ref="panel"
             tabindex="-1"
             :class="[
-              'pop-in relative w-full rounded-t-[26px] bg-surface shadow-[0_0_0_1px_rgb(var(--wash-rgb)/0.06),0_40px_80px_-20px_rgb(0_0_0/0.6)] outline-none sm:rounded-[26px]',
+              // Auto margins rather than the overlay's align-items: centred, or at the
+              // foot on a phone, yet a dialog taller than the window scrolls to its top.
+              'pop-in relative mt-auto w-full rounded-t-[26px] sm:mb-auto bg-surface shadow-[0_0_0_1px_rgb(var(--wash-rgb)/0.06),0_40px_80px_-20px_rgb(0_0_0/0.6)] outline-none sm:rounded-[26px]',
               widths[size],
             ]"
           >
@@ -115,7 +118,7 @@ onBeforeUnmount(() => {
                 size="sm"
                 square
                 icon="x"
-                label="Close"
+                :label="t('common.close')"
                 class="-mt-1 -mr-1.5"
                 @click="close"
               />

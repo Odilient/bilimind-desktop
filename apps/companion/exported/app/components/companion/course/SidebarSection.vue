@@ -25,15 +25,15 @@ const emit = defineEmits<{ toggle: []; add: [] }>()
 </script>
 
 <template>
-  <section class="pt-1">
-    <div class="group/section flex h-8 items-center gap-1 rounded-[10px] pr-1 pl-0.5 transition-colors hover:bg-surface-mute">
+  <section class="pt-2">
+    <div class="group/section flex h-7 items-center gap-1 rounded-[8px] pr-1 pl-0.5 transition-colors hover:bg-[rgb(var(--wash-rgb)/0.035)]">
       <button
         type="button"
-        class="flex h-full min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded-[10px] text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt"
+        class="flex h-full min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded-[10px] text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
         :aria-expanded="open"
         @click="emit('toggle')"
       >
-        <span class="grid size-5 shrink-0 place-items-center text-[#a5a9b4] transition-colors group-hover/section:text-text-soft">
+        <span class="grid size-5 shrink-0 place-items-center text-text-faint transition-colors group-hover/section:text-text-soft">
           <UiIcon
             name="chevron-down"
             :size="12"
@@ -41,10 +41,10 @@ const emit = defineEmits<{ toggle: []; add: [] }>()
             :class="['transition-transform duration-150', !open && '-rotate-90']"
           />
         </span>
-        <span class="min-w-0 truncate font-display text-[13px] font-semibold tracking-[-0.01em] text-text">{{ title }}</span>
+        <span class="min-w-0 truncate text-[12px] font-semibold text-text-muted">{{ title }}</span>
         <span
           v-if="count"
-          class="num shrink-0 text-[11.5px] text-text-faint"
+          class="num ml-auto shrink-0 pr-1 text-[12px] font-semibold text-text-muted"
         >{{ count }}</span>
       </button>
       <div
@@ -58,7 +58,7 @@ const emit = defineEmits<{ toggle: []; add: [] }>()
         type="button"
         :title="addLabel"
         :aria-label="addLabel"
-        class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-[7px] text-text-faint opacity-0 transition-[opacity,background-color,color] duration-150 group-hover/section:opacity-100 hover:bg-surface-track hover:text-text focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-cobalt max-lg:opacity-100"
+        class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-[7px] text-text-faint opacity-0 transition-[opacity,background-color,color] duration-150 group-hover/section:opacity-100 hover:bg-surface-track hover:text-text focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-brand max-lg:opacity-100"
         @click="emit('add')"
       >
         <UiIcon

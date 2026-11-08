@@ -4,8 +4,9 @@
  * makes, in the app's own ink. A course is a row of beads on a path (some
  * walked, one current), flashcards a small stack, a mind map a node with
  * branches, a study plan a week of cells, "Check my attempt" a page of
- * scribbled working with a tick, and "Just ask" an empty page with a caret. No images: strokes in the faint ink, the one accent in cobalt,
- * or in the course's colour on a tile made for one of the learner's own
+ * scribbled working with a tick, and "Just ask" an empty page with a caret. No images: strokes in the faint ink, the one accent in
+ * the kind's Daylight colour (a course is leaf, a quiz lilac…), or in the
+ * course's colour on a tile made for one of the learner's own
  * courses, so it reads as theirs at a glance. Light and dark both, because
  * it is only tokens and `currentColor`.
  */
@@ -14,18 +15,32 @@ import type { MakeThumb } from '~/companion/ai/make'
 withDefaults(
   defineProps<{
     kind: MakeThumb
-    /** A CSS colour for the accent (a course's); cobalt when left out. */
+    /** A CSS colour for the accent (a course's); the kind's own colour when left out. */
     accent?: string | null
   }>(),
   { accent: null },
 )
+
+/** Each kind keeps one colour everywhere it is drawn, the way the landing's feature tiles do. */
+const KIND_INK: Record<MakeThumb, string> = {
+  blank: 'var(--text-muted)',
+  course: 'var(--leaf)',
+  attempt: 'var(--rose)',
+  notes: 'var(--sky)',
+  cards: 'var(--apricot)',
+  quiz: 'var(--lilac)',
+  map: 'var(--sky)',
+  plan: 'var(--leaf)',
+  summary: 'var(--apricot)',
+  exam: 'var(--rose)',
+}
 </script>
 
 <template>
   <svg
     viewBox="0 0 80 56"
     class="block size-full text-text-faint"
-    :style="{ '--thumb': accent ?? 'var(--cobalt)' }"
+    :style="{ '--thumb': accent ?? KIND_INK[kind] }"
     fill="none"
     stroke="currentColor"
     stroke-width="1.6"

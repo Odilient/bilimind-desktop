@@ -230,14 +230,14 @@ function stuck(): void {
           :is="canOpen(a) ? 'button' : 'span'"
           :type="canOpen(a) ? 'button' : undefined"
           :class="[
-            'flex h-9 max-w-[240px] min-w-0 items-center gap-2 rounded-[12px] bg-surface pr-3 pl-1 text-left text-[12.5px] text-text-body shadow-[inset_0_0_0_1px_var(--border)] transition-[background-color,box-shadow] duration-150',
-            canOpen(a) && 'cursor-pointer hover:bg-surface-sunken hover:shadow-[inset_0_0_0_1px_transparent] focus-visible:bg-surface-sunken',
+            'flex h-9 max-w-[240px] min-w-0 items-center gap-2 rounded-full bg-surface pr-3.5 pl-1 text-left text-[12.5px] text-text shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-[background-color,box-shadow] duration-150',
+            canOpen(a) && 'cursor-pointer hover:bg-surface-chrome hover:shadow-[0_0_0_1px_var(--border-field),var(--shadow-card)] focus-visible:bg-surface-chrome',
           ]"
           :title="a.url ?? a.label"
           @click="canOpen(a) && openGiven(a)"
         >
           <span
-            class="grid size-7 shrink-0 place-items-center rounded-[9px] bg-surface-sunken"
+            class="grid size-7 shrink-0 place-items-center rounded-full bg-surface shadow-[0_0_0_1px_var(--border)]"
             :class="attachmentLook(a).tone"
           >
             <CompanionIcon
@@ -245,24 +245,24 @@ function stuck(): void {
               :size="14"
             />
           </span>
-          <span class="truncate font-medium">{{ a.label }}</span>
+          <span class="truncate font-semibold">{{ a.label }}</span>
         </component>
       </li>
     </ul>
     <div
       v-if="message.quote"
-      class="flex max-w-[88%] items-start gap-1.5 rounded-[12px] px-2.5 py-1.5 text-[12px] leading-[1.45] text-text-muted shadow-[inset_0_0_0_1px_var(--border)]"
+      class="flex max-w-[88%] items-start gap-1.5 rounded-[9px] bg-surface-sunken px-2.5 py-1.5 text-[12.5px] leading-[1.45] text-text-muted"
     >
       <UiIcon
         name="chat"
         :size="12"
-        class="mt-[2px] shrink-0 text-text-faint"
+        class="mt-[3px] shrink-0 text-text-faint"
       />
-      <span class="line-clamp-2 italic">{{ message.quote }}</span>
+      <span class="line-clamp-2">{{ message.quote }}</span>
     </div>
     <p
       :class="[
-        'max-w-[88%] rounded-[18px] rounded-br-[6px] bg-surface-sunken px-3.5 py-2 whitespace-pre-wrap text-text',
+        'max-w-[88%] rounded-[14px] rounded-br-[4px] bg-bg px-3 py-2 whitespace-pre-wrap text-text shadow-[inset_0_0_0_1px_var(--border)]',
         variant === 'page' ? 'text-[15px] leading-[1.55]' : 'text-[14px] leading-[1.5]',
       ]"
     >
@@ -275,16 +275,11 @@ function stuck(): void {
     v-else
     class="group/msg flex gap-2.5"
   >
-    <span
-      :class="[
-        'mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-ink text-lime',
-        waiting && 'animate-pulse-dot',
-      ]"
-      aria-hidden="true"
-    >
-      <UiIcon
-        name="spark"
-        :size="12"
+    <!-- Bili: thinking until the first words arrive. -->
+    <span class="grid w-6 shrink-0 justify-items-center pt-0.5">
+      <CompanionAiBilim
+        :size="22"
+        :mood="waiting ? 'think' : 'idle'"
       />
     </span>
 
@@ -292,12 +287,16 @@ function stuck(): void {
       <!-- What it is reading, until the first words arrive. -->
       <p
         v-if="showStatus"
-        class="ai-status pt-[3px] text-[13px] text-text-muted"
+        class="flex min-h-6 items-center gap-2.5 text-[13px] text-text-muted"
       >
-        {{ message.status || 'Thinking…' }}
+        <span class="ai-status min-w-0">{{ message.status || 'Thinking' }}</span>
+        <span
+          class="ai-dots"
+          aria-hidden="true"
+        ><i /><i /><i /></span>
         <span
           v-if="waited"
-          class="num ml-1 text-text-faint"
+          class="num text-text-faint"
         >{{ waited }}</span>
       </p>
 
@@ -332,16 +331,18 @@ function stuck(): void {
           :size="15"
           class="mt-px shrink-0"
         />
-        <span class="min-w-0 flex-1">{{ message.error }}</span>
-        <NuxtLink
+        <!-- Out of AI: the reason and every way forward, as links. -->
+        <CompanionOutOfAi
           v-if="message.limited"
-          to="/app/settings?section=usage"
-          class="shrink-0 font-semibold underline underline-offset-4 hover:no-underline"
-        >
-          Usage
-        </NuxtLink>
+          :reason="message.error"
+          class="min-w-0 flex-1"
+        />
+        <span
+          v-else
+          class="min-w-0 flex-1"
+        >{{ message.error }}</span>
         <button
-          v-else-if="last"
+          v-if="!message.limited && last"
           type="button"
           class="shrink-0 cursor-pointer font-semibold underline underline-offset-4 hover:no-underline"
           @click="emit('retry')"
@@ -355,19 +356,20 @@ function stuck(): void {
         v-if="!message.pending && cites.length"
         class="mt-3 flex flex-wrap items-center gap-1.5"
       >
-        <span class="mr-0.5 text-[11.5px] font-medium text-text-faint">Sources</span>
+        <span class="mr-0.5 text-[12px] font-semibold text-text-faint">Sources</span>
+        <!-- The landing's "with its source" pill, numbered the way the answer cites it. -->
         <button
           v-for="(cite, i) in sources"
           :key="`${cite.kind}:${cite.id}:${i}`"
           type="button"
-          class="inline-flex h-7 max-w-[220px] cursor-pointer items-center gap-1.5 rounded-full bg-surface-sunken pr-2.5 pl-1 text-[12px] text-text-body transition-colors hover:bg-surface-track focus-visible:bg-surface-track"
+          class="inline-flex h-8 max-w-[240px] cursor-pointer items-center gap-1.5 rounded-full bg-surface pr-3 pl-1 text-[12.5px] font-semibold text-text shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-[background-color,box-shadow] duration-150 hover:bg-surface-chrome hover:shadow-[0_0_0_1px_var(--border-field),var(--shadow-card)] focus-visible:bg-surface-chrome max-lg:h-10"
           :title="cite.quote ? `${cite.label}: “${cite.quote}”` : cite.label"
           @click="openCite(cite)"
         >
-          <span class="num grid size-5 shrink-0 place-items-center rounded-full bg-surface text-[10.5px] font-semibold text-text-soft">{{ i + 1 }}</span>
+          <span class="num grid size-6 shrink-0 place-items-center rounded-full bg-sky-soft text-[10.5px] font-bold text-sky-ink">{{ i + 1 }}</span>
           <CompanionIcon
             :name="citationIcon(store, cite)"
-            :size="12"
+            :size="13"
             class="shrink-0 text-text-faint"
           />
           <span class="truncate">{{ cite.label }}</span>
@@ -375,7 +377,7 @@ function stuck(): void {
         <button
           v-if="cites.length > 4 && !allSources"
           type="button"
-          class="h-7 cursor-pointer rounded-full px-2 text-[12px] font-semibold text-text-muted hover:text-text"
+          class="h-8 cursor-pointer rounded-full px-2.5 text-[12.5px] font-semibold text-text-muted shadow-[inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-sunken hover:text-text max-lg:h-10"
           @click="allSources = true"
         >
           +{{ cites.length - 4 }}
@@ -522,11 +524,11 @@ function stuck(): void {
   height: 17px;
   margin: 0 1px 0 3px;
   padding: 0 4px;
-  border-radius: 6px;
-  background: var(--surface-sunken);
-  color: var(--text-soft);
+  border-radius: 5px;
+  background: var(--sky-soft);
+  color: var(--sky-ink);
   font-size: 10.5px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
   vertical-align: 1.5px;
@@ -536,8 +538,8 @@ function stuck(): void {
 
 .ai-prose :deep(.ai-cite:hover),
 .ai-prose :deep(.ai-cite:focus-visible) {
-  background: var(--brand-soft);
-  color: var(--brand);
+  background: var(--sky);
+  color: var(--surface);
 }
 
 .ai-prose :deep(.ai-caret) {
@@ -551,9 +553,53 @@ function stuck(): void {
   animation: ai-blink 1s ease-in-out infinite;
 }
 
-/* The status line breathes while it waits, so a slow answer still looks alive. */
+/* The status line breathes while it waits, and three dots hop beside it, so a
+   slow answer still looks alive. */
 .ai-status {
   animation: ai-breathe 1.6s ease-in-out infinite;
+}
+
+.ai-dots {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--text-muted);
+  animation: ai-hop 1.2s cubic-bezier(0.4, 0.14, 0.3, 1) infinite;
+}
+
+.ai-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ai-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes ai-hop {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-status,
+  .ai-dots i {
+    animation: none;
+  }
 }
 
 @keyframes ai-blink {

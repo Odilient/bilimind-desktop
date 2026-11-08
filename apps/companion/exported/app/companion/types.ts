@@ -48,7 +48,7 @@ export interface Subject extends Row {
   code: string | null
   color: CourseColor
   lecturer: string | null
-  source: 'moodle' | 'canvas' | 'teams' | 'ics' | 'manual' | 'generated' | 'public' | 'import'
+  source: 'moodle' | 'canvas' | 'teams' | 'ics' | 'manual' | 'generated' | 'public' | 'import' | 'classroom'
   source_ref: string | null
   source_url: string | null
   format: 'weeks' | 'path'
@@ -67,6 +67,18 @@ export interface Subject extends Row {
    * can only make the assistant stricter; there is no switch that loosens it.
    */
   try_first: boolean
+  /** Daylight 2 (gaps): the overall mark aimed for, 0-100 (`grades.ts` `neededOnRest`); null for none. */
+  grade_target?: number | null
+  /**
+   * Daylight 2 (gaps): the class share this course is part of (`shares.ts`),
+   * as its owner or a member; null for a course of one's own. Set by the server.
+   */
+  share_id?: Uuid | null
+  /**
+   * The cover's picture: a glyph key from `COURSE_ICONS` or one emoji; null
+   * lets `courseIcon()` pick one from the title (`companion/course-icons.ts`).
+   */
+  icon?: string | null
 }
 
 export interface Slot extends Row {
@@ -100,6 +112,26 @@ export interface Session extends Row {
 
 export type ItemKind = 'page' | 'board' | 'file' | 'recording' | 'photo' | 'link'
 
+/**
+ * Imports and links: a link's preview (`Item.meta.link`). `embed_url`
+ * is a player or viewer on the service's own host, set only when the thing is
+ * public; a private Canva or Figma design has a title and no embed.
+ */
+export interface LinkPreview {
+  url: string
+  title: string | null
+  provider: string | null
+  thumbnail: string | null
+  embed_url: string | null
+}
+
+/** Recording: one line of a recording's transcript, in seconds from its start. */
+export interface TranscriptLine {
+  start: number
+  end: number | null
+  text: string
+}
+
 export interface Item extends Row {
   /** `null` = the Notebook. */
   subject_id: Uuid | null
@@ -118,7 +150,7 @@ export interface Item extends Row {
     url?: string
     template?: string
     icon?: string
-    /** A seeded page's first text, set out once by the editor (the demo seed). */
+    /** A seeded page's first text, set out once by the editor (a server or starter-kit seed). */
     seed_html?: string
     /** One of the starter kit's sample notes (`companion/samples.ts`). */
     sample?: true
@@ -132,8 +164,41 @@ export interface Item extends Row {
      */
     suggested_subject_id?: string | null
     suggested_session_id?: string | null
+    /**
+     * Planner and inbox: answered in the Inbox ("Keep in My notes"),
+     * so an arrival from outside stops asking where it goes (`companion/inbox.ts`).
+     */
+    inbox_done_at?: IsoDateTime | null
+    /**
+     * Google: the Google Doc this page was last saved to, so the next
+     * "Update in Google Docs" replaces it (`companion/google/docs.ts`).
+     */
+    google_doc?: { id: string; url: string }
+    /*
+     * Recording. A desktop recording is kept on the computer that
+     * made it (`on_device`), never uploaded, so it has no `path` (which the
+     * server reads as its own stored file). `screen`: it has a picture.
+     * `transcript` is written on that computer (`companion/transcribe/`); the
+     * server already reads it as `[{start, text}]` (CourseMaterial), and
+     * `transcribed_s` is how far it got, so a stopped one carries on.
+     */
+    on_device?: boolean
+    screen?: boolean
+    transcript?: TranscriptLine[]
+    transcribed_s?: number
+    /**
+     * Imports and links: what a link is, read once from the service
+     * (POST /companion/links/unfurl; `companion/imports/links.ts`), and the
+     * deadline it sits on, when it was added there (the link is then in the
+     * deadline's course too).
+     */
+    link?: LinkPreview
+    deadline_id?: Uuid | null
   }
   source: 'made' | 'moodle' | 'canvas' | 'ics' | 'email' | 'share' | 'generated' | 'import'
+    // MCP: a note or link ChatGPT or Claude added; `source_ref` is
+    // `assistant:chatgpt` / `assistant:claude`.
+    | 'assistant'
   source_ref: string | null
   /** A signed, short-lived link to the stored file (http mode); fetched again when it runs out. */
   file_url?: string | null
@@ -159,7 +224,7 @@ export type DeadlineKind =
 
 export interface DeadlineSource extends Row {
   deadline_id: Uuid
-  kind: 'moodle' | 'teams' | 'canvas' | 'ics' | 'email' | 'transcript' | 'share' | 'classmate' | 'user' | 'photo' | 'pdf'
+  kind: 'moodle' | 'teams' | 'canvas' | 'ics' | 'email' | 'transcript' | 'share' | 'classmate' | 'user' | 'photo' | 'pdf' | 'classroom'
   confidence: Confidence
   evidence: string
   url: string | null
@@ -183,6 +248,13 @@ export interface Deadline extends Row {
   confirmed: boolean
   scope_note: string | null
   grade: number | null
+  /** Tasks as a board: Doing since then; null while it is to do. Done is still `status`. */
+  started_at?: IsoDateTime | null
+  /** Tasks as a tracker: the learner's own say, never the school's (an LMS sync leaves these). */
+  priority?: Priority
+  /** The learner's own note; `scope_note` is what the school says it covers. */
+  notes?: string | null
+  checklist?: ChecklistItem[] | null
   /**
    * What readiness said on the due date, stored by the server when the grade
    * comes in (from the LMS or typed by the learner): "Readiness said 70%. You
@@ -213,7 +285,12 @@ export interface Card extends Row {
 }
 
 export interface PlanTask extends Row {
-  date: IsoDate
+  /**
+   * The day it's for. Tasks and grades: null only for a task of the
+   * learner's own that has no day yet ("No date" on /app/tasks); the server
+   * refuses a dateless task of any other kind. An own task's `detail` is its note.
+   */
+  date: IsoDate | null
   subject_id: Uuid | null
   deadline_id: Uuid | null
   topic_id: Uuid | null
@@ -231,6 +308,31 @@ export interface PlanTask extends Row {
   position: number
   done_at: IsoDateTime | null
   generated_at: IsoDateTime
+  /**
+   * Planner and inbox: the day the plan first put it on, once the
+   * learner moved it to another (the Calendar's week, "Do it tomorrow").
+   * Set by the server only; while it's set the planner leaves the task where
+   * it is and doesn't plan it again on the day it left. Never on `own` tasks.
+   */
+  moved_from?: IsoDate | null
+  /** Tasks as a board: Doing since then; null while it is to do. Done is still `done_at`. */
+  started_at?: IsoDateTime | null
+  /** The Calendar's grid: the hour it is planned for, `HH:MM`; null keeps it in its day's To do strip. Never without a `date`. */
+  starts_at?: string | null
+  /** Tasks as a tracker: 0 none, 1 low, 2 medium, 3 high, 4 urgent. */
+  priority?: Priority
+  /** Tasks as a tracker: the steps inside it, or null. */
+  checklist?: ChecklistItem[] | null
+}
+
+/** Tasks as a tracker: how pressing a task or deadline is, 0 (none) to 4 (urgent). */
+export type Priority = 0 | 1 | 2 | 3 | 4
+
+/** One step inside a task or a deadline (`checklist`). */
+export interface ChecklistItem {
+  id: string
+  text: string
+  done: boolean
 }
 
 export type FactType =
@@ -248,6 +350,9 @@ export interface SignalFact {
 
 export interface Signal extends Row {
   channel: 'email' | 'share' | 'transcript' | 'ics' | 'moodle' | 'photo' | 'pdf' | 'telegram' | 'manual'
+    // Planner and inbox: a deadline proposed by an import (Notion) or
+    // by ChatGPT or Claude (the MCP server), waiting in the Inbox.
+    | 'import' | 'assistant'
   raw_excerpt: string
   item_id: Uuid | null
   at_seconds: number | null
@@ -260,6 +365,10 @@ export interface Signal extends Row {
 
 export interface Connection extends Row {
   kind: 'ics' | 'moodle' | 'email' | 'teams'
+    // Imports: Notion's page picker; the token stays on the server.
+    | 'notion'
+    // Daylight 2 (gaps): Google Classroom, read-only (`imports/classroom.ts`).
+    | 'classroom'
   label: string
   url: string | null
   site_url: string | null
@@ -341,6 +450,23 @@ export interface Check extends Row {
   asked_at: IsoDateTime
   answered_at: IsoDateTime | null
   graded_at: IsoDateTime | null
+  /**
+   * Daylight 2 (gaps): `written` (answered in their own words, the default),
+   * `choice` (pick one of four `options`) or `truefalse` (`options` is
+   * ['True', 'False']). An option question is answered with the option's
+   * exact text and marked right or wrong on the server, with no model call.
+   */
+  format?: CheckFormat
+  options?: string[] | null
+  /** A written answer, once marked: each rubric point and the verdict on it ("1/1" when met). */
+  marks?: CheckMark[] | null
+}
+
+export type CheckFormat = 'written' | 'choice' | 'truefalse'
+
+export interface CheckMark {
+  point: string
+  verdict: 'met' | 'partly' | 'missed'
 }
 
 /** `POST /checks`: a sitting, or nothing to check yet and when there will be. */
@@ -456,6 +582,13 @@ export interface Readiness {
     last_studied_at: IsoDateTime | null
     /** When it is cold enough to check; null when it is now, or never studied. */
     checkable_at: IsoDateTime | null
+    /**
+     * Daylight 2 (gaps): when it is next due for a check, on the ladder "a day
+     * after the lesson, then a week, then a month" (a week after one right
+     * sitting, a month after two in a row); null when never studied. In the
+     * past when it is due now. "Its next check is in a month, on Wed 9 Dec."
+     */
+    next_check_at?: IsoDateTime | null
     /** Share of its cards reviewed at least once, 0–1: the work, shown beside the proof. */
     practiced: number
   }[]

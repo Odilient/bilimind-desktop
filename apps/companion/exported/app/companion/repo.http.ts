@@ -74,10 +74,11 @@ export function createHttpRepo(): CompanionRepo {
 
     readiness: (deadlineId) => api.get<Readiness>(`${BASE}/deadlines/${deadlineId}/readiness`),
 
-    async applySignal(id, factIndexes) {
+    async applySignal(id, factIndexes, subjects) {
       await api.post(
         `${BASE}/signals/${id}/apply`,
-        factIndexes ? { facts_indexes: factIndexes } : {},
+        // Planner and inbox: `subjects`, the course picked per fact.
+        { ...(factIndexes ? { facts_indexes: factIndexes } : {}), ...(subjects ? { subjects } : {}) },
       )
     },
 
@@ -122,5 +123,17 @@ export function createHttpRepo(): CompanionRepo {
 
     goalFromSentence: (sentence, answers) =>
       api.post<GoalDraft>(`${BASE}/goals/from-sentence`, { sentence, answers }),
+
+    // Google: Drive imports and the calendar link (routes/api/companion-google.php).
+    importDriveFile(file, where) {
+      const form = new FormData()
+      form.append('file', file)
+      for (const [key, value] of Object.entries(where)) if (value) form.append(key, value)
+      return api.post<Item>(`${BASE}/google/drive/files`, form)
+    },
+
+    calendarFeed: () => api.get<{ url: string | null }>(`${BASE}/feed`),
+
+    newCalendarFeed: () => api.post<{ url: string }>(`${BASE}/feed`),
   }
 }

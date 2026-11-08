@@ -136,13 +136,13 @@ watch(
         v-if="canAsk"
         type="button"
         class="pg-bubble-btn"
-        title="Ask BiliMind about this"
+        title="Ask Bili about this"
         @click="ask"
       >
         <UiIcon
           name="spark"
           :size="12"
-          class="text-lime"
+          class="text-accent"
         />
         Ask
       </button>

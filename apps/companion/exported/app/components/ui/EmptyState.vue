@@ -43,7 +43,7 @@ withDefaults(
       v-else
       :class="[
         'mb-4 grid place-items-center rounded-full',
-        tone === 'danger' ? 'bg-danger-bright text-white' : 'bg-lime text-ink',
+        tone === 'danger' ? 'bg-danger-bright text-white' : 'bg-accent text-on-accent',
         size === 'page' ? 'size-12' : 'size-10',
       ]"
     >

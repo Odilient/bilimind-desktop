@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 /**
  * The overflow menu behind a row's secondary actions.
  *
@@ -33,8 +34,10 @@ const props = withDefaults(
      * upwards when there is no room below. Closes on scroll.
      */
     float?: boolean
+    /** The trigger's glyph: "⋯" unless the menu is one kind of thing (a paperclip: attach). */
+    icon?: string
   }>(),
-  { label: 'More actions', align: 'right', float: false },
+  { label: undefined, align: 'right', float: false, icon: 'dots' },
 )
 
 const open = ref(false)
@@ -116,7 +119,7 @@ onBeforeUnmount(() => {
     <button
       ref="trigger"
       type="button"
-      :aria-label="label"
+      :aria-label="label ?? t('ui.moreActions')"
       :aria-expanded="open"
       aria-haspopup="menu"
       :class="[
@@ -128,7 +131,7 @@ onBeforeUnmount(() => {
       @click="open = !open"
     >
       <UiIcon
-        name="dots"
+        :name="icon"
         :size="18"
       />
     </button>
@@ -149,7 +152,7 @@ onBeforeUnmount(() => {
           ref="pop"
           role="menu"
           :class="[
-            'min-w-[196px] rounded-[16px] bg-surface p-1.5 shadow-[0_0_0_1px_rgb(var(--wash-rgb)/0.08),0_20px_40px_-12px_rgb(11_13_16/0.25)]',
+            'min-w-[196px] rounded-[12px] bg-surface-pop p-1.5 shadow-[var(--shadow-pop)]',
             float
               ? 'fixed z-[98] origin-top'
               : ['absolute top-full z-50 mt-1.5 origin-top', align === 'right' ? 'right-0' : 'left-0'],

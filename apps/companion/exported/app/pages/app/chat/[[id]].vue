@@ -4,10 +4,15 @@
  * ChatGPT is one place. `/app/chat` is a new chat, `/app/chat/<id>` is a
  * chat, reloadable and bookmarkable; the app sidebar lists them.
  *
- *   ┌──────────────── the conversation (760) ────────────────┬ sources (280) ┐
- *   │ title · Answers from · ⋯                               │ Answers from  │
- *   │ …                                                      │ Added to chat │
- *   │ [ + Ask anything, or tell it what to make…          ↑ ] │ Read in chat  │
+ *   ┌──────────────── the conversation (760) ────────────────┐
+ *   │ title · ⋯                                              │
+ *   │ …  (each answer lists its own numbered sources)        │
+ *   │ [ + · Answers from ▾ · Ask anything…                 ↑ ] │
+ *
+ * No sources column, the way ChatGPT has none: an answer reads everything and
+ * finds what the question needs, "Answers from" in the box narrows it to one
+ * course when the learner wants that, and each answer's [n] pills open what
+ * it leaned on.
  *
  * One file for both addresses (`[[id]]`), with one page key, so the moment
  * a new chat gets its id and the address follows, nothing re-mounts: the
@@ -44,7 +49,6 @@ import { COURSE_TILE } from '~/companion/ai/make'
 import { draggingFiles, useAiAttachments } from '~/companion/ai/attach'
 import { chatPath, firstAsk } from '~/companion/ai/routes'
 import { useCompanion } from '~/companion/store'
-import { courseColor } from '~/companion/colors'
 import { greeting } from '~/companion/time'
 
 definePageMeta({ layout: 'companion', key: 'app-chat' })
@@ -60,7 +64,7 @@ const composer = ref<{ focus: () => void; openConnect: (kind: ConnectKind) => vo
 
 /* -- What it answers from ---------------------------------------------------------- */
 
-/** One course, or all of them: the composer's "Answers from" chip and the sources column both set it. */
+/** One course, or all of them: the composer's "Answers from" chip sets it. */
 const source = computed({
   get: () => t.answersFrom.value,
   set: (value: string | null) => {
@@ -74,14 +78,6 @@ useAiContext(() =>
     ? { kind: 'course', label: sourceSubject.value.title, subjectId: sourceSubject.value.id }
     : { kind: 'everything', label: 'All your courses' },
 )
-
-const sourcesOpen = ref(true)
-const sourcesSheet = ref(false)
-
-function toggleSources(): void {
-  if (window.matchMedia('(min-width: 1280px)').matches) sourcesOpen.value = !sourcesOpen.value
-  else sourcesSheet.value = true
-}
 
 /* -- The chat and the address ---------------------------------------------------------- */
 
@@ -117,6 +113,20 @@ const CONNECTS: ConnectKind[] = ['moodle', 'ics', 'email', 'photo']
 function focusBox(): void {
   if (window.matchMedia('(min-width: 1024px)').matches) t.focus()
 }
+
+/** Bili listens while the box is being typed in, and settles a moment after. */
+const listening = ref(false)
+let listenT: ReturnType<typeof setTimeout> | undefined
+watch(
+  () => t.draft.value,
+  (now, before) => {
+    if (now === before || !now) return
+    listening.value = true
+    clearTimeout(listenT)
+    listenT = setTimeout(() => (listening.value = false), 1300)
+  },
+)
+onBeforeUnmount(() => clearTimeout(listenT))
 
 const READ_ONCE = ['q', 'prompt', 'intent', 'attach', 'connect']
 
@@ -326,17 +336,6 @@ function onDrop(event: DragEvent): void {
       <template #bar-actions>
         <button
           type="button"
-          class="grid size-11 shrink-0 place-items-center rounded-full text-text-soft active:bg-surface-sunken"
-          aria-label="Sources"
-          @click="sourcesSheet = true"
-        >
-          <UiIcon
-            name="layers"
-            :size="19"
-          />
-        </button>
-        <button
-          type="button"
           class="grid size-11 shrink-0 place-items-center rounded-full text-text-soft active:bg-surface-sunken disabled:opacity-40"
           :disabled="empty"
           aria-label="New chat"
@@ -390,29 +389,6 @@ function onDrop(event: DragEvent): void {
           </h1>
           <span class="flex-1" />
 
-          <button
-            type="button"
-            :class="[
-              'inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium transition-colors',
-              sourcesOpen ? 'bg-surface-sunken text-text' : 'text-text-soft hover:bg-surface-sunken hover:text-text focus-visible:bg-surface-sunken',
-            ]"
-            :aria-pressed="sourcesOpen"
-            title="What this chat reads and has cited"
-            @click="toggleSources"
-          >
-            <i
-              v-if="sourceSubject"
-              class="size-2 shrink-0 rounded-full"
-              :style="{ background: courseColor(sourceSubject.color) }"
-            />
-            <UiIcon
-              v-else
-              name="layers"
-              :size="13"
-              class="shrink-0 text-text-faint"
-            />
-            Sources
-          </button>
           <UiMenu
             v-if="t.threadId.value"
             :actions="menu"
@@ -426,7 +402,7 @@ function onDrop(event: DragEvent): void {
           v-if="empty"
           class="om-scroll min-h-0 flex-1 overflow-y-auto"
         >
-          <div class="mx-auto grid w-full max-w-[840px] content-start gap-12 px-4 pt-[7vh] pb-16 min-[900px]:px-6 min-[900px]:pt-[11vh]">
+          <div class="mx-auto grid w-full max-w-[840px] grid-cols-[minmax(0,1fr)] content-start gap-12 px-4 pt-[7vh] pb-16 min-[900px]:px-6 min-[900px]:pt-[11vh]">
             <div class="grid gap-7">
               <div
                 :key="course ? 'course' : 'ask'"
@@ -443,8 +419,16 @@ function onDrop(event: DragEvent): void {
                 </h2>
               </div>
 
-              <div>
+              <div class="mt-5">
                 <div class="relative z-10">
+                  <!-- Bili stands on the box's edge, as on the landing, and listens while you type. -->
+                  <CompanionAiBilim
+                    class="absolute -top-[43px] right-12 z-[2] max-sm:right-6"
+                    :size="48"
+                    :mood="listening ? 'listen' : 'idle'"
+                    follow
+                    drag
+                  />
                   <CompanionAiComposer
                     ref="composer"
                     v-model="t.draft.value"
@@ -457,7 +441,7 @@ function onDrop(event: DragEvent): void {
                     :focus-key="t.focusTick.value"
                     :examples="course ? examples : []"
                     menu-placement="down"
-                    placeholder="Ask anything, attach your files, or say what you want to learn"
+                    placeholder="Ask Bili anything, attach your files, or say what you want to learn"
                     @send="(text) => t.send(text)"
                     @stop="t.stop()"
                     @clear-quote="t.quote.value = null"
@@ -479,7 +463,7 @@ function onDrop(event: DragEvent): void {
                 >
                   <button
                     type="button"
-                    class="cursor-pointer rounded-[4px] font-semibold text-cobalt underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
+                    class="cursor-pointer rounded-[4px] font-semibold text-brand underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
                     @click="composer?.openConnect(door.kind)"
                   >
                     {{ door.label }}</button>{{ i < DOORS.length - 2 ? ', ' : i === DOORS.length - 2 ? ' or ' : '' }}
@@ -498,31 +482,7 @@ function onDrop(event: DragEvent): void {
           :autofocus="ai.wide.value"
         />
       </section>
-
-      <!-- Sources -->
-      <aside
-        v-if="sourcesOpen && !empty"
-        class="om-scroll w-[280px] shrink-0 overflow-y-auto border-l border-border bg-surface-chrome px-2 py-4 max-xl:hidden"
-        aria-label="Sources"
-      >
-        <CompanionAiSources v-model="source" />
-        <p class="mt-6 px-2.5 text-[12px] leading-[1.5] text-text-faint">
-          Every answer says where each line came from. It never makes anything until you press its button.
-        </p>
-      </aside>
     </div>
-
-    <UiSheet
-      v-model:open="sourcesSheet"
-      title="Sources"
-    >
-      <div class="mt-3">
-        <CompanionAiSources
-          v-model="source"
-          @navigate="sourcesSheet = false"
-        />
-      </div>
-    </UiSheet>
 
     <!-- Files over the page: drop anywhere. -->
     <Transition
@@ -536,9 +496,9 @@ function onDrop(event: DragEvent): void {
         class="pointer-events-none absolute inset-0 z-40 bg-surface/80 p-4 backdrop-blur-[6px] min-[900px]:p-6"
         aria-hidden="true"
       >
-        <div class="grid size-full place-items-center rounded-[28px] border-2 border-dashed border-cobalt bg-cobalt-soft/70">
+        <div class="grid size-full place-items-center rounded-[26px] border-2 border-dashed border-brand-line bg-surface/60">
           <div class="grid justify-items-center gap-3 px-6 text-center">
-            <span class="grid size-14 place-items-center rounded-full bg-cobalt text-on-brand">
+            <span class="grid size-14 place-items-center rounded-full bg-sky-soft text-sky-ink">
               <UiIcon
                 name="upload"
                 :size="24"

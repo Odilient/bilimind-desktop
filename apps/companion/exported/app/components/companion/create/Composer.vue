@@ -269,10 +269,10 @@ defineExpose({
 
 <template>
   <div
-    class="relative rounded-[26px] border bg-surface transition-[border-color,box-shadow] duration-200"
+    class="relative rounded-[24px] border bg-surface transition-[border-color,box-shadow] duration-200"
     :class="busy
       ? 'border-border shadow-card'
-      : 'border-border-field shadow-[0_1px_2px_rgb(11_13_16/0.04),0_24px_50px_-28px_rgb(11_13_16/0.28)] focus-within:border-accent-line focus-within:shadow-[0_1px_2px_rgb(11_13_16/0.04),0_24px_50px_-28px_rgb(11_13_16/0.28),0_0_0_4px_var(--accent-soft)]'"
+      : 'border-border-strong shadow-lift focus-within:shadow-[0_0_0_5px_color-mix(in_oklab,var(--accent)_45%,transparent),var(--shadow-lift)]'"
   >
     <!-- The field, and the example under it while it's empty. -->
     <div class="relative">
@@ -286,7 +286,7 @@ defineExpose({
         v-model="text"
         rows="1"
         enterkeyhint="send"
-        class="block min-h-[64px] w-full resize-none bg-transparent px-5 pt-5 pb-2 text-[17px] leading-[1.55] text-text caret-cobalt outline-none disabled:opacity-60 min-[600px]:min-h-[72px] min-[600px]:px-6 min-[600px]:pt-6 min-[600px]:text-[18px]"
+        class="block min-h-[64px] w-full resize-none bg-transparent px-5 pt-5 pb-2 text-[17px] leading-[1.55] text-text caret-brand outline-none disabled:opacity-60 min-[600px]:min-h-[72px] min-[600px]:px-6 min-[600px]:pt-6 min-[600px]:text-[18px]"
         :disabled="busy"
         @keydown="onKeydown"
         @paste="onPaste"
@@ -320,13 +320,13 @@ defineExpose({
     >
       <div
         v-if="offer && !busy"
-        class="mx-3 mb-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[14px] bg-cobalt-soft px-3.5 py-2.5 min-[600px]:mx-4"
+        class="mx-3 mb-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[14px] bg-brand-soft px-3.5 py-2.5 min-[600px]:mx-4"
         role="status"
       >
         <CompanionIcon
           :name="offer.kind === 'links' ? 'link' : 'paste'"
           :size="16"
-          class="shrink-0 text-cobalt"
+          class="shrink-0 text-brand"
         />
         <span class="min-w-0 flex-1 text-[13.5px] leading-snug text-text-body">{{ offerWords }}</span>
         <span class="flex shrink-0 items-center gap-1">
@@ -374,7 +374,7 @@ defineExpose({
       class="animate-rise mx-3 mb-3 grid gap-1.5 min-[600px]:mx-4"
       @submit.prevent="addLinkField"
     >
-      <div class="flex items-center gap-1.5 rounded-full border border-border-field bg-surface-mute py-1 pr-1 pl-4 focus-within:border-cobalt focus-within:ring-3 focus-within:ring-brand-line">
+      <div class="flex items-center gap-1.5 rounded-full border border-border-field bg-surface-mute py-1 pr-1 pl-4 focus-within:border-brand focus-within:ring-3 focus-within:ring-brand-line">
         <UiIcon
           name="link"
           :size="15"

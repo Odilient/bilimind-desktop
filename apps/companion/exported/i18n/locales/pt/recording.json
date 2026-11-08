@@ -1,0 +1,72 @@
+{
+  "aloud": {
+    "sayOut": "Diga em voz alta",
+    "orScreen": "ou explique sobre a sua tela",
+    "agree": "O BiliMind transcreve o que você diz neste computador. Na primeira vez, ele baixa um modelo de voz{size} e o guarda aqui. O que você diz nunca sai deste computador.",
+    "aboutMb": " (cerca de {mb} MB)",
+    "downloadStart": "Baixar e começar",
+    "typeInstead": "Digitar em vez disso",
+    "whichScreen": "Sobre qual tela você vai explicar? Sua voz é gravada junto com ela.",
+    "cancel": "Cancelar",
+    "recordingScreen": "Gravando sua tela e sua voz",
+    "listening": "Ouvindo",
+    "stop": "Parar",
+    "talk": "Explique como explicaria a um colega. Quando você parar, suas palavras vão para a caixa.",
+    "tryAgain": "Tentar de novo",
+    "done": "Suas palavras estão na caixa. Leia e corrija o que foi entendido errado.",
+    "again": "Dizer de novo",
+    "screenFail": "Este computador não pode compartilhar a tela agora.",
+    "explaining": "Explicando {topic}",
+    "explainingBack": "Explicando de volta",
+    "recFail": "A gravação não começou. Tente de novo em instantes.",
+    "noWords": "Nenhuma palavra foi captada. Verifique o microfone ou digite.",
+    "writeFail": "Não foi possível transcrever o que você disse.",
+    "modelReady": "Preparando o modelo de voz…",
+    "modelProgress": "Preparando o modelo de voz… {done} de {total} MB",
+    "writing": "Transcrevendo o que você disse…"
+  },
+  "tr": {
+    "title": "Transcrição",
+    "waiting": "Aguardando outra transcrição terminar…",
+    "progress": "Escrevendo a transcrição neste computador… {done} de {total} min",
+    "stopped": "A transcrição parou. {error}",
+    "agree": "O BiliMind pode transcrever o que foi dito, neste computador. Ele baixa um modelo de voz uma vez{size} e o guarda aqui; a gravação em si nunca sai deste computador.",
+    "stoppedAt": "Parou em {at}.",
+    "downloadWrite": "Baixar e transcrever",
+    "carryOn": "Continuar",
+    "write": "Escrever a transcrição"
+  },
+  "pill": {
+    "recording": "Gravando",
+    "paused": "Pausado",
+    "aria": "Gravando {label}, {elapsed}. Abrir o gravador.",
+    "interrupted": "A gravação parou sozinha",
+    "saved": "{time} foram salvos em {where}.",
+    "notebook": "seu caderno"
+  },
+  "picker": {
+    "screen": "Tela inteira",
+    "window": "Uma janela"
+  },
+  "err": {
+    "noMic": "Este navegador não pode usar o microfone.",
+    "denied": "O BiliMind precisa do microfone para gravar. Permita no navegador ou nas configurações de privacidade do computador e tente de novo.",
+    "noMicAnswer": "Nenhum microfone respondeu. Verifique se há um conectado e se não está em uso.",
+    "saveFail": "Não foi possível salvar a gravação.",
+    "busy": "Algo já está sendo gravado.",
+    "noRecord": "Este navegador não pode gravar.",
+    "noSound": "Não havia som para gravar.",
+    "itself": "A gravação parou sozinha.",
+    "noStart": "A gravação não começou. Tente de novo em instantes."
+  },
+  "file": {
+    "voiceMemo": "Nota de voz",
+    "recording": "Gravação de {base}",
+    "screenRecording": "Gravação de tela",
+    "baseScreen": "Gravação de tela de {base}",
+    "uploadFail": "A gravação não foi enviada",
+    "tooLong": "É mais longa do que um envio permite. Salve neste computador para não perder nada.",
+    "saveLocal": "Salve neste computador para não perder nada e adicione depois com Enviar arquivos.",
+    "saveIt": "Salvar"
+  }
+}

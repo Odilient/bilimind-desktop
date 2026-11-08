@@ -35,7 +35,7 @@ const points = computed(() =>
         <!-- The course player's numbered ink square: a key point is a thing to
              keep, and a count makes "five of them" visible before reading. -->
         <span
-          class="mt-px grid h-[22px] w-[26px] shrink-0 place-items-center rounded-[7px] bg-chip font-display text-[11px] font-semibold text-lime"
+          class="mt-px grid h-[22px] w-[26px] shrink-0 place-items-center rounded-[7px] bg-chip font-display text-[11px] font-semibold text-accent"
           aria-hidden="true"
           >{{ String(index + 1).padStart(2, '0') }}</span
         >

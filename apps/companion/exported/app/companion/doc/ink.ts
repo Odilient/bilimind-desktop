@@ -4,7 +4,7 @@ import type { BoardLabel, Stroke, StrokePoint } from '~/types/api'
 /**
  * A note's drawing: the strokes and the text labels the lesson's pen tray
  * puts on a note, kept inside the note's own Y.Doc, beside its text. So ink
- * syncs, works offline and goes to the demo exactly as the words do, with no
+ * syncs and works offline exactly as the words do, with no
  * second store and no second save.
  *
  *   ink    a Y.Array of strokes, oldest first (the eraser removes by index)

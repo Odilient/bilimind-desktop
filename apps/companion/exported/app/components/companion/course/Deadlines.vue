@@ -3,8 +3,10 @@ import type { Deadline, Subject } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { useCapture } from '~/companion/capture'
 import { dayKey, shortDate, untilLabel } from '~/companion/time'
-import { KIND_WORD, dueLong, knownBy, readyWords } from '~/companion/words'
+import { kindWord, dueLong, knownBy, readyWords } from '~/companion/words'
 import { checkHref } from '~/companion/checks'
+import { useExport } from '~/companion/export/use-export'
+import { runningGrade } from '~/companion/grades'
 
 /**
  * A course's deadlines, as a view of its home (`?tab=deadlines`).
@@ -21,6 +23,8 @@ import { checkHref } from '~/companion/checks'
  *  - Then what's behind, with the grades, and the weighted average so far in
  *    the heading, because "how am I doing in this course" is the question.
  *    A grade that readiness predicted says what it predicted beside it.
+ *  - At the foot, one quiet line to take the same rows away, as a
+ *    spreadsheet or a CSV.
  *
  * Nothing here is new data; it is the deadline rows, said plainly. Empty, it
  * says where dates come from and offers the one way to add one by hand:
@@ -29,6 +33,7 @@ import { checkHref } from '~/companion/checks'
 const props = defineProps<{ subject: Subject }>()
 const c = useCompanion()
 const capture = useCapture()
+const exp = useExport()
 
 const now = Date.now()
 const deadlines = computed(() => c.deadlines.value.filter((d) => d.subject_id === props.subject.id))
@@ -45,13 +50,14 @@ const covers = computed(() =>
   (first.value?.topic_ids ?? []).map((id) => c.get('topics', id)?.title).filter(Boolean).slice(0, 5) as string[],
 )
 
-/** Weighted by what each counts for; a deadline with no weight counts once. */
+/**
+ * The course's running grade: the
+ * same number its Grades view and the Courses shelf say, so "how am I doing"
+ * never has two answers in one course.
+ */
 const average = computed(() => {
-  const graded = past.value.filter((d) => d.grade != null)
-  if (!graded.length) return null
-  const weight = graded.reduce((sum, d) => sum + (d.weight_pct ?? 1), 0)
-  const score = graded.reduce((sum, d) => sum + d.grade! * (d.weight_pct ?? 1), 0)
-  return { percent: Math.round(score / weight), count: graded.length }
+  const r = runningGrade(deadlines.value)
+  return r ? { percent: r.percent, count: r.marked } : null
 })
 
 function standing(d: Deadline): string {
@@ -60,7 +66,7 @@ function standing(d: Deadline): string {
 }
 
 function gradeTone(grade: number): string {
-  return grade >= 85 ? 'text-success-text' : grade >= 60 ? 'text-text' : 'text-coral-text'
+  return grade >= 85 ? 'text-success-text' : grade >= 60 ? 'text-text' : 'text-danger-text'
 }
 </script>
 
@@ -74,7 +80,7 @@ function gradeTone(grade: number): string {
     >
       <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <p class="text-[13px] font-semibold text-text-soft">
-          Next up · {{ KIND_WORD[first.kind] }}<template v-if="first.weight_pct">
+          Next up · {{ kindWord(first.kind) }}<template v-if="first.weight_pct">
             , {{ first.weight_pct }}% of the grade
           </template>
         </p>
@@ -117,7 +123,7 @@ function gradeTone(grade: number): string {
           >
             <span
               class="block h-full rounded-full transition-[width] duration-500"
-              :class="firstReady.percent >= 85 ? 'bg-lime-2' : 'bg-cobalt'"
+              :class="firstReady.percent >= 85 ? 'bg-leaf' : 'bg-hi-2'"
               :style="{ width: `${Math.max(3, firstReady.percent)}%` }"
             />
           </span>
@@ -251,5 +257,27 @@ function gradeTone(grade: number): string {
         </li>
       </ul>
     </section>
+
+    <!-- Exports: the same rows, for a spreadsheet of the learner's own. -->
+    <p
+      v-if="deadlines.length"
+      class="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[14px] text-text-muted"
+    >
+      Download these dates and grades:
+      <button
+        type="button"
+        class="cursor-pointer font-medium text-text-soft hover:text-text hover:underline"
+        @click="exp.spreadsheet(subject.id)"
+      >
+        Spreadsheet
+      </button>
+      <button
+        type="button"
+        class="cursor-pointer font-medium text-text-soft hover:text-text hover:underline"
+        @click="exp.deadlinesCsv(subject.id)"
+      >
+        CSV
+      </button>
+    </p>
   </div>
 </template>

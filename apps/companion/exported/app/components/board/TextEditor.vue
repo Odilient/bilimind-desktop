@@ -12,10 +12,10 @@
  * sibling). On notes, Enter is a new line and Cmd/Ctrl+Enter finishes.
  */
 import type { BoardController } from '~/companion/board/controller'
-import { mindSize, mindStyle, shapeTextWidth } from '~/companion/board/draw'
+import { mindSize, mindStyle, shapeTextWidth, STICKY_FONT } from '~/companion/board/draw'
 import { depthOf } from '~/companion/board/mindmap'
 import { mindNodes } from '~/companion/board/ops'
-import { FONT, INK, PEN, SHAPE_FILL, STICKY } from '~/companion/board/palette'
+import { FONT, fills, ink, paint, pen, sticky } from '~/companion/board/palette'
 
 const props = defineProps<{ ctl: BoardController }>()
 const area = ref<HTMLTextAreaElement>()
@@ -33,15 +33,21 @@ const look = computed(() => {
   const o = obj.value
   const text = ed.value?.text ?? ''
   if (!o) return null
-  const base = { x: o.x, y: o.y, w: o.w, h: o.h, font: `400 14px/19px ${FONT.body}`, pad: '10px 12px', bg: 'transparent', border: 'none', radius: '3px', align: 'left' as 'left' | 'center', color: INK.text, clip: '' }
+  const base = { x: o.x, y: o.y, w: o.w, h: o.h, font: `400 14px/19px ${FONT.body}`, pad: '10px 12px', bg: 'transparent', border: 'none', radius: '3px', align: 'left' as 'left' | 'center', color: ink().text, clip: '' }
   switch (o.kind) {
     case 'sticky':
-      return { ...base, bg: STICKY[o.color] ?? STICKY.yellow }
+      // The same hand and size the canvas draws it in, so the note doesn't jump when typed into.
+      return {
+        ...base,
+        bg: sticky()[o.color] ?? sticky().yellow,
+        color: ink().stickyText,
+        font: `${STICKY_FONT.weight} ${STICKY_FONT.size}px/${STICKY_FONT.lh}px ${FONT.hand}`,
+      }
     case 'shape': {
       const tw = shapeTextWidth(o)
       return {
         ...base, font: `500 14px/19px ${FONT.body}`, align: 'center' as const, pad: `0 ${(o.w - tw) / 2}px`,
-        bg: SHAPE_FILL[o.fill] ?? '#fff', border: `1.5px solid ${PEN[o.stroke] ?? PEN.ink}`,
+        bg: fills()[o.fill] ?? fills().white, border: `1.5px solid ${pen()[o.stroke] ?? pen().ink}`,
         radius: o.shape === 'ellipse' ? '50%' : o.shape === 'diamond' ? '0' : '6px',
         clip: o.shape === 'diamond' ? 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)' : '',
       }
@@ -49,7 +55,7 @@ const look = computed(() => {
     case 'text':
       return { ...base, font: `500 ${o.size}px/${Math.round(o.size * 1.3)}px ${FONT.body}`, pad: '0', h: Math.max(o.h, Math.round(o.size * 1.3)) }
     case 'frame':
-      return { ...base, y: o.y - 22, h: 20, w: Math.max(200, o.w * 0.6), font: `600 12.5px/16px ${FONT.body}`, pad: '2px', color: INK.dim, bg: '#fff', radius: '4px' }
+      return { ...base, y: o.y - 22, h: 20, w: Math.max(200, o.w * 0.6), font: `600 12.5px/16px ${FONT.body}`, pad: '2px', color: ink().dim, bg: ink().surface, radius: '4px' }
     case 'mind': {
       const depth = depthOf(mindNodes(props.ctl.parts), o.id)
       const st = mindStyle(depth)
@@ -60,8 +66,8 @@ const look = computed(() => {
         ...base, x: cx - w / 2, y: cy - size.h / 2, w, h: size.h,
         font: `${st.weight} ${st.size}px/${Math.round(st.size * 1.3)}px ${st.family}`,
         pad: `${st.padY}px ${st.padX}px`, align: 'center' as const, radius: `${st.r}px`,
-        bg: depth === 0 ? o.color : '#fff', color: depth === 0 ? '#fff' : depth === 1 ? INK.text : INK.dim,
-        border: depth === 0 ? 'none' : `${depth === 1 ? 1.5 : 1}px solid ${depth === 1 ? o.color : INK.lineStrong}`,
+        bg: depth === 0 ? paint(o.color) : ink().surface, color: depth === 0 ? ink().onCourse : depth === 1 ? ink().text : ink().dim,
+        border: depth === 0 ? 'none' : `${depth === 1 ? 1.5 : 1}px solid ${depth === 1 ? paint(o.color) : ink().lineStrong}`,
       }
     }
     default:
@@ -163,7 +169,7 @@ function onBlur() {
 .bedit {
   position: absolute; left: 0; top: 0; z-index: 4; transform-origin: 0 0;
   display: flex; align-items: center; overflow: hidden;
-  box-shadow: 0 0 0 1.5px var(--cobalt);
+  box-shadow: 0 0 0 1.5px var(--brand);
   user-select: text; -webkit-user-select: text;
 }
 textarea {

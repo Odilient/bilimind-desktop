@@ -11,7 +11,8 @@
  */
 import type { BoardObject, ConnectorObj, MindObj, PageObj, ShapeObj, StickyObj, TextObj } from './model'
 import { connectorPoints, font, textWidth, wrapLines, type Pt, type Resolve } from './geometry'
-import { FONT, INK, PEN, SHAPE_FILL, STICKY } from './palette'
+// The theme's hexes, looked up as each object is drawn (`palette.ts`): a board stores keys, not colours.
+import { FONT, fills, ink, paint, pen, sticky } from './palette'
 
 export type Prim =
   | { t: 'rect'; x: number; y: number; w: number; h: number; r?: number; fill?: string; stroke?: string; sw?: number; dash?: number[]; opacity?: number }
@@ -42,12 +43,14 @@ export interface DrawEnv {
 
 // ---- sticky ----------------------------------------------------------------
 
+// A sticky is something a hand wrote: Caveat, as on course.html's board.
 const STICKY_PAD = 12
-const STICKY_SIZE = 14
-const STICKY_LH = 19
+const STICKY_SIZE = 20
+const STICKY_LH = 22
+export const STICKY_FONT = { size: STICKY_SIZE, lh: STICKY_LH, weight: 600 }
 
 export function stickyLines(o: Pick<StickyObj, 'text' | 'w'>): string[] {
-  return wrapLines(o.text || ' ', font(STICKY_SIZE), o.w - STICKY_PAD * 2)
+  return wrapLines(o.text || ' ', font(STICKY_SIZE, 600, FONT.hand), o.w - STICKY_PAD * 2)
 }
 
 export function stickyHeight(o: Pick<StickyObj, 'text' | 'w' | 'by'>): number {
@@ -59,14 +62,14 @@ function drawSticky(o: StickyObj): Prim[] {
   const out: Prim[] = [
     // A cheap lift instead of a blurred shadow: a darker card peeking out
     // under the bottom edge. Blur on hundreds of notes costs every frame.
-    { t: 'rect', x: 3, y: 5, w: o.w - 6, h: o.h - 2, r: 3, fill: 'rgba(11,13,16,0.13)' },
-    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 3, fill: STICKY[o.color] ?? STICKY.yellow },
+    { t: 'rect', x: 3, y: 5, w: o.w - 6, h: o.h - 2, r: 3, fill: ink().stickyShadow },
+    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 3, fill: sticky()[o.color] ?? sticky().yellow },
   ]
   if (o.text) {
-    out.push({ t: 'text', x: STICKY_PAD, y: STICKY_PAD - 2, lines: stickyLines(o), size: STICKY_SIZE, lh: STICKY_LH, weight: 400, family: FONT.body, color: INK.text })
+    out.push({ t: 'text', x: STICKY_PAD, y: STICKY_PAD - 2, lines: stickyLines(o), size: STICKY_SIZE, lh: STICKY_LH, weight: 600, family: FONT.hand, color: ink().stickyText })
   }
   if (o.by) {
-    out.push({ t: 'text', x: STICKY_PAD, y: o.h - 24, lines: [o.by], size: 11.5, lh: 14, weight: 600, family: FONT.body, color: INK.text, opacity: 0.55 })
+    out.push({ t: 'text', x: STICKY_PAD, y: o.h - 24, lines: [o.by], size: 11.5, lh: 14, weight: 600, family: FONT.body, color: ink().stickyText, opacity: 0.6 })
   }
   return out
 }
@@ -81,8 +84,8 @@ export function shapeTextWidth(o: Pick<ShapeObj, 'shape' | 'w'>): number {
 }
 
 function drawShape(o: ShapeObj): Prim[] {
-  const fill = SHAPE_FILL[o.fill] ?? SHAPE_FILL.white
-  const stroke = PEN[o.stroke] ?? PEN.ink
+  const fill = fills()[o.fill] ?? fills().white
+  const stroke = pen()[o.stroke] ?? pen().ink
   const out: Prim[] = []
   if (o.shape === 'ellipse') out.push({ t: 'ellipse', x: 0, y: 0, w: o.w, h: o.h, fill, stroke, sw: 1.5 })
   else if (o.shape === 'diamond') {
@@ -92,7 +95,7 @@ function drawShape(o: ShapeObj): Prim[] {
     const tw = shapeTextWidth(o)
     const lines = wrapLines(o.text, font(SHAPE_SIZE, 500), tw)
     const th = lines.length * SHAPE_LH
-    out.push({ t: 'text', x: (o.w - tw) / 2, y: (o.h - th) / 2, w: tw, align: 'center', lines, size: SHAPE_SIZE, lh: SHAPE_LH, weight: 500, family: FONT.body, color: INK.text })
+    out.push({ t: 'text', x: (o.w - tw) / 2, y: (o.h - th) / 2, w: tw, align: 'center', lines, size: SHAPE_SIZE, lh: SHAPE_LH, weight: 500, family: FONT.body, color: ink().text })
   }
   return out
 }
@@ -108,15 +111,15 @@ export function textHeight(o: Pick<TextObj, 'text' | 'w' | 'size'>): number {
 }
 
 function drawText(o: TextObj): Prim[] {
-  return [{ t: 'text', x: 0, y: 0, lines: textLines(o), size: o.size, lh: Math.round(o.size * 1.3), weight: 500, family: FONT.body, color: INK.text }]
+  return [{ t: 'text', x: 0, y: 0, lines: textLines(o), size: o.size, lh: Math.round(o.size * 1.3), weight: 500, family: FONT.body, color: ink().text }]
 }
 
 // ---- frame -----------------------------------------------------------------
 
 function drawFrame(o: BoardObject & { kind: 'frame' }): Prim[] {
   return [
-    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 8, fill: 'rgba(255,255,255,0.72)', stroke: INK.line, sw: 1.5 },
-    { t: 'text', x: 2, y: -20, lines: [o.title || 'Frame'], size: 12.5, lh: 16, weight: 600, family: FONT.body, color: INK.dim },
+    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 8, fill: ink().frameFill, stroke: ink().line, sw: 1.5 },
+    { t: 'text', x: 2, y: -20, lines: [o.title || 'Frame'], size: 12.5, lh: 16, weight: 600, family: FONT.body, color: ink().dim },
   ]
 }
 
@@ -129,7 +132,7 @@ function arrowHead(a: Pt, b: Pt, size: number): string {
   return `M${b.x} ${b.y}L${l.x} ${l.y}L${r.x} ${r.y}Z`
 }
 
-export function drawConnector(c: Pick<ConnectorObj, 'from' | 'to' | 'label'>, env: DrawEnv, color = INK.dim): Prim[] {
+export function drawConnector(c: Pick<ConnectorObj, 'from' | 'to' | 'label'>, env: DrawEnv, color = ink().dim): Prim[] {
   const [a, b] = connectorPoints(c, env.resolve)
   const out: Prim[] = [
     { t: 'path', d: `M${a.x} ${a.y}L${b.x} ${b.y}`, stroke: color, sw: 2 },
@@ -139,8 +142,8 @@ export function drawConnector(c: Pick<ConnectorObj, 'from' | 'to' | 'label'>, en
     const f = font(12, 500)
     const w = textWidth(c.label, f) + 12
     const m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
-    out.push({ t: 'rect', x: m.x - w / 2, y: m.y - 10, w, h: 20, r: 6, fill: INK.bg })
-    out.push({ t: 'text', x: m.x - w / 2, y: m.y - 8, w, align: 'center', lines: [c.label], size: 12, lh: 16, weight: 500, family: FONT.body, color: INK.dim })
+    out.push({ t: 'rect', x: m.x - w / 2, y: m.y - 10, w, h: 20, r: 6, fill: ink().bg })
+    out.push({ t: 'text', x: m.x - w / 2, y: m.y - 8, w, align: 'center', lines: [c.label], size: 12, lh: 16, weight: 500, family: FONT.body, color: ink().dim })
   }
   return out
 }
@@ -149,9 +152,9 @@ export function drawConnector(c: Pick<ConnectorObj, 'from' | 'to' | 'label'>, en
 
 function drawImage(o: BoardObject & { kind: 'image' }): Prim[] {
   return [
-    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 6, fill: INK.sunken },
+    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 6, fill: ink().sunken },
     ...(o.src ? [{ t: 'image', x: 0, y: 0, w: o.w, h: o.h, url: o.src, r: 6 } as Prim] : []),
-    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 6, stroke: INK.line, sw: 1 },
+    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 6, stroke: ink().line, sw: 1 },
   ]
 }
 
@@ -171,15 +174,15 @@ export function pageHeight(o: Pick<PageObj, 'title' | 'preview' | 'w'>): number 
 function drawPage(o: PageObj): Prim[] {
   const { title, preview } = pageLines(o)
   const out: Prim[] = [
-    { t: 'rect', x: 2, y: 5, w: o.w - 4, h: o.h - 2, r: 10, fill: 'rgba(13,22,96,0.07)' },
-    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 10, fill: INK.surface, stroke: INK.line, sw: 1 },
+    { t: 'rect', x: 2, y: 5, w: o.w - 4, h: o.h - 2, r: 10, fill: ink().pageShadow },
+    { t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: 10, fill: ink().surface, stroke: ink().line, sw: 1 },
     // The icon is drawn on a 24-unit grid; this places it at 12,13 and 14px.
-    { t: 'path', d: scalePath(DOC_ICON, 14 / 24, 12, 13), stroke: INK.cobalt, sw: 1.8 },
-    { t: 'text', x: 34, y: 12, lines: title, size: 13.5, lh: 18, weight: 600, family: FONT.body, color: INK.text },
+    { t: 'path', d: scalePath(DOC_ICON, 14 / 24, 12, 13), stroke: ink().cobalt, sw: 1.8 },
+    { t: 'text', x: 34, y: 12, lines: title, size: 13.5, lh: 18, weight: 600, family: FONT.body, color: ink().text },
   ]
   const py = 14 + title.length * 18 + 6
-  if (preview.length) out.push({ t: 'text', x: 13, y: py, lines: preview, size: 12, lh: 17, weight: 400, family: FONT.body, color: INK.dim })
-  out.push({ t: 'text', x: 13, y: o.h - 24, lines: ['page'], size: 11, lh: 14, weight: 500, family: FONT.body, color: INK.faint })
+  if (preview.length) out.push({ t: 'text', x: 13, y: py, lines: preview, size: 12, lh: 17, weight: 400, family: FONT.body, color: ink().dim })
+  out.push({ t: 'text', x: 13, y: o.h - 24, lines: ['page'], size: 11, lh: 14, weight: 500, family: FONT.body, color: ink().faint })
   return out
 }
 
@@ -232,18 +235,18 @@ function drawMind(o: MindObj, env: DrawEnv): Prim[] {
   const { lines } = mindSize(o, depth)
   const lh = Math.round(st.size * 1.3)
   const out: Prim[] = []
-  if (depth === 0) out.push({ t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: st.r, fill: o.color })
-  else if (depth === 1) out.push({ t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: st.r, fill: INK.surface, stroke: o.color, sw: 1.5 })
-  else out.push({ t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: st.r, fill: INK.surface, stroke: INK.lineStrong, sw: 1 })
+  if (depth === 0) out.push({ t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: st.r, fill: paint(o.color) })
+  else if (depth === 1) out.push({ t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: st.r, fill: ink().surface, stroke: paint(o.color), sw: 1.5 })
+  else out.push({ t: 'rect', x: 0, y: 0, w: o.w, h: o.h, r: st.r, fill: ink().surface, stroke: ink().lineStrong, sw: 1 })
   out.push({
     t: 'text', x: 0, y: st.padY, w: o.w, align: 'center', lines, size: st.size, lh, weight: st.weight, family: st.family,
-    color: depth === 0 ? '#ffffff' : depth === 1 ? INK.text : INK.dim,
+    color: depth === 0 ? ink().onCourse : depth === 1 ? ink().text : ink().dim,
   })
   const sub = o.hint || o.source
   if (sub) {
     out.push({
       t: 'text', x: 0, y: st.padY + lines.length * lh + 1, w: o.w, align: 'center', lines: [sub], size: 10.5, lh: 13, weight: 600,
-      family: FONT.body, color: o.hint ? INK.amberText : depth === 0 ? 'rgba(255,255,255,0.8)' : INK.faint,
+      family: FONT.body, color: o.hint ? ink().amberText : depth === 0 ? ink().onCourse : ink().faint, opacity: depth === 0 && !o.hint ? 0.8 : undefined,
     })
   }
   return out
@@ -254,7 +257,7 @@ export function drawMindLink(child: MindObj, parent: MindObj): Prim[] {
   const a = { x: parent.x + parent.w / 2, y: parent.y + parent.h / 2 }
   const b = { x: child.x + child.w / 2, y: child.y + child.h / 2 }
   const mx = (a.x + b.x) / 2
-  return [{ t: 'path', d: `M${a.x} ${a.y}C${mx} ${a.y} ${mx} ${b.y} ${b.x} ${b.y}`, stroke: child.color, sw: 2, opacity: 0.55 }]
+  return [{ t: 'path', d: `M${a.x} ${a.y}C${mx} ${a.y} ${mx} ${b.y} ${b.x} ${b.y}`, stroke: paint(child.color), sw: 2, opacity: 0.55 }]
 }
 
 // ---- dispatch --------------------------------------------------------------

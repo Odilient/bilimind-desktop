@@ -13,8 +13,8 @@
  *
  * Every row is one thing: an icon, what it is, one quiet line of where it
  * lives, and on the row in front what Enter will do ("Open ↵", "Ask ↵").
- * The chat's rows (New chat, empty; "Ask BiliMind: …", typing) wear the
- * AI's mark, the ink disc with the lime spark, so the rows that leave the
+ * The chat's rows (New chat, empty; "Ask Bili: …", typing) wear the
+ * AI's mark, the ink disc with the yellow spark, so the rows that leave the
  * search for the chat are never mistaken for a result. Both go to the chat
  * page: a blank new chat, or one with the question already asked.
  */
@@ -40,6 +40,7 @@ import {
   type PaletteRow,
 } from '~/companion/palette'
 
+const { t: tr } = useI18n()
 const palette = usePalette()
 const c = useCompanion()
 const capture = useCapture()
@@ -192,6 +193,10 @@ async function perform(action: PaletteAction): Promise<void> {
       else if (action.kind === 'upload' || action.kind === 'photo') await note.files(action.kind)
       else if (action.kind === 'link' && action.url) await note.link(action.url)
       else if (action.kind === 'record') note.record()
+      // recording
+      else if (action.kind === 'screen') note.screen()
+      // imports
+      else if (action.kind === 'notion') note.notion()
       else if (action.kind === 'draft') note.draft()
       return
     case 'capture':
@@ -211,7 +216,7 @@ async function perform(action: PaletteAction): Promise<void> {
       }
       else if (action.id === 'quiet-ai') {
         toggleQuiet()
-        toast.info(quiet.value ? 'Quiet AI is on. AI buttons are hidden.' : 'Quiet AI is off.')
+        toast.info(quiet.value ? tr('palette.quietOn') : tr('palette.quietOff'))
       }
       return
     case 'query':
@@ -236,7 +241,7 @@ async function make(action: Extract<PaletteAction, { type: 'page' }>): Promise<v
     })
     await navigateTo(itemHref({ id }))
   } catch {
-    toast.error({ title: "Couldn't make the page", body: 'Check the connection and try again.' })
+    toast.error({ title: tr('palette.pageFailed'), body: tr('palette.checkConnection') })
   }
 }
 
@@ -247,17 +252,12 @@ async function openFile(item: Item): Promise<void> {
     window.open(known, '_blank', 'noopener')
     return
   }
-  if (c.status.mode === 'demo') {
-    toast.info({ title: item.title, body: 'Files open from the course in your own account.' })
-    if (item.subject_id) await navigateTo(`/app/courses/${item.subject_id}`)
-    return
-  }
   const tab = window.open('', '_blank')
   const url = await fetchFileUrl(item)
   if (url && tab) tab.location.href = url
   else {
     tab?.close()
-    toast.error({ title: item.title, body: "It can't be opened right now. Try again when you're online." })
+    toast.error({ title: item.title, body: tr('palette.fileOffline') })
   }
 }
 
@@ -301,15 +301,15 @@ function kbd(text: string): string {
         role="presentation"
       >
         <div
-          class="absolute inset-0 bg-[rgb(6_9_30/0.45)] backdrop-blur-[4px] max-sm:hidden"
+          class="absolute inset-0 bg-[rgb(30_24_14/0.26)] backdrop-blur-[3px] max-sm:hidden"
           @click="palette.hide()"
         />
 
         <div
-          class="pop-in relative flex h-full w-full flex-col overflow-hidden bg-surface sm:h-auto sm:max-h-[min(640px,78vh)] sm:max-w-[640px] sm:rounded-[22px] sm:shadow-pop sm:ring-1 sm:ring-border"
+          class="pop-in relative flex h-full w-full flex-col overflow-hidden bg-surface sm:h-auto sm:max-h-[min(640px,78vh)] sm:max-w-[640px] sm:rounded-[18px] sm:shadow-[0_0_0_1px_var(--border-strong),0_40px_90px_-20px_rgb(30_20_5/0.5)]"
           role="dialog"
           aria-modal="true"
-          aria-label="Search and ask"
+          :aria-label="tr('palette.dialog')"
         >
           <!-- The field -->
           <div class="cp-safe-top shrink-0 border-b border-border">
@@ -325,7 +325,7 @@ function kbd(text: string): string {
                 v-model="palette.query.value"
                 type="text"
                 class="h-full min-w-0 flex-1 bg-transparent text-[16px] text-text outline-none placeholder:text-text-faint"
-                :placeholder="quiet ? 'Search courses, notes, deadlines…' : 'Search, or ask BiliMind anything…'"
+                :placeholder="quiet ? tr('palette.phQuiet') : tr('palette.ph')"
                 autocomplete="off"
                 autocorrect="off"
                 spellcheck="false"
@@ -335,14 +335,14 @@ function kbd(text: string): string {
                 aria-autocomplete="list"
                 :aria-controls="`${uid}-list`"
                 :aria-activedescendant="flat.length ? optionId(active) : undefined"
-                aria-label="Search everything, or ask"
+                :aria-label="tr('palette.inputAria')"
                 @keydown="onKeydown"
               >
               <button
                 v-if="palette.query.value"
                 type="button"
                 class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-sunken hover:text-text-soft focus-visible:ring-2 focus-visible:ring-brand-line"
-                aria-label="Clear"
+                :aria-label="tr('palette.clear')"
                 @click="palette.query.value = ''; input?.focus()"
               >
                 <UiIcon
@@ -357,7 +357,7 @@ function kbd(text: string): string {
                 class="-mr-1 inline-flex h-11 shrink-0 cursor-pointer items-center px-2 text-[15px] font-semibold text-brand sm:hidden"
                 @click="palette.hide()"
               >
-                Cancel
+                {{ tr('common.cancel') }}
               </button>
             </div>
           </div>
@@ -367,7 +367,7 @@ function kbd(text: string): string {
             :id="`${uid}-list`"
             ref="list"
             role="listbox"
-            aria-label="Results"
+            :aria-label="tr('palette.results')"
             class="om-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2"
             @mousedown.prevent
           >
@@ -375,9 +375,9 @@ function kbd(text: string): string {
               v-if="nothing"
               class="px-5 pt-4 text-[13.5px] text-text-muted"
             >
-              Nothing you keep is called “{{ palette.query.value.trim() }}”.
+              {{ tr('palette.nothing', { q: palette.query.value.trim() }) }}
               <template v-if="!quiet">
-                Ask BiliMind, or make it.
+                {{ tr('palette.nothingAsk') }}
               </template>
             </p>
 
@@ -400,30 +400,37 @@ function kbd(text: string): string {
                 role="option"
                 :aria-selected="index === active"
                 :class="[
-                  'mx-2 flex min-h-[52px] cursor-pointer items-center gap-3 rounded-[12px] px-2.5 py-1.5 transition-colors duration-100',
+                  'mx-2 flex min-h-[52px] cursor-pointer items-center gap-3 rounded-[10px] px-2.5 py-1.5 transition-colors duration-100',
                   section.group === 'ask' && 'mt-2',
-                  index === active ? 'bg-surface-sunken' : '',
+                  index === active ? 'bg-[rgb(var(--wash-rgb)/0.065)]' : '',
                 ]"
                 @mousemove="active = index"
                 @click="run(row)"
               >
-                <!-- The AI's mark on the Ask row: the ink disc, the lime spark. -->
+                <!-- The AI's mark on the Ask row: the ink disc, the highlighter spark. -->
                 <span
                   v-if="row.group === 'ask'"
-                  class="grid size-9 shrink-0 place-items-center rounded-full bg-ink"
+                  class="grid size-9 shrink-0 place-items-center rounded-full bg-chip"
                   aria-hidden="true"
                 >
-                  <span class="grid size-6 place-items-center rounded-full bg-lime text-ink">
+                  <span class="grid size-6 place-items-center rounded-full bg-accent text-on-accent">
                     <UiIcon
                       name="spark"
                       :size="13"
                     />
                   </span>
                 </span>
+                <!-- A course is shown by its cover, as everywhere else. -->
+                <CompanionCourseCover
+                  v-else-if="row.group === 'courses'"
+                  :subject="row.key.slice('course:'.length)"
+                  size="sm"
+                  :px="36"
+                />
                 <span
                   v-else
                   :class="[
-                    'grid size-9 shrink-0 place-items-center rounded-[11px] transition-colors duration-100',
+                    'grid size-9 shrink-0 place-items-center rounded-[10px] transition-colors duration-100',
                     index === active ? 'bg-surface text-text shadow-[inset_0_0_0_1px_var(--border)]' : 'bg-surface-sunken text-text-soft',
                   ]"
                   aria-hidden="true"
@@ -480,18 +487,18 @@ function kbd(text: string): string {
           <div class="hidden shrink-0 items-center gap-4 border-t border-border-rule bg-surface-chrome px-5 py-2.5 text-[12px] text-text-faint sm:flex">
             <span class="inline-flex items-center gap-1.5">
               <kbd class="rounded-[5px] border border-border-field px-1 text-[11px]">↑</kbd><kbd class="rounded-[5px] border border-border-field px-1 text-[11px]">↓</kbd>
-              to move
+              {{ tr('palette.toMove') }}
             </span>
             <span class="inline-flex items-center gap-1.5">
               <kbd class="rounded-[5px] border border-border-field px-1 text-[11px]">↵</kbd>
-              to open
+              {{ tr('palette.toOpen') }}
             </span>
             <span
               v-if="!quiet"
               class="inline-flex items-center gap-1.5"
             >
               <kbd class="rounded-[5px] border border-border-field px-1 text-[11px]">{{ mod === '⌘' ? '⌘↵' : 'Ctrl ↵' }}</kbd>
-              to ask BiliMind
+              {{ tr('palette.toAsk') }}
             </span>
             <span
               v-if="palette.recent.value.length && !searching"
@@ -502,7 +509,7 @@ function kbd(text: string): string {
                 class="cursor-pointer rounded-[6px] px-1 text-text-faint transition-colors hover:text-text-soft focus-visible:ring-2 focus-visible:ring-brand-line"
                 @click="palette.forget()"
               >
-                Clear recent searches
+                {{ tr('palette.clearRecent') }}
               </button>
             </span>
           </div>

@@ -65,7 +65,7 @@ async function add(): Promise<void> {
         autocomplete="off"
         autofocus
         placeholder="https://… .ics"
-        class="h-12 w-full min-w-0 rounded-full border border-border-field bg-surface px-5 text-[16px] outline-none placeholder:text-text-faint focus:border-cobalt focus:ring-3 focus:ring-brand-line"
+        class="h-12 w-full min-w-0 rounded-full border border-border-field bg-surface px-5 text-[16px] outline-none placeholder:text-text-faint focus:border-brand focus:ring-3 focus:ring-brand-line"
       >
       <p
         v-if="note && !done"
@@ -92,7 +92,7 @@ async function add(): Promise<void> {
         Done: {{ done }}.
         <NuxtLink
           to="/app/calendar"
-          class="ml-1 font-semibold text-cobalt hover:underline"
+          class="ml-1 font-semibold text-brand hover:underline"
         >See your week</NuxtLink>
       </p>
     </div>

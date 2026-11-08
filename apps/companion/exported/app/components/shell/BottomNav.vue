@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 /**
  * The phone's navigation.
  *
@@ -56,35 +57,35 @@ interface Place {
   active: (path: string) => boolean
 }
 
-const OLD: Place[] = [
-  { to: '/today', label: 'Today', icon: 'home', active: (p) => p.startsWith('/today') },
+const OLD = computed<Place[]>(() => [
+  { to: '/today', label: t('shell.today'), icon: 'home', active: (p) => p.startsWith('/today') },
   {
     to: '/library',
-    label: 'Courses',
+    label: t('shell.courses'),
     icon: 'workspace',
     active: (p) => p.startsWith('/library') || p.startsWith('/courses'),
   },
-  { to: '/materials', label: 'Files', icon: 'file', active: (p) => p.startsWith('/materials') },
-]
+  { to: '/materials', label: t('shell.files'), icon: 'file', active: (p) => p.startsWith('/materials') },
+])
 
 const left = computed<Place[]>(() =>
   inApp.value
     ? [
         {
           to: '/app',
-          label: 'Today',
+          label: t('shell.today'),
           icon: 'home',
           count: c?.pendingSignals.value.length ?? 0,
-          active: (p) => p === '/app' || p === '/app/' || /^\/app\/(inbox|d\/|practice)/.test(p),
+          active: (p) => p === '/app' || p === '/app/' || /^\/app\/(d\/|practice)/.test(p),
         },
         {
           to: '/app/courses',
-          label: 'Courses',
+          label: t('shell.courses'),
           icon: 'workspace',
           active: (p) => p.startsWith('/app/courses') && !p.startsWith('/app/courses/notebook'),
         },
       ]
-    : OLD,
+    : OLD.value,
 )
 
 const right = computed<Place[]>(() =>
@@ -92,7 +93,7 @@ const right = computed<Place[]>(() =>
     ? [
         {
           to: '/app/notes',
-          label: 'Notes',
+          label: t('shell.notes'),
           icon: 'notebook',
           active: (p) =>
             p.startsWith('/app/notes') ||
@@ -100,7 +101,7 @@ const right = computed<Place[]>(() =>
             p.startsWith('/app/p/') ||
             p.startsWith('/app/b/'),
         },
-        { to: '/app/calendar', label: 'Calendar', icon: 'calendar', active: (p) => p.startsWith('/app/calendar') },
+        { to: '/app/calendar', label: t('shell.calendar'), icon: 'calendar', active: (p) => p.startsWith('/app/calendar') },
       ]
     : [],
 )
@@ -114,15 +115,15 @@ const TAB =
 <template>
   <nav
     class="flex shrink-0 items-stretch justify-around gap-1 border-t border-border bg-surface/94 px-2 pt-1.5 pb-[max(0.45rem,env(safe-area-inset-bottom))] backdrop-blur-[14px] lg:hidden"
-    aria-label="Main"
+    :aria-label="t('shell.mainNav')"
   >
     <NuxtLink
       v-for="item in left"
       :key="item.to"
       :to="item.to"
       :aria-current="item.active(route.path) ? 'page' : undefined"
-      :aria-label="item.count ? `${item.label}, ${item.count} waiting for your OK` : undefined"
-      :class="[TAB, item.active(route.path) ? 'text-text' : 'text-[#6b7080] dark:text-text-muted']"
+      :aria-label="item.count ? t('shell.waiting', { label: item.label, n: item.count }) : undefined"
+      :class="[TAB, item.active(route.path) ? 'text-text' : 'text-text-faint']"
     >
       <!-- Cobalt's current place: a lime-soft tile behind the icon, the same
            tile the desktop rail lights. -->
@@ -139,7 +140,7 @@ const TAB =
         />
         <span
           v-if="item.count"
-          class="absolute top-0 right-2 size-2 rounded-full bg-brand ring-2 ring-surface"
+          class="absolute top-0 right-2 size-2 rounded-full bg-rose ring-2 ring-surface"
           aria-hidden="true"
         />
       </span>
@@ -158,14 +159,14 @@ const TAB =
       v-if="inApp"
       type="button"
       :aria-expanded="plain ? undefined : ai.visible.value"
-      :aria-label="plain ? 'New chat' : 'Ask BiliMind about this screen'"
+      :aria-label="plain ? t('shell.newChat') : t('shell.askAboutScreen')"
       class="flex min-w-0 flex-1 cursor-pointer flex-col items-center justify-center gap-[3px] py-1.5 text-text-soft transition-colors focus-visible:outline-none [&:focus-visible>span:first-child]:ring-2 [&:focus-visible>span:first-child]:ring-brand"
       @click="centre"
     >
       <span
         :class="[
           'grid h-[26px] w-[44px] place-items-center rounded-full transition-[background-color,transform] duration-150 active:scale-95',
-          plain || ai.visible.value ? 'bg-accent text-on-accent' : 'bg-ink text-lime',
+          plain || ai.visible.value ? 'bg-accent text-on-accent' : 'bg-chip text-accent',
         ]"
       >
         <UiIcon
@@ -174,7 +175,7 @@ const TAB =
           :stroke="plain ? 2.4 : 1.9"
         />
       </span>
-      <span class="text-[10.5px] font-medium tracking-[-0.01em]">{{ plain ? 'New chat' : 'Ask' }}</span>
+      <span class="text-[10.5px] font-medium tracking-[-0.01em]">{{ plain ? t('shell.newChat') : t('shell.ask') }}</span>
     </button>
 
     <NuxtLink
@@ -182,7 +183,7 @@ const TAB =
       :key="item.to"
       :to="item.to"
       :aria-current="item.active(route.path) ? 'page' : undefined"
-      :class="[TAB, item.active(route.path) ? 'text-text' : 'text-[#6b7080] dark:text-text-muted']"
+      :class="[TAB, item.active(route.path) ? 'text-text' : 'text-text-faint']"
     >
       <span
         :class="[
@@ -209,7 +210,7 @@ const TAB =
       v-if="!inApp"
       to="/create"
       :aria-current="route.path.startsWith('/create') ? 'page' : undefined"
-      class="flex min-w-0 flex-1 flex-col items-center justify-center gap-[3px] py-1.5 text-[#6b7080] dark:text-text-muted transition-colors"
+      class="flex min-w-0 flex-1 flex-col items-center justify-center gap-[3px] py-1.5 text-text-faint transition-colors"
     >
       <span
         :class="[
@@ -218,7 +219,7 @@ const TAB =
           // on /create meant the button only looked important once you no
           // longer needed it.
           'grid h-[26px] w-[44px] place-items-center rounded-full bg-accent text-on-accent transition-colors',
-          route.path.startsWith('/create') && 'bg-chip text-lime',
+          route.path.startsWith('/create') && 'bg-chip text-accent',
         ]"
       >
         <UiIcon
@@ -227,7 +228,7 @@ const TAB =
           :stroke="2.4"
         />
       </span>
-      <span class="text-[10.5px] font-medium tracking-[-0.01em]">New</span>
+      <span class="text-[10.5px] font-medium tracking-[-0.01em]">{{ t('shell.new') }}</span>
     </NuxtLink>
   </nav>
 </template>

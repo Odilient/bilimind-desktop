@@ -95,16 +95,18 @@ const KIND_ICON: Record<string, string> = {
 
 const kindIcon = computed(() => KIND_ICON[props.type] ?? 'layers')
 
+// Daylight's block head (course.css .blk-h): a plain glyph and the name, muted. Something
+// to DO keeps the one loud colour, a highlighter square behind its glyph.
 const tileClass = computed(() => {
-  if (props.type === 'misconception') return 'bg-danger-soft text-danger'
+  if (props.type === 'misconception') return 'text-rose-ink'
   if (presentation.value.voice === 'task') return 'bg-accent text-on-accent'
-  return 'bg-brand-soft text-brand'
+  return 'text-text-muted'
 })
 
 /* White cards cut with a hairline and a long low drop — the lesson cards of the
    course player. State tones swap the ground, never the shape. */
 const cardTones = {
-  default: 'bg-surface shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.09),0_18px_36px_-30px_rgb(11_13_16/0.28)]',
+  default: 'bg-surface-mute shadow-[0_0_0_1px_var(--border)]',
   success: 'bg-success-soft shadow-[inset_0_0_0_1px_var(--success-line)]',
   warn: 'bg-warn-soft shadow-[inset_0_0_0_1px_var(--warn-line)]',
   danger: 'bg-danger-soft shadow-[inset_0_0_0_1px_var(--danger-line)]',
@@ -126,7 +128,7 @@ const frameClass = computed(() =>
   presentation.value.frame === 'rule'
     ? 'border-t border-dashed border-border-strong pt-6'
     : isCard.value
-      ? ['rounded-[20px] px-4 pt-4 pb-4.5 sm:px-6 sm:pt-5 sm:pb-6', cardTones[props.tone]]
+      ? ['rounded-[14px] px-4 pt-4 pb-4.5 sm:px-[18px] sm:pb-5', cardTones[props.tone]]
       : '',
 )
 </script>
@@ -135,21 +137,21 @@ const frameClass = computed(() =>
   <section :class="frameClass">
     <header
       v-if="eyebrow || $slots.actions"
-      class="mb-3 flex min-h-6 items-center gap-2.5"
+      class="mb-2.5 flex min-h-6 items-center gap-[7px]"
     >
       <span
         v-if="eyebrow"
-        :class="['grid size-[22px] shrink-0 place-items-center rounded-[7px]', tileClass]"
+        :class="['grid size-5 shrink-0 place-items-center rounded-[6px]', tileClass]"
       >
         <UiIcon
           :name="kindIcon"
-          :size="12"
+          :size="14"
           :stroke="2"
         />
       </span>
       <span
         v-if="eyebrow"
-        class="text-[11px] leading-none font-semibold tracking-[0.08em] text-text-faint uppercase"
+        class="text-[12px] leading-none font-bold text-text-muted"
         >{{ eyebrow }}</span
       >
       <span
@@ -185,7 +187,7 @@ const frameClass = computed(() =>
     >
       From your files
       <span
-        class="inline-flex h-[22px] items-center gap-1.5 rounded-full bg-brand-soft px-2.5 text-[11.5px] font-semibold text-brand"
+        class="inline-flex h-[21px] items-center gap-1 rounded-[6px] bg-[rgb(var(--wash-rgb)/0.065)] px-[7px] text-[12px] font-semibold text-text-soft"
       >
         <UiIcon
           name="file"

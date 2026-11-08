@@ -116,13 +116,13 @@ onBeforeUnmount(() => {
               section.ordinal === active
                 ? 'bg-chip'
                 : section.voice === 'task'
-                  ? 'bg-surface ring-[2px] ring-lime-2'
+                  ? 'bg-surface ring-[2px] ring-hi-2'
                   : 'bg-surface ring-[1.5px] ring-[#cdd0d8] dark:ring-text-ghost',
             ]"
           >
             <span
               v-if="section.ordinal === active"
-              class="size-[5px] rounded-full bg-lime"
+              class="size-[5px] rounded-full bg-accent"
             />
           </span>
           <span class="min-w-0 flex-1 truncate">{{ section.heading }}</span>

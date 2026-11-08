@@ -1,0 +1,26 @@
+{
+  "moreActions": "Diğer eylemler",
+  "hidePassword": "Parolayı gizle",
+  "showPassword": "Parolayı göster",
+  "dismiss": "Kapat",
+  "complete": "%{n} tamamlandı",
+  "nothing": "(hiçbir şey)",
+  "week": "findPerson",
+  "upgrade": {
+    "message": "Merkez planına dahildir: öğrenci başına aylık $1 (en az $29), 30 günlük deneme sürümüyle.",
+    "seePlans": "Planları gör",
+    "ownerChange": "Kurum sahibi Ayarlar'dan planı değiştirebilir."
+  },
+  "looking": "Aranıyor…",
+  "nobody": "Bu isimde kimse yok.",
+  "noDate": "Tarih yok",
+  "clearSearch": "Aramayı temizle",
+  "due": "Son teslim",
+  "remove": "{name} kişisini kaldır",
+  "search": "Ara",
+  "noData": "Veri yok",
+  "findPerson": "Kişi bul",
+  "change": "Değiştir",
+  "searchPerson": "İsim veya e-postaya göre ara",
+  "versus": "önceki döneme kıyasla"
+}

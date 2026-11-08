@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CourseNode, ProgressState } from '~/types/api'
 import type { TreeItem, TreeStep } from '~/composables/useRoadmap'
+import { markOf } from '~/components/companion/course/Mark.vue'
 
 /**
  * The course structure as a list: the roadmap's table of contents.
@@ -43,6 +44,8 @@ const props = defineProps<{
   openChapters?: string[]
   currentChapter?: string | null
   writable?: boolean
+  /** Steps recalled in a check: their mark is the filled leaf. */
+  checkedIds?: number[]
 }>()
 
 const emit = defineEmits<{
@@ -52,6 +55,7 @@ const emit = defineEmits<{
 }>()
 
 const openSet = computed(() => new Set(props.openNodeIds))
+const checked = computed(() => new Set(props.checkedIds ?? []))
 
 const tree = computed(() => courseTree(props.nodes))
 
@@ -171,9 +175,8 @@ function doneIn(step: TreeStep): number {
 
 function stateClass(node: CourseNode): string {
   const state = progressOf(node)
-  if (state === 'completed') return 'line-through text-text-faint'
-  if (state === 'skipped') return 'line-through text-text-ghost'
-  if (state === 'in_progress') return 'underline decoration-lime-2 decoration-2 underline-offset-[3px]'
+  // The mark says done and learning; only a skipped step is struck through.
+  if (state === 'skipped') return 'line-through text-text-faint'
   return ''
 }
 
@@ -193,12 +196,12 @@ function onContextMenu(node: CourseNode, event: MouseEvent): void {
       <button
         v-if="heading && foldChapters"
         type="button"
-        class="group/chapter mt-1.5 flex min-h-[30px] w-full cursor-pointer items-center gap-1.5 rounded-[10px] pr-2 pl-0.5 text-left transition-colors first:mt-0 hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt"
+        class="group/chapter mt-1.5 flex min-h-[30px] w-full cursor-pointer items-center gap-1.5 rounded-[10px] pr-2 pl-0.5 text-left transition-colors first:mt-0 hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
         :aria-expanded="chapterOpen(heading)"
         :title="heading"
         @click="toggleChapter(heading)"
       >
-        <span class="grid size-5 shrink-0 place-items-center text-[#a5a9b4] transition-colors group-hover/chapter:text-text-soft">
+        <span class="grid size-5 shrink-0 place-items-center text-text-faint transition-colors group-hover/chapter:text-text-soft">
           <UiIcon
             name="chevron-down"
             :size="12"
@@ -220,7 +223,7 @@ function onContextMenu(node: CourseNode, event: MouseEvent): void {
       <!-- A chapter heading, where one opens. -->
       <p
         v-else-if="heading"
-        class="mt-2 truncate px-1.5 pt-2.5 pb-1.5 text-[11px] font-semibold tracking-[0.08em] text-text-faint uppercase first:mt-0"
+        class="mt-2 truncate px-1.5 pt-2.5 pb-1.5 text-[12px] font-semibold text-text-muted first:mt-0"
         :title="heading"
       >
         {{ heading }}
@@ -229,7 +232,7 @@ function onContextMenu(node: CourseNode, event: MouseEvent): void {
       <div
         v-if="shown"
         :class="[
-          'group/step flex min-h-[34px] w-full items-center gap-1 rounded-[10px] py-1 pr-2 pl-0.5 transition-colors',
+          'group/step flex min-h-[30px] w-full items-center gap-1 rounded-[8px] py-0.5 pr-2 pl-0.5 transition-colors',
           step.node.id === activeNodeId ? 'bg-accent-soft' : 'hover:bg-surface-mute',
         ]"
       >
@@ -237,7 +240,7 @@ function onContextMenu(node: CourseNode, event: MouseEvent): void {
         <button
           v-if="step.items.length"
           type="button"
-          class="grid size-5 shrink-0 cursor-pointer place-items-center rounded-[6px] text-[#a5a9b4] dark:text-text-faint transition-colors hover:bg-surface-track hover:text-text-soft"
+          class="grid size-5 shrink-0 cursor-pointer place-items-center rounded-[6px] text-text-faint transition-colors hover:bg-surface-track hover:text-text-soft"
           :aria-label="isOpen(step) ? 'Fold this step' : 'Unfold this step'"
           :aria-expanded="isOpen(step)"
           @click.stop="toggle(step)"
@@ -262,26 +265,9 @@ function onContextMenu(node: CourseNode, event: MouseEvent): void {
           @click="emit('open', step.node.id)"
           @contextmenu="onContextMenu(step.node, $event)"
         >
-          <span
-            :class="[
-              // Cobalt's number disc: bare by default, lime on the current
-              // step, cobalt with a white check once it is done, as on the board.
-              'num grid size-5 shrink-0 place-items-center rounded-full font-display text-[10.5px] font-semibold',
-              progressOf(step.node) === 'completed'
-                ? 'bg-brand text-on-brand'
-                : step.node.id === activeNodeId
-                  ? 'bg-accent text-on-accent'
-                  : 'text-text-faint',
-            ]"
-          >
-            <UiIcon
-              v-if="progressOf(step.node) === 'completed'"
-              name="check"
-              :size="10"
-              :stroke="3"
-            />
-            <template v-else>{{ step.step }}</template>
-          </span>
+          <!-- Daylight's topic row: its place on the line, then its status mark. -->
+          <span class="num w-4 shrink-0 text-right text-[11px] font-semibold text-text-faint">{{ step.step }}</span>
+          <CompanionCourseMark :state="markOf(step.node, checked.has(step.node.id))" />
 
           <span
             :class="[

@@ -15,6 +15,7 @@ import { useCompanion } from '~/companion/store'
 import { FOCUS_MIN, useFocus } from '~/companion/focus'
 import { nowIso, timecode } from '~/companion/time'
 
+const { t } = useI18n()
 const c = useCompanion()
 const focus = useFocus()
 const toast = useToast()
@@ -22,7 +23,7 @@ const toast = useToast()
 const s = computed(() => focus.state.value)
 const paused = computed(() => Boolean(s.value && !s.value.ends_at))
 const time = computed(() => timecode(Math.ceil(focus.left.value / 1000)))
-const word = computed(() => (s.value?.phase === 'break' ? 'Break' : paused.value ? 'Paused' : 'Focus'))
+const word = computed(() => t(s.value?.phase === 'break' ? 'today.focus.break' : paused.value ? 'today.focus.paused' : 'today.focus.focus'))
 
 useHead({ titleTemplate: computed(() => (s.value ? `${time.value} ${word.value} · %s` : '%s')) })
 
@@ -46,23 +47,25 @@ watch(
       const task = c.planTasks.value.find((t) => t.id === ended.task_id)
       const minutes = Math.round(focus.left.value / 60_000)
       toast.success({
-        title: ended.label ? `${FOCUS_MIN} minutes on ${ended.label}` : `${FOCUS_MIN} minutes of focus`,
-        body: `Take ${minutes} minutes off. Stand up, look away from the screen.`,
+        title: ended.label
+          ? t('today.focus.minutesOn', { n: FOCUS_MIN, label: ended.label }, FOCUS_MIN)
+          : t('today.focus.minutesOfFocus', FOCUS_MIN),
+        body: t('today.focus.takeOff', minutes),
         duration: 0,
         action:
           task && !task.done_at
             ? {
-                label: 'Mark it done',
+                label: t('today.focus.markDone'),
                 handler: () => void c.upsert<PlanTask>('plan-tasks', { id: task.id, done_at: nowIso() }),
               }
             : undefined,
       })
     } else {
       toast.info({
-        title: "Break's over",
+        title: t('today.focus.breakOver'),
         body: ended.label || undefined,
         duration: 0,
-        action: { label: `${FOCUS_MIN} more minutes`, handler: () => again(ended) },
+        action: { label: t('today.focus.moreMinutes', FOCUS_MIN), handler: () => again(ended) },
       })
     }
   },
@@ -78,7 +81,7 @@ watch(
       <button
         type="button"
         class="flex min-w-0 cursor-pointer items-center gap-2 rounded-full py-0.5 pr-2.5 pl-2 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
-        :aria-label="`${word}${s.label ? ` · ${s.label}` : ''}, ${time} left.${s.to ? ' Go back to it.' : ''}`"
+        :aria-label="`${word}${s.label ? ` · ${s.label}` : ''}, ${t('today.focus.left', { time })}${s.to ? ` ${t('today.focus.goBack')}` : ''}`"
         @click="back"
       >
         <span
@@ -92,7 +95,7 @@ watch(
         v-if="s.phase === 'focus'"
         type="button"
         class="grid size-7 shrink-0 cursor-pointer place-items-center rounded-full text-paper-2 transition-colors hover:bg-white/12 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
-        :aria-label="paused ? 'Resume focus' : 'Pause focus'"
+        :aria-label="t(paused ? 'today.focus.resume' : 'today.focus.pause')"
         @click="paused ? focus.resume() : focus.pause()"
       >
         <UiIcon
@@ -106,12 +109,12 @@ watch(
         class="h-7 shrink-0 cursor-pointer rounded-full px-2.5 text-[12.5px] text-paper-2 transition-colors hover:bg-white/12 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
         @click="again(s)"
       >
-        Back to it
+        {{ t('today.focus.backToIt') }}
       </button>
       <button
         type="button"
         class="grid size-7 shrink-0 cursor-pointer place-items-center rounded-full text-paper-2 transition-colors hover:bg-white/12 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
-        aria-label="Stop the focus timer"
+        :aria-label="t('today.focus.stop')"
         @click="focus.stop()"
       >
         <UiIcon

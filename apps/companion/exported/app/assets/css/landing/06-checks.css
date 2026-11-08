@@ -1,0 +1,118 @@
+/* 06 · checks: one real check you can take, beside the four rules that make it a check */
+.d2 .ck { padding-bottom: 0; }
+.d2 .ck-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); border-bottom: 0; }
+
+.d2 .ck-stage { display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding: 64px 48px 48px; }
+.d2 .ck-hand { position: absolute; top: 18px; left: 48px; display: flex; align-items: flex-end; gap: 2px; font: 600 24px/1 'Caveat', var(--font); color: var(--rose-ink); transform: rotate(-2deg); }
+.d2 .ck-hand svg { width: 46px; height: 32px; margin-bottom: -16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.d2 .ck-win { width: min(600px, 100%); min-height: 470px; }
+
+.d2 .ck-prog { flex: none; display: flex; align-items: center; gap: 12px; padding: 14px 20px 0; font-size: 12.5px; font-weight: 650; color: var(--ink-2); }
+.d2 .ck-dots { display: flex; gap: 4px; }
+.d2 .ck-dots i { width: 22px; height: 5px; border-radius: 3px; background: var(--wash-2); transition: background-color 0.4s; }
+.d2 .ck-dots i.now { background: var(--ink); }
+.d2 .ck-dots i.ok { background: var(--leaf); }
+.d2 .ck-dots i.no { background: var(--rose); }
+.d2 .ck-when { margin-left: auto; font-weight: 560; color: var(--ink-3); }
+
+.d2 .ck-screens { flex: 1; display: grid; }
+.d2 .ck-s { grid-area: 1 / 1; padding: 14px 20px 18px; display: flex; flex-direction: column; gap: 14px; opacity: 0; visibility: hidden; transform: translateX(16px); transition: opacity 0.35s, transform 0.45s var(--ease), visibility 0s 0.35s; }
+.d2 .ck-s.on { opacity: 1; visibility: visible; transform: none; transition: opacity 0.4s 0.1s, transform 0.5s var(--ease) 0.1s, visibility 0s; }
+.d2 .ck-q { font-family: var(--font-display); font-size: 23px; font-weight: 600; line-height: 1.18; letter-spacing: -0.025em; text-wrap: balance; }
+
+/* answers look like buttons you can press */
+.d2 .ck-opts { display: grid; gap: 8px; }
+.d2 .ck-opts.two { grid-template-columns: 1fr 1fr; }
+.d2 .ck-opts button { display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 10px 14px; border-radius: 12px; text-align: left; font-size: 15px; font-weight: 600; color: var(--ink); background: var(--card); box-shadow: 0 0 0 1px var(--line-2), 0 1px 2px rgb(70 50 20 / 0.06); cursor: pointer; transition: box-shadow 0.2s, transform 0.2s var(--ease), background-color 0.25s; }
+.d2 .ck-opts button > span:nth-child(2) { flex: 1; }
+.d2 .ck-opts button:hover:not(:disabled) { box-shadow: 0 0 0 1.5px var(--ink), var(--shadow-2); transform: translateY(-1px); }
+.d2 .ck-opts button:active:not(:disabled) { transform: translateY(0); }
+.d2 .ck-opts .rd { width: 18px; height: 18px; flex: none; border-radius: 99px; box-shadow: inset 0 0 0 1.5px var(--line-2); display: grid; place-items: center; transition: background-color 0.25s, box-shadow 0.25s; }
+.d2 .ck-opts button:hover:not(:disabled) .rd { box-shadow: inset 0 0 0 1.5px var(--ink-3); }
+.d2 .ck-opts button:disabled { cursor: default; }
+.d2 .ck-opts button.dim { opacity: 0.5; }
+.d2 .ck-opts button.right { background: var(--leaf-soft); box-shadow: 0 0 0 1.5px var(--leaf); opacity: 1; }
+.d2 .ck-opts button.right .rd { background: var(--leaf); box-shadow: none; }
+.d2 .ck-opts button.wrong { background: var(--rose-soft); box-shadow: 0 0 0 1.5px var(--rose); opacity: 1; animation: d2-ck-shake 0.4s; }
+.d2 .ck-opts button.wrong .rd { background: var(--rose); box-shadow: none; }
+.d2 .ck-opts .rd::after { content: ''; width: 6px; height: 6px; border-radius: 9px; background: #fff; opacity: 0; }
+.d2 .ck-opts .right .rd::after, .d2 .ck-opts .wrong .rd::after { opacity: 1; }
+@keyframes d2-ck-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+/* a nudge when the check scrolls in, so it's clearly something to press */
+.d2 .ck-win.nudge .ck-s.on .ck-opts button { animation: d2-ck-nudge 0.6s var(--ease) both; }
+.d2 .ck-win.nudge .ck-s.on .ck-opts button:nth-child(2) { animation-delay: 0.08s; }
+.d2 .ck-win.nudge .ck-s.on .ck-opts button:nth-child(3) { animation-delay: 0.16s; }
+.d2 .ck-win.nudge .ck-s.on .ck-opts button:nth-child(4) { animation-delay: 0.24s; }
+@keyframes d2-ck-nudge { 40% { transform: translateY(-3px); box-shadow: 0 0 0 1.5px var(--ink-3), var(--shadow-2); } }
+
+/* written answer and its rubric */
+.d2 .ck-ans { width: 100%; resize: none; padding: 12px 14px; border-radius: 12px; border: 0; background: var(--card); box-shadow: 0 0 0 1px var(--line-2); font: inherit; font-size: 15px; line-height: 1.5; color: var(--ink); }
+.d2 .ck-ans:focus { outline: none; box-shadow: 0 0 0 1.5px var(--ink); }
+.d2 .ck-ans::placeholder { color: var(--ink-3); }
+.d2 .ck-rubric { display: grid; gap: 4px; }
+.d2 .ck-rubric li { display: flex; align-items: center; gap: 9px; min-height: 34px; padding: 0 10px; border-radius: 9px; font-size: 13.5px; color: var(--ink-2); animation: d2-ck-in 0.4s var(--ease) both; }
+.d2 .ck-rubric li:nth-child(2) { animation-delay: 0.25s; } .d2 .ck-rubric li:nth-child(3) { animation-delay: 0.5s; }
+.d2 .ck-rubric li span { flex: 1; }
+.d2 .ck-rubric li svg { width: 20px; height: 20px; padding: 3px; border-radius: 99px; flex: none; background: var(--leaf-soft); color: var(--leaf-ink); }
+.d2 .ck-rubric li b { font-size: 12.5px; color: var(--leaf-ink); }
+.d2 .ck-rubric li.miss { background: var(--hi-soft); color: var(--ink); font-weight: 600; }
+.d2 .ck-rubric li.miss svg { background: var(--card); color: var(--hi-ink); }
+.d2 .ck-rubric li.miss b { color: var(--hi-ink); }
+@keyframes d2-ck-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* result */
+.d2 .ck-done { justify-content: center; align-items: center; text-align: center; gap: 12px; }
+.d2 .ck-score { display: flex; align-items: baseline; gap: 8px; font-size: 16px; font-weight: 600; color: var(--ink-2); }
+.d2 .ck-score b { font-family: var(--font-display); font-size: 64px; font-weight: 600; letter-spacing: -0.05em; line-height: 1; color: var(--ink); }
+.d2 .ck-verdict { font-size: 17px; font-weight: 680; }
+.d2 .ck-path { display: flex; align-items: center; gap: 0; margin: 10px 0 4px; }
+.d2 .cp { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 10px; background: var(--card); box-shadow: 0 0 0 1px var(--line-2); font-size: 12.5px; font-weight: 650; white-space: nowrap; transition: background-color 0.5s 0.4s, box-shadow 0.5s 0.4s; }
+.d2 .cp svg { width: 14px; height: 14px; color: var(--leaf-ink); }
+.d2 .cp.done { background: color-mix(in oklab, var(--leaf-soft) 55%, var(--card)); }
+.d2 .cp.fut { color: var(--ink-3); box-shadow: 0 0 0 1px var(--line); }
+.d2 #ckNode svg { display: none; }
+.d2 #ckNode.pass { background: var(--leaf); color: #fff; box-shadow: 0 0 0 1px var(--leaf); }
+.d2 #ckNode.pass svg { display: block; color: #fff; }
+.d2 #ckNode.miss { background: var(--hi-soft); box-shadow: 0 0 0 1px var(--hi-2); }
+.d2 .cp-ln { width: 18px; height: 2px; background: var(--ink-3); }
+.d2 .cp-ln.fut { background: repeating-linear-gradient(90deg, var(--ink-4) 0 2px, transparent 2px 6px); }
+.d2 .ck-nextc { font-size: 13px; color: var(--ink-3); }
+
+.d2 .ck-f { flex: none; display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 16px; border-top: 1px solid var(--line); background: var(--card-2); }
+.d2 .ck-say { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.d2 .ck-say p { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); transition: opacity 0.2s; }
+.d2 .ck-say p b { color: var(--ink); }
+.d2 .ck-f .btn:disabled { opacity: 0.35; cursor: default; }
+
+/* the rules */
+.d2 .ck-rules { display: flex; align-items: center; padding: 48px 48px 48px 44px; }
+.d2 .ck-rules ol { display: grid; gap: 6px; width: 100%; }
+.d2 .ck-rules li { display: flex; gap: 16px; padding: 18px; border-radius: 16px; opacity: 0.5; transition: opacity 0.4s, background-color 0.4s, box-shadow 0.4s; }
+.d2 .ck-rules li.on { opacity: 1; background: var(--card); box-shadow: 0 0 0 1px var(--line), var(--shadow-1); }
+.d2 .ck-rules li > div { display: grid; gap: 4px; }
+.d2 .ck-rules p { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); }
+.d2 .ck-gaps { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.d2 .ck-gaps span { display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 7px; background: var(--wash-2); font-size: 12px; font-weight: 650; color: var(--ink-3); }
+.d2 .ck-gaps .ok { background: var(--leaf-soft); color: var(--leaf-ink); }
+.d2 .ck-gaps .now { background: var(--ink); color: var(--on-ink); }
+.d2 .ck-gaps svg { width: 12px; height: 12px; stroke-width: 3; }
+
+@media (max-width: 1100px) {
+  .d2 .ck-stage { padding: 60px 24px 32px; }
+  .d2 .ck-hand { left: 24px; }
+  .d2 .ck-rules { padding: 32px 24px; }
+}
+@media (max-width: 900px) {
+  .d2 .ck-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .d2 .ck-stage { padding: 56px 10px 20px; }
+  .d2 .ck-hand { left: 18px; font-size: 21px; }
+  .d2 .ck-win { min-height: 500px; }
+  .d2 .ck-when { display: none; }
+  .d2 .ck-q { font-size: 20px; }
+  .d2 .ck-opts button { font-size: 14px; }
+  .d2 .ck-win .ui-r { display: none; }
+  .d2 .ck-rules { padding: 20px 10px 28px; }
+  .d2 .ck-rules li { padding: 14px; gap: 12px; }
+}

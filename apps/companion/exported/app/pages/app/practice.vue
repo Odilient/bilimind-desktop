@@ -36,6 +36,7 @@ definePageMeta({ layout: 'companion' })
 
 const route = useRoute()
 const c = useCompanion()
+const { t } = useI18n()
 
 const deadlineId = computed(() => (route.query.deadline ? String(route.query.deadline) : null))
 const subjectId = computed(() => (route.query.subject ? String(route.query.subject) : null))
@@ -54,15 +55,20 @@ const after = ref<Readiness | null>(null)
 const busy = ref(false)
 
 function scopeCards(): Card[] {
+  // The same window every "N due" count uses (the course's Practice, its tab's
+  // count): a count that promised cards the session then didn't have read as broken.
   const until = Date.now() + 86_400_000
   if (deadline.value) return dueCardsFor(deadline.value.topic_ids, c.cards.value, until)
   return c.cards.value
-    .filter((k) => !k.suspended && Date.parse(k.due_at) <= Date.now() && (!subjectId.value || k.subject_id === subjectId.value))
+    .filter((k) => !k.suspended && Date.parse(k.due_at) <= until && (!subjectId.value || k.subject_id === subjectId.value))
     .sort((a, b) => Date.parse(a.due_at) - Date.parse(b.due_at))
 }
 
 async function start(): Promise<void> {
   await c.load()
+  // A cold load brings only the cards due now; the queue is fixed below, so
+  // wait for the ones due later today too, or it is shorter than the count.
+  await c.cardsLoaded()
   queue.value = scopeCards().slice(0, 40).map((k) => k.id)
   index.value = 0
   revealed.value = false
@@ -131,8 +137,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 const reviewed = computed(() => ratings.value.length)
 const minutes = computed(() => Math.max(1, Math.round((Date.now() - startedAt.value) / 60_000)))
 const remembered = computed(() => ratings.value.filter((r) => r >= 3).length)
-const scopeLabel = computed(() => deadline.value?.title ?? scopeSubject.value?.title ?? 'everything due')
-const heading = computed(() => (deadline.value || scopeSubject.value ? `Cards for ${scopeLabel.value}` : 'Cards due today'))
+const scopeLabel = computed(() => deadline.value?.title ?? scopeSubject.value?.title ?? '')
+const heading = computed(() => (deadline.value || scopeSubject.value ? t('settings.practice.headingFor', { scope: scopeLabel.value }) : t('settings.practice.headingDue')))
 
 /** Readiness in words, the checks' way: a deadline nobody has checked says so. */
 function words(r: Readiness): string {
@@ -157,8 +163,8 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
       <NuxtLink
         :to="backTo"
         class="-ml-2 grid size-11 shrink-0 place-items-center rounded-full text-text-muted transition-colors hover:bg-surface-mute hover:text-text"
-        aria-label="Stop practising"
-        title="Stop"
+        :aria-label="t('settings.practice.stopAria')"
+        :title="t('settings.practice.stop')"
       >
         <CompanionIcon
           name="x"
@@ -171,10 +177,10 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
           <span
             v-if="queue.length && !done"
             class="shrink-0 text-[14px] text-text-muted"
-          >{{ Math.min(index + 1, queue.length) }} of {{ queue.length }}</span>
+          >{{ t('settings.practice.progress', { n: Math.min(index + 1, queue.length), total: queue.length }) }}</span>
         </p>
         <span
-          class="h-1.5 overflow-hidden rounded-full bg-surface-track"
+          class="h-1.5 overflow-hidden rounded-full bg-[rgb(var(--wash-rgb)/0.065)]"
           aria-hidden="true"
         >
           <span
@@ -187,7 +193,7 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
 
     <div
       v-if="!started"
-      class="cp-skel h-[360px] rounded-[24px]"
+      class="cp-skel h-[360px] rounded-[18px]"
       aria-busy="true"
     />
 
@@ -196,11 +202,10 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
       class="grid justify-items-center gap-3 py-16 text-center"
     >
       <h1 class="t-head text-[26px]">
-        Nothing to review here
+        {{ t('settings.practice.emptyTitle') }}
       </h1>
       <p class="max-w-[440px] text-[15px] leading-relaxed text-text-muted">
-        Every card is resting until its next date. That's the point: you'll see each one again
-        just before you'd forget it.
+        {{ t('settings.practice.emptyText') }}
       </p>
       <UiBtn
         :to="backTo"
@@ -208,7 +213,7 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
         size="lg"
         class="mt-2"
       >
-        {{ deadline ? `Back to ${deadline.title}` : 'Back' }}
+        {{ deadline ? t('settings.practice.backTo', { title: deadline.title }) : t('settings.practice.back') }}
       </UiBtn>
     </section>
 
@@ -218,23 +223,22 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
       class="grid justify-items-center gap-3 py-16 text-center"
     >
       <h1 class="t-head text-[30px]">
-        Done for now
+        {{ t('settings.practice.doneTitle') }}
       </h1>
       <p
         v-if="deadline && before && after && moved"
         class="text-[18px] font-medium text-text"
       >
-        {{ deadline.title }}: {{ words(before) }} → {{ words(after) }}
+        {{ t('settings.practice.moved', { title: deadline.title, from: words(before), to: words(after) }) }}
       </p>
       <p class="max-w-[440px] text-[15px] leading-relaxed text-text-muted">
-        {{ reviewed }} answers in about {{ minutes }} min, {{ remembered }} remembered.
-        Each card comes back on its own schedule, just before you'd forget it.
+        {{ t('settings.practice.summary', { n: reviewed, minutes, remembered }, reviewed) }}
       </p>
       <p
         v-if="opens"
         class="max-w-[440px] text-[15px] leading-relaxed text-text"
       >
-        Your next check on these opens {{ opens }}.
+        {{ t('settings.practice.nextCheck', { when: opens }) }}
       </p>
       <div class="mt-3 flex flex-wrap justify-center gap-2">
         <UiBtn
@@ -242,14 +246,14 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
           variant="primary"
           size="lg"
         >
-          {{ deadline ? `Back to ${deadline.title}` : 'Done' }}
+          {{ deadline ? t('settings.practice.backTo', { title: deadline.title }) : t('settings.practice.done') }}
         </UiBtn>
         <UiBtn
           to="/app"
           variant="secondary"
           size="lg"
         >
-          Today
+          {{ t('settings.practice.today') }}
         </UiBtn>
       </div>
     </section>
@@ -257,17 +261,17 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
     <!-- One card. -->
     <template v-else-if="card">
       <article
-        class="grid min-h-[340px] content-start gap-5 rounded-[24px] border border-border bg-surface p-6 min-[900px]:min-h-[400px] min-[900px]:p-10"
+        class="grid min-h-[340px] content-start gap-4 rounded-[18px] bg-surface p-5 shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] min-[900px]:min-h-[400px] min-[900px]:p-8"
         :aria-live="revealed ? 'polite' : 'off'"
       >
-        <p class="flex min-w-0 items-center gap-2 text-[14px] text-text-muted">
+        <p class="flex min-w-0 items-center gap-2 text-[12.5px] font-semibold text-text-muted">
           <span
             class="size-2 shrink-0 rounded-full"
             :style="{ background: courseColor(cardSubject?.color) }"
           />
           <span class="truncate">{{ topic?.title ?? cardSubject?.title }}</span>
         </p>
-        <h1 class="t-head text-[26px] leading-snug min-[900px]:text-[34px]">
+        <h1 class="font-display text-[23px] leading-[1.18] font-semibold tracking-[-0.025em] text-balance min-[900px]:text-[30px]">
           {{ card.front }}
         </h1>
         <template v-if="revealed">
@@ -279,7 +283,7 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
             v-if="card.source_quote"
             class="text-[14px] text-text-muted"
           >
-            From {{ card.source_quote }}
+            {{ t('settings.practice.from', { quote: card.source_quote }) }}
           </p>
         </template>
       </article>
@@ -293,10 +297,10 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
             block
             @click="revealed = true"
           >
-            Show the answer
+            {{ t('settings.practice.show') }}
           </UiBtn>
           <p class="mt-3 hidden text-center text-[14px] text-text-muted min-[900px]:block">
-            or press Space
+            {{ t('settings.practice.orSpace') }}
           </p>
         </template>
         <div
@@ -307,7 +311,7 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
             id="rate-q"
             class="text-center text-[15px] font-medium text-text"
           >
-            How well did you remember it?
+            {{ t('settings.practice.howWell') }}
           </p>
           <div
             class="grid grid-cols-4 gap-2"
@@ -318,8 +322,8 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
               v-for="r in RATINGS"
               :key="r.value"
               type="button"
-              class="grid min-h-[68px] place-items-center content-center gap-0.5 rounded-[18px] border px-1 py-2 text-[16px] font-semibold transition-colors disabled:opacity-50"
-              :class="r.value === 3 ? 'border-transparent bg-ink text-white hover:bg-ink-2' : r.value === 1 ? 'border-transparent bg-coral-soft text-coral-text hover:bg-[#ffd9cc]' : 'border-border-strong bg-surface text-text hover:bg-surface-mute'"
+              class="grid min-h-[64px] cursor-pointer place-items-center content-center gap-0.5 rounded-[12px] border px-1 py-2 text-[15px] font-semibold shadow-[var(--shadow-card)] transition-[background-color,box-shadow,transform] duration-200 ease-[var(--ease)] enabled:hover:-translate-y-px disabled:opacity-50"
+              :class="r.value === 3 ? 'border-transparent bg-inverse text-on-inverse hover:bg-inverse-hover' : r.value === 1 ? 'border-transparent bg-rose-soft text-rose-ink hover:shadow-[0_0_0_1.5px_var(--rose)]' : 'border-border-strong bg-surface text-text hover:bg-surface-mute'"
               :disabled="busy"
               :aria-keyshortcuts="r.key"
               @click="rate(r.value)"
@@ -327,12 +331,12 @@ const backTo = computed(() => (deadline.value ? `/app/d/${deadline.value.id}` : 
               {{ r.label }}
               <span
                 class="text-[13px] font-medium"
-                :class="r.value === 3 ? 'text-paper-3' : 'opacity-75'"
-              >in {{ preview?.[r.value] }}</span>
+                :class="r.value === 3 ? 'text-on-inverse/60' : 'opacity-75'"
+              >{{ t('settings.practice.in', { when: preview?.[r.value] }) }}</span>
             </button>
           </div>
           <p class="hidden text-center text-[14px] text-text-muted min-[900px]:block">
-            "In 10 min" is when you'll see the card again. Keys 1 to 4 work too.
+            {{ t('settings.practice.hint') }}
           </p>
         </div>
       </div>

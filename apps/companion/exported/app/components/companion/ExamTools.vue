@@ -15,10 +15,11 @@ import type { Deadline } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { TARGETS, neededOn } from '~/companion/grades'
 import { dayKey, daysBetween } from '~/companion/time'
-import { KIND_WORD } from '~/companion/words'
+import { kindWord } from '~/companion/words'
 
 const props = defineProps<{ deadline: Deadline }>()
 const c = useCompanion()
+const { t, locale } = useI18n()
 
 const course = computed(() => c.deadlines.value.filter((d) => d.subject_id === props.deadline.subject_id))
 
@@ -29,33 +30,35 @@ onMounted(() => {
 })
 onBeforeUnmount(() => clearInterval(timer))
 
+// Tasks and grades: an assessment with no date yet (a course's Grades view
+// often has one) still gets the sum, without the countdown; only one whose
+// date has passed has nothing left to need.
 const left = computed(() => {
-  if (!props.deadline.due_at) return null
+  if (!props.deadline.due_at) return ''
   const days = daysBetween(dayKey(now.value), dayKey(props.deadline.due_at))
   if (days < 0) return null
-  if (days === 0) return 'It\'s today.'
-  if (days === 1) return 'It\'s tomorrow.'
-  return `${days} days to go.`
+  if (days === 0) return t('check.exam.today')
+  if (days === 1) return t('check.exam.tomorrow')
+  return t('check.exam.daysToGo', days)
 })
 
 const target = ref(TARGETS.find((t) => t.label === 'B+')!)
 const result = computed(() => neededOn(props.deadline, course.value, target.value.percent))
-const word = computed(() => KIND_WORD[props.deadline.kind].toLowerCase())
+const word = computed(() => kindWord(props.deadline.kind).toLowerCase())
 
 const assumption = computed(() => {
   const r = result.value
   if (!r) return ''
   const names = r.assumed.map((d) => d.title)
-  const list = names.length > 2 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names.join(' and ')
-  return names.length
-    ? `This assumes ${list} go like your average so far, ${r.average}% across the ${r.markedWeight}% of the grade already marked.`
-    : `From your average so far, ${r.average}% across the ${r.markedWeight}% already marked.`
+  const list = new Intl.ListFormat(intlTag(locale.value), { type: 'conjunction' }).format(names)
+  const shown = { average: r.average, weight: r.markedWeight }
+  return names.length ? t('check.exam.assumes', { list, ...shown }) : t('check.exam.fromAverage', shown)
 })
 </script>
 
 <template>
   <section
-    v-if="left && result"
+    v-if="left !== null && result"
     class="grid gap-3"
     aria-labelledby="exam-need"
   >
@@ -63,15 +66,15 @@ const assumption = computed(() => {
       id="exam-need"
       class="t-head text-[19px]"
     >
-      The score you need
+      {{ t('check.exam.title') }}
     </h2>
     <p class="text-[15px] text-text-body">
-      {{ left }} Pick the grade you're after.
+      {{ left }} {{ t('check.exam.pick') }}
     </p>
     <div
       class="grid grid-cols-4 gap-2 min-[600px]:flex"
       role="radiogroup"
-      aria-label="The grade you're after"
+      :aria-label="t('check.exam.gradeAria')"
     >
       <button
         v-for="t in TARGETS"
@@ -88,13 +91,13 @@ const assumption = computed(() => {
     </div>
     <p class="t-head pt-1 text-[22px] leading-snug">
       <template v-if="result.state === 'reachable'">
-        {{ result.need }}% on the {{ word }} gets you a {{ target.label }}
+        {{ t('check.exam.reachable', { need: result.need, word, grade: target.label }) }}
       </template>
       <template v-else-if="result.state === 'secured'">
-        A {{ target.label }} is already yours, whatever the {{ word }} brings
+        {{ t('check.exam.secured', { word, grade: target.label }) }}
       </template>
       <template v-else>
-        A {{ target.label }} is out of reach on the {{ word }} alone: full marks gets you {{ result.best }}%
+        {{ t('check.exam.unreachable', { word, grade: target.label, best: result.best }) }}
       </template>
     </p>
     <p class="text-[14px] leading-relaxed text-text-muted">

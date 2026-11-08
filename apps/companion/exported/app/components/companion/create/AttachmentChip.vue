@@ -3,7 +3,7 @@
  * One thing in the composer's tray: a file, a link, pasted text, a Moodle
  * course or a calendar link. Every kind is the same chip — a small tile
  * that says what it is, a name, one line of detail, and the ×. A file
- * carries its upload on the chip itself: a hairline of cobalt along the
+ * carries its upload on the chip itself: a hairline of sky ink along the
  * bottom that fills, and "Uploading · 64%" in the detail line, so the
  * learner watches their slides go up where they put them.
  *
@@ -50,7 +50,7 @@ const look = computed<{ icon: string; tone: string; name: string; detail: string
     case 'link':
       return {
         icon: a.moodle ? 'cap' : 'link',
-        tone: 'text-cobalt',
+        tone: 'text-sky-ink',
         name: a.title ?? a.domain,
         detail: a.moodle ? `Moodle · ${a.domain}` : a.domain,
       }
@@ -62,11 +62,11 @@ const look = computed<{ icon: string; tone: string; name: string; detail: string
         detail: `${a.words.toLocaleString('en')} word${a.words === 1 ? '' : 's'}`,
       }
     case 'moodle':
-      return { icon: 'cap', tone: 'text-cobalt', name: a.title, detail: `Moodle · ${a.detail}` }
+      return { icon: 'cap', tone: 'text-sky-ink', name: a.title, detail: `Moodle · ${a.detail}` }
     case 'note':
       return { icon: NOTE_ICON[a.itemKind], tone: 'text-text-soft', name: a.title, detail: a.detail }
     default:
-      return { icon: 'calendar', tone: 'text-cobalt', name: 'Calendar link', detail: a.domain }
+      return { icon: 'calendar', tone: 'text-sky-ink', name: 'Calendar link', detail: a.domain }
   }
 })
 
@@ -86,19 +86,19 @@ function press(): void {
 
 <template>
   <div
-    class="animate-rise relative flex h-12 max-w-full min-w-0 items-center gap-2.5 overflow-hidden rounded-[14px] border pr-1 pl-1.5 transition-colors duration-150 min-[600px]:max-w-[300px]"
-    :class="failed ? 'border-danger-line bg-danger-soft' : 'border-border bg-surface-sunken'"
+    class="ac-pop relative flex h-12 max-w-full min-w-0 items-center gap-2.5 overflow-hidden rounded-[12px] pr-1 pl-1.5 transition-colors duration-150 min-[600px]:max-w-[300px]"
+    :class="failed ? 'bg-danger-soft shadow-[inset_0_0_0_1px_var(--danger-line)]' : 'bg-surface-chrome shadow-[inset_0_0_0_1px_var(--border-strong)]'"
     :title="attachment.kind === 'link' || attachment.kind === 'calendar' ? attachment.url : look.name"
   >
     <span
-      class="grid size-9 shrink-0 place-items-center rounded-[10px] bg-surface shadow-card"
+      class="grid size-9 shrink-0 place-items-center rounded-[9px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-card)]"
       :class="failed ? 'text-danger' : look.tone"
     >
       <UiIcon
         v-if="uploading"
         name="loader"
         :size="16"
-        class="animate-spin-slow text-cobalt"
+        class="animate-spin-slow text-brand"
       />
       <UiIcon
         v-else-if="uploaded"
@@ -131,7 +131,7 @@ function press(): void {
     <button
       v-if="!locked"
       type="button"
-      class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors duration-150 outline-none hover:bg-[rgb(11_13_16/0.06)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand-line max-[599px]:size-10"
+      class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors duration-150 outline-none hover:bg-surface-sunken hover:text-text focus-visible:ring-2 focus-visible:ring-brand-line max-[599px]:size-10"
       :aria-label="`Remove ${look.name}`"
       :title="`Remove ${look.name}`"
       @click="emit('remove')"
@@ -152,9 +152,29 @@ function press(): void {
       aria-hidden="true"
     >
       <span
-        class="block h-full bg-cobalt transition-[width] duration-200 ease-out"
+        class="block h-full bg-brand transition-[width] duration-200 ease-out"
         :style="{ width: `${progress}%` }"
       />
     </span>
   </div>
 </template>
+
+<style scoped>
+/* The landing's attachment pop: in with a small spring. */
+.ac-pop {
+  animation: ac-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes ac-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-pop {
+    animation: none;
+  }
+}
+</style>

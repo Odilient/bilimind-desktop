@@ -148,30 +148,30 @@ function lessons(n: number): string {
       <!-- The next lesson: the one thing to press on this page. -->
       <section
         v-if="nowStep"
-        class="cb-cobalt grid gap-5 rounded-[24px] p-5 min-[900px]:p-7"
+        class="grid gap-4 rounded-[18px] bg-accent-soft p-5 shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--hi-2)_38%,transparent)] min-[900px]:px-6 min-[900px]:py-5"
         aria-label="Next lesson"
       >
         <div class="grid gap-2">
-          <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px] text-white/80">
-            <span class="font-semibold text-white">{{ when(nowStep) || 'Next on your path' }}</span>
+          <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px] text-text-soft">
+            <span class="font-semibold text-text">{{ when(nowStep) || 'Next on your path' }}</span>
             <template v-if="nowStep.session">
               <span aria-hidden="true">·</span>
               <span>{{ sessionLine(nowStep.session) }}</span>
             </template>
           </p>
-          <p class="t-head text-[26px] text-white min-[900px]:text-[32px]">
+          <p class="t-head text-[24px] text-text min-[900px]:text-[28px]">
             <template v-if="nowStep.session && nowStep.session.title.toLowerCase() !== 'study'">
               {{ nowStep.session.title }} ·
             </template>{{ nowStep.topic.title }}
           </p>
-          <p class="text-[14px] text-white/75">
+          <p class="text-[14px] text-text-muted">
             {{ lessonFor(nowStep) ? 'Your lesson is ready.' : 'The lesson is written for you when you start.' }}
           </p>
         </div>
         <div>
           <UiBtn
             :to="openTopic ? undefined : stepTo(nowStep)"
-            variant="accent"
+            variant="primary"
             size="lg"
             trailing-icon="arrow-right"
             @click="openTopic?.(nowStep.topic)"
@@ -227,7 +227,7 @@ function lessons(n: number): string {
               />
               <span
                 v-else-if="s.state === 'now'"
-                class="size-2.5 rounded-full bg-cobalt"
+                class="size-2.5 rounded-full bg-brand"
               />
               <span
                 v-else
@@ -246,7 +246,7 @@ function lessons(n: number): string {
               <span
                 v-else-if="s.check === 'checked' || s.check === 'missed'"
                 class="text-[13.5px]"
-                :class="s.check === 'checked' ? 'text-success-text' : 'text-coral-text'"
+                :class="s.check === 'checked' ? 'text-success-text' : 'text-danger-text'"
               >{{ s.check === 'checked' ? 'Checked' : 'Missed in a check · back in your plan' }}</span>
             </span>
             <span
@@ -317,7 +317,7 @@ function lessons(n: number): string {
             class="flex items-center gap-3 py-3"
           >
             <span class="grid size-6 shrink-0 place-items-center">
-              <span class="size-2.5 rounded-full bg-cobalt" />
+              <span class="size-2.5 rounded-full bg-brand" />
             </span>
             <span class="grid min-w-0 flex-1 gap-0.5">
               <span class="text-[16px] leading-snug font-semibold text-text">{{ unitLabel(u) }}</span>
@@ -378,7 +378,7 @@ function lessons(n: number): string {
                   <span class="min-w-0 flex-1 truncate text-[15px] text-text-body">{{ s.topic.title }}</span>
                   <span class="shrink-0 text-[14px] text-success-text">done<template v-if="s.check === 'checked'"> · checked</template><span
                     v-else-if="s.check === 'missed'"
-                    class="text-coral-text"
+                    class="text-danger-text"
                   > · missed</span></span>
                   <CompanionIcon
                     name="chevron-right"

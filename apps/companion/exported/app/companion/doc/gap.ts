@@ -1,8 +1,5 @@
-import type { CompanionRepo } from '../repo'
 import type { Item } from '../types'
 import { timecode } from '../time'
-import type { PageContext } from './context'
-import { demoGaps } from './demo'
 
 /**
  * "What did I miss?": your notes compared with the slides and the transcript,
@@ -10,8 +7,7 @@ import { demoGaps } from './demo'
  *
  * The comparison runs on the server, `POST /api/companion/items/{id}/gaps`
  * with the page's plain text. It only ever runs when the learner opens the
- * panel. The demo answers with written-out gaps for its lecture pages
- * (demo.ts); a server without the endpoint (404) shows "coming soon".
+ * panel. A server without the endpoint (404) shows "coming soon".
  */
 
 /** How a source is shown: a slide, a second of the recording, a reading, a photo. */
@@ -97,15 +93,7 @@ function toGap(gap: ServerGap): Gap {
   }
 }
 
-export async function findGaps(repo: CompanionRepo, page: Item, ctx: PageContext, text: string): Promise<GapResult> {
-  if (repo.mode === 'demo') {
-    // A beat, so the panel's "comparing" state is real rather than a flash.
-    await new Promise((resolve) => setTimeout(resolve, 450))
-    const found = demoGaps(ctx)
-    return found ? { state: 'ready', ...found } : { state: 'no-material' }
-  }
-
-  // http and powersync both ask the server: the comparison needs the model.
+export async function findGaps(page: Item, text: string): Promise<GapResult> {
   try {
     const answer = await useApi().post<ServerAnswer>(`/companion/items/${page.id}/gaps`, { text })
     if (answer.reason === 'no-material') return { state: 'no-material' }

@@ -44,6 +44,8 @@ import {
 import { useCompanion } from '../store'
 import type { Item, ItemKind, Subject, Uuid } from '../types'
 import type { AiAttachment } from './types'
+// imports
+import { importPlaylist, playlistId } from '../imports/links'
 
 /** A page, board or file already in Notes, attached by picking it. */
 export interface NoteAttachment {
@@ -90,20 +92,6 @@ const controllers = new Map<string, AbortController>()
 /** Files this tray uploaded, so taking the chip out can take the upload back too. */
 const uploadedHere = new Set<Uuid>()
 
-function wait(ms: number, signal?: AbortSignal): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(resolve, ms)
-    signal?.addEventListener(
-      'abort',
-      () => {
-        clearTimeout(timer)
-        reject(new DOMException('Cancelled', 'AbortError'))
-      },
-      { once: true },
-    )
-  })
-}
-
 function token(): string | null {
   try {
     return useCookie<string | null>(AUTH_COOKIE, authCookieOptions()).value ?? null
@@ -145,31 +133,16 @@ async function uploadOne(id: string): Promise<void> {
   a.progress = 0
   a.error = null
   try {
-    let item: Item
-    if (c.status.mode === 'demo') {
-      // The demo's repo answers at once; a short climb reads as an upload.
-      const climb = setInterval(() => {
+    const item: Item = await uploadWithProgress({
+      url: useApi().url('/companion/items/upload'),
+      token: token(),
+      file: a.file,
+      onProgress: (p) => {
         const now = live(id)
-        if (now) now.progress = Math.min(94, now.progress + 7 + Math.round(Math.random() * 16))
-      }, 110)
-      try {
-        item = await c.repo().upload(a.file, {})
-        await wait(450 + Math.random() * 500, controller.signal)
-      } finally {
-        clearInterval(climb)
-      }
-    } else {
-      item = await uploadWithProgress({
-        url: useApi().url('/companion/items/upload'),
-        token: token(),
-        file: a.file,
-        onProgress: (p) => {
-          const now = live(id)
-          if (now) now.progress = p
-        },
-        signal: controller.signal,
-      })
-    }
+        if (now) now.progress = p
+      },
+      signal: controller.signal,
+    })
     c.rows.items[item.id] = item
     uploadedHere.add(item.id)
     const now = live(id)
@@ -245,7 +218,22 @@ function addUrls(urls: string[], moodleSites: string[] = []): number {
   if (fresh.length > room) useToast().push({ title: `A message takes up to ${MAX_LINKS} links` })
   const added = fresh.slice(0, room).map((u) => linkAttachment(u, moodleSites))
   tray.value = [...tray.value, ...added]
+  // imports: a YouTube playlist comes in as material.
+  for (const a of added) if (a.kind === 'link' && playlistId(a.url)) void playlistChip(a.id, a.url)
   return added.length
+}
+
+/**
+ * Imports: a playlist's chip, once its videos are in My notes (a page
+ * listing them, one link each under it), becomes that page, so the chat reads
+ * every video's title in order rather than YouTube's consent wall. Without
+ * the server's YouTube key it stays the link it was. Like an upload, what
+ * came in stays in My notes if the chip is taken out.
+ */
+async function playlistChip(chipId: string, url: string): Promise<void> {
+  const page = await importPlaylist(useCompanion(), url, null)
+  if (!page || !tray.value.some((a) => a.id === chipId)) return
+  tray.value = tray.value.map((a) => (a.id === chipId ? noteAttachment(page) : a))
 }
 
 function addCalendar(url: string): void {
@@ -409,13 +397,13 @@ export function attachmentLook(a: AiAttachment): { icon: string; tone: string } 
       return { icon: item ? NOTE_ICON[item.kind] : 'page', tone: 'text-text-soft' }
     }
     case 'link':
-      return { icon: 'link', tone: 'text-cobalt' }
+      return { icon: 'link', tone: 'text-sky-ink' }
     case 'calendar':
-      return { icon: 'calendar', tone: 'text-cobalt' }
+      return { icon: 'calendar', tone: 'text-sky-ink' }
     case 'text':
       return { icon: 'paste', tone: 'text-text-soft' }
     case 'moodle':
-      return { icon: 'cap', tone: 'text-cobalt' }
+      return { icon: 'cap', tone: 'text-sky-ink' }
   }
 }
 

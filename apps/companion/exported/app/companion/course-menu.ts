@@ -3,13 +3,13 @@
  * on a card (`CompanionCourseCard`) and on a list row (`CompanionCoursesRow`),
  * so the two views never disagree about what a course can do.
  *
- *   const menu = useCourseMenu(() => props.subject, { field, swatches, ask, group })
+ *   const menu = useCourseMenu(() => props.subject, { field, ask, group })
  *   <UiMenu :actions="menu.actions.value" />
  *
- * Rename and Colour happen in place, in whichever view asked: the host draws
- * the name field (`field`, focused and selected on Rename) and the swatches
- * (`swatches`, the picked one focused on Colour), and reads `renaming` and
- * `colouring` to know when. "Move to group…" and "Ask about this course"
+ * Rename happens in place, in whichever view asked: the host draws the name
+ * field (`field`, focused and selected on Rename) and reads `renaming` to
+ * know when. "Icon and colour…" opens the host's
+ * `CompanionCoursesLookDialog` (`looking`). "Move to group…" and "Ask about this course"
  * belong to the page (one dialog, one assistant), so they're handed back
  * through `group` and `ask`. Archive and Restore are a write each, with Undo
  * on the toast. Delete opens the host's `CompanionCoursesDeleteDialog`
@@ -25,7 +25,7 @@
  * makes sense for a course that's been put away: rename, its original, and
  * delete.
  */
-import { computed, nextTick, onBeforeUnmount, ref, watch, type Ref } from 'vue'
+import { computed, nextTick, ref, type Ref } from 'vue'
 import type { Subject } from './types'
 import type { MenuAction } from '~/components/ui/Menu.vue'
 import { useCompanion } from './store'
@@ -33,12 +33,13 @@ import { useQuietAi } from './quiet-ai'
 import { renameCompanionTab } from './tabs'
 import { archiveCourse, isArchived, restoreCourse } from './shelf'
 import { useToast } from '~/composables/useToast'
+import { useExport } from './export/use-export'
+import { shareCourse } from './shares'
+import { ApiError } from '~/composables/useApi'
 
 export interface CourseMenuHooks {
   /** The name field the host draws while `renaming`. */
   field?: Ref<HTMLInputElement | null>
-  /** The swatches the host draws while `colouring`; a pointer outside them closes them. */
-  swatches?: Ref<HTMLElement | null>
   ask?: (subject: Subject) => void
   group?: (subject: Subject) => void
 }
@@ -47,6 +48,7 @@ export function useCourseMenu(subject: () => Subject, hooks: CourseMenuHooks = {
   const c = useCompanion()
   const toast = useToast()
   const { quiet } = useQuietAi()
+  const exp = useExport()
 
   /* -- Rename, in place ------------------------------------------------------ */
 
@@ -71,37 +73,9 @@ export function useCourseMenu(subject: () => Subject, hooks: CourseMenuHooks = {
     void c.upsert<Subject>('subjects', { id: s.id, title }).catch(() => undefined)
   }
 
-  /* -- Colour, from the course palette ------------------------------------- */
+  /* -- Icon and colour (the host's dialog) ---------------------------------- */
 
-  const colouring = ref(false)
-
-  async function startColour(): Promise<void> {
-    colouring.value = true
-    await nextTick()
-    const box = hooks.swatches?.value
-    const picked = box?.querySelector<HTMLButtonElement>('[aria-checked="true"]')
-    ;(picked ?? box?.querySelector<HTMLButtonElement>('[role="radio"]'))?.focus()
-  }
-
-  function recolour(tone: string): void {
-    colouring.value = false
-    const s = subject()
-    if (tone === s.color) return
-    void c.upsert<Subject>('subjects', { id: s.id, color: tone }).catch(() => undefined)
-  }
-
-  function onOutside(event: PointerEvent): void {
-    if (!hooks.swatches?.value?.contains(event.target as Node)) colouring.value = false
-  }
-
-  watch(colouring, (on) => {
-    if (!import.meta.client) return
-    document[on ? 'addEventListener' : 'removeEventListener']('pointerdown', onOutside as EventListener)
-  })
-
-  onBeforeUnmount(() => {
-    if (import.meta.client) document.removeEventListener('pointerdown', onOutside as EventListener)
-  })
+  const looking = ref(false)
 
   /* -- Archive and restore ------------------------------------------------------ */
 
@@ -152,6 +126,24 @@ export function useCourseMenu(subject: () => Subject, hooks: CourseMenuHooks = {
     })
   }
 
+  /* -- Invite coursemates (Daylight 2, gaps: a course shared by one link) --------- */
+
+  async function invite(): Promise<void> {
+    const s = subject()
+    try {
+      const view = await shareCourse(s.id)
+      await navigator.clipboard?.writeText(view.url).catch(() => undefined)
+      toast.success({
+        title: `Link copied: ${view.url.replace(/^https?:\/\//, '')}`,
+        body: 'Whoever opens it joins with the same path, files and dates. Their notes stay their own.',
+      })
+    } catch (error) {
+      // A refusal says why in its own words ("This course comes from your class at …").
+      if (error instanceof ApiError && error.status === 422) toast.error({ title: error.message })
+      else toast.error({ title: "Couldn't make the link", body: 'Check the connection and try again.' })
+    }
+  }
+
   /* -- Delete (the host's dialog) ------------------------------------------------ */
 
   const confirming = ref(false)
@@ -175,23 +167,28 @@ export function useCourseMenu(subject: () => Subject, hooks: CourseMenuHooks = {
       destructive: true,
       run: () => (confirming.value = true),
     }
+    // exports: the course as one zip, archived or not (the last thing anyone does before deleting one)
+    const download: MenuAction = { label: 'Download this course', icon: 'download', run: () => void exp.course(s) }
     if (isArchived(s)) {
       return [
         { label: 'Restore to the shelf', icon: 'refresh', run: () => void restore() },
         { label: 'Rename', icon: 'pencil', run: () => void startRename() },
         ...original,
+        download,
         remove,
       ]
     }
     return [
       { label: 'Rename', icon: 'pencil', run: () => void startRename() },
-      { label: 'Colour', icon: 'sliders', run: () => void startColour() },
+      { label: 'Icon and colour…', icon: 'image', run: () => (looking.value = true) },
       ...(hooks.group ? [{ label: 'Move to group…', icon: 'layers', run: () => hooks.group!(s) }] : []),
       ...(quiet.value || !hooks.ask
         ? []
         : [{ label: 'Ask about this course', icon: 'spark', run: () => hooks.ask!(s) }]),
+      { label: 'Invite coursemates', icon: 'users', run: () => void invite() },
       { label: 'Make me try first', icon: s.try_first ? 'check' : 'target', run: () => void setTryFirst(!s.try_first) },
       ...original,
+      download,
       { label: 'Archive', icon: 'archive', run: () => void archive() },
       remove,
     ]
@@ -202,9 +199,9 @@ export function useCourseMenu(subject: () => Subject, hooks: CourseMenuHooks = {
     renaming,
     draft,
     finishRename,
-    colouring,
-    recolour,
+    looking,
     confirming,
     restore,
+    invite,
   }
 }

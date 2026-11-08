@@ -3,6 +3,7 @@ import type { Item, Subject } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { materialGroups } from '~/companion/course-home'
 import { itemIcon } from '~/companion/words'
+const { t } = useI18n()
 
 /**
  * The course's files in the sidebar: slides from Moodle, recordings, links,
@@ -52,7 +53,7 @@ function toggle(key: string): void {
     >
       <button
         type="button"
-        class="group/mat flex min-h-[28px] w-full cursor-pointer items-center gap-1.5 rounded-[10px] pr-2 pl-[26px] text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt"
+        class="group/mat flex min-h-[28px] w-full cursor-pointer items-center gap-1.5 rounded-[10px] pr-2 pl-[26px] text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
         :aria-expanded="isOpen(g.key, index, g.current)"
         :title="g.label"
         @click="toggle(g.key)"
@@ -61,7 +62,7 @@ function toggle(key: string): void {
         <span
           v-if="g.current"
           class="shrink-0 rounded-full bg-accent-soft px-1.5 py-px text-[10.5px] font-semibold text-accent-strong"
-        >Now</span>
+        >{{ t('course.materials.now') }}</span>
         <span
           v-else-if="!isOpen(g.key, index, g.current)"
           class="num shrink-0 text-[11.5px] text-text-faint"
@@ -72,7 +73,7 @@ function toggle(key: string): void {
           v-for="i in g.items"
           :key="i.id"
           type="button"
-          class="flex min-h-[28px] w-full cursor-pointer items-center gap-2 rounded-[10px] py-1 pr-2 pl-[26px] text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt"
+          class="flex min-h-[28px] w-full cursor-pointer items-center gap-2 rounded-[10px] py-1 pr-2 pl-[26px] text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
           :title="i.title"
           @click="emit('openItem', i)"
         >
@@ -81,7 +82,7 @@ function toggle(key: string): void {
             :size="13"
             class="shrink-0 text-text-faint"
           />
-          <span class="min-w-0 flex-1 truncate text-[12.5px] leading-[1.3] text-text-soft">{{ i.title || 'Untitled' }}</span>
+          <span class="min-w-0 flex-1 truncate text-[12.5px] leading-[1.3] text-text-soft">{{ i.title || t('course.notes.untitled') }}</span>
           <UiIcon
             v-if="i.kind === 'link'"
             name="arrow-up-right"
@@ -95,7 +96,7 @@ function toggle(key: string): void {
       v-if="!groups.length"
       class="px-2 py-1 text-[12.5px] leading-relaxed text-text-muted"
     >
-      {{ filter ? 'No files match.' : 'Slides, recordings and links land here, from Moodle or the + above.' }}
+      {{ filter ? t('course.materials.noMatch') : t('course.materials.empty') }}
     </p>
   </div>
 </template>

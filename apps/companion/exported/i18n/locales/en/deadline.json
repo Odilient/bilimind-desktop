@@ -1,0 +1,17 @@
+{
+  "readinessSaid": "Readiness said {readiness}%. You got {got}%.",
+  "whatDidYouGet": "What did you get?",
+  "save": "Save",
+  "saveHint": "So BiliMind can see how close its readiness was.",
+  "notConfirmed": "Not confirmed yet.",
+  "heardInClass": "Heard in class",
+  "fromShared": "From a shared message",
+  "moodleHasnt": "; Moodle hasn't said it.",
+  "confirmDeadline": "Confirm deadline",
+  "open": "Open",
+  "due": "Due {when}",
+  "seoTitle": "Deadline · BiliMind",
+  "checkedRight": "I've checked, it's right",
+  "whereCameFrom": "Where the date came from",
+  "nothingLinked": "Nothing linked yet. When the brief or the lecturer says what it covers, the topics show here, each with how ready you are."
+}

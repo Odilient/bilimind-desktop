@@ -9,6 +9,10 @@
 import type { Deadline, FactType, Session, Signal, SignalFact, Subject } from './types'
 import type { CompanionStore } from './store'
 import { clock, dayKey, dayLabel, relativeDay, timecode } from './time'
+import { fmtDate, translate } from '~/utils/i18n'
+
+/** The address forwarded mail lands on: `<alias>@` this. */
+export const FORWARD_DOMAIN = 'in.bilimind.com'
 
 export interface SignalView {
   subject: Subject | null
@@ -21,6 +25,8 @@ export interface SignalView {
   quote: string
   quoteBy: string | null
   source: string
+  /** The same, said after a name: "in a shared message". */
+  sourceIn: string
   /** One sentence on what applying does, at this confidence. */
   consequence: string
   applyLabel: string
@@ -32,25 +38,42 @@ function when(iso: unknown): string | null {
   return `${dayLabel(dayKey(iso))} ${clock(iso)}`
 }
 
-const SOURCES: Record<Signal['channel'], string> = {
-  share: 'a shared message',
-  telegram: 'a forwarded Telegram message',
-  email: 'an email',
-  transcript: 'the lecture recording',
-  moodle: 'Moodle',
-  ics: 'your timetable link',
-  photo: 'a photo',
-  pdf: 'a PDF',
-  manual: 'something you pasted',
+const tr = (key: string, named?: Record<string, unknown>): string => translate(`today.sig.${key}`, named)
+
+// Channels: share, telegram, email, transcript, moodle, ics, photo, pdf, manual, import
+//, assistant.
+// Each has `today.sig.from.<channel>` ("From an email") and `today.sig.in.<channel>` ("in an email").
+
+/**
+ * Planner and inbox: the course a fact is for, found the way the
+ * server's SignalApplier::subjectFor finds it: the guess by id, the signal's
+ * own course, then the one course with exactly that code, then that title.
+ * Null means the learner has to say ("Add to a course" in the Inbox).
+ */
+export function factCourse(store: CompanionStore, signal: Signal, fact: SignalFact | undefined): Subject | null {
+  const byId = store.get('subjects', fact?.subject_guess?.id ?? null) ?? store.get('subjects', signal.subject_id)
+  if (byId) return byId
+  for (const field of ['code', 'title'] as const) {
+    const value = fact?.subject_guess?.[field]?.toLowerCase()
+    if (!value?.trim()) continue
+    const found = store.subjects.value.filter((s) => s[field]?.toLowerCase() === value)
+    if (found.length === 1) return found[0]!
+  }
+  return null
+}
+
+/** The deadlines a signal proposes that name no course of the learner's: what "Add to a course" answers. */
+export function uncoursedFacts(store: CompanionStore, signal: Signal): number[] {
+  return signal.facts.flatMap((f, i) => (f.type === 'deadline.create' && !factCourse(store, signal, f) ? [i] : []))
 }
 
 export function describeSignal(signal: Signal, store: CompanionStore): SignalView {
   const fact: SignalFact | undefined = signal.facts[0]
-  const subject =
-    store.get('subjects', signal.subject_id) ?? store.get('subjects', fact?.subject_guess.id ?? null)
+  const subject = factCourse(store, signal, fact)
   const deadline: Deadline | null = fact?.target_id ? store.get('deadlines', fact.target_id) : null
   const session: Session | null = fact?.target_id ? store.get('sessions', fact.target_id) : null
   const payload = (fact?.payload ?? {}) as Record<string, unknown>
+  const creates = signal.facts.filter((f) => f.type === 'deadline.create').length
 
   // The words that matter are the fact's evidence; the excerpt around them is
   // the chat. A chat line is "Name · 21:05" alone above the message, or
@@ -70,86 +93,98 @@ export function describeSignal(signal: Signal, store: CompanionStore): SignalVie
     quote = lines.slice(1).join('\n')
   }
 
-  let headline = 'Keep this?'
+  let headline = tr('keep')
   let before: string | null = null
   let after: string | null = null
-  let subjectLine = subject?.title ?? fact?.subject_guess.title ?? 'Not sure which course'
+  let subjectLine = subject?.title ?? fact?.subject_guess.title ?? tr('noCourse')
 
   switch (fact?.type) {
     case 'deadline.update': {
-      const title = deadline?.title ?? String(payload.title ?? 'Deadline')
+      const title = deadline?.title ?? String(payload.title ?? tr('deadline'))
       subjectLine = `${subject?.title ?? ''}${subject ? ' · ' : ''}${title}`
       if (payload.due_at) {
-        headline = 'Move the deadline?'
-        before = when(deadline?.due_at) ?? 'no date yet'
+        headline = tr('moveDeadline')
+        before = when(deadline?.due_at) ?? tr('noDateYet')
         after = when(payload.due_at)
       } else if (payload.confirmed) {
-        headline = `Confirm ${title}?`
-      } else headline = `Update ${title}?`
+        headline = tr('confirm', { title })
+      } else headline = tr('update', { title })
       break
     }
     case 'deadline.create': {
-      const title = String(payload.title ?? 'a deadline')
+      const title = String(payload.title ?? tr('aDeadline'))
       if (subject) subjectLine = `${subject.title} · ${deadline?.title ?? title}`
-      headline = `Add ${title}${subject ? ` to ${subject.title}` : ''}?`
-      after = when(payload.due_at) ?? 'date to be confirmed'
+      headline = subject ? tr('addTo', { title, course: subject.title }) : tr('add', { title })
+      after = when(payload.due_at) ?? tr('dateTbc')
+      // Planner and inbox: an imported table proposes its rows in one
+      // signal, and the one button adds them all, so the card says so.
+      if (creates > 1) {
+        const titles = signal.facts.filter((f) => f.type === 'deadline.create').map((f) => String(f.payload.title ?? ''))
+        if (subject) subjectLine = subject.title
+        headline = subject ? tr('addManyTo', { n: creates, course: subject.title }) : tr('addMany', { n: creates })
+        after = creates > 3 ? tr('andMore', { list: titles.slice(0, 3).join(', '), n: creates - 3 }) : titles.join(', ')
+      }
       break
     }
     case 'deadline.cancel': {
-      headline = `Is ${deadline?.title ?? 'it'} cancelled?`
+      headline = tr('cancelled', { title: deadline?.title ?? tr('it') })
       before = when(deadline?.due_at)
-      after = 'Cancelled'
+      after = tr('cancelledAfter')
       break
     }
     case 'session.cancel': {
-      headline = `Is ${session?.title ?? 'the class'} cancelled?`
+      headline = tr('cancelled', { title: session?.title ?? tr('theClass') })
       before = session ? `${relativeDay(dayKey(session.starts_at))} ${clock(session.starts_at)}` : null
-      after = 'No class'
+      after = tr('noClass')
       break
     }
     case 'session.move': {
-      headline = `Move ${session?.title ?? 'the class'}?`
+      headline = tr('moveClass', { title: session?.title ?? tr('theClass') })
       before = when(session?.starts_at)
       after = when(payload.starts_at)
       break
     }
     case 'slot.create': {
       const weekday = Number(payload.weekday ?? 1)
-      headline = 'Add a weekly class?'
-      after = `${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][weekday - 1]} ${payload.starts_at ?? ''}–${payload.ends_at ?? ''}${payload.location ? ` · ${payload.location}` : ''}`
+      headline = tr('weekly')
+      // 2024-01-01 is a Monday, so weekday 1 is Monday.
+      after = `${fmtDate(new Date(Date.UTC(2024, 0, weekday)), { weekday: 'short', timeZone: 'UTC' })} ${payload.starts_at ?? ''}–${payload.ends_at ?? ''}${payload.location ? ` · ${payload.location}` : ''}`
       break
     }
     case 'note':
-      headline = 'Nothing to change, but worth keeping?'
+      headline = tr('note')
       break
   }
 
-  let source = `From ${SOURCES[signal.channel]}`
+  let source = tr(`from.${signal.channel}`)
+  let sourceIn = tr(`in.${signal.channel}`)
   if (signal.channel === 'transcript' && signal.at_seconds != null) {
-    source = `Said in the lecture recording at ${timecode(signal.at_seconds)}`
+    source = tr('saidInLecture', { time: timecode(signal.at_seconds) })
+    sourceIn = tr('saidInLectureIn', { time: timecode(signal.at_seconds) })
   }
 
   const tentative = signal.confidence === 'heard' || signal.confidence === 'shared'
   const consequence = tentative
-    ? 'It goes on your calendar marked "not confirmed" until Moodle or Teams says the same. If they say something else, we\'ll tell you.'
+    ? tr('consequenceTentative')
     : signal.confidence === 'own'
-      ? 'It goes in as yours, and you can change it any time.'
-      : 'It comes from an official source, so it goes straight in.'
+      ? tr('consequenceOwn')
+      : tr('consequenceOfficial')
 
   // What the button does, said as the change itself; "Confirm it" needs no
   // "not confirmed yet" after it.
   const verbs: Partial<Record<FactType, string>> = {
-    'deadline.update': payload.due_at ? 'Move it' : payload.confirmed ? 'Confirm it' : 'Update it',
-    'deadline.create': 'Add it',
-    'deadline.cancel': 'Mark it cancelled',
-    'session.cancel': 'Mark it cancelled',
-    'session.move': 'Move the class',
-    'slot.create': 'Add the class',
+    'deadline.update': tr(payload.due_at ? 'vMove' : payload.confirmed ? 'vConfirm' : 'vUpdate'),
+    'deadline.create': tr(creates > 1 ? 'vAddThem' : 'vAddIt'),
+    'deadline.cancel': tr('vCancelled'),
+    'session.cancel': tr('vCancelled'),
+    'session.move': tr('vMoveClass'),
+    'slot.create': tr('vAddClass'),
   }
-  const verb = (fact && verbs[fact.type]) ?? 'Save it'
+  const verb = (fact && verbs[fact.type]) ?? tr('vSave')
+  const confirming = fact?.type === 'deadline.update' && !payload.due_at && Boolean(payload.confirmed)
   const applyLabel = fact?.type === 'note'
-    ? 'Keep it'
-    : tentative && verb !== 'Confirm it' ? `${verb} (not confirmed yet)` : verb
+    ? tr('vKeep')
+    : tentative && !confirming ? tr('notConfirmedYet', { verb }) : verb
 
   return {
     subject,
@@ -160,6 +195,7 @@ export function describeSignal(signal: Signal, store: CompanionStore): SignalVie
     quote,
     quoteBy: header,
     source,
+    sourceIn,
     consequence,
     applyLabel,
     canApply: Boolean(fact) && (fact!.type === 'note' || !!subject),

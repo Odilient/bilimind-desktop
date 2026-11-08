@@ -1,6 +1,6 @@
 {
   "name": "bilimind-desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "BiliMind Desktop: turn your own files into a checked, narrated course. Open source, local files, bring your own AI key.",

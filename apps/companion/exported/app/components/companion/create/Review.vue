@@ -144,8 +144,7 @@ interface SourceRow {
 /*
  * One row per thing the learner gave, matched to what the server says about
  * it: a file by its item id, a link by its URL (the server's `label` is the
- * URL as sent). `read: false` is a source it couldn't read. The demo lists
- * only what it read, so there a file or link with no source wasn't read.
+ * URL as sent). `read: false` is a source it couldn't read.
  */
 const sourceRows = computed<SourceRow[]>(() => {
   type Source = CourseProposal['sources'][number]
@@ -245,7 +244,7 @@ onMounted(fit)
       <div class="-mt-2 mb-1 flex min-h-11 items-center">
         <button
           type="button"
-          class="-ml-2.5 inline-flex h-11 cursor-pointer items-center gap-1 rounded-full pr-4 pl-2 text-[15px] font-semibold text-cobalt transition-colors duration-150 outline-none hover:bg-cobalt-soft focus-visible:ring-2 focus-visible:ring-brand-line"
+          class="-ml-2.5 inline-flex h-11 cursor-pointer items-center gap-1 rounded-full pr-4 pl-2 text-[15px] font-semibold text-brand transition-colors duration-150 outline-none hover:bg-brand-soft focus-visible:ring-2 focus-visible:ring-brand-line"
           @click="emit('back')"
         >
           <CompanionIcon
@@ -276,7 +275,7 @@ onMounted(fit)
         :class="[
           'grid min-w-0 content-start gap-6',
           page
-            ? 'animate-rise rounded-[24px] border border-border bg-surface p-5 shadow-card min-[600px]:p-6 min-[1100px]:sticky min-[1100px]:top-6'
+            ? 'animate-rise rounded-[18px] bg-surface p-5 shadow-[0_0_0_1px_var(--border-strong),var(--shadow-raised)] min-[600px]:p-6 min-[1100px]:sticky min-[1100px]:top-6'
             : 'border-b border-border-rule pb-7',
         ]"
         aria-label="The course"
@@ -330,7 +329,7 @@ onMounted(fit)
               :aria-checked="proposal.kind === k.value"
               class="grid cursor-pointer content-start gap-1 rounded-[14px] border px-3 py-2.5 text-left transition-[border-color,background-color,box-shadow] duration-150 outline-none focus-visible:ring-2 focus-visible:ring-brand-line"
               :class="proposal.kind === k.value
-                ? 'border-ink bg-surface shadow-[inset_0_0_0_1px_var(--ink)]'
+                ? 'border-text bg-surface shadow-[inset_0_0_0_1px_var(--text)]'
                 : 'border-border bg-surface-mute hover:border-border-strong hover:bg-surface'"
               @click="setKind(k.value)"
             >
@@ -371,7 +370,7 @@ onMounted(fit)
               v-model="proposal.finish.label"
               type="text"
               :placeholder="FINISH_WORD[proposal.finish.kind]"
-              class="h-11 min-w-0 rounded-[12px] border border-border-field bg-surface px-3 text-[15px] text-text outline-none placeholder:text-text-faint focus:border-cobalt focus:ring-3 focus:ring-brand-line"
+              class="h-11 min-w-0 rounded-[12px] border border-border-field bg-surface px-3 text-[15px] text-text outline-none placeholder:text-text-faint focus:border-brand focus:ring-3 focus:ring-brand-line"
             >
             <label
               for="cp-review-date"
@@ -382,7 +381,7 @@ onMounted(fit)
               v-model="proposal.finish.date"
               type="date"
               :min="dayKey()"
-              class="h-11 w-[150px] min-w-0 rounded-[12px] border border-border-field bg-surface px-3 text-[15px] text-text tabular-nums outline-none focus:border-cobalt focus:ring-3 focus:ring-brand-line"
+              class="h-11 w-[150px] min-w-0 rounded-[12px] border border-border-field bg-surface px-3 text-[15px] text-text tabular-nums outline-none focus:border-brand focus:ring-3 focus:ring-brand-line"
             >
           </div>
           <p class="text-[13px] text-text-muted">

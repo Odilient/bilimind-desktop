@@ -1,0 +1,26 @@
+{
+  "moreActions": "Mais ações",
+  "hidePassword": "Ocultar senha",
+  "showPassword": "Mostrar senha",
+  "dismiss": "Dispensar",
+  "complete": "{n}% concluído",
+  "nothing": "(nada)",
+  "week": "remove",
+  "upgrade": {
+    "message": "Incluído no plano Centro: $1 por aluno por mês (mínimo $29), com 30 dias de teste.",
+    "seePlans": "Ver planos",
+    "ownerChange": "O proprietário pode mudar o plano em Configurações."
+  },
+  "looking": "Buscando…",
+  "nobody": "Ninguém com esse nome.",
+  "noDate": "Sem data",
+  "clearSearch": "Limpar busca",
+  "due": "Prazo",
+  "remove": "Remover {name}",
+  "search": "Buscar",
+  "noData": "Sem dados",
+  "findPerson": "Encontrar uma pessoa",
+  "change": "Alterar",
+  "searchPerson": "Buscar por nome ou e-mail",
+  "versus": "vs. o período anterior"
+}

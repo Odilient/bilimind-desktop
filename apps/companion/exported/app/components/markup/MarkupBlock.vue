@@ -20,6 +20,7 @@ import {
   tint,
   type MarkupSize,
 } from '~/utils/markup'
+import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom'
 import InkLayer from '~/components/markup/InkLayer.vue'
 import TextLayer, { type LabelItem } from '~/components/markup/TextLayer.vue'
 import { useAi } from '~/companion/ai/state'
@@ -1056,11 +1057,14 @@ interface Popover {
   /** Top and bottom of what the popover points at, relative to the root. */
   above: number
   below: number
-  flipped: boolean
 }
 
 const popover = ref<Popover | null>(null)
 const popoverEl = ref<HTMLElement | null>(null)
+const popoverStyle = ref<Record<string, string>>({})
+/** The lesson's Warm or Dim reader, carried to the popover, which draws at the body. */
+const readingTheme = ref('')
+let stopFollowing: (() => void) | null = null
 const noteField = ref<HTMLTextAreaElement | null>(null)
 const pendingAnchor = ref<HighlightAnchor | null>(null)
 const noteDraft = ref('')
@@ -1091,37 +1095,55 @@ function place(kind: Popover['kind'], uuid: string | null, rect: DOMRect | null)
     x: rect ? rect.left + rect.width / 2 - rootRect.left : rootRect.width / 2,
     above: rect ? rect.top - rootRect.top : 0,
     below: rect ? rect.bottom - rootRect.top : 0,
-    flipped: false,
   }
-
-  void nextTick(clamp)
+  readingTheme.value = [...(rootEl.closest('[class*="reading-theme-"]')?.classList ?? [])]
+    .find((name) => name.startsWith('reading-theme-')) ?? ''
 }
 
-/** Keep it inside the block's width, and below the text when there is no room above. */
-function clamp(): void {
+/** What the popover points at, in the window: read off the root each time, so it follows a scroll. */
+function popoverAnchor(): DOMRect | null {
+  const current = popover.value
+  const rootRect = root.value?.getBoundingClientRect()
+  if (!current || !rootRect) return null
+  const { x, above, below } = current
+  return new DOMRect(rootRect.left + x, rootRect.top + above, 0, below - above)
+}
+
+function popoverReference() {
+  return {
+    contextElement: root.value ?? undefined,
+    getBoundingClientRect: () => popoverAnchor() ?? new DOMRect(),
+  }
+}
+
+/*
+ * Fixed at the body and placed by floating-ui, as the page's own menus are
+ * (`PageFloating`): drawn inside the part, a narrow part squeezed it onto two
+ * lines and the lesson column's overflow cut its end off. Above the words,
+ * below them when the window has no room, never past the window's sides.
+ */
+function follow(): void {
   const el = popoverEl.value
-  const rootEl = root.value
-  const current = popover.value
-  if (!el || !rootEl || !current) return
-
-  const half = el.offsetWidth / 2
-  const min = half + 4
-  const max = Math.max(min, rootEl.clientWidth - half - 4)
-  const x = Math.min(Math.max(current.x, min), max)
-  const flipped = current.above - el.offsetHeight - 10 < 0
-
-  if (x !== current.x || flipped !== current.flipped) {
-    popover.value = { ...current, x, flipped }
-  }
+  if (!el) return
+  void computePosition(popoverReference(), el, {
+    placement: 'top',
+    strategy: 'fixed',
+    middleware: [offset(8), flip({ padding: 8 }), shift({ padding: 8 })],
+  }).then(({ x, y }) => {
+    popoverStyle.value = { left: `${x}px`, top: `${y}px` }
+  })
 }
 
-const popoverStyle = computed(() => {
-  const current = popover.value
-  if (!current) return undefined
-  return current.flipped
-    ? { left: `${current.x}px`, top: `${current.below + 8}px`, transform: 'translateX(-50%)' }
-    : { left: `${current.x}px`, top: `${current.above - 8}px`, transform: 'translate(-50%, -100%)' }
-})
+watch(
+  popover,
+  (open) => {
+    const el = popoverEl.value
+    if (!open || !el) return
+    if (stopFollowing) follow()
+    else stopFollowing = autoUpdate(popoverReference(), el, follow)
+  },
+  { flush: 'post' },
+)
 
 function onDocumentPointerDown(event: PointerEvent): void {
   if (popoverEl.value?.contains(event.target as Node)) return
@@ -1146,6 +1168,8 @@ watch(
 )
 
 function closePopover(): void {
+  stopFollowing?.()
+  stopFollowing = null
   popover.value = null
   pendingAnchor.value = null
   if (import.meta.client) document.removeEventListener('pointerdown', onDocumentPointerDown, true)
@@ -1283,20 +1307,9 @@ function commit(
 
 function commitPending(asNote: boolean, color = props.color): void {
   const anchor = pendingAnchor.value
-  const current = popover.value
-  if (!anchor || !current) return
+  if (!anchor || !popover.value) return
 
-  const rootRect = root.value?.getBoundingClientRect()
-  const rect = rootRect
-    ? new DOMRect(
-        rootRect.left + current.x,
-        rootRect.top + current.above,
-        0,
-        current.below - current.above,
-      )
-    : null
-
-  commit(anchor, asNote, color, rect)
+  commit(anchor, asNote, color, popoverAnchor())
 }
 
 /* -- An existing mark ------------------------------------------------------ */
@@ -1510,6 +1523,8 @@ function finishNote(): void {
         height: `${blockBox.height}px`,
       }"
     >
+      <!-- Reach: half the 40px between parts, so a stroke can start in the gap, and run
+           on into the parts above and below it (an arrow from a table to its paragraph). -->
       <InkLayer
         :strokes="blockInk?.data.strokes ?? NONE"
         :tool="tool"
@@ -1517,6 +1532,7 @@ function finishNote(): void {
         :size="size"
         :armed="armed && editable"
         :box="{ width: blockBox.width, height: blockBox.height }"
+        :reach="20"
         @add="onBlockAdd"
         @erase="onBlockErase"
         @miss="onEraseMiss"
@@ -1576,146 +1592,154 @@ function finishNote(): void {
       </div>
     </template>
 
-    <!-- The one popover: what to do with a selection, a highlight, or a note. -->
-    <div
-      v-if="popover"
-      ref="popoverEl"
-      class="pop-in absolute z-40 rounded-[16px] bg-surface shadow-pop ring-1 ring-border"
-      :class="popover.kind === 'note' ? 'w-[264px] p-2' : 'p-1'"
-      :style="popoverStyle"
-      @keydown="onPopoverKeydown"
-    >
-      <!-- A fresh selection -->
+    <!-- The one popover: what to do with a selection, a highlight, or a note.
+         At the body, so no part's width or column's overflow cuts it off. -->
+    <Teleport to="body">
       <div
-        v-if="popover.kind === 'select'"
-        class="flex items-center gap-0.5"
+        v-if="popover"
+        ref="popoverEl"
+        class="pop-in fixed z-[98] max-w-[calc(100vw-16px)] rounded-[16px] bg-surface shadow-pop ring-1 ring-border"
+        :class="[popover.kind === 'note' ? 'w-[264px] p-2' : 'w-max p-1', readingTheme]"
+        :style="popoverStyle"
+        @keydown="onPopoverKeydown"
       >
-        <button
-          v-for="ink in menuInks"
-          :key="ink.value"
-          type="button"
-          :title="`Highlight in ${ink.name.toLowerCase()}`"
-          :aria-label="`Highlight in ${ink.name.toLowerCase()}`"
-          class="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-surface-sunken"
-          @click="commitPending(false, ink.value)"
+        <!-- A fresh selection -->
+        <div
+          v-if="popover.kind === 'select'"
+          class="flex items-center gap-0.5"
         >
-          <span
-            class="block size-3.5 rounded-full"
-            :style="{ backgroundColor: ink.value }"
-          />
-        </button>
-        <span class="mx-0.5 h-4 w-px bg-border-strong" />
-        <button
-          type="button"
-          class="h-7 cursor-pointer rounded-full px-2.5 text-[12.5px] font-semibold text-text-dim hover:bg-surface-mute"
-          @click="commitPending(true)"
-        >
-          Note
-        </button>
-        <button
-          v-if="canAsk"
-          type="button"
-          class="inline-flex h-7 cursor-pointer items-center gap-1 rounded-full pr-2.5 pl-2 text-[12.5px] font-semibold text-text-dim hover:bg-surface-mute"
-          title="Ask BiliMind about this"
-          @click="askAboutSelection"
-        >
-          <UiIcon
-            name="spark"
-            :size="12"
-            class="text-lime-ink"
-          />
-          Ask
-        </button>
-      </div>
-
-      <!-- An existing highlight -->
-      <div
-        v-else-if="popover.kind === 'mark' && current"
-        class="flex items-center gap-0.5"
-      >
-        <button
-          v-for="ink in menuInks"
-          :key="ink.value"
-          type="button"
-          :title="ink.name"
-          :aria-label="ink.name"
-          :aria-pressed="current.data.color === ink.value"
-          class="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-surface-sunken"
-          @click="recolour(ink.value)"
-        >
-          <span
-            class="block rounded-full"
-            :class="
-              current.data.color === ink.value
-                ? 'size-4 ring-2 ring-offset-1 ring-offset-surface'
-                : 'size-3.5'
-            "
-            :style="{ backgroundColor: ink.value, color: ink.value }"
-          />
-        </button>
-        <span class="mx-0.5 h-4 w-px bg-border-strong" />
-        <button
-          type="button"
-          class="h-7 cursor-pointer rounded-full px-2.5 text-[12.5px] font-semibold text-text-dim hover:bg-surface-mute"
-          @click="openNote(current.uuid, rectOfMark(current.uuid))"
-        >
-          {{ current.kind === 'note' ? 'Edit note' : 'Add note' }}
-        </button>
-        <button
-          type="button"
-          class="h-7 cursor-pointer rounded-full px-2.5 text-[12.5px] font-semibold text-danger hover:bg-danger-soft"
-          @click="removeCurrent"
-        >
-          Remove
-        </button>
-      </div>
-
-      <!-- The note itself -->
-      <div v-else-if="popover.kind === 'note'">
-        <textarea
-          ref="noteField"
-          v-model="noteDraft"
-          rows="3"
-          maxlength="4000"
-          placeholder="A note to yourself…"
-          aria-label="Note"
-          class="block w-full resize-none rounded-[10px] border border-border-field bg-surface px-2.5 py-2 text-[13px] leading-relaxed text-text-body placeholder:text-text-faint focus:border-lime-2 focus:outline-none"
-          @keydown.enter.meta.prevent="finishNote"
-          @keydown.enter.ctrl.prevent="finishNote"
-        />
-        <div class="mt-1.5 flex items-center gap-1">
+          <button
+            v-for="ink in menuInks"
+            :key="ink.value"
+            type="button"
+            :title="`Highlight in ${ink.name.toLowerCase()}`"
+            :aria-label="`Highlight in ${ink.name.toLowerCase()}`"
+            class="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-surface-sunken"
+            @click="commitPending(false, ink.value)"
+          >
+            <span
+              class="block size-3.5 rounded-full"
+              :style="{ backgroundColor: ink.value }"
+            />
+          </button>
+          <span class="mx-0.5 h-4 w-px bg-border-strong" />
           <button
             type="button"
-            class="cursor-pointer rounded-md px-1.5 py-1 text-[12px] text-text-faint hover:text-danger"
+            class="h-7 cursor-pointer rounded-full px-2.5 text-[12.5px] font-semibold text-text-dim hover:bg-surface-mute"
+            @click="commitPending(true)"
+          >
+            Note
+          </button>
+          <button
+            v-if="canAsk"
+            type="button"
+            class="inline-flex h-7 cursor-pointer items-center gap-1 rounded-full pr-2.5 pl-2 text-[12.5px] font-semibold text-text-dim hover:bg-surface-mute"
+            title="Ask Bili about this"
+            @click="askAboutSelection"
+          >
+            <UiIcon
+              name="spark"
+              :size="12"
+              class="text-accent-strong"
+            />
+            Ask
+          </button>
+        </div>
+
+        <!-- An existing highlight -->
+        <div
+          v-else-if="popover.kind === 'mark' && current"
+          class="flex items-center gap-0.5"
+        >
+          <button
+            v-for="ink in menuInks"
+            :key="ink.value"
+            type="button"
+            :title="ink.name"
+            :aria-label="ink.name"
+            :aria-pressed="current.data.color === ink.value"
+            class="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-surface-sunken"
+            @click="recolour(ink.value)"
+          >
+            <span
+              class="block rounded-full"
+              :class="
+                current.data.color === ink.value
+                  ? 'size-4 ring-2 ring-offset-1 ring-offset-surface'
+                  : 'size-3.5'
+              "
+              :style="{ backgroundColor: ink.value, color: ink.value }"
+            />
+          </button>
+          <span class="mx-0.5 h-4 w-px bg-border-strong" />
+          <button
+            type="button"
+            class="h-7 cursor-pointer rounded-full px-2.5 text-[12.5px] font-semibold whitespace-nowrap text-text-dim hover:bg-surface-mute"
+            @click="openNote(current.uuid, rectOfMark(current.uuid))"
+          >
+            {{ current.kind === 'note' ? 'Edit note' : 'Add note' }}
+          </button>
+          <button
+            type="button"
+            title="Remove highlight"
+            aria-label="Remove highlight"
+            class="grid size-7 cursor-pointer place-items-center rounded-full text-danger hover:bg-danger-soft"
             @click="removeCurrent"
           >
-            Remove
-          </button>
-          <span class="flex-1" />
-          <!-- Open: a numbered card under the part. Folded: a note mark on
-               the words only. The choice carries over to the next note. -->
-          <label
-            class="flex cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-1 text-[12px] text-text-soft hover:text-text"
-            title="Show this note in a card under the part. Unticked, it folds to a mark on the words."
-          >
-            <input
-              type="checkbox"
-              :checked="noteOpen"
-              class="size-3.5 cursor-pointer accent-brand"
-              @change="setNoteOpen(($event.target as HTMLInputElement).checked)"
+            <UiIcon
+              name="trash"
+              :size="14"
             />
-            Keep open
-          </label>
-          <UiBtn
-            variant="primary"
-            size="xs"
-            @click="finishNote"
-          >
-            Done
-          </UiBtn>
+          </button>
+        </div>
+
+        <!-- The note itself -->
+        <div v-else-if="popover.kind === 'note'">
+          <textarea
+            ref="noteField"
+            v-model="noteDraft"
+            rows="3"
+            maxlength="4000"
+            placeholder="A note to yourself…"
+            aria-label="Note"
+            class="block w-full resize-none rounded-[10px] border border-border-field bg-surface px-2.5 py-2 text-[13px] leading-relaxed text-text-body placeholder:text-text-faint focus:border-hi-2 focus:outline-none"
+            @keydown.enter.meta.prevent="finishNote"
+            @keydown.enter.ctrl.prevent="finishNote"
+          />
+          <div class="mt-1.5 flex items-center gap-1">
+            <button
+              type="button"
+              class="cursor-pointer rounded-md px-1.5 py-1 text-[12px] text-text-faint hover:text-danger"
+              @click="removeCurrent"
+            >
+              Remove
+            </button>
+            <span class="flex-1" />
+            <!-- Open: a numbered card under the part. Folded: a note mark on
+                 the words only. The choice carries over to the next note. -->
+            <label
+              class="flex cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-1 text-[12px] text-text-soft hover:text-text"
+              title="Show this note in a card under the part. Unticked, it folds to a mark on the words."
+            >
+              <input
+                type="checkbox"
+                :checked="noteOpen"
+                class="size-3.5 cursor-pointer accent-brand"
+                @change="setNoteOpen(($event.target as HTMLInputElement).checked)"
+              />
+              Keep open
+            </label>
+            <UiBtn
+              variant="primary"
+              size="xs"
+              @click="finishNote"
+            >
+              Done
+            </UiBtn>
+          </div>
         </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
@@ -1789,8 +1813,9 @@ function finishNote(): void {
 }
 
 .note-card {
-  background: color-mix(in oklab, var(--mark) 7%, var(--surface));
-  box-shadow: inset 2px 0 0 var(--mark);
+  /* Its ink as a wash and a hairline, never a stripe down the side. */
+  background: color-mix(in oklab, var(--mark) 9%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--mark) 30%, transparent);
 }
 
 .note-card:hover {

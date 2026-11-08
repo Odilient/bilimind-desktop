@@ -64,7 +64,6 @@ import { clearCompanionTabs } from './tabs'
 import { schedule, type RatingValue } from './fsrs'
 import { computeReadiness, pathSteps, topicCheck as checkOf, topicSignal, type PathStep, type TopicCheck, type TopicSignal } from './readiness'
 import { dayKey, nowIso, setZone, browserZone } from './time'
-import { DEMO_USER } from './demo-seed'
 
 export type RowKey = Exclude<keyof Snapshot, 'server_time'>
 
@@ -109,7 +108,7 @@ function emptyRows(): { [K in RowKey]: Record<Uuid, RowTypes[K]> } {
 
 const rows = reactive(emptyRows())
 const status = reactive({
-  mode: null as 'http' | 'demo' | 'powersync' | null,
+  mode: null as 'http' | 'powersync' | null,
   ready: false,
   loading: false,
   error: null as string | null,
@@ -128,6 +127,8 @@ const OUTBOX_KEY = 'bm:companion-outbox'
 const outbox = ref<Pending[]>(readOutbox())
 
 let loading: Promise<void> | null = null
+/** The background fetch of every card (http mode), so a review can wait for the ones due later today. */
+let allCards: Promise<void> = Promise.resolve()
 let listening = false
 /** Stops the live feed from a repo that pushes (PowerSync's local database). */
 let unfollow: (() => void) | null = null
@@ -313,7 +314,7 @@ const termGoal = computed(() => goals.value.find((g) => g.kind === 'term' && g.s
  * progress: one copy for every screen. Each is loaded once the course is
  * known and again after any change to one of its lessons (written, edited,
  * marked complete: `refreshLessons`, which `companion/lessons.ts` and the
- * course page call). In the demo the same request is answered in memory.
+ * course page call).
  */
 const lessonCourses = reactive<Record<number, Course>>({})
 const lessonTickets = new Map<number, number>()
@@ -368,7 +369,7 @@ const readinessInput = computed(() => ({
 async function load(force = false): Promise<void> {
   const repo = useCompanionRepo()
   if (status.mode && status.mode !== repo.mode) {
-    // The tab switched between the demo and a real account: nothing carries over.
+    // The tab switched between http and PowerSync: nothing carries over.
     unfollow?.()
     unfollow = null
     clearRows()
@@ -395,7 +396,7 @@ async function load(force = false): Promise<void> {
       // (the Topics tab, every ring outside Today) needs the rest, so fetch
       // them once in the background; the screens are already drawn.
       if (repo.mode === 'http') {
-        void repo.list<Card>('cards').then((all) => merge({ cards: all })).catch(() => undefined)
+        allCards = repo.list<Card>('cards').then((all) => merge({ cards: all })).catch(() => undefined)
       }
     } catch (error) {
       status.error = error instanceof Error ? error.message : 'Could not load your courses.'
@@ -522,11 +523,12 @@ async function loadToday(): Promise<Today | null> {
   return today.value
 }
 
-async function applySignal(id: Uuid, factIndexes?: number[]): Promise<void> {
+/** `subjects`: the course picked per fact in the Inbox. */
+async function applySignal(id: Uuid, factIndexes?: number[], subjects?: Record<number, Uuid>): Promise<void> {
   const signal = rows.signals[id]
   if (signal) rows.signals[id] = { ...signal, status: 'applied', applied_at: nowIso() }
   try {
-    await useCompanionRepo().applySignal(id, factIndexes)
+    await useCompanionRepo().applySignal(id, factIndexes, subjects)
     await sync()
     void loadToday()
   } catch (error) {
@@ -610,8 +612,7 @@ function get<K extends RowKey>(key: K, id: Uuid | null | undefined): RowTypes[K]
  * is gone, deleted here, from another screen or on another device, or on its
  * way out with an Undo. Only a row the store had and lost: an id it never
  * had (still loading, someone else's) isn't gone, moving to another id isn't,
- * and neither is the whole store being emptied (signing out, leaving the
- * demo). Call it in `setup`; the watcher ends with the component.
+ * and neither is the whole store being emptied (signing out). Call it in `setup`; the watcher ends with the component.
  */
 function onGone<K extends RowKey>(key: K, id: () => Uuid | null | undefined, then: (row: RowTypes[K]) => void): void {
   watch(
@@ -660,7 +661,6 @@ function weekOf(iso: string): number | null {
 const currentWeek = computed(() => weekOf(new Date().toISOString()))
 
 const userName = computed(() => {
-  if (status.mode === 'demo') return DEMO_USER.name
   const user = useState<{ name?: string } | null>('auth:user', () => null).value
   return user?.name?.split(' ')[0] ?? ''
 })
@@ -727,6 +727,8 @@ const store = {
   userName,
   lessonCourses,
   load,
+  /** Resolves once every card is here, not only the ones due now (see `load`). */
+  cardsLoaded: () => allCards,
   sync,
   loadToday,
   upsert,

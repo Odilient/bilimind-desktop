@@ -65,7 +65,7 @@ const filterable = computed(() => allRows.value.length > 4)
             <th
               v-for="(column, index) in columns"
               :key="index"
-              class="px-3 pb-2.5 text-[10.5px] font-semibold tracking-[0.06em] whitespace-nowrap text-text-faint uppercase"
+              class="px-3 pb-2.5 text-[12px] font-semibold whitespace-nowrap text-text-faint"
             >
               {{ column }}
             </th>
@@ -120,7 +120,7 @@ const filterable = computed(() => allRows.value.length > 4)
             :key="columnIndex"
             class="flex flex-col gap-0.5"
           >
-            <dt class="text-[10.5px] font-semibold tracking-[0.06em] text-text-faint uppercase">
+            <dt class="text-[12px] font-semibold text-text-faint">
               {{ column }}
             </dt>
             <dd

@@ -53,7 +53,7 @@ function onKeydown(event: KeyboardEvent): void {
       autofocus
       rows="12"
       placeholder="Paste here…"
-      class="block max-h-[52vh] min-h-[220px] w-full resize-y rounded-[16px] border border-border-field bg-surface px-4 py-3 text-[15px] leading-relaxed text-text outline-none placeholder:text-text-faint focus:border-cobalt focus:ring-3 focus:ring-brand-line"
+      class="block max-h-[52vh] min-h-[220px] w-full resize-y rounded-[16px] border border-border-field bg-surface px-4 py-3 text-[15px] leading-relaxed text-text outline-none placeholder:text-text-faint focus:border-brand focus:ring-3 focus:ring-brand-line"
       @keydown="onKeydown"
     />
     <template #footer>

@@ -1,0 +1,153 @@
+{
+  "title": "Vazifalar",
+  "col": {
+    "todo": "Bajarilishi kerak",
+    "doing": "Jarayonda",
+    "done": "Tayyor"
+  },
+  "group": {
+    "overdue": "Muddati oʻtgan",
+    "today": "Bugun",
+    "week": "Shu hafta",
+    "later": "Keyinroq",
+    "none": "Sanasiz",
+    "done": "Tayyor"
+  },
+  "priority": {
+    "none": "Ustuvorliksiz",
+    "low": "Past",
+    "medium": "Oʻrtacha",
+    "high": "Yuqori",
+    "urgent": "Shoshilinch"
+  },
+  "kind": {
+    "assignment": "Topshiriq",
+    "quiz": "Qisqa test",
+    "lab": "Laboratoriya ishi",
+    "midterm": "Oraliq imtihon",
+    "final": "Yakuniy imtihon",
+    "exam": "Imtihon",
+    "project": "Loyiha",
+    "presentation": "Taqdimot",
+    "milestone": "Bosqich",
+    "other": "Muddat"
+  },
+  "day": {
+    "today": "Bugun",
+    "tomorrow": "Ertaga",
+    "nextWeek": "Kelasi hafta",
+    "none": "Sanasiz",
+    "noTime": "Vaqtsiz",
+    "pick": "Sanani tanlang",
+    "pickDayFirst": "Avval kunni tanlang",
+    "noneYet": "Sana hali yoʻq",
+    "addsItOn": "{day} kuniga qoʻshadi"
+  },
+  "field": {
+    "status": "Holati",
+    "priority": "Ustuvorlik",
+    "course": "Kurs",
+    "day": "Kun",
+    "time": "Vaqt",
+    "length": "Davomiyligi",
+    "due": "Muddat",
+    "kind": "Turi",
+    "properties": "Xususiyatlar",
+    "note": "Eslatma",
+    "task": "Vazifa",
+    "view": "Koʻrinish",
+    "column": "Ustun"
+  },
+  "course": {
+    "none": "Kurssiz",
+    "all": "Barcha kurslar"
+  },
+  "menu": {
+    "find": "Qidirish: {what}…",
+    "findAria": "Qidirish: {what}",
+    "nothing": "Hech narsa topilmadi."
+  },
+  "add": {
+    "label": "Nima qilish kerak",
+    "placeholder": "Vazifa qoʻshing",
+    "moreTitle": "Yana: kun, vaqt, ustuvorlik, eslatma",
+    "moreAria": "Kun, vaqt, ustuvorlik yoki eslatma bilan qoʻshish",
+    "action": "Vazifa qoʻshish"
+  },
+  "card": {
+    "moveTo": "Koʻchirish: {col}",
+    "doToday": "Bugun bajarish",
+    "doTomorrow": "Ertaga bajarish",
+    "markDone": "Bajarildi deb belgilash",
+    "markHandedIn": "Topshirildi deb belgilash",
+    "notDone": "Aslida bajarilmagan",
+    "done": "Tayyor",
+    "priority": "Ustuvorlik: {name}",
+    "fromCourse": "Kursingizdan: {kind}",
+    "steps": "{total} qadamdan {done} tasi bajarildi",
+    "mark": "Sizning bahoyingiz",
+    "got": "Olingan",
+    "hasNote": "Eslatma bor",
+    "moreFor": "Yana: {title}",
+    "ofGrade": "baholashdan"
+  },
+  "steps": {
+    "title": "Qadamlar",
+    "step": "Qadam: {text}",
+    "takeOut": "Olib tashlash: {text}",
+    "takeOutTitle": "Bu qadamni olib tashlash",
+    "add": "Qadam qoʻshing"
+  },
+  "list": {
+    "newIn": "Yangi vazifa: {col}",
+    "emptyTodo": "Qiladigan ish yoʻq.",
+    "emptyDoing": "Hech narsa boshlanmagan.",
+    "emptyDone": "Soʻnggi ikki haftada hech narsa tugallanmagan."
+  },
+  "new": {
+    "heading": "Yangi vazifa",
+    "what": "Nima qilish kerak",
+    "notePlaceholder": "Eslatma qoʻshing: nima uchun, qayerdan boshlash…",
+    "addedTo": "Qoʻshildi: {col}",
+    "addsIt": "qoʻshadi",
+    "add": "Vazifa qoʻshish"
+  },
+  "page": {
+    "missingTitle": "Bu vazifa endi yoʻq",
+    "missingBody": "U oʻchirilgan yoki “Bugun” sahifasidagi kun rejasiga tegishli.",
+    "back": "Vazifalarga qaytish",
+    "sources": "Manbalari va tarixi",
+    "rename": "Nomini oʻzgartirish",
+    "openDeadline": "Muddat sahifasini ochish",
+    "added": "Qoʻshilgan",
+    "arrived": "Kelgan",
+    "started": "Boshlangan",
+    "handedIn": "Topshirilgan",
+    "notePlaceholder": "Nima uchun, qayerdan boshlash, nimani soʻrash…",
+    "ctrlSaves": "Ctrl + Enter saqlaydi",
+    "noteEmpty": "Eslatma qoʻshing: nima uchun, qayerdan boshlash, nimani soʻrash…",
+    "covers": "Kurs aytishicha, nimalarni qamrab oladi:",
+    "breadcrumb": "Navigatsiya"
+  },
+  "board": {
+    "subtitle": "Oʻz ishlaringiz va kurslaringizning muddatlari. Boshlaganingizda yoki tugatganingizda kartani sudrang.",
+    "newTask": "Yangi vazifa",
+    "newTaskKey": "Yangi vazifa (C)",
+    "board": "Doska",
+    "list": "Roʻyxat",
+    "find": "Vazifa qidirish",
+    "nothingFilter": "Bu filtr uchun hech narsa yoʻq.",
+    "emptyDoing": "Boshlaganingizni shu yerga sudrang.",
+    "emptyDone": "Tugatganingiz shu yerga tushadi.",
+    "fromEarlier": "Oldingi kunlardan {n} ta vazifa",
+    "moveToday": "Bugunga koʻchirish",
+    "movedToday": "{n} ta vazifa bugunga koʻchirildi",
+    "showFewer": "Kamroq koʻrsatish",
+    "showAll": "Barchasini koʻrsatish ({n})",
+    "bring": "Topshiriqlaringizni ulang",
+    "download": "Bu vazifalarni yuklab olish:",
+    "spreadsheet": "Jadval",
+    "eyebrow": "Bugun {n} ta ish",
+    "eyebrowNone": "Bugun qiladigan ish yoʻq"
+  }
+}

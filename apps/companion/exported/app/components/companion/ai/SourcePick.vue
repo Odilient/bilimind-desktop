@@ -9,8 +9,9 @@
  *
  *   <CompanionAiSourcePick v-model="answersFrom" placement="down" />
  *
- * A popover on a desktop, a sheet on a phone. The sources column shows
- * the same choice as a list; both write the same `answersFrom`.
+ * A popover on a desktop, a sheet on a phone. It is the one place the
+ * choice is made: the chat has no sources column, and left alone an answer
+ * reads everything and finds what the question needs.
  */
 import { useCompanion } from '~/companion/store'
 import { courseColor } from '~/companion/colors'
@@ -82,7 +83,7 @@ const row =
     <button
       type="button"
       :class="[
-        'flex h-11 max-w-[240px] min-w-0 cursor-pointer items-center gap-2 rounded-[12px] pr-2.5 pl-1.5 text-left shadow-[inset_0_0_0_1px_var(--border)] transition-[background-color,box-shadow] duration-150 outline-none hover:bg-surface-sunken hover:shadow-[inset_0_0_0_1px_var(--border-field)] focus-visible:shadow-[inset_0_0_0_1.5px_var(--brand-line)] max-sm:max-w-[180px]',
+        'flex h-10 max-w-[240px] min-w-0 cursor-pointer items-center gap-2 rounded-full pr-3 pl-1 text-left shadow-[inset_0_0_0_1px_var(--border-strong)] transition-[background-color,box-shadow] duration-150 outline-none hover:bg-surface-sunken focus-visible:shadow-[inset_0_0_0_1.5px_var(--brand-line)] max-lg:h-11 max-sm:max-w-[180px]',
         open && 'bg-surface-sunken',
       ]"
       aria-haspopup="listbox"
@@ -91,7 +92,7 @@ const row =
       @click="open = !open"
     >
       <span
-        class="grid size-8 shrink-0 place-items-center rounded-[9px]"
+        class="grid size-8 shrink-0 place-items-center rounded-full"
         :style="picked ? { background: wash(courseColor(picked.color), 22), color: courseColor(picked.color) } : undefined"
         :class="!picked && 'bg-surface-sunken text-text-soft'"
         aria-hidden="true"
@@ -130,7 +131,7 @@ const row =
       <div
         v-if="open && !isPhone"
         :class="[
-          'om-scroll absolute left-0 z-40 max-h-[min(380px,60vh)] w-[300px] overflow-y-auto rounded-[16px] bg-surface p-1.5 shadow-pop ring-1 ring-border',
+          'om-scroll absolute left-0 z-40 max-h-[min(380px,60vh)] w-[300px] overflow-y-auto rounded-[15px] bg-surface p-1.5 shadow-pop',
           placement === 'up' ? 'bottom-full mb-2' : 'top-full mt-2',
         ]"
         role="listbox"
@@ -158,7 +159,7 @@ const row =
             name="check"
             :size="15"
             :stroke="2"
-            class="shrink-0 text-cobalt"
+            class="shrink-0 text-brand"
           />
         </button>
         <div
@@ -192,7 +193,7 @@ const row =
             name="check"
             :size="15"
             :stroke="2"
-            class="shrink-0 text-cobalt"
+            class="shrink-0 text-brand"
           />
         </button>
       </div>
@@ -224,7 +225,7 @@ const row =
             name="check"
             :size="17"
             :stroke="2"
-            class="shrink-0 text-cobalt"
+            class="shrink-0 text-brand"
           />
         </button>
         <button
@@ -252,7 +253,7 @@ const row =
             name="check"
             :size="17"
             :stroke="2"
-            class="shrink-0 text-cobalt"
+            class="shrink-0 text-brand"
           />
         </button>
       </div>

@@ -1,0 +1,153 @@
+{
+  "title": "Tâches",
+  "col": {
+    "todo": "À faire",
+    "doing": "En cours",
+    "done": "Terminé"
+  },
+  "group": {
+    "overdue": "En retard",
+    "today": "Aujourd’hui",
+    "week": "Cette semaine",
+    "later": "Plus tard",
+    "none": "Sans date",
+    "done": "Terminées"
+  },
+  "priority": {
+    "none": "Sans priorité",
+    "low": "Basse",
+    "medium": "Moyenne",
+    "high": "Haute",
+    "urgent": "Urgente"
+  },
+  "kind": {
+    "assignment": "Devoir",
+    "quiz": "Quiz",
+    "lab": "TP",
+    "midterm": "Partiel",
+    "final": "Examen final",
+    "exam": "Examen",
+    "project": "Projet",
+    "presentation": "Présentation",
+    "milestone": "Étape",
+    "other": "Échéance"
+  },
+  "day": {
+    "today": "Aujourd’hui",
+    "tomorrow": "Demain",
+    "nextWeek": "Semaine prochaine",
+    "none": "Sans date",
+    "noTime": "Sans heure",
+    "pick": "Choisir une date",
+    "pickDayFirst": "Choisissez d’abord un jour",
+    "noneYet": "Pas encore de date",
+    "addsItOn": "l’ajoute, pour le {day}"
+  },
+  "field": {
+    "status": "Statut",
+    "priority": "Priorité",
+    "course": "Cours",
+    "day": "Jour",
+    "time": "Heure",
+    "length": "Durée",
+    "due": "Échéance",
+    "kind": "Type",
+    "properties": "Propriétés",
+    "note": "Note",
+    "task": "Tâche",
+    "view": "Affichage",
+    "column": "Colonne"
+  },
+  "course": {
+    "none": "Sans cours",
+    "all": "Tous les cours"
+  },
+  "menu": {
+    "find": "Chercher {what}…",
+    "findAria": "Chercher {what}",
+    "nothing": "Aucun résultat."
+  },
+  "add": {
+    "label": "Quelque chose à faire",
+    "placeholder": "Ajouter une tâche",
+    "moreTitle": "Plus : un jour, une heure, une priorité, une note",
+    "moreAria": "Ajouter avec un jour, une heure, une priorité ou une note",
+    "action": "Ajouter une tâche"
+  },
+  "card": {
+    "moveTo": "Déplacer vers {col}",
+    "doToday": "La faire aujourd’hui",
+    "doTomorrow": "La faire demain",
+    "markDone": "Marquer comme faite",
+    "markHandedIn": "Marquer comme rendue",
+    "notDone": "Finalement pas faite",
+    "done": "Terminé",
+    "priority": "Priorité : {name}",
+    "fromCourse": "De votre cours : {kind}",
+    "steps": "{done} étapes sur {total} faites",
+    "mark": "Votre note",
+    "got": "Obtenu",
+    "hasNote": "A une note",
+    "moreFor": "Plus d’options pour {title}",
+    "ofGrade": "de la note"
+  },
+  "steps": {
+    "title": "Étapes",
+    "step": "Étape : {text}",
+    "takeOut": "Retirer : {text}",
+    "takeOutTitle": "Retirer cette étape",
+    "add": "Ajouter une étape"
+  },
+  "list": {
+    "newIn": "Nouvelle tâche dans {col}",
+    "emptyTodo": "Rien à faire.",
+    "emptyDoing": "Rien de commencé.",
+    "emptyDone": "Rien de terminé ces deux dernières semaines."
+  },
+  "new": {
+    "heading": "Nouvelle tâche",
+    "what": "Quoi faire",
+    "notePlaceholder": "Ajoutez une note : à quoi ça sert, par où commencer…",
+    "addedTo": "Ajoutée à {col}",
+    "addsIt": "l’ajoute",
+    "add": "Ajouter la tâche"
+  },
+  "page": {
+    "missingTitle": "Cette tâche n’est plus là",
+    "missingBody": "Elle a été supprimée, ou elle fait partie du plan du jour, qui se trouve dans Aujourd’hui.",
+    "back": "Retour aux tâches",
+    "sources": "Ses sources et son historique",
+    "rename": "Renommer",
+    "openDeadline": "Ouvrir la page de l’échéance",
+    "added": "Ajoutée",
+    "arrived": "Arrivée",
+    "started": "Commencée",
+    "handedIn": "Rendue",
+    "notePlaceholder": "À quoi ça sert, par où commencer, quoi demander…",
+    "ctrlSaves": "Ctrl + Entrée enregistre",
+    "noteEmpty": "Ajoutez une note : à quoi ça sert, par où commencer, quoi demander…",
+    "covers": "Ce que ça couvre, d’après le cours :",
+    "breadcrumb": "Fil d’Ariane"
+  },
+  "board": {
+    "subtitle": "Vos propres tâches et les échéances de vos cours. Faites glisser une carte quand vous la commencez ou la terminez.",
+    "newTask": "Nouvelle tâche",
+    "newTaskKey": "Nouvelle tâche (C)",
+    "board": "Tableau",
+    "list": "Liste",
+    "find": "Chercher une tâche",
+    "nothingFilter": "Rien ici pour ce filtre.",
+    "emptyDoing": "Déposez ici ce que vous avez commencé.",
+    "emptyDone": "Ce que vous terminez arrive ici.",
+    "fromEarlier": "{n} tâche des jours précédents | {n} tâches des jours précédents",
+    "moveToday": "Déplacer à aujourd’hui",
+    "movedToday": "{n} tâche déplacée à aujourd’hui | {n} tâches déplacées à aujourd’hui",
+    "showFewer": "En montrer moins",
+    "showAll": "Tout afficher ({n})",
+    "bring": "Importer vos devoirs",
+    "download": "Télécharger ces tâches :",
+    "spreadsheet": "Tableur",
+    "eyebrow": "{n} chose à faire aujourd’hui | {n} choses à faire aujourd’hui",
+    "eyebrowNone": "Rien à faire aujourd’hui"
+  }
+}

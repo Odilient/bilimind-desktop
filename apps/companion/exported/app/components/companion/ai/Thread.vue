@@ -215,11 +215,11 @@ const page = computed(() => props.variant === 'page')
     >
       <div
         v-if="dropping"
-        class="pointer-events-none absolute inset-2 z-20 grid place-items-center rounded-[18px] border-2 border-dashed border-cobalt bg-cobalt-soft/80 backdrop-blur-[3px]"
+        class="pointer-events-none absolute inset-2 z-20 grid place-items-center rounded-[14px] border-2 border-dashed border-brand-line bg-surface/85 backdrop-blur-[4px]"
         aria-hidden="true"
       >
         <div class="grid justify-items-center gap-2 px-6 text-center">
-          <span class="grid size-11 place-items-center rounded-full bg-cobalt text-on-brand">
+          <span class="grid size-11 place-items-center rounded-full bg-sky-soft text-sky-ink">
             <UiIcon
               name="upload"
               :size="20"
@@ -262,48 +262,43 @@ const page = computed(() => props.variant === 'page')
 
         <template v-else-if="empty">
           <slot name="empty">
-            <div class="animate-rise grid gap-4 pt-3">
-              <div class="grid gap-1.5">
-                <span class="mb-1.5 grid size-9 place-items-center rounded-full bg-ink text-lime">
-                  <UiIcon
-                    name="spark"
-                    :size="16"
-                  />
-                </span>
-                <h2 class="font-display text-[19px] leading-[1.25] font-semibold tracking-[-0.02em] text-text">
-                  {{ heading }}
-                </h2>
-                <p class="text-[13px] leading-[1.5] text-text-muted">
-                  {{ seeLine }}
-                </p>
-              </div>
+            <div class="animate-rise grid justify-items-center gap-1.5 px-1 pt-8 pb-2 text-center">
+              <CompanionAiBilim
+                class="mb-2"
+                :size="54"
+                mood="happy"
+                follow
+              />
+              <h2 class="font-display text-[21px] leading-[1.2] font-semibold tracking-[-0.025em] text-balance text-text">
+                {{ heading }}
+              </h2>
+              <p class="max-w-[32ch] text-[13px] leading-[1.5] text-text-muted">
+                {{ seeLine }}
+              </p>
 
+              <!-- Questions for what's on screen: the landing's follow-up pills. -->
               <ul
                 v-if="suggestions.length"
-                class="grid gap-1.5"
+                class="mt-3 flex flex-wrap justify-center gap-1.5"
                 aria-label="Suggested questions"
               >
                 <li
                   v-for="s in suggestions"
                   :key="s.prompt"
+                  class="max-w-full"
                 >
                   <button
                     type="button"
-                    class="group/s flex min-h-11 w-full cursor-pointer items-center gap-2.5 rounded-[12px] px-3 py-2 text-left text-[13.5px] text-text-body shadow-[inset_0_0_0_1px_var(--border)] transition-[background-color,box-shadow,color] duration-150 hover:bg-surface-sunken hover:text-text hover:shadow-[inset_0_0_0_1px_transparent] focus-visible:bg-surface-sunken"
+                    class="inline-flex min-h-8 max-w-full cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-left text-[12.5px] font-semibold text-text-dim shadow-[inset_0_0_0_1px_var(--border-strong)] transition-[background-color,box-shadow,color] duration-200 hover:bg-accent-soft hover:text-accent-strong hover:shadow-[inset_0_0_0_1px_var(--accent-line)] focus-visible:bg-accent-soft max-lg:min-h-10"
                     :title="s.prompt"
                     @click="ask(s.prompt)"
                   >
                     <CompanionIcon
                       :name="s.icon"
-                      :size="15"
-                      class="shrink-0 text-text-faint transition-colors group-hover/s:text-text-soft"
-                    />
-                    <span class="min-w-0 flex-1 truncate">{{ s.label }}</span>
-                    <UiIcon
-                      name="arrow-right"
                       :size="13"
-                      class="shrink-0 -translate-x-1 text-text-faint opacity-0 transition-[opacity,transform] duration-150 group-hover/s:translate-x-0 group-hover/s:opacity-100"
+                      class="shrink-0 opacity-70"
                     />
+                    <span class="min-w-0 truncate">{{ s.label }}</span>
                   </button>
                 </li>
               </ul>

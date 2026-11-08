@@ -1,8 +1,10 @@
 <script setup lang="ts">
 /**
- * The answer to "what should I do right now": the old Today's hero card
- * (`pages/today.vue`), cobalt slab, beams, grain and one glossy object, with
- * one lime button. It is the one card on the page that gets the colour.
+ * The answer to "what should I do right now": Today's pick, drawn as Daylight
+ * 2's Today card (docs/design/daylight2/sections/07-today.html). "How long do
+ * you have?" (10 min, 20, an hour) above one pick with one ink button. The
+ * time only shows when it can change the pick, and it only picks among the
+ * plan's tasks: a class on now is on now, however long you have.
  *
  * What it holds is decided again every 30 seconds (`useNow`), in this order:
  *
@@ -40,9 +42,11 @@ import { useAi } from '~/companion/ai/state'
 import { useQuietAi } from '~/companion/quiet-ai'
 import { newChatLink } from '~/companion/ai/routes'
 import { FOCUS_MIN, useFocus } from '~/companion/focus'
-import { clock, dayKey, untilLabel } from '~/companion/time'
-import { KIND_WORD, dueLong, readyWords, sessionLine } from '~/companion/words'
+import { clock, dayKey, nowIso, untilLabel } from '~/companion/time'
+import { kindWord, dueLong, readyWords, sessionLine } from '~/companion/words'
 import { checkHref } from '~/companion/checks'
+import { TIME_CHOICES, dueWords, pickFor, type TimeChoice } from '~/companion/today-pick'
+import { useUsage } from '~/companion/usage'
 import {
   classHref,
   classNow,
@@ -58,12 +62,14 @@ import {
   useNow,
 } from '~/companion/today-layout'
 
+const { t: tr } = useI18n()
 const c = useCompanion()
 const capture = useCapture()
 const ai = useAi()
 const { quiet } = useQuietAi()
 const now = useNow()
 const focus = useFocus()
+const toast = useToast()
 
 const today = computed(() => dayKey(now.value))
 
@@ -73,13 +79,34 @@ const lecture = computed<Session | null>(() => {
   return s && !isStudy(c, s) ? s : null
 })
 
-const task = computed<PlanTask | null>(
-  () =>
-    c.planTasks.value
-      .filter((t) => t.date === today.value && !t.done_at)
-      .sort((a, b) => a.position - b.position)
-      .find((t) => taskHref(t, c)) ?? null,
+/*
+ * "How long do you have?" (Daylight 2's Today): 10 minutes, 20, or an hour.
+ * The pick is `pickFor` (companion/today-pick.ts): the first thing on today's
+ * plan, in the planner's order, that fits the time, or one that can be cut
+ * down to it ("10 of its 25 min"). When nothing fits, the plan's first task
+ * still, with its real length beside the button rather than a promise it
+ * can't keep. Kept for the visit, not saved: the time you have is today's
+ * answer, not a setting.
+ */
+const budget = useState<TimeChoice>('today:budget', () => 20)
+const budgetWord = (m: TimeChoice): string => (m === 60 ? tr('today.hero.hour') : tr('today.hero.minutes', { n: m }))
+
+/** Today's plan, still to do, that opens something: what the pick is chosen from. */
+const open = computed<PlanTask[]>(() =>
+  c.planTasks.value
+    .filter((t) => t.date === today.value && !t.done_at && taskHref(t, c))
+    .sort((a, b) => a.position - b.position),
 )
+
+const picked = computed(() => pickFor(open.value, budget.value))
+const task = computed<PlanTask | null>(() => picked.value?.task ?? open.value[0] ?? null)
+/** What the pick takes in the time given: its own minutes, or what it was cut down to. */
+const pickMinutes = computed(() =>
+  picked.value && picked.value.task.id === task.value?.id ? picked.value.minutes : (task.value?.minutes ?? 0),
+)
+
+/** The time is asked whenever the card is a task of the plan's: it is what sizes it. */
+const sized = computed(() => mode.value === 'task')
 
 /** A deadline close enough to worry about, and not ready for. */
 const urgent = computed<{ d: Deadline; r: Readiness } | null>(() => {
@@ -128,10 +155,16 @@ const mode = computed<'class' | 'start' | 'task' | 'lesson' | 'deadline' | 'card
  * page will send; the server hands that open batch back the moment the page
  * asks, and the intro still shows because nothing in it is answered yet. One
  * call a day at most: an open batch is reused, never rewritten.
+ *
+ * Not on a plan with no AI of its own (Free) without a key: there it would be
+ * credits spent before anyone pressed Start, and credits are only spent on what
+ * the learner asked for. They wait the half minute instead.
  */
+const { usage: aiUsage, ensure: ensureAiUsage } = useUsage()
+onMounted(ensureAiUsage)
 const prepared = new Set<string>()
 watch(
-  () => (mode.value === 'task' && task.value?.kind === 'check' ? task.value : null),
+  () => (mode.value === 'task' && task.value?.kind === 'check' && aiUsage.value && (aiUsage.value.plan_ai !== false || aiUsage.value.own_key) ? task.value : null),
   (t) => {
     if (!t || prepared.has(t.id)) return
     prepared.add(t.id)
@@ -149,19 +182,24 @@ const subject = computed(() => {
   return null
 })
 
+/** The task the card is about: "Also today" (Plan) leaves it out, so nothing is said twice. */
+const pick = useState<string | null>('today:pick', () => null)
+watchEffect(() => {
+  pick.value = mode.value === 'task' ? (task.value?.id ?? null) : null
+})
+
+function markDone(t: PlanTask): void {
+  void c.upsert<PlanTask>('plan-tasks', { id: t.id, done_at: nowIso() })
+  toast.success({
+    title: tr('today.plan.done', { title: t.title }),
+    action: { label: tr('today.plan.undo'), handler: () => void c.upsert<PlanTask>('plan-tasks', { id: t.id, done_at: null }) },
+  })
+}
+
 const notes = computed(() => (lecture.value ? notesOf(c, lecture.value) : null))
 const canRecord = computed(() => false)
 
-const VERB: Record<PlanTask['kind'], string> = {
-  lesson: 'Resume',
-  read: 'Read',
-  review: 'Review',
-  practice: 'Practise',
-  prepare: 'Open',
-  work: 'Open',
-  own: 'Start',
-  check: 'Start the check',
-}
+const verb = (kind: PlanTask['kind']): string => tr(`today.hero.verb.${kind}`)
 
 const card = computed(() => {
   switch (mode.value) {
@@ -171,10 +209,10 @@ const card = computed(() => {
       const started = Date.parse(s.starts_at) <= now.value
       return {
         icon: 'mic',
-        eyebrow: started ? `Happening now · until ${clock(s.ends_at)}` : `Starts ${untilLabel(s.starts_at, now.value)}`,
+        eyebrow: started ? tr('today.hero.nowUntil', { time: clock(s.ends_at) }) : tr('today.hero.starts', { when: untilLabel(s.starts_at, now.value) }),
         title: topic ? `${s.title} · ${topic.title}` : s.title,
         line: [subject.value?.title, sessionLine(s)].filter(Boolean).join(' · '),
-        pill: notes.value ? 'Open your notes' : 'Take notes',
+        pill: tr(notes.value ? 'today.classes.openNotes' : 'today.classes.takeNotes'),
         // A button: the page is made on the press, already filed under the class.
         to: null,
         object: 'docs',
@@ -184,10 +222,10 @@ const card = computed(() => {
       const { subject: course, topic, n } = starter.value!
       return {
         icon: 'play',
-        eyebrow: 'Start here',
+        eyebrow: tr('today.hero.startHere'),
         title: course.title,
-        line: `Lesson ${n}: ${topic.title}. A short sample course, to see how lessons, notes and flashcards work.`,
-        pill: `Open lesson ${n}`,
+        line: tr('today.hero.startLine', { n, title: topic.title }),
+        pill: tr('today.hero.openLesson', { n }),
         to: topicHref(topic),
         object: 'book',
       }
@@ -199,21 +237,24 @@ const card = computed(() => {
         // already says "Check yourself", so the title is the topics alone.
         return {
           icon: 'check',
-          eyebrow: 'Check yourself',
+          eyebrow: tr('today.hero.checkYourself'),
           title: t.title.replace(/^Check yourself on /, ''),
-          line: [t.detail?.split(' · ')[0], `about ${minutesLabel(t.minutes)}`, 'no notes, no help'].filter(Boolean).join(' · '),
-          sub: 'You studied these a few days ago. This is how BiliMind knows what stuck.',
-          pill: VERB.check,
+          line: [t.detail?.split(' · ')[0], tr('today.plan.about', { time: minutesLabel(t.minutes) }), tr('today.hero.noHelp')].filter(Boolean).join(' · '),
+          sub: tr('today.hero.checkSub'),
+          pill: verb('check'),
           to: taskHref(t, c),
           object: 'check',
         }
       }
+      // Why now, the way the landing's card says it: "Midterm is on Wednesday".
+      // The course is already named on the card, by its cover.
+      const due = c.get('deadlines', t.deadline_id)
       return {
         icon: t.kind === 'lesson' ? 'play' : 'sparkles',
-        eyebrow: t.kind === 'lesson' ? 'Pick up where you left off' : 'Next on your plan',
+        eyebrow: tr(t.kind === 'lesson' ? 'today.hero.pickUp' : 'today.hero.doNow'),
         title: t.title,
-        line: [subject.value?.title, t.detail].filter(Boolean).join(' · '),
-        pill: VERB[t.kind],
+        line: [due ? dueWords(due, today.value) : null, t.detail].filter(Boolean).join(' · '),
+        pill: verb(t.kind),
         to: taskHref(t, c),
         object: t.kind === 'review' || t.kind === 'practice' ? 'check' : t.kind === 'lesson' || t.kind === 'read' ? 'book' : 'docs',
       }
@@ -222,10 +263,10 @@ const card = computed(() => {
       const { topic, subject: course } = lesson.value!
       return {
         icon: 'play',
-        eyebrow: 'Pick up where you left off',
+        eyebrow: tr('today.hero.pickUp'),
         title: topic.title,
         line: c.goalOf(course)?.title ?? course.title,
-        pill: 'Resume',
+        pill: tr('today.hero.verb.lesson'),
         to: topicHref(topic),
         object: 'book',
       }
@@ -234,39 +275,39 @@ const card = computed(() => {
       const { d, r } = urgent.value!
       const base = {
         icon: 'clock',
-        eyebrow: `${KIND_WORD[d.kind]} ${dayWord(d.due_at!, now.value)}`,
+        eyebrow: `${kindWord(d.kind)} ${dayWord(d.due_at!, now.value)}`,
         line: [subject.value?.title, readyWords(r.checked ? r.percent : null), dueLong(d)].filter(Boolean).join(' · '),
         object: 'trophy',
       }
       const topics = r.suggestion.check.topics
       if (topics) {
-        return { ...base, title: `Check yourself for ${d.title}`, pill: `Check ${plural(topics, 'topic')}`, to: checkHref({ deadlineId: d.id }) }
+        return { ...base, title: tr('today.hero.checkFor', { title: d.title }), pill: tr('today.hero.checkTopics', topics), to: checkHref({ deadlineId: d.id }) }
       }
       if (!r.topics.some((t) => t.last_studied_at)) {
-        return { ...base, title: `See what ${d.title} needs`, pill: 'See what it needs', to: checkHref({ purpose: 'prepare', deadlineId: d.id }) }
+        return { ...base, title: tr('today.hero.seeNeeds', { title: d.title }), pill: tr('today.changes.seeNeeds'), to: checkHref({ purpose: 'prepare', deadlineId: d.id }) }
       }
       // No cards to practise yet: the deadline page says where they come from.
       return r.suggestion.practice.cards
-        ? { ...base, title: `Practice for ${d.title}`, pill: 'Practise', to: `/app/practice?deadline=${d.id}` }
-        : { ...base, title: `Get ready for ${d.title}`, pill: 'Open it', to: `/app/d/${d.id}` }
+        ? { ...base, title: tr('today.hero.practiceFor', { title: d.title }), pill: tr('today.hero.verb.practice'), to: `/app/practice?deadline=${d.id}` }
+        : { ...base, title: tr('today.hero.getReady', { title: d.title }), pill: tr('today.hero.openIt'), to: `/app/d/${d.id}` }
     }
     case 'cards':
       return {
         icon: 'cards',
-        eyebrow: 'Flashcards due',
-        title: `Review ${plural(cardsDue.value, 'card')}`,
-        line: `About ${minutesLabel(Math.max(2, Math.round(cardsDue.value * 0.5)))}. Made from your slides and notes, back just before you'd forget them.`,
-        pill: 'Review',
+        eyebrow: tr('today.hero.cardsDue'),
+        title: tr('today.hero.reviewCards', cardsDue.value),
+        line: tr('today.hero.cardsLine', { time: minutesLabel(Math.max(2, Math.round(cardsDue.value * 0.5))) }),
+        pill: tr('today.hero.verb.review'),
         to: '/app/practice',
         object: 'check',
       }
     case 'first':
       return {
         icon: 'spark',
-        eyebrow: 'Your first course',
-        title: 'What do you want to learn?',
-        line: 'Say it in a sentence, with a date if there is one. BiliMind drafts the course in a chat, and nothing is made until you press Create.',
-        pill: 'Make a course',
+        eyebrow: tr('today.hero.firstCourse'),
+        title: tr('today.hero.whatLearn'),
+        line: tr('today.hero.whatLearnLine'),
+        pill: tr('today.setup.courseCta'),
         to: newChatLink({ intent: 'course' }),
         object: 'rocket',
       }
@@ -274,19 +315,19 @@ const card = computed(() => {
       return quiet.value
         ? {
             icon: 'calendar',
-            eyebrow: 'Nothing pressing',
-            title: 'A free moment',
-            line: 'Nothing due soon and nothing left on the list. Look at the week ahead.',
-            pill: 'See the week',
+            eyebrow: tr('today.hero.nothingPressing'),
+            title: tr('today.hero.freeMoment'),
+            line: tr('today.hero.freeLine'),
+            pill: tr('today.hero.seeWeek'),
             to: '/app/calendar',
             object: 'calendar',
           }
         : {
             icon: 'spark',
-            eyebrow: 'Nothing pressing',
-            title: 'Plan the week with BiliMind',
-            line: 'It reads your classes and what is due, and gives each day a short list.',
-            pill: 'Plan my week',
+            eyebrow: tr('today.hero.nothingPressing'),
+            title: tr('today.hero.planWith'),
+            line: tr('today.hero.planLine'),
+            pill: tr('today.hero.planMyWeek'),
             to: null,
             object: 'rocket',
           }
@@ -296,7 +337,7 @@ const card = computed(() => {
 function primary(): void {
   if (card.value.to) return
   if (mode.value === 'class' && lecture.value) void takeNotes(c, lecture.value)
-  else ai.ask("Plan my week: what should I do each day so I'm ready for what's due?")
+  else ai.ask(tr('today.hero.planPrompt'))
 }
 
 /** A focus block on the task, with its work opened. */
@@ -317,7 +358,7 @@ const after = computed(() => {
   const course = c.subjectOf(next)
   return {
     to: classHref(next),
-    text: [`Next class ${clock(next.starts_at)}`, `${course?.title ?? ''} ${next.title}`.trim(), next.location]
+    text: [tr('today.hero.nextClass', { time: clock(next.starts_at) }), `${course?.title ?? ''} ${next.title}`.trim(), next.location]
       .filter(Boolean)
       .join(' · '),
   }
@@ -325,103 +366,151 @@ const after = computed(() => {
 </script>
 
 <template>
-  <section aria-label="Right now">
+  <!-- Daylight 2's "Today" card (sections/07-today.html): how long you have,
+       and the one thing worth doing in it. A card on the page, not a slab. -->
+  <section
+    :aria-label="tr('today.hero.label')"
+    class="rounded-[18px] bg-surface p-4 shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] sm:p-5"
+  >
+    <div
+      v-if="sized"
+      class="mb-4 grid gap-1.5"
+    >
+      <span
+        id="today-budget"
+        class="text-[12px] font-semibold text-text-faint"
+      >{{ tr('today.hero.howLong') }}</span>
+      <!-- What the switch does, said once: it was three bare durations nobody could read. -->
+      <span class="-mt-1 text-[12px] leading-snug text-text-faint">{{ tr('today.hero.howLongHint') }}</span>
+      <div
+        class="grid grid-cols-3 gap-0.5 rounded-[11px] bg-[rgb(var(--wash-rgb)/0.065)] p-[3px]"
+        role="radiogroup"
+        aria-labelledby="today-budget"
+      >
+        <button
+          v-for="m in TIME_CHOICES"
+          :key="m"
+          type="button"
+          role="radio"
+          :aria-checked="budget === m"
+          :class="[
+            'h-[30px] cursor-pointer rounded-[8px] text-[13px] font-semibold transition-[background-color,color,box-shadow] duration-200 focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none',
+            budget === m
+              ? 'bg-surface text-text shadow-[var(--shadow-card),0_0_0_1px_var(--border)]'
+              : 'text-text-faint hover:text-text-soft',
+          ]"
+          @click="budget = m"
+        >
+          {{ budgetWord(m) }}
+        </button>
+      </div>
+    </div>
+
     <Transition
       mode="out-in"
-      enter-active-class="duration-200 ease-out"
-      enter-from-class="translate-y-1 opacity-0"
+      enter-active-class="duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      enter-from-class="translate-y-1.5 opacity-0"
       leave-active-class="duration-150 ease-in"
       leave-to-class="opacity-0"
     >
       <div
         :key="`${mode}:${card.title}`"
-        class="group cb-cobalt relative isolate rounded-[26px] p-5 shadow-[0_30px_60px_-34px_rgb(20_40_200/0.6)] sm:p-7 sm:pr-48"
+        class="grid gap-1.5 rounded-[14px] bg-surface-mute p-4 shadow-[0_0_0_1px_var(--border)]"
       >
-        <span class="cb-beams" />
-        <span class="cb-grain" />
-        <img
-          :src="`/img/cobalt/obj-${card.object}.webp`"
-          alt=""
-          aria-hidden="true"
-          class="cb-obj -top-9 right-4 hidden w-40 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-2 sm:block"
-        >
-        <span class="cb-eb on-dark relative">
-          <span class="dot"><UiIcon
+        <span class="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-accent-strong">
+          <UiIcon
             :name="card.icon"
-            :size="10"
-            :stroke="2.4"
-          /></span>
+            :size="13"
+            :stroke="2.3"
+          />
           {{ card.eyebrow }}
         </span>
-        <h2 class="t-head relative mt-4 text-[24px] leading-[1.12] text-white sm:text-[30px]">
+        <span
+          v-if="subject"
+          class="mt-0.5 flex min-w-0 items-center gap-1.5 text-[12.5px] font-semibold text-text-faint"
+        >
+          <CompanionCourseCover
+            :subject="subject"
+            size="sm"
+            :px="18"
+          />
+          <span class="truncate">{{ subject.title }}</span>
+        </span>
+        <h2 class="mt-0.5 font-display text-[21px] leading-[1.15] font-semibold tracking-[-0.025em] text-text sm:text-[23px]">
           {{ card.title }}
         </h2>
         <p
           v-if="card.line"
-          class="relative mt-2 text-[14px] text-white/72"
+          class="text-[13.5px] leading-[1.5] text-text-soft"
         >
           {{ card.line }}
         </p>
         <p
           v-if="'sub' in card"
-          class="relative mt-1 text-[14px] text-white/72"
+          class="text-[13.5px] leading-[1.5] text-text-soft"
         >
           {{ card.sub }}
         </p>
 
-        <div class="relative mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div class="mt-2.5 flex flex-wrap items-center gap-x-1.5 gap-y-2">
           <component
             :is="card.to ? NuxtLink : 'button'"
             :to="card.to ?? undefined"
             :type="card.to ? undefined : 'button'"
-            class="cb-pill lime h-12 cursor-pointer pr-[17px] pl-6 text-[15px] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-cobalt focus-visible:outline-none"
+            class="inline-flex h-[38px] cursor-pointer items-center gap-2 rounded-full bg-inverse px-[16px] text-[14px] font-semibold whitespace-nowrap text-on-inverse shadow-card transition-[background-color,transform] duration-200 hover:bg-inverse-hover active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none"
             @click="primary"
           >
             {{ card.pill }}
-            <span class="arr">
-              <UiIcon
-                :name="mode === 'class' && !notes ? 'pencil' : mode === 'plan' && !quiet ? 'spark' : 'arrow-right'"
-                :size="14"
-                :stroke="2.2"
-              />
-            </span>
+            <UiIcon
+              :name="mode === 'class' && !notes ? 'pencil' : mode === 'plan' && !quiet ? 'spark' : 'arrow-right'"
+              :size="14"
+              :stroke="2.2"
+            />
           </component>
 
           <button
             v-if="canRecord"
             type="button"
-            class="inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-full px-2 text-[13.5px] text-white/80 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
+            class="inline-flex h-[38px] cursor-pointer items-center gap-1.5 rounded-full px-3 text-[13.5px] font-semibold text-text-soft transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
             @click="record"
           >
             <UiIcon
               name="mic"
               :size="14"
             />
-            Record
+            {{ tr('today.classes.record') }}
           </button>
           <!-- A check is timed by its questions, not a focus block. -->
-          <template v-else-if="mode === 'task' && task && task.kind !== 'check'">
+          <template v-else-if="mode === 'task' && task">
             <button
-              v-if="focus.state.value?.task_id !== task.id"
+              v-if="task.kind !== 'check' && focus.state.value?.task_id !== task.id"
               type="button"
-              class="inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-full px-2 text-[13.5px] text-white/80 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
+              class="inline-flex h-[38px] cursor-pointer items-center gap-1.5 rounded-full px-3 text-[13.5px] font-semibold text-text-soft transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
               @click="focusOn(task)"
             >
               <UiIcon
                 name="timer"
                 :size="14"
               />
-              Focus {{ FOCUS_MIN }} min
+              {{ tr('today.hero.focus', { n: FOCUS_MIN }) }}
             </button>
-            <span
-              v-if="task.minutes"
-              class="inline-flex items-center gap-1.5 text-[13px] text-white/72"
+            <button
+              type="button"
+              class="inline-flex h-[38px] cursor-pointer items-center gap-1.5 rounded-full px-3 text-[13.5px] font-semibold text-text-soft transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
+              @click="markDone(task)"
             >
               <UiIcon
-                name="clock"
-                :size="13"
+                name="check"
+                :size="14"
+                :stroke="2.3"
               />
-              {{ minutesLabel(task.minutes) }}
+              {{ tr('common.done') }}
+            </button>
+            <span
+              v-if="pickMinutes"
+              class="ml-auto text-[12.5px] font-semibold whitespace-nowrap text-text-faint"
+            >
+              {{ pickMinutes < task.minutes ? tr('today.hero.ofIts', { n: pickMinutes, time: minutesLabel(task.minutes) }) : tr('today.hero.about', { time: minutesLabel(pickMinutes) }) }}
             </span>
           </template>
         </div>
@@ -431,13 +520,13 @@ const after = computed(() => {
     <NuxtLink
       v-if="after"
       :to="after.to"
-      class="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full px-1 text-[13px] text-text-faint transition-colors hover:text-text-soft"
+      class="mt-2 -mb-1 flex min-h-10 items-center gap-2 rounded-[9px] px-1 text-[13px] text-text-faint transition-colors hover:text-text-soft"
     >
       <UiIcon
         name="clock"
         :size="13"
       />
-      {{ after.text }}
+      <span class="truncate">{{ after.text }}</span>
     </NuxtLink>
   </section>
 </template>

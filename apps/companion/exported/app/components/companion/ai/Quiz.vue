@@ -88,11 +88,11 @@ async function keepMissed(): Promise<void> {
 <template>
   <section
     ref="root"
-    class="overflow-hidden rounded-[16px] bg-surface shadow-[inset_0_0_0_1px_var(--border)]"
+    class="overflow-hidden rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)]"
     aria-label="Quiz"
   >
     <header class="flex items-center gap-2 px-3.5 pt-3">
-      <span class="grid size-6 place-items-center rounded-full bg-accent text-on-accent">
+      <span class="grid size-7 place-items-center rounded-[8px] bg-lilac-soft text-lilac-ink">
         <UiIcon
           name="quiz"
           :size="13"
@@ -116,9 +116,9 @@ async function keepMissed(): Promise<void> {
           :class="[
             'block size-1.5 rounded-full transition-colors duration-200',
             marks[i] === 'got'
-              ? 'bg-success-bright'
+              ? 'bg-leaf'
               : marks[i] === 'missed'
-                ? 'bg-warn-bright'
+                ? 'bg-rose'
                 : i === index && !finished
                   ? 'bg-text-soft'
                   : 'bg-surface-track',
@@ -226,7 +226,7 @@ async function keepMissed(): Promise<void> {
             <NuxtLink
               v-if="saved.to"
               :to="saved.to"
-              class="ml-1 text-cobalt underline-offset-4 hover:underline"
+              class="ml-1 text-brand underline-offset-4 hover:underline"
             >Practise</NuxtLink>
           </span>
         </template>

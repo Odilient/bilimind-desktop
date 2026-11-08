@@ -24,6 +24,7 @@ import { useCompanion } from '~/companion/store'
 
 const props = defineProps<{ deadline: Deadline }>()
 
+const { t } = useI18n()
 const c = useCompanion()
 const auth = useAuth()
 const toast = useToast()
@@ -51,11 +52,13 @@ const numbers = computed(() => {
   if (!v?.shown || !v.sharing) return []
   const lines: string[] = []
   if (v.preparing != null) {
-    lines.push(v.preparing === 1 ? '1 classmate is preparing for it.' : `${v.preparing} classmates are preparing for it.`)
+    lines.push(t('today.class.preparing', v.preparing))
   }
-  if (v.readiness_median != null) lines.push(`Most are about ${v.readiness_median}% ready.`)
-  const hard = v.hardest.map((h, i) => (i === 0 ? `${h.title} (missed by ${h.missed_pct}%)` : `${h.title} (${h.missed_pct}%)`))
-  if (hard.length) lines.push(`Hardest so far: ${hard.join(', ')}.`)
+  if (v.readiness_median != null) lines.push(t('today.class.median', { n: v.readiness_median }))
+  const hard = v.hardest.map((h, i) =>
+    i === 0 ? t('today.class.missedBy', { title: h.title, n: h.missed_pct }) : `${h.title} (${h.missed_pct}%)`,
+  )
+  if (hard.length) lines.push(t('today.class.hardest', { list: hard.join(', ') }))
   return lines
 })
 
@@ -64,11 +67,11 @@ const waiting = computed(() => {
   const v = shown.value
   if (!v || v.shown || !v.sharing) return null
   if (v.members <= 1) {
-    return 'Studying with classmates? When 5 of you are here, you\'ll see how ready the class is and which topics it finds hardest.'
+    return t('today.class.alone')
   }
   // Enough people, but not 5 of them sharing: say what the number waits for.
-  if (v.members >= 5) return `${v.members} of you are on BiliMind for this. Class numbers show once 5 of you share results.`
-  return `${v.members} of you are on BiliMind for this. Class numbers show from 5.`
+  if (v.members >= 5) return t('today.class.fiveNotSharing', { n: v.members })
+  return t('today.class.fewer', { n: v.members })
 })
 
 async function invite(): Promise<void> {
@@ -85,9 +88,9 @@ async function invite(): Promise<void> {
   }
   try {
     await navigator.clipboard.writeText(`${card.text} ${card.url}`)
-    toast.success('Copied. Paste it in your class chat.')
+    toast.success(t('today.class.copied'))
   } catch {
-    toast.error({ title: 'Copying isn\'t allowed here', body: `The link to send: ${card.url}` })
+    toast.error({ title: t('today.class.copyDenied'), body: t('today.class.linkToSend', { url: card.url }) })
   }
 }
 </script>
@@ -95,16 +98,16 @@ async function invite(): Promise<void> {
 <template>
   <CompanionBox
     v-if="shown"
-    label="Your class"
+    :label="t('today.class.title')"
   >
     <div class="grid gap-1 text-[15px] leading-relaxed text-text-soft">
       <p v-if="!shown.sharing">
-        You're not sharing your results, so class numbers stay hidden.
+        {{ t('today.class.notSharing') }}
         <NuxtLink
           to="/app/settings?section=preferences"
           class="font-semibold text-text underline decoration-border-field underline-offset-4 hover:decoration-current"
         >
-          Turn it on in Settings
+          {{ t('today.class.turnOn') }}
         </NuxtLink>.
       </p>
       <template v-else-if="numbers.length">
@@ -124,7 +127,7 @@ async function invite(): Promise<void> {
       class="mt-2 justify-self-start"
       @click="invite"
     >
-      Invite your class
+      {{ t('today.class.invite') }}
     </UiBtn>
   </CompanionBox>
 </template>

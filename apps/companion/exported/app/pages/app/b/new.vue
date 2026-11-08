@@ -38,7 +38,7 @@ async function make() {
       deadlineId: one('deadline_id'),
       template: one('template'),
     })
-    await router.replace({ path: `/app/notes/${id}`, query: q.demo ? { demo: String(q.demo) } : {} })
+    await router.replace(`/app/notes/${id}`)
   } catch (e) {
     started = false
     failed.value = (e as Error).message || 'The board could not be made.'

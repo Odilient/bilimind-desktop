@@ -20,6 +20,8 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{ grade: [recall: Recall] }>()
+const { t } = useI18n()
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 const tones: Record<Recall, string> = {
   again: 'border-danger-line bg-surface text-danger-text hover:bg-danger-soft',
@@ -53,13 +55,13 @@ const tones: Record<Recall, string> = {
           :size="14"
           class="animate-spin-slow"
         />
-        {{ option.label }}
+        {{ t(`check.review.${option.value}`) }}
       </span>
       <span
         class="text-[11.5px] leading-tight opacity-70"
         :class="option.value === 'good' ? 'text-on-inverse/70' : ''"
       >
-        {{ option.hint }}
+        {{ t(`check.review.hint${cap(option.value)}`) }}
       </span>
     </button>
   </div>

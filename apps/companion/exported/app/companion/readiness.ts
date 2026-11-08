@@ -13,8 +13,8 @@
  * can be checked, never how ready it is.
  *
  * The server owns the same rule (`Readiness.php`) and the two must agree number for number. This copy exists because
- * the demo has no server, the path and the Topics tab need a figure for every
- * topic rather than one deadline, and a check just answered has to move the
+ * the path and the Topics tab need a figure for every topic rather than one
+ * deadline, and a check just answered has to move the
  * number on screen at once, offline included. The one difference is written
  * lessons: the server counts one marked complete as study, at the time it was
  * marked; the device only knows *that* it was, not when, so it leaves it out
@@ -46,8 +46,16 @@ export const CLOSE_DAYS = 3
 export const WINDOW_DAYS = 42
 /** A check's weight halves every this many days. */
 export const HALF_LIFE_DAYS = 14
-/** A topic checked longer ago than this is due again, and its number starts to fade. */
+/** A topic's number counts in full at least this long after its newest check, then starts to fade. */
 export const REFRESH_DAYS = 14
+/**
+ * The ladder (Daylight 2): a topic's first check comes a day after it was
+ * studied; after one right sitting the next waits a week, after two in a row
+ * a month. A miss goes back to the cold wait. Same rule as `Readiness.php`.
+ */
+export const FIRST_COLD_DAYS = 1
+export const RECHECK_WEEK_DAYS = 7
+export const RECHECK_MONTH_DAYS = 30
 /** Over this many days past REFRESH_DAYS the fade reaches its floor of a half. */
 export const FADE_DAYS = 56
 
@@ -184,7 +192,11 @@ function topicRow(topic: Topic, input: ReadinessInput, now: number, close: boole
     .sort((a, b) => Date.parse(a.answered_at!) - Date.parse(b.answered_at!))
   const newest = counted.at(-1)
   const soon = close || (newest?.result === 'wrong' && newest.confidence === 'sure')
-  const opens = studied === null ? null : studied + (soon ? COLD_DAYS_CLOSE : COLD_DAYS) * DAY
+  const wait = !newest ? FIRST_COLD_DAYS : soon ? COLD_DAYS_CLOSE : COLD_DAYS
+  const opens = studied === null ? null : studied + wait * DAY
+  const rung = recheckDays(counted)
+  const recheck = newest?.result === 'right' ? Date.parse(newest.answered_at!) + rung * DAY : null
+  const next = opens === null ? null : Math.max(opens, recheck ?? opens)
 
   let percent: number | null = null
   if (newest) {
@@ -196,7 +208,8 @@ function topicRow(topic: Topic, input: ReadinessInput, now: number, close: boole
       weights += w
     }
     const age = (now - Date.parse(newest.answered_at!)) / DAY
-    const fade = age <= REFRESH_DAYS ? 1 : Math.max(0.5, 1 - (age - REFRESH_DAYS) / FADE_DAYS)
+    const fresh = Math.max(REFRESH_DAYS, newest.result === 'right' ? rung : 0)
+    const fade = age <= fresh ? 1 : Math.max(0.5, 1 - (age - fresh) / FADE_DAYS)
     percent = Math.round(100 * (sum / weights) * fade)
   }
 
@@ -217,28 +230,49 @@ function topicRow(topic: Topic, input: ReadinessInput, now: number, close: boole
     last_checked_at: newest?.answered_at ?? null,
     last_studied_at: studied === null ? null : new Date(studied).toISOString(),
     checkable_at: opens !== null && opens > now ? new Date(opens).toISOString() : null,
+    next_check_at: next === null ? null : new Date(next).toISOString(),
     practiced: cards.length ? round2(cards.filter((c) => c.last_review_at).length / cards.length) : 0,
   }
 }
 
 /**
+ * The rung after a right answer: a week after one right sitting, a month
+ * once the last two sittings that asked it were right (every question in a
+ * sitting right). `counted` oldest first.
+ */
+export function recheckDays(counted: Check[]): number {
+  const sittings = new Map<string, { last: number; right: boolean }>()
+  for (const c of counted) {
+    const s = sittings.get(c.batch_id) ?? { last: 0, right: true }
+    s.last = Math.max(s.last, Date.parse(c.answered_at!))
+    s.right &&= c.result === 'right'
+    sittings.set(c.batch_id, s)
+  }
+  let run = 0
+  for (const s of [...sittings.values()].sort((a, b) => b.last - a.last)) {
+    if (!s.right) break
+    run++
+  }
+  return run >= 2 ? RECHECK_MONTH_DAYS : RECHECK_WEEK_DAYS
+}
+
+/**
  * Due for a check: studied, cold now, and either never checked, missed last
- * time, or checked so long ago that it's time to see whether it held.
+ * time, or its rung on the ladder has come round since it was last right.
  */
 export function dueForCheck(t: TopicCheck, now = Date.now()): boolean {
   if (!t.last_studied_at || t.checkable_at) return false
   if (t.state === 'unchecked' || t.state === 'missed') return true
-  return t.state === 'checked' && !!t.last_checked_at && now - Date.parse(t.last_checked_at) > REFRESH_DAYS * DAY
+  return t.state === 'checked' && !!t.next_check_at && Date.parse(t.next_check_at) <= now
 }
 
 /**
- * When this topic opens for a check: the moment it turns cold, if a check is
- * wanted then (unproven, missed, or last right more than REFRESH_DAYS before
- * that moment); otherwise null. A topic checked well last week turns cold in
- * days but opens nothing. The server's `opens_at` is the earliest of these.
+ * When this topic opens for a check: the moment it is next due (cold, and on
+ * its rung), if that is still to come; otherwise null. The server's
+ * `opens_at` is the earliest of these.
  */
-export function opensAt(t: TopicCheck): string | null {
-  return t.checkable_at && dueForCheck({ ...t, checkable_at: null }, Date.parse(t.checkable_at)) ? t.checkable_at : null
+export function opensAt(t: TopicCheck, now = Date.now()): string | null {
+  return t.last_studied_at && t.next_check_at && Date.parse(t.next_check_at) > now ? t.next_check_at : null
 }
 
 /** Questions and minutes for a sitting: 1.5 minutes a question, 4 for an explanation, rounded up. */
@@ -390,8 +424,8 @@ export interface PathStep {
 
 /**
  * A course's topics in path order, units left out. Positions may count from
- * zero inside each unit (the API does) or run across the course (the demo
- * does), so the unit's own position sorts first either way.
+ * zero inside each unit (the API does) or run across the course (a course
+ * made on the device does), so the unit's own position sorts first either way.
  */
 export function pathOrder(subjectTopics: Topic[]): Topic[] {
   const byId = new Map(subjectTopics.map((t) => [t.id, t]))

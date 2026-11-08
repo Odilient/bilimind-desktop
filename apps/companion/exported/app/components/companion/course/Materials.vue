@@ -3,6 +3,7 @@ import type { Item, Subject } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { materialGroups, materialMeta } from '~/companion/course-home'
 import { itemIcon } from '~/companion/words'
+const { t } = useI18n()
 
 /**
  * Everything the school gave for a course, as a view of its home
@@ -55,13 +56,13 @@ const tile =
   <div class="mx-auto grid w-full max-w-[760px] content-start gap-8 px-4 pt-6 pb-20 min-[900px]:px-8">
     <header class="grid gap-0.5">
       <h2 class="t-head text-[19px]">
-        Materials
+        {{ t('course.side.materials') }}
       </h2>
       <p class="text-[14px] text-text-muted">
         {{
           count
-            ? `${count} files, links and recordings, by the week they belong to.`
-            : 'Slides, readings, recordings and links for this course, all in one place.'
+            ? t('course.mat.sub', { n: count })
+            : t('course.mat.subNone')
         }}
       </p>
     </header>
@@ -70,7 +71,7 @@ const tile =
     <div
       :class="[
         'grid justify-items-center gap-2 rounded-[18px] border-[1.5px] border-dashed px-6 py-7 text-center transition-colors duration-150',
-        over ? 'border-cobalt bg-cobalt-soft' : 'border-border-dashed bg-surface-sunken/60',
+        over ? 'border-brand bg-brand-soft' : 'border-border-dashed bg-surface-sunken/60',
       ]"
       @dragenter.prevent="hasFiles($event) && dragDepth++"
       @dragover.prevent
@@ -80,7 +81,7 @@ const tile =
       <span
         :class="[
           'grid size-10 place-items-center rounded-full transition-colors',
-          over ? 'bg-cobalt text-white' : 'bg-surface text-text-soft shadow-[inset_0_0_0_1px_var(--border)]',
+          over ? 'bg-brand text-white' : 'bg-surface text-text-soft shadow-[inset_0_0_0_1px_var(--border)]',
         ]"
       >
         <UiIcon
@@ -91,34 +92,34 @@ const tile =
       </span>
       <p class="text-[15px] font-semibold text-text">
         <template v-if="uploading">
-          Uploading {{ uploading === 1 ? 'a file' : `${uploading} files` }}…
+          {{ t('course.mat.uploading', { n: uploading }, uploading) }}
         </template>
         <template v-else-if="over">
-          Drop to add them
+          {{ t('course.mat.drop') }}
         </template>
         <template v-else>
-          Drop files here, or
+          {{ t('course.mat.dropHere') }}
           <button
             type="button"
-            class="cursor-pointer text-cobalt underline-offset-2 hover:underline"
+            class="cursor-pointer text-brand underline-offset-2 hover:underline"
             @click="emit('pick')"
           >
-            browse
+            {{ t('course.mat.browse') }}
           </button>
         </template>
       </p>
       <p class="text-[13px] text-text-muted">
-        Several at once is fine. They're filed under {{ where }}.
+        {{ t('course.mat.several', { where }) }}
       </p>
       <p
         v-if="!uploading && !over"
         class="text-[13px] text-text-muted"
       >
-        Already uploaded?
+        {{ t('course.mat.already') }}
         <CompanionCourseAddNotes
           :subject="subject"
           look="link"
-          label="Add them from My notes"
+          :label="t('course.mat.fromNotes')"
         />
       </p>
     </div>
@@ -135,7 +136,7 @@ const tile =
         <span
           v-if="g.current"
           class="shrink-0 text-[13px] font-medium text-text-muted"
-        >This week</span>
+        >{{ t('course.mat.thisWeek') }}</span>
       </header>
       <ul class="divide-y divide-border-rule border-y border-border-rule">
         <li
@@ -144,8 +145,8 @@ const tile =
         >
           <button
             type="button"
-            class="group -mx-2 flex w-[calc(100%+16px)] cursor-pointer items-center gap-3 rounded-[12px] px-2 py-2.5 text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt"
-            :title="i.kind === 'link' ? `Open ${i.title} in a new window` : `Open ${i.title}`"
+            class="group -mx-2 flex w-[calc(100%+16px)] cursor-pointer items-center gap-3 rounded-[12px] px-2 py-2.5 text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
+            :title="i.kind === 'link' ? t('course.mat.openLink', { title: i.title }) : t('course.mat.openFile', { title: i.title })"
             @click="emit('openItem', i)"
           >
             <span :class="tile">
@@ -155,7 +156,7 @@ const tile =
               />
             </span>
             <span class="grid min-w-0 flex-1 gap-0.5">
-              <span class="truncate text-[15px] leading-snug font-medium text-text">{{ i.title || 'Untitled' }}</span>
+              <span class="truncate text-[15px] leading-snug font-medium text-text">{{ i.title || t('course.notes.untitled') }}</span>
               <span class="truncate text-[13px] text-text-muted">{{ materialMeta(i) }}</span>
             </span>
             <UiIcon

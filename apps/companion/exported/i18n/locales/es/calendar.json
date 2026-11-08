@@ -1,0 +1,120 @@
+{
+  "time": {
+    "today": "hoy",
+    "tomorrow": "mañana",
+    "yesterday": "ayer",
+    "now": "ahora",
+    "inMin": "en {n} min",
+    "inH": "en {n} h",
+    "inDays": "en {n} día | en {n} días",
+    "minAgo": "hace {n} min",
+    "hAgo": "hace {n} h",
+    "daysAgo": "hace {n} día | hace {n} días",
+    "dh": "{d} d {h} h",
+    "hMin": "{h} h {m} min",
+    "min": "{n} min",
+    "hm": "{h} h {m} min",
+    "h": "{n} h",
+    "morning": "Buenos días",
+    "afternoon": "Buenas tardes",
+    "evening": "Buenas noches"
+  },
+  "classes": "{n} clase | {n} clases",
+  "deadlines": "{n} fecha límite | {n} fechas límite",
+  "month": {
+    "study": "{time} de estudio",
+    "openWeek": "Abrir la semana del {day}",
+    "moreDue": "{n} más"
+  },
+  "grid": {
+    "dueTitle": "Vence · {title}",
+    "done": "Hecho",
+    "dueAt": "Vence {time}: {title}",
+    "hShort": "h",
+    "mShort": "{n}m",
+    "min": "{n} min",
+    "more": "{n} más",
+    "ofStudy": "{time} de estudio",
+    "showLess": "Mostrar menos",
+    "todo": "Por hacer",
+    "todoOn": "Por hacer el {day}"
+  },
+  "views": {
+    "week": "Semana",
+    "month": "Mes",
+    "agenda": "Todas las fechas límite"
+  },
+  "summary": {
+    "nothingThisWeek": "Nada esta semana",
+    "nothingOn": "Nada programado",
+    "studyOf": "{time} de estudio",
+    "and": "{list} y {last}"
+  },
+  "nav": {
+    "prevMonth": "Mes anterior",
+    "prevWeek": "Semana anterior",
+    "nextMonth": "Mes siguiente",
+    "nextWeek": "Semana siguiente",
+    "today": "Hoy"
+  },
+  "behind": {
+    "line": "{n} tarea de días anteriores sin terminar. | {n} tareas de días anteriores sin terminar.",
+    "moveToToday": "Mover a hoy",
+    "movedSuccess": "{n} tarea movida a hoy | {n} tareas movidas a hoy"
+  },
+  "plan": {
+    "myWeek": "Planificar mi semana",
+    "nextWeek": "Planificar la próxima semana",
+    "thatWeek": "Planificar esa semana",
+    "planned": "Tu semana está planificada",
+    "plannedThat": "Esa semana está planificada",
+    "plannedBody": "Todo lo que hayas movido se queda en su lugar.",
+    "planError": "No se pudo planificar la semana. Comprueba la conexión y vuelve a intentarlo."
+  },
+  "timetable": {
+    "notice": "Tus clases aparecerán aquí con su horario y aula cuando añadas tu horario.",
+    "add": "Añadir mi horario"
+  },
+  "agenda": {
+    "termDesc": "Lo que vence cada semana. Toca una semana para verla.",
+    "busyTitle": "La semana {n} es la más cargada:",
+    "busyBody": "{list}. Tu plan diario empezará antes de que llegue.",
+    "seeWeek": "Ver semana {n}",
+    "nothingDue": "Nada pendiente a partir de ahora",
+    "nothingDueDesc": "Las fechas llegan de Moodle, tus correos y las clases. O pega un mensaje que mencione alguna.",
+    "pasteBtn": "Pegar un mensaje"
+  },
+  "sync": {
+    "addBtn": "Añadir a tu calendario",
+    "addTitle": "Añadir a Google Calendar, Apple u Outlook",
+    "modalDesc": "Tus clases, fechas límite y plan en Google, Apple u Outlook, siempre actualizados."
+  },
+  "add": "Añadir",
+  "close": "Cerrar",
+  "open": "Abrir",
+  "undo": "Deshacer",
+  "peek": {
+    "added": "Añadido al {day}",
+    "addedAt": "Añadido al {day} a las {time}",
+    "cancelled": "Cancelado",
+    "clearTime": "Borrar hora",
+    "doneToast": "{title} marcado como hecho",
+    "due": "Vence {when}",
+    "newTask": "Nueva tarea",
+    "ofGrade": "{n}% de la nota",
+    "placeholder": "Añade una tarea…",
+    "set": "Fijar",
+    "setTime": "Fijar hora",
+    "time": "Hora",
+    "unconfirmed": "Aún sin confirmar",
+    "whatToDo": "¿Qué tienes que hacer?",
+    "notHandedIn": "Sin entregar",
+    "notDone": "Sin hacer",
+    "markHandedIn": "Marcar como entregado",
+    "markDone": "Marcar como hecho",
+    "handedInToast": "{title} marcado como entregado",
+    "moveToday": "Mover a hoy",
+    "moveTomorrow": "Mover a mañana",
+    "dayLater": "Mover a más tarde"
+  }
+}

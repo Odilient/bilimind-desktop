@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Note } from '~/companion/notes/tree'
 import { byEdited, matchNotes } from '~/companion/notes/tree'
 import { noteIcon } from '~/companion/notes/tree'
@@ -31,7 +32,7 @@ import { useCompanion } from '~/companion/store'
  * My notes, the courses), with the tiles as a strip above it and the app's
  * bottom bar under it; the header has "+ New" (every kind of note) and Ask.
  */
-useHead({ title: 'Notes · BiliMind' })
+useHead({ title: t('notes.notesTitle') })
 
 const store = useCompanion()
 const create = useNoteCreate()
@@ -90,9 +91,9 @@ const courses = computed(() =>
         subject: s,
         latest: own.slice(0, 3),
         counts: [
-          pages ? `${pages} ${pages === 1 ? 'page' : 'pages'}` : '',
-          boards ? `${boards} ${boards === 1 ? 'whiteboard' : 'whiteboards'}` : '',
-          rest ? `${rest} more` : '',
+          pages ? t('notes.pageCount', pages) : '',
+          boards ? t('notes.boardCount', boards) : '',
+          rest ? t('notes.moreCount', rest) : '',
         ]
           .filter(Boolean)
           .join(' · '),
@@ -129,9 +130,9 @@ function when(note: Note): string {
         <button
           v-if="!sidebar.open.value"
           type="button"
-          class="grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[9px] bg-accent-soft text-accent-strong transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-cobalt"
-          title="Show the sidebar (Ctrl+\)"
-          aria-label="Show the sidebar"
+          class="grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[9px] bg-accent-soft text-accent-strong transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-brand"
+          :title="t('notes.showSidebarKey')"
+          :aria-label="t('notes.showSidebar')"
           @click="sidebar.set(true)"
         >
           <UiIcon
@@ -140,7 +141,7 @@ function when(note: Note): string {
             :stroke="1.9"
           />
         </button>
-        <span class="px-1.5 text-[13.5px] font-medium text-text">Notes</span>
+        <span class="px-1.5 text-[13.5px] font-medium text-text">{{ t('notes.notes') }}</span>
         <span class="flex-1" />
         <CompanionAiToggle />
       </header>
@@ -153,15 +154,14 @@ function when(note: Note): string {
           <div class="grid gap-5">
             <div class="grid gap-1.5">
               <h1 class="t-head text-[40px]">
-                Notes
+                {{ t('notes.notes') }}
               </h1>
               <p class="max-w-[60ch] text-[15px] text-text-muted">
-                Everything you write, draw, upload or record. New notes start in My notes; put one
-                in a course when you want to, from its header or by dragging it in the sidebar.
+                {{ t('notes.indexIntro') }}
               </p>
             </div>
             <label
-              class="flex h-11 max-w-[560px] items-center gap-2.5 rounded-full bg-surface-sunken px-4 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+              class="flex h-11 max-w-[560px] items-center gap-2.5 rounded-full bg-surface-sunken px-4 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--brand)]"
             >
               <UiIcon
                 name="search"
@@ -172,8 +172,8 @@ function when(note: Note): string {
               <input
                 v-model="query"
                 type="search"
-                placeholder="Search your notes"
-                aria-label="Search your notes"
+                :placeholder="t('notes.searchNotes')"
+                :aria-label="t('notes.searchNotes')"
                 class="min-w-0 flex-1 bg-transparent text-[15px] text-text outline-none placeholder:text-text-faint [&::-webkit-search-cancel-button]:hidden"
                 @keydown.esc="query = ''"
                 @keydown.enter="openFirst"
@@ -198,14 +198,14 @@ function when(note: Note): string {
           <section
             v-if="query.trim()"
             class="grid gap-3"
-            aria-label="Results"
+            :aria-label="t('notes.results')"
           >
             <h2 class="text-[14px] font-semibold text-text-soft">
-              {{ results.length ? `${results.length === 24 ? '24+' : results.length} found` : 'Nothing found' }}
+              {{ results.length ? t('notes.found', { n: results.length === 24 ? '24+' : results.length }) : t('notes.nothingFound') }}
             </h2>
             <div
               v-if="results.length"
-              class="grid grid-cols-2 gap-3 min-[1180px]:grid-cols-3"
+              class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-3"
             >
               <CompanionNotesCard
                 v-for="note in results"
@@ -238,13 +238,13 @@ function when(note: Note): string {
 
             <div
               v-if="!store.status.ready"
-              class="grid grid-cols-3 gap-3"
+              class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-3"
               aria-busy="true"
             >
               <div
                 v-for="n in 6"
                 :key="n"
-                class="cp-skel h-[150px] rounded-[16px]"
+                class="cp-skel h-[178px] rounded-[12px]"
               />
             </div>
 
@@ -259,13 +259,10 @@ function when(note: Note): string {
                 class="text-text-faint"
               />
               <h2 class="t-head text-[22px]">
-                Your notes will live here
+                {{ t('notes.emptyTitle') }}
               </h2>
               <p class="max-w-[58ch] text-[14.5px] leading-relaxed text-text-muted">
-                Pages, whiteboards, files, links, recordings and photos all live here, and start in
-                My notes. Made during a class, a note asks once whether it belongs to that course.
-                In the sidebar they're a tree: drag one onto a page to put it inside, or onto a
-                course to file it there.
+                {{ t('notes.emptyBody') }}
               </p>
               <UiBtn
                 variant="primary"
@@ -273,7 +270,7 @@ function when(note: Note): string {
                 :loading="create.busy.value"
                 @click="create.page()"
               >
-                Start a blank page
+                {{ t('notes.startBlank') }}
               </UiBtn>
             </section>
 
@@ -296,7 +293,7 @@ function when(note: Note): string {
                   <h3 class="text-[14px] font-semibold text-text-soft">
                     {{ group.label }}
                   </h3>
-                  <div class="grid grid-cols-2 gap-3 min-[1180px]:grid-cols-3">
+                  <div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-3">
                     <CompanionNotesCard
                       v-for="note in group.notes"
                       :key="note.id"
@@ -324,7 +321,7 @@ function when(note: Note): string {
                   id="notes-courses"
                   class="text-[14px] font-semibold text-text-soft"
                 >
-                  In your courses
+                  {{ t('notes.inCourses') }}
                 </h2>
                 <ul class="divide-y divide-border-rule rounded-[16px] shadow-[inset_0_0_0_1px_var(--border)]">
                   <li
@@ -334,8 +331,8 @@ function when(note: Note): string {
                   >
                     <button
                       type="button"
-                      class="flex min-w-[200px] cursor-pointer items-center gap-2.5 rounded-[8px] text-left outline-none focus-visible:shadow-[0_0_0_2px_var(--cobalt)]"
-                      :title="`Show ${course.subject.title} in the sidebar`"
+                      class="flex min-w-[200px] cursor-pointer items-center gap-2.5 rounded-[8px] text-left outline-none focus-visible:shadow-[0_0_0_2px_var(--brand)]"
+                      :title="t('notes.showCourseSidebar', { course: course.subject.title })"
                       @click="revealCourse(course.subject.id)"
                     >
                       <span
@@ -354,21 +351,21 @@ function when(note: Note): string {
                         v-for="note in course.latest"
                         :key="note.id"
                         :to="noteTo(note.id)"
-                        class="flex h-8 max-w-[220px] min-w-0 items-center gap-1.5 rounded-full bg-surface-sunken px-3 text-[13px] text-text-body transition-colors hover:bg-surface-track hover:text-text focus-visible:outline-2 focus-visible:outline-cobalt"
-                        :title="when(note) ? `${note.title || 'Untitled'}, ${when(note)}` : note.title || 'Untitled'"
+                        class="flex h-8 max-w-[220px] min-w-0 items-center gap-1.5 rounded-full bg-surface-sunken px-3 text-[13px] text-text-body transition-colors hover:bg-surface-track hover:text-text focus-visible:outline-2 focus-visible:outline-brand"
+                        :title="when(note) ? `${note.title || t('notes.untitled')}, ${when(note)}` : note.title || t('notes.untitled')"
                       >
                         <CompanionIcon
                           :name="noteIcon(note)"
                           :size="13"
                           class="shrink-0 text-text-faint"
                         />
-                        <span class="truncate">{{ note.title || 'Untitled' }}</span>
+                        <span class="truncate">{{ note.title || t('notes.untitled') }}</span>
                       </NuxtLink>
                       <button
                         type="button"
-                        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-sunken hover:text-text-soft focus-visible:outline-2 focus-visible:outline-cobalt"
-                        :aria-label="`New page in ${course.subject.title}`"
-                        :title="`New page in ${course.subject.title}`"
+                        class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-sunken hover:text-text-soft focus-visible:outline-2 focus-visible:outline-brand"
+                        :aria-label="t('notes.newPageIn', { course: course.subject.title })"
+                        :title="t('notes.newPageIn', { course: course.subject.title })"
                         @click="create.page({ subjectId: course.subject.id })"
                       >
                         <UiIcon
@@ -394,10 +391,10 @@ function when(note: Note): string {
       <header class="cp-safe-top shrink-0 border-b border-border bg-surface">
         <div class="flex h-[52px] items-center gap-1 pr-2 pl-4">
           <h1 class="min-w-0 flex-1 truncate font-display text-[20px] font-semibold tracking-[-0.025em]">
-            Notes
+            {{ t('notes.notes') }}
           </h1>
           <CompanionNotesNewButton
-            label="New"
+            :label="t('notes.new')"
             size="md"
             align="end"
           />

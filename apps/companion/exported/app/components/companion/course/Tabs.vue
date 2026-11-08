@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { NodeStatus } from '~/types/api'
+import type { Subject } from '~/companion/types'
+const { t: tr } = useI18n()
 
 /**
  * The course's document strip: the old workspace's (`WorkspaceTabBar`), with
@@ -15,12 +17,10 @@ import type { NodeStatus } from '~/types/api'
  * or ⌘W for the one in front. A document tab can be dragged into another
  * place in the strip.
  *
- * The open tab is a real tab: white like the page under it, edged on three
- * sides and open at the foot, so it and its page read as one sheet. The strip
- * sits a shade darker and draws its rule as an inset shadow, which the open
- * tab's own white paints over; a border would stay on top of it. No accent
- * underline: on white it was the only thing saying which tab was open, and
- * the lime barely showed.
+ * Since Daylight 2 the strip lives inside the course's top bar
+ * (`CompanionCourseHeader`'s slot) as course.html's tabs: pills, the open one
+ * on the paper with a hairline. The home is pinned at the left and, once
+ * documents are open, shrinks to the course's dot so the strip has room.
  */
 export interface StripTab {
   id: string
@@ -36,6 +36,8 @@ const HOME_TAB = 'home'
 const props = defineProps<{
   homeTitle: string
   homeColor: string
+  /** The course itself: the home tab wears its cover, as the rail and the sidebar do. */
+  subject?: Subject | null
   tabs: StripTab[]
   activeId: string
 }>()
@@ -88,19 +90,19 @@ function onDragEnd(): void {
   over.value = null
 }
 
+// course.html's tabs: pills in the page's own top bar, the open one on the paper with a hairline.
 const tab =
-  'group relative flex h-[34px] shrink-0 cursor-pointer items-center gap-2 rounded-t-[10px] pl-3 whitespace-nowrap transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt'
-const on =
-  'bg-surface text-text shadow-[inset_1px_0_0_var(--border-strong),inset_-1px_0_0_var(--border-strong),inset_0_1px_0_var(--border-strong)]'
-const off = 'text-text-muted hover:bg-surface-track hover:text-text'
+  'group relative flex h-[30px] shrink-0 cursor-pointer items-center gap-[7px] rounded-[8px] pl-[9px] whitespace-nowrap transition-[background-color,color,box-shadow] duration-200 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand'
+const on = 'bg-bg text-text shadow-[inset_0_0_0_1px_var(--border)]'
+const off = 'text-text-muted hover:bg-[rgb(var(--wash-rgb)/0.035)] hover:text-text-soft'
 </script>
 
 <template>
   <div
     ref="strip"
-    class="om-tabs flex h-10 shrink-0 items-end gap-0.5 overflow-x-auto overflow-y-hidden bg-surface-rail px-2 shadow-[inset_0_-1px_0_var(--border-strong)]"
+    class="om-tabs flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto overflow-y-hidden [scrollbar-width:none]"
     role="tablist"
-    aria-label="Open in this course"
+    :aria-label="tr('course.tabs.open')"
   >
     <!-- The course's home: pinned, first, never closed. -->
     <div
@@ -108,19 +110,38 @@ const off = 'text-text-muted hover:bg-surface-track hover:text-text'
       role="tab"
       tabindex="0"
       :aria-selected="activeId === HOME_TAB"
-      :title="`${homeTitle}: roadmap, weeks, deadlines, notes and files`"
-      :class="[tab, 'pr-3', activeId === HOME_TAB ? on : off]"
+      :title="tr('course.tabs.home', { title: homeTitle })"
+      :class="[
+        tab,
+        // course.html's pinned tab: once documents are open it is the course's dot alone, and it
+        // stays put while the strip scrolls under it.
+        'sticky left-0 z-[2]',
+        tabs.length ? 'pr-[7px] pl-[7px]!' : 'pr-2.5',
+        activeId === HOME_TAB ? on : [off, 'bg-surface'],
+      ]"
       @click="emit('focus', HOME_TAB)"
       @keydown.enter.prevent="emit('focus', HOME_TAB)"
       @keydown.space.prevent="emit('focus', HOME_TAB)"
     >
-      <UiIcon
-        name="home"
-        :size="14"
-        :stroke="2"
-        :style="{ color: homeColor }"
+      <CompanionCourseCover
+        v-if="subject"
+        :subject="subject"
+        size="sm"
+        :px="18"
       />
-      <span class="max-w-[168px] overflow-hidden text-[13px] font-semibold text-ellipsis">{{ homeTitle }}</span>
+      <span
+        v-else
+        class="size-2 shrink-0 rounded-full"
+        :style="{ background: homeColor }"
+      />
+      <span
+        v-if="!tabs.length"
+        class="max-w-[168px] overflow-hidden text-[13px] font-semibold text-ellipsis"
+      >{{ homeTitle }}</span>
+      <span
+        v-else
+        class="sr-only"
+      >{{ homeTitle }}</span>
     </div>
 
     <TransitionGroup
@@ -144,7 +165,7 @@ const off = 'text-text-muted hover:bg-surface-track hover:text-text'
           'pr-1.5',
           t.id === activeId ? on : off,
           dragging === t.id && 'opacity-50',
-          over === t.id && 'shadow-[inset_2px_0_0_var(--color-cobalt)]',
+          over === t.id && 'shadow-[inset_0_0_0_1.5px_var(--color-brand)]',
         ]"
         @click="emit('focus', t.id)"
         @keydown.enter.prevent="emit('focus', t.id)"
@@ -170,15 +191,15 @@ const off = 'text-text-muted hover:bg-surface-track hover:text-text'
           class="text-brand"
         />
 
-        <span class="max-w-[188px] overflow-hidden text-[13px] font-semibold text-ellipsis">{{ t.title }}</span>
+        <span class="max-w-[180px] overflow-hidden text-[13px] font-semibold text-ellipsis">{{ t.title }}</span>
 
         <button
           type="button"
-          title="Close (⌘W)"
-          :aria-label="`Close ${t.title}`"
+          :title="tr('course.tabs.close')"
+          :aria-label="tr('course.tabs.closeTab', { title: t.title })"
           :class="[
-            'grid size-[18px] shrink-0 cursor-pointer place-items-center rounded-[6px] text-text-faint transition-[opacity,background-color,color] hover:bg-surface-track hover:text-text-soft',
-            t.id === activeId ? 'opacity-100' : 'opacity-60 group-hover:opacity-100',
+            'grid size-[18px] shrink-0 cursor-pointer place-items-center rounded-[5px] text-text-muted transition-[opacity,background-color,color] hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text hover:opacity-100',
+            t.id === activeId ? 'opacity-60' : 'opacity-0 group-hover:opacity-60 focus-visible:opacity-100',
           ]"
           @click.stop="emit('close', t.id)"
         >
@@ -190,14 +211,6 @@ const off = 'text-text-muted hover:bg-surface-track hover:text-text'
         </button>
       </div>
     </TransitionGroup>
-
-    <!-- Nothing open yet: say what the strip is for, once, quietly. -->
-    <p
-      v-if="!tabs.length"
-      class="self-center pl-3 text-[12.5px] text-text-faint max-xl:hidden"
-    >
-      Lessons, notes and whiteboards you open sit here, side by side.
-    </p>
 
     <div class="flex-1" />
   </div>

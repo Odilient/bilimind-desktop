@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Item, Subject } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
+const { t } = useI18n()
 
 /**
  * The course's pages and whiteboards that match "Find in this course", flat,
@@ -35,7 +36,7 @@ const matches = computed(() =>
       (i) =>
         i.subject_id === props.subject.id &&
         (i.kind === 'page' || i.kind === 'board') &&
-        (i.title || 'Untitled').toLowerCase().includes(needle.value),
+        (i.title || t('course.notes.untitled')).toLowerCase().includes(needle.value),
     )
     .sort(recent),
 )
@@ -48,10 +49,10 @@ const matches = computed(() =>
       :key="item.id"
       type="button"
       :class="[
-        'flex min-h-[30px] w-full cursor-pointer items-center gap-2 rounded-[10px] py-1 pr-2 pl-[26px] text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt',
+        'flex min-h-[30px] w-full cursor-pointer items-center gap-2 rounded-[10px] py-1 pr-2 pl-[26px] text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand',
         item.id === activeItemId ? 'bg-accent-soft' : 'hover:bg-surface-mute',
       ]"
-      :title="item.title || 'Untitled'"
+      :title="item.title || t('course.notes.untitled')"
       :aria-current="item.id === activeItemId ? 'true' : undefined"
       @click="emit('openItem', item)"
     >
@@ -65,18 +66,18 @@ const matches = computed(() =>
           'min-w-0 flex-1 truncate text-[13px] leading-[1.3]',
           item.id === activeItemId ? 'font-semibold text-text' : 'text-text-body',
         ]"
-      >{{ item.title || 'Untitled' }}</span>
+      >{{ item.title || t('course.notes.untitled') }}</span>
       <span
         v-if="openSet.has(item.id) && item.id !== activeItemId"
         class="size-[5px] shrink-0 rounded-full bg-border-dashed"
-        title="Open in a background tab"
+        :title="t('course.notes.background')"
       />
     </button>
     <p
       v-if="!matches.length"
       class="px-2 py-1 text-[12.5px] leading-relaxed text-text-muted"
     >
-      No notes match.
+      {{ t('course.notes.none') }}
     </p>
   </div>
 </template>

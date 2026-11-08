@@ -7,6 +7,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * and an input is dropped in at each gap. Submits `{blanks: [...]}` positionally
  * — DeterministicGrader compares blank-by-blank.
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -103,10 +104,10 @@ function widthFor(index: number): string {
           type="text"
           :disabled="disabled"
           :style="{ width: widthFor(segment.index) }"
-          :aria-label="`Blank ${segment.index + 1}`"
+          :aria-label="t('check.assess.blank', { n: segment.index + 1 })"
           autocomplete="off"
           spellcheck="false"
-          class="mx-1 inline-block rounded-[8px] border-b-2 border-lime-2 bg-accent-soft px-2 py-0.5 text-center font-mono text-[13px] text-text outline-none transition-colors focus:border-text focus:bg-surface disabled:opacity-60"
+          class="mx-1 inline-block rounded-[8px] border-b-2 border-hi-2 bg-accent-soft px-2 py-0.5 text-center font-mono text-[13px] text-text outline-none transition-colors focus:border-text focus:bg-surface disabled:opacity-60"
           @keydown.enter.prevent="onEnter(segment.index)"
         >
       </template>
@@ -116,13 +117,13 @@ function widthFor(index: number): string {
       v-else
       v-model="answers[0]"
       :disabled="disabled"
-      placeholder="Your answer"
-      aria-label="Your answer"
+      :placeholder="t('check.assess.yourAnswer')"
+      :aria-label="t('check.assess.yourAnswer')"
       @keydown.enter="emit('submit')"
     />
 
     <p class="text-[11.5px] text-text-faint">
-      Capitalisation, spacing and punctuation are ignored when grading.
+      {{ t('check.assess.ignored') }}
     </p>
   </div>
 </template>

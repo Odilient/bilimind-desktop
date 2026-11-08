@@ -3,7 +3,6 @@ import { Editor, type JSONContent } from '@tiptap/vue-3'
 import type { Item } from '../../types'
 import { saveCard } from '../cards'
 import { previewDoc, resolveTemplateKey, templateDoc } from '../templates'
-import { demoNotes } from '../demo'
 import { PAGE_ENV, type PageEnv } from './env'
 import { pageExtensions } from './extensions'
 import { createMenuState } from './menu'
@@ -31,7 +30,7 @@ export function titleText(ydoc: Y.Doc): Y.Text {
   return ydoc.getText('title')
 }
 
-/** Set once a page has had its template (or demo notes) poured in. */
+/** Set once a page has had its template poured in. */
 function seededFlag(ydoc: Y.Doc): Y.Map<unknown> {
   return ydoc.getMap('page')
 }
@@ -98,9 +97,8 @@ export function usePageEditor(ydoc: Y.Doc, env: PageEnv, actions: PageActions, r
 
   /**
    * Set an empty page out, once. What it starts from, first match wins:
-   * the server seed's HTML (`meta.seed_html`); the demo's written-up notes for
-   * its lecture pages; a seeded page's `preview` line over its template; the
-   * template alone. A page started here (`meta.props.fresh`) takes only its
+   * the server seed's HTML (`meta.seed_html`); a seeded page's `preview` line
+   * over its template; the template alone. A page started here (`meta.props.fresh`) takes only its
    * template. The `seeded` flag lives in the document, so it syncs: no device,
    * and no reload, sets a page out twice, even after it's emptied by hand.
    */
@@ -115,7 +113,6 @@ export function usePageEditor(ydoc: Y.Doc, env: PageEnv, actions: PageActions, r
     const ctx = env.ctx.value
     let content: string | JSONContent | null = null
     if (meta.seed_html?.trim()) content = meta.seed_html
-    else if (!fresh && env.repo.mode === 'demo' && key === 'lecture') content = demoNotes(ctx)
     if (!content && !fresh && page.preview?.trim()) content = previewDoc(page.preview.trim(), key, ctx)
     if (!content && key && key !== 'blank') content = templateDoc(key, ctx)
     if (content) editor.commands.setContent(content)

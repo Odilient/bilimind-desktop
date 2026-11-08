@@ -1,0 +1,50 @@
+{
+  "headline": {
+    "none": "Nada calificado todavía",
+    "final": "Nota final: {percent}%",
+    "sofar": "{percent}% hasta ahora"
+  },
+  "fromMoodle": "de Moodle",
+  "aiming": "Objetivo",
+  "worth": "Ponderación",
+  "mark": "Nota",
+  "whatItIs": "Concepto",
+  "worthPct": "Ponderación %",
+  "worthPctLabel": "Ponderación, % de la nota final",
+  "markPct": "Nota %",
+  "markPctLabel": "Tu nota, % (si ya la tienes)",
+  "add": "Añadir",
+  "aimLabel": "Nota final a la que aspiras, %",
+  "yourGrade": "Tu nota",
+  "assessments": "Evaluaciones",
+  "participation": "Participación",
+  "addAssessment": "Añadir una evaluación",
+  "download": "Descargar estas notas:",
+  "spreadsheet": "Hoja de cálculo",
+  "rest": {
+    "sofar": "Por ahora tienes un {sofar}% sobre el {marked}% evaluado.",
+    "secured": "Ya tienes asegurado un {target}% final.",
+    "out": "Un {target}% final ya no es alcanzable, ni obteniendo la máxima nota en lo que queda.",
+    "need": "Para alcanzar un {target}% final, necesitas aproximadamente un {need}% en lo que queda."
+  },
+  "names": {
+    "more": "{list} y {n} más",
+    "and": "{list} y {last}"
+  },
+  "marks": "{n} nota | {n} notas",
+  "line": {
+    "unweighted": "El promedio de {marks}. Aún no tienen ponderación, así que todas valen igual: añade las ponderaciones abajo para la nota real.",
+    "rest": "Aún queda {weight}: {names}.",
+    "weighted": "De {marks}, el {weight} de la nota.{rest}",
+    "waiting": "Esperando a que salgan las notas.",
+    "empty": "Aún no hay nada calificado."
+  },
+  "overallUntil": "general, hasta que fijes la tuya",
+  "overall": "general",
+  "short": "Las ponderaciones suman menos del 100%: falta por incluir el {share} de la nota.",
+  "worthOf": "Ponderación de {title}, % de la nota",
+  "markFor": "Tu nota en {title}, %",
+  "onceMarked": "En cuanto haya una nota, esto calcula la puntuación que necesitas en {title}.",
+  "finishedWith": "Terminado con {percent}%",
+  "averaging": "Promedio de {percent}% hasta ahora"
+}

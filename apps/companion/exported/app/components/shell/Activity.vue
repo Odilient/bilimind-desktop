@@ -7,6 +7,8 @@ let poll: ReturnType<typeof setInterval> | undefined
 <script setup lang="ts">
 import type { Notification } from '~/types/api'
 
+const { t } = useI18n()
+
 /**
  * The activity bell and its panel. Lives in the rail on desktop and in the top
  * bar on mobile, so it owns its own polling rather than having each layout
@@ -72,17 +74,7 @@ onBeforeUnmount(() => {
   poll = undefined
 })
 
-function relative(iso: string): string {
-  const then = new Date(iso).getTime()
-  if (Number.isNaN(then)) return ''
-  const minutes = Math.round((Date.now() - then) / 60_000)
-  if (minutes < 1) return 'just now'
-  if (minutes < 60) return `${minutes}m ago`
-  const hours = Math.round(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.round(hours / 24)
-  return days === 1 ? 'yesterday' : `${days}d ago`
-}
+const relative = fmtRelative
 </script>
 
 <template>
@@ -90,11 +82,11 @@ function relative(iso: string): string {
     type="button"
     v-bind="$attrs"
     :class="[
-      'relative grid cursor-pointer place-items-center text-[#6b7080] dark:text-text-muted transition-colors hover:bg-[#e9ebf1] dark:hover:bg-surface-sunken hover:text-text',
+      'relative grid cursor-pointer place-items-center text-text-faint transition-colors hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
       compact ? 'size-9 rounded-[10px]' : 'size-[38px] rounded-[12px]',
       ($attrs.class as string) ?? '',
     ]"
-    aria-label="Activity"
+    :aria-label="t('shell.activity')"
     @click="open = true"
   >
     <UiIcon
@@ -105,16 +97,16 @@ function relative(iso: string): string {
     <span
       v-if="unread.length"
       :class="[
-        'absolute size-2 rounded-full bg-brand ring-2',
-        compact ? 'top-1.5 right-1.5 ring-surface' : 'top-2 right-2 ring-surface-rail',
+        'absolute size-2 rounded-full bg-rose ring-2 ring-bg',
+        compact ? 'top-1.5 right-1.5' : 'top-2 right-2',
       ]"
     />
   </button>
 
   <UiModal
     v-model:open="open"
-    title="Activity"
-    description="Daily plans and generation updates."
+    :title="t('shell.activity')"
+    :description="t('shell.activityHint')"
     size="md"
   >
     <div
@@ -133,8 +125,8 @@ function relative(iso: string): string {
       v-else-if="notifications.length === 0"
       icon="inbox"
       size="inline"
-      title="Nothing yet"
-      description="Your daily plan lands here every morning once a course is scheduled."
+      :title="t('shell.nothingYet')"
+      :description="t('shell.nothingYetHint')"
     />
 
     <ul
@@ -187,13 +179,13 @@ function relative(iso: string): string {
         variant="ghost"
         size="sm"
         @click="markAllRead"
-        >Mark all read</UiBtn
+        >{{ t('shell.markAllRead') }}</UiBtn
       >
       <UiBtn
         variant="secondary"
         size="sm"
         @click="open = false"
-        >Close</UiBtn
+        >{{ t('common.close') }}</UiBtn
       >
     </template>
   </UiModal>

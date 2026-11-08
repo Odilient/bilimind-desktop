@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import { usePalette } from '~/companion/palette'
 import { useSidebar } from '~/companion/sidebar'
 
@@ -73,13 +74,13 @@ const container = computed(
 <template>
   <!-- Phone: sticky bar -->
   <div
-    class="sticky top-0 z-20 flex h-[52px] shrink-0 items-center gap-2 border-b border-border bg-surface/92 px-3 backdrop-blur-[14px] lg:hidden"
+    class="sticky top-0 z-20 flex h-[52px] shrink-0 items-center gap-2 border-b border-border bg-surface/94 px-3 backdrop-blur-[14px] lg:hidden"
   >
     <button
       v-if="inApp && !back"
       type="button"
       class="-ml-1.5 grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-text-soft active:bg-surface-sunken"
-      aria-label="Menu"
+      :aria-label="t('shell.menu')"
       aria-haspopup="dialog"
       :aria-expanded="sidebar.drawer.value"
       @click="sidebar.drawer.value = true"
@@ -94,7 +95,7 @@ const container = computed(
       v-if="back"
       :to="back"
       class="-ml-1.5 grid size-9 shrink-0 place-items-center rounded-full text-text-soft active:bg-surface-sunken"
-      aria-label="Back"
+      :aria-label="t('shell.back')"
     >
       <UiIcon
         name="chevron-left"
@@ -112,7 +113,7 @@ const container = computed(
     <button
       type="button"
       class="grid size-9 shrink-0 place-items-center rounded-full text-text-soft active:bg-surface-sunken"
-      aria-label="Search"
+      :aria-label="t('shell.search')"
       @click="inApp ? companionPalette.show() : openPalette()"
     >
       <UiIcon
@@ -143,15 +144,14 @@ const container = computed(
   >
     <div class="flex items-start gap-4">
       <div class="min-w-0 flex-1">
-        <!-- Cobalt's in-app heading: a small cobalt caps line over a Space
-             Grotesk title, the way the landing draws the app's own screens. -->
+        <!-- Daylight 2: a quiet sentence over the title, never small capitals. -->
         <p
           v-if="eyebrow"
-          class="text-[12px] font-semibold tracking-[0.06em] text-brand uppercase"
+          class="text-[13.5px] font-semibold text-text-faint"
         >
           {{ eyebrow }}
         </p>
-        <h1 class="mt-2 text-[34px] leading-[1.06] tracking-[-0.03em] t-head">
+        <h1 class="mt-1 font-display text-[34px] leading-[1.04] font-semibold tracking-[-0.04em]">
           {{ title }}
         </h1>
         <p

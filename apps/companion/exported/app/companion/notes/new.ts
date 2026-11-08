@@ -18,13 +18,21 @@
  */
 import { ref, type MaybeRefOrGetter, toValue } from 'vue'
 import { useCompanion } from '../store'
+import { translate } from '~/utils/i18n'
 import { addLink, namedTarget, uploadMany, useCapture } from '../capture'
 import { useAi } from '../ai/state'
 import { newChatLink, onChatPage } from '../ai/routes'
 import { makeBoard, makePage } from './make'
 import { noteTo } from './actions'
+// recording
+import { isDesktopApp } from '../platform'
+import { askFor } from '../recorder'
 
 export type NewKind = 'page' | 'board' | 'upload' | 'link' | 'record' | 'photo' | 'draft'
+  // recording: the desktop app's screen recorder
+  | 'screen'
+  // imports: pages and an assignments table from Notion (/app/notion)
+  | 'notion'
 
 export interface NewTemplate {
   key: string
@@ -42,71 +50,97 @@ export interface NewNoteType {
   letter: string
   /** Shapes it can start in besides blank, offered as small chips on its row. */
   templates?: NewTemplate[]
+  /** Recording: only in the desktop app, so every list leaves it out elsewhere (`offered`). */
+  desktop?: true
 }
 
 export const NEW_NOTE_TYPES: NewNoteType[] = [
   {
     key: 'page',
-    label: 'Page',
-    hint: 'Type it up: notes, a plan, a summary',
+    get label() { return translate('notes.typePage') },
+    get hint() { return translate('notes.typePageHint') },
     icon: 'page',
     tone: 'bg-brand-soft text-brand',
     letter: 'p',
     templates: [
-      { key: 'lecture', label: 'Lecture' },
-      { key: 'cornell', label: 'Cornell' },
-      { key: 'reading', label: 'Reading' },
-      { key: 'vocab', label: 'Vocabulary' },
-      { key: 'lab', label: 'Lab' },
+      { key: 'lecture', get label() { return translate('notes.tplLecture') } },
+      { key: 'cornell', get label() { return translate('notes.tplCornell') } },
+      { key: 'reading', get label() { return translate('notes.tplReading') } },
+      { key: 'vocab', get label() { return translate('notes.tplVocab') } },
+      { key: 'lab', get label() { return translate('notes.tplLab') } },
     ],
   },
   {
     key: 'board',
-    label: 'Whiteboard',
-    hint: 'Draw it out, stick notes, connect ideas',
+    get label() { return translate('notes.typeBoard') },
+    get hint() { return translate('notes.typeBoardHint') },
     icon: 'board',
     tone: 'bg-accent-soft text-accent-strong',
     letter: 'w',
     templates: [
-      { key: 'mindmap', label: 'Mind map' },
-      { key: 'concept', label: 'Concept map' },
-      { key: 'revision', label: 'Revision map' },
-      { key: 'kanban', label: 'Kanban' },
+      { key: 'mindmap', get label() { return translate('notes.tplMind') } },
+      { key: 'concept', get label() { return translate('notes.tplConcept') } },
+      { key: 'revision', get label() { return translate('notes.tplRevision') } },
+      { key: 'kanban', get label() { return translate('notes.tplKanban') } },
     ],
   },
   {
     key: 'upload',
-    label: 'Upload files',
-    hint: 'PDFs, slides, documents, one or many',
+    get label() { return translate('notes.typeUpload') },
+    get hint() { return translate('notes.typeUploadHint') },
     icon: 'upload',
     tone: 'bg-surface-sunken text-text-soft',
     letter: 'u',
   },
   {
     key: 'link',
-    label: 'Add a link',
-    hint: 'An article, a video, a site to come back to',
+    get label() { return translate('notes.addLink') },
+    get hint() { return translate('notes.typeLinkHint') },
     icon: 'link',
     tone: 'bg-cobalt-soft text-cobalt',
     letter: 'l',
   },
+  // recording
+  {
+    key: 'screen',
+    get label() { return translate('notes.typeScreen') },
+    get hint() { return translate('notes.typeScreenHint') },
+    icon: 'monitor',
+    tone: 'bg-danger-soft text-danger',
+    letter: 's',
+    desktop: true,
+  },
   {
     key: 'photo',
-    label: 'Scan or photo',
-    hint: 'The board, a slide, a page of a book',
+    get label() { return translate('notes.typePhoto') },
+    get hint() { return translate('notes.typePhotoHint') },
     icon: 'camera',
     tone: 'bg-warn-soft text-warn-text',
     letter: 'o',
   },
+  // imports: opens /app/notion, which files where this "+" says
+  {
+    key: 'notion',
+    get label() { return translate('notes.typeNotion') },
+    get hint() { return translate('notes.typeNotionHint') },
+    icon: 'notebook',
+    tone: 'bg-surface-sunken text-text-soft',
+    letter: 'n',
+  },
   {
     key: 'draft',
-    label: 'Draft with AI…',
-    hint: 'Say what it’s about; BiliMind writes a first version',
+    get label() { return translate('notes.typeDraft') },
+    get hint() { return translate('notes.typeDraftHint') },
     icon: 'spark',
     tone: '',
     letter: 'a',
   },
 ]
+
+/** Recording: whether a kind is offered here; "Record screen" is the desktop app's alone. */
+export function offered(type: NewNoteType): boolean {
+  return !type.desktop || isDesktopApp()
+}
 
 /**
  * Pick files without a mounted `<input>`: a detached one, clicked inside the
@@ -179,7 +213,7 @@ export function useNewNote(options: NewNoteOptions = {}) {
       if (id) await open(id)
       return id
     } catch {
-      toast.error({ title: `Couldn't make the ${what}`, body: 'Check the connection and try again.' })
+      toast.error({ title: translate(`notes.couldntMake_${what}`), body: translate('notes.couldntMakeBody') })
       return null
     } finally {
       busy.value = null
@@ -224,6 +258,12 @@ export function useNewNote(options: NewNoteOptions = {}) {
     capture.show('record', subjectId(), null)
   }
 
+  /** Recording: the Record sheet, straight to which screen. */
+  function screen(): void {
+    askFor('screen')
+    capture.show('record', subjectId(), null)
+  }
+
   /** The assistant, with the sentence started; on the chat page, the chat's own box. */
   function draft(): void {
     const prompt = 'Write a note about '
@@ -231,5 +271,11 @@ export function useNewNote(options: NewNoteOptions = {}) {
     else ai.show({ prompt })
   }
 
-  return { busy, page, board, files, link, record, draft }
+  /** Imports: the Notion page, bringing things into the course this "+" named. */
+  function notion(): void {
+    const id = subjectId()
+    void navigateTo({ path: '/app/notion', query: id ? { subject: id } : {} })
+  }
+
+  return { busy, page, board, files, link, record, screen, draft, notion }
 }

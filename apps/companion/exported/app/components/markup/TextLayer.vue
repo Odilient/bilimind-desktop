@@ -272,7 +272,7 @@ const SIZES: Array<{ value: LabelSize; label: string }> = [
           :aria-pressed="item.size === size.value"
           :class="[
             'grid size-7 cursor-pointer place-items-center rounded-full text-[12px] font-semibold',
-            item.size === size.value ? 'bg-chip text-lime' : 'text-text-soft hover:bg-surface-mute',
+            item.size === size.value ? 'bg-chip text-accent' : 'text-text-soft hover:bg-surface-mute',
           ]"
           :title="size.value === 'sm' ? 'Small' : size.value === 'md' ? 'Medium' : 'Large'"
           @click="look({ size: size.value })"
@@ -302,7 +302,7 @@ const SIZES: Array<{ value: LabelSize; label: string }> = [
           :aria-pressed="item.weight === 'bold'"
           :class="[
             'grid size-7 cursor-pointer place-items-center rounded-full text-[12.5px] font-bold',
-            item.weight === 'bold' ? 'bg-chip text-lime' : 'text-text-soft hover:bg-surface-mute',
+            item.weight === 'bold' ? 'bg-chip text-accent' : 'text-text-soft hover:bg-surface-mute',
           ]"
           @click="look({ weight: item.weight === 'bold' ? 'normal' : 'bold' })"
         >
@@ -314,7 +314,7 @@ const SIZES: Array<{ value: LabelSize; label: string }> = [
           :aria-pressed="!!item.background"
           :class="[
             'grid size-7 cursor-pointer place-items-center rounded-full',
-            item.background ? 'bg-chip text-lime' : 'text-text-soft hover:bg-surface-mute',
+            item.background ? 'bg-chip text-accent' : 'text-text-soft hover:bg-surface-mute',
           ]"
           @click="look({ background: !item.background })"
         >
@@ -410,7 +410,7 @@ const SIZES: Array<{ value: LabelSize; label: string }> = [
 .label-area {
   min-width: 6ch;
   max-width: 100%;
-  border: 1px dashed var(--cobalt);
+  border: 1px dashed var(--brand);
   background: color-mix(in oklab, var(--color-surface) 92%, transparent);
   outline: none;
   resize: none;

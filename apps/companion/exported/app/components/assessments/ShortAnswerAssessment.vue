@@ -5,6 +5,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * Two to four sentences, graded against the rubric the generator wrote beside
  * the question. Submits `{text}`.
  */
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     assessment: Assessment
@@ -45,9 +46,9 @@ const words = computed(() => (text.value.trim() === '' ? 0 : text.value.trim().s
       :rows="rows"
       :maxlength="maxlength"
       :disabled="disabled"
-      :placeholder="placeholder ?? 'Answer in two to four sentences.'"
+      :placeholder="placeholder ?? t('check.assess.shortPlaceholder')"
       :aria-label="assessment.prompt"
     />
-    <p class="num text-[11.5px] text-text-faint">{{ words }} {{ words === 1 ? 'word' : 'words' }}</p>
+    <p class="num text-[11.5px] text-text-faint">{{ t('check.assess.words', words) }}</p>
   </div>
 </template>

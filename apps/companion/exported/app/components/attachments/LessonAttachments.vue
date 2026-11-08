@@ -32,8 +32,14 @@ const props = withDefaults(
     attachments: Attachment[]
     /** The owner's workspace says yes; a shared or public view never does. */
     editable?: boolean
+    /**
+     * No files, no section, not even for the owner: the lesson's own Attach
+     * button calls `pick()`. A dropzone at the end of every lesson read as one
+     * more thing to do there (11-09). The editor keeps the dropzone.
+     */
+    quiet?: boolean
   }>(),
-  { editable: false },
+  { editable: false, quiet: false },
 )
 
 const emit = defineEmits<{
@@ -66,10 +72,14 @@ function pick(): void {
   if (props.editable) fileInput.value?.click()
 }
 
+const section = ref<HTMLElement | null>(null)
+
 function onFilePicked(event: Event): void {
   const input = event.target as HTMLInputElement
   void upload(Array.from(input.files ?? []))
   input.value = ''
+  // Picked from the strip's paperclip, the upload shows at the lesson's end: go and see it.
+  void nextTick(() => section.value?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }))
 }
 
 /* -- Dropping them --------------------------------------------------------- */
@@ -188,8 +198,11 @@ defineExpose({
 </script>
 
 <template>
+  <!-- Quiet and empty: kept, but not drawn, so `pick()` still has its file input. -->
   <section
     v-if="visible"
+    v-show="!quiet || hasAnything"
+    ref="section"
     :class="[
       'relative rounded-[18px] transition-[box-shadow,background-color] duration-150',
       dragging && '-m-3 bg-brand-soft p-3 ring-[1.5px] ring-brand',

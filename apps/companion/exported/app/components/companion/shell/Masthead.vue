@@ -39,16 +39,16 @@ withDefaults(
     </template>
   </ShellPageHead>
 
-  <header :class="['mx-auto w-full px-4 pt-4 sm:px-6 lg:px-8 lg:pt-10', width]">
+  <header :class="['mx-auto w-full px-4 pt-4 sm:px-6 lg:px-8 lg:pt-8', width]">
     <div class="hidden items-end gap-4 lg:flex">
       <div class="min-w-0 flex-1">
         <p
           v-if="eyebrow"
-          class="text-[14px] font-medium text-brand"
+          class="text-[13.5px] font-semibold text-text-faint"
         >
           {{ eyebrow }}
         </p>
-        <h1 class="t-head mt-1 text-[36px] leading-[1.06] tracking-[-0.03em]">
+        <h1 class="mt-1 font-display text-[34px] leading-[1.04] font-semibold tracking-[-0.04em]">
           {{ title }}
         </h1>
         <p

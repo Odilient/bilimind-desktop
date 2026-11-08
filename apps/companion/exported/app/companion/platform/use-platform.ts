@@ -19,6 +19,14 @@ function desktopBridge(): DesktopBridge | null {
   return bridge?.kind === 'electron' ? bridge : null
 }
 
+/**
+ * The desktop app, asked without creating the platform: for lists built
+ * outside a component's setup (the New menu's "Record screen", the palette).
+ */
+export function isDesktopApp(): boolean {
+  return desktopBridge() !== null
+}
+
 export function usePlatform(): Platform {
   if (instance) return instance
   const bridge = desktopBridge()

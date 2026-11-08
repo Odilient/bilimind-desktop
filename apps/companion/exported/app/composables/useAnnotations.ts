@@ -129,16 +129,13 @@ export function useAnnotations(nodeId: MaybeRefOrGetter<number>) {
    * Signed-out readers have no marks and must not be asked: a 401 from here
    * would bounce them to the login page from a lesson they were allowed to
    * read. The 404 for "not yours to see" is equally quiet.
-   *
-   * The companion demo is the one reader with marks and no account: its
-   * lessons have negative ids and `useApi` answers them in memory.
    */
   async function load(): Promise<void> {
     if (!import.meta.client) return
 
     const node = id()
     if (!node) return
-    if (!isAuthenticated.value && !(node < 0 && isCompanionDemo())) return
+    if (!isAuthenticated.value) return
 
     loading.value = true
     try {

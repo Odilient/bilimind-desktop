@@ -1,144 +1,237 @@
 <script setup lang="ts">
 /**
- * The Calendar. One question: what does this week look like?
+ * The Calendar: the whole page for the week, drawn the way Google and Notion
+ * Calendar draw one (`WeekGrid`), with the hours down the left, a column a
+ * day, classes at their times in their course's colour and deadlines as rose
+ * chips at theirs. What has no time (deadlines due all day, the plan's study
+ * blocks, the learner's own tasks) sits in the strip under the dates.
  *
- * The week comes first, with the way to move through it right above: the
- * previous and next week, and back to this one. Things due and classes are
- * told apart at a glance: a deadline is a tinted block that says "Due 09:00"
- * and how ready the learner is; a class is a plain line with its time, its
- * course and its room. On a wide screen the week is seven columns split by
- * hairlines; on a phone or a narrow window it is a day-by-day list.
+ * It used to be a 750px column of narrow text cards with no hours, where one
+ * check's title wrapped into a tower and nothing could be done without
+ * leaving the page. Now:
+ *  - a block opens a peek beside it (`Peek`): open it, tick it, move it on;
+ *  - an empty hour adds a task of your own on that day;
+ *  - a study block or task drags to another day still to come. The server
+ *    pins a moved plan block (`week-plan.ts`), so the planner plans around it.
  *
- * The semester sits underneath, calm: a strip of weeks with how much is due
- * in each, one tap from any of them, and the planner's warning in one
- * sentence while there is still time to start. "All deadlines" swaps the week for everything ahead.
+ * The head is one row: the week, ‹ Today ›, the week's counts, "Plan my
+ * week" and Week · Month · All deadlines. "1 thing from earlier days isn't
+ * done · Move to today" sits under it only when something is. The semester
+ * strip and the busiest week ahead moved to All deadlines, where the weeks
+ * ahead are the question.
  *
- * It used to open on a cobalt strip of tiny columns and an amber banner, with
- * the week in boxed cards below; the eye had nowhere to land.
+ * On a phone, or wherever the page is narrower than a week can be read, the
+ * grid is one day, with a strip of the week's days to switch.
  *
- * `?date=2026-10-29` opens the week holding that day (notes link here);
- * `?view=agenda` opens on every deadline ahead (Today's "All deadlines").
- *
- * The head is the companion's masthead, as on Today: the term and its week
- * as the eyebrow, and one line on what this week holds, so the page answers
- * its question before the grid is read.
+ * `?date=2026-10-29` opens the week (and on a phone the day) holding that
+ * date; `?view=agenda` opens on every deadline ahead; `?view=month` the month.
  */
-import type { Deadline, Session } from '~/companion/types'
+import type { Deadline, PlanTask } from '~/companion/types'
+import type { CalendarTarget } from '~/companion/calendar-grid'
+import type { ConnectKind } from '~/companion/create'
 import { useCompanion } from '~/companion/store'
-import { readyWords } from '~/companion/words'
+import { moveTask, planDays } from '~/companion/week-plan'
 import { useCapture } from '~/companion/capture'
-import { courseColor } from '~/companion/colors'
-import { clock, dayKey, daysBetween, longDayLabel, mondayOf, shiftDay, shortDate, weekdayShort } from '~/companion/time'
+import { dayKey, dayLabel, dayMonthLong, daysBetween, mondayOf, shiftDay, shortDate, weekdayLong, weekdayOf, weekdayShort } from '~/companion/time'
 
 definePageMeta({ layout: 'companion' })
 
 const c = useCompanion()
 const capture = useCapture()
+const toast = useToast()
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
-const VIEWS = [
-  { value: 'week', label: 'Week' },
-  { value: 'agenda', label: 'All deadlines' },
-] as const
+type View = 'week' | 'month' | 'agenda'
+const VIEWS = computed<{ value: View; label: string }[]>(() => [
+  { value: 'week', label: t('calendar.views.week') },
+  { value: 'month', label: t('calendar.views.month') },
+  { value: 'agenda', label: t('calendar.views.agenda') },
+])
 
-const view = computed(() => (route.query.view === 'agenda' ? 'agenda' : 'week'))
-function setView(v: 'week' | 'agenda'): void {
+const view = computed<View>(() => (route.query.view === 'agenda' || route.query.view === 'month' ? route.query.view : 'week'))
+function setView(v: View): void {
   void router.replace({ query: { ...route.query, view: v === 'week' ? undefined : v } })
 }
 
-/* -- One week ------------------------------------------------------------ */
+/* -- Where the calendar is ------------------------------------------------- */
 
 const today = dayKey()
-const offset = ref(0)
-const monday = computed(() => shiftDay(mondayOf(today), offset.value * 7))
+/** The day in view: its week in the grid, its month in Month, itself on a phone. */
+const cursor = ref(today)
+const monday = computed(() => mondayOf(cursor.value))
 const days = computed(() => Array.from({ length: 7 }, (_, i) => shiftDay(monday.value, i)))
+const offset = computed(() => Math.round(daysBetween(mondayOf(today), monday.value) / 7))
 const weekNumber = computed(() => c.weekOf(`${monday.value}T12:00:00`))
 
-function weeksFromNow(day: string): number {
-  return Math.round((Date.parse(mondayOf(day)) - Date.parse(mondayOf(today))) / (7 * 86_400_000))
-}
-
-const focusDay = computed(() => {
-  const d = route.query.date
-  return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : null
-})
 watch(
-  focusDay,
+  () => route.query.date,
   (d) => {
-    if (!d) return
-    offset.value = weeksFromNow(d)
-    void nextTick(() => document.getElementById(`day-${d}`)?.scrollIntoView({ block: 'start' }))
+    if (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) cursor.value = d
   },
   { immediate: true },
 )
 
-function sessionsOn(day: string): Session[] {
-  return c.sessions.value
-    .filter((s) => dayKey(s.starts_at) === day)
-    .sort((a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at))
-}
-function dueOn(day: string): Deadline[] {
-  return c.deadlines.value
-    .filter((d) => d.due_at && d.status !== 'cancelled' && dayKey(d.due_at) === day)
-    .sort((a, b) => Date.parse(a.due_at!) - Date.parse(b.due_at!))
-}
-function isPast(day: string): boolean {
-  return daysBetween(today, day) < 0
-}
-function dueTime(d: Deadline): string {
-  return d.all_day ? '' : clock(d.due_at!)
-}
-function readyOf(d: Deadline): string {
-  const r = c.readinessOf(d)
-  return readyWords(r.checked ? r.percent : null)
+/** A week either way, or a month in Month (the 1st, so a 31st never skips a short month). */
+function step(by: -1 | 1): void {
+  if (view.value !== 'month') {
+    cursor.value = shiftDay(cursor.value, by * 7)
+    return
+  }
+  const [y, m] = cursor.value.split('-').map(Number) as [number, number]
+  const at = new Date(Date.UTC(y, m - 1 + by, 1))
+  cursor.value = at.toISOString().slice(0, 10)
 }
 
 function weekName(n: number | null): string | null {
   if (!n || n < 1 || n > 16) return null
-  return n > 14 ? `Exam week ${n - 14}` : `Week ${n}`
+  return n > 14 ? `exam week ${n - 14}` : `week ${n}`
 }
 
-const weekTitle = computed(() => {
-  if (offset.value === 0) return 'This week'
-  if (offset.value === 1) return 'Next week'
-  if (offset.value === -1) return 'Last week'
-  return weekName(weekNumber.value) ?? `Week of ${shortDate(monday.value)}`
+/** "2–8 November", "30 Oct – 5 Nov", "November 2026", or "All deadlines". */
+const heading = computed(() => {
+  if (view.value === 'agenda') return 'All deadlines'
+  if (view.value === 'month') {
+    return new Date(`${cursor.value.slice(0, 7)}-15T12:00:00Z`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+  }
+  const [a, b] = [days.value[0]!, days.value[6]!]
+  return a.slice(0, 7) === b.slice(0, 7) ? `${+a.slice(8, 10)}–${dayMonthLong(b)}` : `${shortDate(a)} – ${shortDate(b)}`
 })
 
-const weekRange = computed(() => {
-  const range = `${shortDate(monday.value)} – ${shortDate(shiftDay(monday.value, 6))}`
-  const name = Math.abs(offset.value) <= 1 ? weekName(weekNumber.value) : null
-  return [range, name?.toLowerCase()].filter(Boolean).join(' · ')
-})
-
-/** "4 classes and 2 deadlines this week": the masthead's line. */
+/** "4 classes, 2 deadlines and 2 hr of study": the week in one line. */
 const summary = computed(() => {
-  const thisWeek = days.value
-  const classes = c.sessions.value.filter((s) => !s.cancelled && thisWeek.includes(dayKey(s.starts_at))).length
-  const due = c.deadlines.value.filter(
-    (d) => d.due_at && d.status === 'upcoming' && thisWeek.includes(dayKey(d.due_at)),
-  ).length
-  if (!classes && !due) return offset.value === 0 ? 'Nothing on this week' : ''
-  const parts = [classes ? plural(classes, 'class', 'classes') : '', due ? plural(due, 'deadline') : '']
-  const when = offset.value === 0 ? 'this week' : offset.value === 1 ? 'next week' : offset.value === -1 ? 'last week' : 'that week'
-  return `${parts.filter(Boolean).join(' and ')} ${when}`
+  const week = days.value
+  const classes = c.sessions.value.filter((s) => !s.cancelled && week.includes(dayKey(s.starts_at))).length
+  const due = c.deadlines.value.filter((d) => d.due_at && d.status === 'upcoming' && week.includes(dayKey(d.due_at))).length
+  const study = c.planTasks.value
+    .filter((t) => t.date && week.includes(t.date) && (t.date >= today || t.done_at))
+    .reduce((sum, t) => sum + t.minutes, 0)
+  const parts = [
+    classes ? t('calendar.classes', classes) : '',
+    due ? t('calendar.deadlines', due) : '',
+    study ? t('calendar.summary.studyOf', { time: minutesLabel(study) }) : '',
+  ].filter(Boolean)
+  if (!parts.length) return offset.value === 0 ? t('calendar.summary.nothingThisWeek') : t('calendar.summary.nothingOn')
+  return parts.length > 1 ? t('calendar.summary.and', { list: parts.slice(0, -1).join(', '), last: parts.at(-1) }) : parts[0]!
 })
 
-const termLine = computed(() => {
-  const n = c.currentWeek.value
-  return [c.termGoal.value?.title ?? 'Your semester', n && n <= 14 ? `week ${n} of 14` : ''].filter(Boolean).join(' · ')
+/* -- One day on a phone ------------------------------------------------------ */
+
+const root = ref<HTMLElement | null>(null)
+/** Narrower than seven readable columns: the page's own width, since the sidebar and the assistant take from it. */
+const narrow = ref(false)
+let watcher: ResizeObserver | null = null
+onMounted(() => {
+  if (!root.value) return
+  watcher = new ResizeObserver(([entry]) => (narrow.value = (entry?.contentRect.width ?? 1000) < 640))
+  watcher.observe(root.value)
 })
+onBeforeUnmount(() => watcher?.disconnect())
+
+const gridDays = computed(() => (narrow.value ? [cursor.value] : days.value))
+
+function dueCount(day: string): number {
+  return c.deadlines.value.filter((d) => d.due_at && d.status === 'upcoming' && dayKey(d.due_at) === day).length
+}
+
+/* -- Peeks, adds and moves ----------------------------------------------------- */
+
+const peeked = ref<{ target: CalendarTarget; at: DOMRect } | null>(null)
+
+/* Integrations: the subscription link and the timetable-link flow, opened in place. */
+const calendarApps = ref(false)
+const connecting = ref<ConnectKind | null>(null)
+const ghost = computed(() => {
+  const t = peeked.value?.target
+  return t?.kind === 'add' && t.minute !== null ? { day: t.day, minute: t.minute } : null
+})
+
+const isPast = (day: string): boolean => daysBetween(today, day) < 0
+
+/** "today", "tomorrow", "Wednesday" in this week; a date in any other. */
+function dayWord(day: string): string {
+  const diff = daysBetween(today, day)
+  if (diff === 0) return 'today'
+  if (diff === 1) return 'tomorrow'
+  return diff > 0 && diff < 7 ? weekdayLong(weekdayOf(day)) : dayLabel(day)
+}
+
+/** To another day, an hour (`time`), or back to the day's strip (`time` null); undefined keeps the hour. */
+async function move(t: PlanTask, day: string, time?: string | null): Promise<void> {
+  const from = t.date
+  const fromTime = t.starts_at ?? null
+  try {
+    await moveTask(c, t, day, time)
+  } catch {
+    return // the store has said it couldn't be saved, and put the block back
+  }
+  const at = time === undefined ? fromTime : time
+  toast.success({
+    title: day === from
+      ? at ? `Moved to ${at}` : 'Time cleared'
+      : `Moved to ${dayWord(day)}${at ? ` at ${at}` : ''}`,
+    body: t.kind === 'own' || day === from ? undefined : 'It stays there when the plan is redone.',
+    duration: 5000,
+    action: from
+      ? {
+          label: 'Undo',
+          handler: () => {
+            const now = c.get('plan_tasks', t.id)
+            if (now) void moveTask(c, now, from, fromTime)
+          },
+        }
+      : undefined,
+  })
+}
+
+/** Left from earlier days and not done: Today's quiet count, with its one fix. */
+const behind = computed(() => c.planTasks.value.filter((t) => t.date !== null && t.date < today && !t.done_at))
+const catchingUp = ref(false)
+async function catchUp(): Promise<void> {
+  if (catchingUp.value) return
+  catchingUp.value = true
+  const moving = [...behind.value]
+  try {
+    for (const t of moving) await moveTask(c, t, today)
+    toast.success(t('calendar.behind.movedSuccess', moving.length))
+  } catch {
+    // The store has said which one couldn't be saved.
+  } finally {
+    catchingUp.value = false
+  }
+}
+
+/** "Plan my week": the days left in the week shown, planned again around what was moved. */
+const planning = ref(false)
+const planLabel = computed(() => (offset.value === 0 ? t('calendar.plan.myWeek') : offset.value === 1 ? t('calendar.plan.nextWeek') : t('calendar.plan.thatWeek')))
+const canPlan = computed(() => days.value.some((d) => !isPast(d)))
+async function planWeek(): Promise<void> {
+  if (planning.value) return
+  planning.value = true
+  try {
+    await planDays(c, days.value)
+    toast.success({ title: offset.value === 0 ? t('calendar.plan.planned') : t('calendar.plan.plannedThat'), body: t('calendar.plan.plannedBody') })
+  } catch {
+    toast.error(t('calendar.plan.planError'))
+  } finally {
+    planning.value = false
+  }
+}
+
+/** A day picked in Month: its week in the grid. */
+function openDay(day: string): void {
+  cursor.value = day
+  setView('week')
+}
+
+/* -- The weeks ahead (All deadlines) ------------------------------------------- */
 
 function pickWeek(n: number): void {
   const term = c.termGoal.value
   if (!term?.starts_on) return
-  offset.value = weeksFromNow(shiftDay(term.starts_on, (n - 1) * 7))
-  setView('week')
-  void nextTick(() => document.getElementById('week-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+  openDay(shiftDay(term.starts_on, (n - 1) * 7))
 }
-
-/* -- The busiest week ahead ---------------------------------------------- */
 
 const crowded = computed(() => {
   const now = c.currentWeek.value ?? 0
@@ -153,55 +246,117 @@ const crowded = computed(() => {
   return n && list.length >= 3 ? { n, list } : null
 })
 
-/* -- Everything ahead ---------------------------------------------------- */
-
 const agenda = computed(() => {
   const groups: { label: string; items: Deadline[] }[] = []
   for (const d of c.deadlines.value) {
     if (d.status !== 'upcoming' || !d.due_at || Date.parse(d.due_at) < Date.now()) continue
     const n = c.weekOf(d.due_at)
-    const label = n && n <= 16 ? (n === c.currentWeek.value ? 'This week' : weekName(n)!) : 'Later'
+    const name = weekName(n)
+    const label = n && n <= 16 ? (n === c.currentWeek.value ? 'This week' : name!.charAt(0).toUpperCase() + name!.slice(1)) : 'Later'
     const last = groups.at(-1)
     if (last?.label === label) last.items.push(d)
     else groups.push({ label, items: [d] })
   }
   return groups
 })
+
+const termLine = computed(() => {
+  const n = c.currentWeek.value
+  return [c.termGoal.value?.title ?? 'Your semester', n && n <= 14 ? `week ${n} of 14` : ''].filter(Boolean).join(' · ')
+})
 </script>
 
 <template>
-  <div class="pb-20">
-    <CompanionShellMasthead
+  <div
+    ref="root"
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <ShellPageHead
       title="Calendar"
-      :eyebrow="termLine"
-      :subtitle="summary"
-    >
-      <template #actions>
-        <div
-          class="inline-flex rounded-full bg-surface-track p-1"
-          role="tablist"
-          aria-label="Show"
-        >
-          <button
-            v-for="v in VIEWS"
-            :key="v.value"
-            type="button"
-            role="tab"
-            :aria-selected="view === v.value"
-            class="h-9 cursor-pointer rounded-full px-4 text-[13.5px] font-semibold whitespace-nowrap transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
-            :class="view === v.value ? 'bg-surface text-text shadow-segment' : 'text-text-muted hover:text-text'"
-            @click="setView(v.value)"
-          >
-            {{ v.label }}
-          </button>
-        </div>
-      </template>
-    </CompanionShellMasthead>
+      bar-only
+    />
 
-    <div class="mx-auto grid w-full max-w-[1120px] content-start gap-10 px-4 pt-5 sm:px-6 lg:gap-12 lg:px-8 lg:pt-8">
-      <!-- The same switch on a phone, under the line, full width. -->
+    <!-- One row: where you are, how to move, what the week holds, what to show. -->
+    <header class="@container flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border-rule px-4 py-3 lg:px-5">
+      <div class="flex min-w-0 items-baseline gap-2">
+        <h1
+          class="font-display text-[21px] leading-tight font-semibold tracking-[-0.03em] whitespace-nowrap text-text"
+          :title="view === 'week' ? summary : undefined"
+        >
+          <span class="sr-only">Calendar, </span>{{ heading }}
+        </h1>
+        <span
+          v-if="view === 'week' && weekName(weekNumber)"
+          class="text-[13.5px] font-medium whitespace-nowrap text-text-muted"
+        >{{ weekName(weekNumber) }}</span>
+      </div>
+
       <div
-        class="flex rounded-full bg-surface-track p-1 lg:hidden"
+        v-if="view !== 'agenda'"
+        class="flex items-center gap-1"
+      >
+        <UiBtn
+          variant="ghost"
+          size="sm"
+          square
+          icon="chevron-left"
+          :label="view === 'month' ? t('calendar.nav.prevMonth') : t('calendar.nav.prevWeek')"
+          @click="step(-1)"
+        />
+        <UiBtn
+          variant="secondary"
+          size="sm"
+          :disabled="view === 'month' ? cursor.slice(0, 7) === today.slice(0, 7) : narrow ? cursor === today : offset === 0"
+          @click="cursor = today"
+        >
+          {{ t('calendar.nav.today') }}
+        </UiBtn>
+        <UiBtn
+          variant="ghost"
+          size="sm"
+          square
+          icon="chevron-right"
+          :label="view === 'month' ? t('calendar.nav.nextMonth') : t('calendar.nav.nextWeek')"
+          @click="step(1)"
+        />
+      </div>
+
+      <!-- Only when the row has room for it; otherwise it is the heading's tooltip. -->
+      <p
+        v-if="view === 'week' && c.status.ready"
+        class="min-w-0 truncate text-[13.5px] text-text-muted @max-[940px]:hidden"
+      >
+        {{ summary }}
+      </p>
+
+      <span class="flex-1" />
+
+      <!-- Integrations: this calendar in theirs, a timetable from theirs into this one. -->
+      <UiBtn
+        variant="ghost"
+        size="sm"
+        square
+        icon="link"
+        :label="t('calendar.sync.addBtn')"
+        :title="t('calendar.sync.addTitle')"
+        @click="calendarApps = true"
+      />
+
+      <UiBtn
+        v-if="view === 'week' && canPlan"
+        variant="secondary"
+        size="sm"
+        icon="calendar"
+        :loading="planning"
+        :title="planLabel"
+        @click="planWeek"
+      >
+        <!-- Its icon alone when the row is short of room, so the head stays one row. -->
+        <span class="@max-[700px]:sr-only">{{ planLabel }}</span>
+      </UiBtn>
+
+      <div
+        class="inline-flex rounded-full bg-surface-track p-[3px]"
         role="tablist"
         aria-label="Show"
       >
@@ -211,7 +366,7 @@ const agenda = computed(() => {
           type="button"
           role="tab"
           :aria-selected="view === v.value"
-          class="h-10 flex-1 cursor-pointer rounded-full px-5 text-[14.5px] font-semibold whitespace-nowrap transition-colors duration-150"
+          class="h-7 cursor-pointer rounded-full px-3 text-[13px] font-semibold whitespace-nowrap transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
           :class="view === v.value ? 'bg-surface text-text shadow-segment' : 'text-text-muted hover:text-text'"
           @click="setView(v.value)"
         >
@@ -219,315 +374,137 @@ const agenda = computed(() => {
         </button>
       </div>
 
-      <div
-        v-if="!c.status.ready"
-        class="grid gap-3"
-        aria-busy="true"
-        aria-label="Loading the calendar"
+    </header>
+
+    <!-- Falling behind is one quiet line with one fix, never a week of leftovers. -->
+    <p
+      v-if="view === 'week' && offset === 0 && behind.length"
+      class="flex shrink-0 flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-border-rule bg-accent-soft px-4 py-2 text-[13.5px] text-text-body lg:px-5"
+    >
+      {{ t('calendar.behind.line', behind.length) }}
+      <button
+        type="button"
+        class="cursor-pointer font-semibold text-text underline underline-offset-4 hover:no-underline disabled:opacity-50"
+        :disabled="catchingUp"
+        @click="catchUp"
       >
-        <div class="cp-skel h-6 w-40" />
-        <div class="cp-skel h-[300px] rounded-[16px]" />
+        {{ t('calendar.behind.moveToToday') }}
+      </button>
+    </p>
+
+    <div
+      v-if="!c.status.ready"
+      class="grid gap-3 p-5"
+      aria-busy="true"
+      aria-label="Loading the calendar"
+    >
+      <div class="cp-skel h-6 w-40" />
+      <div class="cp-skel h-[420px] rounded-[16px]" />
+    </div>
+
+    <template v-else-if="view === 'week'">
+      <!-- A phone: the week's days as a strip, the grid one day. -->
+      <ol
+        v-if="narrow"
+        class="grid shrink-0 grid-cols-7 gap-1 border-b border-border-rule px-2 py-2"
+        aria-label="Days"
+      >
+        <li
+          v-for="day in days"
+          :key="day"
+        >
+          <button
+            type="button"
+            class="grid w-full cursor-pointer justify-items-center gap-0.5 rounded-[10px] py-1.5 transition-colors"
+            :class="day === cursor ? 'bg-surface-track' : 'hover:bg-[rgb(var(--wash-rgb)/0.04)]'"
+            :aria-pressed="day === cursor"
+            @click="cursor = day"
+          >
+            <span
+              class="text-[11.5px] font-medium"
+              :class="day === today ? 'text-accent-strong' : 'text-text-muted'"
+            >{{ weekdayShort(day) }}</span>
+            <span
+              class="grid size-7 place-items-center rounded-full font-display text-[15px] font-semibold"
+              :class="day === today ? 'bg-accent text-on-accent' : 'text-text'"
+            >{{ +day.slice(8) }}</span>
+            <span
+              class="size-1.5 rounded-full"
+              :class="dueCount(day) ? 'bg-rose' : 'bg-transparent'"
+              aria-hidden="true"
+            />
+          </button>
+        </li>
+      </ol>
+
+      <div
+        v-if="!c.sessions.value.length"
+        class="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border-rule px-4 py-2.5 text-[13.5px] text-text-muted lg:px-5"
+      >
+        {{ t('calendar.timetable.notice') }}
+        <button
+          type="button"
+          class="cursor-pointer font-semibold text-text underline underline-offset-4 hover:no-underline"
+          @click="connecting = 'ics'"
+        >
+          {{ t('calendar.timetable.add') }}
+        </button>
       </div>
 
-      <template v-else-if="view === 'week'">
-        <section
-          id="week-view"
-          class="grid scroll-mt-4 gap-4"
-          aria-labelledby="cal-week"
-        >
-          <header class="flex flex-wrap items-center justify-between gap-3">
-            <div class="grid gap-0.5">
-              <h2
-                id="cal-week"
-                class="t-head text-[19px]"
-              >
-                {{ weekTitle }}
-              </h2>
-              <p class="text-[14px] text-text-muted">
-                {{ weekRange }}
-              </p>
-            </div>
-            <div class="flex items-center gap-2">
-              <UiBtn
-                v-if="offset !== 0"
-                variant="secondary"
-                size="lg"
-                @click="offset = 0"
-              >
-                This week
-              </UiBtn>
-              <UiBtn
-                variant="secondary"
-                size="lg"
-                square
-                icon="chevron-left"
-                label="Previous week"
-                @click="offset--"
-              />
-              <UiBtn
-                variant="secondary"
-                size="lg"
-                square
-                icon="chevron-right"
-                label="Next week"
-                @click="offset++"
-              />
-            </div>
-          </header>
+      <CompanionCalendarWeekGrid
+        :days="gridDays"
+        :ghost="ghost"
+        @peek="(target, at) => (peeked = { target, at })"
+        @move="move"
+      />
+    </template>
 
-          <div
-            v-if="!c.sessions.value.length"
-            class="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-[18px] bg-surface p-4 shadow-[inset_0_0_0_1px_var(--border)]"
-          >
-            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
-              <UiIcon
-                name="calendar"
-                :size="18"
-              />
-            </span>
-            <p class="min-w-0 flex-1 text-[14.5px] leading-snug text-text-body">
-              Exam dates from a timetable PDF show up here.
-            </p>
-            <UiBtn
-              to="/app/connect"
-              variant="secondary"
-              size="lg"
-            >
-              Add an exam timetable
-            </UiBtn>
-          </div>
+    <CompanionCalendarMonth
+      v-else-if="view === 'month'"
+      :month="cursor"
+      @pick="openDay"
+    />
 
-          <!-- Wide: seven columns, split by hairlines. -->
-          <ol class="hidden border-y border-border-rule min-[1280px]:grid min-[1280px]:grid-cols-7 min-[1280px]:divide-x min-[1280px]:divide-border-rule">
-            <li
-              v-for="day in days"
-              :key="day"
-              class="grid min-h-[320px] min-w-0 content-start gap-1 px-1.5 pt-3 pb-5"
-              :class="isPast(day) ? 'opacity-55' : ''"
-              :aria-label="longDayLabel(day)"
-            >
-              <h3 class="mb-2 flex items-center gap-1.5 px-2">
-                <span
-                  class="text-[14px]"
-                  :class="day === today ? 'font-semibold text-cobalt' : 'font-medium text-text-muted'"
-                >{{ weekdayShort(day) }}</span>
-                <span
-                  class="t-head grid size-8 place-items-center rounded-full text-[17px]"
-                  :class="day === today ? 'bg-cobalt text-white dark:bg-brand-strong' : 'text-text'"
-                >{{ +day.slice(8) }}</span>
-              </h3>
-
-              <NuxtLink
-                v-for="d in dueOn(day)"
-                :key="d.id"
-                :to="`/app/d/${d.id}`"
-                class="grid min-w-0 gap-0.5 rounded-[12px] bg-cobalt-soft px-2.5 py-2 transition-colors hover:bg-brand-line"
-              >
-                <span class="flex items-center gap-1 text-[13px] font-semibold text-cobalt">
-                  <CompanionIcon
-                    name="flag"
-                    :size="13"
-                    :stroke="2"
-                  />
-                  Due {{ dueTime(d) }}
-                </span>
-                <span class="text-[14.5px] leading-snug font-semibold text-text">{{ d.title }}</span>
-                <span class="flex min-w-0 items-center gap-1.5 text-[13px] text-text-muted">
-                  <span
-                    class="size-2 shrink-0 rounded-full"
-                    :style="{ background: courseColor(c.subjectOf(d)?.color) }"
-                  />
-                  <span class="truncate">{{ c.subjectOf(d)?.title }}</span>
-                </span>
-                <span class="text-[13px] text-text-soft">{{ d.tentative ? 'not confirmed' : readyOf(d) }}</span>
-              </NuxtLink>
-
-              <NuxtLink
-                v-for="s in sessionsOn(day)"
-                :key="s.id"
-                :to="`/app/courses/${s.subject_id}`"
-                class="grid min-w-0 gap-0.5 rounded-[12px] px-2.5 py-2 transition-colors hover:bg-surface-mute"
-                :class="s.cancelled ? 'opacity-55' : ''"
-                :title="[c.subjectOf(s)?.title, s.title, s.location].filter(Boolean).join(' · ')"
-              >
-                <span class="text-[13px] font-semibold text-text-muted">{{ s.cancelled ? 'Cancelled' : `${clock(s.starts_at)}–${clock(s.ends_at)}` }}</span>
-                <span
-                  class="text-[14.5px] leading-snug font-medium text-text"
-                  :class="s.cancelled ? 'line-through' : ''"
-                >{{ s.title }}</span>
-                <span class="flex min-w-0 items-center gap-1.5 text-[13px] text-text-muted">
-                  <span
-                    class="size-2 shrink-0 rounded-full"
-                    :style="{ background: courseColor(c.subjectOf(s)?.color) }"
-                  />
-                  <span class="truncate">{{ c.subjectOf(s)?.title }}</span>
-                </span>
-                <span
-                  v-if="s.location"
-                  class="truncate text-[13px] text-text-muted"
-                >{{ s.location }}</span>
-              </NuxtLink>
-
-              <p
-                v-if="!sessionsOn(day).length && !dueOn(day).length"
-                class="px-2.5 text-[14px] text-text-faint"
-              >
-                Free
-              </p>
-            </li>
-          </ol>
-
-          <!-- Narrow: the same week, day by day. -->
-          <ol class="grid max-w-[760px] gap-8 min-[1280px]:hidden">
-            <li
-              v-for="day in days"
-              :id="`day-${day}`"
-              :key="day"
-              class="grid scroll-mt-4 gap-2"
-              :class="isPast(day) ? 'opacity-55' : ''"
-            >
-              <h3 class="flex items-baseline gap-2">
-                <span class="t-head text-[17px]">{{ longDayLabel(day) }}</span>
-                <span
-                  v-if="day === today"
-                  class="text-[14px] font-semibold text-cobalt"
-                >Today</span>
-              </h3>
-
-              <NuxtLink
-                v-for="d in dueOn(day)"
-                :key="d.id"
-                :to="`/app/d/${d.id}`"
-                class="group -mx-2 flex items-center gap-4 rounded-[14px] bg-cobalt-soft px-2 py-3 transition-colors hover:bg-brand-line"
-              >
-                <span class="grid w-[64px] shrink-0 leading-tight">
-                  <span class="flex items-center gap-1 text-[15px] font-semibold text-cobalt">
-                    <CompanionIcon
-                      name="flag"
-                      :size="14"
-                      :stroke="2"
-                    />
-                    Due
-                  </span>
-                  <span class="text-[13px] text-cobalt">{{ dueTime(d) }}</span>
-                </span>
-                <span class="grid min-w-0 flex-1 gap-0.5">
-                  <span class="truncate text-[16px] leading-snug font-semibold text-text">{{ d.title }}</span>
-                  <span class="flex min-w-0 items-center gap-1.5 text-[13.5px] text-text-muted">
-                    <span
-                      class="size-2 shrink-0 rounded-full"
-                      :style="{ background: courseColor(c.subjectOf(d)?.color) }"
-                    />
-                    <span class="truncate">{{ [c.subjectOf(d)?.title, d.tentative ? 'not confirmed' : null].filter(Boolean).join(' · ') }}</span>
-                  </span>
-                </span>
-                <span class="shrink-0 text-[14px] font-medium text-text-soft">{{ readyOf(d) }}</span>
-                <CompanionIcon
-                  name="chevron-right"
-                  :size="18"
-                  class="shrink-0 text-text-faint transition-colors group-hover:text-text-soft"
-                />
-              </NuxtLink>
-
-              <ul
-                v-if="sessionsOn(day).length"
-                class="divide-y divide-border-rule border-y border-border-rule"
-              >
-                <li
-                  v-for="s in sessionsOn(day)"
-                  :key="s.id"
-                >
-                  <NuxtLink
-                    :to="`/app/courses/${s.subject_id}`"
-                    class="group -mx-2 flex items-center gap-4 rounded-[12px] px-2 py-3 transition-colors hover:bg-surface-mute"
-                    :class="s.cancelled ? 'opacity-55' : ''"
-                  >
-                    <span class="grid w-[64px] shrink-0 leading-tight">
-                      <span class="text-[15px] font-semibold text-text">{{ clock(s.starts_at) }}</span>
-                      <span class="text-[13px] text-text-muted">{{ clock(s.ends_at) }}</span>
-                    </span>
-                    <span class="grid min-w-0 flex-1 gap-0.5">
-                      <span
-                        class="truncate text-[16px] leading-snug font-medium text-text"
-                        :class="s.cancelled ? 'line-through' : ''"
-                      >{{ s.title }}</span>
-                      <span class="flex min-w-0 items-center gap-1.5 text-[13.5px] text-text-muted">
-                        <span
-                          class="size-2 shrink-0 rounded-full"
-                          :style="{ background: courseColor(c.subjectOf(s)?.color) }"
-                        />
-                        <span class="truncate">{{ [c.subjectOf(s)?.title, s.location, s.cancelled ? 'cancelled' : null].filter(Boolean).join(' · ') }}</span>
-                      </span>
-                    </span>
-                    <CompanionIcon
-                      name="chevron-right"
-                      :size="18"
-                      class="shrink-0 text-text-faint transition-colors group-hover:text-text-soft"
-                    />
-                  </NuxtLink>
-                </li>
-              </ul>
-
-              <p
-                v-if="!sessionsOn(day).length && !dueOn(day).length"
-                class="border-y border-border-rule py-3 text-[15px] text-text-faint"
-              >
-                Nothing on
-              </p>
-            </li>
-          </ol>
-        </section>
-
+    <!-- Everything ahead, by week, under the semester at a glance. -->
+    <div
+      v-else
+      class="om-scroll min-h-0 flex-1 overflow-y-auto"
+    >
+      <div class="mx-auto grid w-full max-w-[860px] content-start gap-10 px-4 pt-6 pb-20 sm:px-6 lg:px-8">
         <section
           v-if="c.termGoal.value?.starts_on"
           class="grid gap-3"
           aria-labelledby="cal-term"
         >
-          <header class="flex items-baseline justify-between gap-3">
-            <h2
-              id="cal-term"
-              class="t-head text-[19px]"
-            >
-              The semester
-            </h2>
-            <button
-              type="button"
-              class="text-[14px] font-semibold text-cobalt hover:underline"
-              @click="setView('agenda')"
-            >
-              All deadlines
-            </button>
-          </header>
-          <p class="text-[15px] text-text-muted">
-            How much is due each week. Tap a week to see it.
+          <h2
+            id="cal-term"
+            class="t-head text-[19px]"
+          >
+            {{ termLine }}
+          </h2>
+          <p class="text-[14.5px] text-text-muted">
+            {{ t('calendar.agenda.termDesc') }}
           </p>
           <CompanionSemesterStrip
-            :shown="weekNumber"
+            :shown="c.currentWeek.value"
             @pick="pickWeek"
           />
           <p
             v-if="crowded"
-            class="max-w-[760px] text-[15px] leading-relaxed text-text-body"
+            class="text-[15px] leading-relaxed text-text-body"
           >
-            <b class="font-semibold text-text">Week {{ crowded.n }} is the busiest:</b>
-            {{ crowded.list.map((d) => `${d.title} (${c.subjectOf(d)?.title})`).join(', ') }}.
-            Your daily plan starts on them before it arrives.
+            <b class="font-semibold text-text">{{ t('calendar.agenda.busyTitle', { n: crowded.n }) }}</b>
+            {{ t('calendar.agenda.busyBody', { list: crowded.list.map((d) => `${d.title} (${c.subjectOf(d)?.title})`).join(', ') }) }}
             <button
               type="button"
-              class="font-semibold whitespace-nowrap text-cobalt hover:underline"
+              class="cursor-pointer font-semibold whitespace-nowrap text-brand hover:underline"
               @click="pickWeek(crowded.n)"
             >
-              See week {{ crowded.n }}
+              {{ t('calendar.agenda.seeWeek', { n: crowded.n }) }}
             </button>
           </p>
         </section>
-      </template>
 
-      <!-- Everything ahead, by week. -->
-      <div
-        v-else
-        class="grid max-w-[760px] gap-10"
-      >
         <CompanionBox
           v-for="g in agenda"
           :key="g.label"
@@ -544,8 +521,8 @@ const agenda = computed(() => {
         <UiEmptyState
           v-if="!agenda.length"
           icon="calendar"
-          title="Nothing due from here on"
-          description="Dates arrive from Moodle, your email and the lectures. Or paste a message that mentions one."
+          :title="t('calendar.agenda.nothingDue')"
+          :description="t('calendar.agenda.nothingDueDesc')"
           class="py-12"
         >
           <UiBtn
@@ -553,10 +530,30 @@ const agenda = computed(() => {
             size="lg"
             @click="capture.show('paste')"
           >
-            Paste a message
+            {{ t('calendar.agenda.pasteBtn') }}
           </UiBtn>
         </UiEmptyState>
       </div>
     </div>
+
+    <CompanionCalendarPeek
+      v-if="peeked"
+      :target="peeked.target"
+      :at="peeked.at"
+      @close="peeked = null"
+      @move="move"
+    />
+
+    <UiModal
+      v-model:open="calendarApps"
+      :title="t('calendar.sync.addBtn')"
+      :description="t('calendar.sync.modalDesc')"
+    >
+      <CompanionIntegrationsCalendarApps @bring="calendarApps = false; connecting = 'ics'" />
+    </UiModal>
+    <CompanionCreateConnectModal
+      :kind="connecting"
+      @close="connecting = null"
+    />
   </div>
 </template>

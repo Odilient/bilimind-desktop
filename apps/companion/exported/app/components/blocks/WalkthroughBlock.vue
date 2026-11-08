@@ -72,8 +72,8 @@ function toggle(n: number): void {
           class="relative z-10 mt-0.5 grid size-7 shrink-0 cursor-pointer place-items-center rounded-full font-display text-[12px] font-semibold transition"
           :class="
             done.has(step.n)
-              ? 'bg-chip text-lime'
-              : 'bg-surface text-text-soft shadow-[inset_0_0_0_1.5px_rgb(var(--wash-rgb)/0.14)] hover:shadow-[inset_0_0_0_1.5px_var(--lime-2)]'
+              ? 'bg-chip text-accent'
+              : 'bg-surface text-text-soft shadow-[inset_0_0_0_1.5px_rgb(var(--wash-rgb)/0.14)] hover:shadow-[inset_0_0_0_1.5px_var(--hi-2)]'
           "
           :aria-pressed="done.has(step.n)"
           :aria-label="`Step ${step.n}: ${step.title}`"

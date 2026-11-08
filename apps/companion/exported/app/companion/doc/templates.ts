@@ -1,6 +1,7 @@
 import type { JSONContent } from '@tiptap/vue-3'
 import type { Deadline } from '../types'
 import type { PageContext } from './context'
+import { translate } from '../../utils/i18n'
 
 /**
  * Templates made for learning, filled from where the page lives.
@@ -22,12 +23,12 @@ export interface TemplateInfo {
 }
 
 export const TEMPLATES: TemplateInfo[] = [
-  { key: 'lecture', label: 'Lecture notes', hint: 'Filed under the class, recording linked', icon: 'pencil' },
-  { key: 'cornell', label: 'Cornell notes', hint: 'Cues, notes, then a summary', icon: 'table' },
-  { key: 'lab', label: 'Lab report', hint: 'Aim, method, results, conclusion', icon: 'flow' },
-  { key: 'reading', label: 'Reading notes', hint: 'Source, your words, quotes', icon: 'book' },
-  { key: 'vocab', label: 'Vocabulary list', hint: 'Every row becomes a card', icon: 'cards' },
-  { key: 'blank', label: 'Empty page', hint: 'Start from nothing', icon: 'file' },
+  { key: 'lecture', get label() { return translate('notes.tileLecture') }, get hint() { return translate('notes.tileLectureHint') }, icon: 'pencil' },
+  { key: 'cornell', get label() { return translate('notes.tileCornell') }, get hint() { return translate('notes.tileCornellHint') }, icon: 'table' },
+  { key: 'lab', get label() { return translate('notes.tplLabLabel') }, get hint() { return translate('notes.tplLabHint') }, icon: 'flow' },
+  { key: 'reading', get label() { return translate('notes.tileReading') }, get hint() { return translate('notes.tileReadingHint') }, icon: 'book' },
+  { key: 'vocab', get label() { return translate('notes.tileVocab') }, get hint() { return translate('notes.tileVocabHint') }, icon: 'cards' },
+  { key: 'blank', get label() { return translate('notes.tileBlank') }, get hint() { return translate('notes.tileBlankHint') }, icon: 'file' },
 ]
 
 export function isTemplateKey(value: unknown): value is TemplateKey {

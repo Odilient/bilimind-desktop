@@ -13,6 +13,7 @@ import { expectedOf } from '~/composables/useCodeExercise'
  * whole result unreadable to anyone who cannot separate the green tick from the
  * red cross, and this list is the entire feedback surface of the exercise.
  */
+const { t } = useI18n()
 const props = defineProps<{
   mode: CodeMode
   checks: ExerciseCheck[]
@@ -27,7 +28,7 @@ const hasRun = computed(() => props.results.length > 0)
 function inputOf(check: ExerciseCheck): string | null {
   const stdin = check.stdinCase?.stdin
   if (stdin === undefined) return null
-  return stdin === '' ? '(an empty line)' : stdin
+  return stdin === '' ? t('check.assess.code.emptyLine') : stdin
 }
 </script>
 
@@ -55,7 +56,7 @@ function inputOf(check: ExerciseCheck): string | null {
             v-if="mode === 'script'"
             class="mt-0.5 font-mono text-[11px] break-words whitespace-pre-wrap text-code-meta"
           >
-            input {{ inputOf(check) ?? '(none)' }}
+            {{ t('check.assess.code.input', { value: inputOf(check) ?? t('check.assess.code.none') }) }}
           </p>
           <p
             v-else-if="check.test?.call"
@@ -95,7 +96,7 @@ function inputOf(check: ExerciseCheck): string | null {
         />
         <div class="min-w-0 flex-1">
           <p class="text-[12px] leading-snug text-code-dim">
-            <span class="sr-only">{{ result.passed ? 'Passed: ' : 'Failed: ' }}</span>
+            <span class="sr-only">{{ result.passed ? t('check.assess.code.passedSr') : t('check.assess.code.failedSr') }}</span>
             {{ result.name }}
           </p>
 
@@ -113,12 +114,12 @@ function inputOf(check: ExerciseCheck): string | null {
             class="mt-1.5 grid grid-cols-1 gap-1.5 @[320px]:grid-cols-2"
           >
             <div class="rounded-md border border-code-line px-2 py-1.5">
-              <p class="eyebrow mb-1 text-code-meta">Expected</p>
-              <pre class="font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-code-dim">{{ result.expected ?? '(nothing)' }}</pre>
+              <p class="eyebrow mb-1 text-code-meta">{{ t('check.assess.code.expected') }}</p>
+              <pre class="font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-code-dim">{{ result.expected ?? t('check.assess.code.nothing') }}</pre>
             </div>
             <div class="rounded-md border border-danger-on-dark/30 px-2 py-1.5">
-              <p class="eyebrow mb-1 text-code-meta">Your output</p>
-              <pre class="font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-danger-on-dark">{{ result.received || '(nothing)' }}</pre>
+              <p class="eyebrow mb-1 text-code-meta">{{ t('check.assess.code.yourOutput') }}</p>
+              <pre class="font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-danger-on-dark">{{ result.received || t('check.assess.code.nothing') }}</pre>
             </div>
           </div>
 

@@ -30,8 +30,8 @@ import { readyWords, sizeLabel } from './words'
 
 /* -- The views of a course's home ----------------------------------------- */
 
-/** What the course's home can show under its header; `?tab=` names one. */
-export type CourseView = 'map' | 'weeks' | 'path' | 'deadlines' | 'notes' | 'materials' | 'practice'
+/** What the course's home can show under its header; `?tab=` names one. `grades`: tasks and grades. */
+export type CourseView = 'map' | 'weeks' | 'path' | 'deadlines' | 'notes' | 'materials' | 'practice' | 'grades'
 
 /* -- Memory ----------------------------------------------------------------- */
 
@@ -539,8 +539,7 @@ const UNDER_A_COURSE = ['slots', 'sessions', 'topics', 'deadlines', 'cards', 'pl
  * course of one's own takes its goal along when nothing else follows it.
  *
  * The screen doesn't wait for the server's tombstones: the rows under the
- * course are marked gone here at once, and a sync settles the rest. The demo
- * has no server to cascade, so there each row is removed by hand.
+ * course are marked gone here at once, and a sync settles the rest.
  *
  * Returns how many of the learner's things were moved to My notes.
  */
@@ -561,14 +560,12 @@ export async function deleteCourse(store: CompanionStore, subject: Subject): Pro
   )
   await store.remove('subjects', subject.id)
 
-  const demo = store.status.mode === 'demo'
   const gone: Promise<void>[] = []
   for (const collection of UNDER_A_COURSE) {
     const table = store.rows[COLLECTION_KEY[collection]] as Record<string, { subject_id?: string | null; deleted_at?: string | null }>
     for (const [id, row] of Object.entries(table)) {
       if (row.subject_id !== subject.id || row.deleted_at) continue
-      if (demo) gone.push(store.remove(collection, id).catch(() => undefined))
-      else table[id] = { ...row, deleted_at: new Date().toISOString() }
+      table[id] = { ...row, deleted_at: new Date().toISOString() }
     }
   }
   const goal = store.goalOf(subject)
@@ -576,7 +573,7 @@ export async function deleteCourse(store: CompanionStore, subject: Subject): Pro
     gone.push(store.remove('goals', goal.id).catch(() => undefined))
   }
   await Promise.all(gone)
-  if (!demo) void store.sync().catch(() => undefined)
+  void store.sync().catch(() => undefined)
   forgetCourse(subject.id)
   return mine.length
 }

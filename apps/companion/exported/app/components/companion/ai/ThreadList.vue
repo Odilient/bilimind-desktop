@@ -157,7 +157,7 @@ const rowClass = (thread: AiThread) => [
       {{ t.threadsState.error }}
       <button
         type="button"
-        class="ml-1 cursor-pointer font-semibold text-cobalt underline-offset-4 hover:underline"
+        class="ml-1 cursor-pointer font-semibold text-brand underline-offset-4 hover:underline"
         @click="t.refreshThreads()"
       >
         Try again
@@ -173,7 +173,7 @@ const rowClass = (thread: AiThread) => [
 
     <div
       v-else
-      class="grid gap-3"
+      class="grid grid-cols-[minmax(0,1fr)] gap-3"
     >
       <section
         v-for="group in groups"
@@ -183,7 +183,7 @@ const rowClass = (thread: AiThread) => [
         <h3 class="px-2.5 pb-1 text-[11.5px] font-medium text-text-faint">
           {{ group.label }}
         </h3>
-        <ul class="grid gap-px">
+        <ul class="grid grid-cols-[minmax(0,1fr)] gap-px">
           <li
             v-for="thread in group.threads"
             :key="thread.id"
@@ -219,7 +219,7 @@ const rowClass = (thread: AiThread) => [
               >
                 <span
                   v-if="answering(thread)"
-                  class="size-2 shrink-0 animate-pulse-dot rounded-full bg-lime-2"
+                  class="size-2 shrink-0 animate-pulse-dot rounded-full bg-accent-strong"
                   aria-label="Answering"
                 />
                 <i

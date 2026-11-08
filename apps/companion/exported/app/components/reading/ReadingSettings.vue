@@ -5,10 +5,11 @@ import {
   READING_SCALE_MIN,
   READING_SCALE_STEP,
   READING_THEMES,
+  READING_WIDTHS,
 } from '~/composables/useReadingSettings'
 
 /**
- * READING — the "Aa" control: zoom, typeface, background.
+ * READING — the "Aa" control: zoom, typeface, background, width.
  *
  * Every change previews at once; nothing is written until "Set as default".
  * The button is the whole story of the popover: what you see is yours for the
@@ -141,6 +142,28 @@ onBeforeUnmount(() => {
             @click="reading.set({ font: font.value })"
           >
             {{ font.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Width -->
+      <div class="mb-3.5">
+        <span class="eyebrow mb-1.5 block">Width</span>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button
+            v-for="w in READING_WIDTHS"
+            :key="w.value"
+            type="button"
+            :aria-pressed="settings.width === w.value"
+            :class="[
+              'cursor-pointer rounded-[12px] border px-3 py-2 text-[13.5px] transition-colors',
+              settings.width === w.value
+                ? 'border-lime-2 bg-accent-soft font-semibold text-text'
+                : 'border-border text-text-dim hover:bg-surface-mute',
+            ]"
+            @click="reading.set({ width: w.value })"
+          >
+            {{ w.label }}
           </button>
         </div>
       </div>

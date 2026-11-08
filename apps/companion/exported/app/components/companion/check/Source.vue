@@ -18,6 +18,7 @@ import { fetchFileUrl } from '~/companion/files'
 const props = defineProps<{ source: CheckSource | null; subjectId: string | null }>()
 
 const store = useCompanion()
+const { t } = useI18n()
 const toast = useToast()
 
 const cite = computed<AiCitation | null>(() => {
@@ -31,7 +32,7 @@ const cite = computed<AiCitation | null>(() => {
 async function open(c: AiCitation): Promise<void> {
   const target = citationTarget(store, c)
   if (!target) {
-    toast.info({ title: c.label, body: c.quote ? `“${c.quote}”` : 'That source isn\'t on this device yet.' })
+    toast.info({ title: c.label, body: c.quote ? `“${c.quote}”` : t('check.source.missing') })
     return
   }
   if ('href' in target) {
@@ -50,7 +51,7 @@ async function open(c: AiCitation): Promise<void> {
     if (url && tab) tab.location.href = url
     else {
       tab?.close()
-      toast.info({ title: item.title, body: 'It can\'t be opened right now. Try again when you\'re online.' })
+      toast.info({ title: item.title, body: t('check.source.cantOpen') })
     }
     return
   }
@@ -77,6 +78,6 @@ async function open(c: AiCitation): Promise<void> {
     v-else
     class="text-[13px] text-text-faint"
   >
-    General knowledge, not from your material
+    {{ t('check.source.general') }}
   </p>
 </template>

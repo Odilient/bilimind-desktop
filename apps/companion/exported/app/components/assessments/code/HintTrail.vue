@@ -12,6 +12,7 @@
  * payload, because `LeakGuard` does not strip that key and the answer would ship
  * to the browser with the lesson.
  */
+const { t } = useI18n()
 const props = defineProps<{
   hints: string[]
   revealed: number
@@ -55,13 +56,13 @@ const remaining = computed(() => props.hints.length - props.revealed)
         name="spark"
         :size="12"
       />
-      Show a hint ({{ revealed + 1 }} of {{ hints.length }})
+      {{ t('check.assess.code.showHint', { n: revealed + 1, total: hints.length }) }}
     </button>
     <p
       v-else
       class="text-[11.5px] text-code-meta"
     >
-      That was the last hint.
+      {{ t('check.assess.code.lastHint') }}
     </p>
 
     <p

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Note } from '~/companion/notes/tree'
 import { movingId, movingIds, suggestionOf, useNoteActions, useSingleton } from '~/companion/notes/actions'
 import { courseColor } from '~/companion/colors'
@@ -39,7 +40,7 @@ const open = computed({
 })
 
 const heading = computed(() =>
-  note.value ? `Move “${note.value.title || 'Untitled'}” to…` : `Move ${notes.value.length} notes to…`,
+  note.value ? t('notes.moveTitle', { title: note.value.title || t('notes.untitled') }) : t('notes.moveMany', { n: notes.value.length }),
 )
 
 const query = ref('')
@@ -51,7 +52,7 @@ const suggested = computed(() => (note.value ? (suggestionOf(store, note.value)?
 
 const places = computed(() => {
   const all = [
-    { id: null as string | null, title: 'My notes', color: null as string | null },
+    { id: null as string | null, title: t('notes.myNotes'), color: null as string | null },
     ...store.subjects.value.map((s) => ({ id: s.id as string | null, title: s.title, color: courseColor(s.color) })),
   ]
   const q = query.value.trim().toLowerCase()
@@ -83,11 +84,11 @@ function onEnter(): void {
     v-model:open="open"
     size="compact"
     :title="heading"
-    :description="notes.length > 1 ? 'They go to the top of that list, with anything inside them.' : 'It goes to the top of that list, with anything inside it.'"
+    :description="notes.length > 1 ? t('notes.moveManyDesc') : t('notes.moveOneDesc')"
   >
     <label
       v-if="store.subjects.value.length > 6"
-      class="mb-3 flex h-10 items-center gap-2 rounded-[12px] bg-surface-sunken px-3 text-text-faint focus-within:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+      class="mb-3 flex h-10 items-center gap-2 rounded-[12px] bg-surface-sunken px-3 text-text-faint focus-within:shadow-[inset_0_0_0_2px_var(--brand)]"
     >
       <UiIcon
         name="search"
@@ -97,8 +98,8 @@ function onEnter(): void {
       <input
         v-model="query"
         type="text"
-        placeholder="Find a course"
-        aria-label="Find a course"
+        :placeholder="t('notes.findCourse')"
+        :aria-label="t('notes.findCourse')"
         class="min-w-0 flex-1 bg-transparent text-[14px] text-text outline-none placeholder:text-text-faint"
         autofocus
         @keydown.enter.prevent="onEnter"
@@ -112,7 +113,7 @@ function onEnter(): void {
         <button
           type="button"
           :disabled="place.id === here && !nested"
-          class="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[12px] px-2.5 text-left text-[14.5px] font-medium text-text transition-colors outline-none hover:bg-surface-mute focus-visible:bg-surface-mute focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-default disabled:hover:bg-transparent"
+          class="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[12px] px-2.5 text-left text-[14.5px] font-medium text-text transition-colors outline-none hover:bg-surface-mute focus-visible:bg-surface-mute focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-default disabled:hover:bg-transparent"
           @click="choose(place.id)"
         >
           <span
@@ -130,18 +131,18 @@ function onEnter(): void {
           <span
             v-if="place.id === here"
             class="shrink-0 text-[12.5px] font-normal text-text-faint"
-          >{{ nested ? 'Here, inside a page' : 'Here now' }}</span>
+          >{{ nested ? t('notes.hereNested') : t('notes.hereNow') }}</span>
           <span
             v-else-if="place.id && place.id === suggested"
             class="shrink-0 rounded-full bg-surface-sunken px-2 py-0.5 text-[12px] font-medium text-text-soft"
-          >Suggested</span>
+          >{{ t('notes.suggested') }}</span>
         </button>
       </li>
       <li
         v-if="!places.length"
         class="px-2.5 py-3 text-[14px] text-text-muted"
       >
-        No course by that name.
+        {{ t('notes.noCourseByName') }}
       </li>
     </ul>
   </UiModal>

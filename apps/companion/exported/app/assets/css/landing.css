@@ -1,0 +1,25 @@
+/*
+ * The public site in Daylight 2, ported from docs/design/daylight2/css/ (same file names, same
+ * order as the design's build.py). Every rule sits under `.d2`, the scope main.css gives the design's
+ * token names, so none of it reaches the app; keyframes carry a `d2-` prefix for the same reason.
+ * One stylesheet rather than one per section, so the cascade between base and sections stays the
+ * design's. Loaded by layouts/landing.vue.
+ */
+@import './landing/base.css';
+@import './landing/00-nav.css';
+@import './landing/01-hero.css';
+@import './landing/02-sources.css';
+@import './landing/03-scatter.css';
+@import './landing/04-cycler.css';
+@import './landing/05-research.css';
+@import './landing/06-checks.css';
+@import './landing/07-today.css';
+@import './landing/08-together.css';
+@import './landing/09-real-features.css';
+@import './landing/10-connect.css';
+@import './landing/11-everywhere.css';
+@import './landing/12-schools.css';
+@import './landing/13-pricing.css';
+@import './landing/14-faq.css';
+@import './landing/15-end.css';
+@import './landing/90-rhythm.css';

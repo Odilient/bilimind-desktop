@@ -1,0 +1,72 @@
+{
+  "aloud": {
+    "sayOut": "Le dire à voix haute",
+    "orScreen": "ou l’expliquer par-dessus votre écran",
+    "agree": "BiliMind écrit ce que vous dites sur cet ordinateur. La première fois, il télécharge un modèle vocal{size} et le garde ici. Ce que vous dites ne quitte jamais cet ordinateur.",
+    "aboutMb": " (environ {mb} Mo)",
+    "downloadStart": "Télécharger et commencer",
+    "typeInstead": "Taper à la place",
+    "whichScreen": "Sur quel écran expliquez-vous ? Votre voix est enregistrée avec lui.",
+    "cancel": "Annuler",
+    "recordingScreen": "Enregistrement de votre écran et de votre voix",
+    "listening": "J’écoute",
+    "stop": "Arrêter",
+    "talk": "Expliquez-le comme à un camarade. Quand vous arrêtez, vos mots arrivent dans la zone.",
+    "tryAgain": "Réessayer",
+    "done": "Vos mots sont dans la zone. Relisez-les et corrigez ce qui a été mal compris.",
+    "again": "Le redire",
+    "screenFail": "Cet ordinateur ne peut pas partager son écran pour le moment.",
+    "explaining": "J’explique {topic}",
+    "explainingBack": "Je l’explique à mon tour",
+    "recFail": "L’enregistrement n’a pas démarré. Réessayez dans un instant.",
+    "noWords": "Aucun mot n’est passé. Vérifiez le micro, ou tapez-le.",
+    "writeFail": "Ce que vous avez dit n’a pas pu être écrit.",
+    "modelReady": "Préparation du modèle vocal…",
+    "modelProgress": "Préparation du modèle vocal… {done} sur {total} Mo",
+    "writing": "J’écris ce que vous avez dit…"
+  },
+  "tr": {
+    "title": "Transcription",
+    "waiting": "En attente de la fin d’une autre transcription…",
+    "progress": "Transcription sur cet ordinateur… {done} sur {total} min",
+    "stopped": "La transcription s’est arrêtée. {error}",
+    "agree": "BiliMind peut écrire ce qui a été dit, sur cet ordinateur. Il télécharge un modèle vocal une fois{size} et le garde ici ; l’enregistrement lui-même ne quitte jamais cet ordinateur.",
+    "stoppedAt": "Arrêté à {at}.",
+    "downloadWrite": "Télécharger et transcrire",
+    "carryOn": "Continuer",
+    "write": "Écrire la transcription"
+  },
+  "pill": {
+    "recording": "Enregistrement",
+    "paused": "En pause",
+    "aria": "Enregistrement de {label}, {elapsed}. Ouvrir l’enregistreur.",
+    "interrupted": "L’enregistrement s’est arrêté tout seul",
+    "saved": "{time} ont été enregistrées dans {where}.",
+    "notebook": "votre carnet"
+  },
+  "picker": {
+    "screen": "Tout l’écran",
+    "window": "Une fenêtre"
+  },
+  "err": {
+    "noMic": "Ce navigateur ne peut pas utiliser le micro.",
+    "denied": "BiliMind a besoin du micro pour enregistrer. Autorisez-le dans le navigateur ou les réglages de confidentialité de l’ordinateur, puis réessayez.",
+    "noMicAnswer": "Aucun micro n’a répondu. Vérifiez qu’il est branché et pas utilisé.",
+    "saveFail": "L’enregistrement n’a pas pu être sauvegardé.",
+    "busy": "Un enregistrement est déjà en cours.",
+    "noRecord": "Ce navigateur ne peut pas enregistrer.",
+    "noSound": "Il n’y avait aucun son à enregistrer.",
+    "itself": "L’enregistrement s’est arrêté tout seul.",
+    "noStart": "L’enregistrement n’a pas démarré. Réessayez dans un instant."
+  },
+  "file": {
+    "voiceMemo": "Mémo vocal",
+    "recording": "Enregistrement de {base}",
+    "screenRecording": "Enregistrement d’écran",
+    "baseScreen": "Enregistrement d’écran de {base}",
+    "uploadFail": "L’enregistrement n’a pas été envoyé",
+    "tooLong": "Elle est plus longue que ce qu’un envoi accepte. Enregistrez-la sur cet ordinateur pour ne rien perdre.",
+    "saveLocal": "Enregistrez-la sur cet ordinateur pour ne rien perdre, puis ajoutez-la plus tard avec Importer des fichiers.",
+    "saveIt": "L’enregistrer"
+  }
+}

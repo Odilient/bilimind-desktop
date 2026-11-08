@@ -180,7 +180,7 @@ describe('grounding', () => {
     const due = new Date(Date.now() + 2 * 86_400_000).toISOString()
     await t.post('/companion/deadlines', { id: uuid(), subject_id: s.id, kind: 'assignment', title: 'Assignment 2', due_at: due, scope_note: 'Normalise the schema', weight_pct: 20 })
     await t.post('/companion/deadlines', { id: uuid(), subject_id: s.id, kind: 'quiz', title: 'Quiz 1', due_at: due })
-    await t.post('/companion/plan-tasks', { id: uuid(), date: new Date().toISOString().slice(0, 10), kind: 'own', title: 'Read chapter 3', minutes: 20 })
+    await t.post('/companion/plan-tasks', { id: uuid(), date: new Date().toLocaleDateString('en-CA'), kind: 'own', title: 'Read chapter 3', minutes: 20 })
     answer('Do the assignment first.')
     await t.ask({ message: 'What should I do tonight?' })
     const sys = systemOf()

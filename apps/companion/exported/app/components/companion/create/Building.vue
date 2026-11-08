@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /**
- * While the course is being made: the AI's own mark (the ink disc with the
- * lime spark, the old assistant's), one line saying what it is working
+ * While the course is being made: Bili, thinking, one line saying what it is working
  * from, and the steps as a checklist that ticks itself off — one per source
  * ("Reading Lecture 1.pdf", with its upload's percentage while it goes up),
  * then the three every course gets. The default slot sits under the list, for
@@ -13,7 +12,7 @@
  * except the uploaded files, which wait in Notes.
  *
  * `compact` is the same list inside a chat answer (ai/Proposal): the answer
- * already wears the spark beside it, so the mark goes, the type steps down
+ * already has Bili beside it, so the mark goes, the type steps down
  * to the thread's size, and Cancel says Stop, like the composer's.
  */
 export interface StepRow {
@@ -67,24 +66,17 @@ const rows = computed(() => {
 <template>
   <section
     :class="[
-      'animate-rise grid border border-border bg-surface-chrome',
-      compact ? 'gap-3 rounded-[16px] p-3.5' : 'gap-4 rounded-[22px] p-4 min-[600px]:p-6',
+      'animate-rise grid bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-raised)]',
+      compact ? 'gap-3 rounded-[14px] p-3.5' : 'gap-4 rounded-[18px] p-4 min-[600px]:p-6',
     ]"
     :aria-labelledby="`${uid}-title`"
   >
     <header :class="['flex items-center', compact ? 'gap-2.5' : 'gap-3.5']">
-      <span
+      <CompanionAiBilim
         v-if="!compact"
-        class="cp-build-mark relative grid size-11 shrink-0 place-items-center rounded-full bg-ink"
-        aria-hidden="true"
-      >
-        <span class="grid size-7 place-items-center rounded-full bg-lime text-ink">
-          <UiIcon
-            name="spark"
-            :size="15"
-          />
-        </span>
-      </span>
+        :size="40"
+        mood="think"
+      />
       <div class="grid min-w-0 flex-1 gap-0.5">
         <h2
           :id="`${uid}-title`"
@@ -116,33 +108,70 @@ const rows = computed(() => {
         :key="s.key"
         :class="['flex items-center gap-3 rounded-[10px] px-1', compact ? 'min-h-8' : 'min-h-9']"
       >
+        <!-- The roadmap's status marks: checked, in progress, still to do. -->
         <span class="grid size-5 shrink-0 place-items-center">
-          <span
+          <svg
             v-if="s.state === 'done'"
-            class="grid size-5 place-items-center rounded-full bg-success-soft text-success"
+            class="cp-mk-in size-4"
+            viewBox="0 0 15 15"
+            aria-hidden="true"
           >
-            <UiIcon
-              name="check"
-              :size="12"
-              :stroke="2.4"
+            <circle
+              cx="7.5"
+              cy="7.5"
+              r="7"
+              fill="var(--leaf)"
             />
-          </span>
+            <path
+              d="m4.6 7.7 2 2 3.8-4.2"
+              fill="none"
+              stroke="var(--surface)"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
           <UiIcon
             v-else-if="s.state === 'skip'"
             name="alert"
             :size="16"
             class="text-warn"
           />
-          <UiIcon
+          <svg
             v-else-if="s.state === 'run'"
-            name="loader"
-            :size="16"
-            class="animate-spin-slow text-cobalt"
-          />
-          <span
+            class="cp-mk-run size-4"
+            viewBox="0 0 15 15"
+            aria-hidden="true"
+          >
+            <circle
+              cx="7.5"
+              cy="7.5"
+              r="6.3"
+              fill="none"
+              stroke="var(--hi-2)"
+              stroke-width="1.5"
+            />
+            <path
+              d="M7.5 3.2a4.3 4.3 0 0 1 0 8.6z"
+              fill="var(--hi-2)"
+            />
+          </svg>
+          <svg
             v-else
-            class="size-1.5 rounded-full bg-text-ghost"
-          />
+            class="size-4 text-text-ghost"
+            viewBox="0 0 15 15"
+            aria-hidden="true"
+          >
+            <circle
+              cx="7.5"
+              cy="7.5"
+              r="6.3"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-dasharray="2.2 2.2"
+            />
+          </svg>
         </span>
         <span
           class="min-w-0 flex-1 truncate transition-colors duration-200"
@@ -167,7 +196,7 @@ const rows = computed(() => {
       aria-label="Building"
     >
       <div
-        class="h-full rounded-full bg-cobalt transition-[width] duration-500 ease-out"
+        class="h-full rounded-full bg-inverse transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
         :style="{ width: `${Math.max(4, percent)}%` }"
       />
     </div>
@@ -175,28 +204,31 @@ const rows = computed(() => {
 </template>
 
 <style scoped>
-/* A slow lime halo: alive, not urgent. */
-.cp-build-mark::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 999px;
-  box-shadow: 0 0 0 0 var(--accent-line);
-  animation: cp-build-halo 2.2s ease-out infinite;
+/* The step being worked on turns slowly; a finished one pops in once. */
+.cp-mk-run {
+  animation: cp-mk-turn 2.4s linear infinite;
 }
 
-@keyframes cp-build-halo {
-  0% {
-    box-shadow: 0 0 0 0 var(--accent-line);
+.cp-mk-in {
+  animation: cp-mk-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes cp-mk-turn {
+  to {
+    transform: rotate(360deg);
   }
-  70%,
-  100% {
-    box-shadow: 0 0 0 10px transparent;
+}
+
+@keyframes cp-mk-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cp-build-mark::after {
+  .cp-mk-run,
+  .cp-mk-in {
     animation: none;
   }
 }

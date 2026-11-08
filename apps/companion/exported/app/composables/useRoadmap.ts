@@ -66,21 +66,22 @@ export const MARK_META: Record<LessonMark, MarkMeta> = {
     label: 'Recommended',
     short: 'our pick',
     blurb: 'Our pick — do this one.',
-    color: '#e6ad1f',
-    ink: 'var(--ink)',
+    // Daylight 2's badges (course/data.js BADGE): leaf, apricot, sky.
+    color: 'var(--leaf)',
+    ink: '#fff',
   },
   alternative: {
     label: 'Alternative',
     short: 'pick this or our pick',
     blurb: 'Pick this or the recommended one, not both.',
-    color: '#5b6472',
+    color: 'var(--apricot)',
     ink: '#fff',
   },
   anytime: {
     label: 'Learn anytime',
     short: 'order not strict',
     blurb: 'Order not strict. Come back to it whenever.',
-    color: '#b9bdc7',
+    color: 'var(--sky)',
     ink: '#fff',
   },
 }

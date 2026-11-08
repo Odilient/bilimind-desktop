@@ -1,0 +1,249 @@
+/* BiliMind · Daylight 2 — base: reset, type, the frame, primitives.
+   Layout rule: the page is a framed column with hairline rails (.frame). Sections (.sec) stack inside it,
+   each opened by a hairline with a small + at both rails. Content fills cells (.cells) edge to edge,
+   so nothing floats in empty paper. Big moments break out as rounded sheets (.sheet). */
+
+.d2 *, .d2 *::before, .d2 *::after { box-sizing: border-box; }
+/* the design's body rule, split: `.d2` is every scope root (nav, page, footer, a flying field),
+   `.d2-page` the one that paints the paper */
+.d2 {
+  color: var(--ink);
+  font: 400 16px/1.55 var(--font);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+.d2-page {
+  background: var(--paper); overflow-x: clip;
+  transition: background-color 0.4s var(--ease-soft), color 0.4s var(--ease-soft);
+}
+/* Bili is drawn by a custom element that arrives with the page's script; until it does, keep its
+   room so nothing beside it jumps (the host is the svg's size: s wide, s × 128/120 tall) */
+.d2 bili-blob:not(:defined) { display: inline-block; vertical-align: top; }
+.d2 bili-blob[size='20']:not(:defined) { width: 20px; height: 21.33px; }
+.d2 bili-blob[size='22']:not(:defined) { width: 22px; height: 23.47px; }
+.d2 bili-blob[size='24']:not(:defined) { width: 24px; height: 25.6px; }
+.d2 bili-blob[size='26']:not(:defined) { width: 26px; height: 27.73px; }
+.d2 bili-blob[size='30']:not(:defined) { width: 30px; height: 32.0px; }
+.d2 bili-blob[size='34']:not(:defined) { width: 34px; height: 36.27px; }
+.d2 bili-blob[size='64']:not(:defined) { width: 64px; height: 68.27px; }
+.d2 bili-blob[size='76']:not(:defined) { width: 76px; height: 81.07px; }
+.d2 bili-blob[size='80']:not(:defined) { width: 80px; height: 85.33px; }
+
+.d2 ::selection { background: var(--hi); color: #1f1c17; }
+.d2 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.d2 input, .d2 textarea, .d2 select { font: inherit; color: inherit; }
+.d2 a { color: inherit; text-decoration: none; }
+.d2 img, .d2 svg, .d2 video, .d2 canvas { display: block; max-width: 100%; }
+.d2 p { margin: 0; }
+.d2 h1, .d2 h2, .d2 h3, .d2 h4 { margin: 0; font-weight: inherit; }
+.d2 ul, .d2 ol { margin: 0; padding: 0; list-style: none; }
+.d2 [hidden] { display: none !important; }
+.d2 .num { font-variant-numeric: tabular-nums; }
+.d2 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.d2 :focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; border-radius: 6px; }
+
+/* ── type ─────────────────────────────────────────────────────── */
+.d2 .display {
+  font-family: var(--font-display); font-weight: 600; font-optical-sizing: auto;
+  font-size: clamp(46px, 5.8vw, 94px); line-height: 0.98; letter-spacing: -0.038em;
+  text-wrap: balance; margin: 0;
+}
+.d2 .h2 {
+  font-family: var(--font-display); font-weight: 600; font-optical-sizing: auto;
+  font-size: clamp(36px, 4.3vw, 62px); line-height: 1.02; letter-spacing: -0.034em;
+  text-wrap: balance; margin: 0;
+}
+.d2 .h2 .mute, .d2 .display .mute { color: var(--ink-3); }
+.d2 .h3 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 2.2vw, 30px); line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; }
+.d2 .h4 { font-size: 17px; line-height: 1.3; font-weight: 680; letter-spacing: -0.015em; }
+.d2 .lede { font-size: 17.5px; line-height: 1.6; color: var(--ink-2); max-width: 48ch; text-wrap: pretty; }
+.d2 .body { font-size: 15px; line-height: 1.6; color: var(--ink-2); text-wrap: pretty; }
+.d2 .small { font-size: 13.5px; line-height: 1.5; color: var(--ink-3); }
+.d2 .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.d2 .cite { font-size: 12px; color: var(--ink-3); }
+.d2 .cite i { font-style: italic; }
+
+/* the highlighter: drawn unless the page's script is there to sweep it in on view (it adds .on) */
+.d2 .hl {
+  background-image: linear-gradient(100deg, transparent 0.4%, var(--hl-mark) 1.6%, var(--hl-mark) 97%, transparent 99.2%);
+  background-repeat: no-repeat; background-size: 100% 70%; background-position: 0 75%; color: #1f1c17;
+  padding: 0 0.08em; margin: 0 -0.04em; border-radius: 0.18em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  transition: background-size 1s var(--ease), color 0.6s var(--ease-soft);
+}
+.d2-js .d2 .hl:not(.on):not(.static) { background-size: 0% 70%; color: inherit; }
+
+/* a word set in a little pill, Shelf-style: <span class="pillword" style="--c:var(--leaf-soft)">finally</span> */
+.d2 .pillword { display: inline-block; padding: 0 0.16em 0.04em; margin: 0 0.02em; border-radius: 0.22em; background: var(--c, var(--hi)); line-height: 1.02; }
+
+/* ── the frame ────────────────────────────────────────────────── */
+.d2 .frame { position: relative; max-width: var(--frame); margin-inline: auto; border-inline: 1px solid var(--line); }
+.d2 .sec { position: relative; border-top: 1px solid var(--line); padding: 104px 56px; }
+.d2 .sec.tight { padding-block: 72px; }
+.d2 .sec.flush { padding: 0; }
+.d2 .sec::before, .d2 .sec::after {
+  content: ''; position: absolute; top: -6px; width: 11px; height: 11px; z-index: 2; pointer-events: none;
+  background: linear-gradient(var(--ink-4), var(--ink-4)) center / 1px 100% no-repeat, linear-gradient(var(--ink-4), var(--ink-4)) center / 100% 1px no-repeat;
+}
+.d2 .sec::before { left: -6px; }
+.d2 .sec::after { right: -6px; }
+.d2 .sec.no-cross::before, .d2 .sec.no-cross::after { display: none; }
+/* fine dotted paper inside a section, LearnHouse-style */
+.d2 .dotted { background-image: radial-gradient(var(--line-2) 1px, transparent 1.2px); background-size: 18px 18px; background-position: -1px -1px; }
+
+/* section head: heading left, lede + link right; fills the width instead of a centred island */
+.d2 .sec-head { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px 64px; align-items: end; margin-bottom: 56px; }
+.d2 .sec-head .h2 { margin-top: 18px; }
+.d2 .sec-head .side { display: grid; gap: 18px; justify-items: start; padding-bottom: 6px; }
+.d2 .sec-head.center { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+.d2 .sec-head.center .side { justify-items: center; }
+.d2 .sec-head.center .lede { margin-inline: auto; }
+
+/* cells: hairline grid, content edge to edge */
+.d2 .cells { display: grid; gap: 1px; background: var(--line); border-block: 1px solid var(--line); }
+.d2 .cells > * { background: var(--paper); min-width: 0; }
+.d2 .cell { position: relative; padding: 32px; overflow: hidden; }
+.d2 .bleed { margin-inline: -56px; } /* cells that run rail to rail */
+
+/* rounded full-width sheets for the big moments */
+.d2 .sheet { position: relative; margin: 10px; border-radius: var(--r-2xl); overflow: clip; isolation: isolate; }
+
+/* ── primitives ───────────────────────────────────────────────── */
+.d2 .tag {
+  display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 11px 0 9px; border-radius: 9px;
+  background: var(--card); box-shadow: 0 0 0 1px var(--line-2), var(--shadow-1);
+  font-size: 13px; font-weight: 650; color: var(--ink-2); white-space: nowrap;
+}
+.d2 .tag svg { width: 14px; height: 14px; stroke-width: 2.1; color: var(--c, var(--ink-3)); }
+.d2 .tag .sq { width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center; background: var(--c, var(--hi)); color: #1f1c17; }
+.d2 .tag .sq svg { width: 11px; height: 11px; color: inherit; stroke-width: 2.4; }
+
+.d2 .btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 42px; padding: 0 18px; border-radius: 999px; font-weight: 650; font-size: 15px; letter-spacing: -0.005em; white-space: nowrap;
+  transition: transform 0.25s var(--ease), background-color 0.25s, box-shadow 0.25s, color 0.25s;
+}
+.d2 .btn:active { transform: scale(0.97); }
+.d2 .btn-ink { background: var(--ink); color: var(--on-ink); box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, var(--shadow-1); }
+.d2 .btn-ink:hover { background: color-mix(in oklab, var(--ink) 86%, var(--paper)); }
+.d2 .btn-soft { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line-2), var(--shadow-1); }
+.d2 .btn-soft:hover { background: var(--card-2); }
+.d2 .btn-ghost { color: var(--ink-2); }
+.d2 .btn-ghost:hover { background: var(--wash-2); color: var(--ink); }
+.d2 .btn-hi { background: var(--hi); color: #1f1c17; }
+.d2 .btn-hi:hover { background: var(--hi-2); }
+.d2 .btn-sm { height: 34px; padding: 0 14px; font-size: 14px; gap: 6px; }
+.d2 .btn-lg { height: 52px; padding: 0 26px; font-size: 16.5px; }
+.d2 .btn svg { width: 16px; height: 16px; stroke-width: 2.1; }
+.d2 .btn-sm svg { width: 14px; height: 14px; }
+.d2 .link { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; font-size: 15px; color: var(--ink); }
+.d2 .link svg { width: 15px; height: 15px; transition: transform 0.3s var(--ease); }
+.d2 .link:hover svg { transform: translateX(3px); }
+
+.d2 .icon-btn { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: var(--ink-2); transition: background-color 0.2s, color 0.2s, transform 0.2s var(--ease); }
+.d2 .icon-btn:hover { background: var(--wash-2); color: var(--ink); }
+.d2 .icon-btn svg { width: 17px; height: 17px; stroke-width: 1.9; }
+
+.d2 .chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ink-2); background: var(--wash-2); white-space: nowrap; }
+.d2 .chip svg { width: 13px; height: 13px; stroke-width: 2.1; }
+.d2 .chip.leaf { background: var(--leaf-soft); color: var(--leaf-ink); }
+.d2 .chip.sky { background: var(--sky-soft); color: var(--sky-ink); }
+.d2 .chip.hi { background: var(--hi-soft); color: var(--hi-ink); }
+.d2 .chip.rose { background: var(--rose-soft); color: var(--rose-ink); }
+.d2 .chip.lilac { background: var(--lilac-soft); color: var(--lilac-ink); }
+.d2 .chip.apricot { background: var(--apricot-soft); color: var(--apricot-ink); }
+.d2 .kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 6px; font-size: 12px; font-weight: 650; color: var(--ink-2); background: var(--card); box-shadow: 0 0 0 1px var(--line-2), 0 1.5px 0 var(--line-2); }
+.d2 .dot { width: 8px; height: 8px; border-radius: 99px; flex: none; background: var(--c, var(--leaf)); }
+
+/* an icon in a soft rounded square; --c / --t pick the colour pair */
+.d2 .ico { width: 40px; height: 40px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--c, var(--hi-soft)); color: var(--t, var(--hi-ink)); }
+.d2 .ico svg { width: 19px; height: 19px; stroke-width: 2; }
+.d2 .ico.sm { width: 30px; height: 30px; border-radius: 9px; }
+.d2 .ico.sm svg { width: 15px; height: 15px; }
+
+/* people: <span class="av" data-person="madina" style="--a:var(--rose-soft);--t:var(--rose-ink)">MK</span>
+   base.js swaps in the painted avatar when it loads; initials stay as the fallback. */
+.d2 .av {
+  --s: 32px; width: var(--s); height: var(--s); flex: none; border-radius: 999px; display: inline-grid; place-items: center;
+  font-size: calc(var(--s) * 0.36); font-weight: 700; letter-spacing: -0.01em; color: var(--t, var(--ink-2)); background: var(--a, var(--wash-2)) center / cover;
+  box-shadow: 0 0 0 2px var(--card);
+}
+.d2 .av.has-photo { color: transparent; }
+.d2 .av.xs { --s: 20px; } .d2 .av.sm { --s: 26px; } .d2 .av.md { --s: 40px; } .d2 .av.lg { --s: 52px; }
+.d2 .faces { display: inline-flex; align-items: center; }
+.d2 .faces .av + .av { margin-left: calc(var(--s) * -0.3); }
+.d2 .faces .more { margin-left: 6px; font-size: 12.5px; font-weight: 650; color: var(--ink-3); }
+
+/* cards and app surfaces */
+.d2 .card { background: var(--card); border-radius: var(--r-lg); box-shadow: 0 0 0 1px var(--line), var(--shadow-2); }
+.d2 .card.lift { box-shadow: 0 0 0 1px var(--line), var(--shadow-3); }
+.d2 .win { background: var(--card); border-radius: 16px; box-shadow: 0 0 0 1px var(--line-2), var(--shadow-3); overflow: hidden; }
+.d2 .win-bar { height: 38px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-bottom: 1px solid var(--line); background: var(--card-2); }
+.d2 .win-bar .lights { display: flex; gap: 6px; }
+.d2 .win-bar .lights i { width: 10px; height: 10px; border-radius: 99px; background: var(--paper-3); }
+.d2 .win-bar .url { margin: 0 auto; display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 12px; border-radius: 7px; background: var(--wash); font-size: 12px; color: var(--ink-3); }
+.d2 .win-bar .url svg { width: 11px; height: 11px; }
+
+/* the assistant's glow (voice-glow reference): .glow + .is-focus | .is-listening | .is-thinking */
+@property --glow-a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.d2 .glow { position: relative; isolation: isolate; }
+.d2 .glow::before {
+  content: ''; position: absolute; z-index: -1; left: 5%; right: 5%; bottom: -4px; height: 72%; border-radius: inherit;
+  background: conic-gradient(from var(--glow-a) at 50% 100%, var(--hi), var(--apricot), var(--rose), var(--lilac), var(--sky), var(--leaf), var(--hi));
+  filter: blur(24px); opacity: 0; transform: translateY(12%) scaleY(0.7);
+  transition: opacity 0.6s var(--ease-soft), transform 0.8s var(--ease);
+  animation: d2-glow-turn 6s linear infinite;
+}
+.d2 .glow.is-listening::before, .d2 .glow.is-thinking::before, .d2 .glow.is-focus::before, .d2 .glow.always::before { opacity: 0.55; transform: translateY(18%) scaleY(1); }
+.d2 .glow.is-thinking::before { animation-duration: 2.4s; opacity: 0.75; }
+.d2 .glow.is-listening::before { animation: d2-glow-turn 3.5s linear infinite, d2-glow-breathe 1.4s var(--ease-soft) infinite alternate; }
+@keyframes d2-glow-turn { to { --glow-a: 360deg; } }
+@keyframes d2-glow-breathe { from { filter: blur(18px); opacity: 0.45; } to { filter: blur(28px); opacity: 0.85; } }
+.d2 .think-dots { display: inline-flex; gap: 4px; align-items: center; }
+.d2 .think-dots i { width: 6px; height: 6px; border-radius: 99px; background: var(--ink-3); animation: d2-tdot 1.2s var(--ease-soft) infinite; }
+.d2 .think-dots i:nth-child(2) { animation-delay: 0.15s; }
+.d2 .think-dots i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes d2-tdot { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-4px); opacity: 1; } }
+
+.d2 .theme-switch { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: var(--wash-2); }
+.d2 .theme-switch button { width: 30px; height: 26px; border-radius: 999px; display: grid; place-items: center; color: var(--ink-3); transition: background-color 0.25s, color 0.25s; }
+.d2 .theme-switch button svg { width: 14px; height: 14px; stroke-width: 2; }
+.d2 .theme-switch button[aria-pressed='true'] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-1); }
+
+/* ── motion hooks (base.js) ───────────────────────────────────── */
+.d2-js .d2 [data-r] { opacity: 0; transform: translateY(22px); }
+.d2-js .d2 [data-split] .w { display: inline-block; opacity: 0; transform: translateY(0.42em); }
+.d2-js .d2 [data-split] .w.in { opacity: 1; transform: none; transition: opacity 0.8s var(--ease), transform 1s var(--ease); }
+
+/* ── phones ───────────────────────────────────────────────────── */
+/* the app's own window: every mock on the page uses this header, so they read as one product */
+.d2 .appwin { position: relative; display: flex; flex-direction: column; background: var(--card); border-radius: 18px; box-shadow: 0 0 0 1px var(--line), 0 2px 6px rgb(70 50 20 / 0.06), 0 30px 60px -24px rgb(70 50 20 / 0.3); overflow: hidden; font-size: 13.5px; color: var(--ink); }
+.d2 .ui-h { flex: none; display: flex; align-items: center; gap: 7px; height: 46px; padding: 0 14px; border-bottom: 1px solid var(--line); font-size: 13px; white-space: nowrap; }
+.d2 .ui-cv { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; flex: none; box-shadow: 0 0 0 1px var(--line); }
+.d2 .ico-cv { display: grid; place-items: center; background: var(--wash-2); color: var(--ink-2); box-shadow: none; }
+.d2 .ico-cv svg { width: 13px; height: 13px; }
+.d2 .ui-crumb { color: var(--ink-3); font-weight: 560; }
+.d2 .ui-sep { width: 13px; height: 13px; color: var(--ink-4); flex: none; }
+.d2 .ui-h b { font-weight: 680; letter-spacing: -0.01em; }
+.d2 .ui-r { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 560; color: var(--ink-3); }
+.d2 .ui-r svg { width: 13px; height: 13px; }
+.d2 .ui-r.good { color: var(--leaf-ink); font-weight: 650; }
+.d2 .grow { flex: 1; }
+
+@media (max-width: 900px) {
+  .d2 .sec { padding: 80px 28px; }
+  .d2 .bleed { margin-inline: -28px; }
+  .d2 .sec-head { grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
+}
+@media (max-width: 640px) {
+  .d2 .frame { border-inline: 0; }
+  .d2 .sec { padding: 64px max(18px, env(safe-area-inset-left, 0px)) 64px max(18px, env(safe-area-inset-right, 0px)); }
+  .d2 .sec::before, .d2 .sec::after { display: none; }
+  .d2 .bleed { margin-inline: -18px; }
+  .d2 .cell { padding: 24px 20px; }
+  .d2 .sheet { margin: 6px; border-radius: 24px; }
+  .d2 .lede { font-size: 16.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .d2 *, .d2 *::before, .d2 *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

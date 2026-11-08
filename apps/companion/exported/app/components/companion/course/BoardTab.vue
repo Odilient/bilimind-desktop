@@ -23,7 +23,7 @@
  */
 import type { BoardSync } from '~/companion/board/persistence'
 import { openBoard } from '~/companion/board/persistence'
-import { createDemoPresence, createLocalPresence, type BoardPresence } from '~/companion/board/presence'
+import { createLocalPresence, type BoardPresence } from '~/companion/board/presence'
 import { readMeta, writeMeta, type BoardMeta } from '~/companion/board/model'
 import { boardContext } from '~/companion/board/context'
 import * as Y from 'yjs'
@@ -36,6 +36,7 @@ import { imageSource } from '~/companion/board/image'
 import { useCompanion } from '~/companion/store'
 import { openCompanionTab, renameCompanionTab } from '~/companion/tabs'
 import type { Item } from '~/companion/types'
+const { t } = useI18n()
 
 const props = withDefaults(defineProps<{ itemId: string; embedded?: boolean; active?: boolean }>(), {
   embedded: true,
@@ -58,9 +59,8 @@ const item = computed(() => store.get('items', id.value))
 // before the rows have loaded, or offline.
 const subjectId = computed(() => (item.value ? item.value.subject_id : (meta.value.subject_id ?? null)))
 const subject = computed(() => (subjectId.value ? store.get('subjects', subjectId.value) : null))
-const title = computed(() => item.value?.title || meta.value.title || 'Untitled board')
-const demo = computed(() => store.repo().mode === 'demo')
-const me = computed(() => store.userName.value || 'You')
+const title = computed(() => item.value?.title || meta.value.title || t('course.tab.untitledBoard'))
+const me = computed(() => store.userName.value || t('course.tab.you'))
 const deadlineId = computed(() => meta.value.deadline_id ?? (item.value?.meta.props?.deadline_id as string | undefined) ?? null)
 
 if (!props.embedded) useHead({ title: computed(() => `${title.value} · BiliMind`) })
@@ -132,9 +132,7 @@ async function open(boardId: string) {
   readMetaNow()
   s.parts.meta.observe(readMetaNow)
   stopMeta = () => s.parts.meta.unobserve(readMetaNow)
-  presence.value = demo.value
-    ? createDemoPresence({ id: 'me', name: me.value, color: '#2340e6' }, () => canvas.value?.ctl?.contentBounds() ?? null)
-    : createLocalPresence({ id: 'me', name: me.value, color: '#2340e6' })
+  presence.value = createLocalPresence({ id: 'me', name: me.value, color: '#2340e6' })
   openId.value = boardId
   sync.value = s
   await s.ready
@@ -237,17 +235,17 @@ async function upload(file: File, done: (src: string | null, itemId?: string) =>
       class="mx-auto grid max-w-[420px] content-center gap-3 px-6 py-24 text-center"
     >
       <h1 class="t-head text-[28px]">
-        This board isn't here
+        {{ t('course.tab.noBoard') }}
       </h1>
       <p class="text-[15px] text-text-muted">
-        It may have been deleted, or it belongs to someone who hasn't shared it with you.
+        {{ t('course.tab.noBoardBody') }}
       </p>
       <div v-if="!embedded">
         <UiBtn
           variant="primary"
           to="/app/notes"
         >
-          Back to Notes
+          {{ t('course.tab.back') }}
         </UiBtn>
       </div>
     </div>
@@ -266,7 +264,6 @@ async function upload(file: File, done: (src: string | null, itemId?: string) =>
         :fallback-color="meta.color ?? null"
         :me="me"
         :presence="presence"
-        :demo="demo"
         :context="context"
         :pages="pages"
         embedded
@@ -279,7 +276,7 @@ async function upload(file: File, done: (src: string | null, itemId?: string) =>
         v-else
         class="absolute inset-0 grid place-items-center bg-surface-canvas"
         aria-busy="true"
-        aria-label="Opening the whiteboard"
+        :aria-label="t('course.tab.openingBoard')"
       >
         <span class="cp-skel h-10 w-56 rounded-[12px]" />
       </div>

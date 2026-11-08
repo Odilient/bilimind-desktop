@@ -90,7 +90,7 @@ function restart(): void {
         class="rounded-[14px] px-4 py-3.5"
         :class="
           entry.option.correct
-            ? 'bg-accent-soft shadow-[inset_0_0_0_1.5px_var(--lime-2)]'
+            ? 'bg-accent-soft shadow-[inset_0_0_0_1.5px_var(--hi-2)]'
             : 'bg-warn-soft shadow-[inset_0_0_0_1px_var(--warn-line)]'
         "
       >
@@ -136,7 +136,7 @@ function restart(): void {
           v-for="option in current.options"
           :key="option.id"
           type="button"
-          class="cursor-pointer rounded-[12px] bg-surface px-4 py-3 text-left text-[14px] leading-snug text-text-body shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] transition hover:bg-surface-mute hover:shadow-[inset_0_0_0_1.5px_var(--ink)]"
+          class="cursor-pointer rounded-[12px] bg-surface px-4 py-3 text-left text-[14px] leading-snug text-text-body shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] transition hover:bg-surface-mute hover:shadow-[inset_0_0_0_1.5px_var(--text-faint)]"
           @click="choose(current, option)"
         >
           {{ option.text }}
@@ -148,7 +148,7 @@ function restart(): void {
       v-else-if="finished && block.payload?.debrief_markdown"
       class="mt-4 rounded-[16px] bg-brand-soft p-4"
     >
-      <p class="eyebrow-loud mb-2.5 flex items-center gap-2 text-brand">
+      <p class="text-[12px] leading-none font-bold mb-2.5 flex items-center gap-2 text-brand">
         <span class="grid size-[22px] place-items-center rounded-[7px] bg-brand text-white">
           <UiIcon
             name="sparkles"

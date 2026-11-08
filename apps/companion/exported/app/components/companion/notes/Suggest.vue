@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Item } from '~/companion/types'
 import { suggestionOf, useNoteActions } from '~/companion/notes/actions'
 import { courseColor } from '~/companion/colors'
@@ -26,8 +27,8 @@ const why = computed(() => {
   const s = suggestion.value
   if (!s) return ''
   return s.session
-    ? `Made during ${s.session.title}. File it in ${s.subject.title}, under that class.`
-    : `Made with ${s.subject.title} open. File it there.`
+    ? t('notes.madeDuring', { session: s.session.title, course: s.subject.title })
+    : t('notes.madeWith', { course: s.subject.title })
 })
 
 async function accept(): Promise<void> {
@@ -60,7 +61,7 @@ async function accept(): Promise<void> {
         :disabled="busy"
         :title="why"
         :class="[
-          'flex min-w-0 cursor-pointer items-center gap-1.5 self-stretch rounded-l-full pr-1 font-medium transition-colors duration-150 outline-none hover:bg-surface-track hover:text-text focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-wait',
+          'flex min-w-0 cursor-pointer items-center gap-1.5 self-stretch rounded-l-full pr-1 font-medium transition-colors duration-150 outline-none hover:bg-surface-track hover:text-text focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-wait',
           compact ? 'pl-3 text-[13.5px]' : 'pl-2.5 text-[12.5px]',
         ]"
         @click="accept"
@@ -69,17 +70,17 @@ async function accept(): Promise<void> {
           class="size-2 shrink-0 rounded-full"
           :style="{ background: courseColor(suggestion.subject.color) }"
         />
-        <span class="shrink-0">Add to</span>
+        <span class="shrink-0">{{ t('notes.addTo') }}</span>
         <span class="min-w-0 truncate">{{ suggestion.subject.title }}?</span>
       </button>
       <button
         type="button"
         :class="[
-          'grid shrink-0 cursor-pointer place-items-center self-stretch rounded-r-full text-text-faint transition-colors duration-150 outline-none hover:bg-surface-track hover:text-text focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+          'grid shrink-0 cursor-pointer place-items-center self-stretch rounded-r-full text-text-faint transition-colors duration-150 outline-none hover:bg-surface-track hover:text-text focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]',
           compact ? 'w-9' : 'w-7',
         ]"
-        :aria-label="`Keep it out of ${suggestion.subject.title}`"
-        title="Keep it in My notes, and don't ask again"
+        :aria-label="t('notes.keepOut', { course: suggestion.subject.title })"
+        :title="t('notes.keepInMine')"
         @click="actions.dismissSuggestion(item)"
       >
         <UiIcon

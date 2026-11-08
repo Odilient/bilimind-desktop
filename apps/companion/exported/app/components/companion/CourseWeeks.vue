@@ -196,7 +196,7 @@ onMounted(async () => {
 })
 
 const chip =
-  'group/chip inline-flex h-11 max-w-full items-center gap-1.5 text-[14px] font-semibold text-cobalt min-[900px]:h-8'
+  'group/chip inline-flex h-11 max-w-full items-center gap-1.5 text-[14px] font-semibold text-brand min-[900px]:h-8'
 </script>
 
 <template>
@@ -233,7 +233,7 @@ const chip =
       >
         <button
           type="button"
-          class="group -mx-2 flex w-[calc(100%+16px)] cursor-pointer items-center gap-3 rounded-[12px] px-2 py-2.5 text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt"
+          class="group -mx-2 flex w-[calc(100%+16px)] cursor-pointer items-center gap-3 rounded-[12px] px-2 py-2.5 text-left transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
           :aria-expanded="isOpen(w)"
           @click="toggle(w)"
         >
@@ -258,7 +258,7 @@ const chip =
           <span
             v-else-if="w.check === 'checked' || w.check === 'missed'"
             class="shrink-0 text-[14px] font-medium"
-            :class="w.check === 'checked' ? 'text-success-text' : 'text-coral-text'"
+            :class="w.check === 'checked' ? 'text-success-text' : 'text-danger-text'"
           >{{ w.check }}</span>
           <CompanionIcon
             name="chevron-down"
@@ -335,7 +335,7 @@ const chip =
               </div>
               <span
                 v-if="isLive(e.session) && !e.session.cancelled"
-                class="mt-0.5 h-fit shrink-0 rounded-full bg-coral-soft px-2.5 py-0.5 text-[13px] font-semibold text-coral-text"
+                class="mt-0.5 h-fit shrink-0 rounded-full bg-danger-soft px-2.5 py-0.5 text-[13px] font-semibold text-danger-text"
               >Now</span>
               <UiMenu
                 v-if="!e.session.cancelled"

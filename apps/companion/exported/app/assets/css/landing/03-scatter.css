@@ -1,0 +1,80 @@
+/* 03 · scattered → one place. Desktop: pinned, chips fly into the inbox rows. Phones: static, filled. */
+.d2 .sc-pin { height: 100vh; min-height: 660px; max-height: 960px; }
+.d2 .sc-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); height: 100%; gap: 1px; background: var(--line); }
+.d2 .sc-grid > * { background: var(--paper); min-width: 0; }
+
+.d2 .sc-text { position: relative; }
+.d2 .sc-state { position: absolute; inset: 0; padding: 48px 44px 48px 56px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 20px; }
+.d2 .sc-state .h2 { font-size: clamp(38px, 4vw, 60px); }
+.d2 .sc-state .lede { font-size: 16.5px; }
+
+.d2 .sc-places { width: 100%; margin-top: 8px; border-top: 1px solid var(--line); }
+.d2 .sc-places li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 12px; height: 44px; border-bottom: 1px solid var(--line); font-size: 14.5px; color: var(--ink-2); }
+.d2 .sc-places li em { font-style: normal; font-size: 12.5px; font-weight: 650; color: var(--ink-3); }
+.d2 .sc-places li b, .d2 .sc-rows .rb > b, .d2 .fc-in b { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--card); box-shadow: 0 0 0 1px var(--line); color: var(--ink); }
+.d2 .sc-places b svg, .d2 .sc-rows b svg, .d2 .fc-in b svg { width: 14px; height: 14px; }
+.d2 b.teams { color: #5b5fc7 !important; }
+.d2 b.voice { color: var(--apricot-ink) !important; background: var(--apricot-soft) !important; }
+
+.d2 .sc-to li em { display: inline-flex; align-items: center; gap: 5px; color: var(--leaf-ink); }
+.d2 .sc-to li em svg { width: 13px; height: 13px; }
+.d2 .sc-to li em.tent { color: var(--hi-ink); }
+
+/* the desk the chips sit on */
+.d2 .sc-desk { position: relative; display: grid; place-items: center; overflow: hidden; padding: 40px; }
+.d2 .sc-chips { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.d2 .fc { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%) rotate(var(--r)); will-change: transform; }
+.d2 .fc-in { display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 15px 0 7px; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--line-2), var(--shadow-2); font-size: 14px; font-weight: 620; color: var(--ink); white-space: nowrap; animation: d2-fc-bob var(--d) ease-in-out infinite alternate; }
+@keyframes d2-fc-bob { from { transform: translateY(-5px) rotate(-1deg); } to { transform: translateY(6px) rotate(1.2deg); } }
+
+/* the inbox card */
+.d2 .sc-card { position: relative; z-index: 2; width: min(460px, 100%); overflow: hidden; }
+.d2 .sc-card-h { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.d2 .sc-card-h img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
+.d2 .sc-card-h div { display: grid; flex: 1; min-width: 0; }
+.d2 .sc-card-h b { font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; }
+.d2 .sc-card-h span:not(.av) { font-size: 12.5px; color: var(--ink-3); }
+.d2 .sc-card-h em { font-style: normal; font-weight: 700; color: var(--ink-2); }
+.d2 .sc-rows li { position: relative; height: 42px; }
+.d2 .sc-rows li + li:not(.g) { border-top: 1px solid var(--line); }
+.d2 .sc-rows li.g { display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 16px; background: var(--card-2); border-top: 1px solid var(--line); font-size: 11.5px; font-weight: 700; color: var(--ink-3); }
+.d2 .sc-rows li.g:first-child { border-top: 0; }
+.d2 .sc-rows li.g svg { width: 13px; height: 13px; }
+.d2 .sc-rows .rb { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 12px; height: 100%; padding: 0 16px; }
+.d2 .sc-rows p { display: grid; min-width: 0; line-height: 1.25; }
+.d2 .sc-rows strong { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d2 .sc-rows p span { font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d2 .sc-meta { font-size: 12px; font-weight: 600; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.d2 .sc-date { height: 24px; padding: 0 8px; border-radius: 7px; display: inline-grid; place-items: center; background: var(--rose-soft); color: var(--rose-ink); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.d2 .sc-date.tent { background: transparent; color: var(--rose-ink); border: 1.5px dashed var(--rose); }
+.d2 .sc-rows .sk { position: absolute; inset: 8px 16px; opacity: 0; pointer-events: none;
+  background: linear-gradient(var(--wash-2), var(--wash-2)) 0 50% / 26px 26px no-repeat, linear-gradient(var(--wash-2), var(--wash-2)) 38px 3px / 46% 9px no-repeat, linear-gradient(var(--wash), var(--wash)) 38px 17px / 30% 7px no-repeat, linear-gradient(var(--wash), var(--wash)) 100% 50% / 56px 18px no-repeat;
+  border-radius: 6px; }
+.d2 .sc-card-f { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-2); background: var(--card-2); }
+.d2 .sc-card-f svg { width: 14px; height: 14px; color: var(--ink-3); }
+
+/* desktop animation states (set by js) */
+.d2 .sc.anim .sc-b { opacity: 0; }
+
+@media (max-width: 900px) {
+  .d2 .sc-pin { height: auto; min-height: 0; max-height: none; }
+  .d2 .sc-grid { grid-template-columns: 1fr; gap: 0; background: none; }
+  .d2 .sc-text { display: contents; }
+  .d2 .sc-state { position: static; padding: 64px 28px 32px; }
+  .d2 .sc-a { order: 1; }
+  .d2 .sc-desk { order: 2; padding: 28px 20px 36px; border-block: 1px solid var(--line); display: flex; flex-direction: column; gap: 22px; }
+  .d2 .sc-b { order: 3; padding-bottom: 72px; }
+  .d2 .sc-chips { position: static; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 8px; }
+  .d2 .fc { position: static; transform: rotate(calc(var(--r) * 0.4)); }
+  .d2 .fc-in { height: 34px; font-size: 13px; animation: none; }
+  .d2 .sc-card { width: min(520px, 100%); }
+}
+@media (max-width: 640px) {
+  .d2 .sc-state { padding: 56px 18px 28px; }
+  .d2 .sc-b { padding-bottom: 60px; }
+  .d2 .sc-desk { padding: 24px 12px 28px; }
+  .d2 .sc-places li { grid-template-columns: 30px minmax(0, 1fr); height: auto; padding: 9px 0; row-gap: 2px; }
+  .d2 .sc-places li em { grid-column: 2; }
+  .d2 .sc-rows .rb { padding: 0 12px; gap: 10px; }
+  .d2 .sc-rows p span { font-size: 11.5px; }
+}

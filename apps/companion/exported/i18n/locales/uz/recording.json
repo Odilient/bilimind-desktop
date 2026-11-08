@@ -1,0 +1,72 @@
+{
+  "aloud": {
+    "sayOut": "Ovoz chiqarib aytish",
+    "orScreen": "yoki ekran ustida tushuntirish",
+    "agree": "BiliMind aytganlaringizni shu kompyuterda yozib oladi. Birinchi marta nutq modelini{size} yuklab oladi va shu yerda saqlaydi. Aytganlaringiz bu kompyuterdan hech qachon chiqmaydi.",
+    "aboutMb": " (taxminan {mb} MB)",
+    "downloadStart": "Yuklab olish va boshlash",
+    "typeInstead": "Oʻrniga yozish",
+    "whichScreen": "Qaysi ekran ustida tushuntirasiz? Ovozingiz u bilan birga yoziladi.",
+    "cancel": "Bekor qilish",
+    "recordingScreen": "Ekran va ovozingiz yozilmoqda",
+    "listening": "Tinglayapman",
+    "stop": "Toʻxtatish",
+    "talk": "Sinfdoshingizga aytgandek tushuntiring. Toʻxtatsangiz, soʻzlaringiz maydonga tushadi.",
+    "tryAgain": "Qayta urinish",
+    "done": "Soʻzlaringiz maydonda. Oʻqib chiqing va notoʻgʻri eshitilganini tuzating.",
+    "again": "Qayta aytish",
+    "screenFail": "Bu kompyuter hozir ekranini ulasha olmaydi.",
+    "explaining": "Tushuntirish: {topic}",
+    "explainingBack": "Oʻz soʻzlarim bilan tushuntirish",
+    "recFail": "Yozuv boshlanmadi. Birozdan soʻng qayta urining.",
+    "noWords": "Hech qanday soʻz chiqmadi. Mikrofonni tekshiring yoki oʻrniga yozing.",
+    "writeFail": "Aytganlaringizni yozib boʻlmadi.",
+    "modelReady": "Nutq modeli tayyorlanmoqda…",
+    "modelProgress": "Nutq modeli tayyorlanmoqda… {done} / {total} MB",
+    "writing": "Aytganlaringiz yozilmoqda…"
+  },
+  "tr": {
+    "title": "Transkript",
+    "waiting": "Boshqa transkript tugashi kutilmoqda…",
+    "progress": "Transkript shu kompyuterda yozilmoqda… {done} / {total} daqiqa",
+    "stopped": "Transkript toʻxtadi. {error}",
+    "agree": "BiliMind aytilganlarni shu kompyuterda yozib olishi mumkin. U nutq modelini bir marta{size} yuklab oladi va shu yerda saqlaydi; yozuvning oʻzi bu kompyuterdan chiqmaydi.",
+    "stoppedAt": "{at} da toʻxtadi.",
+    "downloadWrite": "Yuklab olish va yozish",
+    "carryOn": "Davom etish",
+    "write": "Transkript yozish"
+  },
+  "pill": {
+    "recording": "Yozilmoqda",
+    "paused": "Pauza",
+    "aria": "Yozilmoqda: {label}, {elapsed}. Yozuvni ochish.",
+    "interrupted": "Yozuv oʻzi toʻxtadi",
+    "saved": "{time} «{where}» ostida saqlandi.",
+    "notebook": "daftaringiz"
+  },
+  "picker": {
+    "screen": "Butun ekran",
+    "window": "Oyna"
+  },
+  "err": {
+    "noMic": "Bu brauzer mikrofondan foydalana olmaydi.",
+    "denied": "Yozish uchun BiliMindga mikrofon kerak. Brauzerda yoki kompyuterning maxfiylik sozlamalarida ruxsat bering va qayta urining.",
+    "noMicAnswer": "Mikrofon javob bermadi. Ulangan va band emasligini tekshiring.",
+    "saveFail": "Yozuvni saqlab boʻlmadi.",
+    "busy": "Allaqachon boshqa narsa yozilmoqda.",
+    "noRecord": "Bu brauzer yozib ola olmaydi.",
+    "noSound": "Yozib olish uchun tovush yoʻq edi.",
+    "itself": "Yozuv oʻzi toʻxtadi.",
+    "noStart": "Yozuv boshlanmadi. Birozdan soʻng qayta urining."
+  },
+  "file": {
+    "voiceMemo": "Ovozli eslatma",
+    "recording": "{base} yozuvi",
+    "screenRecording": "Ekran yozuvi",
+    "baseScreen": "{base} ekran yozuvi",
+    "uploadFail": "Yozuv yuklanmadi",
+    "tooLong": "U yuklash mumkin boʻlganidan uzun. Hech narsa yoʻqolmasligi uchun uni shu kompyuterga saqlang.",
+    "saveLocal": "Hech narsa yoʻqolmasligi uchun uni shu kompyuterga saqlang va keyinroq «Fayllarni yuklash» orqali qoʻshing.",
+    "saveIt": "Saqlash"
+  }
+}

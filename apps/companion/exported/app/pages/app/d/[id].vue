@@ -44,10 +44,11 @@ import { courseColor } from '~/companion/colors'
 import { checkHref } from '~/companion/checks'
 import { dayKey, relativeDay, untilLabel } from '~/companion/time'
 import { dayWord } from '~/companion/today-layout'
-import { KIND_WORD, atLabel, dueLong, sourceLine, readyWords } from '~/companion/words'
+import { kindWord, atLabel, dueLong, sourceLine, readyWords } from '~/companion/words'
 
 definePageMeta({ layout: 'companion' })
 
+const { t } = useI18n()
 const route = useRoute()
 const c = useCompanion()
 const toast = useToast()
@@ -329,7 +330,7 @@ const notFound = computed(() => c.status.ready && !deadline.value)
             class="size-2 shrink-0 rounded-full"
             :style="{ background: courseColor(subject?.color) }"
           />
-          <span class="truncate">{{ subject?.title }} · {{ KIND_WORD[deadline.kind] }}</span>
+          <span class="truncate">{{ subject?.title }} · {{ kindWord(deadline.kind) }}</span>
         </p>
         <h1 class="t-head text-[30px] min-[900px]:text-[40px]">
           {{ deadline.title }}
@@ -368,7 +369,7 @@ const notFound = computed(() => c.status.ready && !deadline.value)
         <label
           for="d-grade"
           class="text-[16px] font-medium text-text"
-        >What did you get?</label>
+        >{{ t('deadline.whatDidYouGet') }}</label>
         <div class="flex items-center gap-2">
           <input
             id="d-grade"
@@ -387,11 +388,11 @@ const notFound = computed(() => c.status.ready && !deadline.value)
             :loading="savingGrade"
             :disabled="!gradeOk"
           >
-            Save
+            {{ t('deadline.save') }}
           </UiBtn>
         </div>
         <p class="text-[13.5px] text-text-muted">
-          So BiliMind can see how close its readiness was.
+          {{ t('deadline.saveHint') }}
         </p>
       </form>
 
@@ -400,16 +401,15 @@ const notFound = computed(() => c.status.ready && !deadline.value)
         class="flex flex-wrap items-center justify-between gap-3 border-y border-border-rule py-3"
       >
         <p class="min-w-0 flex-1 basis-[280px] text-[15px] text-text-body">
-          <b class="font-semibold text-text">Not confirmed yet.</b>
-          {{ deadline.confidence === 'heard' ? 'Heard in class' : 'From a shared message' }}; Moodle hasn't
-          said it.
+          <b class="font-semibold text-text">{{ t('deadline.notConfirmed') }}</b>
+          {{ deadline.confidence === 'heard' ? t('deadline.heardInClass') : t('deadline.fromShared') }}{{ t('deadline.moodleHasnt') }}
         </p>
         <UiBtn
           variant="secondary"
           :loading="confirming"
           @click="confirm"
         >
-          I've checked, it's right
+          {{ t('deadline.checkedRight') }}
         </UiBtn>
       </div>
 
@@ -473,26 +473,25 @@ const notFound = computed(() => c.status.ready && !deadline.value)
           class="divide-y divide-border-rule border-y border-border-rule"
         >
           <li
-            v-for="t in readiness.topics"
-            :key="t.topic_id"
+            v-for="topicItem in readiness.topics"
+            :key="topicItem.topic_id"
             class="flex items-center gap-4 py-3"
           >
             <span class="grid min-w-0 flex-1 gap-0.5">
-              <span class="text-[16px] leading-snug font-medium text-text">{{ t.title }}</span>
-              <span class="text-[13.5px] text-text-muted">{{ topicLine(t) }}</span>
+              <span class="text-[16px] leading-snug font-medium text-text">{{ topicItem.title }}</span>
+              <span class="text-[13.5px] text-text-muted">{{ topicLine(topicItem) }}</span>
             </span>
             <span
               class="shrink-0 text-[14px] font-medium"
-              :class="t.state === 'missed' ? 'text-coral-text' : (t.percent ?? 0) >= 85 ? 'text-success-text' : 'text-text-soft'"
-            >{{ readyWords(t.percent) }}</span>
+              :class="topicItem.state === 'missed' ? 'text-coral-text' : (topicItem.percent ?? 0) >= 85 ? 'text-success-text' : 'text-text-soft'"
+            >{{ readyWords(topicItem.percent) }}</span>
           </li>
         </ul>
         <p
           v-else-if="readiness"
           class="text-[15px] text-text-muted"
         >
-          Nothing linked yet. When the brief or the lecturer says what it covers, the topics show
-          here, each with how ready you are.
+          {{ t('deadline.nothingLinked') }}
         </p>
         <div
           v-else
@@ -506,6 +505,12 @@ const notFound = computed(() => c.status.ready && !deadline.value)
         </div>
       </CompanionBox>
 
+      <!-- Imports and links: the brief, the Figma file, the Canva design. -->
+      <CompanionLinksAttached
+        :on="{ deadlineId: deadline.id }"
+        :subject-id="deadline.subject_id"
+      />
+
       <CompanionDeadlineClass
         v-if="upcoming"
         :deadline="deadline"
@@ -513,7 +518,7 @@ const notFound = computed(() => c.status.ready && !deadline.value)
 
       <CompanionBox
         v-if="sources.length"
-        label="Where the date came from"
+        :label="t('deadline.whereCameFrom')"
       >
         <ul class="divide-y divide-border-rule border-y border-border-rule">
           <li

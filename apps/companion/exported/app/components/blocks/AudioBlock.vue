@@ -130,7 +130,7 @@ function onScrub(event: Event): void {
     <div class="audio-bar flex flex-wrap items-center gap-3 rounded-[28px] bg-chip py-2 pr-3 pl-2 text-white">
       <button
         type="button"
-        class="relative grid size-11 shrink-0 cursor-pointer place-items-center rounded-full bg-lime text-ink transition hover:bg-[#d2f86a] active:scale-95"
+        class="relative grid size-11 shrink-0 cursor-pointer place-items-center rounded-full bg-accent text-on-accent transition hover:bg-hi-2 active:scale-95"
         :aria-label="audio.playing.value ? 'Pause' : audio.currentTime.value > 0 ? 'Resume' : 'Listen'"
         :aria-busy="audio.loading.value || undefined"
         @click="toggle"
@@ -201,7 +201,7 @@ function onScrub(event: Event): void {
 .audio-bar input[type='range'] {
   height: 5px;
   border-radius: 99px;
-  background: linear-gradient(var(--lime), var(--lime)) 0 / var(--fill, 0%) 100% no-repeat,
+  background: linear-gradient(var(--accent), var(--accent)) 0 / var(--fill, 0%) 100% no-repeat,
     rgb(255 255 255 / 0.18);
 }
 

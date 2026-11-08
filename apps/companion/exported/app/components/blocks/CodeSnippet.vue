@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
       class="flex items-center justify-between gap-3 border-b border-white/8 px-3.5 py-2 text-code-meta"
     >
       <span class="flex min-w-0 items-center gap-2">
-        <span class="size-[7px] shrink-0 rounded-full bg-lime" />
+        <span class="size-[7px] shrink-0 rounded-full bg-accent" />
         <span class="truncate text-[11.5px] font-semibold tracking-[0.04em] lowercase">{{
           caption || language || 'code'
         }}</span>

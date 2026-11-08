@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { NewKind } from '~/companion/notes/new'
 import { useCompanion } from '~/companion/store'
 
@@ -54,10 +55,10 @@ const WIDTH = 340
 
 const course = computed(() => store.get('subjects', props.subjectId))
 const name = computed(
-  () => props.name ?? (course.value ? `New note in ${course.value.title}` : 'New note'),
+  () => props.name ?? (course.value ? t('notes.newNoteIn', { course: course.value.title }) : t('notes.newNote')),
 )
 const hint = computed(() =>
-  props.kinds ? props.name ?? name.value : `${name.value}: a page, a whiteboard, a file, a link…`,
+  props.kinds ? props.name ?? name.value : t('notes.newNoteHint', { name: name.value }),
 )
 
 const sheetOpen = computed({
@@ -150,11 +151,11 @@ function onMade(id: string): void {
       :aria-label="name"
       :title="hint"
       :class="[
-        'flex cursor-pointer items-center gap-1.5 rounded-[10px] font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-cobalt',
+        'flex cursor-pointer items-center gap-1.5 rounded-[10px] font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-brand',
         size === 'md' ? 'h-[30px] px-3 text-[12.5px] max-lg:h-11 max-lg:rounded-full max-lg:px-3.5 max-lg:text-[14.5px]' : 'h-[28px] px-2.5 text-[12.5px]',
         open
-          ? 'bg-ink text-white'
-          : 'bg-surface text-text shadow-[inset_0_0_0_1px_rgb(11_13_16/0.1)] hover:bg-surface-mute max-lg:shadow-none max-lg:active:bg-surface-sunken',
+          ? 'bg-inverse text-on-inverse'
+          : 'bg-surface text-text shadow-[inset_0_0_0_1px_var(--border-strong)] hover:bg-surface-mute max-lg:shadow-none max-lg:active:bg-surface-sunken',
       ]"
       @click.stop.prevent="toggle"
     >
@@ -173,7 +174,7 @@ function onMade(id: string): void {
       :aria-label="name"
       :title="hint"
       :class="[
-        'grid cursor-pointer place-items-center transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-cobalt',
+        'grid cursor-pointer place-items-center transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-brand',
         size === 'md' ? 'size-[30px] rounded-[9px] max-lg:size-11 max-lg:rounded-full' : 'size-6 rounded-md max-lg:size-11 max-lg:rounded-full',
         open ? 'bg-surface-track text-text' : 'text-text-faint hover:bg-surface-track hover:text-text',
       ]"
@@ -198,7 +199,7 @@ function onMade(id: string): void {
         <div
           v-if="open && !isPhone"
           ref="panel"
-          class="om-scroll fixed z-[95] max-h-[calc(100dvh-16px)] overflow-y-auto rounded-[16px] bg-surface p-1.5 shadow-[0_0_0_1px_rgb(11_13_16/0.08),0_24px_48px_-16px_rgb(11_13_16/0.32)]"
+          class="om-scroll fixed z-[95] max-h-[calc(100dvh-16px)] overflow-y-auto rounded-[16px] bg-surface-pop p-1.5 shadow-[var(--shadow-pop)]"
           :style="{ top: `${pos.top}px`, left: `${pos.left}px`, width: `${WIDTH}px` }"
         >
           <CompanionNotesNewList

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { NoteMenuItem } from '~/companion/notes/actions'
 
 /**
@@ -29,7 +30,7 @@ const props = withDefaults(
     align?: 'start' | 'end'
     width?: number
   }>(),
-  { label: 'More actions', title: undefined, align: 'start', width: 232 },
+  { label: undefined, title: undefined, align: 'start', width: 232 },
 )
 
 const open = defineModel<boolean>('open', { default: false })
@@ -140,12 +141,12 @@ onBeforeUnmount(() => {
     >
       <button
         type="button"
-        :aria-label="label"
-        :title="label"
+        :aria-label="label ?? t('notes.moreActions')"
+        :title="label ?? t('notes.moreActions')"
         aria-haspopup="menu"
         :aria-expanded="open"
         :class="[
-          'grid size-[22px] cursor-pointer place-items-center rounded-[6px] transition-colors focus-visible:outline-2 focus-visible:outline-cobalt',
+          'grid size-[22px] cursor-pointer place-items-center rounded-[6px] transition-colors focus-visible:outline-2 focus-visible:outline-brand',
           open ? 'bg-surface-track text-text' : 'text-text-faint hover:bg-surface-track hover:text-text-soft',
         ]"
         @click.stop.prevent="toggle"
@@ -170,8 +171,8 @@ onBeforeUnmount(() => {
           v-if="open && !isPhone"
           ref="panel"
           role="menu"
-          :aria-label="label"
-          class="om-scroll fixed z-[95] max-h-[min(440px,calc(100dvh-16px))] overflow-y-auto rounded-[14px] bg-surface p-1.5 shadow-[0_0_0_1px_rgb(11_13_16/0.08),0_20px_40px_-12px_rgb(11_13_16/0.28)]"
+          :aria-label="label ?? t('notes.moreActions')"
+          class="om-scroll fixed z-[95] max-h-[min(440px,calc(100dvh-16px))] overflow-y-auto rounded-[14px] bg-surface-pop p-1.5 shadow-[var(--shadow-pop)]"
           :style="{ top: `${pos.top}px`, left: `${pos.left}px`, width: `${width}px` }"
         >
           <template
@@ -225,7 +226,7 @@ onBeforeUnmount(() => {
                 name="check"
                 :size="15"
                 :stroke="2.2"
-                class="shrink-0 text-cobalt"
+                class="shrink-0 text-brand"
               />
               <kbd
                 v-if="item.hint"
@@ -290,7 +291,7 @@ onBeforeUnmount(() => {
             name="check"
             :size="18"
             :stroke="2.2"
-            class="shrink-0 text-cobalt"
+            class="shrink-0 text-brand"
           />
         </button>
       </template>

@@ -39,7 +39,7 @@ defineProps<{ block: AnalogyBlock }>()
         />
       </span>
       <div class="min-w-0">
-        <p class="eyebrow-loud mb-1.5 text-brand">Where the analogy breaks down</p>
+        <p class="text-[12px] leading-none font-bold mb-1.5 text-brand">Where the analogy breaks down</p>
         <p class="text-[14.5px] leading-relaxed text-text-body">
           {{ block.payload.breaks_down_when }}
         </p>

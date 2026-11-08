@@ -5,6 +5,7 @@ import { courseColor } from '~/companion/colors'
 import { useCourseMenu } from '~/companion/course-menu'
 import { courseNextDate, courseProgress, courseWhere, type DateTone } from '~/companion/course-home'
 import { dayKey, shortDate } from '~/companion/time'
+import { gradeWords, runningGrade } from '~/companion/grades'
 
 /**
  * A course as one row of the Courses list: the shelf's dense view, for when
@@ -18,9 +19,8 @@ import { dayKey, shortDate } from '~/companion/time'
  * course of one's own, the lesson it's on), how far along it is as a short
  * bar in its colour, and the next date that counts (the same chip as the
  * card's, which opens the deadline). The whole row opens the course; the
- * "⋯" is the card's own menu (`useCourseMenu`), so rename and colour happen
- * here in the row: the name becomes a field, and the swatches take the bar
- * and the date's place.
+ * "⋯" is the card's own menu (`useCourseMenu`): rename happens here in the
+ * row (the name becomes a field), and "Icon and colour…" opens its dialog.
  *
  * On a phone the row keeps the name and the menu; the bar and the date come
  * in as the width allows. An archived course's row says when it was put
@@ -44,37 +44,39 @@ const date = computed(() => (archived.value ? null : courseNextDate(c, props.sub
 const sub = computed(() => {
   const s = props.subject
   const own = s.format === 'path' ? courseWhere(c, s) : [s.code, s.lecturer].filter(Boolean).join(' · ')
-  const line = own || (s.format === 'path' ? 'On your own' : 'School')
-  return s.archived_at ? `Archived ${shortDate(dayKey(s.archived_at))} · ${line}` : line
+  const line = own || s.code || (s.format === 'path' ? 'On your own' : 'School')
+  // Tasks and grades: the running grade, quietly, in words.
+  const grade = gradeWords(runningGrade(c.deadlines.value.filter((d) => d.subject_id === s.id)))
+  return s.archived_at ? `Archived ${shortDate(dayKey(s.archived_at))} · ${line}` : [line, grade].filter(Boolean).join(' · ')
 })
 
 const TONE_DOT: Record<DateTone, string> = {
-  good: 'bg-lime-2',
+  good: 'bg-leaf',
   mid: 'bg-warn-bright',
-  low: 'bg-coral',
+  low: 'bg-rose',
   calm: 'bg-border-dashed',
 }
 
 const NuxtLinkComponent = resolveComponent('NuxtLink')
 
 const field = ref<HTMLInputElement | null>(null)
-const swatches = ref<HTMLElement | null>(null)
 
-const { actions, renaming, draft, finishRename, colouring, recolour, confirming, restore } = useCourseMenu(
+const { actions, renaming, draft, finishRename, looking, confirming, restore } = useCourseMenu(
   () => props.subject,
-  { field, swatches, ask: (s) => emit('ask', s), group: (s) => emit('group', s) },
+  { field, ask: (s) => emit('ask', s), group: (s) => emit('group', s) },
 )
 </script>
 
 <template>
   <article
-    class="group/row relative flex min-h-[60px] items-center gap-3 py-2.5 pr-2 pl-4 transition-colors duration-150 hover:bg-surface-mute focus-within:bg-surface-mute"
+    class="group/row relative flex min-h-[60px] items-center gap-3 py-2.5 pr-2 pl-3 transition-colors duration-150 hover:bg-[rgb(var(--wash-rgb)/0.03)] focus-within:bg-[rgb(var(--wash-rgb)/0.03)]"
     :aria-labelledby="`course-row-${subject.id}`"
   >
-    <span
-      class="size-2.5 shrink-0 rounded-full"
-      :style="{ background: color }"
-      aria-hidden="true"
+    <!-- The course's cover, the same tile as the rail and the sidebar. -->
+    <CompanionCourseCover
+      :subject="subject"
+      size="sm"
+      :px="36"
     />
 
     <div class="grid min-w-0 flex-1 gap-px">
@@ -87,7 +89,7 @@ const { actions, renaming, draft, finishRename, colouring, recolour, confirming,
           ref="field"
           v-model="draft"
           type="text"
-          class="relative z-10 -mx-1.5 w-[calc(100%+12px)] rounded-[8px] bg-surface px-1.5 py-0.5 outline-none shadow-[inset_0_0_0_1.5px_var(--cobalt)]"
+          class="relative z-10 -mx-1.5 w-[calc(100%+12px)] rounded-[8px] bg-surface px-1.5 py-0.5 outline-none shadow-[inset_0_0_0_1.5px_var(--brand)]"
           aria-label="Course name"
           @keydown.enter.prevent="finishRename(true)"
           @keydown.esc.prevent.stop="finishRename(false)"
@@ -97,7 +99,7 @@ const { actions, renaming, draft, finishRename, colouring, recolour, confirming,
         <NuxtLink
           v-else
           :to="home"
-          class="outline-none after:absolute after:inset-0 focus-visible:after:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+          class="outline-none after:absolute after:inset-0 focus-visible:after:shadow-[inset_0_0_0_2px_var(--brand)]"
         >
           {{ subject.title }}
         </NuxtLink>
@@ -110,22 +112,8 @@ const { actions, renaming, draft, finishRename, colouring, recolour, confirming,
       </p>
     </div>
 
-    <!-- Picking a colour: the swatches take the bar and the date's place. -->
-    <div
-      v-if="colouring"
-      ref="swatches"
-      class="relative z-10 w-[224px] shrink-0"
-    >
-      <CompanionCoursesSwatches
-        :subject="subject"
-        compact
-        @pick="recolour"
-        @close="colouring = false"
-      />
-    </div>
-
     <UiBtn
-      v-else-if="archived"
+      v-if="archived"
       variant="ghost"
       size="sm"
       icon="refresh"
@@ -163,7 +151,7 @@ const { actions, renaming, draft, finishRename, colouring, recolour, confirming,
           :class="[
             'flex h-7 min-w-0 items-center gap-2 rounded-full bg-surface-sunken px-3',
             date.to &&
-              'relative z-10 transition-colors hover:bg-surface-track focus-visible:outline-2 focus-visible:outline-cobalt',
+              'relative z-10 transition-colors hover:bg-surface-track focus-visible:outline-2 focus-visible:outline-brand',
           ]"
           :title="`${date.title}: ${date.words}`"
         >
@@ -195,6 +183,10 @@ const { actions, renaming, draft, finishRename, colouring, recolour, confirming,
 
     <CompanionCoursesDeleteDialog
       v-model:open="confirming"
+      :subject="subject"
+    />
+    <CompanionCoursesLookDialog
+      v-model:open="looking"
       :subject="subject"
     />
   </article>

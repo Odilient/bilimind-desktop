@@ -11,6 +11,8 @@
  * on screen.
  */
 
+import { currentLocale, intlTag, translate } from '../utils/i18n'
+
 let zone: string | undefined
 
 export function browserZone(): string {
@@ -99,49 +101,56 @@ export function mondayOf(key: string): string {
   return shiftDay(key, 1 - weekdayOf(key))
 }
 
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-const WEEKDAYS_LONG = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const MONTHS_LONG = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-]
+const names = new Map<string, Intl.DateTimeFormat>()
 
-/** "Thu 29 Oct", from a day key. */
-export function dayLabel(key: string): string {
-  return `${WEEKDAYS[weekdayOf(key) - 1]} ${+key.slice(8, 10)} ${MONTHS[+key.slice(5, 7) - 1]}`
+/** A day key's part in the active language, said by `Intl` (the key is a calendar day, so UTC). */
+function say(key: string, options: Intl.DateTimeFormatOptions): string {
+  const tag = intlTag(currentLocale())
+  const id = tag + JSON.stringify(options)
+  let f = names.get(id)
+  if (!f) {
+    f = new Intl.DateTimeFormat(tag, { timeZone: 'UTC', ...options })
+    names.set(id, f)
+  }
+  return f.format(new Date(Date.UTC(+key.slice(0, 4), +key.slice(5, 7) - 1, +key.slice(8, 10))))
 }
 
 /** "29 Oct". */
 export function shortDate(key: string): string {
-  return `${+key.slice(8, 10)} ${MONTHS[+key.slice(5, 7) - 1]}`
+  return say(key, { day: 'numeric', month: 'short' })
 }
 
-/** "Tuesday 27 October". */
-export function longDayLabel(key: string): string {
-  return `${WEEKDAYS_LONG[weekdayOf(key) - 1]} ${+key.slice(8, 10)} ${MONTHS_LONG[+key.slice(5, 7) - 1]}`
-}
-
-export function weekdayShort(key: string): string {
-  return WEEKDAYS[weekdayOf(key) - 1] ?? ''
-}
-
-export function weekdayName(n: number): string {
-  return WEEKDAYS[n - 1] ?? ''
-}
-
-/** "Sunday", from an ISO weekday. */
-export function weekdayLong(n: number): string {
-  return WEEKDAYS_LONG[n - 1] ?? ''
+/** "Thu 29 Oct", from a day key. */
+export function dayLabel(key: string): string {
+  return `${weekdayShort(key)} ${shortDate(key)}`
 }
 
 /** "15 June". */
 export function dayMonthLong(key: string): string {
-  return `${+key.slice(8, 10)} ${MONTHS_LONG[+key.slice(5, 7) - 1]}`
+  return say(key, { day: 'numeric', month: 'long' })
+}
+
+/** "Tuesday 27 October". */
+export function longDayLabel(key: string): string {
+  return `${say(key, { weekday: 'long' })} ${dayMonthLong(key)}`
+}
+
+export function weekdayShort(key: string): string {
+  return say(key, { weekday: 'short' })
+}
+
+// 2024-01-01 was a Monday.
+export function weekdayName(n: number): string {
+  return weekdayShort(shiftDay('2024-01-01', n - 1))
+}
+
+/** "Sunday", from an ISO weekday. */
+export function weekdayLong(n: number): string {
+  return say(shiftDay('2024-01-01', n - 1), { weekday: 'long' })
 }
 
 export function monthShort(key: string): string {
-  return MONTHS[+key.slice(5, 7) - 1] ?? ''
+  return say(key, { month: 'short' })
 }
 
 /** "09:00", in the learner's zone. */
@@ -166,8 +175,15 @@ export function relativeDay(key: string, today = dayKey()): string {
 /** "Thu 09:00", "today 23:59", "Wed 4 Nov 14:00". */
 export function whenLabel(iso: string, allDay = false): string {
   const key = dayKey(iso)
-  const rel = relativeDay(key)
-  const day = rel === 'today' || rel === 'tomorrow' ? rel : rel.length <= 3 ? rel : dayLabel(key)
+  const diff = daysBetween(dayKey(), key)
+  const day =
+    diff === 0
+      ? translate('calendar.time.today')
+      : diff === 1
+        ? translate('calendar.time.tomorrow')
+        : diff > 1 && diff < 7
+          ? weekdayShort(key)
+          : dayLabel(key)
   return allDay ? day : `${day} ${clock(iso)}`
 }
 
@@ -175,18 +191,18 @@ export function whenLabel(iso: string, allDay = false): string {
 export function untilLabel(iso: string, now = Date.now()): string {
   const ms = new Date(iso).getTime() - now
   const mins = Math.round(ms / 60_000)
-  if (Math.abs(mins) < 1) return 'now'
+  if (Math.abs(mins) < 1) return translate('calendar.time.now')
   if (mins > 0) {
-    if (mins < 60) return `in ${mins} min`
-    if (mins < 60 * 20) return `in ${Math.round(mins / 60)} h`
+    if (mins < 60) return translate('calendar.time.inMin', mins)
+    if (mins < 60 * 20) return translate('calendar.time.inH', Math.round(mins / 60))
     const days = daysBetween(dayKey(now), dayKey(iso))
-    return days <= 1 ? 'tomorrow' : `in ${days} days`
+    return days <= 1 ? translate('calendar.time.tomorrow') : translate('calendar.time.inDays', days)
   }
   const ago = -mins
-  if (ago < 60) return `${ago} min ago`
-  if (ago < 60 * 20) return `${Math.round(ago / 60)} h ago`
+  if (ago < 60) return translate('calendar.time.minAgo', ago)
+  if (ago < 60 * 20) return translate('calendar.time.hAgo', Math.round(ago / 60))
   const days = daysBetween(dayKey(iso), dayKey(now))
-  return days <= 1 ? 'yesterday' : `${days} days ago`
+  return days <= 1 ? translate('calendar.time.yesterday') : translate('calendar.time.daysAgo', days)
 }
 
 /** "1 d 23 h" — the countdown chip on the desktop title bar. */
@@ -194,17 +210,17 @@ export function countdown(iso: string, now = Date.now()): string {
   const mins = Math.max(0, Math.round((new Date(iso).getTime() - now) / 60_000))
   const d = Math.floor(mins / 1440)
   const h = Math.floor((mins % 1440) / 60)
-  if (d > 0) return `${d} d ${h} h`
-  if (h > 0) return `${h} h ${mins % 60} min`
-  return `${mins} min`
+  if (d > 0) return translate('calendar.time.dh', { d, h })
+  if (h > 0) return translate('calendar.time.hMin', { h, m: mins % 60 })
+  return translate('calendar.time.min', { n: mins })
 }
 
 /** "1 h 52 m", "41:20" style durations, in words a person reads. */
 export function durationLabel(seconds: number): string {
   const m = Math.round(seconds / 60)
-  if (m < 60) return `${m} min`
+  if (m < 60) return translate('calendar.time.min', { n: m })
   const h = Math.floor(m / 60)
-  return m % 60 ? `${h} h ${m % 60} m` : `${h} h`
+  return m % 60 ? translate('calendar.time.hm', { h, m: m % 60 }) : translate('calendar.time.h', { n: h })
 }
 
 /** A moment in a recording: "47:05", "1:02:10". */
@@ -219,10 +235,9 @@ export function timecode(seconds: number): string {
 /** "Good morning" by the learner's own clock. */
 export function greeting(now = Date.now()): string {
   const h = parts(now).hour
-  if (h < 5) return 'Good evening'
-  if (h < 12) return 'Good morning'
-  if (h < 18) return 'Good afternoon'
-  return 'Good evening'
+  if (h < 12 && h >= 5) return translate('calendar.time.morning')
+  if (h >= 12 && h < 18) return translate('calendar.time.afternoon')
+  return translate('calendar.time.evening')
 }
 
 /**

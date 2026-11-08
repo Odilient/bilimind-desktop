@@ -5,6 +5,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * A 200–400 word brief, graded against its rubric. Submits `{text}`.
  * The word counter tracks the target the generator writes to.
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -47,20 +48,20 @@ const criteria = computed(() => props.assessment.rubric ?? [])
       :rows="10"
       :maxlength="40000"
       :disabled="disabled"
-      placeholder="Write your answer. Aim for 200–400 words — argue a position and back it with specifics."
+      :placeholder="t('check.assess.essayPlaceholder')"
       :aria-label="assessment.prompt"
     />
 
     <div class="flex flex-wrap items-center justify-between gap-2">
       <p :class="['num text-[11.5px]', tone]">
-        {{ words }} {{ words === 1 ? 'word' : 'words' }}
-        <span class="text-text-faint">· target 200–400</span>
+        {{ t('check.assess.words', words) }}
+        <span class="text-text-faint">{{ t('check.assess.target') }}</span>
       </p>
       <p
         v-if="criteria.length"
         class="text-[11.5px] text-text-faint"
       >
-        Judged on {{ criteria.length }} {{ criteria.length === 1 ? 'criterion' : 'criteria' }}
+        {{ t('check.assess.judged', criteria.length) }}
       </p>
     </div>
   </div>

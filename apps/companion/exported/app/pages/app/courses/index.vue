@@ -24,10 +24,11 @@
  * shelf, archive included, to the courses with those words in their name,
  * code, lecturer or group, drawn in the same view; Enter opens the first.
  *
- * Making a course happens in the chat (one place to say what you want and
- * attach what you have), so "New course" opens a new chat set to draft one
- * (`newChatLink({ intent: 'course' })`), and connecting Moodle opens the
- * chat's own connect step.
+ * A course is made one of two ways. "Build it with AI" opens a new chat set
+ * to draft one (`newChatLink({ intent: 'course' })`: one place to say what
+ * you want and attach what you have); "Start from scratch" is a course typed
+ * by hand, no AI (`CompanionCoursesScratchDialog`), which works on Free.
+ * Connecting Moodle opens the chat's own connect step.
  *
  * "Ask about this course" in a course's menu points the assistant at that
  * course for as long as it stays open: the screen registers the course as
@@ -56,6 +57,7 @@ import {
 } from '~/companion/shelf'
 
 definePageMeta({ layout: 'companion' })
+const { t } = useI18n()
 useHead({ title: 'Courses · BiliMind' })
 
 const c = useCompanion()
@@ -70,6 +72,7 @@ const hasSchool = computed(() => c.subjects.value.some((s) => s.format === 'week
 const total = computed(() => c.subjects.value.length)
 
 const newCourse = newChatLink({ intent: 'course' })
+const scratch = ref(false)
 const connectMoodle = newChatLink({ connect: 'moodle' })
 
 /* -- The sections, Archived last -------------------------------------------- */
@@ -223,16 +226,26 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
             </template>
           </p>
         </div>
-        <UiBtn
-          :to="newCourse"
-          variant="primary"
-          size="lg"
-          icon="plus"
-          class="shrink-0"
-          title="Say what you want to learn; the chat drafts the course"
-        >
-          New course
-        </UiBtn>
+        <div class="flex shrink-0 flex-wrap gap-2">
+          <UiBtn
+            variant="secondary"
+            size="lg"
+            icon="pencil"
+            title="Name it and list the topics yourself, no AI"
+            @click="scratch = true"
+          >
+            Start from scratch
+          </UiBtn>
+          <UiBtn
+            :to="newCourse"
+            variant="primary"
+            size="lg"
+            icon="sparkles"
+            title="Say what you want to learn; the chat drafts the course"
+          >
+            Build it with AI
+          </UiBtn>
+        </div>
       </header>
 
       <!-- The shelf's controls: find one, make a group, cards or a list. -->
@@ -242,7 +255,7 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
       >
         <label
           v-if="total > 6"
-          class="flex h-10 max-w-[420px] min-w-0 flex-[1_1_240px] items-center gap-2.5 rounded-full bg-surface-sunken px-4 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+          class="flex h-10 max-w-[420px] min-w-0 flex-[1_1_240px] items-center gap-2.5 rounded-full bg-surface-sunken px-4 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--brand)]"
         >
           <UiIcon
             name="search"
@@ -331,7 +344,7 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
         aria-hidden="true"
       >
         <span class="absolute inset-x-[7px] top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-border-strong" />
-        <span class="absolute left-[7px] top-1/2 h-[2px] w-[calc((100%_-_14px)*0.375)] -translate-y-1/2 rounded-full bg-cobalt" />
+        <span class="absolute left-[7px] top-1/2 h-[2px] w-[calc((100%_-_14px)*0.375)] -translate-y-1/2 rounded-full bg-brand" />
         <div class="relative flex h-full items-center justify-between">
           <span
             v-for="(state, i) in SAMPLE"
@@ -341,8 +354,8 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
             <span
               :class="[
                 'block rounded-full',
-                state === 'done' && 'size-2 bg-cobalt',
-                state === 'now' && 'size-3.5 bg-surface shadow-[inset_0_0_0_3px_var(--cobalt),0_0_0_4px_var(--brand-line)]',
+                state === 'done' && 'size-2 bg-brand',
+                state === 'now' && 'size-3.5 bg-surface shadow-[inset_0_0_0_3px_var(--brand),0_0_0_4px_var(--brand-line)]',
                 state === 'ahead' && 'size-2 bg-surface shadow-[inset_0_0_0_1.5px_var(--border-dashed)]',
               ]"
             />
@@ -355,16 +368,26 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
       <p class="max-w-[500px] text-[15.5px] leading-relaxed text-text-body">
         A course is a path: the topics in order, a lesson for each, and the dates that count. Tell
         BiliMind what you want to learn and by when, and attach anything you have, a syllabus, slides
-        or a link. It drafts the path; you say go.
+        or a link. It drafts the path; you say go. Or list the topics yourself.
       </p>
-      <UiBtn
-        :to="newCourse"
-        variant="primary"
-        size="lg"
-        icon="plus"
-      >
-        New course
-      </UiBtn>
+      <div class="flex flex-wrap justify-center gap-2">
+        <UiBtn
+          variant="secondary"
+          size="lg"
+          icon="pencil"
+          @click="scratch = true"
+        >
+          Start from scratch
+        </UiBtn>
+        <UiBtn
+          :to="newCourse"
+          variant="primary"
+          size="lg"
+          icon="sparkles"
+        >
+          Build it with AI
+        </UiBtn>
+      </div>
     </section>
 
     <!-- Results, while something is typed: the whole shelf, archive included. -->
@@ -416,7 +439,7 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
               v-model="draft"
               type="text"
               :maxlength="60"
-              class="w-[min(320px,70vw)] rounded-[8px] bg-surface-sunken px-1.5 py-0.5 font-display text-[16px] font-semibold tracking-[-0.01em] text-text outline-none focus:shadow-[inset_0_0_0_1.5px_var(--cobalt)]"
+              class="w-[min(320px,70vw)] rounded-[8px] bg-surface-sunken px-1.5 py-0.5 font-display text-[16px] font-semibold tracking-[-0.01em] text-text outline-none focus:shadow-[inset_0_0_0_1.5px_var(--brand)]"
               aria-label="Group name"
               @keydown.enter.prevent="finishRename(true)"
               @keydown.esc.prevent.stop="finishRename(false)"
@@ -425,7 +448,7 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
             <button
               v-else
               type="button"
-              class="group/fold -ml-1 flex min-w-0 cursor-pointer items-center gap-1.5 rounded-[8px] py-0.5 pr-1.5 pl-1 outline-none focus-visible:shadow-[0_0_0_2px_var(--cobalt)]"
+              class="group/fold -ml-1 flex min-w-0 cursor-pointer items-center gap-1.5 rounded-[8px] py-0.5 pr-1.5 pl-1 outline-none focus-visible:shadow-[0_0_0_2px_var(--brand)]"
               :aria-expanded="!prefs.folded(g.key)"
               :aria-controls="`courses-${g.key}-list`"
               @click="toggle(g.key)"
@@ -474,7 +497,7 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
     <NuxtLink
       v-if="c.status.ready && !hasSchool && !hasMoodle"
       :to="connectMoodle"
-      class="group flex items-center gap-4 rounded-[18px] px-4 py-3.5 shadow-[inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-cobalt"
+      class="group flex items-center gap-4 rounded-[18px] px-4 py-3.5 shadow-[inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-brand"
     >
       <span class="grid size-10 shrink-0 place-items-center rounded-full bg-surface-sunken text-text-soft">
         <CompanionIcon
@@ -483,8 +506,8 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
         />
       </span>
       <span class="grid min-w-0 flex-1 gap-0.5">
-        <span class="text-[15px] font-semibold text-text">Connect Moodle</span>
-        <span class="text-[13.5px] text-text-muted">Your school courses build themselves, with their weeks, files and deadlines.</span>
+        <span class="text-[15px] font-semibold text-text">{{ t('course.shelf.connectMoodle') }}</span>
+        <span class="text-[13.5px] text-text-muted">{{ t('course.shelf.connectMoodleHint') }}</span>
       </span>
       <CompanionIcon
         name="chevron-right"
@@ -501,5 +524,6 @@ const SAMPLE = ['done', 'done', 'done', 'now', 'ahead', 'ahead', 'ahead', 'ahead
       v-model:open="grouping"
       :group="editing"
     />
+    <CompanionCoursesScratchDialog v-model:open="scratch" />
   </div>
 </template>

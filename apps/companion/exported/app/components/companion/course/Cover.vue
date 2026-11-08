@@ -3,12 +3,16 @@ import type { Subject } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { courseColor } from '~/companion/colors'
 import { courseBeads, courseInitials, courseProgress, type BeadState } from '~/companion/course-home'
+import { coverImageUrl, coverPicture } from '~/companion/course-icons'
+const { t } = useI18n()
 
 /**
  * A course's cover: the one picture of a course, wherever a course is shown
  * as a thing (the Courses shelf, a course row in the chat's Recent list).
  * It is the course's colour washed into the surface, the dotted canvas the
- * roadmap is drawn on, its initials, and its path.
+ * roadmap is drawn on, its picture, and its path. The picture is the one the
+ * learner picked (a glyph or an emoji, `subjects.icon`), else the one its
+ * title calls for, else its initials (`coverPicture`).
  *
  *   <CompanionCourseCover :subject="s" />               the card's cover
  *   <CompanionCourseCover :subject="id" size="sm" />    a 40px thumbnail
@@ -30,8 +34,8 @@ import { courseBeads, courseInitials, courseProgress, type BeadState } from '~/c
  * Continue) steps aside, so the two never sit on each other. Three
  * slots let a host put its own controls on the cover: `actions` top right
  * (the card's "⋯"), `over` just above the path (the card's Continue), and
- * `foot`, which takes the path's place while it's filled (the card's colour
- * swatches). Everything drawn is a mix of the course colour with a surface
+ * `foot`, which takes the path's place while it's filled. With `picker` the
+ * picture is a button that emits `look` (the card's "Icon and colour"). Everything drawn is a mix of the course colour with a surface
  * or text token, so it holds on a light page and a dark one; the mixes are
  * set as `--course-*` on the root for slot content to use too.
  *
@@ -48,9 +52,28 @@ const props = withDefaults(
     note?: string | null
     /** lg: beads are links into the course's lessons. */
     links?: boolean
+    /**
+     * sm: its side in px when not the 40px default: 34 on the app rail, 22 in
+     * the sidebar's course list. Radius and initials scale with it, so a cover
+     * is the same picture at every size.
+     */
+    px?: number
+    /** lg: the picture is a button that asks for "Icon and colour" (`look`). */
+    picker?: boolean
   }>(),
-  { size: 'lg', note: null, links: true },
+  { size: 'lg', note: null, links: true, px: 40, picker: false },
 )
+
+const emit = defineEmits<{ look: [] }>()
+
+// A thumbnail is seen before it is read: twice the card's wash, so a row of
+// them tells the courses apart at a glance.
+const box = computed(() => ({
+  background: `color-mix(in srgb, ${color.value} 22%, var(--surface))`,
+  ...(props.px === 40
+    ? {}
+    : { width: `${props.px}px`, height: `${props.px}px`, borderRadius: `${Math.round(props.px * 0.3)}px` }),
+}))
 
 const c = useCompanion()
 
@@ -60,6 +83,16 @@ const course = computed<Subject | null>(() =>
 
 const color = computed(() => courseColor(course.value?.color))
 const initials = computed(() => (course.value ? courseInitials(course.value.title) : '·'))
+/** An uploaded picture that won't load (gone, offline) gives way to what the name calls for. */
+const broken = ref(false)
+watch(() => course.value?.icon, () => (broken.value = false))
+const picture = computed(() => {
+  const s = course.value
+  if (!s) return { kind: 'initials' as const }
+  const p = coverPicture(s)
+  return p.kind === 'image' && broken.value ? coverPicture({ title: s.title }) : p
+})
+const imageSrc = computed(() => (picture.value.kind === 'image' ? coverImageUrl(picture.value.name) : ''))
 const beads = computed(() => (course.value ? courseBeads(c, course.value) : []))
 const progress = computed(() =>
   course.value ? courseProgress(c, course.value) : { done: 0, total: 0, words: '' },
@@ -78,12 +111,13 @@ const walked = computed(() => {
 const kind = computed(() => {
   const s = course.value
   if (!s) return ''
-  return s.format === 'path' ? 'On your own' : s.code || 'School'
+  // The code first: a centre's class copy carries its group's name there, and isn't "On your own".
+  return s.code || (s.format === 'path' ? t('course.cover.alone') : t('course.cover.school'))
 })
 
 const pathLabel = computed(() => {
   const here = nowAt.value >= 0 ? beads.value[nowAt.value]?.title.replace(/^[\d–]+ · /, '') : null
-  return [progress.value.words || 'No topics yet', here ? `now: ${here}` : null].filter(Boolean).join(', ')
+  return [progress.value.words || t('course.cover.noTopics'), here ? t('course.cover.now', { here }) : null].filter(Boolean).join(', ')
 })
 
 function beadTo(open: string): string {
@@ -99,29 +133,26 @@ const hovered = ref<number | null>(null)
 const RUN_SHOWN = 3
 
 /** A bead's state in words: a path is walked by the learner, a school course by its classes. */
-const STATE_WORDS: Record<'path' | 'weeks', Record<BeadState, string>> = {
-  path: { done: 'done', now: 'you’re here', ahead: 'ahead' },
-  weeks: { done: 'covered in class', now: 'up next', ahead: 'ahead' },
-}
+const stateWord = (kind: 'path' | 'weeks', s: BeadState): string => t(`course.cover.${kind}_${s}`)
 
 const tip = computed(() => {
   const i = hovered.value
   const bead = i === null ? null : beads.value[i]
   if (!bead) return null
   const path = course.value?.format === 'path'
-  const word = path ? 'Lesson' : 'Topic'
-  const state = STATE_WORDS[path ? 'path' : 'weeks'][bead.state]
+  const word = path ? t('course.cover.lesson') : t('course.cover.topic')
+  const state = stateWord(path ? 'path' : 'weeks', bead.state)
   // Placed like the card's Continue: at the bead's fraction of the line,
   // pulled back by the same fraction of its own width, so it stays inside.
   const at = beads.value.length > 1 ? i! / (beads.value.length - 1) : 0
   const place = { left: `${at * 100}%`, transform: `translateX(-${at * 100}%)` }
   if (bead.names.length === 1) {
-    return { head: bead.names[0]!, lines: [] as string[], meta: `${word} ${bead.number} · ${state}`, place }
+    return { head: bead.names[0]!, lines: [] as string[], meta: t('course.cover.metaOne', { word, n: bead.number, state }), place }
   }
   const more = bead.names.length - RUN_SHOWN
   return {
-    head: `${word}s ${bead.number}–${bead.number + bead.names.length - 1}`,
-    lines: [...bead.names.slice(0, RUN_SHOWN), ...(more > 0 ? [`and ${more} more`] : [])],
+    head: t(path ? 'course.cover.lessons' : 'course.cover.topics', { from: bead.number, to: bead.number + bead.names.length - 1 }),
+    lines: [...bead.names.slice(0, RUN_SHOWN), ...(more > 0 ? [t('course.cover.more', { n: more })] : [])],
     meta: state,
     place,
   }
@@ -145,13 +176,42 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
   <span
     v-if="size === 'sm'"
     class="relative grid size-10 shrink-0 place-items-center overflow-hidden rounded-[12px] bg-[var(--course-wash)] shadow-[inset_0_0_0_1px_var(--course-line)]"
-    :style="tones"
+    :style="[tones, box]"
     aria-hidden="true"
   >
-    <span class="absolute inset-0 bg-[radial-gradient(circle,var(--course-dots)_0.8px,transparent_1.1px)] bg-[length:7px_7px] bg-[position:3.5px_2px] [mask-image:linear-gradient(to_bottom,transparent_10%,black_95%)]" />
-    <span class="relative font-display text-[14px] leading-none font-bold tracking-[-0.03em] text-[color:var(--course-ink)]">{{ initials }}</span>
     <span
-      v-if="beads.length"
+      v-if="px >= 30 && picture.kind !== 'image'"
+      class="absolute inset-0 bg-[radial-gradient(circle,var(--course-dots)_0.8px,transparent_1.1px)] bg-[length:7px_7px] bg-[position:3.5px_2px] [mask-image:linear-gradient(to_bottom,transparent_10%,black_95%)]"
+    />
+    <template v-if="picture.kind === 'image'">
+      <img
+        :src="imageSrc"
+        alt=""
+        class="absolute inset-0 size-full object-cover"
+        draggable="false"
+        @error="broken = true"
+      >
+      <span class="absolute inset-0 rounded-[inherit] shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]" />
+    </template>
+    <CompanionIcon
+      v-else-if="picture.kind === 'glyph'"
+      :name="picture.key"
+      :size="Math.round(px * 0.5)"
+      :stroke="px >= 30 ? 1.9 : 2.1"
+      class="relative text-[color:var(--course-ink)]"
+    />
+    <span
+      v-else-if="picture.kind === 'emoji'"
+      class="relative leading-none"
+      :style="{ fontSize: `${Math.round(px * 0.5)}px` }"
+    >{{ picture.text }}</span>
+    <span
+      v-else
+      class="relative font-display leading-none font-bold tracking-[-0.03em] text-[color:var(--course-ink)]"
+      :style="{ fontSize: `${Math.round(px * 0.35)}px` }"
+    >{{ initials }}</span>
+    <span
+      v-if="beads.length && px >= 30"
       class="absolute inset-x-0 bottom-0 h-[3px] bg-[var(--course-line)]"
     >
       <span
@@ -172,13 +232,44 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
     />
 
     <div class="absolute inset-x-0 top-0 flex items-start gap-3 pt-4 pr-2.5 pl-4">
-      <span
-        class="grid size-10 shrink-0 place-items-center rounded-[12px] bg-[var(--course)] font-display text-[16px] leading-none font-bold tracking-[-0.03em] text-on-brand shadow-[0_8px_16px_-8px_var(--course-ring)]"
-        aria-hidden="true"
-      >{{ initials }}</span>
+      <component
+        :is="picker ? 'button' : 'span'"
+        :type="picker ? 'button' : undefined"
+        :class="[
+          'relative grid size-10 shrink-0 place-items-center overflow-hidden rounded-[12px] bg-[var(--course)] font-display text-[16px] leading-none font-bold tracking-[-0.03em] text-on-brand shadow-[0_8px_16px_-8px_var(--course-ring)]',
+          picker &&
+            'relative z-10 cursor-pointer transition-transform duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+        ]"
+        :title="picker ? t('course.cover.look') : undefined"
+        :aria-label="picker ? t('course.cover.lookFor', { title: course?.title ?? t('course.cover.thisCourse') }) : undefined"
+        :aria-hidden="picker ? undefined : 'true'"
+        @click="picker && emit('look')"
+      >
+        <template v-if="picture.kind === 'image'">
+          <img
+            :src="imageSrc"
+            alt=""
+            class="absolute inset-0 size-full object-cover"
+            draggable="false"
+            @error="broken = true"
+          >
+          <span class="absolute inset-0 rounded-[inherit] shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]" />
+        </template>
+        <CompanionIcon
+          v-else-if="picture.kind === 'glyph'"
+          :name="picture.key"
+          :size="21"
+          :stroke="2"
+        />
+        <span
+          v-else-if="picture.kind === 'emoji'"
+          class="text-[21px]"
+        >{{ picture.text }}</span>
+        <template v-else>{{ initials }}</template>
+      </component>
       <span class="grid min-w-0 flex-1 gap-px pt-0.5">
         <span class="truncate text-[12.5px] font-semibold text-[color:var(--course-ink)]">{{ kind }}</span>
-        <span class="truncate text-[12px] text-text-muted">{{ note ?? (progress.words || 'No topics yet') }}</span>
+        <span class="truncate text-[12px] text-text-muted">{{ note ?? (progress.words || t('course.cover.noTopics')) }}</span>
       </span>
       <div
         v-if="slots.actions"
@@ -259,7 +350,7 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
         <!-- The hovered bead's name. -->
         <span
           v-if="tip"
-          class="pointer-events-none absolute bottom-[calc(100%+10px)] z-30 grid w-max max-w-[min(240px,100%)] gap-px rounded-[10px] bg-ink px-[11px] pt-[7px] pb-2 text-left text-white shadow-[var(--shadow-pop)]"
+          class="pointer-events-none absolute bottom-[calc(100%+10px)] z-30 grid w-max max-w-[min(240px,100%)] gap-px rounded-[10px] bg-inverse px-[11px] pt-[7px] pb-2 text-left text-on-inverse shadow-[var(--shadow-pop)]"
           :style="tip.place"
           aria-hidden="true"
         >

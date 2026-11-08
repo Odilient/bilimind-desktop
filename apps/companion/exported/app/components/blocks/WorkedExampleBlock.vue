@@ -78,7 +78,7 @@ function showAll(): void {
             :class="
               index === shown - 1 && !allShown
                 ? 'bg-accent text-on-accent'
-                : 'bg-chip text-lime'
+                : 'bg-chip text-accent'
             "
             >{{ index + 1 }}</span
           >
@@ -118,7 +118,7 @@ function showAll(): void {
         class="flex flex-wrap items-center gap-2.5 border-t border-accent-line bg-accent-soft px-4 py-3.5"
       >
         <template v-if="answerShown">
-          <span class="eyebrow-loud text-accent-strong">Answer</span>
+          <span class="text-[12px] leading-none font-bold text-accent-strong">Answer</span>
           <span class="num text-[14px] font-medium text-accent-strong">{{
             block.payload.answer
           }}</span>
@@ -138,7 +138,7 @@ function showAll(): void {
       v-if="allShown && block.payload?.common_mistakes?.length"
       class="mt-3.5"
     >
-      <p class="eyebrow-loud mb-2 text-danger">Common mistakes</p>
+      <p class="text-[12px] leading-none font-bold mb-2 text-danger">Common mistakes</p>
       <div
         v-for="(mistake, index) in block.payload.common_mistakes"
         :key="index"

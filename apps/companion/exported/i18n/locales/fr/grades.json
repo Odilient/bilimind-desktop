@@ -1,0 +1,50 @@
+{
+  "headline": {
+    "none": "Rien d'évalué pour l'instant",
+    "final": "Note finale : {percent} %",
+    "sofar": "{percent} % pour l’instant"
+  },
+  "fromMoodle": "de Moodle",
+  "aiming": "Objectif",
+  "worth": "Coefficient",
+  "mark": "Note",
+  "whatItIs": "Intitulé",
+  "worthPct": "Coeff. %",
+  "worthPctLabel": "Pondération, % de la note finale",
+  "markPct": "Note %",
+  "markPctLabel": "Votre note, % (si disponible)",
+  "add": "Ajouter",
+  "aimLabel": "La note globale visée, %",
+  "yourGrade": "Votre note",
+  "assessments": "Évaluations",
+  "participation": "Participation",
+  "addAssessment": "Ajouter une évaluation",
+  "download": "Télécharger ces notes :",
+  "spreadsheet": "Feuille de calcul",
+  "rest": {
+    "sofar": "Pour l'instant, vous avez {sofar}% sur les {marked}% évalués.",
+    "secured": "{target}% au total vous sont déjà acquis.",
+    "out": "{target}% au total n'est plus atteignable, même avec la note maximale sur le reste.",
+    "need": "Pour finir avec {target}% au total, il vous faut environ {need}% sur le reste."
+  },
+  "names": {
+    "more": "{list} et {n} de plus",
+    "and": "{list} et {last}"
+  },
+  "marks": "{n} note | {n} notes",
+  "line": {
+    "unweighted": "La moyenne de {marks}. Aucun coefficient défini, chaque note a le même poids : ajoutez les coefficients ci-dessous pour la vraie note.",
+    "rest": "{weight} reste à venir : {names}.",
+    "weighted": "D'après {marks}, {weight} de la note finale.{rest}",
+    "waiting": "En attente des notes.",
+    "empty": "Rien n’est encore noté."
+  },
+  "overallUntil": "au total, jusqu'à ce que vous fixiez la vôtre",
+  "overall": "au total",
+  "short": "Le total des coefficients est inférieur à 100% : {share} de la note n'est pas encore listé.",
+  "worthOf": "Pondération de {title}, % de la note",
+  "markFor": "Votre note pour {title}, %",
+  "onceMarked": "Dès qu'une note est saisie, le score nécessaire sur {title} est calculé.",
+  "finishedWith": "Terminé avec {percent} %",
+  "averaging": "Moyenne de {percent} % pour l’instant"
+}

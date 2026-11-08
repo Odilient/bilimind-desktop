@@ -30,6 +30,7 @@ import { groupThreads, useAiThread, type ThreadGroup } from '~/companion/ai/thre
 const props = withDefaults(defineProps<{ touch?: boolean }>(), { touch: false })
 
 const t = useAiThread()
+const { t: tr } = useI18n()
 const route = useRoute()
 
 onMounted(() => {
@@ -68,14 +69,14 @@ function toggleFolded(): void {
   remember(FOLDED_KEY, folded.value ? '1' : '0')
 }
 
-const SORTS: { value: ChatSort; label: string }[] = [
-  { value: 'recent', label: 'Newest first' },
-  { value: 'oldest', label: 'Oldest first' },
-  { value: 'name', label: 'Name, A to Z' },
-]
+const SORTS = computed<{ value: ChatSort; label: string }[]>(() => [
+  { value: 'recent', label: tr('shell.sortNewest') },
+  { value: 'oldest', label: tr('shell.sortOldest') },
+  { value: 'name', label: tr('shell.sortName') },
+])
 
 const sortActions = computed<MenuAction[]>(() =>
-  SORTS.map((option) => ({
+  SORTS.value.map((option) => ({
     // In the label, not `icon`: an icon on one row only would knock the others out of line.
     label: sort.value === option.value ? `${option.label} ✓` : option.label,
     run: () => {
@@ -113,7 +114,7 @@ function answering(thread: AiThread): boolean {
 }
 
 function titleOf(thread: AiThread): string {
-  return thread.title?.trim() || 'New chat'
+  return thread.title?.trim() || tr('shell.newChat')
 }
 
 /* -- The ⋯ menu ----------------------------------------------------------------- */
@@ -235,14 +236,14 @@ const ROW =
         :stroke="2.4"
         :class="['transition-transform duration-150', folded && '-rotate-90']"
       />
-      Chats
+      {{ tr('shell.chats') }}
     </button>
     <span class="flex-1" />
     <UiMenu
       v-if="t.threads.value.length && !folded"
       :actions="sortActions"
-      label="Sort chats"
-      title="Sort chats"
+      :label="tr('shell.sortChats')"
+      :title="tr('shell.sortChats')"
       float
     />
   </div>
@@ -258,7 +259,7 @@ const ROW =
       v-if="t.threadsState.loading && !t.threadsState.loaded"
       class="grid gap-2.5 px-2.5 pt-1"
       aria-busy="true"
-      aria-label="Loading your chats"
+      :aria-label="tr('shell.chatsLoading')"
     >
       <span
         v-for="i in 4"
@@ -272,13 +273,13 @@ const ROW =
       v-else-if="t.threadsState.error && !t.threads.value.length"
       class="px-2.5 text-[12.5px] leading-[1.5] text-text-muted"
     >
-      Your chats didn't load.
+      {{ tr('shell.chatsFailed') }}
       <button
         type="button"
-        class="cursor-pointer rounded font-semibold text-cobalt underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
+        class="cursor-pointer rounded font-semibold text-brand underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
         @click="t.refreshThreads()"
       >
-        Try again
+        {{ tr('common.retry') }}
       </button>
     </p>
 
@@ -286,7 +287,7 @@ const ROW =
       v-else-if="!groups.length"
       class="px-2.5 text-[12.5px] leading-[1.5] text-text-faint"
     >
-      Every chat is kept here: questions, quizzes, the course plans you drafted.
+      {{ tr('shell.chatsEmpty') }}
     </p>
 
     <template v-else>
@@ -317,7 +318,7 @@ const ROW =
                 'w-full rounded-[10px] bg-surface px-2.5 text-[13.5px] text-text shadow-[inset_0_0_0_1.5px_var(--brand-line)] outline-none',
                 props.touch ? 'h-11' : 'h-[34px]',
               ]"
-              aria-label="Chat name"
+              :aria-label="tr('shell.chatName')"
               @keydown="onRenameKey($event, thread)"
               @blur="commitRename(thread)"
             >
@@ -349,7 +350,7 @@ const ROW =
                   v-if="answering(thread)"
                   class="sb-pulse size-2 rounded-full bg-brand"
                   role="status"
-                  aria-label="Answering"
+                  :aria-label="tr('shell.answering')"
                 />
                 <CompanionIcon
                   v-else-if="thread.has_proposal"
@@ -370,8 +371,8 @@ const ROW =
                     : 'opacity-0 group-hover/chat:opacity-100 group-focus-within/chat:opacity-100',
                   menuFor?.id === thread.id && 'bg-surface-track text-text',
                 ]"
-                :aria-label="`More for “${titleOf(thread)}”`"
-                title="Rename or delete"
+                :aria-label="tr('shell.moreFor', { title: titleOf(thread) })"
+                :title="tr('shell.renameOrDelete')"
                 aria-haspopup="menu"
                 :aria-expanded="menuFor?.id === thread.id"
                 @click.stop.prevent="openMenu(thread, $event)"
@@ -414,7 +415,7 @@ const ROW =
               :size="15"
               class="shrink-0 text-text-faint"
             />
-            Rename
+            {{ tr('shell.rename') }}
           </button>
           <div class="my-1 border-t border-border-rule" />
           <button
@@ -428,7 +429,7 @@ const ROW =
               :size="15"
               class="shrink-0"
             />
-            Delete
+            {{ tr('common.delete') }}
           </button>
         </div>
       </Transition>

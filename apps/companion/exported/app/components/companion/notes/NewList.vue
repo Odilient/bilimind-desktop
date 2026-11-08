@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { NEW_NOTE_TYPES, useNewNote, type NewKind, type NewNoteType } from '~/companion/notes/new'
+const { t: tt } = useI18n()
+import { NEW_NOTE_TYPES, offered, useNewNote, type NewKind, type NewNoteType } from '~/companion/notes/new'
 import { normaliseUrl } from '~/companion/capture'
 import { courseColor } from '~/companion/colors'
 import { useQuietAi } from '~/companion/quiet-ai'
 import { useCompanion } from '~/companion/store'
+// Google
+import { namedTarget } from '~/companion/capture'
+import { driveBusy, googleAvailable, importFromDrive, preloadGoogle } from '~/companion/google/drive'
 
 /**
  * What Notes' "+" opens: one row per kind of note (a tinted round icon, what
@@ -56,7 +60,10 @@ const make = useNewNote({ subjectId: () => props.subjectId, made: (id) => emit('
 
 const course = computed(() => store.get('subjects', props.subjectId))
 const types = computed(() =>
-  NEW_NOTE_TYPES.filter((t) => (!props.kinds || props.kinds.includes(t.key)) && !(quiet.value && t.key === 'draft')),
+  NEW_NOTE_TYPES.filter(
+    // recording: `offered` leaves "Record screen" out off the desktop
+    (t) => (!props.kinds || props.kinds.includes(t.key)) && !(quiet.value && t.key === 'draft') && offered(t),
+  ),
 )
 const plain = computed(() => types.value.filter((t) => t.key !== 'draft'))
 const draftRow = computed(() => types.value.find((t) => t.key === 'draft') ?? null)
@@ -84,6 +91,14 @@ function pick(type: NewNoteType, template: string | null = null): void {
       break
     case 'record':
       make.record()
+      break
+    // recording
+    case 'screen':
+      make.screen()
+      break
+    // imports
+    case 'notion':
+      make.notion()
       break
     case 'draft':
       make.draft()
@@ -155,6 +170,24 @@ onMounted(() => {
 })
 
 const working = (key: NewKind): boolean => make.busy.value === key
+
+/*
+ * Google: "From Google Drive" sits under a course's Materials "+" (the
+ * one list here that files uploads into a course), where Google is set up and the
+ * device can open its sign-in. It files in that course, as the button says, and
+ * does the work itself: the Picker is Google's window, not something the course
+ * page has to host.
+ */
+const drive = computed(() => props.here && Boolean(props.kinds?.includes('upload')) && googleAvailable())
+
+onMounted(() => {
+  if (drive.value) preloadGoogle()
+})
+
+function fromDrive(): void {
+  emit('done')
+  void importFromDrive(store, namedTarget(store, props.subjectId))
+}
 </script>
 
 <template>
@@ -166,7 +199,7 @@ const working = (key: NewKind): boolean => make.busy.value === key
     <template v-if="mode === 'list'">
       <div
         role="menu"
-        aria-label="New note"
+        :aria-label="tt('notes.newNote')"
         class="grid gap-px"
       >
         <div
@@ -180,7 +213,7 @@ const working = (key: NewKind): boolean => make.busy.value === key
             :data-new-option="t.key"
             :disabled="Boolean(make.busy.value)"
             :class="[
-              'group/opt flex w-full cursor-pointer items-center gap-3 rounded-[12px] px-2 text-left transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:bg-surface-sunken focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-wait',
+              'group/opt flex w-full cursor-pointer items-center gap-3 rounded-[12px] px-2 text-left transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:bg-surface-sunken focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-wait',
               roomy ? 'min-h-[56px] py-2' : 'min-h-[48px] py-1.5',
               t.templates && 'pb-1',
             ]"
@@ -220,9 +253,9 @@ const working = (key: NewKind): boolean => make.busy.value === key
               type="button"
               :data-new-option="`${t.key}:${tpl.key}`"
               :disabled="Boolean(make.busy.value)"
-              :title="`New ${t.key === 'page' ? 'page' : 'whiteboard'}: ${tpl.label}`"
+              :title="tt('notes.newTplTitle', { kind: t.key === 'page' ? tt('notes.kindPage') : tt('notes.kindBoard'), tpl: tpl.label })"
               :class="[
-                'cursor-pointer rounded-full bg-surface-sunken px-2.5 font-medium text-text-soft transition-colors duration-150 outline-none hover:bg-surface-track hover:text-text focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-wait',
+                'cursor-pointer rounded-full bg-surface-sunken px-2.5 font-medium text-text-soft transition-colors duration-150 outline-none hover:bg-surface-track hover:text-text focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-wait',
                 roomy ? 'h-9 text-[13.5px]' : 'h-[26px] text-[12px]',
               ]"
               @click="pick(t, tpl.key)"
@@ -232,6 +265,39 @@ const working = (key: NewKind): boolean => make.busy.value === key
           </div>
         </div>
 
+        <!-- Google: files picked in Drive, filed in this course. -->
+        <button
+          v-if="drive"
+          type="button"
+          role="menuitem"
+          data-new-option="drive"
+          :disabled="Boolean(make.busy.value) || driveBusy"
+          :class="[
+            'group/opt flex w-full cursor-pointer items-center gap-3 rounded-[12px] px-2 text-left transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:bg-surface-sunken focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-wait',
+            roomy ? 'min-h-[56px] py-2' : 'min-h-[48px] py-1.5',
+          ]"
+          @click="fromDrive"
+        >
+          <span :class="['grid shrink-0 place-items-center rounded-full bg-surface-sunken text-text-soft', roomy ? 'size-10' : 'size-9']">
+            <UiIcon
+              v-if="driveBusy"
+              name="loader"
+              :size="16"
+              class="animate-spin"
+            />
+            <CompanionNotesGlyph
+              v-else
+              name="download"
+              :size="roomy ? 19 : 17"
+              :stroke="1.9"
+            />
+          </span>
+          <span class="grid min-w-0 flex-1 gap-px">
+            <span :class="['font-semibold text-text', roomy ? 'text-[15px]' : 'text-[14px]']">{{ tt('notes.fromDrive') }}</span>
+            <span :class="['truncate leading-snug text-text-muted', roomy ? 'text-[13px]' : 'text-[12.5px]']">{{ tt('notes.fromDriveHint') }}</span>
+          </span>
+        </button>
+
         <!-- The AI, apart, in its own mark. -->
         <template v-if="draftRow">
           <div class="mx-2 my-1 border-t border-border-rule" />
@@ -240,13 +306,13 @@ const working = (key: NewKind): boolean => make.busy.value === key
             role="menuitem"
             data-new-option="draft"
             :class="[
-              'group/opt flex w-full cursor-pointer items-center gap-3 rounded-[12px] px-2 text-left transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:bg-surface-sunken focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+              'group/opt flex w-full cursor-pointer items-center gap-3 rounded-[12px] px-2 text-left transition-colors duration-150 outline-none hover:bg-surface-sunken focus-visible:bg-surface-sunken focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]',
               roomy ? 'min-h-[56px] py-2' : 'min-h-[48px] py-1.5',
             ]"
             @click="pick(draftRow)"
           >
-            <span :class="['grid shrink-0 place-items-center rounded-full bg-ink', roomy ? 'size-10' : 'size-9']">
-              <span class="grid size-6 place-items-center rounded-full bg-lime text-ink">
+            <span :class="['grid shrink-0 place-items-center rounded-full bg-inverse', roomy ? 'size-10' : 'size-9']">
+              <span class="grid size-6 place-items-center rounded-full bg-accent text-on-accent">
                 <UiIcon
                   name="spark"
                   :size="13"
@@ -275,9 +341,9 @@ const working = (key: NewKind): boolean => make.busy.value === key
       <div class="flex items-center gap-1.5">
         <button
           type="button"
-          class="-ml-1.5 grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-sunken hover:text-text focus-visible:outline-2 focus-visible:outline-cobalt max-lg:size-11"
-          aria-label="Back to the list"
-          title="Back (Esc)"
+          class="-ml-1.5 grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-sunken hover:text-text focus-visible:outline-2 focus-visible:outline-brand max-lg:size-11"
+          :aria-label="tt('notes.backToList')"
+          :title="tt('notes.backEsc')"
           @click="back"
         >
           <UiIcon
@@ -285,11 +351,11 @@ const working = (key: NewKind): boolean => make.busy.value === key
             :size="17"
           />
         </button>
-        <span class="text-[14px] font-semibold text-text">Add a link</span>
+        <span class="text-[14px] font-semibold text-text">{{ tt('notes.addLink') }}</span>
       </div>
       <label
         :class="[
-          'flex items-center gap-2 rounded-[12px] bg-surface-sunken px-3 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+          'flex items-center gap-2 rounded-[12px] bg-surface-sunken px-3 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--brand)]',
           roomy ? 'h-12' : 'h-10',
           tried && !parsed && 'shadow-[inset_0_0_0_2px_var(--danger)]',
         ]"
@@ -306,8 +372,8 @@ const working = (key: NewKind): boolean => make.busy.value === key
           inputmode="url"
           autocomplete="off"
           spellcheck="false"
-          placeholder="Paste a link"
-          aria-label="The link"
+          :placeholder="tt('notes.pasteLink')"
+          :aria-label="tt('notes.theLink')"
           :class="['min-w-0 flex-1 bg-transparent text-text outline-none placeholder:text-text-faint', roomy ? 'text-[16px]' : 'text-[14px]']"
         >
       </label>
@@ -316,7 +382,7 @@ const working = (key: NewKind): boolean => make.busy.value === key
         class="-mt-1 text-[12.5px] text-danger"
         role="alert"
       >
-        That doesn’t look like a link. Try one that starts with https://
+        {{ tt('notes.badLink') }}
       </p>
       <UiBtn
         type="submit"
@@ -325,7 +391,7 @@ const working = (key: NewKind): boolean => make.busy.value === key
         :disabled="!url.trim()"
         :loading="make.busy.value === 'link'"
       >
-        Add link
+        {{ tt('notes.addLinkBtn') }}
       </UiBtn>
     </form>
 
@@ -348,8 +414,8 @@ const working = (key: NewKind): boolean => make.busy.value === key
         class="shrink-0"
       />
       <span class="truncate">
-        <template v-if="course">Goes in {{ course.title }}</template>
-        <template v-else>Goes in My notes. Move it to a course any time.</template>
+        <template v-if="course">{{ tt('notes.goesInCourse', { course: course.title }) }}</template>
+        <template v-else>{{ tt('notes.goesInMine') }}</template>
       </span>
     </p>
   </div>

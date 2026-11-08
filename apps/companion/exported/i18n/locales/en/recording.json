@@ -1,0 +1,72 @@
+{
+  "aloud": {
+    "sayOut": "Say it out loud",
+    "orScreen": "or explain over your screen",
+    "agree": "BiliMind writes down what you say on this computer. The first time, it downloads a speech model{size} and keeps it here. What you say never leaves this computer.",
+    "aboutMb": " (about {mb} MB)",
+    "downloadStart": "Download and start",
+    "typeInstead": "Type instead",
+    "whichScreen": "Which screen are you explaining over? Your voice is recorded with it.",
+    "cancel": "Cancel",
+    "recordingScreen": "Recording your screen and voice",
+    "listening": "Listening",
+    "stop": "Stop",
+    "talk": "Talk it through as you would to a classmate. When you stop, your words go into the box.",
+    "tryAgain": "Try again",
+    "done": "Your words are in the box. Read them over and fix what it misheard.",
+    "again": "Say it again",
+    "screenFail": "This computer won’t share its screen right now.",
+    "explaining": "Explaining {topic}",
+    "explainingBack": "Explaining it back",
+    "recFail": "The recorder didn’t start. Try again in a moment.",
+    "noWords": "No words came through. Check the microphone, or type it instead.",
+    "writeFail": "What you said couldn’t be written down.",
+    "modelReady": "Getting the speech model ready…",
+    "modelProgress": "Getting the speech model ready… {done} of {total} MB",
+    "writing": "Writing down what you said…"
+  },
+  "tr": {
+    "title": "Transcript",
+    "waiting": "Waiting for another transcript to finish…",
+    "progress": "Writing the transcript on this computer… {done} of {total} min",
+    "stopped": "The transcript stopped. {error}",
+    "agree": "BiliMind can write down what was said, on this computer. It downloads a speech model once{size} and keeps it here; the recording itself never leaves this computer.",
+    "stoppedAt": "It stopped at {at}.",
+    "downloadWrite": "Download and write it",
+    "carryOn": "Carry on",
+    "write": "Write the transcript"
+  },
+  "pill": {
+    "recording": "Recording",
+    "paused": "Paused",
+    "aria": "Recording {label}, {elapsed}. Open the recorder.",
+    "interrupted": "The recording stopped by itself",
+    "saved": "{time} was saved under {where}.",
+    "notebook": "your Notebook"
+  },
+  "picker": {
+    "screen": "Whole screen",
+    "window": "A window"
+  },
+  "err": {
+    "noMic": "This browser can’t use the microphone.",
+    "denied": "BiliMind needs the microphone to record. Allow it in the browser or the computer’s privacy settings, then try again.",
+    "noMicAnswer": "No microphone answered. Check that one is plugged in and not in use.",
+    "saveFail": "The recording couldn’t be saved.",
+    "busy": "Something is already being recorded.",
+    "noRecord": "This browser can’t record.",
+    "noSound": "There was no sound to record.",
+    "itself": "The recording stopped by itself.",
+    "noStart": "The recorder didn’t start. Try again in a moment."
+  },
+  "file": {
+    "voiceMemo": "Voice memo",
+    "recording": "{base} recording",
+    "screenRecording": "Screen recording",
+    "baseScreen": "{base} screen recording",
+    "uploadFail": "The recording didn’t upload",
+    "tooLong": "It’s longer than an upload can take. Save it to this computer so nothing is lost.",
+    "saveLocal": "Save it to this computer so nothing is lost, and add it later with Upload files.",
+    "saveIt": "Save it"
+  }
+}

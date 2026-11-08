@@ -1,0 +1,17 @@
+{
+  "readinessSaid": "La preparación indicaba un {readiness}%. Obtuviste un {got}%.",
+  "whatDidYouGet": "¿Qué nota obtuviste?",
+  "save": "Guardar",
+  "saveHint": "Para que BiliMind compare la precisión de su estimación.",
+  "notConfirmed": "Aún no confirmado.",
+  "heardInClass": "Mencionado en clase",
+  "fromShared": "De un mensaje compartido",
+  "moodleHasnt": "; no figura en Moodle.",
+  "confirmDeadline": "Confirmar fecha límite",
+  "open": "Abrir",
+  "due": "Vence {when}",
+  "seoTitle": "Fecha límite · BiliMind",
+  "checkedRight": "Lo he comprobado, es correcto",
+  "whereCameFrom": "De dónde procede la fecha",
+  "nothingLinked": "Aún no hay temas vinculados. Cuando la guía o el profesor indiquen el contenido, aparecerán aquí con tu nivel de preparación."
+}

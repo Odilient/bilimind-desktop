@@ -21,6 +21,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{ grade: [recall: Recall] }>()
 
+const { t } = useI18n()
+
 const node = computed(() => props.item.node ?? null)
 const course = computed(() => props.item.course ?? null)
 
@@ -40,13 +42,13 @@ const lessonLink = computed(() => {
         <p
           class="inline-flex h-7 items-center rounded-full bg-brand-soft px-3 font-display text-[12.5px] font-semibold text-brand"
         >
-          {{ position }} of {{ total }}
+          {{ t('check.review.of', { position, total }) }}
         </p>
         <p
           v-if="item.is_overdue && item.days_late > 0"
           class="text-[12px] text-text-faint"
         >
-          waited {{ plural(item.days_late, 'day') }}
+          {{ t('check.review.waited', item.days_late) }}
         </p>
       </div>
 
@@ -57,7 +59,7 @@ const lessonLink = computed(() => {
         {{ course.title }}
       </p>
       <h2 class="t-head mt-1 text-[24px] leading-[1.15] sm:text-[30px]">
-        {{ node?.title ?? 'A lesson from earlier' }}
+        {{ node?.title ?? t('check.review.fallbackTitle') }}
       </h2>
 
       <p
@@ -75,12 +77,12 @@ const lessonLink = computed(() => {
           name="book"
           :size="14"
         />
-        Open the lesson
+        {{ t('check.review.openLesson') }}
       </NuxtLink>
     </div>
 
     <div class="rounded-b-[26px] border-t border-border bg-surface-mute px-5 py-5 sm:px-8">
-      <p class="mb-3 text-[13.5px] font-semibold text-text-dim">How well did you remember this?</p>
+      <p class="mb-3 text-[13.5px] font-semibold text-text-dim">{{ t('check.review.howWell') }}</p>
       <ReviewRecallButtons
         :submitting="submitting"
         :pending="pending"

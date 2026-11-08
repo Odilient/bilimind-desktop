@@ -15,21 +15,22 @@ import { itemRoute } from '~/companion/ai/links'
 import { noteIcon } from '~/companion/notes/tree'
 import { itemHref } from '~/companion/today-layout'
 
+const { t } = useI18n()
 const c = useCompanion()
 const toast = useToast()
 
 const rows = computed(() => [
   ...c.shelf.value
     .filter((s) => s.sample)
-    .map((s) => ({ key: s.id, subject: s, icon: '', name: s.title, line: 'Course', to: `/app/courses/${s.id}` })),
+    .map((s) => ({ key: s.id, subject: s, icon: '', name: s.title, line: t('today.samples.course'), to: `/app/courses/${s.id}` })),
   ...c.items.value
     .filter((i) => isSample(i) && !i.parent_id)
     .map((i) => ({
       key: i.id,
       subject: null,
       icon: noteIcon(i),
-      name: i.title || 'Untitled',
-      line: i.kind === 'board' ? 'Whiteboard' : 'Page',
+      name: i.title || t('today.samples.untitled'),
+      line: t(i.kind === 'board' ? 'today.samples.whiteboard' : 'today.samples.page'),
       to: itemRoute(i) ?? itemHref(i),
     })),
 ])
@@ -41,9 +42,9 @@ async function remove(): Promise<void> {
   removing.value = true
   try {
     await removeSamples()
-    toast.success({ title: 'Samples removed', body: 'Everything here is yours from now on.' })
+    toast.success({ title: t('today.samples.removed'), body: t('today.samples.removedBody') })
   } catch {
-    toast.error({ title: "The samples didn't go", body: 'Check the connection and try again.' })
+    toast.error({ title: t('today.samples.failed'), body: t('today.samples.failedBody') })
   } finally {
     removing.value = false
   }
@@ -59,12 +60,12 @@ async function remove(): Promise<void> {
       <div class="min-w-0">
         <h2
           id="today-samples"
-          class="t-head text-[19px]"
+          class="font-display text-[18px] font-semibold tracking-[-0.02em]"
         >
-          Look around
+          {{ t('today.samples.title') }}
         </h2>
         <p class="mt-0.5 text-[13px] text-text-faint">
-          A sample course and notes, to try things on.
+          {{ t('today.samples.hint') }}
         </p>
       </div>
       <UiBtn
@@ -75,11 +76,11 @@ async function remove(): Promise<void> {
         :loading="removing"
         @click="remove"
       >
-        Remove samples
+        {{ t('today.samples.remove') }}
       </UiBtn>
     </div>
 
-    <ul class="mt-3 overflow-hidden rounded-[22px] bg-surface shadow-[inset_0_0_0_1px_var(--border),0_24px_48px_-36px_rgb(11_13_16/0.3)]">
+    <ul class="mt-3 overflow-hidden rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]">
       <li
         v-for="(r, index) in rows"
         :key="r.key"
@@ -109,8 +110,8 @@ async function remove(): Promise<void> {
             <span class="mt-0.5 block text-[12.5px] text-text-faint">{{ r.line }}</span>
           </span>
           <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-semibold text-accent-strong">
-            <span class="size-1.5 rounded-full bg-lime-2" />
-            Sample
+            <span class="size-1.5 rounded-full bg-leaf" />
+            {{ t('today.samples.sample') }}
           </span>
           <UiIcon
             name="chevron-right"

@@ -10,17 +10,12 @@ import type { Confidence } from '~/companion/types'
 
 const props = defineProps<{ value: Confidence; label?: string }>()
 
-const WORDS: Record<Confidence, string> = {
-  official: 'Official',
-  heard: 'Heard in class, not official',
-  shared: 'Shared in a chat, not official',
-  own: 'Set by you',
-}
+const { t } = useI18n()
 </script>
 
 <template>
   <span
     class="text-[13.5px] font-medium"
     :class="props.value === 'official' ? 'text-success-text' : 'text-text-muted'"
-  >{{ label ?? WORDS[props.value] }}</span>
+  >{{ label ?? t(`today.confidence.${props.value}`) }}</span>
 </template>

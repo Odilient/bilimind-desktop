@@ -1,4 +1,5 @@
 import { PUBLIC_PAGES } from '#shared/pages'
+import { homeFor } from '~/institution/place'
 
 /**
  * The one gate in front of the whole app.
@@ -43,6 +44,8 @@ const PUBLIC_ROUTES = new Set<string>([
   // provider's domain review has to be able to load it while signed out — a 302
   // to /login there fails the review.
   '/checkout',
+  // A school sign-in (SSO, LTI) hands over here with a one-time code; nobody is signed in yet.
+  '/handoff',
 ])
 
 /** Where a signed-in learner is sent away from the marketing/auth pages. */
@@ -82,6 +85,12 @@ function isPublic(path: string, name?: string): boolean {
      account yet; the page itself says who invited them before it asks them to
      register. Bouncing it to `/login` would lose the token on the way. */
   if (clean.startsWith('/invite/')) return true
+  /* A course's share link (`/join/{code}`, Daylight 2) is opened from a group
+     chat by people who mostly have no account yet; the page says what the
+     course is, then offers sign-up with the code kept in `next`. */
+  if (clean.startsWith('/join/')) return true
+  // A centre's pay link (`/pay/{token}`) goes out in messages to parents, who often have no account; the token is the credential.
+  if (clean.startsWith('/pay/')) return true
   /* `/learn/*` is a generated set — one roadmap per subject, listed by
      `shared/learn.ts` rather than by `shared/pages.ts`, because it grows by
      running a script rather than by writing a page. Matched on the prefix for
@@ -99,6 +108,16 @@ function isPublic(path: string, name?: string): boolean {
      from `app/content/compare/`. Nuxt matches the static files first, so the
      prefix covers both without the allowlist having to know which is which. */
   if (clean.startsWith('/vs/')) return true
+  /* A centre's own page (`/c/{slug}`, its enquiry form) and a certificate check
+     (`/verify/{code}`) are opened by parents and employers who have no account.
+     Public routes only: neither is in `shared/pages.ts`, so neither reaches the
+     sitemap, and both pages carry `noindex`. An unknown slug or code 404s in the
+     page. */
+  if (clean.startsWith('/c/') || clean.startsWith('/verify/')) return true
+  // A launch from the school's LMS (LTI) arrives signed out; the page signs in with a one-time code.
+  if (clean.startsWith('/lti/')) return true
+  // A centre's placement test is sent to enquirers who have no account yet.
+  if (clean.startsWith('/placement/')) return true
   return PUBLIC_ROUTES.has(clean)
 }
 
@@ -117,21 +136,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
     isAuthenticated.value &&
     (clean === '/' || clean === '/login' || clean === '/register' || clean === '/start')
   ) {
-    const next = typeof to.query.next === 'string' ? to.query.next : HOME
+    const topic = typeof to.query.topic === 'string' ? to.query.topic : null
+    // Staff and parents go to their institution, as after signing in; a sentence in hand goes to the chat.
+    const next = typeof to.query.next === 'string' ? to.query.next : topic ? HOME : await homeFor(false)
     /* A signed-in reader pressing "Build this course" on `/learn/rust` asks
        for `/start?topic=…`, and `/start` is a page they have no use for. They
        still said what they wanted, though, so the sentence travels with the
        bounce instead of being thrown away at the door: `/app?topic=` opens
        the chat with it in the box (companion-home.global.ts). */
-    const topic = typeof to.query.topic === 'string' ? to.query.topic : null
     return navigateTo(topic ? { path: next, query: { topic } } : next)
-  }
-
-  /* The companion's demo mode (`?demo=1`, remembered for the tab, or
-     NUXT_PUBLIC_COMPANION_DEMO=1) runs on a seeded in-memory semester with no
-     account behind it, so its pages have nothing to guard. */
-  if ((clean === '/app' || clean.startsWith('/app/')) && isCompanionDemo(to.query.demo)) {
-    return
   }
 
   // Signed-out learners hitting an app route get sent to sign in, and back.

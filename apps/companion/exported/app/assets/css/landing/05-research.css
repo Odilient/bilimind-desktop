@@ -1,0 +1,83 @@
+/* 05 · research: three findings, read left to right: what was found, the evidence, what BiliMind does with it. */
+.d2 .rs { padding-bottom: 12px; }
+.d2 .rs .sec-head .cite { margin-top: 14px; }
+.d2 .rs-list { border-top: 1px solid var(--line); }
+.d2 .rs-row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.95fr) minmax(0, 0.95fr); gap: 48px; align-items: center; padding: 44px 0; }
+.d2 .rs-row + .rs-row { border-top: 1px solid var(--line); }
+
+.d2 .rs-say { display: grid; gap: 12px; align-content: start; }
+.d2 .rs-n { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--c); color: #1f1c17; font-size: 14px; font-weight: 750; }
+.d2 .rs-h { font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 36px); font-weight: 600; line-height: 1.08; letter-spacing: -0.032em; text-wrap: balance; }
+.d2 .rs-say > p:not(.cite) { font-size: 16.5px; line-height: 1.55; color: var(--ink-2); max-width: 46ch; text-wrap: pretty; }
+
+.d2 .rs-proof { margin: 0; padding: 22px 24px; border-radius: 18px; background: var(--wash); box-shadow: inset 0 0 0 1px var(--line); display: grid; gap: 14px; }
+.d2 .rs-proof figcaption { font-size: 12.5px; font-weight: 650; color: var(--ink-3); }
+.d2 .rs-key { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-3); }
+.d2 .rs-key span { display: inline-flex; align-items: center; gap: 7px; }
+.d2 .rs-key .ln { width: 16px; height: 0; border-top: 2.5px solid var(--hi-2); border-radius: 2px; }
+.d2 .rs-key .ln.dash { border-top: 2px dashed var(--ink-4); }
+.d2 .rs-key .sq { width: 10px; height: 10px; border-radius: 3px; }
+.d2 .sq.exp, .d2 .gp .exp { background: var(--ink-4); }
+.d2 .sq.got, .d2 .gp .got { background: var(--rose); }
+
+/* 1 · bars */
+.d2 .bar { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 6px 10px; align-items: center; font-size: 13.5px; color: var(--ink-2); }
+.d2 .bar span { grid-column: 1 / -1; font-weight: 600; }
+.d2 .bar i { height: 18px; border-radius: 6px; background: var(--wash-2); position: relative; overflow: hidden; }
+.d2 .bar i::after { content: ''; position: absolute; inset: 0; width: var(--w); border-radius: 6px; background: var(--leaf); transform-origin: 0 50%; transform: scaleX(var(--k, 1)); transition: transform 1.4s var(--ease); }
+.d2 .bar.b i::after { background: var(--ink-4); }
+.d2 .bar b { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); text-align: right; }
+.d2 .bar.a b { color: var(--leaf-ink); }
+
+/* 2 · the curve */
+.d2 .rs-curve svg { width: 100%; height: auto; overflow: visible; }
+.d2 .rs-curve .ax { stroke: var(--line-2); stroke-width: 1; }
+.d2 .rs-curve .base { fill: none; stroke: var(--ink-4); stroke-width: 2; stroke-dasharray: 4 5; }
+.d2 .rs-curve .rev { fill: none; stroke: var(--hi-2); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.d2 .rs-curve .dot-r { fill: var(--paper); stroke: var(--hi-2); stroke-width: 2.5; }
+.d2 .rs-curve text { font: 650 11.5px var(--font); fill: var(--ink-3); }
+.d2 .rs-curve text.now { fill: var(--ink); }
+
+/* 3 · expected vs got */
+.d2 .gp { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 12px; font-size: 13.5px; font-weight: 600; color: var(--ink-2); }
+.d2 .gp-bars { display: grid; gap: 5px; }
+.d2 .gp-bars i { display: block; height: 12px; width: var(--w); border-radius: 5px; transform-origin: 0 50%; transform: scaleX(var(--k, 1)); transition: transform 1.2s var(--ease); }
+.d2 .gp-bars .got { transition-delay: 0.25s; }
+
+/* the app side */
+.d2 .rs-app { display: grid; gap: 10px; align-content: start; }
+.d2 .rs-in { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ct); }
+.d2 .rs-in svg { width: 14px; height: 14px; }
+.d2 .rs-what { font-size: 17px; font-weight: 650; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); text-wrap: pretty; }
+.d2 .rs-mini { margin-top: 4px; padding: 12px 14px; border-radius: 14px; }
+.d2 .rs-mrow { display: flex; align-items: center; gap: 11px; }
+.d2 .rs-mrow > span:nth-child(2) { display: grid; flex: 1; min-width: 0; line-height: 1.3; }
+.d2 .rs-mrow b { font-size: 13.5px; font-weight: 650; }
+.d2 .rs-mrow em { font-style: normal; font-size: 12px; color: var(--ink-3); }
+.d2 .rs-go { height: 30px; padding: 0 12px; border-radius: 9px; display: inline-grid; place-items: center; background: var(--ink); color: var(--on-ink); font-size: 12.5px; font-weight: 700; }
+.d2 .rs-revs { padding: 6px 14px; }
+.d2 .rs-rv { display: grid; grid-template-columns: 82px minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 38px; font-size: 13px; }
+.d2 .rs-rv + .rs-rv { border-top: 1px solid var(--line); }
+.d2 .rs-rv b { font-weight: 700; font-size: 12.5px; }
+.d2 .rs-rv span { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d2 .rs-rv em { font-style: normal; font-size: 12px; font-weight: 650; color: var(--hi-ink); }
+.d2 .rs-cal { display: grid; gap: 10px; padding: 14px; }
+.d2 .rs-cr { display: grid; grid-template-columns: 104px minmax(0, 1fr) 40px; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); }
+.d2 .rs-cr i { height: 10px; border-radius: 5px; background: var(--wash-2); position: relative; overflow: hidden; }
+.d2 .rs-cr i::after { content: ''; position: absolute; inset: 0; width: var(--w); border-radius: 5px; background: var(--ink-4); transform-origin: 0 50%; transform: scaleX(var(--k, 1)); transition: transform 1.2s var(--ease); }
+.d2 .rs-cr.got i::after { background: var(--rose); transition-delay: 0.25s; }
+.d2 .rs-cr b { font-weight: 700; color: var(--ink); text-align: right; }
+
+.d2-js .d2 .rs-bars:not(.on) i::after, .d2-js .d2 .rs-cal:not(.on) i::after, .d2-js .d2 .rs-gap:not(.on) .gp-bars i { --k: 0; }
+
+@media (max-width: 1100px) {
+  .d2 .rs-row { gap: 32px; padding: 40px 0; }
+}
+@media (max-width: 900px) {
+  .d2 .rs-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .d2 .rs-say { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .d2 .rs-row { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 36px 0; }
+  .d2 .rs-proof { padding: 18px; }
+}

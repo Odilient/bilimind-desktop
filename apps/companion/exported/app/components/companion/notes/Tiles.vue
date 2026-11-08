@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import { useNoteCreate } from '~/companion/notes/actions'
 import { courseColor } from '~/companion/colors'
 import { useCompanion } from '~/companion/store'
@@ -28,16 +29,16 @@ interface Tile {
   art: Art
 }
 
-const START: Tile[] = [
-  { kind: 'page', template: 'blank', label: 'Blank page', hint: 'Start from nothing', art: 'blank' },
-  { kind: 'page', template: 'lecture', label: 'Lecture notes', hint: 'Main ideas, an example, exam hints', art: 'lecture' },
-  { kind: 'page', template: 'cornell', label: 'Cornell notes', hint: 'Cues, notes, then a summary', art: 'cornell' },
-  { kind: 'page', template: 'reading', label: 'Reading notes', hint: 'Source, your words, quotes', art: 'reading' },
-  { kind: 'page', template: 'vocab', label: 'Vocabulary', hint: 'Every row becomes a card', art: 'vocab' },
-  { kind: 'board', template: 'blank', label: 'Whiteboard', hint: 'Draw, stick notes, connect', art: 'board' },
-  { kind: 'board', template: 'mindmap', label: 'Mind map', hint: 'One idea, branching out', art: 'mind' },
-  { kind: 'board', template: 'concept', label: 'Concept map', hint: "The course's topics, linked", art: 'concept' },
-]
+const START = computed<Tile[]>(() => [
+  { kind: 'page', template: 'blank', label: t('notes.tileBlank'), hint: t('notes.tileBlankHint'), art: 'blank' },
+  { kind: 'page', template: 'lecture', label: t('notes.tileLecture'), hint: t('notes.tileLectureHint'), art: 'lecture' },
+  { kind: 'page', template: 'cornell', label: t('notes.tileCornell'), hint: t('notes.tileCornellHint'), art: 'cornell' },
+  { kind: 'page', template: 'reading', label: t('notes.tileReading'), hint: t('notes.tileReadingHint'), art: 'reading' },
+  { kind: 'page', template: 'vocab', label: t('notes.tileVocab'), hint: t('notes.tileVocabHint'), art: 'vocab' },
+  { kind: 'board', template: 'blank', label: t('notes.tileBoard'), hint: t('notes.tileBoardHint'), art: 'board' },
+  { kind: 'board', template: 'mindmap', label: t('notes.tileMind'), hint: t('notes.tileMindHint'), art: 'mind' },
+  { kind: 'board', template: 'concept', label: t('notes.tileConcept'), hint: t('notes.tileConceptHint'), art: 'concept' },
+])
 
 const props = withDefaults(
   defineProps<{
@@ -54,8 +55,8 @@ const store = useCompanion()
 const create = useNoteCreate()
 
 const course = computed(() => store.get('subjects', props.subjectId))
-const where = computed(() => course.value?.title ?? 'My notes')
-const ink = computed(() => (course.value ? courseColor(course.value.color) : 'var(--cobalt)'))
+const where = computed(() => course.value?.title ?? t('notes.myNotes'))
+const ink = computed(() => (course.value ? courseColor(course.value.color) : 'var(--brand)'))
 
 const making = ref<string | null>(null)
 
@@ -77,7 +78,7 @@ async function make(tile: Tile): Promise<void> {
     :class="
       size === 'lg'
         ? 'grid grid-cols-2 gap-3 min-[720px]:grid-cols-4'
-        : 'om-scroll -mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 pb-1'
+        : 'om-scroll -mx-4 flex snap-x scroll-px-4 gap-2.5 overflow-x-auto px-4 pb-1'
     "
   >
     <button
@@ -85,9 +86,9 @@ async function make(tile: Tile): Promise<void> {
       :key="`${tile.kind}:${tile.template}`"
       type="button"
       :disabled="create.busy.value"
-      :aria-label="`${tile.label}, in ${where}`"
+      :aria-label="t('notes.tileAria', { tile: tile.label, where })"
       :class="[
-        'group/tile grid cursor-pointer content-start rounded-[16px] bg-surface text-left shadow-[inset_0_0_0_1px_var(--border)] transition duration-150 outline-none hover:-translate-y-px hover:shadow-[inset_0_0_0_1px_var(--border-strong),0_10px_24px_-14px_rgb(13_22_96/0.35)] focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-wait motion-reduce:hover:translate-y-0',
+        'group/tile grid cursor-pointer content-start rounded-[16px] bg-surface text-left shadow-[inset_0_0_0_1px_var(--border)] transition duration-150 outline-none hover:-translate-y-px hover:shadow-[inset_0_0_0_1px_var(--border-strong),0_10px_24px_-14px_rgb(13_22_96/0.35)] focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-wait motion-reduce:hover:translate-y-0',
         size === 'lg' ? 'gap-3 p-2.5 pb-3.5' : 'w-[148px] shrink-0 snap-start gap-2 p-2 pb-2.5',
         making === `${tile.kind}:${tile.template}` && 'opacity-70',
       ]"

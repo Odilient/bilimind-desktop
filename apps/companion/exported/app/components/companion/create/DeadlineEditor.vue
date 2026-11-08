@@ -13,14 +13,14 @@
  */
 import type { ProposalDeadline } from '~/companion/create'
 import { deadlineKind, dueIso } from '~/companion/create'
-import { KIND_WORD } from '~/companion/words'
+import { kindWord } from '~/companion/words'
 import { dayKey, daysBetween, dayMonthLong } from '~/companion/time'
 
 defineProps<{ disabled?: boolean }>()
 const deadlines = defineModel<ProposalDeadline[]>({ required: true })
 
 const root = ref<HTMLElement | null>(null)
-const KINDS = Object.entries(KIND_WORD) as [keyof typeof KIND_WORD, string][]
+const KINDS = computed(() => (['assignment', 'quiz', 'lab', 'midterm', 'final', 'exam', 'project', 'presentation', 'milestone', 'other'] as const).map((k) => [k, kindWord(k)] as const))
 
 function dateOf(d: ProposalDeadline): string {
   return d.due_at ? d.due_at.slice(0, 10) : ''
@@ -61,7 +61,7 @@ function keyOf(row: object): number {
 }
 
 const FIELD =
-  'h-10 min-w-0 rounded-[10px] border border-transparent bg-transparent px-2 text-[14.5px] text-text outline-none transition-colors duration-150 hover:border-border focus:border-cobalt focus:ring-3 focus:ring-brand-line disabled:hover:border-transparent'
+  'h-10 min-w-0 rounded-[10px] border border-transparent bg-transparent px-2 text-[14.5px] text-text outline-none transition-colors duration-150 hover:border-border focus:border-brand focus:ring-3 focus:ring-brand-line disabled:hover:border-transparent'
 </script>
 
 <template>
@@ -71,7 +71,7 @@ const FIELD =
   >
     <ul
       v-if="deadlines.length"
-      class="divide-y divide-border-rule rounded-[18px] border border-border bg-surface"
+      class="divide-y divide-border-rule rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)]"
     >
       <li
         v-for="(d, i) in deadlines"
@@ -136,7 +136,7 @@ const FIELD =
         >
         <button
           type="button"
-          class="grid size-10 cursor-pointer place-items-center rounded-full text-text-faint transition-colors duration-150 outline-none hover:bg-[rgb(11_13_16/0.06)] hover:text-text focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none max-[699px]:col-start-3 max-[699px]:row-start-1"
+          class="grid size-10 cursor-pointer place-items-center rounded-full text-text-faint transition-colors duration-150 outline-none hover:bg-surface-sunken hover:text-text focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none max-[699px]:col-start-3 max-[699px]:row-start-1"
           :disabled="disabled"
           :aria-label="`Remove ${d.title || 'this deadline'}`"
           title="Remove"
@@ -151,14 +151,14 @@ const FIELD =
     </ul>
     <p
       v-else
-      class="rounded-[18px] border border-dashed border-border-dashed px-4 py-4 text-[14.5px] text-text-muted"
+      class="rounded-[14px] border border-dashed border-border-dashed px-4 py-4 text-[14.5px] text-text-muted"
     >
       Nothing with a date in it. Add the ones you know, or add a syllabus later and BiliMind finds them.
     </p>
     <div>
       <button
         type="button"
-        class="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full pr-4 pl-2.5 text-[14.5px] font-semibold text-cobalt transition-colors duration-150 outline-none hover:bg-cobalt-soft focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none disabled:opacity-50"
+        class="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full pr-4 pl-2.5 text-[14.5px] font-semibold text-brand transition-colors duration-150 outline-none hover:bg-brand-soft focus-visible:ring-2 focus-visible:ring-brand-line disabled:pointer-events-none disabled:opacity-50"
         :disabled="disabled"
         @click="add"
       >

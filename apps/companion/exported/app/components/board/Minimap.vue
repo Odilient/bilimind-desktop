@@ -42,18 +42,19 @@ function draw() {
   for (const it of data.items) {
     const x = ox + it.r.x * k, y = oy + it.r.y * k, w = Math.max(1.5, it.r.w * k), h = Math.max(1.5, it.r.h * k)
     if (it.kind === 'frame') {
-      g.fillStyle = '#eef0f4'
+      g.fillStyle = 'rgba(128,118,100,0.14)'
       g.fillRect(x, y, w, h)
     } else if (it.kind === 'stroke') {
-      g.fillStyle = 'rgba(11,13,16,0.18)'
+      g.fillStyle = 'rgba(128,118,100,0.3)'
       g.fillRect(x, y, w, h)
     } else {
-      g.fillStyle = it.color ?? '#d9dce3'
+      g.fillStyle = it.color ?? 'rgba(128,118,100,0.22)'
       g.fillRect(x, y, w, h)
     }
   }
   const v = data.view
-  g.strokeStyle = '#2340e6'
+  // Daylight's sky: the viewport, as on course.html's minimap.
+  g.strokeStyle = '#5b9cf0'
   g.lineWidth = 1.5
   g.strokeRect(ox + v.x * k, oy + v.y * k, v.w * k, v.h * k)
 }

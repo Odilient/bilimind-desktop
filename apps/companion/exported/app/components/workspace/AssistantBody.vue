@@ -79,7 +79,7 @@ defineExpose({ scrollToEnd })
           v-for="opener in openers"
           :key="opener.q"
           type="button"
-          class="cursor-pointer rounded-[12px] bg-surface px-3 py-2.5 text-left text-[12.5px] leading-[1.4] text-text-body shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.1)] transition-colors hover:bg-brand-soft hover:text-brand hover:shadow-[inset_0_0_0_1.5px_var(--cobalt)]"
+          class="cursor-pointer rounded-[12px] bg-surface px-3 py-2.5 text-left text-[12.5px] leading-[1.4] text-text-body shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.1)] transition-colors hover:bg-brand-soft hover:text-brand hover:shadow-[inset_0_0_0_1.5px_var(--brand)]"
           @click="emit('send', opener.q)"
         >
           {{ opener.q }}
@@ -173,13 +173,13 @@ defineExpose({ scrollToEnd })
       <input
         v-model="draft"
         placeholder="Ask, or point at a block…"
-        class="h-10 min-w-0 flex-1 rounded-[12px] bg-surface px-3 text-[13px] shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] outline-none placeholder:text-[#9da2ae] dark:placeholder:text-text-faint focus:shadow-[inset_0_0_0_1.5px_var(--lime-2),0_0_0_4px_rgb(198_242_78/0.35)]"
+        class="h-10 min-w-0 flex-1 rounded-[12px] bg-surface px-3 text-[13px] shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] outline-none placeholder:text-[#9da2ae] dark:placeholder:text-text-faint focus:shadow-[inset_0_0_0_1.5px_var(--hi-2),0_0_0_4px_rgb(255_212_71/0.35)]"
         @keydown.enter="emit('send')"
       />
       <!-- Grey until there is something to send, then the ink "do it". -->
       <button
         type="button"
-        class="grid size-[38px] shrink-0 cursor-pointer place-items-center rounded-[11px] bg-chip text-lime transition-colors hover:bg-[#22262e] disabled:cursor-default disabled:bg-[#9da2ae] disabled:text-white dark:hover:brightness-125 dark:disabled:bg-surface-track dark:disabled:text-text-ghost"
+        class="grid size-[38px] shrink-0 cursor-pointer place-items-center rounded-[11px] bg-chip text-accent transition-colors hover:bg-inverse-hover disabled:cursor-default disabled:bg-[#9da2ae] disabled:text-white dark:hover:brightness-125 dark:disabled:bg-surface-track dark:disabled:text-text-ghost"
         aria-label="Send"
         :disabled="busy || draft.trim() === ''"
         @click="emit('send')"

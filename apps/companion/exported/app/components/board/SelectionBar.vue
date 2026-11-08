@@ -8,7 +8,8 @@
  * themselves on hover.
  */
 import type { BoardController } from '~/companion/board/controller'
-import { SHAPE_FILL, STICKY, type ShapeFill, type StickyColor } from '~/companion/board/palette'
+// Swatches show the colour as the board paints it now (`sticky()`, `fills()` follow the theme).
+import { SHAPE_FILL, STICKY, fills as fillHex, sticky, type ShapeFill, type StickyColor } from '~/companion/board/palette'
 import type { BoardObject, ObjKind, ShapeKind } from '~/companion/board/model'
 import { useAi } from '~/companion/ai/state'
 import { useQuietAi } from '~/companion/quiet-ai'
@@ -106,7 +107,7 @@ const SHAPE_NAME: Record<ShapeKind, string> = { rect: 'Box', ellipse: 'Circle', 
         :key="c"
         type="button"
         class="sw"
-        :style="{ background: STICKY[c] }"
+        :style="{ background: sticky()[c] }"
         :aria-label="`Make ${c}`"
         :title="`Make ${c}`"
         @click="ctl.setStickyColor(c)"
@@ -133,7 +134,7 @@ const SHAPE_NAME: Record<ShapeKind, string> = { rect: 'Box', ellipse: 'Circle', 
         :key="f"
         type="button"
         class="sw sw--round"
-        :style="{ background: SHAPE_FILL[f] }"
+        :style="{ background: fillHex()[f] }"
         :aria-label="`Fill ${f}`"
         :title="`Fill ${f}`"
         @click="ctl.setShapeFill(f)"
@@ -197,13 +198,13 @@ const SHAPE_NAME: Record<ShapeKind, string> = { rect: 'Box', ellipse: 'Circle', 
       <button
         type="button"
         class="act"
-        title="Ask BiliMind about this"
+        title="Ask Bili about this"
         @click="ask"
       >
         <UiIcon
           name="spark"
           :size="13"
-          class="text-lime-ink"
+          class="text-accent-strong"
         />
         Ask about this
       </button>
@@ -241,7 +242,7 @@ const SHAPE_NAME: Record<ShapeKind, string> = { rect: 'Box', ellipse: 'Circle', 
   position: absolute; z-index: 6; transform: translateX(-50%);
   display: flex; align-items: center; gap: 3px; padding: 4px 5px; white-space: nowrap;
   background: var(--surface); border: 1px solid var(--border); border-radius: 11px;
-  box-shadow: 0 12px 28px -14px rgb(13 22 96 / 0.4);
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-raised);
 }
 .sw { width: 20px; height: 20px; border-radius: 5px; box-shadow: inset 0 0 0 1px rgb(11 13 16 / 0.14); }
 .sw--round { border-radius: 50%; }

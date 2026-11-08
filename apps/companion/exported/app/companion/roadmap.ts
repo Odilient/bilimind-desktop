@@ -11,8 +11,7 @@
  *  - every topic is a step on the line, in path order, under its unit's
  *    heading when it has one;
  *  - its id is synthetic and negative (`-1`, `-2`, …) and its key is
- *    `topic:<the topic's id>`, which is how a box is told from a real lesson
- *    (the demo's real lessons have negative ids too);
+ *    `topic:<the topic's id>`, which is how a box is told from a real lesson;
  *  - written once it has a lesson (`topic.node_id`), a stub before that, so
  *    the brief offers "Open lesson" or "Write this lesson" as it always did;
  *  - its progress is the companion's own: ready is done, heard or started is

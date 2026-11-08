@@ -1,0 +1,202 @@
+/* hero: a painted morning in a rounded sheet; the real app rises out of the hills */
+.d2 .hero { --sky-a: #b6c5e8; --sky-b: #c9d2ea; --sky-c: #dcdde5; padding: 148px 32px 330px; text-align: center; background: var(--sky-a); }
+.d2 .hero-sky { position: absolute; inset: 0; z-index: -3; background: linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 30%, var(--sky-c) 62%, #eee4d8 100%); }
+.d2 .hero-paint { position: absolute; z-index: -2; left: 0; right: 0; bottom: 0; height: clamp(420px, 56vw, 980px); -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 26%); mask-image: linear-gradient(180deg, transparent 0%, #000 26%); }
+.d2 .hero-paint img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
+.d2 .hero-paint .night { display: none; }
+.d2 .hero-stars { position: absolute; inset: 0 0 45% 0; z-index: -1; opacity: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 8% 14%, #fff 50%, transparent 52%), radial-gradient(1px 1px at 17% 32%, #fff 50%, transparent 52%),
+    radial-gradient(1.6px 1.6px at 26% 9%, #fff 50%, transparent 52%), radial-gradient(1px 1px at 37% 24%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 62% 12%, #fff 50%, transparent 52%), radial-gradient(1px 1px at 71% 30%, #fff 50%, transparent 52%),
+    radial-gradient(1.8px 1.8px at 83% 8%, #fff 50%, transparent 52%), radial-gradient(1px 1px at 91% 26%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 52% 4%, #fff 50%, transparent 52%), radial-gradient(1px 1px at 4% 40%, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 96% 44%, #fff 50%, transparent 52%), radial-gradient(1.3px 1.3px at 44% 38%, #fff 50%, transparent 52%);
+  animation: d2-twinkle 5s ease-in-out infinite alternate; }
+@keyframes d2-twinkle { from { filter: brightness(0.7); } to { filter: brightness(1.2); } }
+:root[data-theme='dark'] .d2 .hero { --sky-a: #262c4c; --sky-b: #39426c; --sky-c: #545e8e; }
+:root[data-theme='dark'] .d2 .hero-sky { background: linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 35%, var(--sky-c) 70%, #7c789a 100%); }
+:root[data-theme='dark'] .d2 .hero-paint .day { display: none; }
+:root[data-theme='dark'] .d2 .hero-paint .night { display: block; }
+:root[data-theme='dark'] .d2 .hero-stars { opacity: 0.85; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .d2 .hero { --sky-a: #262c4c; --sky-b: #39426c; --sky-c: #545e8e; }
+  :root:not([data-theme='light']) .d2 .hero-sky { background: linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 35%, var(--sky-c) 70%, #7c789a 100%); }
+  :root:not([data-theme='light']) .d2 .hero-paint .day { display: none; }
+  :root:not([data-theme='light']) .d2 .hero-paint .night { display: block; }
+  :root:not([data-theme='light']) .d2 .hero-stars { opacity: 0.85; }
+}
+
+.d2 .hero-in { position: relative; max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+.d2 .news { display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 12px 0 5px; border-radius: 999px; font-size: 14px; font-weight: 560; color: var(--ink-2);
+  background: color-mix(in oklab, var(--card) 70%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 0 0 1px var(--line-2); transition: background-color 0.25s; }
+.d2 .news:hover { background: var(--card); }
+.d2 .news-tag { height: 24px; padding: 0 9px; border-radius: 999px; display: inline-grid; place-items: center; background: var(--hi); color: #1f1c17; font-size: 12.5px; font-weight: 750; }
+.d2 .news svg { width: 14px; height: 14px; transition: transform 0.3s var(--ease); }
+.d2 .news:hover svg { transform: translateX(3px); }
+.d2 .hero-h { margin-top: 26px; }
+.d2 .hero-h .hl { padding-inline: 0.06em; }
+
+/* The hero's entrance is CSS, so the server's first paint already holds it and nothing above the fold
+   waits for a script: the words rise one after another, the highlighter sweeps, the copy and the field
+   come up, and the app window rises out of the hills (what the design's script did on load). */
+.d2 .hero-h .w { display: inline-block; animation: d2-hero-word 1s var(--ease) both; animation-delay: calc(120ms + var(--i, 0) * 55ms); }
+.d2 .hero-h .hl.w { animation: d2-hero-word 1s var(--ease) both, d2-hero-sweep 1s var(--ease) both; animation-delay: calc(120ms + var(--i, 0) * 55ms), 900ms; }
+.d2 .hero-in > .news, .d2 .hero-lede, .d2 .composer-zone { animation: d2-hero-up 1s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+.d2 .hero-lede { animation-delay: 80ms; }
+.d2 .composer-zone { animation-delay: 160ms; }
+.d2 .win-tabs { animation: d2-hero-up 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0.9s both; }
+.d2 .win.big { animation: d2-hero-win 1.4s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s both; }
+@keyframes d2-hero-word { from { opacity: 0; translate: 0 0.42em; } }
+@keyframes d2-hero-sweep { from { background-size: 0% 70%; color: var(--ink); } }
+@keyframes d2-hero-up { from { opacity: 0; translate: 0 22px; } }
+@keyframes d2-hero-win { from { opacity: 0; translate: 0 90px; scale: 0.965; } }
+.d2 .hero-lede { margin-top: 26px; max-width: 58ch; font-size: 18.5px; color: var(--ink-2); }
+
+/* composer */
+.d2 .composer-zone { position: relative; width: min(700px, 100%); margin-top: 42px; }
+.d2 .hero-blob { position: absolute; z-index: 2; top: -67px; right: 48px; } /* stands on the composer's edge, so its tail and stretch are visible */
+.d2 .hero-field { position: relative; z-index: 1; text-align: left; border-radius: 24px; background: var(--card); box-shadow: 0 0 0 1px var(--line-2), 0 2px 4px rgb(70 50 20 / 0.05), 0 26px 60px -28px rgb(60 50 30 / 0.45); transition: box-shadow 0.3s; }
+.d2 .hero-field.is-focus { box-shadow: 0 0 0 1px var(--line-2), 0 0 0 5px color-mix(in oklab, var(--hi) 45%, transparent), 0 26px 60px -28px rgb(60 50 30 / 0.45); }
+.d2 .composer-body { position: relative; padding: 18px 18px 12px 20px; }
+.d2 .hero-field textarea { display: block; width: 100%; min-height: 56px; resize: none; border: 0; outline: 0; background: none; font-size: 17px; line-height: 1.5; padding: 0; color: var(--ink); }
+.d2 .ph { position: absolute; left: 20px; right: 20px; top: 18px; font-size: 17px; line-height: 1.5; color: var(--ink-3); pointer-events: none; transition: opacity 0.2s; }
+.d2 .ph.off { opacity: 0; }
+.d2 .caret { display: inline-block; width: 1.5px; height: 1.1em; margin-left: 1px; vertical-align: -0.18em; background: var(--ink-3); animation: d2-blink 1s steps(2) infinite; }
+@keyframes d2-blink { 50% { opacity: 0; } }
+.d2 .composer-row { display: flex; align-items: center; gap: 4px; margin-top: 8px; }
+.d2 .composer-row .grow { flex: 1; }
+.d2 .tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--ink-2); transition: background-color 0.2s, color 0.2s; }
+.d2 .tool:hover { background: var(--wash-2); color: var(--ink); }
+.d2 .tool svg { width: 16px; height: 16px; stroke-width: 2; }
+.d2 .tool .mic-time { display: none; font-size: 13px; color: var(--rose-ink); }
+.d2 .tool.on { background: var(--rose-soft); color: var(--rose-ink); }
+.d2 .tool.on .mic-time { display: inline; }
+.d2 .hint { display: inline-flex; align-items: center; gap: 6px; margin-right: 8px; font-size: 13px; color: var(--ink-3); }
+.d2 .send { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; background: var(--ink); color: var(--on-ink); transition: transform 0.25s var(--spring), opacity 0.2s, background-color 0.2s; }
+.d2 .send:disabled { opacity: 0.25; cursor: default; }
+.d2 .send:not(:disabled):hover { transform: scale(1.06); }
+.d2 .send svg { width: 18px; height: 18px; stroke-width: 2.4; }
+.d2 .attached { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.d2 .att { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 6px 0 5px; border-radius: 10px; background: var(--wash); box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; font-weight: 560; animation: d2-pop 0.4s var(--spring); }
+.d2 .att b { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; background: var(--rose-soft); color: var(--rose-ink); }
+.d2 .att b svg { width: 13px; height: 13px; }
+.d2 .att button { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; color: var(--ink-3); }
+.d2 .att button:hover { background: var(--wash-2); }
+.d2 .att button svg { width: 13px; height: 13px; }
+@keyframes d2-pop { from { transform: scale(0.8); opacity: 0; } }
+.d2 .composer-sent { padding: 18px; display: grid; gap: 14px; }
+.d2 .bubble-me { justify-self: end; max-width: 85%; padding: 10px 14px; border-radius: 16px 16px 4px 16px; background: var(--wash-2); font-size: 15.5px; line-height: 1.5; }
+.d2 .sent-atts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.d2 .s-file { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.d2 .s-file svg { width: 13px; height: 13px; }
+.d2 .bubble-bili { display: flex; gap: 10px; align-items: flex-start; font-size: 15.5px; line-height: 1.5; }
+.d2 .auth-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.d2 .blob-tip { position: absolute; z-index: 3; top: -96px; right: 0; padding: 9px 13px; border-radius: 14px 14px 4px 14px; background: var(--ink); color: var(--on-ink); font-size: 14px; font-weight: 560; white-space: nowrap; animation: d2-pop 0.45s var(--spring); transition: opacity 0.5s, transform 0.5s var(--ease); }
+.d2 .blob-tip.out { opacity: 0; transform: translateY(-6px); }
+
+/* suggestions read as things you'd say: quoted, with a blank to fill; hovering previews them in the field */
+.d2 .suggest { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-top: 16px;
+  width: max-content; max-width: calc(100vw - 32px); position: relative; left: 50%; transform: translateX(-50%); } /* may run a little wider than the field, so it stays one row */
+.d2 .sg-lead { font-size: 13.5px; font-weight: 650; color: var(--ink-2); margin-right: 2px; }
+.d2 .suggest button { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px; border-radius: 12px; font-size: 14.5px; font-weight: 540; color: var(--ink-2);
+  background: color-mix(in oklab, var(--card) 52%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border: 1px dashed color-mix(in oklab, var(--ink) 26%, transparent); transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.25s var(--ease); }
+.d2 .suggest button:hover { background: var(--card); color: var(--ink); border-color: color-mix(in oklab, var(--ink) 45%, transparent); transform: translateY(-1px); }
+.d2 .suggest q { quotes: '“' '”'; display: inline-flex; align-items: baseline; }
+.d2 .suggest q::before, .d2 .suggest q::after { color: var(--ink-3); }
+.d2 .suggest u { display: inline-block; margin-left: 5px; width: 30px; height: 1.5px; border-radius: 2px; background: currentColor; opacity: 0.4; transform: translateY(-1px); }
+.d2 .suggest button:hover u { animation: d2-blank 1s steps(2) infinite; }
+@keyframes d2-blank { 50% { opacity: 0.12; } }
+.d2 .suggest svg { width: 15px; height: 15px; color: var(--ink-3); }
+.d2 .ph.is-preview #phText { color: var(--ink-2); }
+
+/* the three promises in one frosted pill, the news chip's sibling, so they read over the trees and the hill */
+.d2 .fineprint { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 18px; width: fit-content; max-width: 100%; margin: 14px auto 0; padding: 8px 16px;
+  border-radius: 999px; font-size: 15px; font-weight: 650; color: var(--ink);
+  background: color-mix(in oklab, var(--card) 78%, transparent); -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 0 0 1px var(--line-2), var(--shadow-1); }
+.d2 .fineprint span { display: inline-flex; align-items: center; gap: 8px; }
+.d2 .fineprint b { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 99px; background: var(--leaf); color: #fff; }
+.d2 .fineprint svg { width: 12px; height: 12px; stroke-width: 3; }
+
+/* the stage */
+.d2 .hero-frame { border-inline-color: transparent; }
+.d2 .stage { position: relative; z-index: 3; margin-top: -270px; padding: 0 40px 44px; }
+.d2 .live { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 99px; background: var(--leaf-soft); color: var(--leaf-ink); font-size: 12px; font-weight: 750; }
+.d2 .live i { width: 6px; height: 6px; border-radius: 9px; background: var(--leaf); box-shadow: 0 0 0 0 var(--leaf); animation: d2-ping 2s infinite; }
+@keyframes d2-ping { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--leaf) 60%, transparent); } 80%, 100% { box-shadow: 0 0 0 7px transparent; } }
+.d2 .win.big { border-radius: 18px; box-shadow: 0 0 0 1px var(--line-2), 0 2px 6px rgb(60 45 20 / 0.06), 0 40px 90px -40px rgb(50 40 25 / 0.55); }
+.d2 .win .lights.ghost { visibility: hidden; }
+.d2 .win-view { position: relative; overflow: hidden; height: 735px; background: var(--paper); }
+.d2 .win-view iframe { position: absolute; left: 0; top: 0; width: 1280px; height: 800px; border: 0; transform-origin: 0 0; background: var(--paper); }
+.d2 .veil { position: absolute; inset: 0; display: grid; place-items: center; background: var(--paper); transition: opacity 0.6s var(--ease-soft); }
+.d2 .veil.off { opacity: 0; pointer-events: none; }
+.d2 .stage-float { position: absolute; z-index: 4; display: flex; align-items: center; gap: 10px; padding: 9px 14px 9px 9px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow-pop); font-size: 13.5px; color: var(--ink-2); white-space: nowrap; animation: d2-hero-up 1s cubic-bezier(0.215, 0.61, 0.355, 1) 1.5s both, d2-bob 6s ease-in-out infinite; }
+.d2 .stage-float b { color: var(--ink); font-weight: 650; }
+.d2 .stage-float.f-1 { left: 6%; top: 22px; }
+.d2 .stage-float.f-2 { right: 6%; top: 22px; animation-delay: 1.7s, -3s; }
+@keyframes d2-bob { 50% { transform: translateY(-8px); } }
+
+/* the picker: Raycast-style, each part plays in the window above */
+.d2 .picker-sec { border-top: 0; }
+.d2 .picker { grid-template-columns: repeat(5, minmax(0, 1fr)); border-bottom: 0; }
+.d2 .picker button { position: relative; display: grid; align-content: start; gap: 8px; padding: 24px 24px 28px; text-align: left; transition: background-color 0.25s; }
+.d2 .picker button:hover { background: var(--card-2); }
+.d2 .pk-bar { position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: transparent; }
+.d2 .pk-bar i { display: block; height: 100%; width: 0; background: var(--ink); }
+.d2 .pk-t { display: flex; align-items: center; gap: 9px; font-size: 15.5px; font-weight: 680; color: var(--ink-3); letter-spacing: -0.01em; transition: color 0.3s; }
+.d2 .pk-t svg { width: 17px; height: 17px; stroke-width: 2; }
+.d2 .pk-d { font-size: 13.5px; line-height: 1.5; color: var(--ink-4); transition: color 0.3s; }
+.d2 .picker [aria-selected='true'] .pk-t { color: var(--ink); }
+.d2 .picker [aria-selected='true'] .pk-d { color: var(--ink-2); }
+.d2 .picker [aria-selected='true'] { background: var(--card-2); }
+
+@media (max-width: 1100px) { .d2 .stage-float { display: none; } }
+@media (max-width: 900px) {
+  .d2 .hero { padding: 128px 20px 240px; }
+  .d2 .stage { padding: 0 16px 28px; margin-top: -190px; }
+  .d2 .picker { grid-template-columns: repeat(5, minmax(180px, 1fr)); overflow-x: auto; scroll-snap-type: x mandatory; }
+  .d2 .picker button { scroll-snap-align: start; padding: 20px; }
+}
+@media (max-width: 720px) {
+  .d2 .win-view { height: 640px; }
+  .d2 .win-view iframe { position: static; width: 100%; height: 100%; transform: none !important; }
+  .d2 .win .url { font-size: 11px; }
+  .d2 .hint { display: none; }
+}
+@media (max-width: 520px) {
+  .d2 .hero { padding: 112px 14px 200px; }
+  .d2 .hero-lede { font-size: 16.5px; }
+  .d2 .hero-blob { right: 24px; top: -67px; }
+  .d2 .composer-zone { margin-top: 36px; }
+  .d2 .tool span:not(.mic-time) { display: none; }
+  .d2 .fineprint { gap: 6px 16px; font-size: 14px; border-radius: 20px; } /* two lines on a phone, still one pill */
+  .d2 .news { font-size: 13px; gap: 8px; }
+  .d2 .sg-lead { width: 100%; text-align: center; }
+  .d2 .stage { padding: 0 6px 20px; margin-top: -160px; }
+}
+
+/* the window's own control, centred above it: the live app, or the film in the same frame (the app's segmented look) */
+.d2 .win-tabs { display: flex; width: max-content; max-width: 100%; margin: 0 auto 14px; padding: 3px; gap: 2px; border-radius: 12px;
+  background: color-mix(in oklab, var(--card) 72%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px var(--line-2); }
+.d2 .win-tabs button { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px 0 10px; border-radius: 9px; font-size: 13.5px; font-weight: 650; color: var(--ink-2); white-space: nowrap;
+  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s; }
+.d2 .win-tabs button:hover { color: var(--ink); }
+.d2 .win-tabs button[aria-selected='true'] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-1), 0 0 0 1px var(--line); }
+.d2 .win-tabs em { font-style: normal; font-weight: 600; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.d2 .wt-live { display: grid; place-items: center; width: 14px; height: 14px; }
+.d2 .wt-live i { width: 7px; height: 7px; border-radius: 9px; background: var(--leaf); animation: d2-ping 2s infinite; }
+.d2 .wt-play { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 99px; background: var(--ink); color: var(--on-ink); }
+.d2 .wt-play svg { width: 8px; height: 8px; margin-left: 1px; fill: currentColor; stroke-width: 0; }
+/* a small hint until the film has been opened once: the glyph breathes, nothing plays */
+.d2 .win-tabs:not(.seen) .wt-play { animation: d2-wt-hint 2.6s var(--ease-soft) 2s infinite; }
+@keyframes d2-wt-hint { 0%, 70%, 100% { transform: none; } 82% { transform: scale(1.16); } }
+
+/* the film fills the window's frame, on paper where its shape differs; the two crossfade */
+.d2 .win-film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--paper); opacity: 0; pointer-events: none; transition: opacity 0.3s var(--ease-soft); }
+.d2 .win-view iframe, .d2 .win-view .veil { transition: opacity 0.3s var(--ease-soft); }
+.d2 .win.film-on .win-film { opacity: 1; pointer-events: auto; }
+.d2 .win.film-on .win-view iframe { opacity: 0; pointer-events: none; }
+.d2 .win.film-on .veil { opacity: 0; }
+@media (max-width: 520px) {.d2 .win-tabs button { padding: 0 10px 0 8px; font-size: 13px; gap: 6px; } }

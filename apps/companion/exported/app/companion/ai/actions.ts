@@ -281,9 +281,12 @@ export async function runAction(action: AiAction, where: ActionWhere = {}): Prom
     case 'write_lesson': {
       const topic = store.get('topics', action.topic_id)
       if (!topic) throw new Error('That topic isn\'t in your courses any more.')
-      const nodeId = await writeLesson(topic, action.instruction)
+      const nodeId = await writeLesson(topic, action.instruction, Boolean(action.rewrite))
       if (nodeId == null) throw new QuietActionError()
-      return { to: lessonRoute(store, nodeId, topic.subject_id), label: 'Lesson on its way' }
+      return {
+        to: lessonRoute(store, nodeId, topic.subject_id),
+        label: action.rewrite ? 'Rewriting the lesson · a minute or two' : 'Writing the lesson · a minute or two',
+      }
     }
 
     case 'add_tasks': {
@@ -357,6 +360,10 @@ export async function runAction(action: AiAction, where: ActionWhere = {}): Prom
 
     case 'open':
       return { to: action.to, label: action.label, go: true }
+
+    case 'create_draft':
+      // The draft's own card creates it (Proposal.vue, through `draftPress`).
+      return { to: null, label: '' }
 
     case 'quiz':
       return { to: null, label: '' }

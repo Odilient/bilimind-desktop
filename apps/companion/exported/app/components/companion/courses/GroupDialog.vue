@@ -129,7 +129,7 @@ async function save(): Promise<void> {
           type="text"
           :maxlength="60"
           placeholder="Year 2 · Autumn"
-          class="h-10 rounded-[12px] bg-surface-sunken px-3 text-[14.5px] text-text outline-none placeholder:text-text-faint focus:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+          class="h-10 rounded-[12px] bg-surface-sunken px-3 text-[14.5px] text-text outline-none placeholder:text-text-faint focus:shadow-[inset_0_0_0_2px_var(--brand)]"
           :autofocus="group === null"
         >
         <p
@@ -147,7 +147,7 @@ async function save(): Promise<void> {
         </div>
         <label
           v-if="c.shelf.value.length > 8"
-          class="flex h-9 items-center gap-2 rounded-[10px] bg-surface px-2.5 text-text-faint shadow-[inset_0_0_0_1px_var(--border)] focus-within:shadow-[inset_0_0_0_1.5px_var(--cobalt)]"
+          class="flex h-9 items-center gap-2 rounded-[10px] bg-surface px-2.5 text-text-faint shadow-[inset_0_0_0_1px_var(--border)] focus-within:shadow-[inset_0_0_0_1.5px_var(--brand)]"
         >
           <UiIcon
             name="search"
@@ -168,11 +168,11 @@ async function save(): Promise<void> {
             v-for="s in courses"
             :key="s.id"
           >
-            <label class="flex min-h-10 cursor-pointer items-center gap-3 rounded-[12px] px-2.5 transition-colors hover:bg-surface-mute has-[:focus-visible]:shadow-[inset_0_0_0_2px_var(--cobalt)]">
+            <label class="flex min-h-10 cursor-pointer items-center gap-3 rounded-[12px] px-2.5 transition-colors hover:bg-surface-mute has-[:focus-visible]:shadow-[inset_0_0_0_2px_var(--brand)]">
               <input
                 type="checkbox"
                 :checked="picked.has(s.id)"
-                class="size-4 shrink-0 cursor-pointer accent-[var(--cobalt)]"
+                class="size-4 shrink-0 cursor-pointer accent-[var(--brand)]"
                 @change="toggle(s.id)"
               >
               <span

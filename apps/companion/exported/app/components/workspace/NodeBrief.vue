@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { markOf } from '~/components/companion/course/Mark.vue'
 import type { CourseNode, ProgressState } from '~/types/api'
 import type { TreeItem } from '~/composables/useRoadmap'
+import { useUsage } from '~/companion/usage'
 
 /**
  * What one lesson is for, before it is opened.
@@ -25,12 +27,16 @@ const props = defineProps<{
   readonly?: boolean
   /** The phone sheet: one big button, thumb-sized. */
   phone?: boolean
+  /** "Write it yourself" is offered (the page handles `compose`). */
+  canCompose?: boolean
 }>()
 
 const emit = defineEmits<{
   open: [nodeId: number]
   /** A lesson that is not written yet: the learner asked for it to be. */
   expand: [nodeId: number, instruction?: string]
+  /** A lesson that is not written yet: the learner will write it themselves. */
+  compose: [nodeId: number]
   /** Look at another lesson instead — a neighbour, or something under this one. */
   focus: [nodeId: number]
   progress: [nodeId: number, state: ProgressState]
@@ -197,8 +203,13 @@ const action = computed(() => {
   if (kind === 'queued') {
     return { label: 'Waiting to be written', variant: 'secondary' as const, icon: undefined, busy: true }
   }
-  return { label: 'Write this lesson', variant: 'accent' as const, icon: 'sparkles', busy: false }
+  // Out of AI (Free with no credits), writing it yourself is the button that works.
+  return { label: 'Write this lesson', variant: noAi.value ? ('secondary' as const) : ('accent' as const), icon: 'sparkles', busy: false }
 })
+
+const usage = useUsage()
+const noAi = computed(() => usage.limited.value)
+if (import.meta.client && !props.readonly) void usage.ensure()
 
 /** How they want it written, for a lesson that isn't yet. */
 const steer = ref('')
@@ -228,12 +239,11 @@ function act(): void {
   else emit('expand', props.node.id, steer.value)
 }
 
+// The marks beside carry done and learning; only a skipped lesson is struck through.
 function tintOf(node: CourseNode): string {
   const s = progressOf(node)
-  if (s === 'completed') return 'line-through text-text-faint'
-  if (s === 'skipped') return 'line-through text-text-ghost'
-  if (s === 'in_progress') return 'text-accent-strong'
-  return 'text-text-dim'
+  if (s === 'skipped') return 'line-through text-text-faint'
+  return 'text-text'
 }
 </script>
 
@@ -241,25 +251,9 @@ function tintOf(node: CourseNode): string {
   <div>
     <!-- What it is: where it sits, its name, its state, what it is for. -->
     <div class="flex items-start gap-2 pr-7 text-[12.5px] leading-5 text-text-muted">
-      <span
-        :class="[
-          'num grid size-5 shrink-0 place-items-center rounded-full font-display text-[10.5px] font-semibold',
-          state === 'completed'
-            ? 'bg-chip text-lime'
-            : state === 'in_progress'
-              ? 'bg-accent text-on-accent'
-              : place.onPath
-                ? 'bg-chip text-white'
-                : 'bg-surface-track text-text-soft',
-        ]"
-      >
-        <UiIcon
-          v-if="state === 'completed'"
-          name="check"
-          :size="10"
-          :stroke="3"
-        />
-        <template v-else>{{ place.step ?? '·' }}</template>
+      <!-- The same status mark the path and the sidebar draw. -->
+      <span class="grid h-5 shrink-0 place-items-center">
+        <CompanionCourseMark :state="markOf(node)" />
       </span>
       <span>{{ where }}</span>
     </div>
@@ -315,13 +309,13 @@ function tintOf(node: CourseNode): string {
     <!-- The mentor's aside, when the topic has one. -->
     <div
       v-if="node.note"
-      class="mt-3 flex gap-2.5 rounded-[12px] bg-warn-soft px-3 py-2.5 text-[12.5px] leading-snug text-warn-text shadow-[inset_0_0_0_1px_var(--warn-line)]"
+      class="mt-3 flex gap-2.5 rounded-[11px] bg-butter-soft px-3 py-2.5 text-[12.5px] leading-snug text-text-soft shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--butter-ink)_18%,transparent)]"
     >
       <UiIcon
         name="sparkles"
         :size="14"
         :stroke="1.8"
-        class="mt-px shrink-0 text-warn-bright"
+        class="mt-px shrink-0 text-butter-ink"
       />
       <span>{{ node.note }}</span>
     </div>
@@ -419,6 +413,16 @@ function tintOf(node: CourseNode): string {
           >Customize</UiBtn
         >
       </div>
+      <!-- No model, nothing spent: the lesson opens empty in the editor. -->
+      <UiBtn
+        v-if="canSteer && canCompose"
+        :variant="noAi ? 'accent' : 'secondary'"
+        size="lg"
+        icon="pencil"
+        :class="phone && 'h-12! rounded-xl! text-[15px]!'"
+        @click="emit('compose', node.id)"
+        >Write it yourself</UiBtn
+      >
 
       <div class="mt-1.5 flex items-center justify-between gap-3">
         <span class="text-[13px] text-text-muted">Mark as</span>
@@ -472,7 +476,7 @@ function tintOf(node: CourseNode): string {
         :key="row.label + row.node.id"
         type="button"
         :class="[
-          'flex min-h-[64px] cursor-pointer items-center gap-2.5 rounded-[14px] border border-border-strong px-3 py-2.5 text-left transition-colors hover:bg-surface-mute',
+          'flex min-h-[60px] cursor-pointer items-center gap-2.5 rounded-[12px] px-3 py-2.5 text-left shadow-[0_0_0_1px_var(--border)] transition-[box-shadow,background-color] hover:bg-surface-mute hover:shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)]',
           row.label === 'Next' && 'col-start-2 flex-row-reverse text-right',
         ]"
         :title="row.node.title"
@@ -491,9 +495,9 @@ function tintOf(node: CourseNode): string {
               row.label === 'Next' && 'justify-end',
             ]"
           >
-            <UiStatusDot
-              :status="row.node.status"
-              still
+            <CompanionCourseMark
+              :state="markOf(row.node)"
+              :size="12"
             />
             {{ row.label }}
           </span>

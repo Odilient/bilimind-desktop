@@ -33,6 +33,39 @@ export type PlatformErrorCode =
   | 'invalid'
   | 'no-audio'
   | 'failed'
+  /** The learner (or the system's privacy settings) said no: the message says where to change it. */
+  | 'denied'
+
+// -- recording: the screen, and recordings kept on this computer --
+
+/** A screen or window the desktop can record, for the app's own picker. */
+export interface ScreenSource {
+  id: string
+  name: string
+  kind: 'screen' | 'window'
+  /** A data: URL, or null where the system gives no picture. */
+  thumbnail: string | null
+}
+
+/** A file in a recording's folder on this computer. */
+export interface RecordingFile {
+  name: string
+  size: number
+}
+
+/**
+ * Recordings written to this computer's disk as they are made, never uploaded
+ * (`app/companion/recorder.ts`). Each recording is a folder named by the id
+ * of the item it is filed as.
+ */
+export interface DeviceRecordings {
+  /** Append a chunk; call in order and wait for each, or the file is scrambled. */
+  append(id: string, name: string, bytes: Uint8Array): Promise<void>
+  files(id: string): Promise<RecordingFile[]>
+  /** Where the page can load a file from, for a player or `fetch`. */
+  url(id: string, name: string): string
+  remove(id: string): Promise<void>
+}
 
 export class PlatformError extends Error {
   constructor(
@@ -59,6 +92,11 @@ export interface Platform {
     systemAudio: boolean
     /** Showing a file in Finder or Explorer. */
     revealInFolder: boolean
+    // recording
+    /** Recording a screen or a window, with its sound. Desktop only. */
+    screenRecording: boolean
+    /** Turning speech into text on this device (Whisper in the app). Desktop only, for now. */
+    transcribe: boolean
   }
 
   /** Tell the tray which deadline is next. `null` clears it. A no-op where there is no tray. */
@@ -97,6 +135,31 @@ export interface Platform {
 
   /** Open a web link in the system browser (a new tab on the web). */
   openExternal(url: string): Promise<void>
+
+  // -- recording --
+
+  /** What can be recorded: screens, then windows. Rejects with `denied` or `unsupported` and words to show. */
+  screenSources(): Promise<ScreenSource[]>
+
+  /**
+   * A live stream of the picked screen, at two frames a second, with what the
+   * computer plays when `sound`. The caller records it and stops its tracks.
+   */
+  captureScreen(sourceId: string, sound: boolean): Promise<MediaStream>
+
+  /** The recordings folder on this computer; null where recordings are uploaded instead (the web). */
+  readonly recordings: DeviceRecordings | null
+
+  // -- exports --
+
+  /** Save a file made in the app (an export): the browser's download, the desktop's Save dialog. */
+  saveFile(blob: Blob, name: string): Promise<void>
+
+  /**
+   * The window as a PDF, through its print stylesheet, with no print dialog: the desktop only. Absent
+   * elsewhere, where the browser's own print dialog ("Save as PDF") does it.
+   */
+  printToPdf?(): Promise<Uint8Array>
 }
 
 /**
@@ -117,4 +180,16 @@ export interface DesktopBridge {
     get(): Promise<{ accelerator: string; registered: boolean }>
     set(accelerator: string): Promise<{ accelerator: string; registered: boolean }>
   }
+  // recording
+  screen: {
+    sources(): Promise<ScreenSource[]>
+    choose(id: string, sound: boolean): Promise<void>
+  }
+  recordings: {
+    append(id: string, name: string, bytes: Uint8Array): Promise<void>
+    files(id: string): Promise<RecordingFile[]>
+    remove(id: string): Promise<void>
+  }
+  // exports: missing from a shell built before it, so the app checks for it
+  printToPdf?(): Promise<Uint8Array>
 }

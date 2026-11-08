@@ -80,28 +80,28 @@ function notesHref(sessionId: string): string {
 }
 
 const ghost =
-  'inline-flex h-11 items-center gap-2 rounded-full px-4 text-[14.5px] font-semibold text-white ring-1 ring-white/35 transition-colors hover:bg-white/10'
+  'inline-flex h-10 items-center gap-2 rounded-[10px] px-4 text-[14px] font-semibold text-text ring-1 ring-border-strong transition-colors hover:bg-[rgb(var(--wash-rgb)/0.05)]'
 </script>
 
 <template>
   <section
     v-if="next"
-    class="cb-cobalt grid gap-5 rounded-[24px] p-5 min-[900px]:p-7"
+    class="grid gap-4 rounded-[18px] bg-accent-soft p-5 shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--hi-2)_38%,transparent)] min-[900px]:px-6 min-[900px]:py-5"
     aria-label="Next"
   >
     <template v-if="next.kind === 'due'">
       <div class="grid gap-2">
-        <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px] text-white/80">
-          <span class="font-semibold text-white">{{ dueWhen(next.deadline) }}</span>
+        <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px] text-text-soft">
+          <span class="font-semibold text-text">{{ dueWhen(next.deadline) }}</span>
           <span aria-hidden="true">·</span>
           <span>{{ readyWords(readiness?.checked ? readiness.percent : null) }}</span>
         </p>
-        <p class="t-head text-[26px] text-white min-[900px]:text-[32px]">
+        <p class="t-head text-[24px] text-text min-[900px]:text-[28px]">
           {{ next.deadline.title }}
         </p>
         <p
           v-if="deadlineMeta(next.deadline, subject, false)"
-          class="text-[14px] text-white/75"
+          class="text-[14px] text-text-muted"
         >
           {{ deadlineMeta(next.deadline, subject, false) }}
         </p>
@@ -110,7 +110,7 @@ const ghost =
         <UiBtn
           v-if="readiness?.suggestion.check.topics"
           :to="checkHref({ deadlineId: next.deadline.id })"
-          variant="accent"
+          variant="primary"
           size="lg"
           trailing-icon="arrow-right"
         >
@@ -119,7 +119,7 @@ const ghost =
         <UiBtn
           v-else-if="!readiness?.topics.some((t) => t.last_studied_at)"
           :to="checkHref({ purpose: 'prepare', deadlineId: next.deadline.id })"
-          variant="accent"
+          variant="primary"
           size="lg"
           trailing-icon="arrow-right"
         >
@@ -128,7 +128,7 @@ const ghost =
         <UiBtn
           v-else
           :to="`/app/practice?deadline=${next.deadline.id}`"
-          variant="accent"
+          variant="primary"
           size="lg"
           trailing-icon="arrow-right"
         >
@@ -144,22 +144,22 @@ const ghost =
     </template>
     <template v-else>
       <div class="grid gap-2">
-        <p class="text-[14px] font-semibold text-white">
+        <p class="text-[14px] font-semibold text-text">
           {{ classWhen(next.session, next.live) }}
         </p>
-        <p class="t-head text-[26px] text-white min-[900px]:text-[32px]">
+        <p class="t-head text-[24px] text-text min-[900px]:text-[28px]">
           {{ next.session.title }}<template v-if="nextTopic">
             · {{ nextTopic.title }}
           </template>
         </p>
-        <p class="text-[14px] text-white/75">
+        <p class="text-[14px] text-text-muted">
           {{ sessionLine(next.session) }}
         </p>
       </div>
       <div class="flex flex-wrap items-center gap-2.5">
         <UiBtn
           v-if="canRecord"
-          variant="accent"
+          variant="primary"
           size="lg"
           icon="mic"
           @click="capture.show('record', subject.id, next.session.id)"
@@ -169,7 +169,7 @@ const ghost =
         <UiBtn
           v-if="!canRecord"
           :to="notesHref(next.session.id)"
-          variant="accent"
+          variant="primary"
           size="lg"
           icon="pencil"
         >

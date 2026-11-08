@@ -26,7 +26,7 @@ const tones: Record<Tone, string> = {
 
 const dots: Record<Tone, string> = {
   neutral: 'bg-text-ghost',
-  accent: 'bg-lime-2',
+  accent: 'bg-hi-2',
   success: 'bg-success-bright',
   warn: 'bg-warn-bright',
   danger: 'bg-danger-bright',

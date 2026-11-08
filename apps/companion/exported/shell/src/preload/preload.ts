@@ -44,6 +44,18 @@ const bridge: DesktopBridge = {
     get: () => call(IPC.shortcutGet),
     set: (accelerator) => call(IPC.shortcutSet, accelerator),
   },
+  // recording
+  screen: {
+    sources: () => call(IPC.screenSources),
+    choose: (id, sound) => call(IPC.screenChoose, id, sound),
+  },
+  recordings: {
+    append: (id, name, bytes) => call(IPC.recordingAppend, id, name, bytes),
+    files: (id) => call(IPC.recordingFiles, id),
+    remove: (id) => call(IPC.recordingRemove, id),
+  },
+  // exports
+  printToPdf: () => call(IPC.printToPdf),
 }
 
 contextBridge.exposeInMainWorld('bilimind', bridge)

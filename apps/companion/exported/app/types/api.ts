@@ -2127,7 +2127,9 @@ export type AnnotationKind = 'highlight' | 'note' | 'ink' | 'board' | 'label'
 /**
  * `[x, y]` or `[x, y, pressure]`. x and y are 0..1 of the box the stroke was
  * drawn on — a picture's painted area, a board's logical canvas — so a stroke
- * lands on the same pixel of the picture at any rendered width.
+ * lands on the same pixel of the picture at any rendered width. Over a whole
+ * part (`InkAnchor.target === 'block'`) a stroke may run past its part, to the
+ * words above or below, so there they can be under 0 or over 1.
  */
 export type StrokePoint = [number, number] | [number, number, number]
 
@@ -2266,12 +2268,15 @@ export type Annotation = HighlightAnnotation | NoteAnnotation | InkAnnotation | 
 
 export type ReadingFont = 'sans' | 'serif'
 export type ReadingTheme = 'paper' | 'warm' | 'dim'
+/** How wide the lesson's reading column may grow: 760px, 960px, 1200px. */
+export type ReadingWidth = 'normal' | 'wide' | 'full'
 
 export interface ReadingSettings {
   /** Zoom of the lesson column, 0.75..1.6. */
   scale: number
   font: ReadingFont
   theme: ReadingTheme
+  width: ReadingWidth
 }
 
 export interface UserPreferences {

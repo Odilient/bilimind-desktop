@@ -6,6 +6,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * partial credit as |intersection| / |union| (SPEC §7), which the footnote says
  * out loud so guessing everything looks as bad as it is.
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -43,7 +44,7 @@ function toggle(id: string): void {
       :class="[
         'flex min-h-[46px] w-full cursor-pointer items-center gap-3 rounded-[12px] px-3.5 py-2.5 text-left transition-[background-color,box-shadow] duration-200',
         selected.includes(option.id)
-          ? 'bg-surface shadow-[inset_0_0_0_1.5px_var(--ink)]'
+          ? 'bg-surface shadow-[inset_0_0_0_1.5px_var(--text)]'
           : 'bg-surface shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] hover:bg-surface-mute hover:shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.22)]',
         disabled && 'cursor-not-allowed opacity-60',
       ]"
@@ -76,14 +77,13 @@ function toggle(id: string): void {
       v-if="options.length === 0"
       class="text-[13px] text-text-faint italic"
     >
-      This question has no options — regenerate the lesson to repair it.
+      {{ t('check.assess.noOptions') }}
     </p>
     <p
       v-else
       class="mt-1 text-[11.5px] text-text-faint"
     >
-      More than one answer is correct. Partial credit is the overlap between your set and the right
-      one, so a scattergun costs you.
+      {{ t('check.assess.multiNote') }}
     </p>
   </div>
 </template>

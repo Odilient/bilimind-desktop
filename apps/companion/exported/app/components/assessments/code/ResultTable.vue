@@ -7,6 +7,7 @@
  * same thing — two copies of a data grid drift within a month, and the one the
  * learner sees would depend on which surface they opened.
  */
+const { t } = useI18n()
 defineProps<{
   table: { columns: string[]; rows: unknown[][] } | null
 }>()
@@ -49,7 +50,7 @@ defineProps<{
               :colspan="(table.columns.length || 1) + 1"
               class="py-4 text-center text-code-meta"
             >
-              No rows returned.
+              {{ t('check.assess.code.noRows') }}
             </td>
           </tr>
         </tbody>
@@ -59,7 +60,7 @@ defineProps<{
       v-else
       class="px-1 py-3 text-[12px] text-code-meta"
     >
-      That statement returned no result set.
+      {{ t('check.assess.code.noResultSet') }}
     </p>
   </div>
 </template>

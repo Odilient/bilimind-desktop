@@ -1,0 +1,50 @@
+{
+  "headline": {
+    "none": "Nada avaliado ainda",
+    "final": "Nota final: {percent}%",
+    "sofar": "{percent}% até agora"
+  },
+  "fromMoodle": "do Moodle",
+  "aiming": "Meta",
+  "worth": "Peso",
+  "mark": "Nota",
+  "whatItIs": "Atividade",
+  "worthPct": "Peso %",
+  "worthPctLabel": "Peso, % da nota final",
+  "markPct": "Nota %",
+  "markPctLabel": "Sua nota, % (se já tiver)",
+  "add": "Adicionar",
+  "aimLabel": "A nota final que você busca, %",
+  "yourGrade": "Sua nota",
+  "assessments": "Avaliações",
+  "participation": "Participação",
+  "addAssessment": "Adicionar avaliação",
+  "download": "Baixar estas notas:",
+  "spreadsheet": "Planilha",
+  "rest": {
+    "sofar": "Até agora você tem {sofar}% nos {marked}% já avaliados.",
+    "secured": "{target}% no total já está garantido.",
+    "out": "{target}% no total não é mais possível, mesmo com nota máxima no restante.",
+    "need": "Para fechar com {target}% no total, você precisa de cerca de {need}% no que falta."
+  },
+  "names": {
+    "more": "{list} e mais {n}",
+    "and": "{list} e {last}"
+  },
+  "marks": "{n} nota | {n} notas",
+  "line": {
+    "unweighted": "A média de {marks}. Nenhuma tem peso ainda, então todas contam igual: adicione os pesos abaixo para a nota real.",
+    "rest": "{weight} ainda por vir: {names}.",
+    "weighted": "De {marks}, {weight} da nota.{rest}",
+    "waiting": "Aguardando as notas saírem.",
+    "empty": "Nada avaliado ainda."
+  },
+  "overallUntil": "no total, até você definir a sua",
+  "overall": "no total",
+  "short": "Os pesos somam menos que a nota total: {share} ainda não foi listado.",
+  "worthOf": "Quanto vale {title}, % da nota",
+  "markFor": "Sua nota em {title}, %",
+  "onceMarked": "Assim que uma nota entra, isso calcula a pontuação que você precisa em {title}.",
+  "finishedWith": "Finalizado com {percent}%",
+  "averaging": "Média de {percent}% até agora"
+}

@@ -88,7 +88,7 @@ function toggle(): void {
       type="button"
       :class="[
         'group/t flex w-[88px] shrink-0 cursor-pointer flex-col gap-1 rounded-[12px] p-1 text-left transition-colors duration-150 outline-none focus-visible:bg-surface-sunken',
-        selected(tile) ? 'bg-brand-soft' : 'hover:bg-surface-sunken',
+        selected(tile) ? 'bg-accent-soft' : 'hover:bg-surface-sunken',
       ]"
       :aria-pressed="selected(tile)"
       :title="tile.sub ? `${tile.label} · ${tile.sub}` : tile.label"
@@ -96,8 +96,8 @@ function toggle(): void {
     >
       <span
         :class="[
-          'block h-[48px] w-full overflow-hidden rounded-[9px] bg-surface p-1 shadow-[inset_0_0_0_1px_var(--border)] transition-shadow duration-150',
-          selected(tile) && 'shadow-[inset_0_0_0_2px_var(--cobalt)]',
+          'block h-[48px] w-full overflow-hidden rounded-[9px] bg-surface p-1 shadow-[inset_0_0_0_1px_var(--border-strong)] transition-shadow duration-150',
+          selected(tile) && 'shadow-[0_0_0_2px_var(--hi-2)]',
         ]"
         :style="tile.color ? { background: wash(tile.color, 14) } : undefined"
       >
@@ -109,7 +109,7 @@ function toggle(): void {
       <span
         :class="[
           'block truncate px-0.5 text-[11.5px] leading-tight font-medium',
-          selected(tile) ? 'text-cobalt' : 'text-text-body group-hover/t:text-text',
+          selected(tile) ? 'text-accent-strong' : 'text-text-body group-hover/t:text-text',
         ]"
       >{{ tile.label }}</span>
     </button>
@@ -118,7 +118,7 @@ function toggle(): void {
   <!-- On the chat page: the drawer under the box. -->
   <div
     v-else
-    class="relative rounded-b-[22px] bg-surface-sunken px-2.5 pt-8 pb-2.5 shadow-[inset_0_0_0_1px_var(--border)] min-[600px]:px-3"
+    class="relative rounded-b-[24px] bg-surface-chrome px-2.5 pt-8 pb-2.5 shadow-[inset_0_0_0_1px_var(--border)] min-[600px]:px-3"
   >
     <button
       type="button"
@@ -149,7 +149,7 @@ function toggle(): void {
         type="button"
         :class="[
           'group/t flex min-w-0 cursor-pointer flex-col gap-1.5 rounded-[14px] p-1.5 text-left transition-colors duration-150 outline-none focus-visible:bg-surface',
-          selected(tile) ? 'bg-brand-soft' : 'hover:bg-surface',
+          selected(tile) ? 'bg-accent-soft' : 'hover:bg-surface',
         ]"
         :aria-pressed="selected(tile)"
         :title="tile.sub ? `${tile.label} · ${tile.sub}` : tile.label"
@@ -157,8 +157,8 @@ function toggle(): void {
       >
         <span
           :class="[
-            'block aspect-[10/7] w-full overflow-hidden rounded-[11px] bg-surface p-1.5 shadow-[inset_0_0_0_1px_var(--border)] transition-shadow duration-150',
-            selected(tile) && 'shadow-[inset_0_0_0_2px_var(--cobalt)]',
+            'block aspect-[10/7] w-full overflow-hidden rounded-[12px] bg-surface p-1.5 shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] transition-[box-shadow,transform] duration-200 group-hover/t:-translate-y-px',
+            selected(tile) && 'shadow-[0_0_0_2px_var(--hi-2)]',
           ]"
           :style="tile.color ? { background: wash(tile.color, 14) } : undefined"
         >
@@ -171,7 +171,7 @@ function toggle(): void {
           <span
             :class="[
               'line-clamp-2 text-[12.5px] leading-[1.3] font-medium',
-              selected(tile) ? 'text-cobalt' : 'text-text-body group-hover/t:text-text',
+              selected(tile) ? 'text-accent-strong' : 'text-text-body group-hover/t:text-text',
             ]"
           >{{ tile.label }}</span>
           <span

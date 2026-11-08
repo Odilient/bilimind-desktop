@@ -6,6 +6,7 @@ import type { Assessment, Attempt, CriterionScore } from '~/types/api'
  * rubric breakdown for llm-graded kinds, and — most prominently — the feedback.
  * SPEC §7: "Never returns a bare score."
  */
+const { t } = useI18n()
 const props = defineProps<{
   assessment: Assessment
   attempt: Attempt
@@ -57,10 +58,10 @@ const tone = computed(() => {
 })
 
 const headline = computed(() => {
-  if (status.value === 'queued' || status.value === 'pending') return 'Grading…'
-  if (status.value === 'failed') return 'Grading failed'
-  if (props.attempt.passed === null) return 'Recorded'
-  return passed.value ? 'Passed' : 'Not yet'
+  if (status.value === 'queued' || status.value === 'pending') return t('check.assess.grading')
+  if (status.value === 'failed') return t('check.assess.gradingFailed')
+  if (props.attempt.passed === null) return t('check.assess.recorded')
+  return t(passed.value ? 'check.assess.passed' : 'check.assess.notYet')
 })
 
 const criteria = computed<CriterionScore[]>(() => {
@@ -71,7 +72,7 @@ const criteria = computed<CriterionScore[]>(() => {
   return rows
     .filter((row): row is CriterionScore => Boolean(row) && typeof row === 'object')
     .map((row) => ({
-      criterion: String(row.criterion ?? '').trim() || 'Criterion',
+      criterion: String(row.criterion ?? '').trim() || t('check.assess.criterion'),
       score_0_to_1: Math.max(0, Math.min(1, Number(row.score_0_to_1) || 0)),
       comment: String(row.comment ?? '').trim(),
     }))
@@ -94,7 +95,7 @@ const meta = computed<Record<string, unknown>>(() =>
 const fromWorker = computed(() => meta.value.source === 'client_worker')
 
 const barTone = (value: number): string =>
-  value >= 0.8 ? 'bg-lime-2' : value >= 0.5 ? 'bg-warn-bright' : 'bg-danger-bright'
+  value >= 0.8 ? 'bg-leaf' : value >= 0.5 ? 'bg-warn-bright' : 'bg-danger-bright'
 </script>
 
 <template>
@@ -141,13 +142,13 @@ const barTone = (value: number): string =>
           v-if="showScore"
           class="num mt-1 text-[12px] text-text-soft"
         >
-          {{ score }} / {{ maxScore }} · pass mark {{ passMark }}
+          {{ t('check.assess.scoreLine', { score, max: maxScore, pass: passMark }) }}
         </p>
         <p
           v-else-if="attempt.passed === null && status === 'graded'"
           class="mt-1 text-[12px] text-text-muted"
         >
-          Recorded without a score.
+          {{ t('check.assess.noScore') }}
         </p>
       </div>
 
@@ -171,7 +172,7 @@ const barTone = (value: number): string =>
       v-if="criteria.length"
       class="mt-4"
     >
-      <p class="eyebrow-loud mb-2.5 text-text-faint">Rubric</p>
+      <p class="mb-2.5 text-[12px] leading-none font-bold text-text-muted">{{ t('check.assess.rubric') }}</p>
       <ul class="flex flex-col gap-2.5">
         <li
           v-for="(row, index) in criteria"
@@ -183,7 +184,7 @@ const barTone = (value: number): string =>
               <span
                 v-if="weightFor(row.criterion) !== null"
                 class="num text-[11px] font-normal text-text-faint"
-                >· weight {{ weightFor(row.criterion) }}</span
+                >{{ t('check.assess.weight', { n: weightFor(row.criterion) }) }}</span
               >
             </p>
             <span class="num shrink-0 font-display text-[12.5px] font-semibold text-text"
@@ -214,7 +215,7 @@ const barTone = (value: number): string =>
         name="lock"
         :size="11"
       />
-      Scored from the test results your browser's sandbox reported — the server ran nothing.
+      {{ t('check.assess.fromWorker') }}
     </p>
   </div>
 </template>

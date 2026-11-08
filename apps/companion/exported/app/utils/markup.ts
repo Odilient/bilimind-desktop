@@ -16,11 +16,14 @@ import type { Stroke, StrokePoint } from '~/types/api'
  * to. Four is enough to tell "this" from "that" and few enough that picking
  * one is not a decision.
  */
+// Daylight 2's tray (course.html): the highlighter first, then ink, rose, sky and leaf.
+// Marks already made keep the colour they were made in; only the choices change.
 export const INK_COLORS = [
-  { name: 'Violet', value: '#7c5cff' },
-  { name: 'Amber', value: '#f5a524' },
-  { name: 'Mint', value: '#22c58b' },
-  { name: 'Sky', value: '#3ea6ff' },
+  { name: 'Yellow', value: '#ffd447' },
+  { name: 'Ink', value: '#1f1c17' },
+  { name: 'Rose', value: '#ec85a6' },
+  { name: 'Sky', value: '#5b9cf0' },
+  { name: 'Leaf', value: '#5bb276' },
 ] as const
 
 export type MarkupSize = 'thin' | 'thick'

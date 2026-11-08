@@ -7,8 +7,9 @@
  * Compact on purpose: one row each in one warm card, never a wall of amber.
  * A row says what it is about and where it came from, the change itself
  * (before → after), and offers exactly two answers: the change, as a verb
- * ("Move it"), and Not this. The quoted words are a click away in the Inbox
- * ("Where it came from"), which is also where more than three wait.
+ * ("Move it"), and Not this. The quoted words sit under the change, so where
+ * it came from is never a page away (the Inbox is gone; this is where they
+ * wait, every one of them). A message to read is one link away: Paste.
  *
  * Adding a new deadline whose course has topics ends with a quiet
  * "See what it needs" on the toast: three questions on its scope whose
@@ -20,12 +21,13 @@ import { useCompanion } from '~/companion/store'
 import { describeSignal, type SignalView } from '~/companion/signals'
 import { courseColor } from '~/companion/colors'
 import { checkHref } from '~/companion/checks'
+import { useCapture } from '~/companion/capture'
 
+const { t } = useI18n()
 const c = useCompanion()
 const toast = useToast()
-const shown = computed(() =>
-  c.pendingSignals.value.slice(0, 3).map((s) => ({ s, v: describeSignal(s, c) })),
-)
+const capture = useCapture()
+const shown = computed(() => c.pendingSignals.value.map((s) => ({ s, v: describeSignal(s, c) })))
 const busy = ref<string | null>(null)
 
 /** "Move it (not confirmed yet)" reads as a sentence; a button wants the verb. */
@@ -38,7 +40,7 @@ async function apply(s: Signal, view: SignalView): Promise<void> {
   const known = new Set(c.deadlines.value.map((d) => d.id))
   try {
     await c.applySignal(s.id)
-    const title = view.after ? `${view.subjectLine}: ${view.after}` : 'Done'
+    const title = view.after ? `${view.subjectLine}: ${view.after}` : t('common.done')
     // The deadline the yes just made: new since the press, upcoming, with
     // topics to ask about (no `topic_ids` means the whole course's).
     const made = s.facts.some((f) => f.type === 'deadline.create')
@@ -47,11 +49,11 @@ async function apply(s: Signal, view: SignalView): Promise<void> {
     if (made) {
       toast.success({
         title,
-        action: { label: 'See what it needs', handler: () => void navigateTo(checkHref({ purpose: 'prepare', deadlineId: made.id })) },
+        action: { label: t('today.changes.seeNeeds'), handler: () => void navigateTo(checkHref({ purpose: 'prepare', deadlineId: made.id })) },
       })
     } else toast.success(title)
   } catch {
-    toast.error('That didn\'t go through. Try again in a moment.')
+    toast.error(t('today.signal.failed'))
   } finally {
     busy.value = null
   }
@@ -75,24 +77,29 @@ async function dismiss(s: Signal): Promise<void> {
     <div class="flex items-baseline justify-between gap-3 px-0.5">
       <h2
         id="today-changes"
-        class="t-head flex items-center gap-2 text-[19px]"
+        class="flex items-center gap-2 font-display text-[18px] font-semibold tracking-[-0.02em]"
       >
-        Waiting for your OK
+        {{ t('today.changes.title') }}
         <span class="grid h-6 min-w-6 place-items-center rounded-full bg-warn-soft px-1.5 font-sans text-[12px] font-semibold text-warn-text">
           {{ c.pendingSignals.value.length }}
         </span>
       </h2>
-      <NuxtLink
-        to="/app/inbox"
-        class="-my-[13px] inline-block py-[13px] text-[12.5px] font-semibold text-brand transition-colors hover:underline"
+      <button
+        type="button"
+        class="-my-[13px] inline-flex cursor-pointer items-center gap-1 py-[13px] text-[12.5px] font-semibold text-text-muted transition-colors hover:text-text"
+        @click="capture.show('paste')"
       >
-        {{ c.pendingSignals.value.length > shown.length ? `All ${c.pendingSignals.value.length}` : 'Where they came from' }}
-      </NuxtLink>
+        <CompanionIcon
+          name="paste"
+          :size="14"
+        />
+        {{ t('today.changes.paste') }}
+      </button>
     </div>
 
     <TransitionGroup
       tag="ul"
-      class="mt-3 overflow-hidden rounded-[20px] bg-surface shadow-[inset_0_0_0_1px_var(--warn-line)]"
+      class="mt-3 overflow-hidden rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--warn-line),var(--shadow-raised)]"
       enter-active-class="duration-200 ease-out"
       enter-from-class="opacity-0"
       leave-active-class="duration-200 ease-in"
@@ -132,6 +139,11 @@ async function dismiss(s: Signal): Promise<void> {
             > → </span>
             <b class="font-semibold text-text">{{ v.after }}</b>
           </span>
+          <span
+            v-if="v.quote"
+            class="truncate text-[12.5px] text-text-faint"
+            :title="v.quote"
+          >“{{ v.quote }}”<template v-if="v.quoteBy"> · {{ v.quoteBy }}</template></span>
         </span>
         <span class="flex shrink-0 items-center gap-1 max-sm:w-full max-sm:pl-11">
           <UiBtn
@@ -152,7 +164,7 @@ async function dismiss(s: Signal): Promise<void> {
             :disabled="busy !== null"
             @click="dismiss(s)"
           >
-            Not this
+            {{ t('today.changes.notThis') }}
           </UiBtn>
         </span>
       </li>

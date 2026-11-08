@@ -23,38 +23,40 @@ import { isSample } from '~/companion/samples'
 
 const emit = defineEmits<{ ask: [] }>()
 
+const { t } = useI18n()
+
 const c = useCompanion()
-const t = useAiThread()
+const thread = useAiThread()
 const { quiet } = useQuietAi()
 
 onMounted(() => {
-  if (!t.threadsState.loaded) void t.refreshThreads()
+  if (!thread.threadsState.loaded) void thread.refreshThreads()
 })
 
 const steps = computed(() =>
   [
     {
       key: 'ask',
-      title: 'Ask your first question',
-      body: 'A topic, your slides, what to study tonight. The box above takes it all.',
-      done: t.threads.value.length > 0,
-      cta: 'Ask',
+      title: t('today.setup.askTitle'),
+      body: t('today.setup.askBody'),
+      done: thread.threads.value.length > 0,
+      cta: t('today.setup.askCta'),
       to: null,
     },
     {
       key: 'course',
-      title: 'Make your own course',
-      body: 'Say what you want to learn, and BiliMind drafts the path for you to check.',
+      title: t('today.setup.courseTitle'),
+      body: t('today.setup.courseBody'),
       done: c.subjects.value.some((s) => !s.sample),
-      cta: 'Make a course',
+      cta: t('today.setup.courseCta'),
       to: newChatLink({ intent: 'course' }),
     },
     {
       key: 'notes',
-      title: 'Add your notes or files',
-      body: 'A page, a whiteboard, the slides as a PDF. Everything you add can be asked about.',
+      title: t('today.setup.notesTitle'),
+      body: t('today.setup.notesBody'),
       done: c.items.value.some((i) => !isSample(i)),
-      cta: 'Add notes',
+      cta: t('today.setup.notesCta'),
       to: '/app/notes',
     },
   ].filter((s) => !(quiet.value && s.key === 'ask')),
@@ -90,17 +92,17 @@ function hide(): void {
     <div class="flex items-center justify-between gap-3 px-0.5">
       <h2
         id="today-setup"
-        class="t-head text-[19px]"
+        class="font-display text-[18px] font-semibold tracking-[-0.02em]"
       >
-        Get set up
+        {{ t('today.setup.title') }}
       </h2>
       <div class="flex items-center gap-1">
-        <span class="text-[12.5px] text-text-faint">{{ done }} of {{ steps.length }} done</span>
+        <span class="text-[12.5px] text-text-faint">{{ t('today.setup.progress', { done, total: steps.length }) }}</span>
         <button
           type="button"
           class="-mr-2 grid size-11 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-sunken hover:text-text focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
-          aria-label="Hide Get set up"
-          title="Hide"
+                    :aria-label="t('today.setup.hideLabel')"
+          :title="t('today.setup.hide')"
           @click="hide"
         >
           <UiIcon
@@ -111,7 +113,7 @@ function hide(): void {
       </div>
     </div>
 
-    <ol class="mt-2 overflow-hidden rounded-[22px] bg-surface shadow-[inset_0_0_0_1px_var(--border),0_24px_48px_-36px_rgb(11_13_16/0.3)]">
+    <ol class="mt-2 overflow-hidden rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]">
       <li
         v-for="(s, index) in steps"
         :key="s.key"
@@ -119,8 +121,9 @@ function hide(): void {
       >
         <span
           :class="[
-            'grid size-8 shrink-0 place-items-center rounded-full font-display text-[13px] font-semibold transition-colors duration-200',
-            s.done ? 'bg-accent text-on-accent' : 'text-text-soft shadow-[inset_0_0_0_1.5px_var(--border-strong)]',
+            // The plan's own tick square (Plan.vue), so a step and a task read alike.
+            'grid size-[26px] shrink-0 place-items-center rounded-[8px] text-[12px] font-bold transition-colors duration-200',
+            s.done ? 'bg-leaf text-white' : 'text-text-faint shadow-[inset_0_0_0_1.5px_var(--border-dashed)]',
           ]"
           aria-hidden="true"
         >
@@ -139,7 +142,7 @@ function hide(): void {
               s.done ? 'text-text-faint line-through decoration-text-ghost' : 'text-text',
             ]"
           >
-            {{ s.title }}<span class="sr-only">{{ s.done ? ', done' : '' }}</span>
+            {{ s.title }}<span class="sr-only">{{ s.done ? t('today.setup.doneSr') : '' }}</span>
           </span>
           <span
             v-if="!s.done"

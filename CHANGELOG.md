@@ -5,6 +5,24 @@ and the project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-09
+
+The redesign from bilimind.com, on your computer: warm paper, Bili, and a calmer layout.
+
+### Added
+
+- The new look everywhere: Today, the chat, courses, lessons, notes, whiteboards and settings.
+- A tasks board (To do, Doing, Done) with priorities, steps and times, and a full calendar with week and month views.
+- Each course is one Path, with a Map or Weeks view and its dates in the corner.
+- Courses get an icon and a colour, and you can start a course or write a lesson yourself, without AI.
+- The interface in English, Spanish, French, Portuguese, Russian, Turkish and Uzbek.
+- Downloads of any page as Word, Markdown or a PDF.
+
+### Changed
+
+- The first check of a topic comes a day after you study it; after right answers the next waits a week, then a month.
+- The app icon is Bili.
+
 ## [1.0.0]
 
 The desktop app is now the whole study companion, on your computer, with your own AI key. It replaces the earlier app.

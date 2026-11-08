@@ -13,7 +13,7 @@
 import { computed, ref, type Ref } from 'vue'
 
 export const PANELS = {
-  sidebar: { initial: 260, min: 220, max: 420, vw: 30 },
+  sidebar: { initial: 252, min: 220, max: 420, vw: 30 },
   column: { initial: 272, min: 220, max: 480, vw: 30 },
   assistant: { initial: 360, min: 320, max: 720, vw: 40 },
 }

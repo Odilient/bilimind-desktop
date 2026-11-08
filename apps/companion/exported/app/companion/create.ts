@@ -15,11 +15,9 @@
  *    `POST /api/companion/courses/propose` and `POST /api/companion/courses`);
  *  - the composer's attachments and what each one sends;
  *  - uploading with real progress (the API's own `upload` has none);
- *  - creating the rows: through the server, or, in the demo and for "Make it
- *    by hand", through the store's `upsert`, so the course appears in the
+ *  - creating the rows: through the server, or, for a course made from
+ *    scratch, through the store's `upsert`, so the course appears in the
  *    rail, Today and the calendar the moment it exists.
- *
- * The demo's stand-in for the model is `create-demo.ts`.
  */
 import type { Deadline, DeadlineKind, Goal, Item, Slot, Subject, Topic, Uuid } from './types'
 import type { CompanionStore } from './store'
@@ -38,6 +36,8 @@ export interface CourseProposal {
   finish: { kind: 'exam' | 'project' | 'date' | 'none'; label: string; date: string | null }
   minutes_per_week: number | null
   color: string | null
+  /** The cover's picture (`course-icons.ts`); only a course made by hand sends one. */
+  icon?: string | null
   units: { title: string; topics: { title: string; summary?: string | null }[] }[]
   deadlines: {
     title: string
@@ -52,7 +52,6 @@ export interface CourseProposal {
   /**
    * Every file and link that was sent, read or not (`read: false` = couldn't
    * be read); a link's `label` is the URL exactly as sent, `title` its page's.
-   * The demo leaves `read` out and lists only what it read.
    */
   sources: {
     label: string
@@ -182,7 +181,7 @@ export function fileKind(name: string, mime = ''): FileKind {
 export const FILE_LOOK: Record<FileKind, { icon: string; word: string; tone: string }> = {
   pdf: { icon: 'file', word: 'PDF', tone: 'text-danger' },
   slides: { icon: 'layers', word: 'Slides', tone: 'text-warn' },
-  doc: { icon: 'page', word: 'Document', tone: 'text-cobalt' },
+  doc: { icon: 'page', word: 'Document', tone: 'text-sky-ink' },
   sheet: { icon: 'table', word: 'Sheet', tone: 'text-success' },
   image: { icon: 'image', word: 'Image', tone: 'text-success' },
   text: { icon: 'page', word: 'Text', tone: 'text-text-soft' },
@@ -458,7 +457,7 @@ export function uploadWithProgress(opts: {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Creating the course from rows (the demo, and "Make it by hand")           */
+/* Creating the course from rows (a course made from scratch)               */
 /* -------------------------------------------------------------------------- */
 
 const DEADLINE_KINDS: DeadlineKind[] = [
@@ -550,6 +549,7 @@ export async function createLocally(
     title: proposal.title,
     code: null,
     color: proposal.color ?? freeColor(c.subjects.value.map((s) => s.color)),
+    icon: proposal.icon ?? null,
     lecturer: null,
     source: school ? 'manual' : 'generated',
     source_ref: null,
@@ -560,20 +560,26 @@ export async function createLocally(
     position: c.subjects.value.length,
   })
 
-  const units = proposal.units.map((u) => ({ unit: u, id: crypto.randomUUID() }))
+  // A unit with no title (topics typed by hand before any unit) is no row:
+  // its topics sit on the path on their own.
+  const units = proposal.units.map((u) => ({ unit: u, id: u.title ? crypto.randomUUID() : null }))
   await Promise.all(
-    units.map(({ unit, id }, u) =>
-      c.upsert<Topic>('topics', {
-        id,
-        subject_id: subjectId,
-        parent_id: null,
-        title: unit.title,
-        position: u * 100,
-        summary: null,
-        source: 'generated',
-        weight: null,
-        node_id: null,
-      }),
+    units.flatMap(({ unit, id }, u) =>
+      id
+        ? [
+            c.upsert<Topic>('topics', {
+              id,
+              subject_id: subjectId,
+              parent_id: null,
+              title: unit.title,
+              position: u * 100,
+              summary: null,
+              source: 'generated',
+              weight: null,
+              node_id: null,
+            }),
+          ]
+        : [],
     ),
   )
   await Promise.all(

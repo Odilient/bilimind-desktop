@@ -52,8 +52,7 @@ async function make(template: TemplateKey): Promise<void> {
       parentId: q('parent_id'),
       template,
     })
-    const demo = route.query.demo
-    await router.replace({ path: `/app/notes/${id}`, query: demo ? { demo: String(demo) } : {} })
+    await router.replace(`/app/notes/${id}`)
   } catch {
     making.value = false
     toast.error({ title: "Couldn't make the page", body: 'Check the connection and try again.' })

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Item } from '~/companion/types'
 import type { NoteMenuItem } from '~/companion/notes/actions'
 import { noteTo, suggestionOf, useNoteActions, useNotesSidebar } from '~/companion/notes/actions'
@@ -60,12 +61,12 @@ const places = computed<NoteMenuItem[]>(() => {
   const list: NoteMenuItem[] = []
   if (subject.value) {
     const s = subject.value
-    list.push({ label: `Open ${s.title}`, icon: 'workspace', run: () => void navigateTo(`/app/courses/${s.id}`) })
+    list.push({ label: t('notes.openCourse', { course: s.title }), icon: 'workspace', run: () => void navigateTo(`/app/courses/${s.id}`) })
   }
   list.push({
-    label: 'No course',
+    label: t('notes.noCourse'),
     icon: 'notebook',
-    caption: here ? 'Back to My notes' : nested.value ? 'In My notes, inside a page' : 'In My notes',
+    caption: here ? t('notes.backToMine') : nested.value ? t('notes.inMineNested') : t('notes.inMine'),
     checked: !here,
     divider: Boolean(subject.value),
     run: move(null),
@@ -76,21 +77,21 @@ const places = computed<NoteMenuItem[]>(() => {
       icon: 'workspace',
       color: courseColor(s.color),
       checked: s.id === here,
-      caption: s.id === here && nested.value ? 'Here, inside a page' : s.id === suggested.value ? 'Suggested' : undefined,
+      caption: s.id === here && nested.value ? t('notes.hereNested') : s.id === suggested.value ? t('notes.suggested') : undefined,
       run: move(s.id),
     })
   }
   return list
 })
 
-const placeLabel = computed(() => subject.value?.title ?? 'My notes')
+const placeLabel = computed(() => subject.value?.title ?? t('notes.myNotes'))
 const above = computed(() => ancestors(tree.value, props.item.id))
 /** First and last pages above stay; the middle folds into "…". */
 const shown = computed(() => (above.value.length > 2 ? [above.value[0]!, above.value.at(-1)!] : above.value))
 const folded = computed<NoteMenuItem[]>(() =>
   above.value.length > 2
     ? above.value.slice(1, -1).map((n) => ({
-        label: n.title || 'Untitled',
+        label: n.title || t('notes.untitled'),
         icon: noteIcon(n),
         run: () => void navigateTo(noteTo(n.id)),
       }))
@@ -135,7 +136,7 @@ function finishRename(save: boolean): void {
 defineExpose({ startRename })
 
 const crumb =
-  'flex h-7 min-w-0 shrink items-center gap-1.5 rounded-[7px] px-1.5 text-text-muted transition-colors hover:bg-surface-mute hover:text-text outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]'
+  'flex h-7 min-w-0 shrink items-center gap-1.5 rounded-[7px] px-1.5 text-text-muted transition-colors hover:bg-surface-mute hover:text-text outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]'
 </script>
 
 <template>
@@ -146,7 +147,7 @@ const crumb =
     <button
       type="button"
       class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-text-soft transition-colors active:bg-surface-sunken"
-      aria-label="Back"
+      :aria-label="t('notes.back')"
       @click="back"
     >
       <UiIcon
@@ -158,15 +159,15 @@ const crumb =
     <CompanionNotesMenu
       class="min-w-0"
       :items="places"
-      label="Where it's filed"
-      title="Where it's filed"
+      :label="t('notes.whereFiled')"
+      :title="t('notes.whereFiled')"
     >
       <template #default="{ toggle, open }">
         <button
           type="button"
           aria-haspopup="menu"
           :aria-expanded="open"
-          :aria-label="`Filed in ${placeLabel}. Change`"
+          :aria-label="t('notes.filedIn', { place: placeLabel })"
           class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2 rounded-full px-1 text-[15px] font-semibold text-text-soft active:bg-surface-sunken"
           @click="toggle"
         >
@@ -195,14 +196,14 @@ const crumb =
   <nav
     v-else
     class="flex min-w-0 flex-1 items-center gap-0.5 text-[13.5px] whitespace-nowrap"
-    aria-label="Where this is"
+    :aria-label="t('notes.whereThis')"
   >
     <button
       v-if="!sidebar.open.value"
       type="button"
-      class="mr-1 grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[9px] bg-accent-soft text-accent-strong transition-colors hover:brightness-95 focus-visible:outline-2 focus-visible:outline-cobalt"
-      title="Show the sidebar (Ctrl+\)"
-      aria-label="Show the sidebar"
+      class="mr-1 grid size-[30px] shrink-0 cursor-pointer place-items-center rounded-[9px] bg-accent-soft text-accent-strong transition-colors hover:brightness-95 focus-visible:outline-2 focus-visible:outline-brand"
+      :title="t('notes.showSidebarKey')"
+      :aria-label="t('notes.showSidebar')"
       @click="sidebar.set(true)"
     >
       <UiIcon
@@ -215,7 +216,7 @@ const crumb =
       to="/app/notes"
       :class="[crumb, 'shrink-0']"
     >
-      Notes
+      {{ t('notes.notes') }}
     </NuxtLink>
     <span
       class="shrink-0 text-text-ghost"
@@ -224,8 +225,8 @@ const crumb =
     <CompanionNotesMenu
       class="min-w-0"
       :items="places"
-      label="Where it's filed"
-      title="Where it's filed"
+      :label="t('notes.whereFiled')"
+      :title="t('notes.whereFiled')"
       :width="248"
     >
       <template #default="{ toggle, open }">
@@ -234,7 +235,7 @@ const crumb =
           aria-haspopup="menu"
           :aria-expanded="open"
           :class="[crumb, open && 'bg-surface-mute text-text']"
-          :title="subject ? `In ${subject.title}: open it, or move this to another course` : 'In My notes: move it to a course'"
+          :title="subject ? t('notes.inCourseHint', { course: subject.title }) : t('notes.inMineHint')"
           @click="toggle"
         >
           <span
@@ -264,14 +265,14 @@ const crumb =
       <template v-if="index === 1 && folded.length">
         <CompanionNotesMenu
           :items="folded"
-          label="Pages in between"
-          title="Pages in between"
+          :label="t('notes.pagesBetween')"
+          :title="t('notes.pagesBetween')"
         >
           <template #default="{ toggle }">
             <button
               type="button"
               :class="crumb"
-              aria-label="Pages in between"
+              :aria-label="t('notes.pagesBetween')"
               @click="toggle"
             >
               …
@@ -287,7 +288,7 @@ const crumb =
         :to="noteTo(note.id)"
         :class="crumb"
       >
-        <span class="max-w-[180px] truncate">{{ note.title || 'Untitled' }}</span>
+        <span class="max-w-[180px] truncate">{{ note.title || t('notes.untitled') }}</span>
       </NuxtLink>
     </template>
 
@@ -301,8 +302,8 @@ const crumb =
       v-model="draft"
       type="text"
       maxlength="160"
-      aria-label="Name"
-      class="h-7 min-w-[160px] rounded-[7px] bg-surface px-1.5 font-medium text-text outline-2 outline-cobalt"
+      :aria-label="t('notes.name')"
+      class="h-7 min-w-[160px] rounded-[7px] bg-surface px-1.5 font-medium text-text outline-2 outline-brand"
       @keydown.enter.prevent="finishRename(true)"
       @keydown.esc.prevent.stop="finishRename(false)"
       @blur="finishRename(true)"
@@ -311,7 +312,7 @@ const crumb =
       v-else
       type="button"
       :class="[crumb, 'font-medium', title ? 'text-text' : 'text-text-faint']"
-      :title="renameable ? 'Rename' : 'Go to the title'"
+      :title="renameable ? t('notes.rename') : t('notes.goToTitle')"
       @click="startRename"
     >
       <span class="truncate">{{ name }}</span>

@@ -15,10 +15,10 @@ const markdown = computed(() => String(props.block.payload?.markdown ?? '').trim
     :title="title || undefined"
     :source-material-ids="block.source_material_ids"
   >
-    <!-- A worked case, set off by a rule like a quotation from practice. -->
+    <!-- A worked case, set off on a wash like a quotation from practice. -->
     <div
       v-if="markdown"
-      class="border-l-2 border-brand-line pl-4"
+      class="rounded-[12px] bg-[rgb(var(--wash-rgb)/0.045)] px-4 py-3"
     >
       <Markdown :source="markdown" />
     </div>

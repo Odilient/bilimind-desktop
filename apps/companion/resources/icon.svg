@@ -1,13 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3A57F0"/>
-      <stop offset="1" stop-color="#1A33C9"/>
-    </linearGradient>
-  </defs>
-  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#g)"/>
-  <!-- lime mark: a lowercase b (stem + bowl) with a spark -->
-  <rect x="68" y="44" width="30" height="168" rx="15" fill="#C6F24E"/>
-  <circle cx="140" cy="157" r="40" fill="none" stroke="#C6F24E" stroke-width="30"/>
-  <circle cx="194" cy="64" r="15" fill="#C6F24E"/>
+  <defs><linearGradient id="mk" x1="0" y1="-46" x2="0" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffea94"/><stop offset=".55" stop-color="#ffdb5c"/><stop offset="1" stop-color="#ffc93d"/>
+    </linearGradient></defs>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="#f6f3ec"/>
+  <g transform="translate(128 134) scale(1.42)"><ellipse cx="2" cy="56" rx="32" ry="5" fill="rgb(80 55 10 / .16)"/>
+      <path d="M0,-44C8.67,-44 19.33,-42.67 26,-38C32.67,-33.33 37.17,-24 40,-16C42.83,-8 43,2 43,10C43,18 38.83,26.5 40,32C41.17,37.5 52.67,40.92 50,43C47.33,45.08 32.33,44.17 24,44.5C15.67,44.83 8,45.17 0,45C-8,44.83 -17.33,45.67 -24,43.5C-30.67,41.33 -36.83,37.92 -40,32C-43.17,26.08 -43,16 -43,8C-43,0 -42.83,-8.33 -40,-16C-37.17,-23.67 -32.67,-33.33 -26,-38C-19.33,-42.67 -8.67,-44 0,-44Z" fill="url(#mk)"/>
+      <ellipse cx="-17" cy="-25" rx="10" ry="5.5" fill="#fff" opacity=".5" transform="rotate(-32 -17 -25)"/>
+      <ellipse cx="-11" cy="-7" rx="4.7" ry="6.4" fill="#2a2418"/>
+      <ellipse cx="11" cy="-7" rx="4.7" ry="6.4" fill="#2a2418"/></g>
 </svg>

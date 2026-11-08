@@ -19,6 +19,8 @@
 import { ref } from 'vue'
 import type { Item, Session, Signal, Subject } from './types'
 import type { CompanionStore } from './store'
+// imports
+import { importPlaylist, previewInto } from './imports/links'
 
 export type CaptureMode = 'menu' | 'record' | 'paste' | 'signal'
 
@@ -256,26 +258,33 @@ export async function addLink(
   store: CompanionStore,
   url: string,
   target: FileTarget | null = null,
-  opts: CaptureOptions & { title?: string | null } = {},
+  // imports: a link ON something: a deadline (`meta.deadline_id`), a
+  // lesson (`topic_id`) or a page (`parent_id`). The target names its course.
+  opts: CaptureOptions & { title?: string | null; deadlineId?: string | null; topicId?: string | null; parentId?: string | null } = {},
 ): Promise<Item> {
   const { filed, guess } = settle(store, target, opts.onScreen ?? null)
   const subjectId = filed.subject?.id ?? null
   const position = store.items.value.filter((i) => !i.deleted_at && i.subject_id === subjectId && !i.parent_id).length
-  const item = await store.upsert<Item>('items', {
+  const on = Boolean(opts.deadlineId || opts.topicId || opts.parentId)
+  // imports: a YouTube playlist arrives as its videos, under a page named
+  // after it; one put on something stays a single link there, which still plays.
+  const item = (on ? null : await importPlaylist(store, url, subjectId)) ?? await store.upsert<Item>('items', {
     id: crypto.randomUUID(),
     subject_id: subjectId,
     session_id: filed.session?.id ?? null,
-    topic_id: filed.session?.topic_id ?? null,
-    parent_id: null,
+    topic_id: opts.topicId ?? filed.session?.topic_id ?? null,
+    parent_id: opts.parentId ?? null,
     kind: 'link',
     title: opts.title?.trim() || linkTitle(url),
     preview: url,
-    meta: { url, ...(subjectId ? {} : suggestionMeta(guess)) },
+    meta: { url, ...(opts.deadlineId ? { deadline_id: opts.deadlineId } : {}), ...(subjectId || on ? {} : suggestionMeta(guess)) },
     source: 'made',
     source_ref: null,
     position,
     pinned: false,
   })
+  // imports: its title, picture and player, read once (quiet when it can't be).
+  void previewInto(store, item)
   if (!opts.quiet) useToast().success({ title: `Saved to ${filed.label}`, body: item.title })
   return item
 }

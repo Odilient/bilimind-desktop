@@ -84,7 +84,7 @@ watch(
     >
       <span
         v-if="tab.id === activeId"
-        class="pointer-events-none absolute right-2 -bottom-px left-2 h-[2.5px] rounded-[2px] bg-lime-2"
+        class="pointer-events-none absolute right-2 -bottom-px left-2 h-[2.5px] rounded-[2px] bg-hi-2"
         aria-hidden="true"
       />
       <UiIcon

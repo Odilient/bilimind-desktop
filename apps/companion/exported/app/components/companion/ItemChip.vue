@@ -14,6 +14,7 @@ import { fetchFileUrl, knownFileUrl } from '~/companion/files'
 import { useCompanion } from '~/companion/store'
 
 const props = defineProps<{ item: Item; count?: number }>()
+const { t } = useI18n()
 const toast = useToast()
 const c = useCompanion()
 
@@ -25,11 +26,11 @@ const to = computed(() => {
 const href = computed(() => (props.item.kind === 'link' ? (props.item.meta.url ?? null) : knownFileUrl(props.item)))
 
 /** Bytes that live on the server but came without a link (PowerSync drops the signed ones). */
-const askable = computed(() => c.status.mode !== 'demo' && ['file', 'photo', 'recording'].includes(props.item.kind))
+const askable = computed(() => ['file', 'photo', 'recording'].includes(props.item.kind))
 
 const label = computed(() => {
-  if (props.count && props.count > 1) return `${props.count} ${props.item.kind === 'photo' ? 'photos' : 'files'}`
-  if (props.item.kind === 'recording' && props.item.meta.duration_s) return `Recording, ${itemLabel(props.item)}`
+  if (props.count && props.count > 1) return t(props.item.kind === 'photo' ? 'today.chip.photos' : 'today.chip.files', props.count)
+  if (props.item.kind === 'recording' && props.item.meta.duration_s) return t('today.chip.recording', { label: itemLabel(props.item) })
   return itemLabel(props.item)
 })
 
@@ -43,24 +44,24 @@ async function open(): Promise<void> {
     // The browser held the window back: hand over a button, which it allows.
     toast.info({
       title: props.item.title,
-      body: 'Ready to open.',
-      action: { label: 'Open', handler: () => window.open(url, '_blank', 'noopener') },
+      body: t('today.chip.ready'),
+      action: { label: t('common.open'), handler: () => window.open(url, '_blank', 'noopener') },
     })
   } else {
     tab?.close()
-    toast.error({ title: props.item.title, body: 'It can\'t be opened right now. Try again when you\'re online.' })
+    toast.error({ title: props.item.title, body: t('today.chip.cantOpen') })
   }
 }
 
 function explain(): void {
   const what =
     props.item.kind === 'recording'
-      ? 'The recording plays here, with its transcript, once the recorder ships.'
+      ? t('today.chip.explainRecording')
       : props.item.kind === 'photo'
-        ? 'Photos open full screen, with the slide they were taken next to.'
+        ? t('today.chip.explainPhoto')
         : props.item.source === 'moodle'
-          ? 'This file opens straight from Moodle once the course is connected for real.'
-          : 'This opens in the viewer, which is on its way.'
+          ? t('today.chip.explainMoodle')
+          : t('today.chip.explainFile')
   toast.info({ title: props.item.title, body: what })
 }
 

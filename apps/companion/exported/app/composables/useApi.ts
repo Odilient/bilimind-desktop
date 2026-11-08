@@ -248,36 +248,6 @@ export function apiBaseUrl(): string {
   return config.public.apiBase as string
 }
 
-/* -------------------------------------------------------------------------- */
-/* The companion demo                                                         */
-/*                                                                            */
-/* `/app?demo=1` runs with no account and no API, yet its courses open real   */
-/* lessons. Those lessons have negative ids, which no database row ever has,  */
-/* and while the demo is on, a request naming one (or a mark or a tutor turn  */
-/* on one) is answered in memory by `companion/demo-lessons.ts` instead of    */
-/* the network. That module is imported only then, so nothing else in the    */
-/* product downloads it, and outside the demo nothing here changes a request. */
-/* -------------------------------------------------------------------------- */
-
-/** A path naming a demo id: `/nodes/-1018`, `/assessments/-101851/attempt`. */
-const DEMO_ID = /\/-\d+(?:\/|\?|$)/
-
-/** The two requests that carry their demo id in the body or answer by uuid. */
-const DEMO_OTHER = /^\/?(?:annotations\/|speech\/dialogue$)/
-
-async function demoReply(method: string, path: string, body: unknown): Promise<{ body: unknown } | null> {
-  if (!import.meta.client || !(DEMO_ID.test(path) || DEMO_OTHER.test(path))) return null
-  let demo = false
-  try {
-    demo = isCompanionDemo()
-  } catch {
-    demo = false
-  }
-  if (!demo) return null
-  const { answerDemoLesson } = await import('~/companion/demo-lessons')
-  return answerDemoLesson(method, path, body)
-}
-
 function buildHeaders(body: unknown, extra?: Record<string, string>): Record<string, string> {
   const headers: Record<string, string> = { Accept: 'application/json' }
   const isForm = typeof FormData !== 'undefined' && body instanceof FormData
@@ -313,18 +283,15 @@ export function useApi() {
     const withVisitor = visitor ? { 'X-Anonymous-Id': visitor, ...withAuth } : withAuth
 
     try {
-      const demo = await demoReply(method, path, body)
-      const result = demo
-        ? (demo.body as MaybeWrapped<T>)
-        : await $fetch<MaybeWrapped<T>>(joinUrl(base, path), {
-            method,
-            query: query as Record<string, unknown> | undefined,
-            body: body as Record<string, unknown> | undefined,
-            headers: buildHeaders(body, withVisitor),
-            signal,
-            timeout,
-            retry: 0,
-          })
+      const result = await $fetch<MaybeWrapped<T>>(joinUrl(base, path), {
+        method,
+        query: query as Record<string, unknown> | undefined,
+        body: body as Record<string, unknown> | undefined,
+        headers: buildHeaders(body, withVisitor),
+        signal,
+        timeout,
+        retry: 0,
+      })
       return shouldUnwrap ? unwrap<T>(result as MaybeWrapped<T>) : (result as T)
     } catch (error) {
       const apiError = toApiError(error)
@@ -343,8 +310,7 @@ export function useApi() {
      * call — a bare `fetch` here 401'd, silently, for every learner.
      */
     beacon(path: string, body: unknown): void {
-      // A demo lesson's seconds have nowhere to go (see demoReply).
-      if (!import.meta.client || DEMO_ID.test(path)) return
+      if (!import.meta.client) return
       const token = authToken()
       void fetch(joinUrl(base, path), {
         method: 'POST',
@@ -410,18 +376,15 @@ export function useAsyncApi<T>(
       const withAuth = token ? { Authorization: `Bearer ${token}`, ...headers } : headers
 
       try {
-        const demo = await demoReply(method, resolvedPath, body)
-        const result = demo
-          ? (demo.body as MaybeWrapped<T>)
-          : await $fetch<MaybeWrapped<T>>(joinUrl(base, resolvedPath), {
-              method,
-              query: (typeof query === 'function' ? query() : query) as
-                | Record<string, unknown>
-                | undefined,
-              body: body as Record<string, unknown> | undefined,
-              headers: buildHeaders(body, withAuth),
-              retry: 0,
-            })
+        const result = await $fetch<MaybeWrapped<T>>(joinUrl(base, resolvedPath), {
+          method,
+          query: (typeof query === 'function' ? query() : query) as
+            | Record<string, unknown>
+            | undefined,
+          body: body as Record<string, unknown> | undefined,
+          headers: buildHeaders(body, withAuth),
+          retry: 0,
+        })
         const value = shouldUnwrap ? unwrap<T>(result as MaybeWrapped<T>) : (result as T)
         return transform ? transform(value) : value
       } catch (error) {

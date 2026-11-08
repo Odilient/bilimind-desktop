@@ -1,0 +1,25 @@
+/* nav: floats over the hero sheet, settles onto paper once you scroll */
+.d2 .nav { position: fixed; z-index: 100; top: env(safe-area-inset-top, 0px); left: 0; right: 0; padding: 18px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; transition: transform 0.5s var(--ease); }
+.d2 .nav.hide { transform: translateY(-110%); }
+.d2 .nav-in {
+  pointer-events: auto; max-width: calc(var(--frame) - 48px); margin: 0 auto; height: 56px; padding: 0 10px 0 16px;
+  display: flex; align-items: center; gap: 24px; border-radius: 18px;
+  background: color-mix(in oklab, var(--card) 72%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--line-2) 70%, transparent), 0 10px 30px -18px rgb(70 50 20 / 0.35);
+}
+.d2 .brand { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -0.035em; }
+.d2 .brand-blob { margin-top: -2px; }
+.d2 .nav-links { display: flex; gap: 2px; margin-right: auto; }
+.d2 .nav-links a { padding: 8px 12px; border-radius: 10px; font-size: 14.5px; font-weight: 560; color: var(--ink-2); transition: background-color 0.2s, color 0.2s; }
+.d2 .nav-links a:hover { background: var(--wash-2); color: var(--ink); }
+.d2 .nav-end { display: flex; align-items: center; gap: 4px; }
+.d2 .nav-end .btn-ink { margin-left: 4px; }
+.d2 #themeFlip .i-moon { display: none; }
+:root[data-theme='dark'] .d2 #themeFlip .i-sun { display: none; }
+:root[data-theme='dark'] .d2 #themeFlip .i-moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .d2 #themeFlip .i-sun { display: none; }
+  :root:not([data-theme='light']) .d2 #themeFlip .i-moon { display: block; }
+}
+@media (max-width: 900px) { .d2 .nav-links { display: none; } .d2 .nav-in { justify-content: space-between; } }
+@media (max-width: 520px) { .d2 .nav { padding-top: 10px; } .d2 .nav-login, .d2 .nav-end .icon-btn[href] { display: none; } .d2 .nav-in { height: 52px; padding-left: 12px; } }

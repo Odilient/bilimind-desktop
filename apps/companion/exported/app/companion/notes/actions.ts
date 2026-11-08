@@ -31,6 +31,7 @@
 import * as Y from 'yjs'
 import { computed, effectScope, onBeforeUnmount, ref, type ComputedRef } from 'vue'
 import { useToast } from '~/composables/useToast'
+import { translate } from '~/utils/i18n'
 import { useCompanion, type CompanionStore } from '../store'
 import { attachDocPersistence } from '../doc/persistence'
 import type { Item, Session, Subject } from '../types'
@@ -310,7 +311,7 @@ export function useNoteActions() {
   const { full: tree } = useNotesTree(store)
 
   function placeLabel(subjectId: string | null): string {
-    return subjectId ? (store.get('subjects', subjectId)?.title ?? 'the course') : 'My notes'
+    return subjectId ? (store.get('subjects', subjectId)?.title ?? translate('notes.theCourse')) : translate('notes.myNotes')
   }
 
   /** Rows to write when a note (and what's under it) changes course. */
@@ -417,9 +418,9 @@ export function useNoteActions() {
     if (opts.quiet || !moved) return
     const where = placeLabel(subjectId)
     toast.success({
-      title: tops.length > 1 ? `Moved ${tops.length} notes to ${where}` : `Moved to ${where}`,
+      title: tops.length > 1 ? translate('notes.movedMany', { n: tops.length, where }) : translate('notes.movedTo', { where }),
       duration: 5000,
-      action: { label: 'Undo', handler: () => void write(undo) },
+      action: { label: translate('notes.undo'), handler: () => void write(undo) },
     })
   }
 
@@ -467,10 +468,10 @@ export function useNoteActions() {
     await write(patches)
     if (tops.some((n) => n.subject_id !== parent.subject_id)) {
       toast.success({
-        title: `Moved into “${parent.title || 'Untitled'}”`,
-        body: parent.subject_id ? `Now in ${placeLabel(parent.subject_id)}` : 'Now in My notes',
+        title: translate('notes.movedInto', { title: parent.title || translate('notes.untitled') }),
+        body: parent.subject_id ? translate('notes.nowIn', { where: placeLabel(parent.subject_id) }) : translate('notes.nowInMine'),
         duration: 5000,
-        action: { label: 'Undo', handler: () => void write(undo) },
+        action: { label: translate('notes.undo'), handler: () => void write(undo) },
       })
     }
     return true
@@ -509,9 +510,9 @@ export function useNoteActions() {
     await write(patches)
     if (moved) {
       toast.success({
-        title: `Moved to ${placeLabel(target.subject_id)}`,
+        title: translate('notes.movedTo', { where: placeLabel(target.subject_id) }),
         duration: 5000,
-        action: { label: 'Undo', handler: () => void write(undo) },
+        action: { label: translate('notes.undo'), handler: () => void write(undo) },
       })
     }
   }
@@ -536,18 +537,18 @@ export function useNoteActions() {
       pending.delete(commit)
       clearTimeout(timer)
       void Promise.all(gone.map((id) => store.remove('items', id)))
-        .catch(() => toast.error({ title: "Couldn't delete it", body: 'It is back where it was.' }))
+        .catch(() => toast.error({ title: translate('notes.couldntDelete'), body: translate('notes.backWhere') }))
         .finally(() => store.leave(gone, false))
     }
     const timer = setTimeout(commit, 6500)
     pending.add(commit)
     const inside = group.length - tops.length
     toast.push({
-      title: tops.length > 1 ? `Deleted ${tops.length} notes` : `Deleted “${tops[0]!.title || 'Untitled'}”`,
-      body: inside ? `And the ${inside === 1 ? 'page' : `${inside} pages`} inside.` : undefined,
+      title: tops.length > 1 ? translate('notes.deletedMany', { n: tops.length }) : translate('notes.deletedOne', { title: tops[0]!.title || translate('notes.untitled') }),
+      body: inside ? translate('notes.insidePages', inside) : undefined,
       duration: 6000,
       action: {
-        label: 'Undo',
+        label: translate('notes.undo'),
         handler: () => {
           if (done) return
           done = true
@@ -570,29 +571,29 @@ export function useNoteActions() {
   ): NoteMenuItem[] {
     const inCourse = opts.inCourse ? null : courseTo(note)
     const items: NoteMenuItem[] = [
-      { label: 'Rename', icon: 'pencil', hint: 'F2', run: opts.rename ?? (() => (renamingId.value = `${note.id}:`)) },
+      { label: translate('notes.rename'), icon: 'pencil', hint: 'F2', run: opts.rename ?? (() => (renamingId.value = `${note.id}:`)) },
     ]
-    if (opts.addInside && note.kind === 'page') items.push({ label: 'Add a page inside', icon: 'plus', run: opts.addInside })
+    if (opts.addInside && note.kind === 'page') items.push({ label: translate('notes.addPageInsideShort'), icon: 'plus', run: opts.addInside })
     items.push(
-      { label: note.pinned ? 'Unpin' : 'Pin to the top', icon: 'pin', run: () => void togglePin(note) },
+      { label: note.pinned ? translate('notes.unpin') : translate('notes.pinTop'), icon: 'pin', run: () => void togglePin(note) },
       {
-        label: 'Move to…',
+        label: translate('notes.moveTo'),
         icon: 'move',
-        caption: note.subject_id ? `In ${placeLabel(note.subject_id)}` : 'In My notes',
+        caption: note.subject_id ? translate('notes.inPlace', { where: placeLabel(note.subject_id) }) : translate('notes.inMine'),
         run: () => (movingId.value = note.id),
       },
     )
-    if (inCourse) items.push({ label: 'Open in its course', icon: 'workspace', run: () => void navigateTo(inCourse) })
+    if (inCourse) items.push({ label: translate('notes.openInCourse'), icon: 'workspace', run: () => void navigateTo(inCourse) })
     items.push({
-      label: 'Copy link',
+      label: translate('notes.copyLink'),
       icon: 'link',
       run: () => {
         void navigator.clipboard
           ?.writeText(`${location.origin}${noteTo(note.id)}`)
-          .then(() => toast.success({ title: 'Link copied', duration: 1800 }))
+          .then(() => toast.success({ title: translate('notes.linkCopied'), duration: 1800 }))
       },
     })
-    items.push({ label: 'Delete', icon: 'trash', destructive: true, run: () => remove(note) })
+    items.push({ label: translate('notes.delete'), icon: 'trash', destructive: true, run: () => remove(note) })
     return items
   }
 
@@ -633,7 +634,7 @@ export function useNoteCreate() {
       await navigateTo(noteTo(id), { replace })
       return id
     } catch {
-      toast.error({ title: `Couldn't make the ${what}`, body: 'Check the connection and try again.' })
+      toast.error({ title: translate(`notes.couldntMake_${what}`), body: translate('notes.couldntMakeBody') })
       return null
     } finally {
       busy.value = false

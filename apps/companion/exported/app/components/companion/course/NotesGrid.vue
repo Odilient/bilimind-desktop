@@ -2,6 +2,7 @@
 import type { Item, Subject } from '~/companion/types'
 import { useCompanion } from '~/companion/store'
 import { dayKey, shortDate, untilLabel } from '~/companion/time'
+const { t } = useI18n()
 
 /**
  * A course's notes and whiteboards, as a view of its home (`?tab=notes`): a
@@ -53,7 +54,7 @@ const groups = computed<Group[]>(() => {
     const session = c.get('sessions', item.session_id)
     const topic = c.get('topics', item.topic_id ?? session?.topic_id)
     let key = 'other'
-    let label = 'Other notes'
+    let label = t('course.grid.other')
     let sub = ''
     if (session) {
       key = `class:${session.id}`
@@ -76,7 +77,7 @@ const groups = computed<Group[]>(() => {
 function edited(i: Item): string {
   const at = i.updated_at ?? i.created_at
   if (!at || Date.parse(at) > Date.now()) return ''
-  return `Edited ${untilLabel(at)}`
+  return t('course.grid.edited', { when: untilLabel(at) })
 }
 </script>
 
@@ -85,10 +86,10 @@ function edited(i: Item): string {
     <header class="flex flex-wrap items-center gap-3">
       <div class="grid min-w-0 flex-1 gap-0.5">
         <h2 class="t-head text-[19px]">
-          Notes & whiteboards
+          {{ t('course.side.notes') }}
         </h2>
         <p class="text-[14px] text-text-muted">
-          {{ own.length ? `${own.length} in this course, by the class or topic they were written for.` : 'Pages and whiteboards for this course, by the class they were written for.' }}
+          {{ own.length ? t('course.grid.subOwn', { n: own.length }) : t('course.grid.subNone') }}
         </p>
       </div>
       <div class="flex shrink-0 flex-wrap items-center gap-2">
@@ -97,19 +98,19 @@ function edited(i: Item): string {
           variant="secondary"
           size="md"
           icon="plus"
-          :title="`New whiteboard in ${subject.title}`"
+          :title="t('course.grid.newBoard', { title: subject.title })"
           @click="emit('newBoard')"
         >
-          Whiteboard
+          {{ t('course.grid.board') }}
         </UiBtn>
         <UiBtn
           variant="primary"
           size="md"
           icon="plus"
-          :title="`New page in ${subject.title}`"
+          :title="t('course.grid.newPage', { title: subject.title })"
           @click="emit('newNote')"
         >
-          Page
+          {{ t('course.grid.page') }}
         </UiBtn>
       </div>
     </header>
@@ -134,7 +135,7 @@ function edited(i: Item): string {
         >
           <button
             type="button"
-            class="group relative flex h-[168px] w-full cursor-pointer flex-col overflow-hidden rounded-[16px] bg-surface text-left shadow-[inset_0_0_0_1px_var(--border)] transition-[box-shadow,transform] duration-150 hover:-translate-y-0.5 hover:shadow-[inset_0_0_0_1px_var(--border-strong),0_10px_24px_-14px_rgb(11_13_16/0.3)] focus-visible:outline-2 focus-visible:outline-cobalt"
+            class="group relative flex h-[168px] w-full cursor-pointer flex-col overflow-hidden rounded-[16px] bg-surface text-left shadow-[inset_0_0_0_1px_var(--border)] transition-[box-shadow,transform] duration-150 hover:-translate-y-0.5 hover:shadow-[inset_0_0_0_1px_var(--border-strong),0_10px_24px_-14px_rgb(11_13_16/0.3)] focus-visible:outline-2 focus-visible:outline-brand"
             @click="emit('openItem', i)"
           >
             <!-- A board's card is a little sheet of dotted paper; a page's is plain. -->
@@ -149,11 +150,11 @@ function edited(i: Item): string {
                   :name="i.kind === 'board' ? 'board' : 'page'"
                   :size="13"
                 />
-                {{ i.kind === 'board' ? 'Whiteboard' : 'Page' }}
+                {{ i.kind === 'board' ? t('course.grid.board') : t('course.grid.page') }}
                 <span
                   v-if="openSet.has(i.id)"
                   class="ml-auto rounded-full bg-accent-soft px-1.5 text-[11px] font-semibold text-accent-strong"
-                >Open</span>
+                >{{ t('course.grid.open') }}</span>
                 <UiIcon
                   v-else-if="i.pinned"
                   name="target"
@@ -161,7 +162,7 @@ function edited(i: Item): string {
                   class="ml-auto text-text-faint"
                 />
               </span>
-              <span class="mt-2 line-clamp-2 block font-display text-[15.5px] leading-snug font-semibold tracking-[-0.01em] text-text">{{ i.title || 'Untitled' }}</span>
+              <span class="mt-2 line-clamp-2 block font-display text-[15.5px] leading-snug font-semibold tracking-[-0.01em] text-text">{{ i.title || t('course.notes.untitled') }}</span>
               <span
                 v-if="i.preview"
                 class="mt-1.5 line-clamp-3 block text-[13px] leading-[1.45] text-text-muted"
@@ -169,7 +170,7 @@ function edited(i: Item): string {
               <span
                 v-else
                 class="mt-1.5 block text-[13px] text-text-faint italic"
-              >Empty so far</span>
+              >{{ t('course.grid.empty') }}</span>
             </span>
             <span class="flex h-9 shrink-0 items-center border-t border-border-rule px-4 text-[12px] text-text-faint">
               <span class="truncate">{{ edited(i) }}</span>
@@ -188,19 +189,17 @@ function edited(i: Item): string {
       v-if="!own.length"
       class="grid justify-items-center gap-3 rounded-[20px] bg-surface-sunken px-6 py-14 text-center"
     >
-      <span class="grid size-12 place-items-center rounded-full bg-lime text-ink">
+      <span class="grid size-12 place-items-center rounded-full bg-accent text-on-accent">
         <CompanionIcon
           name="page"
           :size="20"
         />
       </span>
       <h3 class="t-head text-[19px]">
-        No notes in {{ subject.title }} yet
+        {{ t('course.grid.noneTitle', { title: subject.title }) }}
       </h3>
       <p class="max-w-[460px] text-[15px] text-text-body">
-        A page made here is filed under the class you're in, or the lesson you have open, so it's
-        where you'll look for it before the exam. Notes made elsewhere wait in My notes until you
-        add them.
+        {{ t('course.grid.noneBody') }}
       </p>
       <UiBtn
         variant="primary"
@@ -208,14 +207,14 @@ function edited(i: Item): string {
         icon="plus"
         @click="emit('newNote')"
       >
-        New page in {{ subject.title }}
+        {{ t('course.grid.newPage', { title: subject.title }) }}
       </UiBtn>
       <p class="text-[13.5px] text-text-muted">
-        Or
+        {{ t('course.grid.or') }}
         <CompanionCourseAddNotes
           :subject="subject"
           look="link"
-          label="add notes you already have"
+          :label="t('course.grid.addLink')"
         />
       </p>
     </section>

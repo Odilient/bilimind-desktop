@@ -1,0 +1,50 @@
+{
+  "headline": {
+    "none": "Henüz not verilmedi",
+    "final": "Final notu: %{percent}",
+    "sofar": "Şu ana kadar %{percent}"
+  },
+  "fromMoodle": "Moodle'dan",
+  "aiming": "Hedef",
+  "worth": "Ağırlık",
+  "mark": "Not",
+  "whatItIs": "Tanım",
+  "worthPct": "Ağırlık %",
+  "worthPctLabel": "Ağırlığı, dönem notunun %'si",
+  "markPct": "Not %",
+  "markPctLabel": "Notunuz, % (varsa)",
+  "add": "Ekle",
+  "aimLabel": "Hedeflediğiniz genel not, %",
+  "yourGrade": "Notunuz",
+  "assessments": "Değerlendirmeler",
+  "participation": "Katılım",
+  "addAssessment": "Değerlendirme ekle",
+  "download": "Bu notları indirin:",
+  "spreadsheet": "Elektronik tablo",
+  "rest": {
+    "sofar": "Şimdiye kadar notlandırılan %{marked}'lik kısımdan %{sofar} aldınız.",
+    "secured": "Genelde %{target} şimdiden garantilendi.",
+    "out": "Kalanların tamamından tam puan alsanız bile genelde %{target} artık ulaşılamaz.",
+    "need": "Genelde %{target} ile bitirmek için kalanlardan yaklaşık %{need} almanız gerekiyor."
+  },
+  "names": {
+    "more": "{list} ve {n} tane daha",
+    "and": "{list} ve {last}"
+  },
+  "marks": "{n} not",
+  "line": {
+    "unweighted": "{marks} ortalaması. Henüz ağırlık belirtilmedi, hepsi eşit sayılıyor: gerçek not için aşağıya ağırlıkları ekleyin.",
+    "rest": "Gelecek %{weight}: {names}.",
+    "weighted": "{marks} içinden notun %{weight}'i.{rest}",
+    "waiting": "Notların açıklanması bekleniyor.",
+    "empty": "Henüz notlandırılan bir şey yok."
+  },
+  "overallUntil": "genel (kendinizinkini belirleyene kadar)",
+  "overall": "genel",
+  "short": "Buradaki ağırlıkların toplamı %100'e ulaşmıyor: notun %{share}'i henüz listelenmedi.",
+  "worthOf": "{title} ağırlığı, notun %'si",
+  "markFor": "{title} için notunuz, %",
+  "onceMarked": "Bir not girildiğinde, {title} için gereken puan burada hesaplanır.",
+  "finishedWith": "%{percent} ile tamamlandı",
+  "averaging": "Şu ana kadarki ortalama: %{percent}"
+}

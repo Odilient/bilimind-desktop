@@ -14,15 +14,16 @@ import { addObjects, boardParts, newId, writeMeta, type BoardObject, type Connec
 import { addMindChild, newMindRoot, relayout } from './ops'
 import { courseHex } from './palette'
 import { pageHeight, stickyHeight } from './draw'
+import { translate } from '../../utils/i18n'
 
 export const TEMPLATES = ['revision', 'concept', 'kanban', 'blank'] as const
 export type TemplateName = (typeof TEMPLATES)[number]
 
 export const TEMPLATE_LABEL: Record<TemplateName, string> = {
-  revision: 'Revision map',
-  concept: 'Concept map',
-  kanban: 'Group project',
-  blank: 'Blank board',
+  get revision() { return translate('notes.tplRevision') },
+  get concept() { return translate('notes.tplConcept') },
+  get kanban() { return translate('notes.tplKanban') },
+  get blank() { return translate('notes.untitledBoard') },
 }
 
 function sticky(x: number, y: number, text: string, color: StickyObj['color'], by?: string, z = 1): StickyObj {

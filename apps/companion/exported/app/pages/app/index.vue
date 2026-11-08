@@ -1,8 +1,11 @@
 <script setup lang="ts">
 /**
  * Today: the old app's Today (`pages/today.vue`) again, with the companion
- * in it. It answers one question, what should I do right now, so it is one
- * column read top to bottom, never a dashboard of blocks:
+ * in it. It answers one question, what should I do right now. Drawn as
+ * Daylight 2's Today (docs/design/daylight2/sections/07-today.html): the
+ * question centred on top, then on a desk the pick and the rest of today on
+ * the right, the week, classes, what's due and grades on the left (one
+ * column on a phone, the pick first):
  *
  *  - The greeting and the day ("Wednesday 28 October · week 8").
  *  - The question: the chat's box, with the chat's "Choose what to make"
@@ -30,9 +33,11 @@ import { useAiContext } from '~/companion/ai/state'
 import { hasSamples, isSample } from '~/companion/samples'
 import { dayKey, greeting, longDayLabel } from '~/companion/time'
 import { useNow } from '~/companion/today-layout'
+import { useOrg } from '~/institution/org'
 
 definePageMeta({ layout: 'companion' })
-useHead({ title: 'Today · BiliMind' })
+const { t } = useI18n()
+useHead({ title: () => `${t('today.page.title')} · BiliMind` })
 
 const c = useCompanion()
 const now = useNow()
@@ -40,7 +45,7 @@ const { quiet } = useQuietAi()
 const ask = ref<{ focus: () => void } | null>(null)
 
 // What the companion sees from here: the day, across every course.
-useAiContext(() => ({ kind: 'today', label: 'Today' }))
+useAiContext(() => ({ kind: 'today', label: t('today.page.title') }))
 
 onMounted(() => {
   void c.load().then(() => c.loadToday())
@@ -60,14 +65,20 @@ const loading = computed(() => !failed.value && (!c.today.value || !c.status.rea
 
 const dayLine = computed(() => {
   const n = c.currentWeek.value
-  return [longDayLabel(date.value), n && n >= 1 && n <= 16 ? `week ${n}` : ''].filter(Boolean).join(' · ')
+  return [longDayLabel(date.value), n && n >= 1 && n <= 16 ? t('today.page.week', { n }) : ''].filter(Boolean).join(' · ')
 })
 
 /** Still on the starter kit, or nothing of their own yet: the page also shows how to begin. */
+// A centre's people are set up by the centre: the student "Get set up" checklist isn't theirs.
+const org = useOrg()
+const inCentre = ref(false)
+onMounted(() => void org.list().then((list) => (inCentre.value = list.length > 0)).catch(() => undefined))
+
 const starter = computed(
   () =>
-    hasSamples(c) ||
-    (!c.subjects.value.some((s) => !s.sample) && !c.items.value.some((i) => !isSample(i))),
+    !inCentre.value &&
+    (hasSamples(c) ||
+      (!c.subjects.value.some((s) => !s.sample) && !c.items.value.some((i) => !isSample(i)))),
 )
 
 /** Get set up's "Ask": the box at the top, or with Quiet AI on, a new chat. */
@@ -80,19 +91,19 @@ function focusAsk(): void {
 <template>
   <div class="pb-20">
     <ShellPageHead
-      title="Today"
+      :title="t('today.page.title')"
       bar-only
     />
 
-    <div class="mx-auto grid w-full max-w-[760px] grid-cols-1 gap-8 px-4 pt-6 sm:px-6 lg:gap-10 lg:pt-[9vh]">
+    <div class="mx-auto grid w-full max-w-[1120px] grid-cols-1 gap-7 px-4 pt-6 sm:px-6 lg:gap-8 lg:px-8 lg:pt-[7vh]">
       <!-- The greeting and the question, there before anything has loaded. -->
       <!-- One column that never grows past the window: the tiles scroll inside their row. -->
-      <div class="grid grid-cols-1 gap-6">
-        <header class="grid justify-items-center gap-1.5 text-center">
-          <p class="text-[14px] text-text-muted">
+      <div class="mx-auto grid w-full max-w-[760px] grid-cols-1 gap-5">
+        <header class="grid justify-items-center gap-1 text-center">
+          <p class="text-[13.5px] font-medium text-text-faint">
             {{ dayLine }}
           </p>
-          <h1 class="t-head text-[30px] leading-[1.08] tracking-[-0.03em] sm:text-[40px]">
+          <h1 class="font-display text-[30px] leading-[1.05] font-semibold tracking-[-0.04em] sm:text-[40px]">
             {{ hello }}
           </h1>
         </header>
@@ -105,17 +116,17 @@ function focusAsk(): void {
       <!-- Offline: one line and no alarm, in the old "from earlier" strip. -->
       <div
         v-if="c.outbox.value.length"
-        class="flex items-center gap-3 rounded-[18px] bg-warn-soft px-4 py-3 shadow-[inset_0_0_0_1px_var(--warn-line)]"
+        class="flex items-center gap-3 rounded-[14px] bg-butter-soft px-4 py-3 shadow-[inset_0_0_0_1px_var(--warn-line)]"
       >
-        <span class="grid size-8 shrink-0 place-items-center rounded-full bg-warn-bright text-white">
+        <span class="grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface text-butter-ink">
           <UiIcon
             name="refresh"
             :size="15"
           />
         </span>
         <p class="min-w-0 flex-1 text-[13.5px] text-warn-text">
-          <span class="font-medium">You're offline.</span>
-          {{ plural(c.outbox.value.length, 'change') }} will be saved when you're back.
+          <span class="font-semibold">{{ t('today.page.offline') }}</span>
+          {{ t('today.page.willSave', c.outbox.value.length) }}
         </p>
       </div>
 
@@ -124,7 +135,7 @@ function focusAsk(): void {
         v-if="failed"
         icon="alert"
         tone="danger"
-        title="Today can't load right now"
+        :title="t('today.page.cantLoad')"
         :description="c.status.error ?? undefined"
         class="py-10"
       >
@@ -133,51 +144,52 @@ function focusAsk(): void {
           icon="refresh"
           @click="c.load(true).then(() => c.loadToday())"
         >
-          Try again
+          {{ t('common.retry') }}
         </UiBtn>
       </UiEmptyState>
 
       <!-- Loading: the shapes of the page, no spinner. -->
       <div
         v-else-if="loading"
-        class="grid gap-8"
+        class="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
         aria-busy="true"
-        aria-label="Loading today"
+        :aria-label="t('today.page.loading')"
       >
         <UiSkeleton
-          h="12rem"
+          h="17rem"
           rounded="xl"
         />
-        <div class="grid gap-1.5">
-          <UiSkeleton
-            h="4.5rem"
-            rounded="lg"
-          />
-          <UiSkeleton
-            h="4.5rem"
-            rounded="lg"
-          />
-          <UiSkeleton
-            h="4.5rem"
-            rounded="lg"
-          />
-        </div>
+        <UiSkeleton
+          h="17rem"
+          rounded="xl"
+        />
       </div>
 
-      <!-- The day -->
+      <!-- The day: what to do now and the rest of today on the right, the
+           week and what's coming on the left; one column on a phone, the
+           pick first. -->
       <div
         v-else
-        class="animate-rise grid grid-cols-1 gap-8 lg:gap-10"
+        class="animate-rise grid grid-cols-1 gap-7 lg:gap-8"
       >
-        <CompanionTodayHero />
         <template v-if="starter">
           <CompanionTodaySetup @ask="focusAsk" />
           <CompanionTodaySamples />
         </template>
         <CompanionTodayChanges />
-        <CompanionTodayPlan />
-        <CompanionTodayClasses />
-        <CompanionTodayDue />
+
+        <div class="grid grid-cols-1 items-start gap-7 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-6">
+          <div class="grid grid-cols-1 gap-7 lg:col-start-2 lg:row-start-1">
+            <CompanionTodayHero />
+            <CompanionTodayPlan />
+          </div>
+          <div class="grid grid-cols-1 gap-7 lg:col-start-1 lg:row-start-1">
+            <CompanionTodayWeek />
+            <CompanionTodayClasses />
+            <CompanionTodayDue />
+            <CompanionTodayGrades />
+          </div>
+        </div>
       </div>
     </div>
   </div>

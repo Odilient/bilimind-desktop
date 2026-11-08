@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 /**
  * The rail: 62px of icons, or 208px of icons with their names.
  *
@@ -29,12 +30,12 @@ const { expanded, toggle } = useRail()
 
 const inApp = computed(() => route.path === '/app' || route.path.startsWith('/app/'))
 
-const items = [
-  { to: '/today', label: 'Today', icon: 'home' },
-  { to: '/library', label: 'Courses', icon: 'workspace' },
-  { to: '/materials', label: 'Materials', icon: 'file' },
-  { to: '/create', label: 'New course', icon: 'plus' },
-] as const
+const items = computed(() => [
+  { to: '/today', label: t('shell.today'), icon: 'home' },
+  { to: '/library', label: t('shell.courses'), icon: 'workspace' },
+  { to: '/materials', label: t('shell.materials'), icon: 'file' },
+  { to: '/create', label: t('shell.newCourse'), icon: 'plus' },
+])
 
 function isActive(to: string): boolean {
   if (to === '/library') return route.path.startsWith('/library') || route.path.startsWith('/courses')
@@ -47,10 +48,10 @@ function isActive(to: string): boolean {
   <nav
     v-else
     :class="[
-      'hidden shrink-0 flex-col border-r border-border bg-surface-rail py-3.5 transition-[width] duration-200 ease-out lg:flex',
+      'hidden shrink-0 flex-col bg-bg py-3.5 transition-[width] duration-200 ease-out lg:flex',
       expanded ? 'w-[208px] items-stretch px-3' : 'w-[60px] items-center',
     ]"
-    aria-label="Main"
+    :aria-label="t('shell.mainNav')"
   >
     <!-- Wordmark. In the rail it is a mark; expanded it earns its name back. -->
     <NuxtLink
@@ -59,7 +60,7 @@ function isActive(to: string): boolean {
         'mb-2.5 flex items-center gap-2.5 rounded-full',
         expanded ? 'px-1' : 'justify-center',
       ]"
-      aria-label="BiliMind home"
+      :aria-label="t('shell.homeAria')"
     >
       <!-- The same mark as the public nav and footer: cobalt's disc. -->
       <UiBrandMark class="size-[34px]" />
@@ -76,11 +77,11 @@ function isActive(to: string): boolean {
     <button
       type="button"
       :class="[
-        'flex h-[38px] cursor-pointer items-center rounded-[12px] text-[#6b7080] dark:text-text-muted transition-colors duration-150 hover:bg-[#e9ebf1] dark:hover:bg-surface-sunken hover:text-text',
+        'flex h-[38px] cursor-pointer items-center rounded-[12px] text-text-faint transition-colors duration-150 hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
         expanded ? 'gap-3 px-2.5' : 'w-[38px] justify-center self-center',
       ]"
-      title="Search — ⌘K or Ctrl-K"
-      :aria-label="expanded ? undefined : 'Search'"
+      :title="t('shell.searchRailHint')"
+      :aria-label="expanded ? undefined : t('shell.search')"
       @click="openPalette()"
     >
       <UiIcon
@@ -93,7 +94,7 @@ function isActive(to: string): boolean {
         v-if="expanded"
         class="flex min-w-0 flex-1 items-center justify-between gap-2 text-[13.5px]"
       >
-        <span class="truncate">Search</span>
+        <span class="truncate">{{ t('shell.search') }}</span>
         <!-- The shortcut, shown where there is room for it. Nobody discovers
              ⌘K from a tooltip they have to hover to see. -->
         <kbd
@@ -116,7 +117,7 @@ function isActive(to: string): boolean {
           expanded ? 'gap-3 px-2.5' : 'w-[38px] justify-center self-center',
           isActive(item.to)
             ? 'bg-accent-soft text-accent-strong'
-            : 'text-[#6b7080] dark:text-text-muted hover:bg-[#e9ebf1] dark:hover:bg-surface-sunken hover:text-text',
+            : 'text-text-faint hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
         ]"
       >
         <!-- Cobalt marks the current place with a lime-soft tile and the lime
@@ -145,11 +146,11 @@ function isActive(to: string): boolean {
       <button
         type="button"
         :class="[
-          'grid size-[38px] cursor-pointer place-items-center rounded-[12px] text-[#6b7080] dark:text-text-muted transition-colors duration-150 hover:bg-[#e9ebf1] dark:hover:bg-surface-sunken hover:text-text',
+          'grid size-[38px] cursor-pointer place-items-center rounded-[12px] text-text-faint transition-colors duration-150 hover:bg-[rgb(var(--wash-rgb)/0.065)] hover:text-text',
           expanded ? 'order-last ml-auto' : '',
         ]"
-        :title="expanded ? 'Collapse sidebar' : 'Expand sidebar'"
-        :aria-label="expanded ? 'Collapse sidebar' : 'Expand sidebar'"
+        :title="expanded ? t('shell.collapseSidebar') : t('shell.expandSidebar')"
+        :aria-label="expanded ? t('shell.collapseSidebar') : t('shell.expandSidebar')"
         :aria-expanded="expanded"
         @click="toggle()"
       >

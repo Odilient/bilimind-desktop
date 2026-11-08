@@ -18,6 +18,7 @@ import { courseColor } from '~/companion/colors'
 import { dueParts, knownBy, readyWords } from '~/companion/words'
 import { deadlinesWithin, useNow } from '~/companion/today-layout'
 
+const { t } = useI18n()
 const c = useCompanion()
 const now = useNow()
 
@@ -45,20 +46,20 @@ const rows = computed(() =>
     <div class="mb-2.5 flex items-baseline justify-between px-0.5">
       <h2
         id="today-due"
-        class="t-head text-[19px]"
+        class="font-display text-[18px] font-semibold tracking-[-0.02em]"
       >
-        Coming up
+        {{ t('today.due.title') }}
       </h2>
       <NuxtLink
         to="/app/calendar?view=agenda"
         class="-my-[13px] inline-block py-[13px] text-[12.5px] font-semibold text-brand transition-colors hover:underline"
       >
-        All deadlines
+        {{ t('today.due.all') }}
       </NuxtLink>
     </div>
 
     <ul
-      class="overflow-hidden rounded-[20px] bg-surface shadow-[inset_0_0_0_1px_var(--border),0_24px_48px_-36px_rgb(11_13_16/0.3)]"
+      class="overflow-hidden rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]"
     >
       <li
         v-for="({ d, words, ready, known }, index) in rows"

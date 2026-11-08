@@ -88,7 +88,8 @@ export type AiAction =
       finish_date?: string | null
       topics: string[]
     }
-  | { type: 'write_lesson'; topic_id: string; title: string; instruction?: string | null }
+  /** `rewrite`: the topic's lesson is already written, so the press rewrites it. */
+  | { type: 'write_lesson'; topic_id: string; title: string; instruction?: string | null; rewrite?: boolean }
   | {
       type: 'add_tasks'
       date: string
@@ -109,6 +110,8 @@ export type AiAction =
    * `intent: 'course'`, and the proposer reads every attachment in the chat.
    */
   | { type: 'draft_course'; label: string }
+  /** "OK, create it": the learner's words pressed Create on the draft `message_id` carries. */
+  | { type: 'create_draft'; message_id: string }
 
 /**
  * Something given with a message, the way ChatGPT takes a file: read before

@@ -5,6 +5,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * SPEC §7 `SelfGrader` — the learner asserts completion and the attempt is
  * recorded with `score = null`. No pretend grade, no pretend feedback.
  */
+const { t } = useI18n()
 defineProps<{
   assessment: Assessment
   disabled?: boolean
@@ -30,7 +31,7 @@ watch([completed, note], () => {
       :class="[
         'flex w-full items-start gap-3 rounded-[12px] px-3.5 py-3 text-left transition-[background-color,box-shadow]',
         completed
-          ? 'bg-accent-soft shadow-[inset_0_0_0_1.5px_var(--lime-2)]'
+          ? 'bg-accent-soft shadow-[inset_0_0_0_1.5px_var(--hi-2)]'
           : 'bg-surface shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)] hover:shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.22)]',
         disabled && 'cursor-not-allowed opacity-60',
       ]"
@@ -51,7 +52,7 @@ watch([completed, note], () => {
         />
       </span>
       <span class="min-w-0 flex-1 text-[14px] leading-relaxed font-medium">
-        I've done this. Record it as complete.
+        {{ t('check.assess.selfDone') }}
       </span>
     </button>
 
@@ -61,12 +62,12 @@ watch([completed, note], () => {
       :rows="2"
       :maxlength="5000"
       :disabled="disabled || !completed"
-      placeholder="Optional note to your future self — what you did, what you'd change."
-      aria-label="Note"
+      :placeholder="t('check.assess.selfNote')"
+      :aria-label="t('check.assess.noteAria')"
     />
 
     <p class="text-[11.5px] text-text-faint">
-      Self-assessed: this is stored as an attempt with no score.
+      {{ t('check.assess.selfStored') }}
     </p>
   </div>
 </template>

@@ -14,7 +14,7 @@
  * shared thread, so a question asked on Today is there when the learner
  * opens a course.
  *
- * The button: when the companion is closed, an ink disc with the lime spark
+ * The button: when the companion is closed, an ink disc with Bili in it
  * rests in the window's bottom-right corner, on every screen, the way
  * Notion's AI does, a perfect circle that names itself and its key in its
  * tooltip (it used to unfold into a pill on hover, which read as broken). It
@@ -129,19 +129,16 @@ onBeforeUnmount(() => {
       leave-active-class="transition-[opacity,transform] duration-120 ease-in"
       leave-to-class="scale-90 opacity-0"
     >
-      <!-- A plain disc, the header toggle's ink and lime: the shortcut is in its tooltip. -->
+      <!-- A plain ink disc with Bili in it, the header toggle's look: the shortcut is in its tooltip. -->
       <button
         v-if="fab"
         type="button"
-        class="fixed right-[30px] bottom-[30px] z-[70] grid size-12 cursor-pointer place-items-center rounded-full bg-ink text-lime shadow-lift transition-[background-color,transform] duration-150 hover:bg-ink-2 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:outline-none active:scale-[0.95]"
-        :title="`Ask BiliMind (${keys})`"
-        aria-label="Ask BiliMind"
+        class="fixed right-[30px] bottom-[30px] z-[70] grid size-12 cursor-pointer place-items-center rounded-full bg-chip text-accent shadow-lift transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-[1.06] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:outline-none active:scale-[0.95]"
+        :title="`Ask Bili (${keys})`"
+        aria-label="Ask Bili"
         @click="ai.show()"
       >
-        <UiIcon
-          name="spark"
-          :size="20"
-        />
+        <CompanionAiBilim :size="28" />
       </button>
     </Transition>
 
@@ -154,7 +151,7 @@ onBeforeUnmount(() => {
     >
       <div
         v-if="drawer"
-        class="fixed inset-0 z-[85] bg-ink/10"
+        class="fixed inset-0 z-[85] bg-[rgb(30_24_14/0.12)]"
         aria-hidden="true"
         @click="ai.hide()"
       />
@@ -167,9 +164,9 @@ onBeforeUnmount(() => {
     >
       <aside
         v-if="drawer"
-        class="fixed inset-y-2 right-2 z-[86] flex w-[400px] max-w-[calc(100vw-16px)] flex-col overflow-hidden rounded-[22px] bg-surface shadow-pop ring-1 ring-border"
+        class="fixed inset-y-2 right-2 z-[86] flex w-[400px] max-w-[calc(100vw-16px)] flex-col overflow-hidden rounded-[18px] bg-surface shadow-pop"
         role="dialog"
-        aria-label="Ask BiliMind"
+        aria-label="Ask Bili"
       >
         <CompanionAiHead mode="drawer" />
         <CompanionAiThread variant="panel" />
@@ -188,17 +185,17 @@ onBeforeUnmount(() => {
         class="fixed inset-0 z-[100]"
         role="dialog"
         aria-modal="true"
-        aria-label="Ask BiliMind"
+        aria-label="Ask Bili"
       >
         <div
-          class="absolute inset-0 bg-ink/45 backdrop-blur-[4px]"
+          class="absolute inset-0 bg-[rgb(30_24_14/0.32)] backdrop-blur-[2px]"
           @click="ai.hide()"
         />
         <div
-          class="animate-sheet absolute inset-x-0 top-[max(env(safe-area-inset-top),10px)] bottom-0 flex flex-col overflow-hidden rounded-t-[24px] bg-surface shadow-sheet"
+          class="animate-sheet absolute inset-x-0 top-[max(env(safe-area-inset-top),10px)] bottom-0 flex flex-col overflow-hidden rounded-t-[20px] bg-surface shadow-sheet"
         >
           <div
-            class="mx-auto mt-2 h-[5px] w-10 shrink-0 rounded-full bg-surface-track"
+            class="mx-auto mt-1.5 h-1 w-9 shrink-0 rounded-full bg-border-strong"
             aria-hidden="true"
           />
           <CompanionAiHead mode="sheet" />

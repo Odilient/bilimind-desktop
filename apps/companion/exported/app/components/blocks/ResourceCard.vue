@@ -150,7 +150,7 @@ const facts = computed(() => {
     ref="root"
     class="overflow-hidden rounded-[16px] bg-surface-mute shadow-[inset_0_0_0_1px_var(--border)]"
   >
-    <div class="relative aspect-video w-full bg-ink">
+    <div class="relative aspect-video w-full bg-inverse">
       <iframe
         :src="embedUrl"
         :title="item.title"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Toast, ToastTone } from '~/composables/useToast'
 
 const { toasts, dismiss } = useToast()
@@ -14,8 +15,8 @@ function runAction(toast: Toast): void {
  * carries the tone the way the landing's tags carry theirs.
  */
 const accents: Record<ToastTone, string> = {
-  neutral: 'bg-lime text-ink',
-  success: 'bg-lime text-ink',
+  neutral: 'bg-accent text-on-accent',
+  success: 'bg-accent text-on-accent',
   warn: 'bg-amber text-ink',
   danger: 'bg-coral text-white',
 }
@@ -46,7 +47,7 @@ const icons: Record<ToastTone, string> = {
           <div
             v-for="toast in toasts"
             :key="toast.id"
-            class="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-[20px] bg-chip px-3.5 py-3 text-white shadow-[0_20px_40px_-12px_rgb(11_13_16/0.5)]"
+            class="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-[12px] bg-chip px-3.5 py-3 text-white shadow-[var(--shadow-lift)]"
           >
             <span
               :class="[
@@ -70,7 +71,7 @@ const icons: Record<ToastTone, string> = {
               <button
                 v-if="toast.action"
                 type="button"
-                class="mt-2 text-[12.5px] font-semibold text-lime hover:underline"
+                class="mt-2 text-[12.5px] font-semibold text-accent hover:underline"
                 @click="runAction(toast)"
               >
                 {{ toast.action.label }}
@@ -79,7 +80,7 @@ const icons: Record<ToastTone, string> = {
             <button
               type="button"
               class="mt-0.5 -mr-1 rounded-full p-1 text-white/45 transition-colors hover:text-white"
-              aria-label="Dismiss"
+              :aria-label="t('ui.dismiss')"
               @click="dismiss(toast.id)"
             >
               <UiIcon

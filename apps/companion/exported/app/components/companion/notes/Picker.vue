@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Note } from '~/companion/notes/tree'
 import { MINE, matchNotes, noteIcon, untitled } from '~/companion/notes/tree'
 import { useNotesTree } from '~/companion/notes/actions'
@@ -32,7 +33,7 @@ const props = withDefaults(
     exclude?: string[]
     onlyUnfiled?: boolean
   }>(),
-  { title: 'Pick notes', confirm: 'Add', multiple: true, exclude: () => [], onlyUnfiled: false },
+  { title: undefined, confirm: undefined, multiple: true, exclude: () => [], onlyUnfiled: false },
 )
 
 const emit = defineEmits<{ 'update:open': [value: boolean]; pick: [ids: string[]] }>()
@@ -91,10 +92,10 @@ const groups = computed<Group[]>(() => {
   const q = query.value.trim()
   if (q) {
     const found = matchNotes(pool.value, q).slice(0, 60)
-    return found.length ? [{ key: 'found', label: `${found.length === 60 ? '60+' : found.length} found`, color: null, lines: found.map((note) => ({ note, depth: 0 })) }] : []
+    return found.length ? [{ key: 'found', label: t('notes.found', { n: found.length === 60 ? '60+' : found.length }), color: null, lines: found.map((note) => ({ note, depth: 0 })) }] : []
   }
   const out: Group[] = [
-    { key: 'mine', label: 'My notes', color: null, lines: walk(full.value.roots.get(MINE) ?? []) },
+    { key: 'mine', label: t('notes.myNotes'), color: null, lines: walk(full.value.roots.get(MINE) ?? []) },
   ]
   if (!props.onlyUnfiled) {
     for (const s of store.subjects.value) {
@@ -122,7 +123,7 @@ function toggle(note: Note): void {
 }
 
 const count = computed(() => chosen.value.size)
-const label = computed(() => (count.value > 1 ? `${props.confirm} ${count.value}` : props.confirm))
+const label = computed(() => (count.value > 1 ? `${props.confirm ?? t('notes.add')} ${count.value}` : (props.confirm ?? t('notes.add'))))
 
 function done(): void {
   if (!count.value) return
@@ -177,14 +178,14 @@ function when(note: Note): string {
   <UiModal
     v-model:open="shown"
     size="md"
-    :title="title"
+    :title="title ?? t('notes.pickNotes')"
   >
     <div
       class="-mx-1 grid gap-3"
       @keydown="onKey"
     >
       <label
-        class="flex h-11 items-center gap-2 rounded-[12px] bg-surface-sunken px-3 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--cobalt)]"
+        class="flex h-11 items-center gap-2 rounded-[12px] bg-surface-sunken px-3 text-text-faint transition-shadow focus-within:bg-surface focus-within:shadow-[inset_0_0_0_2px_var(--brand)]"
       >
         <UiIcon
           name="search"
@@ -196,8 +197,8 @@ function when(note: Note): string {
           ref="search"
           v-model="query"
           type="search"
-          placeholder="Find a note"
-          aria-label="Find a note"
+          :placeholder="t('notes.findNote')"
+          :aria-label="t('notes.findNote')"
           class="min-w-0 flex-1 bg-transparent text-[15px] text-text outline-none placeholder:text-text-faint [&::-webkit-search-cancel-button]:hidden"
           @keydown="onSearchKey"
         >
@@ -205,7 +206,7 @@ function when(note: Note): string {
           v-if="query"
           type="button"
           class="grid size-7 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint hover:bg-surface-track hover:text-text-soft"
-          aria-label="Clear"
+          :aria-label="t('notes.clear')"
           @click="query = ''; search?.focus()"
         >
           <UiIcon
@@ -220,7 +221,7 @@ function when(note: Note): string {
         ref="list"
         class="om-scroll -mx-2 max-h-[min(52vh,460px)] overflow-y-auto px-2 max-sm:max-h-[50dvh]"
         role="group"
-        :aria-label="title"
+        :aria-label="title ?? t('notes.pickNotes')"
         @keydown="onListKey"
       >
         <div
@@ -264,8 +265,8 @@ function when(note: Note): string {
               :aria-checked="multiple ? chosen.has(line.note.id) || excluded.has(line.note.id) : undefined"
               :disabled="excluded.has(line.note.id)"
               :class="[
-                'flex w-full cursor-pointer items-center gap-2.5 rounded-[10px] pr-2 text-left transition-colors duration-150 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)] disabled:cursor-default max-sm:min-h-12 sm:min-h-[38px]',
-                chosen.has(line.note.id) ? 'bg-cobalt-soft' : 'hover:bg-surface-sunken focus-visible:bg-surface-sunken',
+                'flex w-full cursor-pointer items-center gap-2.5 rounded-[10px] pr-2 text-left transition-colors duration-150 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--brand)] disabled:cursor-default max-sm:min-h-12 sm:min-h-[38px]',
+                chosen.has(line.note.id) ? 'bg-brand-soft' : 'hover:bg-surface-sunken focus-visible:bg-surface-sunken',
               ]"
               :style="{ paddingLeft: `${6 + line.depth * 18}px` }"
               @click="toggle(line.note)"
@@ -275,7 +276,7 @@ function when(note: Note): string {
                 :class="[
                   'grid size-[18px] shrink-0 place-items-center rounded-[5px] transition-colors duration-150',
                   chosen.has(line.note.id) || excluded.has(line.note.id)
-                    ? 'bg-cobalt text-white'
+                    ? 'bg-brand text-white'
                     : 'shadow-[inset_0_0_0_1.5px_var(--border-strong)]',
                   excluded.has(line.note.id) && 'opacity-45',
                 ]"
@@ -308,7 +309,7 @@ function when(note: Note): string {
               <span
                 v-if="excluded.has(line.note.id)"
                 class="shrink-0 text-[12px] text-text-faint"
-              >Added</span>
+              >{{ t('notes.added') }}</span>
               <span
                 v-else-if="when(line.note)"
                 class="shrink-0 text-[12px] text-text-faint max-sm:hidden"
@@ -329,13 +330,13 @@ function when(note: Note): string {
           />
           <p class="max-w-[38ch] text-[14px] leading-relaxed text-text-muted">
             <template v-if="searching">
-              No note has those words. Search looks at titles and the text you’ve written.
+              {{ t('notes.noMatch') }}
             </template>
             <template v-else-if="onlyUnfiled">
-              Every note is already in a course. New notes start in My notes, and show up here to be added.
+              {{ t('notes.allFiled') }}
             </template>
             <template v-else>
-              No notes yet. Pages, whiteboards, files and links you make in Notes show up here.
+              {{ t('notes.noNotesYet') }}
             </template>
           </p>
           <UiBtn
@@ -345,7 +346,7 @@ function when(note: Note): string {
             to="/app/notes"
             @click="shown = false"
           >
-            Go to Notes
+            {{ t('notes.goToNotes') }}
           </UiBtn>
         </div>
       </div>
@@ -356,13 +357,13 @@ function when(note: Note): string {
       #footer
     >
       <span class="mr-auto text-[13px] text-text-muted">
-        {{ count ? (count === 1 ? '1 note picked' : `${count} notes picked`) : 'Pick one or more' }}
+        {{ count ? t('notes.notesPicked', count) : t('notes.pickOneOrMore') }}
       </span>
       <UiBtn
         variant="ghost"
         @click="shown = false"
       >
-        Cancel
+        {{ t('notes.cancel') }}
       </UiBtn>
       <UiBtn
         variant="primary"

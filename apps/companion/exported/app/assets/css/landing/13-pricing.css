@@ -1,0 +1,92 @@
+/* 13 · pricing: two plans, then the AI ways as a band under both (they work on either), then the table */
+.d2 .pr { padding-bottom: 0; }
+
+.d2 .pr-toggle { position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: var(--wash-2); box-shadow: inset 0 0 0 1px var(--line); }
+.d2 .pr-toggle button { position: relative; z-index: 1; height: 34px; padding: 0 16px; border-radius: 999px; font-size: 14px; font-weight: 650; color: var(--ink-3); display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s; }
+.d2 .pr-toggle button[aria-pressed='true'] { color: var(--ink); }
+.d2 .pr-knob { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; width: 0; border-radius: 999px; background: var(--card); box-shadow: var(--shadow-1), 0 0 0 1px var(--line); transition: left 0.45s var(--ease), width 0.45s var(--ease); }
+.d2 .pr-save { font-size: 11.5px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: var(--leaf-soft); color: var(--leaf-ink); }
+
+.d2 .pr-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-bottom: 0; }
+.d2 .pr-plan { display: flex; flex-direction: column; gap: 22px; padding: 40px 48px 44px; }
+.d2 .pr-top { display: flex; align-items: center; gap: 12px; }
+.d2 .pr-top div { display: grid; }
+.d2 .pr-name { font-size: 18px; font-weight: 700; letter-spacing: -0.015em; }
+.d2 .pr-price { display: flex; align-items: baseline; gap: 10px; }
+.d2 .pr-price b { font-family: var(--font-display); font-size: 68px; line-height: 0.9; font-weight: 600; letter-spacing: -0.05em; }
+.d2 .pr-price span { font-size: 15px; color: var(--ink-3); font-weight: 550; }
+.d2 .pr-alt { margin-top: -14px; min-height: 1.5em; }
+.d2 .pr-price b, .d2 .pr-price span, .d2 .pr-alt { transition: opacity 0.25s var(--ease-soft), transform 0.35s var(--ease); }
+.d2 .pr.swap .pr-plan.pro .pr-price b, .d2 .pr.swap .pr-plan.pro .pr-price span, .d2 .pr.swap .pr-alt { opacity: 0; transform: translateY(6px); }
+.d2 .pr-list { display: grid; gap: 11px; }
+.d2 .pr-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.4; color: var(--ink-2); }
+.d2 .pr-list svg { width: 16px; height: 16px; flex: none; margin-top: 2px; color: var(--leaf-ink); stroke-width: 2.4; }
+.d2 .pr-plan .btn { margin-top: auto; align-self: stretch; }
+
+/* Pro gets a little morning sun in its corner */
+.d2 .cells > .pr-plan.pro { background: radial-gradient(420px 260px at 100% 0%, var(--hi-soft), transparent 70%), var(--card-2); }
+.d2 .pr-plan.pro .pr-list li:first-child { color: var(--ink); font-weight: 600; }
+
+/* what AI each plan includes, stated in one box */
+.d2 .pr-aiq { display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px; background: var(--wash); box-shadow: inset 0 0 0 1px var(--line); }
+.d2 .pr-aiq.pro { background: var(--hi-soft); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--hi-2) 40%, transparent); }
+.d2 .pr-aik { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--lilac-ink); }
+.d2 .pr-aiq.pro .pr-aik { color: var(--hi-ink); }
+.d2 .pr-aik svg { width: 13px; height: 13px; }
+.d2 .pr-aiq b { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.d2 .pr-aiq > span:last-child { font-size: 13.5px; color: var(--ink-2); }
+
+/* the band: four ways to more AI, each marked with the plans it works on */
+.d2 .pr-ai { grid-column: 1 / -1; display: grid; gap: 24px; padding: 36px 48px 40px; }
+.d2 .pr-ai-h { display: flex; align-items: center; gap: 14px; }
+.d2 .pr-ai-h > div { flex: 1; display: grid; gap: 2px; }
+.d2 .pr-ways { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.d2 .pr-ways li { display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: 16px; background: var(--card); box-shadow: 0 0 0 1px var(--line), var(--shadow-1); }
+.d2 .pw-i { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--card-2); color: var(--ink-2); box-shadow: 0 0 0 1px var(--line-2); }
+.d2 .pw-i svg { width: 16px; height: 16px; stroke-width: 2; }
+.d2 .pr-ways b { margin-top: 4px; font-size: 15px; font-weight: 680; line-height: 1.3; }
+.d2 .pr-ways p { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.d2 .pw-on { display: flex; align-items: center; gap: 5px; margin-top: auto; padding-top: 8px; }
+.d2 .pw-on > span:not(.pw-l) { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 7px; background: var(--leaf-soft); color: var(--leaf-ink); font-size: 11.5px; font-weight: 700; }
+.d2 .pw-on > span:not(.pw-l)::before { content: '✓'; margin-right: 4px; }
+.d2 .pw-l { display: inline-flex; gap: 6px; margin-left: auto; color: var(--ink-2); }
+.d2 .pw-l svg { width: 14px; height: 14px; }
+.d2 .pr-run { display: flex; gap: 8px; align-items: flex-start; max-width: 340px; padding: 10px 12px; border-radius: 12px; background: var(--wash); font-size: 13px; }
+.d2 .pr-run svg { width: 15px; height: 15px; flex: none; margin-top: 1px; }
+
+.d2 .pr-cmp { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.12fr); gap: 0; padding: 0; }
+.d2 .pr-cmp-l { display: flex; flex-direction: column; gap: 10px; padding: 36px; border-right: 1px solid var(--line); }
+.d2 .pr-cmp-l .h4 { margin-top: 8px; }
+.d2 .pr-fine { margin-top: auto; padding-top: 16px; font-size: 12.5px; }
+.d2 .pr-tbl-wrap { overflow-x: auto; padding: 18px 36px 22px; }
+.d2 .pr-tbl { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.d2 .pr-tbl th, .d2 .pr-tbl td { padding: 11px 0; border-bottom: 1px solid var(--line); text-align: left; }
+.d2 .pr-tbl tbody tr:last-child th, .d2 .pr-tbl tbody tr:last-child td { border-bottom: 0; }
+.d2 .pr-tbl thead th { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); padding-top: 6px; }
+.d2 .pr-tbl tbody th { font-weight: 550; color: var(--ink-2); }
+.d2 .pr-tbl td, .d2 .pr-tbl thead th:not(:first-child) { width: 22%; padding-left: 12px; }
+.d2 .pr-tbl td { font-weight: 600; color: var(--ink); }
+.d2 .pr-tbl td svg { width: 17px; height: 17px; color: var(--leaf-ink); stroke-width: 2.4; }
+.d2 .pr-tbl tbody tr { transition: background-color 0.2s; }
+.d2 .pr-tbl tbody tr:hover { background: var(--wash); }
+.d2 .pr-no { color: var(--ink-4); font-weight: 600; }
+
+@media (max-width: 1100px) {
+  .d2 .pr-ways { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .d2 .pr-ai-h { flex-wrap: wrap; }
+}
+@media (max-width: 760px) {
+  .d2 .pr-grid { grid-template-columns: 1fr; }
+  .d2 .pr-cmp { grid-template-columns: 1fr; }
+  .d2 .pr-cmp-l { border-right: 0; border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 640px) {
+  .d2 .pr-plan, .d2 .pr-ai { padding: 26px 20px 30px; }
+  .d2 .pr-ways { grid-template-columns: 1fr; }
+  .d2 .pr-cmp-l { padding: 26px 20px; }
+  .d2 .pr-tbl-wrap { padding: 10px 20px 18px; }
+  .d2 .pr-tbl { font-size: 13.5px; }
+  .d2 .pr-tbl td, .d2 .pr-tbl thead th:not(:first-child) { width: 26%; padding-left: 8px; }
+  .d2 .pr-price b { font-size: 58px; }
+  .d2 .pr-toggle button { padding: 0 12px; }
+}

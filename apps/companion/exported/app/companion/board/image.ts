@@ -5,8 +5,8 @@
  * so it shows in the course's files too). What the board draws is chosen
  * here: the server's URL when the upload answers with one, otherwise a copy
  * of the image shrunk to 1600 px and kept in the board's own document, so it
- * draws offline and survives a reload. A blob URL, which is all the demo has,
- * dies with the tab and is never stored.
+ * draws offline and survives a reload. A blob URL dies with the tab and is
+ * never stored.
  */
 import type { Item } from '../types'
 

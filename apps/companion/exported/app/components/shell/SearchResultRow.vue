@@ -62,9 +62,9 @@ const chip = computed<string | null>(() => {
   >
     <span
       :class="[
-        // Cobalt's block-kind tile: cobalt-soft, lit lime when it is the one.
+        // The block-kind tile: sky-soft, lit in the highlighter when it is the one.
         'mt-px grid size-7 shrink-0 place-items-center rounded-[9px]',
-        active ? 'bg-lime text-ink' : 'bg-brand-soft text-brand',
+        active ? 'bg-accent text-on-accent' : 'bg-brand-soft text-brand',
       ]"
     >
       <UiIcon
@@ -102,7 +102,7 @@ const chip = computed<string | null>(() => {
         >
           <mark
             v-if="part.hit"
-            class="rounded-[3px] bg-lime-soft px-px font-medium text-text"
+            class="rounded-[3px] bg-accent-soft px-px font-medium text-text"
             >{{ part.text }}</mark
           >
           <template v-else>{{ part.text }}</template>

@@ -20,7 +20,7 @@ const props = defineProps<{
 const emit = defineEmits<{ add: []; open: [nodeId: number] }>()
 
 const STATUS: Record<MaterialStatus, { dot: string; label: string }> = {
-  ready: { dot: 'bg-lime-2', label: 'Ready' },
+  ready: { dot: 'bg-leaf', label: 'Ready' },
   processing: { dot: 'bg-brand animate-pulse-dot', label: 'Extracting' },
   pending: { dot: 'bg-border-dashed', label: 'Queued' },
   failed: { dot: 'bg-danger', label: 'Failed' },

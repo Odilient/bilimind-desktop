@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import type { Subject } from '~/companion/types'
+import { useCompanion } from '~/companion/store'
+import { namedTarget } from '~/companion/capture'
+import { googleAvailable, importFromDrive } from '~/companion/google/drive'
+const { t } = useI18n()
 
 /**
  * The course's one "+ New": a page, a whiteboard, an upload, a recording,
@@ -35,14 +39,21 @@ const props = defineProps<{
 
 const emit = defineEmits<{ note: []; board: []; upload: []; record: []; lesson: [] }>()
 
+const c = useCompanion()
+
 const adder = ref<{ start: () => void } | null>(null)
 
 const open = ref(false)
+const quizlet = ref(false)
+const linking = ref(false)
+/** Drive only where Google is set up and the device can open its sign-in (`drive.ts`). */
+const drive = ref(false)
+onMounted(() => (drive.value = googleAvailable()))
 const root = ref<HTMLElement | null>(null)
 const list = ref<HTMLElement | null>(null)
 
 interface Row {
-  key: 'note' | 'board' | 'upload' | 'record' | 'pull' | 'lesson'
+  key: 'note' | 'board' | 'upload' | 'record' | 'pull' | 'quizlet' | 'lesson' | 'drive' | 'notion' | 'link'
   icon: string
   label: string
   hint: string
@@ -51,36 +62,44 @@ interface Row {
 
 const rows = computed<Row[]>(() => {
   const course = props.subject?.title ?? null
-  const under = course && props.where !== course ? `Under ${props.where}` : 'At the top of the course'
+  const under = course && props.where !== course ? t('course.menu.under', { where: props.where }) : t('course.menu.top')
   const record: Row[] = props.canRecord
     ? [
         {
           key: 'record',
           icon: 'mic',
-          label: props.live ? 'Record the class' : 'Record audio',
-          hint: props.live ? `${props.where} is on now` : 'A lecture, a seminar, a thought out loud',
+          label: props.live ? t('course.menu.recordClass') : t('course.menu.recordAudio'),
+          hint: props.live ? t('course.menu.live', { where: props.where }) : t('course.menu.recordHint'),
           keyHint: 'R',
         },
       ]
     : []
   return [
     ...(props.live ? record : []),
-    { key: 'note', icon: 'page', label: 'Page', hint: under, keyHint: 'N' },
+    { key: 'note', icon: 'page', label: t('course.menu.page'), hint: under, keyHint: 'N' },
     {
       key: 'board',
       icon: 'board',
-      label: 'Whiteboard',
-      hint: 'Draw, map and stick notes',
+      label: t('course.menu.board'),
+      hint: t('course.menu.boardHint'),
       keyHint: 'B',
     },
-    { key: 'upload', icon: 'upload', label: 'Upload files', hint: 'Slides, PDFs, photos; several at once' },
+    { key: 'upload', icon: 'upload', label: t('course.menu.upload'), hint: t('course.menu.uploadHint') },
     ...(props.live ? [] : record),
     ...(props.subject
-      ? [{ key: 'pull' as const, icon: 'notebook', label: 'Add from My notes…', hint: 'Notes that are in no course yet' }]
+      ? [
+          // Integrations: the apps a course's things already live in.
+          ...(drive.value ? [{ key: 'drive' as const, icon: 'download', label: t('course.menu.drive'), hint: t('course.menu.driveHint') }] : []),
+          { key: 'link' as const, icon: 'link', label: t('course.menu.link'), hint: t('course.menu.linkHint') },
+          { key: 'notion' as const, icon: 'notebook', label: t('course.menu.notion'), hint: t('course.menu.notionHint') },
+          { key: 'pull' as const, icon: 'notebook', label: t('course.menu.pull'), hint: t('course.menu.pullHint') },
+          // Daylight 2 (gaps): a Quizlet set becomes this course's cards.
+          { key: 'quizlet' as const, icon: 'cards', label: t('course.menu.quizlet'), hint: t('course.menu.quizletHint') },
+        ]
       : []),
     ...(props.canWrite === false
       ? []
-      : [{ key: 'lesson' as const, icon: 'wand', label: 'Lesson on a topic…', hint: 'Written for you, opened here' }]),
+      : [{ key: 'lesson' as const, icon: 'wand', label: t('course.menu.lesson'), hint: t('course.menu.lessonHint') }]),
   ]
 })
 
@@ -91,6 +110,10 @@ function choose(key: Row['key']): void {
   else if (key === 'upload') emit('upload')
   else if (key === 'record') emit('record')
   else if (key === 'pull') adder.value?.start()
+  else if (key === 'quizlet') quizlet.value = true
+  else if (key === 'link') linking.value = true
+  else if (key === 'drive' && props.subject) void importFromDrive(c, namedTarget(c, props.subject.id))
+  else if (key === 'notion' && props.subject) void navigateTo({ path: '/app/notion', query: { subject: props.subject.id } })
   else emit('lesson')
 }
 
@@ -153,10 +176,10 @@ onBeforeUnmount(() => {
       :disabled="disabled"
       :aria-expanded="open"
       aria-haspopup="menu"
-      title="Make something in this course"
+      :title="t('course.menu.make')"
       @click="toggle"
     >
-      New
+      {{ t('course.menu.new') }}
     </UiBtn>
 
     <Transition
@@ -169,8 +192,8 @@ onBeforeUnmount(() => {
         v-if="open"
         ref="list"
         role="menu"
-        :aria-label="subject ? `Add to ${subject.title}` : 'New'"
-        class="absolute top-full right-0 z-50 mt-1.5 w-[320px] max-w-[calc(100vw-24px)] origin-top-right rounded-[16px] bg-surface p-1.5 shadow-[0_0_0_1px_rgb(11_13_16/0.08),0_20px_40px_-12px_rgb(11_13_16/0.25)]"
+        :aria-label="subject ? t('course.menu.addTo', { course: subject.title }) : t('course.menu.new')"
+        class="absolute top-full right-0 z-50 mt-1.5 w-[320px] max-w-[calc(100vw-24px)] origin-top-right rounded-[16px] bg-surface-pop p-1.5 shadow-[var(--shadow-pop)]"
         @keydown="onKeydown"
       >
         <p
@@ -178,7 +201,7 @@ onBeforeUnmount(() => {
           class="px-2.5 pt-1.5 pb-2 text-[13px] leading-snug text-text-muted"
           role="presentation"
         >
-          Add to <span class="font-semibold text-text">{{ subject.title }}</span>
+          <i18n-t keypath="course.menu.addTo" tag="span"><template #course><span class="font-semibold text-text">{{ subject.title }}</span></template></i18n-t>
         </p>
         <button
           v-for="row in rows"
@@ -211,6 +234,19 @@ onBeforeUnmount(() => {
       ref="adder"
       :subject="subject"
       look="none"
+    />
+
+    <CompanionImportsQuizletModal
+      v-if="subject"
+      v-model:open="quizlet"
+      :subject-id="subject.id"
+    />
+    <CompanionIntegrationsLinkDialog
+      v-if="subject"
+      v-model:open="linking"
+      :subject-id="subject.id"
+      :title="t('course.menu.addLink', { title: subject.title })"
+      :example="t('course.menu.example')"
     />
   </div>
 </template>

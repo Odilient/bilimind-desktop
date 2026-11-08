@@ -10,14 +10,16 @@
  * force stop) still has its finished minutes, so those are filed as soon as
  * the app sees them, rather than waiting for a Stop that will never come.
  *
- * Android only: off the native shell the recorder isn't there, and neither
- * is this.
+ * On the web and the desktop the recording is recorder.ts's,
+ * running in the page; it shows the same way while its sheet is hidden.
  */
 import { useCompanion } from '~/companion/store'
 import { useCapture } from '~/companion/capture'
 import { useNativeRecorder } from '~/companion/native/recorder'
 import { fileRecording, metaOf } from '~/companion/recording'
 import { timecode } from '~/companion/time'
+// recording: the web and desktop recorder
+import { elapsedMs, live as deviceLive } from '~/companion/recorder'
 
 const c = useCompanion()
 const capture = useCapture()
@@ -27,20 +29,25 @@ const toast = useToast()
 const now = ref(Date.now())
 let timer: ReturnType<typeof setInterval> | undefined
 onMounted(() => {
-  if (rec.available) timer = setInterval(() => (now.value = Date.now()), 1000)
+  timer = setInterval(() => (now.value = Date.now()), 1000)
 })
 onBeforeUnmount(() => clearInterval(timer))
 
-const live = computed(() => Boolean(rec.state.value?.recording))
-const label = computed(() => metaOf(rec.state.value)?.label ?? rec.state.value?.title ?? 'Recording')
+const native = computed(() => rec.available && Boolean(rec.state.value?.recording))
+// a teach-back said out loud is its question's to stop, not the pill's
+const live = computed(() => native.value || (Boolean(deviceLive.id) && deviceLive.owner === 'sheet'))
+const paused = computed(() => (native.value ? Boolean(rec.state.value?.paused) : deviceLive.paused))
+const label = computed(() =>
+  native.value ? (metaOf(rec.state.value)?.label ?? rec.state.value?.title ?? 'Recording') : deviceLive.label || 'Recording',
+)
 const elapsed = computed(() => {
   void now.value
-  return timecode(Math.floor(rec.elapsedNow() / 1000))
+  return timecode(Math.floor((native.value ? rec.elapsedNow() : elapsedMs()) / 1000))
 })
-const shown = computed(() => rec.available && live.value && !(capture.open.value && capture.mode.value === 'record'))
+const shown = computed(() => live.value && !(capture.open.value && capture.mode.value === 'record'))
 
 function reopen(): void {
-  const meta = metaOf(rec.state.value)
+  const meta = native.value ? metaOf(rec.state.value) : (deviceLive.meta as { subject_id?: string | null; session_id?: string | null })
   capture.show('record', meta?.subject_id ?? null, meta?.session_id ?? null)
 }
 
@@ -82,9 +89,9 @@ watch(
     >
       <span
         class="size-2 shrink-0 rounded-full bg-coral"
-        :class="rec.state.value?.paused ? 'opacity-40' : 'animate-pulse-dot motion-reduce:animate-none'"
+        :class="paused ? 'opacity-40' : 'animate-pulse-dot motion-reduce:animate-none'"
       />
-      <span class="truncate">{{ rec.state.value?.paused ? 'Paused' : 'Recording' }} · {{ label }}</span>
+      <span class="truncate">{{ paused ? 'Paused' : 'Recording' }} · {{ label }}</span>
       <span class="num shrink-0 text-paper-2">{{ elapsed }}</span>
     </button>
   </div>

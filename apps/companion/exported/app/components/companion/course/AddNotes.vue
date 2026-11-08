@@ -2,6 +2,7 @@
 import type { Subject } from '~/companion/types'
 import type { Note } from '~/companion/notes/tree'
 import { useNoteActions, useNotesTree } from '~/companion/notes/actions'
+const { t } = useI18n()
 
 /**
  * "Add notes…": how a course pulls in what the learner already has. Notes
@@ -26,9 +27,10 @@ const props = withDefaults(
     /** The trigger's words. */
     label?: string
   }>(),
-  { look: 'button', label: 'Add notes…' },
+  { look: 'button' },
 )
 
+const text = computed(() => props.label ?? t('course.addNotes.label'))
 const actions = useNoteActions()
 const { full } = useNotesTree()
 const open = ref(false)
@@ -52,17 +54,17 @@ defineExpose({ start })
     variant="ghost"
     size="md"
     icon="plus"
-    :title="`Bring notes from My notes into ${subject.title}`"
+    :title="t('course.addNotes.bring', { title: subject.title })"
     @click="start"
   >
-    {{ label }}
+    {{ text }}
   </UiBtn>
   <button
     v-else-if="look === 'row'"
     v-bind="$attrs"
     type="button"
-    class="flex min-h-[30px] w-full cursor-pointer items-center gap-2 rounded-[10px] py-1 pr-2 pl-[26px] text-left text-text-muted transition-colors hover:bg-surface-mute hover:text-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-cobalt max-lg:min-h-11"
-    :title="`Bring notes from My notes into ${subject.title}`"
+    class="flex min-h-[30px] w-full cursor-pointer items-center gap-2 rounded-[10px] py-1 pr-2 pl-[26px] text-left text-text-muted transition-colors hover:bg-surface-mute hover:text-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand max-lg:min-h-11"
+    :title="t('course.addNotes.bring', { title: subject.title })"
     @click="start"
   >
     <UiIcon
@@ -71,22 +73,22 @@ defineExpose({ start })
       :stroke="2.1"
       class="shrink-0"
     />
-    <span class="min-w-0 flex-1 truncate text-[12.5px]">{{ label }}</span>
+    <span class="min-w-0 flex-1 truncate text-[12.5px]">{{ text }}</span>
   </button>
   <button
     v-else-if="look === 'link'"
     v-bind="$attrs"
     type="button"
-    class="cursor-pointer rounded-[4px] text-cobalt underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cobalt"
+    class="cursor-pointer rounded-[4px] text-brand underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
     @click="start"
   >
-    {{ label }}
+    {{ text }}
   </button>
 
   <CompanionNotesPicker
     v-model:open="open"
-    :title="`Add notes to ${subject.title}`"
-    :confirm="`Add to ${subject.title}`"
+    :title="t('course.addNotes.title', { title: subject.title })"
+    :confirm="t('course.addNotes.confirm', { title: subject.title })"
     only-unfiled
     @pick="pick"
   />

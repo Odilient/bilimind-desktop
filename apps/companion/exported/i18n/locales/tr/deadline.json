@@ -1,0 +1,17 @@
+{
+  "readinessSaid": "Hazırlık %{readiness} olarak ölçülmüştü. Aldığınız not: %{got}.",
+  "whatDidYouGet": "Kaç aldınız?",
+  "save": "Kaydet",
+  "saveHint": "BiliMind'ın hazırlık tahmininin ne kadar yakın olduğunu görmesi için.",
+  "notConfirmed": "Henüz onaylanmadı.",
+  "heardInClass": "Derste duyuldu",
+  "fromShared": "Paylaşılan bir mesajdan",
+  "moodleHasnt": "; Moodle'da belirtilmemiş.",
+  "confirmDeadline": "Son tarihi onayla",
+  "open": "Aç",
+  "due": "Son teslim: {when}",
+  "seoTitle": "Son Tarih · BiliMind",
+  "checkedRight": "Kontrol ettim, doğru",
+  "whereCameFrom": "Tarihin kaynağı",
+  "nothingLinked": "Henüz konu bağlanmadı. Yönergede veya derste nelerin dahil olduğu belirtildiğinde, hazırlık durumunuzla birlikte burada görünecektir."
+}

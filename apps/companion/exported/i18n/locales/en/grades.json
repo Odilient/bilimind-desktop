@@ -1,0 +1,50 @@
+{
+  "headline": {
+    "none": "Nothing marked yet",
+    "final": "Final grade: {percent}%",
+    "sofar": "{percent}% so far"
+  },
+  "fromMoodle": "from Moodle",
+  "aiming": "Aiming for",
+  "worth": "Worth",
+  "mark": "Mark",
+  "whatItIs": "What it is",
+  "worthPct": "Worth %",
+  "worthPctLabel": "What it is worth, % of the grade",
+  "markPct": "Mark %",
+  "markPctLabel": "Your mark, % (if you have it)",
+  "add": "Add",
+  "aimLabel": "The overall mark you're aiming for, %",
+  "yourGrade": "Your grade",
+  "assessments": "Assessments",
+  "participation": "Participation",
+  "addAssessment": "Add an assessment",
+  "download": "Download these grades:",
+  "spreadsheet": "Spreadsheet",
+  "rest": {
+    "sofar": "So far you have {sofar}% on the {marked}% that's been marked.",
+    "secured": "{target}% overall is already yours.",
+    "out": "{target}% overall is out of reach now, even with full marks on what's left.",
+    "need": "To finish on {target}% overall, you need about {need}% on what's left."
+  },
+  "names": {
+    "more": "{list} and {n} more",
+    "and": "{list} and {last}"
+  },
+  "marks": "{n} mark | {n} marks",
+  "line": {
+    "unweighted": "The average of {marks}. None has a weight yet, so each counts the same: add the weights below for the real grade.",
+    "rest": "{weight} still to come: {names}.",
+    "weighted": "From {marks}, {weight} of the grade.{rest}",
+    "waiting": "Waiting on grades to come back.",
+    "empty": "Nothing graded yet."
+  },
+  "overallUntil": "overall, until you set your own",
+  "overall": "overall",
+  "short": "The weights here add up to less than the whole grade: {share} of it isn't listed yet.",
+  "worthOf": "What {title} is worth, % of the grade",
+  "markFor": "Your mark for {title}, %",
+  "onceMarked": "Once a mark is in, this works out the score you need on {title}.",
+  "finishedWith": "Finished with {percent}%",
+  "averaging": "Averaging {percent}% so far"
+}

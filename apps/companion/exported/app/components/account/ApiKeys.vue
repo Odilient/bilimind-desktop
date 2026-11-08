@@ -2,10 +2,17 @@
 import type { MenuAction } from '~/components/ui/Menu.vue'
 import { ApiError, toApiError } from '~/composables/useApi'
 import type { Credential } from '~/composables/useCredentials'
+import { canSignInWithOpenRouter, startOpenRouterSignIn } from '~/companion/openrouter'
 
 /**
- * Bring your own key. The secret is only ever sent up — the list shows the last four characters, never the whole thing.
+ * Bring your own key. A learner who hands over their own model key gets lessons and
+ * answers written against it, and those are never counted. Since 7 Nov 2026 that is
+ * true on Free as well, where it is one of the ways to AI at all (Free has none of
+ * its own), so "Sign in with OpenRouter" sits first: one click, no key to copy
+ * (companion/openrouter.ts). The secret is only ever sent up — the list shows the
+ * last four characters, never the whole thing.
  */
+
 const credentials = useCredentials()
 const toast = useToast()
 
@@ -28,6 +35,23 @@ const label = ref('')
 
 const addError = ref<string | null>(null)
 const fieldError = ref<string | null>(null)
+
+// Client-only: the desktop app's app:// origin can't be come back to from openrouter.ai.
+const openRouterSignIn = ref(false)
+const signingIn = ref(false)
+onMounted(() => {
+  openRouterSignIn.value = canSignInWithOpenRouter()
+})
+
+async function signInWithOpenRouter(): Promise<void> {
+  signingIn.value = true
+  try {
+    await startOpenRouterSignIn()
+  } catch {
+    signingIn.value = false
+    toast.error('Could not open OpenRouter. Try again, or paste a key instead.')
+  }
+}
 
 onMounted(() => {
   if (credentials.items.value.length === 0) void credentials.load()
@@ -62,7 +86,7 @@ async function submit(): Promise<void> {
       key: key.value.trim(),
       label: label.value.trim() || undefined,
     })
-    toast.success('Key added. The chat answers with it now.')
+    toast.success('Key added. Your AI now runs on it.')
     reset()
   } catch (raw) {
     const error = raw instanceof ApiError ? raw : toApiError(raw)
@@ -129,7 +153,7 @@ function menuFor(item: Credential): MenuAction[] {
         <li
           v-for="item in credentials.items.value"
           :key="item.id"
-          class="flex items-center gap-3.5 rounded-[20px] bg-surface shadow-[inset_0_0_0_1px_var(--border),0_24px_48px_-36px_rgb(11_13_16/0.3)] p-3.5"
+          class="flex items-center gap-3.5 rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] p-3.5"
         >
           <span
             class="grid size-9 shrink-0 place-items-center rounded-full bg-brand-soft text-brand"
@@ -181,25 +205,38 @@ function menuFor(item: Credential): MenuAction[] {
         v-else
         icon="key"
         title="No key yet"
-        description="Add a key and the chat can answer."
+        description="Sign in with OpenRouter or paste a key, and your AI runs on your own account."
         size="inline"
       />
     </template>
 
-    <!-- Add a key -->
+    <!-- Add a key: signed in through OpenRouter, or pasted -->
     <div class="mt-4">
-      <UiBtn
+      <div
         v-if="!adding"
-        variant="secondary"
-        icon="plus"
-        @click="adding = true"
+        class="flex flex-wrap items-center gap-2"
       >
-        Add a key
-      </UiBtn>
+        <UiBtn
+          v-if="openRouterSignIn"
+          variant="primary"
+          icon="key"
+          :loading="signingIn"
+          @click="signInWithOpenRouter"
+        >
+          Sign in with OpenRouter
+        </UiBtn>
+        <UiBtn
+          variant="secondary"
+          icon="plus"
+          @click="adding = true"
+        >
+          Paste your own key
+        </UiBtn>
+      </div>
 
       <form
         v-else
-        class="rounded-[20px] bg-surface shadow-[inset_0_0_0_1px_var(--border),0_24px_48px_-36px_rgb(11_13_16/0.3)] p-4 sm:p-5"
+        class="rounded-[18px] bg-surface shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] p-4 sm:p-5"
         novalidate
         @submit.prevent="submit"
       >
@@ -246,9 +283,6 @@ function menuFor(item: Credential): MenuAction[] {
                 class="pointer-events-none absolute right-3 text-text-faint"
               />
             </div>
-            <p class="text-[12px] leading-relaxed text-text-faint">
-              Lessons are written through OpenRouter.
-            </p>
           </div>
 
           <UiTextField

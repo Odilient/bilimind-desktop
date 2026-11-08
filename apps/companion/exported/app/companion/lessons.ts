@@ -13,21 +13,18 @@
  *   the shapes they were built for. The copy is the store's
  *   (`store.lessonCourses`), shared by every screen: `refresh()` after a
  *   lesson changes is seen everywhere, its progress included.
+ * - `lessonToWrite(topic)` is the same node for the learner to write by hand.
  * - `writeLesson(topic)` has one topic's lesson written. The server mirrors the
  *   course's topics into an old course the first time (no model involved), and
  *   the lesson is then asked for through the old expand endpoint, so the cap,
  *   the charge and the queue behave as they do everywhere else.
- *
- * In demo mode the same calls answer from `demo-lessons.ts`: `useApi` hands any
- * request for a demo id to it, so NodeView reads them like any other lesson.
  */
 import type { Course } from '~/types/api'
 import { ApiError, useApi } from '~/composables/useApi'
 import type { Subject, Topic } from './types'
 import { useCompanion } from './store'
-
-const DEMO_UNWRITTEN =
-  'The sample account has only a few lessons written. With your own, this one is written for you.'
+import { outOfAi, toastOutOfAi } from './usage'
+import { translate } from '~/utils/i18n'
 
 /** What `POST /companion/topics/{id}/lesson` answers. */
 export interface LessonBridge {
@@ -53,39 +50,75 @@ export function useLessonCourse(subject: MaybeRefOrGetter<Subject | null>) {
 
 /**
  * Have one topic's lesson written; resolves to the node id to open, or null
- * when it cannot be (a lesson the demo does not have, or the server refused,
- * either said in a toast). A topic whose lesson already exists or is on its
+ * when it cannot be (the server refused, said in a toast). A topic whose lesson already exists or is on its
  * way answers with its node at once and spends nothing. `instruction` is how
- * the learner wants it written; it reaches the writer's prompt.
+ * the learner wants it written; it reaches the writer's prompt. A lesson
+ * already written is rewritten when there is an instruction or `rewrite`.
  */
-export async function writeLesson(topic: Topic, instruction?: string | null): Promise<number | null> {
+export async function writeLesson(topic: Topic, instruction?: string | null, rewrite = false): Promise<number | null> {
   const store = useCompanion()
   const toast = useToast()
 
-  // The demo writes nothing: a lesson it has is opened, any other is explained.
-  if (store.status.mode === 'demo') {
-    const { demoLessonWritten } = await import('./demo-lessons')
-    if (topic.node_id && demoLessonWritten(topic.node_id)) return topic.node_id
-    toast.push(DEMO_UNWRITTEN)
-    return null
-  }
-
   const api = useApi()
   try {
-    const bridge = await api.post<LessonBridge>(`/companion/topics/${topic.id}/lesson`)
-    // The bridge is a synced write; show it now rather than at the next pull.
-    const row = store.rows.topics[topic.id]
-    if (row) row.node_id = bridge.node_id
-    const subject = store.rows.subjects[topic.subject_id]
-    if (subject) subject.generated_course_id = bridge.course_id
+    const bridge = await bridgeLesson(topic)
+
+    // A class run by a centre: the course is the teacher's (read-only here), so is writing its lessons.
+    if (!(bridge.course_id in store.lessonCourses)) await store.refreshLessons(bridge.course_id)
+    if (store.lessonCourses[bridge.course_id]?.can_edit === false) {
+      if (bridge.node_status !== 'ready') toast.push('Your teacher hasn’t written this lesson yet.')
+      return bridge.node_status === 'ready' ? bridge.node_id : null
+    }
 
     if (bridge.node_status === 'stub' || bridge.node_status === 'failed') {
       await api.post(`/courses/${bridge.course_id}/expand`, { node_ids: [bridge.node_id], instruction: instruction?.trim() || null })
+    } else if (bridge.node_status === 'ready' && (rewrite || instruction?.trim())) {
+      // A written lesson asked for again ("make it simpler") is rewritten, not just
+      // reopened: before this the card said "on its way" and nothing was queued.
+      try {
+        await api.post(`/nodes/${bridge.node_id}/regenerate`, { instruction: instruction?.trim() || null })
+      } catch (error) {
+        // 409: it is being written already, which is what was asked.
+        if (!(error instanceof ApiError && error.status === 409)) throw error
+      }
     }
     void store.sync()
     return bridge.node_id
   } catch (error) {
-    toast.push(error instanceof ApiError ? error.message : 'The lesson could not be asked for.')
+    // Out of AI: the reason with the ways forward, the same everywhere.
+    const limited = outOfAi(error)
+    if (limited) toastOutOfAi(limited)
+    else toast.push(error instanceof ApiError ? error.message : translate('check.lessons.cantAsk'))
+    return null
+  }
+}
+
+/** The topic's node, made (no model involved) if it is missing. */
+async function bridgeLesson(topic: Topic): Promise<LessonBridge> {
+  const store = useCompanion()
+  const bridge = await useApi().post<LessonBridge>(`/companion/topics/${topic.id}/lesson`)
+  // The bridge is a synced write; show it now rather than at the next pull.
+  const row = store.rows.topics[topic.id]
+  if (row) row.node_id = bridge.node_id
+  const subject = store.rows.subjects[topic.subject_id]
+  if (subject) subject.generated_course_id = bridge.course_id
+  return bridge
+}
+
+/**
+ * A topic's lesson for the learner to write themselves: its node, bridged and
+ * never expanded, so no model runs and nothing is spent (works on Free with no
+ * AI). Resolves to null when it cannot be, said in a toast.
+ */
+export async function lessonToWrite(topic: Topic): Promise<LessonBridge | null> {
+  const store = useCompanion()
+  const toast = useToast()
+  try {
+    const bridge = await bridgeLesson(topic)
+    void store.sync()
+    return bridge
+  } catch (error) {
+    toast.push(error instanceof ApiError ? error.message : translate('check.lessons.cantOpen'))
     return null
   }
 }

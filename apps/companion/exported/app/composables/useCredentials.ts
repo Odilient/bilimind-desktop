@@ -3,10 +3,10 @@ import type { ApiError } from '~/composables/useApi'
 /**
  * Bring-your-own-key.
  *
- * A learner on Pro can hand BiliMind their own model key, and lessons get
- * written against it instead of counting toward the month. On Free a key is
- * kept but not used — the API decides that (App\Services\Billing\OwnKey), not
- * this composable. The secret only ever travels one way: it goes up when added
+ * A learner can hand BiliMind their own model key (pasted, or from "Sign in with
+ * OpenRouter", companion/openrouter.ts), and what it writes is never counted.
+ * Since 7 Nov 2026 that holds on Free too, where it is one of the ways to AI at
+ * all — the API decides that (App\Services\Billing\OwnKey), not this composable. The secret only ever travels one way: it goes up when added
  * and never comes back — the list only carries the last four characters, enough
  * to recognise which key is which.
  */
@@ -30,6 +30,14 @@ export interface AddCredentialPayload {
   label?: string
 }
 
+/**
+ * The API names it `is_active` (CredentialResource); the screens read `active`.
+ * Without this the key in use never showed as "In use".
+ */
+function normalise(raw: Credential & { is_active?: boolean }): Credential {
+  return { ...raw, active: Boolean(raw.active ?? raw.is_active) }
+}
+
 export function useCredentials() {
   const api = useApi()
 
@@ -45,7 +53,7 @@ export function useCredentials() {
     loading.value = true
     error.value = null
     try {
-      items.value = await api.get<Credential[]>('/credentials')
+      items.value = (await api.get<Credential[]>('/credentials')).map(normalise)
     } catch (raw) {
       error.value = raw as ApiError
     } finally {
@@ -56,7 +64,7 @@ export function useCredentials() {
   async function add(payload: AddCredentialPayload): Promise<Credential> {
     working.value = true
     try {
-      const created = await api.post<Credential>('/credentials', payload)
+      const created = normalise(await api.post<Credential>('/credentials', payload))
       // A freshly added key is the one you want to use, so reflect it locally as
       // active and demote the rest until the next reload confirms the server view.
       items.value = [

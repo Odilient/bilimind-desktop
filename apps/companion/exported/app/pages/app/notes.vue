@@ -36,7 +36,8 @@ const size = usePanelWidth('column')
 const isPhone = useIsPhone()
 
 // What the companion sees when nothing narrower is open: all your notes.
-useAiContext(() => ({ kind: 'notes', label: 'Your notes' }))
+const { t } = useI18n()
+useAiContext(() => ({ kind: 'notes', label: t('settings.notes.context') }))
 
 function onKey(event: KeyboardEvent): void {
   if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key === '\\') {
@@ -53,8 +54,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 </script>
 
 <template>
+  <!-- course.html's frame, as on a course: the notes tree sits on the paper, the page is a card. -->
   <div
-    class="flex min-h-0 flex-1 bg-surface"
+    class="flex min-h-0 flex-1 bg-surface lg:bg-bg"
     :style="{ '--column-w': size.css.value }"
   >
     <Transition
@@ -69,11 +71,19 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       />
     </Transition>
 
-    <div class="flex min-w-0 flex-1 flex-col">
+    <div
+      :class="[
+        'flex min-w-0 flex-1 flex-col overflow-hidden bg-surface lg:my-2 lg:mr-2 lg:rounded-[14px] lg:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]',
+        !(sidebar.open.value && !isPhone) && 'lg:ml-2',
+      ]"
+    >
       <NuxtPage />
     </div>
 
-    <CompanionAiPanel />
+    <!-- The dock as course.html's assistant card on the paper, framed the way the layout frames it. -->
+    <div class="shrink-0 empty:hidden max-xl:hidden xl:my-2 xl:mr-2 xl:overflow-hidden xl:rounded-[14px] xl:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] [&>aside]:h-full [&>aside]:border-l-0">
+      <CompanionAiPanel />
+    </div>
 
     <CompanionNotesMoveDialog />
   </div>

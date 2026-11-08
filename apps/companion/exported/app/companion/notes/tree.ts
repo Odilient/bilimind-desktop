@@ -19,6 +19,7 @@
  * a `computed`.
  */
 import type { Item } from '../types'
+import { translate } from '~/utils/i18n'
 
 /**
  * A note: any page, whiteboard, upload, link, recording or photo the learner
@@ -48,10 +49,10 @@ export function isNote(item: Item): boolean {
 export function noteIcon(item: Pick<Item, 'kind'>): string {
   switch (item.kind) {
     case 'board': return 'board'
-    case 'recording': return 'mic'
-    case 'photo': return 'camera'
-    case 'link': return 'link'
-    case 'file': return 'file'
+    case translate('notes.wordRecording'): return 'mic'
+    case translate('notes.wordPhoto'): return 'camera'
+    case translate('notes.wordLink'): return translate('notes.wordLink')
+    case translate('notes.wordFile'): return translate('notes.wordFile')
     default: return 'page'
   }
 }
@@ -59,18 +60,18 @@ export function noteIcon(item: Pick<Item, 'kind'>): string {
 /** "page", "whiteboard", "recording": the kind in a sentence ("More for this whiteboard"). */
 export function noteWord(item: Pick<Item, 'kind'>): string {
   switch (item.kind) {
-    case 'board': return 'whiteboard'
-    case 'recording': return 'recording'
-    case 'photo': return 'photo'
-    case 'link': return 'link'
-    case 'file': return 'file'
-    default: return 'page'
+    case 'board': return translate('notes.kindBoard')
+    case translate('notes.wordRecording'): return translate('notes.wordRecording')
+    case translate('notes.wordPhoto'): return translate('notes.wordPhoto')
+    case translate('notes.wordLink'): return translate('notes.wordLink')
+    case translate('notes.wordFile'): return translate('notes.wordFile')
+    default: return translate('notes.kindPage')
   }
 }
 
 /** The name a note shows when it has none. */
 export function untitled(item: Pick<Item, 'kind'>): string {
-  return item.kind === 'board' ? 'Untitled board' : 'Untitled'
+  return item.kind === 'board' ? translate('notes.untitledBoard') : translate('notes.untitled')
 }
 
 /** My notes' key among the courses. */

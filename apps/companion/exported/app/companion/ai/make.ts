@@ -11,8 +11,8 @@
  * A tile writes words: picking one puts its request in the box ("Create a
  * quiz on ", ready to finish; a personal tile's whole sentence), and the
  * learner sends it as typed. The bubble then says exactly what was asked,
- * and the server's model and the demo both already know what "Create
- * flashcards on…" means. "Create a course on…" and "Create a revision
+ * and the server's model already knows what "Create flashcards on…"
+ * means. "Create a course on…" and "Create a revision
  * course…" go with `intent: 'course'` (COURSE_WORDS), so they draft a course
  * whatever follows.
  *
@@ -57,7 +57,7 @@ export function wash(color: string | null | undefined, amount = 16): string {
   return `color-mix(in srgb, ${color ?? 'var(--c-c8)'} ${amount}%, var(--surface))`
 }
 
-export const ASK_PLACEHOLDER = 'Ask anything, attach your files, or say what you want to learn'
+export const ASK_PLACEHOLDER = 'Ask Bili anything, attach your files, or say what you want to learn'
 
 export const JUST_ASK: MakeTile = { key: 'ask', label: 'Just ask', thumb: 'blank', placeholder: ASK_PLACEHOLDER }
 

@@ -1,16 +1,17 @@
 <script setup lang="ts">
+const { t } = useI18n()
 /**
  * The companion's sidebar under `/app`, in the place the old product's rail
  * stands everywhere else (`ShellRail` hands over to it there). What it holds
  * is `SidebarBody`; this is where it sits and how it moves.
  *
  * On a computer it is two boxes. The outer one is the column in the row: it
- * takes 260px or 60px of the frame and the page beside it slides over as
+ * takes 252px or 58px of the frame and the page beside it slides over as
  * its width animates. The inner one is the panel, absolutely placed and
- * clipping the 260px body: the same width as the column, except over a
- * workspace (a course, Notes), where the column stays the 60px rail and the
- * panel alone grows to 260px, floating over the content with a shadow. Two
- * 260px columns of names side by side would leave the lesson a strip.
+ * clipping the 252px body: the same width as the column, except over a
+ * workspace (a course, Notes), where the column stays the 58px rail and the
+ * panel alone grows to 252px, floating over the content with a shadow. Two
+ * 252px columns of names side by side would leave the lesson a strip.
  * Floating, it closes when the learner goes anywhere, clicks the page beside
  * it, or presses Esc (`app/companion/sidebar.ts` has the why of each state).
  *
@@ -20,7 +21,7 @@
  * Width is the one thing that animates, 200ms on the shell's curve, and
  * only the panel's width at that: the body inside never re-wraps.
  *
- * The 260px is the default: the panel's edge drags it (`panel-width.ts`).
+ * The 252px is the default: the panel's edge drags it (`panel-width.ts`).
  */
 import { isWorkspace, useSidebar } from '~/companion/sidebar'
 import { usePanelWidth } from '~/companion/panel-width'
@@ -34,8 +35,9 @@ const workspace = computed(() => isWorkspace(route))
 const wide = computed(() => (workspace.value ? s.floating.value : s.pinned.value))
 /** Over a workspace and expanded: floating above the content. */
 const floats = computed(() => workspace.value && s.floating.value)
-const column = computed(() => (!workspace.value && s.pinned.value ? size.css.value : '60px'))
-const panel = computed(() => (wide.value ? size.css.value : '60px'))
+// The rail is Daylight 2's 58px: 11px, a 36px tile, 11px.
+const column = computed(() => (!workspace.value && s.pinned.value ? size.css.value : '58px'))
+const panel = computed(() => (wide.value ? size.css.value : '58px'))
 
 function toggle(): void {
   s.toggle(workspace.value)
@@ -86,16 +88,16 @@ onMounted(() => {
 
 <template>
   <div
-    class="relative z-[60] hidden shrink-0 transition-[width] duration-200 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none lg:block"
+    class="relative z-[60] hidden shrink-0 transition-[width] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:block"
     :style="{ width: column }"
   >
     <nav
       :class="[
-        'absolute inset-y-0 left-0 flex overflow-hidden border-r border-border bg-surface-rail transition-[width,box-shadow] duration-200 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
-        floats && 'shadow-[18px_0_48px_-18px_rgb(11_13_16/0.28)]',
+        'absolute inset-y-0 left-0 flex overflow-hidden bg-bg transition-[width,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+        floats && 'shadow-[var(--shadow-lift)]',
       ]"
       :style="{ width: panel, '--sidebar-w': size.css.value }"
-      aria-label="Main"
+      :aria-label="t('shell.mainNav')"
     >
       <CompanionShellSidebarBody
         :wide="wide"
@@ -109,7 +111,7 @@ onMounted(() => {
       v-if="wide"
       panel="sidebar"
       edge="right"
-      label="Resize the sidebar"
+      :label="t('shell.resizeSidebar')"
       class="-translate-x-1/2"
       :style="{ left: panel }"
     />
@@ -124,7 +126,7 @@ onMounted(() => {
   >
     <div
       v-if="floats"
-      class="fixed inset-0 z-[59] bg-ink/[0.06] max-lg:hidden"
+      class="fixed inset-0 z-[59] bg-[rgb(30_24_14/0.08)] max-lg:hidden"
       aria-hidden="true"
       @click="s.close()"
     />
@@ -140,7 +142,7 @@ onMounted(() => {
     >
       <div
         v-if="s.drawer.value"
-        class="fixed inset-0 z-[88] bg-ink/45 backdrop-blur-[3px] lg:hidden"
+        class="fixed inset-0 z-[88] bg-[rgb(30_24_14/0.32)] backdrop-blur-[3px] lg:hidden"
         aria-hidden="true"
         @click="s.close()"
       />
@@ -154,10 +156,10 @@ onMounted(() => {
       <aside
         v-if="s.drawer.value"
         ref="drawerEl"
-        class="cp-safe-top fixed inset-y-0 left-0 z-[89] flex w-[300px] max-w-[86vw] flex-col bg-surface-rail shadow-sheet outline-none lg:hidden"
+        class="cp-safe-top fixed inset-y-0 left-0 z-[89] flex w-[300px] max-w-[86vw] flex-col bg-bg shadow-[var(--shadow-lift)] outline-none lg:hidden"
         role="dialog"
         aria-modal="true"
-        aria-label="Menu"
+        :aria-label="t('shell.menu')"
         tabindex="-1"
       >
         <CompanionShellSidebarBody

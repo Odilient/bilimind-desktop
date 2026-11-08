@@ -2,7 +2,7 @@
 /**
  * `/app/p/<id>`, the address a page had before Notes: every old link, the
  * Markdown export's links and anything bookmarked land on the same page in
- * Notes (`/app/notes/<id>`), with the query kept (`?demo=1`). The redirect
+ * Notes (`/app/notes/<id>`), with the query kept. The redirect
  * replaces the address, so Back never bounces through it.
  *
  * Inside a course these links are caught first and open as a tab there

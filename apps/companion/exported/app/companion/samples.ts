@@ -3,8 +3,8 @@
  *
  * Every new account starts with a sample course ("Learning how to learn":
  * a path with two lessons written, cards and today's plan) and two sample
- * notes in My notes, a welcome page and a mind map (StarterKit on the server,
- * `starter-demo.ts` in `?demo=new`). The course says so with `sample: true`,
+ * notes in My notes, a welcome page and a mind map (StarterKit on the
+ * server). The course says so with `sample: true`,
  * the notes with `meta.sample`; every other sample row is one by belonging to
  * the sample course.
  *
@@ -69,24 +69,16 @@ export async function removeSamples(): Promise<void> {
   const store = useCompanion()
   const { gone, kept } = sampleRows(store)
 
-  if (store.status.mode === 'demo') {
-    // No server: the demo's world forgets them row by row, as a learner's own deletes would.
-    await Promise.all([
-      ...gone.map(([collection, id]) => store.remove(collection, id)),
-      ...kept.map(([collection, id]) => store.upsert(collection, { id, ...LOOSE[collection] })),
-    ])
-  } else {
-    await useApi().del('/companion/samples')
-    // The server has done the same; say it here now, and the next pull agrees.
-    const at = nowIso()
-    const put = (collection: CollectionName, id: Uuid, patch: Partial<Row>) => {
-      const table = store.rows[COLLECTION_KEY[collection]] as Record<Uuid, Row>
-      if (table[id]) table[id] = { ...table[id]!, ...patch, updated_at: at }
-    }
-    for (const [collection, id] of gone) put(collection, id, { deleted_at: at })
-    for (const [collection, id] of kept) put(collection, id, LOOSE[collection] as Partial<Row>)
-    void store.sync()
+  await useApi().del('/companion/samples')
+  // The server has done the same; say it here now, and the next pull agrees.
+  const at = nowIso()
+  const put = (collection: CollectionName, id: Uuid, patch: Partial<Row>) => {
+    const table = store.rows[COLLECTION_KEY[collection]] as Record<Uuid, Row>
+    if (table[id]) table[id] = { ...table[id]!, ...patch, updated_at: at }
   }
+  for (const [collection, id] of gone) put(collection, id, { deleted_at: at })
+  for (const [collection, id] of kept) put(collection, id, LOOSE[collection] as Partial<Row>)
+  void store.sync()
 
   if (store.today.value) void store.loadToday()
 }

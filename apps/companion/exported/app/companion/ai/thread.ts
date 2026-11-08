@@ -113,6 +113,14 @@ const asked = new Map<string, AskIntent>()
 const deleting = new Map<string, { timer: ReturnType<typeof setTimeout>; thread: AiThread }>()
 
 const busy = computed(() => messages.value.some((m) => m.pending))
+
+/**
+ * A draft the learner said to create in words ("ok, create it"): the card of
+ * that message (Proposal.vue) takes it and creates through its own path.
+ * `draftsCreating` is every draft being created now, for the answer's card.
+ */
+export const draftPress = ref<string | null>(null)
+export const draftsCreating = reactive(new Set<string>())
 /** Chats with an answer still coming in, on screen or left to finish in the background. */
 const answering = ref<string[]>([])
 
@@ -195,6 +203,8 @@ function settle(): void {
     status: null,
     making: null,
   })
+  const press = msg.actions?.find((a) => a.type === 'create_draft')
+  if (press?.type === 'create_draft') draftPress.value = press.message_id
   // The work list stays as it ended, so a finished draft can still say what it read.
   if (msg.steps?.length && msg.proposal?.state === 'ready') {
     msg.steps = msg.steps.map((s) => (s.state === 'active' ? { ...s, state: 'done' } : s))
@@ -482,8 +492,8 @@ function stop(): void {
 
 /**
  * Move the screen on without throwing away an answer still coming in: it
- * finishes into its own thread (the server keeps it, and the sample does
- * too), which stays in the chats list, so it is there when the learner
+ * finishes into its own thread (the server keeps it), which stays in the
+ * chats list, so it is there when the learner
  * goes back. Stop, by contrast, ends it.
  */
 function detach(): void {

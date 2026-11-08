@@ -133,8 +133,8 @@ try {
 
   // ---------- own task ----------
   await page.getByText('Add a task').first().click()
-  await page.getByLabel('Something to do today').fill('Read chapter 3, 30 min')
-  await page.getByLabel('Something to do today').press('Enter')
+  await page.getByLabel('Add a task for today').fill('Read chapter 3, 30 min')
+  await page.getByLabel('Add a task for today').press('Enter')
   await page.getByText('Read chapter 3').first().waitFor({ timeout: 10_000 })
   await page.waitForFunction(async () => {
     const { data } = await (await fetch('/api/companion/plan-tasks')).json()
@@ -209,7 +209,7 @@ try {
 
   // ---------- the chat, with no key ----------
   const ask = async (words) => {
-    const box = page.getByLabel('Ask BiliMind').first()
+    const box = page.getByLabel('Ask Bili', { exact: true }).first()
     await box.waitFor({ timeout: 20_000 })
     await box.fill(words)
     await box.press('Enter')
@@ -218,7 +218,7 @@ try {
   await ask('Explain joins')
   await page.getByText('Add a DeepSeek or OpenRouter key in Settings').first().waitFor({ timeout: 20_000 })
   check('with no key the chat says how to add one, and calls nobody', llm.requests.length === 0)
-  await page.getByRole('button', { name: 'Open' }).first().click()
+  await page.getByRole('link', { name: 'Add your AI key' }).first().click()
   await page.waitForURL(/\/app\/settings\?section=keys/, { timeout: 10_000 })
   check('its link opens the key screen', true)
 
@@ -226,7 +226,7 @@ try {
   // Headless, with no session bus: Chromium's basic_text backend, which is what "no keychain" looks like here.
   await page.getByText('This computer has no system keychain').waitFor({ timeout: 10_000 })
   check('with no keychain the screen says so', true)
-  await page.getByRole('button', { name: 'Add a key' }).click()
+  await page.getByRole('button', { name: 'Paste your own key' }).click()
   await page.locator('#cred-provider').selectOption('deepseek')
   await page.getByLabel('Secret key').fill(FAKE_KEY)
   await page.getByRole('button', { name: 'Save key' }).click()
@@ -330,7 +330,7 @@ try {
     return { subject: subject.id, topic: topic.id }
   })
   await page.goto('app://bilimind/app')
-  await page.getByText('Check yourself on').first().waitFor({ timeout: 30_000 })
+  await page.getByText(/Check yourself/).first().waitFor({ timeout: 30_000 })
   check('Today asks for a check once a topic has gone cold', true)
   const sitting = await page.evaluate(async () => (await (await fetch('/api/companion/checks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ purpose: 'cold' }) })).json()).data)
   check('a check is written, with nothing that gives it away', sitting.checks.length > 0 && !JSON.stringify(sitting).includes('every row of the left table'))

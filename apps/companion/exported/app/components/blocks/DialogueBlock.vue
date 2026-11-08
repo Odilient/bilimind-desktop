@@ -263,7 +263,7 @@ function replay(text: string): void {
           v-model="input"
           type="text"
           :placeholder="`Reply in ${lang ? lang : 'the target language'}…`"
-          class="h-9 min-w-0 flex-1 rounded-full border border-border-field bg-surface px-4 text-[13.5px] outline-none focus:border-lime-2 focus:shadow-[0_0_0_4px_rgb(198_242_78/0.45)]"
+          class="h-9 min-w-0 flex-1 rounded-full border border-border-field bg-surface px-4 text-[13.5px] outline-none focus:border-hi-2 focus:shadow-[0_0_0_4px_rgb(255_212_71/0.45)]"
           :disabled="sending"
         />
         <UiBtn

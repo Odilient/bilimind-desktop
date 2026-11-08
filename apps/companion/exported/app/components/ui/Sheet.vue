@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
           @keydown="onKeydown"
         >
           <div
-            class="absolute inset-0 bg-[rgb(6_9_30/0.5)] backdrop-blur-[6px]"
+            class="absolute inset-0 bg-[rgb(30_24_14/0.32)] backdrop-blur-[4px]"
             @click="close"
           />
 

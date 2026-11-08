@@ -61,7 +61,7 @@ watch([typed, () => blocks.value.length], async () => {
         role="status"
       >
         <span
-          class="animate-pulse-dot grid size-6 shrink-0 place-items-center rounded-full bg-ink text-lime"
+          class="animate-pulse-dot grid size-6 shrink-0 place-items-center rounded-full bg-inverse text-on-inverse"
           aria-hidden="true"
         >
           <UiIcon

@@ -58,7 +58,8 @@ const marks = (verdicts: string[], extra: Record<string, unknown> = {}) => ({ pi
 describe('checks', () => {
   it('asks nothing until a topic has gone cold, and says when it will', async () => {
     const t = await setup(checkWriter)
-    await studied(t, 1)
+    // The first check waits a day after study (Readiness' FIRST_COLD_DAYS), so half a day isn't cold yet.
+    await studied(t, 0.5)
     const res = await t.call('POST', '/companion/checks', { purpose: 'cold' })
     expect(res.status).toBe(200)
     expect(res.data.checks).toEqual([])
@@ -150,7 +151,7 @@ describe('checks', () => {
       if (s.includes('You mark one answer')) return marks(['met'])
       return null
     })
-    const { topics } = await studied(t, 1, ['Joins'])
+    const { topics } = await studied(t, 0.5, ['Joins'])
     const sitting = await t.call('POST', '/companion/checks', { purpose: 'teach', topic_ids: [topics[0].id] })
     const check = sitting.data.checks[0]
     expect(check.kind).toBe('explain')
@@ -338,7 +339,7 @@ describe('a goal from a sentence', () => {
     })
     const res = await t.call('POST', '/companion/goals/from-sentence', { sentence: 'Italian to B1 in 10 weeks' })
     expect(res.status).toBe(201)
-    expect(res.data.goal.ends_on).toBe(new Date(Date.now() + 70 * DAY).toISOString().slice(0, 10))
+    expect(res.data.goal.ends_on).toBe(new Date(Date.now() + 70 * DAY).toLocaleDateString('en-CA')) // the learner's day, not UTC's
     expect(res.data.goal.title).toContain('Italian · B1 by')
     expect(res.data.subject.format).toBe('path')
     expect(res.data.topics).toHaveLength(4)

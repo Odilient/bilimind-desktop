@@ -19,6 +19,8 @@
  */
 import type { ConnectKind } from '~/companion/create'
 import { useCompanion } from '~/companion/store'
+// Google
+import { googleAvailable, preloadGoogle } from '~/companion/google/drive'
 
 export type AttachChoice =
   | 'course'
@@ -28,6 +30,8 @@ export type AttachChoice =
   | 'paste'
   | 'moodle'
   | 'calendar'
+  // Google
+  | 'drive'
   | `connect:${ConnectKind}`
 
 withDefaults(
@@ -59,10 +63,20 @@ interface Row {
 const ADD: Row[] = [
   { key: 'files', icon: 'upload', title: 'Upload files', hint: 'PDFs, slides, documents, images' },
   { key: 'notes', icon: 'notebook', title: 'Attach notes', hint: 'Pages, whiteboards and files from Notes' },
-  { key: 'link', icon: 'link', title: 'Add a link', hint: 'A web page, read when you send' },
+  { key: 'link', icon: 'link', title: 'Add a link', hint: 'A web page or a YouTube video, read when you send' },
   { key: 'paste', icon: 'paste', title: 'Paste text', hint: 'A syllabus, an announcement, an email' },
   { key: 'moodle', icon: 'folder', title: 'Build from a folder', hint: 'Every answer checked against your files' },
 ]
+
+// Google: Drive under Upload files, only where Google is set up and its
+// sign-in can open (a browser, not the desktop or phone app). Its scripts start
+// loading when the menu opens, so Google's window opens close to the tap.
+if (googleAvailable()) {
+  ADD.splice(1, 0, { key: 'drive', icon: 'download', title: 'From Google Drive', hint: 'Files or a folder you pick' })
+  watch(open, (now) => {
+    if (now) preloadGoogle()
+  })
+}
 
 /** A way already connected says so, so the learner sees what is already flowing in. */
 function connected(kind: ConnectKind): { word: string; tone: string } | null {
@@ -152,7 +166,7 @@ const tile = 'grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface-s
       <div
         v-if="open && !isPhone"
         :class="[
-          'absolute left-0 z-40 w-[300px] max-w-[calc(100vw-32px)] rounded-[16px] bg-surface p-1.5 shadow-pop ring-1 ring-border',
+          'absolute left-0 z-40 w-[300px] max-w-[calc(100vw-32px)] rounded-[15px] bg-surface p-1.5 shadow-pop',
           placement === 'up' ? 'bottom-full mb-2 origin-bottom-left' : 'top-full mt-2 origin-top-left',
         ]"
         role="menu"
@@ -375,7 +389,7 @@ const tile = 'grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface-s
           </button>
           <button
             type="button"
-            class="mt-1 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-2 text-[14px] font-semibold text-cobalt"
+            class="mt-1 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-2 text-[14px] font-semibold text-brand"
             @click="page = 'main'"
           >
             <UiIcon

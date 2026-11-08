@@ -1,0 +1,17 @@
+{
+  "readinessSaid": "O preparo indicava {readiness}%. Você tirou {got}%.",
+  "whatDidYouGet": "Qual nota você tirou?",
+  "save": "Salvar",
+  "saveHint": "Para o BiliMind avaliar a precisão da estimativa.",
+  "notConfirmed": "Ainda não confirmado.",
+  "heardInClass": "Ouvido na aula",
+  "fromShared": "De uma mensagem compartilhada",
+  "moodleHasnt": "; não consta no Moodle.",
+  "confirmDeadline": "Confirmar prazo",
+  "open": "Abrir",
+  "due": "Prazo: {when}",
+  "seoTitle": "Prazo · BiliMind",
+  "checkedRight": "Conferi, está certo",
+  "whereCameFrom": "De onde veio a data",
+  "nothingLinked": "Nenhum tópico vinculado ainda. Quando a ementa ou o professor disser o que cai, os tópicos aparecerão aqui com seu nível de preparo."
+}

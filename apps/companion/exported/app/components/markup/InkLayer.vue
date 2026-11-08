@@ -1,3 +1,12 @@
+<script lang="ts">
+/**
+ * The layers with a reach, on the page now. A stroke can run past its own part
+ * into the next one, where the next part's layer takes the pointer; so an
+ * eraser that touches none of its own strokes asks these before calling it a miss.
+ */
+const reaching = new Set<(clientX: number, clientY: number) => boolean>()
+</script>
+
 <script setup lang="ts">
 import { getStroke } from 'perfect-freehand'
 import type { MarkupTool, Stroke, StrokePoint } from '~/types/api'
@@ -40,6 +49,14 @@ const props = defineProps<{
   armed: boolean
   /** The box's rendered size, in px. The layer draws nothing until it is known. */
   box: { width: number; height: number }
+  /**
+   * How far past the box a stroke may start, in px, and leaving it set lets a
+   * stroke run on past it: a part of a lesson, where an arrow from a table has
+   * to reach the words above it (11-09). Points outside are still stored
+   * against this box (below 0, above 1) and scale with it. 0, a picture or a
+   * board: everything stays on it, as before.
+   */
+  reach?: number
 }>()
 
 const emit = defineEmits<{
@@ -70,6 +87,7 @@ const drawingTool = computed(() =>
 const width = computed(() => Math.max(0, props.box.width))
 const height = computed(() => Math.max(0, props.box.height))
 const scale = computed(() => width.value / REFERENCE_WIDTH)
+const reach = computed(() => props.reach ?? 0)
 
 /* -- Rendering ------------------------------------------------------------- */
 
@@ -166,15 +184,19 @@ const livePath = computed(() => (live.value ? render(live.value, true) : null))
 
 let activePointer: number | null = null
 let activeType: string | null = null
-let origin: DOMRect | null = null
+/** The box on screen while a stroke is drawn: the svg's rect less its reach. */
+let origin: { left: number; top: number; width: number; height: number } | null = null
 let hasPressure = false
 const erased = new Set<Stroke>()
 
 function normalise(event: PointerEvent): StrokePoint | null {
   if (!origin || origin.width === 0 || origin.height === 0) return null
 
-  const x = Math.min(1, Math.max(0, (event.clientX - origin.left) / origin.width))
-  const y = Math.min(1, Math.max(0, (event.clientY - origin.top) / origin.height))
+  const nx = (event.clientX - origin.left) / origin.width
+  const ny = (event.clientY - origin.top) / origin.height
+  const bounded = reach.value === 0
+  const x = bounded ? Math.min(1, Math.max(0, nx)) : nx
+  const y = bounded ? Math.min(1, Math.max(0, ny)) : ny
 
   // Real pressure only comes from a stylus; a mouse reports a flat 0.5 and a
   // finger reports 0 or 1, neither of which is a width anyone chose.
@@ -188,9 +210,29 @@ function normalise(event: PointerEvent): StrokePoint | null {
 
 function eraseAt(event: PointerEvent): void {
   if (!origin) return
+  if (hitAt(event.clientX - origin.left, event.clientY - origin.top)) return
+  for (const other of reaching) if (other !== eraseHere && other(event.clientX, event.clientY)) return
+  emit('miss', event.clientX, event.clientY)
+}
 
-  const px = event.clientX - origin.left
-  const py = event.clientY - origin.top
+/** Another part's eraser, at this point on the screen: is one of this layer's strokes under it? */
+function eraseHere(clientX: number, clientY: number): boolean {
+  const el = svg.value
+  if (!el || drawingTool.value !== 'eraser' || !props.strokes.length) return false
+  // A lesson tab behind the one in front is laid out in the same place.
+  if (el.checkVisibility?.({ visibilityProperty: true }) === false) return false
+  const rect = el.getBoundingClientRect()
+  if (rect.width === 0) return false
+  return hitAt(clientX - rect.left - reach.value, clientY - rect.top - reach.value)
+}
+
+onMounted(() => {
+  if (reach.value > 0) reaching.add(eraseHere)
+})
+onBeforeUnmount(() => reaching.delete(eraseHere))
+
+/** Erase the first stroke within reach of this point (px in the box); false when none is. */
+function hitAt(px: number, py: number): boolean {
   const w = width.value
   const h = height.value
 
@@ -219,11 +261,11 @@ function eraseAt(event: PointerEvent): void {
     if (hit) {
       erased.add(stroke)
       emit('erase', index)
-      return
+      return true
     }
   }
 
-  emit('miss', event.clientX, event.clientY)
+  return false
 }
 
 function onPointerDown(event: PointerEvent): void {
@@ -245,7 +287,9 @@ function onPointerDown(event: PointerEvent): void {
   event.preventDefault()
   activePointer = event.pointerId
   activeType = event.pointerType
-  origin = svg.value.getBoundingClientRect()
+  const rect = svg.value.getBoundingClientRect()
+  const r = reach.value
+  origin = { left: rect.left + r, top: rect.top + r, width: rect.width - 2 * r, height: rect.height - 2 * r }
   hasPressure = false
   erased.clear()
 
@@ -380,15 +424,18 @@ const visible = computed(() => props.strokes.length > 0 || drawingTool.value !==
 </script>
 
 <template>
+  <!-- With a reach, the svg is that much bigger on every side (the viewBox starts
+       at -reach, so the box's own coordinates don't move) and draws past its edge. -->
   <svg
     v-if="visible && width > 0 && height > 0"
     ref="svg"
-    :viewBox="`0 0 ${width} ${height}`"
-    :width="width"
-    :height="height"
+    :viewBox="`${-reach} ${-reach} ${width + 2 * reach} ${height + 2 * reach}`"
+    :width="width + 2 * reach"
+    :height="height + 2 * reach"
     class="ink-layer block select-none"
-    :class="drawingTool ? 'pointer-events-auto' : 'pointer-events-none'"
+    :class="[drawingTool ? 'pointer-events-auto' : 'pointer-events-none', reach > 0 && 'overflow-visible']"
     :style="{
+      margin: reach ? `${-reach}px` : undefined,
       touchAction: drawingTool ? 'none' : undefined,
       cursor,
     }"

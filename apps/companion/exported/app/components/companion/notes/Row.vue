@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Note } from '~/companion/notes/tree'
 import { highlight, isDoc, noteIcon } from '~/companion/notes/tree'
 import { courseColor } from '~/companion/colors'
@@ -65,7 +66,7 @@ const renaming = computed(() => renamingId.value === self)
 const subject = computed(() => (props.flat ? store.get('subjects', props.note.subject_id) : null))
 const menuOpen = ref(false)
 
-const pieces = computed(() => highlight(props.note.title || 'Untitled', props.query))
+const pieces = computed(() => highlight(props.note.title || t('notes.untitled'), props.query))
 const picked = computed(() => Boolean(list.select) && selection.value.has(props.note.id))
 
 /* -- Clicks: open, or pick ---------------------------------------------------- */
@@ -164,12 +165,12 @@ function onDragStart(event: DragEvent): void {
   list.drag.ids = many ? order().filter((id) => selection.value.has(id)) : null
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/plain', props.note.title || 'Untitled')
+    event.dataTransfer.setData('text/plain', props.note.title || t('notes.untitled'))
     if (many) {
       const ghost = document.createElement('div')
-      ghost.textContent = `${selection.value.size} notes`
+      ghost.textContent = t('notes.noteCount', selection.value.size)
       ghost.style.cssText =
-        'position:fixed;top:-100px;left:-100px;padding:6px 12px;border-radius:999px;font:600 13px Inter,sans-serif;background:var(--ink);color:var(--surface)'
+        'position:fixed;top:-100px;left:-100px;padding:6px 12px;border-radius:999px;font:600 13px Inter,sans-serif;background:var(--inverse);color:var(--on-inverse)'
       document.body.appendChild(ghost)
       event.dataTransfer.setDragImage(ghost, 14, 14)
       setTimeout(() => ghost.remove(), 0)
@@ -263,7 +264,7 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
         dropZone === 'inside'
           ? 'bg-brand-soft shadow-[inset_0_0_0_1px_var(--brand-line)]'
           : picked
-            ? 'bg-cobalt-soft'
+            ? 'bg-brand-soft'
             : active
               ? 'bg-accent-soft'
               : 'hover:bg-surface-mute focus-within:bg-surface-mute',
@@ -282,7 +283,7 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
       <span
         v-if="dropZone === 'before' || dropZone === 'after'"
         :class="[
-          'pointer-events-none absolute right-1 z-[1] h-[2px] rounded-full bg-cobalt',
+          'pointer-events-none absolute right-1 z-[1] h-[2px] rounded-full bg-brand',
           dropZone === 'before' ? '-top-px' : '-bottom-px',
         ]"
         :style="{ left: `${indent + 18}px` }"
@@ -292,7 +293,7 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
         v-if="kids.length"
         type="button"
         tabindex="-1"
-        :aria-label="open ? `Fold ${note.title || 'Untitled'}` : `Unfold ${note.title || 'Untitled'}`"
+        :aria-label="open ? t('notes.foldNote', { title: note.title || t('notes.untitled') }) : t('notes.unfoldNote', { title: note.title || t('notes.untitled') })"
         :class="[
           'grid shrink-0 cursor-pointer place-items-center rounded-[6px] text-text-faint transition-colors hover:bg-surface-track hover:text-text-soft',
           list.roomy ? 'size-8' : 'size-[20px]',
@@ -327,9 +328,9 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
           v-model="draft"
           type="text"
           maxlength="160"
-          :aria-label="`Rename ${note.title || 'Untitled'}`"
+          :aria-label="t('notes.renameNote', { title: note.title || t('notes.untitled') })"
           :class="[
-            'h-[26px] min-w-0 flex-1 rounded-[6px] bg-surface px-1.5 text-text outline-2 outline-cobalt',
+            'h-[26px] min-w-0 flex-1 rounded-[6px] bg-surface px-1.5 text-text outline-2 outline-brand',
             list.roomy ? 'text-[15px]' : 'text-[13px]',
           ]"
           @keydown.enter.prevent="finishRename(true)"
@@ -345,9 +346,9 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
         data-note-link
         :draggable="false"
         :aria-current="active ? 'page' : undefined"
-        :title="list.select && !list.roomy ? `${note.title || 'Untitled'} · Ctrl/⌘-click to pick more` : note.title || 'Untitled'"
+        :title="list.select && !list.roomy ? t('notes.pickMore', { title: note.title || t('notes.untitled') }) : note.title || t('notes.untitled')"
         :class="[
-          'flex min-w-0 flex-1 cursor-pointer items-center gap-2 self-stretch rounded-[7px] pl-1 text-left outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--cobalt)]',
+          'flex min-w-0 flex-1 cursor-pointer items-center gap-2 self-stretch rounded-[7px] pl-1 text-left outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--brand)]',
         ]"
         @click="onClick"
       >
@@ -372,7 +373,7 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
         <span
           v-if="list.openIds?.value.has(note.id) && !active"
           class="size-[5px] shrink-0 rounded-full bg-border-dashed"
-          title="Open in a background tab"
+          :title="t('notes.openBackground')"
         />
         <span
           v-if="subject"
@@ -396,8 +397,8 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
           v-if="note.kind === 'page' && !flat && !list.roomy"
           type="button"
           tabindex="-1"
-          :aria-label="`Add a page inside ${note.title || 'Untitled'}`"
-          title="Add a page inside"
+          :aria-label="t('notes.addPageInside', { title: note.title || t('notes.untitled') })"
+          :title="t('notes.addPageInsideShort')"
           class="grid size-[22px] cursor-pointer place-items-center rounded-[6px] text-text-faint transition-colors hover:bg-surface-track hover:text-text-soft"
           @click.stop.prevent="list.addInside(note)"
         >
@@ -410,15 +411,15 @@ const indent = computed(() => (props.flat ? 6 : 6 + props.depth * 14))
         <CompanionNotesMenu
           v-model:open="menuOpen"
           :items="menu"
-          :label="`More for ${note.title || 'Untitled'}`"
-          :title="note.title || 'Untitled'"
+          :label="t('notes.moreForNote', { title: note.title || t('notes.untitled') })"
+          :title="note.title || t('notes.untitled')"
         >
           <template #default="{ toggle: toggleMenu }">
             <button
               type="button"
               :tabindex="list.roomy ? 0 : -1"
-              :aria-label="`More for ${note.title || 'Untitled'}`"
-              title="Rename, pin, move, delete"
+              :aria-label="t('notes.moreForNote', { title: note.title || t('notes.untitled') })"
+              :title="t('notes.renamePinMove')"
               aria-haspopup="menu"
               :aria-expanded="menuOpen"
               :class="[

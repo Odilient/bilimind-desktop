@@ -11,8 +11,8 @@ import Markdown from './Markdown.vue'
  * they are the opposite of the obvious layout. A refutation in which the
  * misconception is the loud half TEACHES the misconception: a skimmer reads the
  * bold quoted claim, retains it, and leaves more confident in the wrong thing
- * than they arrived. So the belief is set as reported speech — quiet, ruled off
- * to the side, clearly somebody else's voice — and the correction is the only
+ * than they arrived. So the belief is set as reported speech — quiet, on a faint
+ * wash, clearly somebody else's voice — and the correction is the only
  * thing in the block with any weight at all.
  *
  * `why_it_seems_right` is required by the server for the same reason
@@ -34,12 +34,12 @@ defineProps<{ block: MisconceptionBlock }>()
     :type="block.type"
     :source-material-ids="block.source_material_ids"
   >
-    <!-- Reported speech, and marked as such. The rule and the quotes are doing
+    <!-- Reported speech, and marked as such. The wash and the quotes are doing
          the work an "Incorrect:" label would otherwise do, without giving the
          wrong claim a heading of its own. -->
     <p
       v-if="block.payload?.belief"
-      class="border-l-2 border-border-strong pl-4 text-[16px] leading-relaxed text-text-soft italic"
+      class="rounded-[12px] bg-[rgb(var(--wash-rgb)/0.045)] px-4 py-3 text-[16px] leading-relaxed text-text-soft italic"
     >
       “{{ block.payload.belief }}”
     </p>
@@ -66,7 +66,7 @@ defineProps<{ block: MisconceptionBlock }>()
         />
       </span>
       <div class="min-w-0">
-        <p class="eyebrow-loud mb-2 text-accent-strong">What is actually true</p>
+        <p class="text-[12px] leading-none font-bold mb-2 text-accent-strong">What is actually true</p>
         <Markdown :source="block.payload.what_is_true" />
       </div>
     </div>

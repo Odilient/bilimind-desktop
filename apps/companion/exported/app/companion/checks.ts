@@ -29,6 +29,9 @@ export const CHECK_PATH = '/app/check'
 /** Is this route the check page (where the assistant steps aside: "no help" has to be true)? */
 export function onCheckPage(path: string): boolean {
   return path === CHECK_PATH || path.startsWith(`${CHECK_PATH}/`)
+    // A class's homework, quiz or test (institutions): the teacher's grade has to be the
+    // student's own work, so the assistant steps aside there too.
+    || /^\/app\/class\/[^/]+\/work\//.test(path)
 }
 
 export function checkHref(
@@ -71,7 +74,6 @@ export interface DuePick {
  * deadline's, then the rest; inside each, a miss before a first check before
  * a refresh, the longest unstudied first, then the course's own order. A
  * sitting takes the first four.
- * Pure, so the demo's server (`repo.demo.ts`) picks exactly as the screens do.
  */
 export function pickDue(
   input: ReadinessInput,
@@ -139,7 +141,7 @@ export function nextCheckOpens(c: CompanionStore, topicIds: string[]): string | 
   let first: string | null = null
   for (const id of topicIds) {
     const row = c.topicCheck(id)
-    const due = row ? opensAt(row) : null
+    const due = row ? opensAt(row, now) : null
     const at = due && Date.parse(due) > now ? due : null
     if (at && (!first || Date.parse(at) < Date.parse(first))) first = at
   }

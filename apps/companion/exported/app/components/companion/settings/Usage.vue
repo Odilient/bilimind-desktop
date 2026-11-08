@@ -2,62 +2,72 @@
 /**
  * Usage: the session, the week, and the credits behind them. Packs are always on
  * show here, because this is the page someone comes to when they want more.
+ *
+ * On Free there is no session or week since 7 Nov 2026 (`plan_ai: false`), so the
+ * plan's limits give way to the ways to AI: credits, an own key or OpenRouter, or
+ * BiliMind inside ChatGPT or Claude. Every "out of AI" line in the app sends here.
  */
-import { resetsIn, useUsage, type UsageWindow } from '~/companion/usage'
+import { MORE_AI, resetsIn, sessionName, useUsage, type UsageWindow } from '~/companion/usage'
 
 const { usage, load } = useUsage()
 const allowance = useAllowance()
 const toast = useToast()
+const { t } = useI18n()
 const buying = ref<string | null>(null)
+
+const PRO = computed(() => [t('settings.usage.pro1'), t('settings.usage.pro2'), t('settings.usage.pro3')])
 
 onMounted(load)
 
 const windows = computed(() => {
   const u = usage.value
-  if (!u) return []
+  if (!u || u.plan_ai === false) return []
   return [
-    { label: 'Current session', sub: 'Five hours from your first question.', ...u.session },
-    { label: 'This week', sub: 'Seven days from your first question.', ...u.week },
+    // Free's session is a day (gaps, Daylight 2: "a little each day").
+    sessionName(u) === 'today'
+      ? { label: t('settings.usage.today'), sub: t('settings.usage.todaySub'), ...u.session }
+      : { label: t('settings.usage.session'), sub: t('settings.usage.sessionSub'), ...u.session },
+    { label: t('settings.usage.week'), sub: t('settings.usage.weekSub'), ...u.week },
   ]
 })
 
 /** A stage is our word for a piece of work. These are the learner's. */
 const ON: Record<string, string> = {
-  companion_ask: 'Chat',
-  expand_node: 'Lessons',
-  regenerate: 'Lessons',
-  rewrite_block: 'Lessons',
-  clarify: 'Building courses',
-  outline: 'Building courses',
-  companion_propose: 'Building courses',
-  companion_check_write: 'Checks',
-  companion_check_grade: 'Checks',
-  companion_check_follow_up: 'Checks',
-  grade: 'Checks',
-  companion_signals: 'Reading your material',
-  companion_exam_pdf: 'Reading your material',
-  companion_goal: 'Building courses',
-  companion_gaps: 'Maps',
-  companion_map: 'Maps',
-  illustrate: 'Pictures',
-  companion_draw: 'Drawings',
+  companion_ask: 'chat',
+  expand_node: 'lessons',
+  regenerate: 'lessons',
+  rewrite_block: 'lessons',
+  clarify: 'courses',
+  outline: 'courses',
+  companion_propose: 'courses',
+  companion_check_write: 'checks',
+  companion_check_grade: 'checks',
+  companion_check_follow_up: 'checks',
+  grade: 'checks',
+  companion_signals: 'material',
+  companion_exam_pdf: 'material',
+  companion_goal: 'courses',
+  companion_gaps: 'maps',
+  companion_map: 'maps',
+  illustrate: 'pictures',
+  companion_draw: 'drawings',
 }
 
 const spentOn = computed(() => {
   const shares = new Map<string, number>()
   for (const row of usage.value?.on ?? []) {
-    const name = ON[row.stage] ?? 'Other'
+    const name = t(`settings.usage.on.${ON[row.stage] ?? 'other'}`)
     shares.set(name, (shares.get(name) ?? 0) + row.percent)
   }
   return [...shares].sort((a, b) => b[1] - a[1]).filter(([, percent]) => percent > 0)
 })
 
 function resets(window: UsageWindow): string {
-  return window.resets_at ? `Resets in ${resetsIn(window.resets_at)}` : 'Not started'
+  return window.resets_at ? t('settings.usage.resets', { when: resetsIn(window.resets_at) }) : t('settings.usage.notStarted')
 }
 
 function expires(iso: string | null): string {
-  return iso ? new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+  return iso ? fmtDate(iso, { day: 'numeric', month: 'long', year: 'numeric' }) : ''
 }
 
 async function buy(id: string): Promise<void> {
@@ -68,10 +78,10 @@ async function buy(id: string): Promise<void> {
     const status = (raw as { status?: number } | null)?.status
     toast.error(
       status === 503
-        ? 'Credits aren\'t on sale yet. Nothing has been charged.'
+        ? t('settings.usage.errNoSale')
         : status === 403
-          ? 'Only the owner of this account can buy credits.'
-          : 'Could not open checkout. Try again in a moment.',
+          ? t('settings.usage.errOwner')
+          : t('settings.usage.errCheckout'),
     )
   } finally {
     buying.value = null
@@ -85,12 +95,89 @@ async function buy(id: string): Promise<void> {
       v-if="usage?.own_key"
       class="text-[15px] leading-relaxed text-text-soft"
     >
-      You're on your own model key, so what it writes isn't counted here. Web search and pictures still are.
+      {{ t('settings.usage.ownKey') }}
     </p>
 
-    <div>
+    <!-- Pro: the one offer here, drawn as something worth pressing. Only what
+         Pro really gives (config/plans.php): AI each session and week, about
+         65 lessons' worth a week, 20 GB synced. -->
+    <NuxtLink
+      v-if="usage?.plan === 'free'"
+      to="/app/settings?section=plan"
+      class="group grid gap-5 rounded-[18px] bg-accent-soft p-5 shadow-[inset_0_0_0_1px_var(--accent-line),var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[inset_0_0_0_1px_var(--accent-line),var(--shadow-raised)] focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none motion-reduce:transition-none min-[640px]:grid-cols-[minmax(0,1fr)_auto] min-[640px]:items-end min-[640px]:p-6"
+    >
+      <span class="grid gap-3.5">
+        <span class="flex items-center gap-3">
+          <CompanionAiBilim
+            :size="36"
+            mood="happy"
+            still
+            class="shrink-0"
+          />
+          <span class="grid">
+            <span class="font-display text-[21px] font-semibold tracking-[-0.02em] text-text">{{ t('settings.usage.proTitle') }}</span>
+            <span class="text-[13.5px] text-text-muted">{{ t('settings.usage.proBrand') }}</span>
+          </span>
+        </span>
+        <span class="grid gap-1.5 text-[14.5px] text-text-body">
+          <span
+            v-for="line in PRO"
+            :key="line"
+            class="flex items-start gap-2"
+          >
+            <UiIcon
+              name="check"
+              :size="16"
+              :stroke="2.4"
+              class="mt-[3px] shrink-0 text-accent-strong"
+            />
+            {{ line }}
+          </span>
+        </span>
+      </span>
+      <span class="inline-flex h-11 items-center justify-center gap-1.5 justify-self-start rounded-full bg-inverse px-5 text-[14.5px] font-semibold whitespace-nowrap text-on-inverse transition-colors group-hover:bg-inverse-hover min-[640px]:justify-self-end">
+        {{ t('settings.usage.upgrade') }}
+        <UiIcon
+          name="arrow-right"
+          :size="16"
+          :stroke="2.2"
+          class="transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+        />
+      </span>
+    </NuxtLink>
+
+    <!-- Free: no plan limits to show, so the ways to AI instead. -->
+    <div v-if="usage?.plan_ai === false && !usage.own_key">
       <h2 class="t-head text-[19px]">
-        Plan limits
+        {{ t('settings.usage.otherTitle') }}
+      </h2>
+      <i18n-t
+        keypath="settings.usage.otherText"
+        tag="p"
+        class="mt-1.5 text-[14px] leading-relaxed text-text-muted"
+      >
+        <template #key>
+          <NuxtLink
+            :to="MORE_AI.key"
+            class="font-semibold text-text underline underline-offset-4 hover:no-underline"
+          >
+            {{ t('settings.usage.otherKey') }}
+          </NuxtLink>
+        </template>
+        <template #apps>
+          <NuxtLink
+            :to="MORE_AI.apps"
+            class="font-semibold text-text underline underline-offset-4 hover:no-underline"
+          >
+            {{ t('settings.usage.otherApps') }}
+          </NuxtLink>
+        </template>
+      </i18n-t>
+    </div>
+
+    <div v-if="windows.length">
+      <h2 class="t-head text-[19px]">
+        {{ t('settings.usage.limits') }}
       </h2>
       <ul class="mt-2 divide-y divide-border-rule border-y border-border-rule">
         <li
@@ -103,7 +190,7 @@ async function buy(id: string): Promise<void> {
               {{ row.label }}
             </p>
             <p class="text-[14px] font-medium tabular-nums">
-              {{ row.percent }}% used
+              {{ t('settings.usage.used', { n: row.percent }) }}
             </p>
           </div>
           <div
@@ -128,7 +215,7 @@ async function buy(id: string): Promise<void> {
       <ul
         v-if="spentOn.length"
         class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13.5px] text-text-muted"
-        aria-label="What this week went on"
+        :aria-label="t('settings.usage.spentAria')"
       >
         <li
           v-for="[name, percent] in spentOn"
@@ -139,35 +226,25 @@ async function buy(id: string): Promise<void> {
       </ul>
     </div>
 
-    <NuxtLink
-      v-if="usage?.plan === 'free'"
-      to="/app/settings?section=plan"
-      class="group -mx-2 flex items-center justify-between gap-3 rounded-[12px] px-2 py-3 transition-colors hover:bg-surface-mute"
-    >
-      <span class="grid gap-0.5">
-        <span class="text-[15.5px] font-semibold">Pro has 8× the AI every session and 12× every week</span>
-        <span class="text-[13.5px] text-text-muted">$15 a month. It's the cheapest way to study a lot: credits cost about twice as much for the same AI.</span>
-      </span>
-      <CompanionIcon
-        name="chevron-right"
-        :size="18"
-        class="shrink-0 text-text-faint transition-colors group-hover:text-text-soft"
-      />
-    </NuxtLink>
-
     <div>
       <div class="flex items-baseline justify-between gap-4">
         <h2 class="t-head text-[19px]">
-          Credits
+          {{ t('settings.usage.credits') }}
         </h2>
         <p class="text-[15.5px] font-semibold tabular-nums">
           {{ (usage?.credits ?? 0).toLocaleString() }}
         </p>
       </div>
       <p class="mt-1.5 text-[14px] leading-relaxed text-text-muted">
-        Credits keep you going when a limit runs out, and aren't touched before then. A lesson is about 9 credits, a chat answer well under one.
+        <template v-if="usage?.plan_ai === false">
+          {{ t('settings.usage.creditsFree') }}
+        </template>
+        <template v-else>
+          {{ t('settings.usage.creditsPro') }}
+        </template>
+        {{ t('settings.usage.creditsCost') }}
         <template v-if="usage?.credits_expire_at">
-          Your earliest expire on {{ expires(usage.credits_expire_at) }}.
+          {{ t('settings.usage.creditsExpire', { date: expires(usage.credits_expire_at) }) }}
         </template>
       </p>
       <ul
@@ -181,7 +258,7 @@ async function buy(id: string): Promise<void> {
         >
           <span class="grid min-w-0 gap-0.5">
             <span class="text-[15.5px] font-semibold">{{ pack.name }}</span>
-            <span class="text-[13.5px] text-text-muted">{{ pack.description }} One-off, valid for a year.</span>
+            <span class="text-[13.5px] text-text-muted">{{ pack.description }} {{ t('settings.usage.packNote') }}</span>
           </span>
           <UiBtn
             variant="secondary"

@@ -3,7 +3,7 @@ import type { Flashcard, FlashcardsBlock } from '~/types/api'
 import BlockShell from './BlockShell.vue'
 
 /**
- * A real deck: flip, next/previous, shuffle, and a "got it / again" pass that
+ * A real deck: turn over (a fade, never a 3D flip), next/previous, shuffle, and a "got it / again" pass that
  * re-queues the cards the learner missed. Fully keyboard driven once focused —
  * space flips, arrows move, S shuffles.
  */
@@ -118,7 +118,7 @@ function onKeydown(event: KeyboardEvent): void {
     <template #actions>
       <span
         v-if="total"
-        class="num inline-flex h-6 items-center rounded-full bg-surface-sunken px-2.5 text-[11.5px] font-semibold text-text-soft"
+        class="num inline-flex h-6 items-center rounded-full bg-[rgb(var(--wash-rgb)/0.065)] px-2.5 text-[12px] font-semibold text-text-soft"
         >{{ known.size }}/{{ total }} known</span
       >
       <UiBtn
@@ -150,44 +150,34 @@ function onKeydown(event: KeyboardEvent): void {
           :aria-label="flipped ? 'Show the question' : 'Show the answer'"
           @click="flip"
         >
+          <!-- Daylight's card (course.css .fcard): the question on the card, the answer on sky.
+               Turning one over fades and slides the other in; nothing flips in 3D. -->
           <div
-            class="card-inner relative min-h-48 w-full"
+            class="card-inner grid min-h-44 w-full"
             :class="flipped && 'is-flipped'"
           >
-            <!-- The question on a small cobalt slab (gradient, beams, grain), the
-                 answer on lime: two faces you could tell apart across a room. -->
             <div
-              class="face cb-cobalt relative isolate grid min-h-48 place-items-center overflow-hidden rounded-[20px] px-6 py-10 text-center shadow-[0_24px_40px_-24px_rgb(20_40_200/0.55)]"
+              class="face face-front grid min-h-44 place-items-center rounded-[13px] bg-surface px-6 py-10 text-center shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)]"
+              :aria-hidden="flipped"
             >
-              <span class="cb-beams" />
-              <span class="cb-grain" />
-              <span
-                class="absolute top-3.5 left-4 rounded-full bg-white/12 px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-white/80 ring-1 ring-white/20"
-                >FRONT</span
-              >
+              <span class="absolute top-3.5 left-4 text-[11.5px] font-semibold text-text-muted">Question</span>
               <p
-                class="relative max-w-[460px] font-display text-[22px] leading-snug font-semibold tracking-[-0.02em] text-balance text-white"
+                class="max-w-[460px] font-display text-[21px] leading-[1.2] font-semibold tracking-[-0.02em] text-balance text-text"
               >
                 {{ current.front || '—' }}
               </p>
-              <span class="absolute bottom-3.5 text-[11px] text-white/60"
-                >click, or press space, to flip</span
-              >
+              <span class="absolute bottom-3.5 text-[11.5px] text-text-faint">Click, or press space, to turn it over</span>
             </div>
 
             <div
-              class="face face-back absolute inset-0 grid min-h-48 place-items-center rounded-[20px] bg-lime px-6 py-10 text-center"
+              class="face face-back grid min-h-44 place-items-center rounded-[13px] bg-sky-soft px-6 py-10 text-center shadow-[0_0_0_1px_var(--border),var(--shadow-card)]"
+              :aria-hidden="!flipped"
             >
-              <span
-                class="absolute top-3.5 left-4 rounded-full bg-ink px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-lime"
-                >BACK</span
-              >
-              <p class="max-w-[480px] text-[16.5px] leading-relaxed font-medium text-ink text-balance">
+              <span class="absolute top-3.5 left-4 text-[11.5px] font-semibold text-sky-ink">Answer</span>
+              <p class="max-w-[480px] text-[16px] leading-relaxed font-medium text-text text-balance">
                 {{ current.back || '—' }}
               </p>
-              <span class="absolute bottom-3.5 text-[11px] text-ink/60"
-                >press K to mark it known</span
-              >
+              <span class="absolute bottom-3.5 text-[11.5px] text-text-muted">Press K to mark it known</span>
             </div>
           </div>
         </button>
@@ -237,14 +227,14 @@ function onKeydown(event: KeyboardEvent): void {
       </div>
 
       <div
-        class="h-1.5 w-full overflow-hidden rounded-full bg-surface-track"
+        class="h-1.5 w-full overflow-hidden rounded-full bg-[rgb(var(--wash-rgb)/0.065)]"
         role="progressbar"
         :aria-valuenow="Math.round(progress)"
         aria-valuemin="0"
         aria-valuemax="100"
       >
         <div
-          class="h-full rounded-full bg-lime-2 transition-[width] duration-300"
+          class="h-full rounded-full bg-leaf transition-[width] duration-300"
           :style="{ width: `${progress}%` }"
         />
       </div>
@@ -274,37 +264,51 @@ function onKeydown(event: KeyboardEvent): void {
 </template>
 
 <style scoped>
-.deck {
-  perspective: 1400px;
-}
-
-.card-inner {
-  transform-style: preserve-3d;
-  transition: transform 0.45s cubic-bezier(0.16, 0.84, 0.44, 1);
-}
-
-.card-inner.is-flipped {
-  transform: rotateX(180deg);
-}
-
+/* Both faces sit in one grid cell; the one in front fades and slides in. */
 .face {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  position: relative;
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.3s var(--ease),
+    transform 0.45s var(--ease),
+    visibility 0s;
 }
 
-.face-back {
-  transform: rotateX(180deg);
+.face-back,
+.card-inner.is-flipped .face-front {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.3s var(--ease),
+    visibility 0s 0.3s;
+}
+
+.card-inner.is-flipped .face-back {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.3s var(--ease),
+    transform 0.45s var(--ease),
+    visibility 0s;
+}
+
+.card-inner.is-flipped .face-front {
+  transform: translateY(-8px);
 }
 
 .deck:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 4px;
-  border-radius: var(--radius-lg);
+  border-radius: 13px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-inner {
-    transition: none;
+  .face {
+    transition: none !important;
+    transform: none !important;
   }
 }
 </style>

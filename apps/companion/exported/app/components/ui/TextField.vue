@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     label?: string
@@ -23,6 +24,7 @@ const props = withDefaults(
   { type: 'text', rows: 4, size: 'md' },
 )
 
+const reveal = ref(false)
 const model = defineModel<string>({ default: '' })
 
 const uid = useId()
@@ -89,11 +91,11 @@ defineExpose({
         // setting, and reads as disabled when it is the thing you came here to
         // fill in — which is exactly what the course prompt is.
         multiline ? 'bg-surface' : 'bg-surface-mute focus-within:bg-surface',
-        // Focus is cobalt's lime halo — a lime line and a soft lime ring, the
+        // Focus is the sky ink of links: a sky line and a soft sky ring, the
         // same signal the landing's field gives when you click into it.
         error
           ? 'border-danger/60 focus-within:border-danger focus-within:shadow-[0_0_0_4px_var(--danger-soft)]'
-          : 'border-border-field focus-within:border-lime-2 focus-within:shadow-[0_0_0_4px_rgb(198_242_78/0.45)]',
+          : 'border-border-field focus-within:border-brand focus-within:shadow-[0_0_0_4px_var(--brand-line)]',
         disabled && 'pointer-events-none opacity-55',
       ]"
     >
@@ -126,7 +128,7 @@ defineExpose({
         :id="fieldId"
         ref="control"
         v-model="model"
-        :type="type"
+        :type="type === 'password' && reveal ? 'text' : type"
         :placeholder="placeholder"
         :disabled="disabled"
         :required="required"
@@ -142,6 +144,20 @@ defineExpose({
           icon ? 'pr-3.5 pl-10' : 'px-3.5',
         ]"
       >
+
+      <button
+        v-if="type === 'password' && !multiline"
+        type="button"
+        class="mr-1.5 grid size-8 shrink-0 place-items-center rounded-lg text-text-faint hover:text-text-dim"
+        :aria-label="reveal ? t('ui.hidePassword') : t('ui.showPassword')"
+        :aria-pressed="reveal"
+        @click="reveal = !reveal"
+      >
+        <UiIcon
+          :name="reveal ? 'eye-off' : 'eye'"
+          :size="16"
+        />
+      </button>
 
       <div
         v-if="$slots.suffix"

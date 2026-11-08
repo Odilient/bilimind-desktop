@@ -7,6 +7,7 @@ import { useAiContext } from '~/companion/ai/state'
 import { registerLiveDoc } from '~/companion/notes/actions'
 import { useCompanion } from '~/companion/store'
 import '~/components/page/page.css'
+const { t } = useI18n()
 
 /**
  * A note, open: the one code path for a page in Notes (`/app/notes/<id>`) and
@@ -84,7 +85,7 @@ useAiContext(() =>
   props.active && state.value === 'ready' && live.value
     ? {
         kind: 'page',
-        label: live.value.title || 'Untitled page',
+        label: live.value.title || t('course.tab.untitledPage'),
         itemId: props.itemId,
         subjectId: live.value.subject_id,
         topicId: live.value.topic_id,
@@ -98,7 +99,7 @@ useAiContext(() =>
 )
 
 if (!props.embedded) {
-  useHead({ title: computed(() => (live.value?.title ? `${live.value.title} · BiliMind` : 'Page · BiliMind')) })
+  useHead({ title: computed(() => (live.value?.title ? `${live.value.title} · BiliMind` : t('course.tab.pageHead'))) })
 }
 </script>
 
@@ -131,15 +132,15 @@ if (!props.embedded) {
         class="pg-route-empty"
       >
         <h1 class="t-head">
-          This page isn't here
+          {{ t('course.tab.noPage') }}
         </h1>
-        <p>It may have been deleted, or it belongs to another account.</p>
+        <p>{{ t('course.tab.noPageBody') }}</p>
         <UiBtn
           v-if="!embedded"
           variant="primary"
           to="/app/notes"
         >
-          Back to Notes
+          {{ t('course.tab.back') }}
         </UiBtn>
       </div>
       <div
@@ -147,21 +148,21 @@ if (!props.embedded) {
         class="pg-route-empty"
       >
         <h1 class="t-head">
-          Couldn't open this page
+          {{ t('course.tab.pageErr') }}
         </h1>
-        <p>The connection dropped while it was loading.</p>
+        <p>{{ t('course.tab.pageErrBody') }}</p>
         <UiBtn
           variant="primary"
           @click="load"
         >
-          Try again
+          {{ t('course.tab.retry') }}
         </UiBtn>
       </div>
       <div
         v-else
         class="pg-route-skeleton"
         aria-busy="true"
-        aria-label="Opening the page"
+        :aria-label="t('course.tab.openingPage')"
       >
         <span class="pg-skel is-crumbs" />
         <span class="pg-skel is-title" />

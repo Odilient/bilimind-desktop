@@ -5,6 +5,7 @@ import type { MenuAction } from '~/components/ui/Menu.vue'
 import type { StripTab } from '~/components/companion/course/Tabs.vue'
 import type { RunLang, SandboxTest } from '~/composables/useWasmSandbox'
 import type { CourseView } from '~/companion/course-home'
+import { useCourseNav } from '~/components/companion/course/Home.vue'
 import { OPEN_SANDBOX, type OpenSandboxPayload } from '~/composables/useWorkspace'
 import { useCompanion } from '~/companion/store'
 import { addLink, fileTarget, namedTarget, useCapture } from '~/companion/capture'
@@ -14,7 +15,7 @@ import { dayKey, shortDate, untilLabel } from '~/companion/time'
 import { readyWords } from '~/companion/words'
 import { dueTopics } from '~/companion/checks'
 import { isTopicBox, topicOfNode, topicsAsNodes, type TopicProgress } from '~/companion/roadmap'
-import { useLessonCourse, writeLesson } from '~/companion/lessons'
+import { lessonToWrite, useLessonCourse, writeLesson } from '~/companion/lessons'
 import { fetchFileUrl, knownFileUrl } from '~/companion/files'
 import { contextFrom } from '~/companion/doc/context'
 import { isTemplateKey, templateTitle as pageTitle, type TemplateKey } from '~/companion/doc/templates'
@@ -30,6 +31,7 @@ import { boardPreview } from '~/companion/board/ops'
 import { seedBoard } from '~/companion/board/persistence'
 import { makeBoard } from '~/companion/notes/make'
 import { archiveCourse, isArchived, restoreCourse } from '~/companion/shelf'
+import { useExport } from '~/companion/export/use-export'
 import { useAi, useAiContext } from '~/companion/ai/state'
 import { useQuietAi } from '~/companion/quiet-ai'
 import { usePanelWidth } from '~/companion/panel-width'
@@ -45,7 +47,7 @@ import {
  * A course: the old course workspace (`pages/[user]/[course].vue`) driven by
  * the companion's own rows, extended into the place a course is studied.
  *
- *   [rail] [ the course's outline ] [ header · strip · content ] [ Ask BiliMind ]
+ *   [rail] [ the course's outline ] [ header · strip · content ] [ Bili ]
  *
  *  - The left panel (`CompanionCourseSidebar`, the old sidebar's look): the
  *    course's lessons by week or unit, its notes and whiteboards as a tree,
@@ -59,7 +61,8 @@ import {
  *    inside the home, not tabs: they are the course, not things opened in it.
  *  - The home (`CompanionCourseHome`): the course's name, where it stands,
  *    progress in words, and a Continue that already knows what's next; then
- *    Roadmap · Weeks (or Path) · Deadlines · Notes · Materials · Practice.
+ *    Path (its map or its list by week or step, and its dates from the
+ *    corner) · Grades · Notes · Materials · Practice.
  *  - A lesson (`CompanionCourseLessonPane`): the old lesson view with its
  *    markup, history, sandbox and boards. The first lesson opened on a wide
  *    screen brings the companion in beside it, as the old page had its chat.
@@ -78,7 +81,7 @@ import {
  * (that class's notes). The address follows what is in front.
  *
  * On a phone: a 48px header (back, the title, Ask, "…"), the home's views on
- * a bottom bar (Map, Weeks or Path, Due, Notes, Files), and a document takes
+ * a bottom bar (the same switch as the desktop's), and a document takes
  * the whole screen with the way back to the view.
  *
  * `/app/courses/notebook` was Notes when Notes lived here; it goes to
@@ -100,6 +103,8 @@ const router = useRouter()
 const c = useCompanion()
 const capture = useCapture()
 const toast = useToast()
+// Exports.
+const exp = useExport()
 const api = useApi()
 const ai = useAi()
 const { quiet } = useQuietAi()
@@ -244,8 +249,7 @@ const nodesById = computed(() => new Map(nodes.value.map((node) => [node.id, nod
 async function setProgress(nodeId: number, state: ProgressState): Promise<void> {
   const before = marks.value[nodeId]
   marks.value = { ...marks.value, [nodeId]: state }
-  // A real lesson's progress lives on the server (the demo's answers in
-  // memory); a topic's is the companion's own.
+  // A real lesson's progress lives on the server; a topic's is the companion's own.
   if (!usingReal.value) return
   try {
     await api.post(`/nodes/${nodeId}/progress`, { state })
@@ -309,6 +313,16 @@ const sidebarNodes = computed<CourseNode[]>(() => {
     return section === node.section ? node : { ...node, section }
   })
 })
+
+/** Steps whose topic was recalled in a check: the filled leaf mark on the path and in the sidebar. */
+const checkedIds = computed(() =>
+  sidebarNodes.value
+    .filter((node) => {
+      const topic = topicOfNode(node, topics.value)
+      return topic ? c.topicCheck(topic.id)?.state === 'checked' : false
+    })
+    .map((node) => node.id),
+)
 
 const chapters = computed(() => {
   const sections = [...new Set(sidebarNodes.value.map((n) => n.section).filter(Boolean))] as string[]
@@ -524,7 +538,6 @@ function docKey(tab: DocTab): string | null {
 function docFromKey(key: string): DocTab | null {
   const [kind, rest] = [key.slice(0, key.indexOf(':')), key.slice(key.indexOf(':') + 1)]
   const lessonId = Number(rest)
-  // The demo's lessons have negative ids, so any whole number but zero is one.
   if (kind === 'lesson' && Number.isInteger(lessonId) && lessonId !== 0) {
     return { kind: 'lesson', id: key, nodeId: lessonId }
   }
@@ -590,6 +603,9 @@ const VIEW_ALIAS: Record<string, CourseView> = {
   deadlines: 'deadlines',
   due: 'deadlines',
   practice: 'practice',
+  // Tasks and grades.
+  grades: 'grades',
+  marks: 'grades',
   notes: 'notes',
   materials: 'materials',
   files: 'materials',
@@ -665,6 +681,37 @@ async function writeTopic(topic: Topic, instruction?: string): Promise<void> {
   openLesson(lessonId)
 }
 
+/**
+ * The lesson the learner is about to write by hand: its tab opens straight in
+ * the editor (NodeView's `compose`), once.
+ */
+const composeId = ref<number | null>(null)
+
+/** Write a topic's lesson yourself: bridged (no model, nothing spent), then opened to write in. */
+async function composeTopic(topic: Topic): Promise<void> {
+  const bridge = await lessonToWrite(topic)
+  if (!bridge) return
+  await lessons.refresh()
+  // One already written (or on its way) just opens; there is nothing to start. A centre's class
+  // lesson is the teacher's to write, so it only opens to read.
+  const canWrite = lessonCourse.value?.can_edit !== false
+  if (canWrite && (bridge.node_status === 'stub' || bridge.node_status === 'failed')) composeId.value = bridge.node_id
+  openLesson(bridge.node_id)
+}
+
+/** "Write it yourself" on a box: the topic behind it, opened to write in. */
+function compose(nodeId: number): void {
+  briefOpen.value = false
+  const node = nodesById.value.get(nodeId)
+  if (!node) return
+  const topic = topicOfNode(node, topics.value)
+  if (topic) void composeTopic(topic)
+  else if (!isTopicBox(node)) {
+    composeId.value = node.id
+    openLesson(node.id)
+  }
+}
+
 /** "Write this lesson" on a box: the topic behind it, written. */
 async function write(nodeId: number, instruction?: string): Promise<void> {
   const node = nodesById.value.get(nodeId)
@@ -697,6 +744,8 @@ function writeFromBrief(nodeId: number, instruction?: string): void {
 }
 
 const newLessonOpen = ref(false)
+/** The icon and colour picker, as on the course's card on the shelf. */
+const lookOpen = ref(false)
 
 /* -- Continue: the one thing to press ------------------------------------------ */
 
@@ -1054,7 +1103,7 @@ async function openFile(item: Item): Promise<void> {
     window.open(known, '_blank', 'noopener')
     return
   }
-  if (c.status.mode === 'demo' || !['file', 'photo', 'recording'].includes(item.kind)) {
+  if (!['file', 'photo', 'recording'].includes(item.kind)) {
     toast.info({
       title: item.title,
       body:
@@ -1184,6 +1233,11 @@ const actions = computed<MenuAction[]>(() => {
   if (hasCards.value || dueTopics(c, { subjectId: s.id }).length) {
     list.push({ label: 'Practice', icon: 'cards', run: () => showHome('practice') })
   }
+  // Tasks and grades: shown when Home's Grades tab is; the phone's
+  // bar has no room for it, as for Practice.
+  if (!isPath.value || c.deadlines.value.some((d) => d.subject_id === s.id && (d.weight_pct || d.grade != null))) {
+    list.push({ label: 'Grades', icon: 'list', run: () => showHome('grades') })
+  }
   list.push(
     { label: 'Revision whiteboard', icon: 'map', run: () => void newBoard({ template: 'revision' }) },
     { label: 'A page from a template', icon: 'file', run: () => void router.push(`/app/p/new?subject_id=${s.id}`) },
@@ -1195,6 +1249,9 @@ const actions = computed<MenuAction[]>(() => {
       run: () => void window.open(s.source_url!, '_blank', 'noopener'),
     })
   }
+  list.push({ label: 'Icon and colour…', icon: 'image', run: () => (lookOpen.value = true) })
+  // Exports: the whole course as one zip, as on its card on the shelf.
+  list.push({ label: 'Download this course', icon: 'download', run: () => void exp.course(s) })
   list.push(
     archived.value
       ? { label: 'Restore to the shelf', icon: 'refresh', run: () => void unarchive() }
@@ -1253,13 +1310,9 @@ function runPhone(action: MenuAction): void {
   action.run()
 }
 
-const PHONE_NAV = computed<{ view: CourseView; label: string; icon: string }[]>(() => [
-  { view: 'map', label: 'Map', icon: 'map' },
-  { view: mainView.value, label: isPath.value ? 'Path' : 'Weeks', icon: isPath.value ? 'path' : 'calendar' },
-  { view: 'deadlines', label: 'Due', icon: 'flag' },
-  { view: 'notes', label: 'Notes', icon: 'notebook' },
-  { view: 'materials', label: 'Files', icon: 'file' },
-])
+// The home's own switch, as the phone's bar: Path (its map, list and dates
+// switch inside it), Grades, Notes, Materials, Practice.
+const PHONE_NAV = useCourseNav(() => subject.value!)
 
 const pane = 'absolute inset-0 flex flex-col'
 
@@ -1292,9 +1345,10 @@ watch(
     </div>
   </div>
 
+  <!-- course.html's frame: the outline sits on the paper, the page you work on is a card. -->
   <div
     v-else
-    class="flex h-full min-h-0 flex-1 bg-surface"
+    class="flex h-full min-h-0 flex-1 bg-surface lg:bg-bg"
   >
     <!-- The skeleton: the workspace's own shape, so nothing jumps when it lands. -->
     <div
@@ -1304,7 +1358,7 @@ watch(
       aria-label="Opening the course"
     >
       <div
-        class="shrink-0 border-r border-border bg-surface-chrome p-4 max-lg:hidden"
+        class="shrink-0 p-4 max-lg:hidden"
         :style="{ width: sidebarSize.css.value }"
       >
         <div class="cp-skel h-6 w-40" />
@@ -1316,7 +1370,7 @@ watch(
           :style="{ width: `${60 + ((n * 37) % 35)}%` }"
         />
       </div>
-      <div class="grid min-w-0 flex-1 content-start gap-3 p-6 lg:p-8">
+      <div class="grid min-w-0 flex-1 content-start gap-3 bg-surface p-6 lg:my-2 lg:mr-2 lg:rounded-[14px] lg:p-8 lg:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]">
         <div class="cp-skel h-7 w-64" />
         <div class="cp-skel h-4 w-80" />
         <div class="cp-skel mt-4 h-[360px] rounded-[24px]" />
@@ -1338,7 +1392,9 @@ watch(
         :open-chapters="chapters.open"
         :current-chapter="chapters.current"
         :can-record="canRecord"
-        @home="showHome()"
+        :view="view"
+        :checked-ids="checkedIds"
+        @home="showHome($event)"
         @open-node="openBox"
         @write="write"
         @progress="setProgress"
@@ -1352,7 +1408,12 @@ watch(
         @record="record"
       />
 
-      <div class="flex min-w-0 flex-1 flex-col">
+      <div
+        :class="[
+          'flex min-w-0 flex-1 flex-col overflow-hidden bg-surface lg:my-2 lg:mr-2 lg:rounded-[14px] lg:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)]',
+          !sidebarOpen && 'lg:ml-2',
+        ]"
+      >
         <CompanionCourseHeader
           v-model:sidebar-open="sidebarOpen"
           class="max-lg:hidden"
@@ -1372,7 +1433,18 @@ watch(
           @board="newBoard()"
           @upload="pickFiles"
           @lesson="newLessonOpen = true"
-        />
+        >
+          <CompanionCourseTabs
+            :subject="subject"
+            :home-title="subject.title"
+            :home-color="courseColor(subject.color)"
+            :tabs="strip"
+            :active-id="activeId"
+            @focus="(tabId) => (tabId === HOME ? showHome() : focus(tabId))"
+            @close="close"
+            @move="move"
+          />
+        </CompanionCourseHeader>
 
         <!-- The phone's header: the way back, the title, Ask and the one menu. -->
         <header class="cp-safe-top shrink-0 border-b border-border bg-surface lg:hidden">
@@ -1437,16 +1509,6 @@ watch(
         />
 
         <main class="relative flex min-h-0 min-w-0 flex-1 flex-col bg-surface">
-          <CompanionCourseTabs
-            class="max-lg:hidden"
-            :home-title="subject.title"
-            :home-color="courseColor(subject.color)"
-            :tabs="strip"
-            :active-id="activeId"
-            @focus="(tabId) => (tabId === HOME ? showHome() : focus(tabId))"
-            @close="close"
-            @move="move"
-          />
 
           <!--
             The home and every open document are panes stacked in here,
@@ -1472,6 +1534,7 @@ watch(
                 @continue="runContinue"
                 @open-box="openBox"
                 @write="write"
+                @compose="compose"
                 @brief="showBrief"
                 @progress="setProgress"
                 @open-topic="openTopic"
@@ -1499,11 +1562,13 @@ watch(
                 :topic-id="topics.find((t) => t.node_id === tab.nodeId)?.id ?? null"
                 :language="lessonCourse?.language"
                 :level="lessonCourse?.level ?? undefined"
-                :editable="c.status.mode !== 'demo' && !isPhone"
-                :author="c.status.mode !== 'demo'"
+                :editable="!isPhone"
+                author
                 :allows-code="lessonCourse?.allows_code ?? false"
                 :preview="historyNodeId === tab.nodeId ? previewDetail : null"
                 :refresh-token="refreshTokens[tab.nodeId] ?? 0"
+                :compose="composeId === tab.nodeId"
+                @composed="composeId = null"
                 @changed="onLessonChanged(tab.nodeId)"
                 @history="openHistory"
                 @board="openMarkup"
@@ -1583,28 +1648,28 @@ watch(
         >
           <button
             v-for="item in PHONE_NAV"
-            :key="item.view"
+            :key="item.label"
             type="button"
             :class="[
               'flex min-h-11 min-w-0 flex-1 cursor-pointer flex-col items-center gap-[3px] py-1 transition-colors',
-              view === item.view ? 'text-text' : 'text-text-muted',
+              item.views.includes(view) ? 'text-text' : 'text-text-muted',
             ]"
-            :aria-current="view === item.view ? 'page' : undefined"
-            @click="showHome(item.view)"
+            :aria-current="item.views.includes(view) ? 'page' : undefined"
+            @click="item.views.includes(view) || showHome(item.view)"
           >
             <span
               :class="[
                 'grid h-[26px] w-[44px] place-items-center rounded-full transition-colors',
-                view === item.view ? 'bg-accent-soft text-accent-strong' : '',
+                item.views.includes(view) ? 'bg-accent-soft text-accent-strong' : '',
               ]"
             >
               <CompanionIcon
                 :name="item.icon"
                 :size="20"
-                :stroke="view === item.view ? 2.1 : 1.8"
+                :stroke="item.views.includes(view) ? 2.1 : 1.8"
               />
             </span>
-            <span :class="['text-[10.5px]', view === item.view ? 'font-semibold' : 'font-medium']">{{ item.label }}</span>
+            <span :class="['truncate text-[10.5px]', item.views.includes(view) ? 'font-semibold' : 'font-medium']">{{ item.label }}</span>
           </button>
         </nav>
       </div>
@@ -1625,7 +1690,12 @@ watch(
         @restore="restoreRevision"
       />
 
-      <CompanionAiPanel />
+      <!-- The dock as course.html's assistant card on the paper, framed the way the layout frames it. -->
+      <div
+        class="shrink-0 empty:hidden max-xl:hidden xl:my-2 xl:mr-2 xl:overflow-hidden xl:rounded-[14px] xl:shadow-[0_0_0_1px_var(--border),var(--shadow-raised)] [&>aside]:h-full [&>aside]:border-l-0"
+      >
+        <CompanionAiPanel />
+      </div>
     </template>
 
     <input
@@ -1660,6 +1730,8 @@ watch(
         :nodes="nodes"
         @open="openFromBrief"
         @expand="writeFromBrief"
+        can-compose
+        @compose="compose"
         @focus="briefId = $event"
         @progress="setProgress"
       />
@@ -1685,6 +1757,8 @@ watch(
         phone
         @open="openFromBrief"
         @expand="writeFromBrief"
+        can-compose
+        @compose="compose"
         @focus="briefId = $event"
         @progress="setProgress"
       />
@@ -1695,6 +1769,13 @@ watch(
       v-model:open="newLessonOpen"
       :subject="subject"
       @write="writeTopic"
+      @compose="composeTopic"
+    />
+
+    <CompanionCoursesLookDialog
+      v-if="subject"
+      v-model:open="lookOpen"
+      :subject="subject"
     />
 
     <!-- The phone's "…": every action, each a row the thumb can hit. -->

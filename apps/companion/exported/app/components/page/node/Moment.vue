@@ -54,7 +54,7 @@ function commitTime(): void {
   const attrs: Record<string, unknown> = { at_seconds: next }
   // An untouched quote follows the time to what was said there.
   if (!quote.value.trim()) {
-    const said = transcriptAt(env.ctx.value, next, env.repo.mode === 'demo')
+    const said = transcriptAt(env.ctx.value, next)
     if (said) {
       attrs.quote = said
       quote.value = said

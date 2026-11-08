@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * A photo (or PDF) of a timetable or an exam schedule, from any school.
- * BiliMind reads the classes and dates and puts what it found in the Inbox;
+ * BiliMind reads the classes and dates and puts what it found on Today;
  * nothing is added until the learner says yes. Lifted out of the old
  * /app/start.
  */
@@ -61,8 +61,8 @@ async function onPick(event: Event): Promise<void> {
       {{ found ? `Found ${found} thing${found === 1 ? '' : 's'} to check.` : 'Nothing new in that PDoto.' }}
       <NuxtLink
         v-if="found"
-        to="/app/inbox"
-        class="ml-1 font-semibold text-cobalt hover:underline"
+        to="/app"
+        class="ml-1 font-semibold text-brand hover:underline"
       >Look at what it found</NuxtLink>
     </p>
     <input

@@ -1,13 +1,15 @@
 <script setup lang="ts">
+const { t } = useI18n()
 import type { Item } from '~/companion/types'
 import { useNoteActions } from '~/companion/notes/actions'
-import { noteIcon, noteWord } from '~/companion/notes/tree'
+import { noteIcon } from '~/companion/notes/tree'
 import { fetchFileUrl, knownFileUrl } from '~/companion/files'
 import { newChatLink } from '~/companion/ai/routes'
 import { useAiContext } from '~/companion/ai/state'
 import { useQuietAi } from '~/companion/quiet-ai'
 import { durationLabel, untilLabel } from '~/companion/time'
 import { useCompanion } from '~/companion/store'
+import { deviceMediaUrl, settleDuration } from '~/companion/recording'
 
 /**
  * An upload, a photo, a link or a recording, open in Notes: the same 48px
@@ -17,13 +19,13 @@ import { useCompanion } from '~/companion/store'
  *  - a photo fills the width, up to most of the screen's height;
  *  - a PDF opens in the browser's own reader, inline; any other file is a
  *    card with its name, type and size, Open and Download;
- *  - a link is its address, the site it's on, and Open (a new tab);
+ *  - a link is its player or picture where the service allows one, the site
+ *    it's on, its address, and Open (a new tab): `CompanionLinksPreview`;
  *  - a recording is a player, with its length.
  *
  * The bytes come from the item's signed link when the device has one, else
- * from the API (`fetchFileUrl`), which signs a fresh one; the demo's seeded
- * photos and recordings have none, and say so instead of drawing a broken
- * image. Nothing here plays by itself.
+ * from the API (`fetchFileUrl`), which signs a fresh one. Nothing here plays
+ * by itself.
  */
 const props = defineProps<{ itemId: string }>()
 
@@ -34,12 +36,12 @@ const { quiet } = useQuietAi()
 const item = computed<Item | null>(() => store.get('items', props.itemId))
 const missing = computed(() => store.status.ready && (!item.value || Boolean(item.value.deleted_at)))
 
-useHead(() => ({ title: item.value ? `${item.value.title || 'Untitled'} · BiliMind` : 'Notes · BiliMind' }))
+useHead(() => ({ title: item.value ? `${item.value.title || t('notes.untitled')} · BiliMind` : t('notes.notesTitle') }))
 
 // What the companion sees: this note, by name.
 useAiContext(() =>
   item.value
-    ? { kind: 'notes', label: item.value.title || 'Untitled', itemId: item.value.id, subjectId: item.value.subject_id }
+    ? { kind: 'notes', label: item.value.title || t('notes.untitled'), itemId: item.value.id, subjectId: item.value.subject_id }
     : null,
 )
 
@@ -58,12 +60,16 @@ watch(
       url.value = row.meta.url ?? null
       return
     }
+    // Recording: kept on the computer that made it, served there by the desktop app and nowhere else.
+    if (row.meta.on_device) {
+      url.value = deviceMediaUrl(row)
+      return
+    }
     const known = knownFileUrl(row)
     if (known) {
       url.value = known
       return
     }
-    if (store.status.mode === 'demo') return
     asking.value = true
     url.value = await fetchFileUrl(row)
     if (item.value?.id === id) asking.value = false
@@ -86,23 +92,23 @@ function sizeLabel(bytes: number | undefined): string {
 }
 
 function typeLabel(row: Item): string {
-  if (row.kind === 'link') return 'Link'
-  if (row.kind === 'recording') return 'Recording'
-  if (row.kind === 'photo') return 'Photo'
+  if (row.kind === 'link') return t('notes.typeLink')
+  if (row.kind === 'recording') return t('notes.recording')
+  if (row.kind === 'photo') return t('notes.photo')
   const m = row.meta.mime ?? ''
   if (m === 'application/pdf') return 'PDF'
-  if (m.startsWith('image/')) return 'Image'
-  if (m.includes('presentation') || m.includes('powerpoint')) return 'Slides'
-  if (m.includes('word') || m.includes('document')) return 'Document'
-  if (m.includes('sheet') || m.includes('excel') || m === 'text/csv') return 'Spreadsheet'
+  if (m.startsWith('image/')) return t('notes.typeImage')
+  if (m.includes('presentation') || m.includes('powerpoint')) return t('notes.typeSlides')
+  if (m.includes('word') || m.includes('document')) return t('notes.typeDocument')
+  if (m.includes('sheet') || m.includes('excel') || m === 'text/csv') return t('notes.typeSheet')
   const ext = /\.([a-z0-9]{1,5})$/i.exec(row.title)?.[1]
-  return ext ? `${ext.toUpperCase()} file` : 'File'
+  return ext ? t('notes.typeExt', { ext: ext.toUpperCase() }) : t('notes.file')
 }
 
 const facts = computed(() => {
   const row = item.value
   if (!row) return []
-  const added = row.created_at && Date.parse(row.created_at) <= Date.now() ? `added ${untilLabel(row.created_at)}` : ''
+  const added = row.created_at && Date.parse(row.created_at) <= Date.now() ? t('notes.addedAgo', { when: untilLabel(row.created_at) }) : ''
   return [
     typeLabel(row),
     row.kind === 'recording' && row.meta.duration_s ? durationLabel(row.meta.duration_s) : sizeLabel(row.meta.size),
@@ -110,24 +116,12 @@ const facts = computed(() => {
   ].filter(Boolean)
 })
 
-const host = computed(() => {
-  try {
-    return url.value ? new URL(url.value).hostname.replace(/^www\./, '') : ''
-  } catch {
-    return ''
-  }
-})
-
-/** Why there's nothing to show: the demo's samples have no bytes behind them. */
+/** Why there's nothing to show. */
 const empty = computed(() => {
   const row = item.value
   if (!row || url.value || asking.value) return ''
-  if (store.status.mode === 'demo') {
-    return row.kind === 'recording'
-      ? 'A sample recording in the demo: there is no sound behind it.'
-      : `A sample ${noteWord(row)} in the demo: there is nothing behind it to show.`
-  }
-  return 'It can’t be opened right now. Try again when you’re online.'
+  if (row.meta.on_device) return t('notes.onDevice')
+  return t('notes.cantOpen')
 })
 
 function rename(value: string): void {
@@ -153,17 +147,17 @@ function ask(): void {
       class="mx-auto grid max-w-[420px] content-center gap-3 px-6 py-24 text-center"
     >
       <h1 class="t-head text-[28px]">
-        This note isn't here
+        {{ t('notes.notFound') }}
       </h1>
       <p class="text-[15px] text-text-muted">
-        It may have been deleted, or it's on a device that hasn't synced yet.
+        {{ t('notes.notFoundBody') }}
       </p>
       <div>
         <UiBtn
           variant="secondary"
           to="/app/notes"
         >
-          Back to Notes
+          {{ t('notes.backToNotes') }}
         </UiBtn>
       </div>
     </div>
@@ -193,7 +187,7 @@ function ask(): void {
             <span>{{ facts.join(' · ') }}</span>
           </p>
           <h1 class="t-head text-[28px] break-words lg:text-[34px]">
-            {{ item.title || 'Untitled' }}
+            {{ item.title || t('notes.untitled') }}
           </h1>
         </header>
 
@@ -217,6 +211,16 @@ function ask(): void {
           class="h-[76vh] w-full rounded-[18px] border border-border bg-surface-sunken"
         />
 
+        <!-- A screen recording (desktop): its picture, never started by itself. -->
+        <video
+          v-else-if="item.meta.screen && url"
+          :src="url"
+          controls
+          preload="metadata"
+          class="max-h-[72vh] w-full rounded-[18px] bg-inverse"
+          @loadedmetadata="settleDuration"
+        />
+
         <!-- A recording: a player, never started by itself. -->
         <div
           v-else-if="isAudio && url"
@@ -227,37 +231,15 @@ function ask(): void {
             controls
             preload="none"
             class="w-full"
+            @loadedmetadata="settleDuration"
           />
         </div>
 
-        <!-- A link: where it goes. -->
-        <div
+        <!-- A link: the thing itself where the service allows it, and where it goes. -->
+        <CompanionLinksPreview
           v-else-if="item.kind === 'link'"
-          class="grid gap-4 rounded-[18px] p-5 shadow-[inset_0_0_0_1px_var(--border)]"
-        >
-          <div class="flex min-w-0 items-center gap-3">
-            <span class="grid size-11 shrink-0 place-items-center rounded-full bg-cobalt-soft text-cobalt">
-              <UiIcon
-                name="link"
-                :size="19"
-              />
-            </span>
-            <span class="grid min-w-0">
-              <span class="truncate text-[15px] font-semibold text-text">{{ host || 'A link' }}</span>
-              <span class="text-[13px] break-all text-text-muted">{{ url }}</span>
-            </span>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <UiBtn
-              v-if="url"
-              variant="primary"
-              :href="url"
-              trailing-icon="arrow-up-right"
-            >
-              Open link
-            </UiBtn>
-          </div>
-        </div>
+          :item="item"
+        />
 
         <!-- Any other file: what it is, and the ways to open it. -->
         <div
@@ -279,18 +261,18 @@ function ask(): void {
               variant="primary"
               :href="url"
             >
-              Open
+              {{ t('notes.open') }}
             </UiBtn>
             <a
               :href="url"
               :download="item.title"
-              class="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[14px] font-semibold text-text shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-cobalt"
+              class="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[14px] font-semibold text-text shadow-[inset_0_0_0_1px_var(--border-strong)] transition-colors hover:bg-surface-mute focus-visible:outline-2 focus-visible:outline-brand"
             >
               <UiIcon
                 name="download"
                 :size="15"
               />
-              Download
+              {{ t('notes.download') }}
             </a>
           </span>
         </div>
@@ -325,17 +307,23 @@ function ask(): void {
           <UiBtn
             variant="secondary"
             size="sm"
-            :title="`Start a chat with “${item.title || 'this'}” attached`"
+            :title="t('notes.chatAttached', { title: item.title || t('notes.thisNote') })"
             @click="ask"
           >
             <UiIcon
               name="spark"
               :size="14"
-              class="text-cobalt"
+              class="text-brand"
             />
-            Ask about it
+            {{ t('notes.askAbout') }}
           </UiBtn>
         </div>
+
+        <!-- Recording: what was said, written on the desktop that holds it. -->
+        <CompanionRecordingTranscript
+          v-if="item.kind === 'recording'"
+          :item="item"
+        />
       </article>
     </div>
   </div>

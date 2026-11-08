@@ -20,7 +20,7 @@
  *  - The "+" (AttachMenu): upload files, attach notes, add a link, paste
  *    text, a Moodle course, a calendar link, and "Connect your school…".
  *    Its first row is the mode "Make a course": on, it sits in the box as a
- *    lime pill and the next message drafts a course whatever it says.
+ *    highlighter pill and the next message drafts a course whatever it says.
  *  - The other mode, "Checking your attempt" (its tile, or the button under
  *    an answer that asked for the learner's attempt first), is the same
  *    pill: the box asks for their working ("Paste your working, or add a
@@ -38,12 +38,14 @@
  * holds (a ring where the arrow was) and sends by itself when the last one
  * is in.
  *
- * Two shapes. In a panel (`md`) it is one line: +, the field, send. On a
+ * Two shapes. In a panel (`md`) it is the field over a row of +, then send. On a
  * page (`lg`, the chat page's empty state and its thread) it is the usual
  * Design's: the field first, the chips under it, then one row of square
  * 44px controls, the +, "Answers from ▾ / All your courses" (`sources`,
- * the chat's course picker), the picked tile as a chip, and the lime send
- * at the right end, faded until there is something to send.
+ * the chat's course picker), the picked tile as a chip, and the ink send
+ * at the right end, faded until there is something to send. In a panel the
+ * same row has "Reads ▾ / This lesson" (`ScopePick`) where a screen offers a
+ * narrower choice than everything.
  *
  * Enter sends, Shift+Enter is a new line, and an IME still composing a word
  * keeps its Enter. ↑ in an empty box asks for the last question back
@@ -61,6 +63,8 @@ import { pickFolder } from '~/companion/folder'
 import { useCompanion } from '~/companion/store'
 import type { AttachChoice } from './AttachMenu.vue'
 import { resetsIn, useUsage } from '~/companion/usage'
+// Google
+import { importFromDrive } from '~/companion/google/drive'
 
 const props = withDefaults(
   defineProps<{
@@ -88,7 +92,7 @@ const props = withDefaults(
   }>(),
   {
     size: 'md',
-    placeholder: 'Ask anything, or tell it what to make…',
+    placeholder: 'Ask Bili, or tell it what to make…',
     focusKey: 0,
     tools: true,
     dropzone: false,
@@ -318,7 +322,19 @@ function choose(choice: AttachChoice): void {
       if (folder) tray.addMoodle(folder as never)
     })
   } else if (choice === 'calendar') calendarOpen.value = true
+  else if (choice === 'drive') void fromDrive()
   else openConnect(choice.slice('connect:'.length) as ConnectKind)
+}
+
+/*
+ * Google: files picked in Drive are brought in like an upload from the
+ * chat, into My notes (the chat files nothing; the class on now is only
+ * suggested), and ride along on the message as notes.
+ */
+async function fromDrive(): Promise<void> {
+  const items = await importFromDrive(c)
+  if (items.length) tray.addNotes(items.map((i) => i.id))
+  focus()
 }
 
 function openPaste(item: TextAttachment | null = null): void {
@@ -401,27 +417,29 @@ const placeholderNow = computed(() => {
 defineExpose({ focus, openConnect, openMenu: () => (menuOpen.value = true) })
 
 const toolBtn =
-  'grid shrink-0 cursor-pointer place-items-center rounded-full text-text-soft transition-[background-color,color] duration-150 outline-none hover:bg-surface-sunken hover:text-text focus-visible:bg-surface-sunken focus-visible:text-text'
-/** A page's row of controls: square, bordered, 44px, so the row reads as tools and not as chips. */
+  'grid shrink-0 cursor-pointer place-items-center rounded-[10px] text-text-dim transition-[background-color,color] duration-150 outline-none hover:bg-surface-sunken hover:text-text focus-visible:bg-surface-sunken focus-visible:text-text'
+/** A page's row of controls: the hero field's tools, 40px, quiet until hovered. */
 const squareBtn =
-  'grid size-11 shrink-0 cursor-pointer place-items-center rounded-[12px] text-text-soft shadow-[inset_0_0_0_1px_var(--border)] transition-[background-color,color,box-shadow] duration-150 outline-none hover:bg-surface-sunken hover:text-text hover:shadow-[inset_0_0_0_1px_var(--border-field)] focus-visible:shadow-[inset_0_0_0_1.5px_var(--brand-line)]'
+  'grid size-10 shrink-0 cursor-pointer place-items-center rounded-[10px] text-text-dim transition-[background-color,color,box-shadow] duration-150 outline-none hover:bg-surface-sunken hover:text-text focus-visible:shadow-[inset_0_0_0_1.5px_var(--brand-line)] max-lg:size-11'
+/** Send, Stop and the waiting ring: one ink disc, the landing's send. */
+const sendBtn = 'grid shrink-0 place-items-center rounded-full transition-[opacity,transform,background-color] duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]'
 
-const { tightest, ensure: ensureUsage } = useUsage()
+const { tightest, limited, ensure: ensureUsage } = useUsage()
 onMounted(ensureUsage)
 </script>
 
 <template>
-  <div class="ai-composer">
+  <div class="ai-composer relative isolate">
     <slot name="above" />
 
     <div
       :class="[
-        'group/box relative flex cursor-text flex-col bg-surface transition-[box-shadow] duration-150',
+        'group/box ai-box relative flex cursor-text flex-col bg-surface transition-[box-shadow] duration-300',
         lg
-          ? 'rounded-[22px] shadow-[inset_0_0_0_1px_var(--border-field),var(--shadow-raised)] hover:shadow-[inset_0_0_0_1px_var(--border-dashed),var(--shadow-raised)]'
-          : 'rounded-[18px] p-1.5 shadow-[inset_0_0_0_1px_var(--border-field)] hover:shadow-[inset_0_0_0_1px_var(--border-dashed)]',
-        'focus-within:shadow-[inset_0_0_0_1.5px_var(--lime-2),0_0_0_4px_var(--accent-soft)] focus-within:hover:shadow-[inset_0_0_0_1.5px_var(--lime-2),0_0_0_4px_var(--accent-soft)]',
-        over && 'shadow-[inset_0_0_0_1.5px_var(--cobalt),0_0_0_4px_var(--brand-soft)]',
+          ? 'rounded-[24px] shadow-[0_0_0_1px_var(--border-strong),var(--shadow-lift)] focus-within:shadow-[0_0_0_1px_var(--border-strong),0_0_0_5px_color-mix(in_oklab,var(--accent)_45%,transparent),var(--shadow-lift)] dark:focus-within:shadow-[0_0_0_1px_var(--border-field),0_0_0_4px_rgb(var(--wash-rgb)/0.08),var(--shadow-lift)]'
+          : 'rounded-[16px] p-1.5 shadow-[0_0_0_1px_var(--border-strong),var(--shadow-card)] focus-within:shadow-[0_0_0_1px_var(--border-dashed),var(--shadow-raised)]',
+        over && 'shadow-[0_0_0_1.5px_var(--brand),0_0_0_5px_var(--brand-soft)]',
+        busy && 'is-thinking',
         disabled && 'pointer-events-none opacity-60',
       ]"
       @click="focus"
@@ -429,9 +447,20 @@ onMounted(ensureUsage)
       @dragleave="over = false"
       @drop="onDrop"
     >
+      <!-- The assistant's glow: wakes on focus, turns faster while it answers. -->
+      <span
+        class="ai-glow"
+        aria-hidden="true"
+      />
+      <!-- Out, and known before asking: the ways forward, here, without blocking the box. -->
+      <CompanionOutOfAi
+        v-if="limited"
+        :class="['text-text-muted', lg ? 'mx-4 mt-3' : 'mx-2 mt-1']"
+        @click.stop
+      />
       <!-- Nearly out: said here, where the next question would run into it. -->
       <NuxtLink
-        v-if="tightest"
+        v-else-if="tightest"
         to="/app/settings?section=usage"
         :class="['flex items-center justify-between gap-3 text-[12.5px] text-text-muted transition-colors hover:text-text', lg ? 'mx-4 mt-3' : 'mx-2 mt-1']"
         @click.stop
@@ -443,19 +472,19 @@ onMounted(ensureUsage)
       <!-- The passage being asked about. -->
       <div
         v-if="quote"
-        :class="['animate-fade mb-1 flex items-start gap-2 rounded-[12px] bg-surface-sunken py-2 pr-1.5 pl-2.5', lg ? 'mx-3 mt-3' : 'mx-1 mt-1']"
+        :class="['animate-fade mb-1 flex items-start gap-2 rounded-[10px] bg-accent-soft py-2 pr-1.5 pl-2.5', lg ? 'mx-3 mt-3' : 'mx-1 mt-1']"
       >
         <UiIcon
           name="chat"
           :size="13"
-          class="mt-[3px] shrink-0 text-text-faint"
+          class="mt-[3px] shrink-0 text-accent-strong"
         />
-        <p class="line-clamp-3 min-w-0 flex-1 text-[12.5px] leading-[1.5] text-text-soft italic">
+        <p class="line-clamp-3 min-w-0 flex-1 text-[12.5px] leading-[1.5] text-text-body">
           {{ quote }}
         </p>
         <button
           type="button"
-          class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-full text-text-faint transition-colors hover:bg-surface-track hover:text-text focus-visible:bg-surface-track"
+          class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-full text-text-muted transition-colors hover:bg-accent-line hover:text-text focus-visible:bg-accent-line"
           aria-label="Stop asking about this passage"
           title="Remove"
           @click.stop="emit('clear-quote')"
@@ -517,17 +546,19 @@ onMounted(ensureUsage)
         </div>
       </template>
 
-      <div :class="lg ? 'contents' : 'flex items-end gap-1'">
+      <!-- In a panel, course.html's assistant box: the line on top, full width; +, then send, under it. -->
+      <div :class="lg ? 'contents' : 'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-1'">
         <CompanionAiAttachMenu
           v-if="!lg && tools"
           v-model:open="menuOpen"
           :course="course"
           :placement="menuPlacement"
+          class="col-start-1 row-start-2"
           @choose="choose"
         >
           <button
             type="button"
-            :class="[toolBtn, 'size-[38px] max-lg:size-11', menuOpen && 'bg-surface-sunken text-text']"
+            :class="[toolBtn, 'size-9 max-lg:size-11', menuOpen && 'bg-surface-sunken text-text']"
             aria-label="Add files, notes, links and more"
             title="Add files, notes, links and more"
             aria-haspopup="menu"
@@ -543,20 +574,27 @@ onMounted(ensureUsage)
           </button>
         </CompanionAiAttachMenu>
 
-        <div class="relative min-w-0 flex-1">
+        <!-- In a panel, what it reads (this lesson · the course · everything), where there's a choice. -->
+        <CompanionAiScopePick
+          v-if="!lg && tools"
+          :placement="menuPlacement"
+          class="col-start-2 row-start-2 justify-self-start"
+        />
+
+        <div :class="['relative min-w-0', lg ? 'flex-1' : 'col-span-3 row-start-1']">
           <textarea
             ref="field"
             v-model="text"
             rows="1"
             :placeholder="placeholderNow"
             :disabled="disabled"
-            :aria-label="course ? 'What do you want to learn?' : attempt ? 'Your attempt' : 'Ask BiliMind'"
+            :aria-label="course ? 'What do you want to learn?' : attempt ? 'Your attempt' : 'Ask Bili'"
             enterkeyhint="send"
             :class="[
               'block w-full resize-none bg-transparent text-text outline-none placeholder:text-text-faint',
               lg
                 ? ['px-[18px] pt-4 pb-2 text-[16px] leading-[1.5]', hero ? 'min-h-[92px] min-[900px]:text-[17px]' : 'min-h-[52px]']
-                : 'min-h-[38px] px-2 py-[9px] text-[14px] leading-[1.45] max-lg:text-[16px]',
+                : 'min-h-9 px-2 pt-1.5 pb-1 text-[14px] leading-[1.5] max-lg:text-[16px]',
             ]"
             @keydown="onKeydown"
             @paste="onPaste"
@@ -566,7 +604,7 @@ onMounted(ensureUsage)
             v-if="!text && examples.length"
             :class="[
               'pointer-events-none absolute inset-x-0 top-0 overflow-hidden text-text-faint',
-              lg ? ['px-[18px] pt-4 text-[16px] leading-[1.5]', hero && 'min-[900px]:text-[17px]'] : 'px-2 pt-[9px] text-[14px] leading-[1.45] max-lg:text-[16px]',
+              lg ? ['px-[18px] pt-4 text-[16px] leading-[1.5]', hero && 'min-[900px]:text-[17px]'] : 'px-2 pt-1.5 text-[14px] leading-[1.5] max-lg:text-[16px]',
             ]"
             aria-hidden="true"
           >
@@ -588,14 +626,14 @@ onMounted(ensureUsage)
         <!-- A paste that is really a link. -->
         <div
           v-if="offer"
-          :class="['animate-fade mt-1 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-[12px] bg-cobalt-soft px-3 py-2', lg ? 'mx-3' : 'hidden']"
+          :class="['animate-fade mt-1 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-[12px] bg-brand-soft px-3 py-2', lg ? 'mx-3' : 'hidden']"
           role="status"
           @click.stop
         >
           <UiIcon
             name="link"
             :size="14"
-            class="shrink-0 text-cobalt"
+            class="shrink-0 text-brand"
           />
           <span class="min-w-0 flex-1 text-[12.5px] leading-snug text-text-body">{{ offerWords }}</span>
           <span class="flex shrink-0 items-center gap-1">
@@ -704,7 +742,7 @@ onMounted(ensureUsage)
           <button
             v-if="busy"
             type="button"
-            class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-[12px] bg-ink text-paper transition-[background-color,transform] duration-150 hover:bg-ink-2 active:scale-95"
+            :class="[sendBtn, 'size-10 cursor-pointer bg-inverse text-on-inverse hover:bg-inverse-hover active:scale-95 max-lg:size-11']"
             aria-label="Stop answering"
             title="Stop"
             @click="emit('stop')"
@@ -714,7 +752,7 @@ onMounted(ensureUsage)
           <button
             v-else-if="queued"
             type="button"
-            class="grid size-11 shrink-0 cursor-pointer place-items-center rounded-[12px] bg-accent text-on-accent transition-transform duration-150 active:scale-95"
+            :class="[sendBtn, 'size-10 cursor-pointer bg-chip text-accent active:scale-95 max-lg:size-11']"
             aria-label="Sending once the files are up. Press to cancel."
             title="Sends when the files are up · press to wait instead"
             @click="queued = false"
@@ -730,8 +768,9 @@ onMounted(ensureUsage)
             type="button"
             :disabled="!canSend"
             :class="[
-              'grid size-11 shrink-0 place-items-center rounded-[12px] bg-accent text-on-accent transition-[opacity,transform,filter] duration-150',
-              canSend ? 'cursor-pointer hover:brightness-95 active:scale-95' : 'cursor-default opacity-40',
+              sendBtn,
+              'size-10 bg-inverse text-on-inverse max-lg:size-11',
+              canSend ? 'cursor-pointer hover:scale-[1.06] active:scale-95' : 'cursor-default opacity-25',
             ]"
             :aria-label="course ? 'Draft the course' : 'Send'"
             :title="tray.uploading.value ? 'Send (Enter) · waits for the files' : course ? 'Draft the course (Enter)' : 'Send (Enter)'"
@@ -751,7 +790,7 @@ onMounted(ensureUsage)
           <button
             v-if="busy"
             type="button"
-            class="grid size-[38px] shrink-0 cursor-pointer place-items-center rounded-full bg-ink text-paper transition-[background-color,transform] duration-150 hover:bg-ink-2 active:scale-95 max-lg:size-11"
+            :class="[sendBtn, 'col-start-3 row-start-2 size-9 cursor-pointer bg-inverse text-on-inverse hover:bg-inverse-hover active:scale-95 max-lg:size-11']"
             aria-label="Stop answering"
             title="Stop"
             @click.stop="emit('stop')"
@@ -761,7 +800,7 @@ onMounted(ensureUsage)
           <button
             v-else-if="queued"
             type="button"
-            class="grid size-[38px] shrink-0 cursor-pointer place-items-center rounded-full bg-ink text-lime transition-transform duration-150 active:scale-95 max-lg:size-11"
+            :class="[sendBtn, 'col-start-3 row-start-2 size-9 cursor-pointer bg-chip text-accent active:scale-95 max-lg:size-11']"
             aria-label="Sending once the files are up. Press to cancel."
             title="Sends when the files are up · press to wait instead"
             @click.stop="queued = false"
@@ -777,10 +816,9 @@ onMounted(ensureUsage)
             type="button"
             :disabled="!canSend"
             :class="[
-              'grid size-[38px] shrink-0 place-items-center rounded-full transition-[background-color,color,transform] duration-150 max-lg:size-11',
-              canSend
-                ? 'cursor-pointer bg-ink text-lime hover:bg-ink-2 active:scale-95'
-                : 'cursor-default bg-surface-track text-text-ghost',
+              sendBtn,
+              'col-start-3 row-start-2 size-9 bg-inverse text-on-inverse max-lg:size-11',
+              canSend ? 'cursor-pointer hover:scale-[1.06] active:scale-95' : 'cursor-default opacity-25',
             ]"
             :aria-label="course ? 'Draft the course' : 'Send'"
             :title="tray.uploading.value ? 'Send (Enter) · waits for the files' : course ? 'Draft the course (Enter)' : 'Send (Enter)'"
@@ -799,14 +837,14 @@ onMounted(ensureUsage)
       <!-- A link pasted in a panel, and the link field anywhere. -->
       <div
         v-if="offer && !lg"
-        class="animate-fade mx-1 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-[12px] bg-cobalt-soft px-3 py-2"
+        class="animate-fade mx-1 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-[12px] bg-brand-soft px-3 py-2"
         role="status"
         @click.stop
       >
         <UiIcon
           name="link"
           :size="14"
-          class="shrink-0 text-cobalt"
+          class="shrink-0 text-brand"
         />
         <span class="min-w-0 flex-1 text-[12.5px] leading-snug text-text-body">{{ offerWords }}</span>
         <span class="flex shrink-0 items-center gap-1">
@@ -930,3 +968,63 @@ onMounted(ensureUsage)
     </template>
   </div>
 </template>
+
+<style scoped>
+/* The landing's glow, under the box: a slow turn of the six course colours,
+   asleep until the box has the caret, faster while an answer is coming. */
+@property --ai-glow-a {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.ai-glow {
+  position: absolute;
+  z-index: -1;
+  inset-inline: 5%;
+  bottom: -4px;
+  height: 72%;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--ai-glow-a) at 50% 100%,
+    var(--accent),
+    var(--apricot),
+    var(--rose),
+    var(--lilac),
+    var(--sky),
+    var(--leaf),
+    var(--accent)
+  );
+  filter: blur(24px);
+  opacity: 0;
+  transform: translateY(12%) scaleY(0.7);
+  pointer-events: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.4, 0.14, 0.3, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: ai-glow-turn 6s linear infinite;
+}
+
+.ai-box:focus-within .ai-glow,
+.ai-box.is-thinking .ai-glow {
+  opacity: 0.5;
+  transform: translateY(18%) scaleY(1);
+}
+
+.ai-box.is-thinking .ai-glow {
+  opacity: 0.7;
+  animation-duration: 2.4s;
+}
+
+@keyframes ai-glow-turn {
+  to {
+    --ai-glow-a: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-glow {
+    animation: none;
+  }
+}
+</style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CourseNode, FurtherCourse, ProgressState } from '~/types/api'
 import type { ItemBox, TopicBox } from '~/composables/useRoadmap'
+import { markOf } from '~/components/companion/course/Mark.vue'
 
 /**
  * The course as a roadmap, in roadmap.sh's grammar and the workspace's ink.
@@ -10,28 +11,29 @@ import type { ItemBox, TopicBox } from '~/composables/useRoadmap'
  * the app, because the drawing is worthless if a subtopic can be mistaken for
  * the next topic:
  *
- *  - a TOPIC is a dark milestone on the line — the one near-black ink the app
- *    already uses for "commit" — numbered by its place;
- *  - a SUBTOPIC is a light card tied back with a dotted curve, wearing a
- *    coloured badge in its corner when it is an option;
+ *  - a TOPIC is a card on the line (Daylight's `.cp-node`): its status mark,
+ *    its title and its number; the step the learner is on is the yellow one;
+ *  - a SUBTOPIC is a paper chip tied back with a dotted curve, a small
+ *    coloured square saying which badge it wears;
  *  - a GROUP is a sunken panel with an eyebrow heading around the subtopics
  *    that are one family; a FAMILY is a subtopic on top of a panel of its own
  *    members;
  *  - a NOTE is a warm paper card — advice, not a lesson;
  *  - a LINK is a soft violet button that starts a new course.
  *
- * Progress is painted onto the box: a done topic goes light with a green tick
- * so the path visibly clears behind you, learning goes violet, skipped goes
- * hollow and dashed. The line itself fills in green as topics are finished.
+ * Progress is painted onto the box with the same status marks the sidebar
+ * uses (`CompanionCourseMark`): a read or checked topic takes a leaf tint so
+ * the path visibly clears behind you, skipped goes hollow and dashed. The
+ * line is solid behind the learner and dotted ahead.
  *
  * Clicking a box does NOT open the lesson. It opens a small brief — what the
  * lesson is for, what it covers, what comes next — and the brief has the one
  * button that opens it. roadmap.sh's marking gestures still work as shortcuts:
  * right-click marks done, shift-click marks learning, alt-click skips.
  *
- * The canvas is laid out at a fixed width and scaled to fit the pane it is in,
- * so the whole map is readable without a horizontal scrollbar on a laptop and
- * never wider than it needs to be on a big screen.
+ * The canvas is laid out at a fixed width, cropped to what is drawn on it and
+ * scaled to fit the pane it is in, so the whole map is readable without a
+ * horizontal scrollbar on a laptop and never wider than it needs to be.
  */
 const props = defineProps<{
   nodes: CourseNode[]
@@ -44,12 +46,24 @@ const props = defineProps<{
   selectedIds?: number[]
   /** A read-only rendering: nothing opens and nothing can be marked. */
   readonly?: boolean
+  /** Steps recalled in a check: the filled leaf mark (the companion's courses). */
+  checkedIds?: number[]
+  /** The brief offers "Write it yourself" (the page handles `compose`). */
+  canCompose?: boolean
+  /**
+   * The lesson the host's own Continue opens (the companion's course head). Given,
+   * "You are here" marks it and the bar draws no Continue of its own: two buttons
+   * naming two different lessons was the bug. `null`: the host has nothing next.
+   */
+  hereNodeId?: number | null
 }>()
 
 const emit = defineEmits<{
   open: [nodeId: number]
   /** A lesson that is not written yet: the learner asked for it to be. */
   expand: [nodeId: number, instruction?: string]
+  /** A lesson that is not written yet: the learner will write it themselves. */
+  compose: [nodeId: number]
   /** The learner marked a box. `state` is the state it should now be in. */
   progress: [nodeId: number, state: ProgressState]
   /** A violet button: start a new course on this topic. */
@@ -62,6 +76,7 @@ const roadmap = useRoadmap(
 )
 
 const nodesById = computed(() => new Map(props.nodes.map((node) => [node.id, node])))
+const checked = computed(() => new Set(props.checkedIds ?? []))
 
 /* -- Hover ---------------------------------------------------------------- */
 
@@ -148,6 +163,11 @@ function writeFromBrief(nodeId: number, instruction?: string): void {
   emit('expand', nodeId, instruction)
 }
 
+function composeFromBrief(nodeId: number): void {
+  peekOpen.value = false
+  emit('compose', nodeId)
+}
+
 /**
  * roadmap.sh's gestures, verbatim, as shortcuts. Each one toggles: marking a
  * done box done again returns it to pending, which is how an accidental
@@ -199,11 +219,30 @@ const scale = ref(1)
 /** Below this the labels stop being readable; past it the pane scrolls instead. */
 const MIN_SCALE = 0.62
 
+/**
+ * The part of the canvas anything is drawn in, side to side. The layout keeps
+ * both flanks whether or not a step has subtopics there; a course with none is
+ * one line down the middle and is shown at full size, not scaled down for
+ * empty margins.
+ */
+const extent = computed(() => {
+  const r = roadmap.value
+  const boxes: { x: number; width: number }[] = [
+    ...r.topics, ...r.items, ...r.groups, ...r.notes, ...r.links, ...r.labels,
+    ...(r.title ? [r.title] : []), ...(r.finish ? [r.finish] : []), ...(r.finishPill ? [r.finishPill] : []),
+  ]
+  if (!boxes.length) return { left: 0, width: r.width }
+  const pad = 24
+  const left = Math.max(0, Math.min(...boxes.map((b) => b.x)) - pad)
+  const right = Math.min(r.width, Math.max(...boxes.map((b) => b.x + b.width)) + pad)
+  return { left, width: right - left }
+})
+
 function fit(): void {
   if (!frame.value) return
   const available = frame.value.clientWidth - 16
   if (available <= 0) return
-  scale.value = Math.max(MIN_SCALE, Math.min(1, available / roadmap.value.width))
+  scale.value = Math.max(MIN_SCALE, Math.min(1, available / extent.value.width))
 }
 
 let observer: ResizeObserver | null = null
@@ -218,7 +257,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => observer?.disconnect())
 
-watch(() => roadmap.value.width, () => fit())
+watch(() => extent.value.width, () => fit())
 
 const percent = computed(() =>
   roadmap.value.counts.total === 0
@@ -228,6 +267,13 @@ const percent = computed(() =>
 
 const START_Y = METRICS.pad
 
+const LEGEND = [
+  { state: 'checked', label: 'Checked from memory' },
+  { state: 'done', label: 'Read' },
+  { state: 'learning', label: 'Learning' },
+  { state: 'todo', label: 'Not started' },
+] as const
+
 /**
  * Where the learner is on the line, the way the course player marks it: the
  * topic being learned, else the first one not yet finished. Nothing finished
@@ -236,6 +282,12 @@ const START_Y = METRICS.pad
 const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
   if (props.readonly) return null
   const topics = roadmap.value.topics
+  const id = props.hereNodeId
+  if (id != null) {
+    // A subtopic's lesson is marked on the topic it hangs from.
+    const hostTopic = roadmap.value.topicById.get(roadmap.value.itemById.get(id)?.topicId ?? id)
+    if (hostTopic) return { topic: hostTopic, started: roadmap.value.counts.done > 0 || tintOf(hostTopic.node) !== null }
+  }
   const learning = topics.find((topic) => tintOf(topic.node) === 'learning')
   const topic = learning ?? topics.find((item) => tintOf(item.node) === null)
   if (!topic) return null
@@ -245,13 +297,11 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
 
 <template>
   <div class="rm">
-    <!-- The sticky bar: what the map is, how to read it, how far along it the learner is. -->
-    <div
-      class="sticky top-0 z-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-surface/94 px-5 py-2.5 backdrop-blur-[8px]"
-    >
-      <div class="flex items-baseline gap-2.5">
-        <span class="font-display text-[16px] font-semibold tracking-[-0.01em]">Roadmap</span>
-        <span class="num text-[12.5px] text-text-faint">
+    <!-- The bar over the path (course.html .legend): what it is, the badges and the status
+         marks in words, how far along, and the way back in. -->
+    <div class="sticky top-0 z-5 grid gap-2 border-b border-border bg-surface/94 px-[30px] py-2.5 backdrop-blur-[8px]">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span class="num text-[12.5px] text-text-muted">
           {{ roadmap.counts.topics }} {{ roadmap.counts.topics === 1 ? 'topic' : 'topics' }}<template
             v-if="roadmap.counts.subtopics"
           >
@@ -259,78 +309,74 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
           >
           · {{ minutesLabel(roadmap.counts.minutes) }}
         </span>
-      </div>
 
-      <!-- The legend: the three badges. Colour alone teaches nobody. -->
-      <div
-        class="flex items-center gap-3.5 text-[12.5px] text-text-soft"
-        aria-label="Badges"
-      >
-        <span
-          v-for="mark in MARK_ORDER"
-          :key="mark"
-          class="inline-flex items-center gap-1.5"
-          :title="MARK_META[mark].blurb"
+        <div
+          v-if="!readonly && roadmap.counts.total"
+          class="flex items-center gap-2 text-[12px]"
+          :title="`${roadmap.counts.done} of ${roadmap.counts.total} done${roadmap.counts.learning ? `, ${roadmap.counts.learning} learning` : ''}`"
         >
-          <span
-            class="rm-badge shrink-0"
-            :style="{ background: MARK_META[mark].color, color: MARK_META[mark].ink }"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="m20 6.5-11 11L4 12.5" />
-            </svg>
+          <span class="h-1.5 w-[90px] overflow-hidden rounded-full bg-[rgb(var(--wash-rgb)/0.065)]">
+            <span
+              class="block h-full rounded-full bg-leaf transition-[width] duration-500"
+              :style="{ width: `${percent}%` }"
+            />
           </span>
-          {{ MARK_META[mark].label }}
-        </span>
-      </div>
+          <span class="num font-semibold text-text-soft">{{ percent }}% done</span>
+        </div>
 
-      <span class="flex-1" />
+        <span class="flex-1" />
 
-      <span
-        v-if="!readonly"
-        class="hidden text-[11.5px] text-text-faint 2xl:inline"
-        >Click a box to see what it covers</span
-      >
-
-      <div
-        v-if="!readonly && roadmap.counts.total"
-        class="flex items-center gap-2.5 text-[12px]"
-        :title="`${roadmap.counts.done} of ${roadmap.counts.total} done${roadmap.counts.learning ? `, ${roadmap.counts.learning} learning` : ''}`"
-      >
-        <span class="h-1.5 w-[120px] overflow-hidden rounded-full bg-surface-track">
-          <span
-            class="block h-full rounded-full bg-cobalt transition-[width] duration-400"
-            :style="{ width: `${percent}%` }"
-          />
-        </span>
-        <span class="num font-semibold text-text-body">{{ percent }}% done</span>
-      </div>
-
-      <!-- The way back in: cobalt's lime "continue" pill, naming the step. -->
-      <button
-        v-if="here"
-        type="button"
-        class="group inline-flex h-[34px] max-w-[min(100%,340px)] cursor-pointer items-center gap-2 rounded-full bg-lime pr-1 pl-3.5 text-[13px] font-semibold text-ink transition-colors hover:bg-[#d2f86a]"
-        :title="here.topic.node.title"
-        @click="emit('open', here.topic.id)"
-      >
-        <span class="min-w-0 truncate"
-          >{{ here.started ? 'Continue' : 'Start' }} · Step {{ here.topic.step }},
-          {{ here.topic.node.title }}</span
+        <!-- The way back in, naming the step, unless the host has its own Continue. -->
+        <button
+          v-if="here && hereNodeId === undefined"
+          type="button"
+          class="group inline-flex h-[30px] max-w-[min(100%,340px)] cursor-pointer items-center gap-1.5 rounded-[8px] bg-inverse px-3 text-[13px] font-semibold text-on-inverse transition-[background-color,transform] duration-200 hover:bg-inverse-hover active:scale-[0.97]"
+          :title="here.topic.node.title"
+          @click="emit('open', here.topic.id)"
         >
-        <span
-          class="grid size-[26px] shrink-0 place-items-center rounded-full bg-ink text-lime transition-transform group-hover:translate-x-0.5"
-        >
+          <span class="min-w-0 truncate">{{ here.started ? 'Continue' : 'Start' }} · {{ here.topic.node.title }}</span>
           <UiIcon
             name="arrow-right"
-            :size="13"
-            :stroke="2.4"
+            :size="14"
+            :stroke="2.2"
+            class="shrink-0 transition-transform group-hover:translate-x-0.5"
           />
+        </button>
+      </div>
+
+      <div class="flex flex-wrap justify-between gap-x-4 gap-y-1.5 text-[12px] font-medium text-text-muted">
+        <span
+          class="flex flex-wrap gap-x-3.5 gap-y-1"
+          aria-label="Badges"
+        >
+          <span
+            v-for="mark in MARK_ORDER"
+            :key="mark"
+            class="inline-flex items-center gap-1.5"
+            :title="MARK_META[mark].blurb"
+          >
+            <i
+              class="size-2 shrink-0 rounded-[3px]"
+              :style="{ background: MARK_META[mark].color }"
+            />
+            {{ MARK_META[mark].label }}
+          </span>
         </span>
-      </button>
+        <span
+          v-if="!readonly"
+          class="flex flex-wrap gap-x-3.5 gap-y-1"
+          aria-label="Status"
+        >
+          <span
+            v-for="m in LEGEND"
+            :key="m.state"
+            class="inline-flex items-center gap-1.5"
+          >
+            <CompanionCourseMark :state="m.state" />
+            {{ m.label }}
+          </span>
+        </span>
+      </div>
     </div>
 
     <div
@@ -347,13 +393,16 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
       ref="frame"
       class="rm-desk flex justify-center overflow-x-auto px-2 py-2"
     >
-      <div :style="{ width: `${roadmap.width * scale}px`, height: `${roadmap.height * scale}px` }">
+      <div
+        class="overflow-hidden"
+        :style="{ width: `${extent.width * scale}px`, height: `${roadmap.height * scale}px` }"
+      >
         <div
           class="rm-canvas fade-in relative origin-top-left select-none"
           :style="{
             width: `${roadmap.width}px`,
             height: `${roadmap.height}px`,
-            transform: `scale(${scale})`,
+            transform: `scale(${scale}) translateX(${-extent.left}px)`,
           }"
         >
           <svg
@@ -394,7 +443,7 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
               v-for="(segment, index) in roadmap.spine"
               :key="segment.id"
               :d="segment.path"
-              pathLength="1"
+              :pathLength="segment.done ? 1 : undefined"
               :class="['rm-rail', segment.done && 'rm-rail--done']"
               :style="{ '--i': index }"
             />
@@ -432,7 +481,7 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
             }"
           >
             <span
-              class="inline-flex h-6 max-w-full items-center truncate rounded-full bg-surface px-3 text-[10.5px] font-semibold tracking-[0.08em] text-text-soft uppercase shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.14)]"
+              class="inline-flex h-6 max-w-full items-center truncate rounded-full bg-surface px-[11px] text-[11.5px] font-semibold text-text-muted shadow-[0_0_0_1px_var(--border-strong)]"
               :title="`Steps ${label.fromStep}–${label.fromStep + label.steps - 1}`"
               >{{ label.text }}</span
             >
@@ -452,7 +501,7 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
           >
             <p
               v-if="group.kind === 'group'"
-              class="truncate px-3 pt-[10px] text-[10px] font-semibold tracking-[0.08em] text-text-faint uppercase"
+              class="truncate px-3 pt-[9px] text-[11.5px] font-semibold text-text-muted"
               :title="group.title ?? undefined"
             >
               {{ group.title }}
@@ -514,6 +563,12 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
             @contextmenu="onContextMenu(item.node, $event)"
             @keydown="onKey(item.node, $event)"
           >
+            <i
+              v-if="item.mark"
+              class="rm-bd"
+              :style="{ background: MARK_META[item.mark].color }"
+              :title="`${MARK_META[item.mark].label} — ${MARK_META[item.mark].blurb}`"
+            />
             <span
               class="rm-label"
               :style="{ '-webkit-line-clamp': item.lines.length }"
@@ -526,21 +581,6 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
               :class="['rm-writing', item.node.status === 'queued' && 'rm-writing--queued']"
               aria-hidden="true"
             />
-
-            <!-- The badge, in the corner nearer the spine, as roadmap.sh places it. -->
-            <span
-              v-if="item.mark"
-              :class="['rm-badge rm-badge--corner', item.side === 'right' ? 'rm-badge--left' : 'rm-badge--right']"
-              :style="{ background: MARK_META[item.mark].color, color: MARK_META[item.mark].ink }"
-              :title="`${MARK_META[item.mark].label} — ${MARK_META[item.mark].blurb}`"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path d="m20 6.5-11 11L4 12.5" />
-              </svg>
-            </span>
           </button>
 
           <!-- Topics. Numbered, because their place on the line is the answer to "where am I". -->
@@ -553,6 +593,7 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
               readonly && 'rm-topic--ink',
               tintOf(topic.node) && `rm-topic--${tintOf(topic.node)}`,
               here?.topic.id === topic.id && 'rm-topic--here',
+              checked.has(topic.id) && 'rm-topic--checked',
               topic.id === activeNodeId && 'rm-box--active',
               selected.has(topic.id) && 'rm-box--selected',
               peekOpen && topic.id === peekId && 'rm-box--peek',
@@ -574,20 +615,17 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
             @contextmenu="onContextMenu(topic.node, $event)"
             @keydown="onKey(topic.node, $event)"
           >
-            <span class="rm-step num">
-              <UiIcon
-                v-if="tintOf(topic.node) === 'done'"
-                name="check"
-                :size="11"
-                :stroke="3"
-              />
-              <template v-else>{{ topic.step }}</template>
-            </span>
+            <!-- course.html's node: its status mark, the title, its number on the line. -->
+            <CompanionCourseMark
+              v-if="!readonly"
+              :state="markOf(topic.node, checked.has(topic.id))"
+            />
             <span
               class="rm-label"
               :style="{ '-webkit-line-clamp': topic.lines.length }"
               >{{ topic.node.title }}</span
             >
+            <span class="rm-nn num">{{ topic.step }}</span>
 
             <span
               v-if="isWorking(topic.node.status)"
@@ -601,22 +639,15 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
           <span
             v-if="here"
             class="rm-here pointer-events-none absolute"
-            :style="{ left: `${here.topic.x - 8}px`, top: `${here.topic.y - 15}px` }"
+            :style="{ left: `${here.topic.x + 10}px`, top: `${here.topic.y - 11}px` }"
           >
-            <span class="rm-here__dot">
-              <UiIcon
-                name="target"
-                :size="11"
-                :stroke="2.2"
-              />
-            </span>
             {{ here.started ? 'You are here' : 'Start here' }}
           </span>
 
           <!-- Where to go from here: the box at the end. -->
           <div
             v-if="roadmap.finish"
-            class="absolute rounded-[12px] bg-surface shadow-[inset_0_0_0_1px_rgb(var(--wash-rgb)/0.12)]"
+            class="absolute rounded-[12px] bg-surface shadow-[0_0_0_1px_var(--border)]"
             :style="{
               left: `${roadmap.finish.x}px`,
               top: `${roadmap.finish.y}px`,
@@ -624,7 +655,7 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
               height: `${roadmap.finish.height}px`,
             }"
           >
-            <p class="pt-[9px] text-center text-[11px] font-semibold tracking-[0.08em] text-text-faint uppercase">
+            <p class="pt-[9px] text-center text-[12px] font-semibold text-text-muted">
               {{ roadmap.finish.title }}
             </p>
           </div>
@@ -687,8 +718,10 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
         :node="peekNode"
         :nodes="nodes"
         :readonly="readonly"
+        :can-compose="canCompose"
         @open="openFromBrief"
         @expand="writeFromBrief"
+        @compose="composeFromBrief"
         @focus="peekId = $event"
         @progress="(id, state) => emit('progress', id, state)"
       />
@@ -708,29 +741,26 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
 
 <style scoped>
 /*
- * Cobalt's path: a dotted canvas and one rule for colour, so where the learner
- * is can be seen without reading anything. Blue is progress: the line and the
- * finished steps go pale, the step they are on is the one solid blue box, what
- * is ahead stays white. Lime is only ever "here" (the tag, the Continue pill).
- * A readonly board has no learner on it and keeps the ink milestones. Around
- * those: white hairline subtopics, butter mentor notes, grey group trays and
- * cobalt "further" chips.
+ * Daylight 2's path (docs/design/daylight2/css/04-cycler.css .cp-*, course.css
+ * .road): the line is drawn on the page itself, no canvas grid. A topic is a
+ * card with its status mark, its title and its number on the line; the step
+ * the learner is on is the one yellow (highlighter) card, and it pulses on
+ * arrival. Read and checked steps take a leaf tint, so the path visibly clears
+ * behind you. Subtopics are paper chips tied back with dotted curves, a little
+ * square saying which badge they wear. The line is solid ink behind the
+ * learner and dotted ahead. A readonly board (a public course nobody is on)
+ * keeps ink milestones.
  */
 
-/* The canvas: cobalt's dot grid on its own off-white, painted on the unscaled
-   frame so the dots stay crisp. */
 .rm-desk {
-  background-color: var(--surface-canvas);
-  background-image: radial-gradient(circle, var(--rm-dot, rgb(11 13 16 / 0.12)) 1px, transparent 1.3px);
-  background-size: 20px 20px;
-  background-position: 10px 10px;
+  background: var(--surface);
 }
 
-/* The title sits on the line; a canvas-coloured backing cuts the line out. */
+/* The title sits on the line; a page-coloured backing cuts the line out. */
 .rm-title__line {
   padding: 2px 10px;
   border-radius: 8px;
-  background: var(--surface-canvas);
+  background: var(--surface);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -739,24 +769,24 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
 
 .rm-lead {
   fill: none;
-  stroke: var(--rm-lead, #a9adb8);
-  stroke-width: 2.2;
+  stroke: var(--text-faint);
+  stroke-width: 2;
   stroke-linecap: round;
-  stroke-dasharray: 0.5 7;
+  stroke-dasharray: 2 6;
 }
 
 .rm-start {
   fill: var(--surface);
-  stroke: var(--rm-tie, #9da2ae);
-  stroke-width: 2.2;
+  stroke: var(--text-muted);
+  stroke-width: 2;
 }
 
 .rm-tie {
   fill: none;
-  stroke: var(--rm-tie, #9da2ae);
+  stroke: var(--border-strong);
   stroke-width: 1.5;
   stroke-linecap: round;
-  stroke-dasharray: 2 4;
+  stroke-dasharray: 1 4;
   transition:
     stroke 150ms,
     stroke-width 150ms;
@@ -765,29 +795,30 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
 .rm-tie--lit {
   stroke: var(--brand);
   stroke-width: 2;
+  stroke-dasharray: none;
 }
 
+/* Ahead: dotted. */
 .rm-rail {
   fill: none;
-  stroke: var(--rm-rail, #cdd0d8);
-  stroke-width: 2.5;
+  stroke: var(--text-faint);
+  stroke-width: 2;
   stroke-linecap: round;
-  transition:
-    stroke 300ms,
-    stroke-width 300ms;
+  stroke-dasharray: 2 6;
+  transition: stroke 300ms;
 }
 
-/* The run: where the learner has already been. */
+/* Where the learner has already been: solid ink. */
 .rm-rail--done {
-  stroke: var(--cobalt);
-  stroke-width: 5;
+  stroke: var(--text-muted);
+  stroke-dasharray: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .rm-rail {
+  .rm-rail--done {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    animation: rm-draw 460ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: rm-draw 460ms var(--ease) forwards;
     animation-delay: calc(var(--i, 0) * 55ms);
   }
 }
@@ -804,17 +835,16 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
 .rm-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  text-align: left;
   cursor: pointer;
   transition:
-    background-color 140ms,
-    color 140ms,
-    box-shadow 140ms,
-    transform 140ms;
+    background-color 200ms,
+    color 200ms,
+    box-shadow 250ms,
+    transform 300ms var(--ease);
 }
 
-/* A lesson being written pulses cobalt; waiting its turn, a hollow ring. */
+/* A lesson being written pulses; waiting its turn, a hollow ring. */
 .rm-writing {
   position: absolute;
   top: -4px;
@@ -834,179 +864,175 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
   animation: none;
 }
 
-/* A topic: a step still ahead. */
+/* A topic: course.html's .node.topic. */
 .rm-topic {
-  padding: 0 14px 0 40px;
-  border-radius: 12px;
+  gap: 8px;
+  padding: 0 10px 0 12px;
+  border-radius: 10px;
   background: var(--surface);
   color: var(--text);
   font-size: 13.5px;
-  box-shadow:
-    inset 0 0 0 1.5px rgb(11 13 16 / 0.2),
-    0 6px 14px -10px rgb(11 13 16 / 0.35);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-card);
+}
+
+.rm-topic .rm-label {
+  flex: 1;
+}
+
+.rm-nn {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-faint);
 }
 
 .rm-topic:hover {
   transform: translateY(-1px);
-  box-shadow:
-    inset 0 0 0 1.5px rgb(11 13 16 / 0.34),
-    0 10px 20px -12px rgb(11 13 16 / 0.4);
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-raised);
 }
 
-/* A course nobody is on (a public page): the ink milestone. */
+/* A course nobody is on (a public page): the ink milestone, centred. */
 .rm-topic--ink {
-  background: var(--ink);
-  color: #fff;
-  box-shadow: 0 10px 20px -12px rgb(11 13 16 / 0.6);
+  justify-content: center;
+  text-align: center;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  box-shadow: var(--shadow-raised);
 }
 
-.rm-topic--ink:hover {
-  box-shadow: 0 16px 26px -14px rgb(11 13 16 / 0.65);
+.rm-topic--ink .rm-label {
+  flex: none;
 }
 
-.rm-topic--done {
-  background: var(--cobalt-soft);
-  color: var(--text-muted);
-  box-shadow: inset 0 0 0 1px var(--brand-line);
+.rm-topic--ink .rm-nn {
+  position: absolute;
+  left: 12px;
+  color: var(--on-inverse);
+  opacity: 0.5;
 }
 
-.rm-topic--learning {
-  background: var(--surface);
-  color: var(--cobalt);
-  box-shadow: inset 0 0 0 1.5px var(--cobalt);
-}
-
-/* The step the learner is on: the one solid box on the board. */
-.rm-topic--here {
-  background: var(--cobalt);
-  color: #fff;
-  box-shadow:
-    0 0 0 5px var(--brand-line),
-    0 14px 26px -12px rgb(35 64 230 / 0.7);
-}
-
-.rm-topic--here:hover {
-  box-shadow:
-    0 0 0 6px var(--brand-line),
-    0 16px 28px -12px rgb(35 64 230 / 0.75);
+.rm-topic--done,
+.rm-topic--checked {
+  background: color-mix(in oklab, var(--leaf-soft) 55%, var(--surface));
 }
 
 .rm-topic--skipped {
-  background: var(--surface);
-  color: var(--text-ghost);
-  box-shadow: inset 0 0 0 1.5px var(--border-dashed);
+  color: var(--text-faint);
+  box-shadow: none;
   outline: 1.5px dashed var(--border-dashed);
   outline-offset: -1.5px;
 }
 
 .rm-topic--skipped .rm-label {
   text-decoration: line-through;
-  text-decoration-color: rgb(var(--wash-rgb) / 0.3);
+  text-decoration-color: var(--border-dashed);
 }
 
-.rm-step {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  display: grid;
-  width: 22px;
-  height: 22px;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--surface-sunken);
-  color: var(--text-dim);
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 600;
-  transform: translateY(-50%);
-  transition:
-    background-color 140ms,
-    color 140ms;
+/* The step the learner is on: the highlighter. It pulses three times as it lands. */
+.rm-topic--here {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--hi-2) 80%, var(--accent-strong)),
+    0 10px 24px -10px rgb(150 110 0 / 0.55);
 }
 
-.rm-topic--ink .rm-step {
-  background: rgb(255 255 255 / 0.14);
-  color: #fff;
+.rm-topic--here .rm-nn {
+  color: rgb(31 28 23 / 0.5);
 }
 
-.rm-topic--done .rm-step {
-  background: var(--cobalt);
-  color: #fff;
+.rm-topic--here:hover {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--hi-2) 80%, var(--accent-strong)),
+    0 14px 28px -12px rgb(150 110 0 / 0.6);
 }
 
-.rm-topic--learning .rm-step {
-  background: var(--cobalt-soft);
-  color: var(--cobalt);
+@media (prefers-reduced-motion: no-preference) {
+  .rm-topic--here::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    animation: rm-pulse 1.4s ease-out 0.9s 3;
+  }
 }
 
-.rm-topic--here .rm-step {
-  background: #fff;
-  color: var(--cobalt);
+@keyframes rm-pulse {
+  from {
+    box-shadow: 0 0 0 0 rgb(255 214 90 / 0.9);
+  }
+  to {
+    box-shadow: 0 0 0 11px rgb(255 214 90 / 0);
+  }
 }
 
-.rm-topic--skipped .rm-step {
-  border: 1.5px dashed var(--border-dashed);
-  background: transparent;
-  color: var(--text-ghost);
-}
-
-/* A subtopic: the white badge card. */
+/* A subtopic: course.html's .node.sub, a paper chip. */
 .rm-item {
-  padding: 0 12px;
+  gap: 7px;
+  padding: 0 10px;
   border-radius: 9px;
-  background: var(--surface);
-  color: var(--text-body);
+  background: var(--bg);
+  color: var(--text-soft);
   font-size: 12.5px;
-  box-shadow: inset 0 0 0 1px rgb(var(--wash-rgb) / 0.12);
+  font-weight: 580;
+  box-shadow: 0 0 0 1px var(--border);
 }
 
 .rm-item:hover {
+  background: var(--surface);
+  color: var(--text);
   transform: translateY(-1px);
-  box-shadow:
-    inset 0 0 0 1px rgb(var(--wash-rgb) / 0.2),
-    0 6px 14px -6px rgb(11 13 16 / 0.18);
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-card);
 }
 
 .rm-item--kin {
-  box-shadow: inset 0 0 0 1.5px var(--brand-line);
+  box-shadow: 0 0 0 1.5px var(--brand-line);
 }
 
 .rm-item--done {
-  background: var(--cobalt-soft);
-  color: var(--text-muted);
-  box-shadow: inset 0 0 0 1px var(--brand-line);
+  background: color-mix(in oklab, var(--leaf-soft) 55%, var(--surface));
 }
 
 .rm-item--learning {
-  color: var(--cobalt);
-  box-shadow: inset 0 0 0 1.5px var(--cobalt);
+  box-shadow: 0 0 0 1.5px var(--hi-2);
 }
 
 .rm-item--skipped {
   background: transparent;
-  color: var(--text-ghost);
+  color: var(--text-faint);
   box-shadow: none;
   outline: 1px dashed var(--border-dashed);
   outline-offset: -1px;
 }
 
-.rm-item--done .rm-label,
 .rm-item--skipped .rm-label {
   text-decoration: line-through;
-  text-decoration-color: rgb(var(--wash-rgb) / 0.3);
+  text-decoration-color: var(--border-dashed);
 }
 
-/* The lesson open in the foreground tab, or ticked to be written: a cobalt ring. */
+.rm-bd {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+}
+
+/* The lesson open in the foreground tab, or ticked to be written: a sky ring. */
 .rm-box--active,
 .rm-box--selected,
 .rm-topic.rm-box--active {
   box-shadow:
-    0 0 0 2px var(--canvas),
-    0 0 0 4px var(--cobalt);
+    0 0 0 2px var(--sky),
+    var(--shadow-raised);
 }
 
 .rm-box--peek {
-  box-shadow: 0 0 0 4px var(--brand-line);
+  box-shadow:
+    0 0 0 2px var(--sky),
+    var(--shadow-raised);
 }
 
 /*
@@ -1023,68 +1049,21 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
   overflow-wrap: anywhere;
 }
 
-/* -- Badges --------------------------------------------------------------- */
-
-.rm-badge {
-  display: grid;
-  width: 14px;
-  height: 14px;
-  place-items: center;
-  border-radius: 999px;
-  color: #fff;
-}
-
-.rm-badge svg {
-  width: 9px;
-  height: 9px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 3.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.rm-badge--corner {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  box-shadow: 0 0 0 2px var(--surface);
-}
-
-.rm-badge--left {
-  left: -7px;
-}
-
-.rm-badge--right {
-  right: -7px;
-}
-
 /* -- "You are here" ------------------------------------------------------- */
 
 .rm-here {
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 26px;
-  padding: 0 11px 0 3px;
-  border-radius: 999px;
-  background: var(--lime);
-  color: var(--ink);
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  box-shadow: 0 6px 14px -6px rgb(100 140 10 / 0.6);
-}
-
-.rm-here__dot {
-  display: grid;
-  width: 20px;
   height: 20px;
-  place-items: center;
+  padding: 0 8px;
   border-radius: 999px;
-  background: var(--ink);
-  color: var(--lime);
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+  box-shadow: var(--shadow-raised);
 }
 
 /* -- The end of the line --------------------------------------------------- */
@@ -1096,61 +1075,61 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
   gap: 8px;
   border-radius: 999px;
   background: var(--surface);
-  color: var(--text-faint);
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  font-weight: 600;
-  box-shadow: inset 0 0 0 1.5px var(--rm-finish-line, #d9dce4);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: 0 0 0 1px var(--border-strong);
 }
 
 .rm-finish__ck {
   display: grid;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   place-items: center;
   border-radius: 999px;
-  background: var(--surface-track);
+  background: rgb(var(--wash-rgb) / 0.065);
 }
 
 .rm-finish--lit {
-  background: var(--lime);
-  color: var(--ink);
-  box-shadow: 0 0 0 6px rgb(198 242 78 / 0.35);
+  background: var(--leaf-soft);
+  color: var(--leaf-ink);
+  box-shadow: 0 0 0 1.5px var(--leaf);
 }
 
 .rm-finish--lit .rm-finish__ck {
-  background: var(--ink);
-  color: var(--lime);
+  background: var(--leaf);
+  color: #fff;
 }
 
 /* -- Panels, notes, links ------------------------------------------------- */
 
 .rm-group {
   border-radius: 12px;
-  background: var(--rm-group, #eef0f4);
-  box-shadow: inset 0 0 0 1px var(--border);
+  background: rgb(var(--wash-rgb) / 0.035);
+  box-shadow: 0 0 0 1px var(--border);
   transition: box-shadow 150ms;
 }
 
 .rm-group--lit {
-  box-shadow: inset 0 0 0 1.5px var(--brand-line);
+  box-shadow: 0 0 0 1.5px var(--brand-line);
 }
 
+/* A note beside the line: course.html's .rnote, butter. */
 .rm-note {
-  padding: 9px 12px 9px 32px;
-  border-radius: 10px;
-  background: var(--warn-soft);
-  color: var(--warn-text);
+  padding: 9px 11px 9px 32px;
+  border-radius: 11px;
+  background: var(--butter-soft);
+  color: var(--text-soft);
   font-size: 12px;
   line-height: 16px;
-  box-shadow: inset 0 0 0 1px var(--warn-line);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--butter-ink) 18%, transparent);
 }
 
 .rm-note__icon {
   position: absolute;
   top: 10px;
   left: 11px;
-  color: var(--warn-bright);
+  color: var(--butter-ink);
 }
 
 .rm-link {
@@ -1159,16 +1138,16 @@ const here = computed<{ topic: TopicBox; started: boolean } | null>(() => {
   justify-content: center;
   gap: 7px;
   border-radius: 999px;
-  background: var(--brand-soft);
-  color: var(--brand);
+  background: var(--sky-soft);
+  color: var(--sky-ink);
   cursor: pointer;
   transition:
-    background-color 120ms,
-    transform 120ms;
+    background-color 200ms,
+    transform 300ms var(--ease);
 }
 
 .rm-link:hover:not(:disabled) {
-  background: var(--rm-link-hover, #e1e7fd);
+  background: color-mix(in oklab, var(--sky-soft) 70%, var(--sky));
   transform: translateY(-1px);
 }
 

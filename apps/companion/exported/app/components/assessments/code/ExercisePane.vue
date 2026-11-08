@@ -24,6 +24,7 @@ import RuntimeState from './RuntimeState.vue'
  * `lg:` rule would confidently split a pane with no room to split, and the
  * failure would look like a styling bug rather than a wrong question.
  */
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     spec: ExerciseSpec
@@ -799,7 +800,7 @@ defineExpose({ focus: () => editorHost.value?.focus() })
   border-bottom-color: var(--color-accent-on-dark);
 }
 
-/* Cobalt's run pill: lime carrying ink, the one loud thing on the ink stage. */
+/* The run pill: the highlighter carrying ink, the one loud thing on the ink stage. */
 .run-btn {
   display: inline-flex;
   align-items: center;
@@ -809,15 +810,15 @@ defineExpose({ focus: () => editorHost.value?.focus() })
   border-radius: 99px;
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--ink);
-  background: var(--lime);
+  color: var(--on-accent);
+  background: var(--accent);
   cursor: pointer;
   transition:
     background-color 0.14s ease,
     transform 0.14s ease;
 }
 .run-btn:hover:not(:disabled) {
-  background: #d2f86a;
+  background: var(--hi-2);
 }
 .run-btn:active:not(:disabled) {
   transform: scale(0.97);

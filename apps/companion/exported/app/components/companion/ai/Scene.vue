@@ -23,9 +23,10 @@ const props = defineProps<{
   title?: string
 }>()
 
+// The model names colours by these keys; they paint in Daylight 2's inks (cobalt is the sky ink, lime the highlighter).
 const COLORS: Record<string, number> = {
-  cobalt: 0x2740e0, lime: 0xc8f04b, ink: 0x1a1d23, grey: 0xb9bfca, white: 0xf7f8fa,
-  red: 0xe5484d, amber: 0xf5a524, green: 0x30a46c, sky: 0x5cb8f0,
+  cobalt: 0x2d64b8, lime: 0xffe27a, ink: 0x1f1c17, grey: 0xc4beb2, white: 0xfffefb,
+  red: 0xd4553f, amber: 0xf2c84b, green: 0x5bb276, sky: 0x5b9cf0,
 }
 
 const host = shallowRef<HTMLElement | null>(null)
@@ -91,7 +92,7 @@ function solid(part: ScenePart): Three.Object3D {
   if (part.shape === 'box' || part.shape === 'cylinder' || part.shape === 'cone') {
     mesh.add(new THREE.LineSegments(
       new THREE.EdgesGeometry(geometry, 30),
-      new THREE.LineBasicMaterial({ color: 0x0b0d10, transparent: true, opacity: 0.22 }),
+      new THREE.LineBasicMaterial({ color: 0x1f1c17, transparent: true, opacity: 0.22 }),
     ))
   }
   return mesh
@@ -287,7 +288,7 @@ function snapshot(): { src: string; w: number; h: number } | null {
     const width = ctx.measureText(text).width + 12
     ctx.fillStyle = 'rgba(255,255,255,.92)'
     ctx.fillRect(x - width / 2, y - 18, width, 18)
-    ctx.fillStyle = '#0b0d10'
+    ctx.fillStyle = '#1f1c17'
     ctx.fillText(text, x, y - 5)
   })
   return { src: out.toDataURL('image/jpeg', 0.85), w, h }

@@ -1,0 +1,26 @@
+{
+  "moreActions": "More actions",
+  "hidePassword": "Hide password",
+  "showPassword": "Show password",
+  "dismiss": "Dismiss",
+  "complete": "{n}% complete",
+  "nothing": "(nothing)",
+  "week": "nothing",
+  "upgrade": {
+    "message": "It comes with the Centre plan: $1 per student a month, at least $29, with a 30-day trial.",
+    "seePlans": "See the plans",
+    "ownerChange": "The owner can change the plan in Settings."
+  },
+  "looking": "Looking…",
+  "nobody": "Nobody by that name.",
+  "noDate": "No date",
+  "clearSearch": "Clear the search",
+  "due": "Due",
+  "remove": "Remove {name}",
+  "search": "Search",
+  "noData": "No data",
+  "findPerson": "Find a person",
+  "change": "Change",
+  "searchPerson": "Search by name or email",
+  "versus": "vs the period before"
+}

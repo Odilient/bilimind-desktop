@@ -56,7 +56,7 @@ function state(kind: ConnectKind): { word: string; tone: string } | null {
           class="group flex h-full min-h-[72px] w-full cursor-pointer items-center gap-3.5 rounded-[16px] border border-border bg-surface px-4 py-3 text-left transition-[border-color,box-shadow,background-color] duration-150 outline-none hover:border-border-strong hover:shadow-raised focus-visible:ring-2 focus-visible:ring-brand-line"
           @click="emit('open', d.kind)"
         >
-          <span class="grid size-10 shrink-0 place-items-center rounded-[12px] bg-surface-track text-text-soft transition-colors duration-150 group-hover:bg-cobalt-soft group-hover:text-cobalt">
+          <span class="grid size-10 shrink-0 place-items-center rounded-[12px] bg-surface-track text-text-soft transition-colors duration-150 group-hover:bg-brand-soft group-hover:text-brand">
             <CompanionIcon
               :name="d.icon"
               :size="19"

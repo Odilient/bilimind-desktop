@@ -1,6 +1,5 @@
 /**
- * The wire to `POST /api/companion/ask` and its threads, and the one place
- * that knows the demo has no server.
+ * The wire to `POST /api/companion/ask` and its threads.
  *
  *   await askStream(body, {
  *     start: ({ thread_id }) => …,     // the thread exists (new or not)
@@ -23,7 +22,6 @@
  * else a plain one for the status.
  */
 import { apiBaseUrl, AUTH_COOKIE, authCookieOptions, useApi } from '~/composables/useApi'
-import { useCompanion } from '../store'
 import type { AiAction, AiAskBody, AiMessage, AiProposal, AiStep, AiThread } from './types'
 
 export interface AskHandlers {
@@ -50,15 +48,6 @@ export class AiAskError extends Error {
   }
 }
 
-/** The demo answers from memory (demo.ts), loaded only when it is on. */
-function demo(): boolean {
-  try {
-    return useCompanion().status.mode === 'demo'
-  } catch {
-    return false
-  }
-}
-
 function token(): string | null {
   try {
     return useCookie<string | null>(AUTH_COOKIE, authCookieOptions()).value ?? null
@@ -74,7 +63,8 @@ function url(path: string): string {
 function plainMessage(status: number): string {
   if (status === 0) return 'BiliMind can\'t be reached. Check the connection and try again.'
   if (status === 401 || status === 419) return 'You\'ve been signed out. Sign in again to ask.'
-  if (status === 402) return 'You\'ve used your AI for now. Add credits in Settings, or wait for it to reset.'
+  // The ways forward are drawn after it as links (CompanionOutOfAi), so this is the reason alone.
+  if (status === 402) return 'You\'re out of AI for now.'
   if (status === 422) return 'That question couldn\'t be sent. Try saying it another way.'
   if (status === 429) return 'Too many questions at once. Wait a moment and ask again.'
   if (status === 503) return 'The AI is resting for a moment. Try again shortly.'
@@ -131,7 +121,11 @@ function dispatch(name: string, data: unknown, on: AskHandlers): boolean {
       on.done({ thread_id: String(payload.thread_id ?? ''), message: payload.message as AiMessage })
       return true
     case 'error':
-      throw new AiAskError(String(payload.message ?? '') || plainMessage(500), Number(payload.status ?? 500))
+      // Out of AI: the reason alone, because the reply draws the ways forward as links.
+      throw new AiAskError(
+        String((payload.status === 402 && payload.reason) || payload.message || '') || plainMessage(500),
+        Number(payload.status ?? 500),
+      )
     default:
       return false
   }
@@ -169,11 +163,6 @@ async function readStream(response: Response, on: AskHandlers): Promise<void> {
  * as the learner pressing Stop, not as a failure).
  */
 export async function askStream(body: AiAskBody, on: AskHandlers, signal?: AbortSignal): Promise<void> {
-  if (demo()) {
-    const { demoAsk } = await import('./demo')
-    return demoAsk(body, on, signal)
-  }
-
   const bearer = token()
   let response: Response
   try {
@@ -196,8 +185,11 @@ export async function askStream(body: AiAskBody, on: AskHandlers, signal?: Abort
     let message = ''
     let threadId: string | null = null
     try {
-      const json = (await response.json()) as { message?: string; thread_id?: string }
-      message = typeof json?.message === 'string' ? json.message : ''
+      const json = (await response.json()) as { message?: string; reason?: string; thread_id?: string }
+      // A 402 from the meter carries its reason alone; the reply adds the ways forward.
+      message = response.status === 402 && typeof json?.reason === 'string'
+        ? json.reason
+        : typeof json?.message === 'string' ? json.message : ''
       threadId = typeof json?.thread_id === 'string' ? json.thread_id : null
     } catch {
       // No body worth reading; the status says enough.
@@ -222,23 +214,19 @@ export async function askStream(body: AiAskBody, on: AskHandlers, signal?: Abort
 /* -- Threads ---------------------------------------------------------------- */
 
 export async function listThreads(): Promise<AiThread[]> {
-  if (demo()) return (await import('./demo')).demoThreads()
   return useApi().get<AiThread[]>('/companion/ask/threads')
 }
 
 export async function getThread(id: string): Promise<AiThread & { messages: AiMessage[] }> {
-  if (demo()) return (await import('./demo')).demoThread(id)
   const thread = await useApi().get<AiThread & { messages?: AiMessage[] }>(`/companion/ask/threads/${id}`)
   return { ...thread, messages: thread.messages ?? [] }
 }
 
 /** A chat named by the learner (the sidebar's Rename, the chat page's title). */
 export async function renameThread(id: string, title: string): Promise<void> {
-  if (demo()) return (await import('./demo')).demoRename(id, title)
   await useApi().patch(`/companion/ask/threads/${id}`, { title })
 }
 
 export async function deleteThread(id: string): Promise<void> {
-  if (demo()) return (await import('./demo')).demoForget(id)
   await useApi().del(`/companion/ask/threads/${id}`)
 }

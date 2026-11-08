@@ -203,7 +203,7 @@ const fieldStyle = computed(() => ({ backgroundColor: hsvToHex({ h: hsv.value.h,
         spellcheck="false"
         maxlength="7"
         aria-label="Hex colour"
-        class="num h-8 min-w-0 flex-1 rounded-[9px] border border-border-field bg-surface px-2.5 text-[13px] text-text-body uppercase focus:border-brand focus:outline-none"
+        class="num h-8 min-w-0 flex-1 rounded-[9px] border border-border-field bg-surface px-2.5 text-[13px] text-text-body focus:border-brand focus:outline-none"
         @input="onHexInput"
         @change="onHexCommit"
         @keydown.enter.prevent="onHexCommit"

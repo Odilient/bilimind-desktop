@@ -1,0 +1,153 @@
+{
+  "title": "Tasks",
+  "col": {
+    "todo": "To do",
+    "doing": "Doing",
+    "done": "Done"
+  },
+  "group": {
+    "overdue": "Overdue",
+    "today": "Today",
+    "week": "This week",
+    "later": "Later",
+    "none": "No date",
+    "done": "Done"
+  },
+  "priority": {
+    "none": "No priority",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "urgent": "Urgent"
+  },
+  "kind": {
+    "assignment": "Assignment",
+    "quiz": "Quiz",
+    "lab": "Lab",
+    "midterm": "Midterm",
+    "final": "Final",
+    "exam": "Exam",
+    "project": "Project",
+    "presentation": "Presentation",
+    "milestone": "Milestone",
+    "other": "Deadline"
+  },
+  "day": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "nextWeek": "Next week",
+    "none": "No date",
+    "noTime": "No time",
+    "pick": "Pick a date",
+    "pickDayFirst": "Pick a day first",
+    "noneYet": "No date yet",
+    "addsItOn": "adds it, on {day}"
+  },
+  "field": {
+    "status": "Status",
+    "priority": "Priority",
+    "course": "Course",
+    "day": "Day",
+    "time": "Time",
+    "length": "Length",
+    "due": "Due",
+    "kind": "Kind",
+    "properties": "Properties",
+    "note": "Note",
+    "task": "Task",
+    "view": "View",
+    "column": "Column"
+  },
+  "course": {
+    "none": "No course",
+    "all": "All courses"
+  },
+  "menu": {
+    "find": "Find {what}…",
+    "findAria": "Find {what}",
+    "nothing": "Nothing matches."
+  },
+  "add": {
+    "label": "Something to do",
+    "placeholder": "Add a task",
+    "moreTitle": "More: a day, a time, a priority, a note",
+    "moreAria": "Add with a day, a time, a priority or a note",
+    "action": "Add a task"
+  },
+  "card": {
+    "moveTo": "Move to {col}",
+    "doToday": "Do it today",
+    "doTomorrow": "Do it tomorrow",
+    "markDone": "Mark done",
+    "markHandedIn": "Mark handed in",
+    "notDone": "Not done after all",
+    "done": "Done",
+    "priority": "Priority: {name}",
+    "fromCourse": "From your course: {kind}",
+    "steps": "{done} of {total} steps done",
+    "mark": "Your mark",
+    "got": "Got",
+    "hasNote": "Has a note",
+    "moreFor": "More for {title}",
+    "ofGrade": "of the grade"
+  },
+  "steps": {
+    "title": "Steps",
+    "step": "Step: {text}",
+    "takeOut": "Take out: {text}",
+    "takeOutTitle": "Take this step out",
+    "add": "Add a step"
+  },
+  "list": {
+    "newIn": "New task in {col}",
+    "emptyTodo": "Nothing to do.",
+    "emptyDoing": "Nothing started.",
+    "emptyDone": "Nothing finished in the last two weeks."
+  },
+  "new": {
+    "heading": "New task",
+    "what": "What to do",
+    "notePlaceholder": "Add a note: what it’s for, where to start…",
+    "addedTo": "Added to {col}",
+    "addsIt": "adds it",
+    "add": "Add task"
+  },
+  "page": {
+    "missingTitle": "This task isn’t here any more",
+    "missingBody": "It was deleted, or it belongs to the day’s plan, which lives on Today.",
+    "back": "Back to Tasks",
+    "sources": "Its sources and history",
+    "rename": "Rename",
+    "openDeadline": "Open the deadline’s page",
+    "added": "Added",
+    "arrived": "Arrived",
+    "started": "Started",
+    "handedIn": "Handed in",
+    "notePlaceholder": "What it’s for, where to start, what to ask…",
+    "ctrlSaves": "Ctrl + Enter saves",
+    "noteEmpty": "Add a note: what it’s for, where to start, what to ask…",
+    "covers": "What it covers, says the course:",
+    "breadcrumb": "Breadcrumb"
+  },
+  "board": {
+    "subtitle": "Your own to-dos and your courses’ deadlines. Drag a card when you start it or finish it.",
+    "newTask": "New task",
+    "newTaskKey": "New task (C)",
+    "board": "Board",
+    "list": "List",
+    "find": "Find a task",
+    "nothingFilter": "Nothing here for this filter.",
+    "emptyDoing": "Drag here what you’ve started.",
+    "emptyDone": "What you finish lands here.",
+    "fromEarlier": "{n} task from earlier days | {n} tasks from earlier days",
+    "moveToday": "Move to today",
+    "movedToday": "{n} task moved to today | {n} tasks moved to today",
+    "showFewer": "Show fewer",
+    "showAll": "Show all {n}",
+    "bring": "Bring in your assignments",
+    "download": "Download these tasks:",
+    "spreadsheet": "Spreadsheet",
+    "eyebrow": "{n} thing to do today | {n} things to do today",
+    "eyebrowNone": "Nothing to do today"
+  }
+}

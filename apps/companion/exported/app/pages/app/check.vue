@@ -36,14 +36,19 @@ import { newChatLink } from '~/companion/ai/routes'
 import { dueTopics, nextCheckOpens, sittingSize } from '~/companion/checks'
 import { opensAt as opensFor, scopeOf } from '~/companion/readiness'
 import { readyWords } from '~/companion/words'
+import { dayKey, dayLabel, daysBetween } from '~/companion/time'
 import { dayWord, topicHref } from '~/companion/today-layout'
 import { ApiError, useApi } from '~/composables/useApi'
+import { outOfAi, toastOutOfAi } from '~/companion/usage'
+// recording: a teach-back can be said out loud in the desktop app (ExplainAloud)
+import { isDesktopApp } from '~/companion/platform'
 import type { StepRow } from '~/components/companion/create/Building.vue'
 
 definePageMeta({ layout: 'companion' })
 
 const route = useRoute()
 const c = useCompanion()
+const { t, locale } = useI18n()
 
 // No notes, no help: the assistant has nothing of this screen to read.
 useAiContext(() => null)
@@ -68,6 +73,10 @@ type Phase = 'loading' | 'intro' | 'asking' | 'results' | 'empty'
 const phase = ref<Phase>('loading')
 const sitting = ref<CheckSitting | null>(null)
 const startError = ref<string | null>(null)
+/** The start failed because the AI is out: the line names the ways forward. */
+const startLimited = ref(false)
+/** Marking ran into the same, and the learner has been told this sitting. */
+let markLimited = false
 /** Start was pressed before the questions arrived. */
 const waiting = ref(false)
 const index = ref(0)
@@ -118,7 +127,7 @@ const topics = computed<Topic[]>(() => {
 })
 
 function names(list: string[]): string {
-  return list.length > 1 ? `${list.slice(0, -1).join(', ')} and ${list.at(-1)}` : (list[0] ?? '')
+  return new Intl.ListFormat(intlTag(locale.value), { type: 'conjunction' }).format(list)
 }
 
 /** "studied 4 days ago", "studied 2 to 9 days ago". */
@@ -131,8 +140,8 @@ const studiedWords = computed(() => {
         .map((at) => Math.floor((Date.now() - Date.parse(at)) / DAY))
   if (!days.length) return null
   const [lo, hi] = [Math.min(...days), Math.max(...days)]
-  const one = (n: number) => (n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`)
-  return lo === hi || hi <= 1 ? `studied ${one(lo)}` : `studied ${lo} to ${hi} days ago`
+  if (lo === hi || hi <= 1) return lo === 0 ? t('check.page.studiedToday') : lo === 1 ? t('check.page.studiedYesterday') : t('check.page.studiedAgo', lo)
+  return t('check.page.studiedRange', { lo, hi })
 })
 
 const size = computed(() => {
@@ -153,9 +162,9 @@ const warm = computed(() => {
 })
 
 const heading = computed(() => {
-  if (purpose.value === 'prepare') return deadline.value ? `What ${deadlineName(deadline.value)} needs` : 'What it needs'
-  if (purpose.value === 'teach') return teachTopic.value ? `Explain ${teachTopic.value.title}` : 'Explain it back'
-  return 'Check yourself'
+  if (purpose.value === 'prepare') return deadline.value ? t('check.page.prepare', { name: deadlineName(deadline.value) }) : t('check.page.prepareFallback')
+  if (purpose.value === 'teach') return teachTopic.value ? t('check.page.teach', { topic: teachTopic.value.title }) : t('check.page.teachFallback')
+  return t('check.page.title')
 })
 
 /* -- Where the result line points ----------------------------------------- */
@@ -193,10 +202,13 @@ function body() {
 }
 
 function failure(error: unknown): string {
+  const limited = outOfAi(error)
+  startLimited.value = limited !== null
+  if (limited) return limited
   if (error instanceof ApiError && (error.isNetwork || error.status === 0)) {
-    return 'Checks need a connection: your questions are written from your material on the server.'
+    return t('check.page.needsConnection')
   }
-  return 'Your questions couldn\'t be written just now. Try again in a minute.'
+  return t('check.page.couldntWrite')
 }
 
 let ticket = 0
@@ -207,6 +219,7 @@ async function arrive(): Promise<void> {
   if (mine !== ticket) return
   sitting.value = null
   startError.value = null
+  markLimited = false
   waiting.value = false
   replanned = false
   index.value = 0
@@ -293,7 +306,7 @@ async function pollWriting(): Promise<void> {
 
 watch(waiting, (on) => {
   clearTimeout(writingPoll)
-  if (on && c.status.mode !== 'demo') void pollWriting()
+  if (on) void pollWriting()
   else writing.value = []
 })
 
@@ -304,13 +317,13 @@ const writingSteps = computed<StepRow[]>(() => {
   const seconds = clockLabel(writingClock.since(0) ?? 0)
   const firstOpen = writing.value.findIndex((t) => t.written < t.of)
   return [
-    { key: 'read', label: 'Reading your material', state: writing.value.length ? 'done' : 'run' },
-    { key: 'think', label: 'Working out what to ask', state: started ? 'done' : writing.value.length ? 'run' : 'wait', note: started ? null : seconds },
-    ...writing.value.map((t, i): StepRow => ({
+    { key: 'read', label: t('check.page.reading'), state: writing.value.length ? 'done' : 'run' },
+    { key: 'think', label: t('check.page.working'), state: started ? 'done' : writing.value.length ? 'run' : 'wait', note: started ? null : seconds },
+    ...writing.value.map((w, i): StepRow => ({
       key: `topic-${i}`,
-      label: t.topic,
-      state: t.written >= t.of ? 'done' : started && i === firstOpen ? 'run' : 'wait',
-      note: t.written ? `${t.written} of ${t.of}` : null,
+      label: w.topic,
+      state: w.written >= w.of ? 'done' : started && i === firstOpen ? 'run' : 'wait',
+      note: w.written ? t('check.page.of', { a: w.written, b: w.of }) : null,
     })),
   ]
 })
@@ -343,8 +356,14 @@ function mark(id: string): void {
     () => {
       delete marking[id]
     },
-    () => {
+    (error) => {
       marking[id] = 'failed'
+      // The answer is kept; marking it needs AI. Said once a sitting, not per question.
+      const limited = outOfAi(error)
+      if (limited && !markLimited) {
+        markLimited = true
+        toastOutOfAi(limited)
+      }
     },
   )
 }
@@ -437,31 +456,37 @@ watch(settled, (now) => {
 })
 
 const headline = computed(() => {
-  if (!settled.value) return 'Marking your answers…'
+  if (!settled.value) return t('check.page.marking')
   const n = (r: Check['result']) => marked.value.filter((k) => k.result === r).length
   const [right, partly, wrong] = [n('right'), n('partly'), n('wrong')]
   // One question (a teach-back) gets its verdict, not a count.
-  if (marked.value.length === 1) return right ? 'Right' : partly ? 'Partly right' : 'Missed'
-  if (!partly) return `${right} of ${marked.value.length} right`
-  return [`${right} right`, `${partly} partly`, wrong ? `${wrong} missed` : ''].filter(Boolean).join(', ')
+  if (marked.value.length === 1) return t(right ? 'check.paper.right' : partly ? 'check.page.partlyRight' : 'check.paper.wrong')
+  if (!partly) return t('check.page.nOfRight', { n: right, total: marked.value.length })
+  return [t('check.page.nRight', { n: right }), t('check.page.nPartly', { n: partly }), wrong ? t('check.page.nMissed', { n: wrong }) : ''].filter(Boolean).join(', ')
 })
 
 /** One line per topic: what the check says about it now. */
 const topicLines = computed(() =>
   topics.value
-    .map((t) => {
-      const rows = marked.value.filter((k) => k.topic_id === t.id)
+    .map((tp) => {
+      const rows = marked.value.filter((k) => k.topic_id === tp.id)
       if (!rows.length) return null
-      if (!rows.some((k) => k.cold)) return { id: t.id, title: t.title, words: 'practice, so it counts next time', tone: 'text-text-muted' }
-      if (c.topicCheck(t.id)?.state === 'checked') return { id: t.id, title: t.title, words: 'checked', tone: 'text-success-text' }
+      if (!rows.some((k) => k.cold)) return { id: tp.id, title: tp.title, words: t('check.page.practiceLine'), tone: 'text-text-muted', mark: 'learning' as const }
+      const tc = c.topicCheck(tp.id)
+      if (tc?.state === 'checked') {
+        // The ladder (a day, a week, a month): when this topic is asked again.
+        const again = tc.next_check_at ? t('check.page.checkedNext', { day: dayLabel(dayKey(tc.next_check_at)) }) : t('check.page.checked')
+        return { id: tp.id, title: tp.title, words: again, tone: 'text-leaf-ink', mark: 'checked' as const }
+      }
       const fresh = rows.every((k) => k.studied_days_ago === null)
       return {
-        id: t.id,
-        title: t.title,
+        id: tp.id,
+        title: tp.title,
         words: fresh
-          ? 'new to you, it\'s in your plan'
-          : `${rows.some((k) => k.result === 'wrong') ? 'missed' : 'partly right'}, it's back in your plan with where to read`,
-        tone: 'text-coral-text',
+          ? t('check.page.fresh')
+          : t(rows.some((k) => k.result === 'wrong') ? 'check.page.missedBack' : 'check.page.partlyBack'),
+        tone: 'text-rose-ink',
+        mark: 'learning' as const,
       }
     })
     .filter((x) => x !== null),
@@ -473,8 +498,8 @@ const calibration = computed(() => {
   if (rated.length < 3) return null
   const sure = rated.filter((k) => k.confidence === 'sure')
   const right = sure.filter((k) => k.result === 'right').length
-  if (!sure.length) return `You weren't sure of any, and got ${rated.filter((k) => k.result === 'right').length} right.`
-  return `You were sure of ${sure.length}, and right on ${right} of those.`
+  if (!sure.length) return t('check.page.noneSure', { n: rated.filter((k) => k.result === 'right').length })
+  return t('check.page.sureOf', { sure: sure.length, right })
 })
 
 const missed = computed(() => marked.value.filter((k) => k.result !== 'right'))
@@ -482,10 +507,10 @@ const missed = computed(() => marked.value.filter((k) => k.result !== 'right'))
 /** Help is welcome now: the misses, with what they wrote, as a new chat's first message, sent. */
 async function askAboutMisses(): Promise<void> {
   const lines = missed.value.map((k, i) => {
-    const wrote = k.answer?.trim() ? `I wrote: ${k.answer.trim()}` : 'I didn\'t know.'
-    return [`${i + 1}. ${k.prompt}`, wrote, k.revealed ? `The answer: ${k.revealed}` : ''].filter(Boolean).join('\n')
+    const wrote = k.answer?.trim() ? t('check.page.iWrote', { answer: k.answer.trim() }) : t('check.page.iDidntKnow')
+    return [`${i + 1}. ${k.prompt}`, wrote, k.revealed ? t('check.page.theAnswer', { answer: k.revealed }) : ''].filter(Boolean).join('\n')
   })
-  const q = [`I just checked myself on ${names(topics.value.map((t) => t.title))} and missed these. Help me see where I went wrong.`, ...lines].join('\n\n')
+  const q = [t('check.page.askMisses', { topics: names(topics.value.map((x) => x.title)) }), ...lines].join('\n\n')
   await navigateTo(newChatLink({ q }))
 }
 
@@ -504,8 +529,8 @@ const backTo = computed(() => {
 /** The nothing-to-check line: which topic turns cold next, and when. */
 const opensLine = computed(() => {
   if (!opensAt.value) return null
-  const when = dayWord(opensAt.value)
-  const at = when === 'today' ? 'later today' : when === 'tomorrow' ? 'tomorrow' : `on ${when}`
+  const diff = daysBetween(dayKey(Date.now()), dayKey(opensAt.value))
+  const at = diff <= 0 ? t('check.page.opensToday') : diff === 1 ? t('check.page.opensTomorrow') : t('check.page.opensOn', { day: dayWord(opensAt.value) })
   const next = scopeIds()
     .map((id) => {
       const row = c.topicCheck(id)
@@ -514,7 +539,7 @@ const opensLine = computed(() => {
     .filter((x): x is { id: string; at: string } => !!x.at && Date.parse(x.at) > Date.now())
     .sort((a, b) => Date.parse(a.at) - Date.parse(b.at))[0]
   const title = next ? c.get('topics', next.id)?.title : null
-  return title ? `${title} opens ${at}.` : `Your next check opens ${at}.`
+  return title ? t('check.page.topicOpens', { title, when: at }) : t('check.page.nextOpens', { when: at })
 })
 
 const progress = computed(() =>
@@ -528,8 +553,8 @@ const progress = computed(() =>
       <NuxtLink
         :to="backTo"
         class="-ml-2 grid size-11 shrink-0 place-items-center rounded-full text-text-muted transition-colors hover:bg-surface-mute hover:text-text"
-        aria-label="Leave the check: your answers are kept"
-        title="Stop"
+        :aria-label="t('check.page.leaveAria')"
+        :title="t('check.page.stop')"
       >
         <CompanionIcon
           name="x"
@@ -542,7 +567,7 @@ const progress = computed(() =>
           <span
             v-if="phase === 'asking' && total"
             class="shrink-0 text-[14px] text-text-muted"
-          >{{ Math.min(index + 1, total) }} of {{ total }}</span>
+          >{{ t('check.page.of', { a: Math.min(index + 1, total), b: total }) }}</span>
         </p>
         <span
           class="h-1.5 overflow-hidden rounded-full bg-surface-track"
@@ -568,20 +593,19 @@ const progress = computed(() =>
       class="grid justify-items-center gap-3 py-16 text-center"
     >
       <h1 class="t-head text-[30px]">
-        Nothing to check yet
+        {{ t('check.page.emptyTitle') }}
       </h1>
       <p
         v-if="opensLine"
         class="max-w-[460px] text-[16px] leading-relaxed text-text-muted"
       >
-        A check works when it's cold: a few days after you studied. {{ opensLine }}
+        {{ t('check.page.emptyCold', { opens: opensLine }) }}
       </p>
       <p
         v-else
         class="max-w-[460px] text-[16px] leading-relaxed text-text-muted"
       >
-        Checks come a few days after you've met a topic, from your own material. Start a lesson or
-        review some cards first.
+        {{ t('check.page.emptyHint') }}
       </p>
       <UiBtn
         :to="backTo"
@@ -589,7 +613,7 @@ const progress = computed(() =>
         size="lg"
         class="mt-2"
       >
-        Back
+        {{ t('common.back') }}
       </UiBtn>
     </section>
 
@@ -612,35 +636,37 @@ const progress = computed(() =>
           v-if="size.questions"
           class="text-[16px] text-text-muted"
         >
-          {{ size.questions }} {{ size.questions === 1 ? 'question' : 'questions' }} · about {{ size.minutes }} min.
+          {{ t('check.page.questionsAbout', { min: size.minutes }, size.questions) }}
         </p>
         <p class="max-w-[460px] text-[16px] leading-relaxed text-text-muted">
-          No notes and no assistant until the end, so the result means something. Answer in your
-          own words; a sentence is enough. Before each answer, say how sure you are.
+          {{ t('check.page.rules') }}
         </p>
       </template>
       <template v-else-if="purpose === 'prepare'">
         <p class="max-w-[460px] text-[16px] leading-relaxed text-text-muted">
-          {{ size.questions }} questions on what it covers, before you start. Whatever you miss goes
-          into your plan, with where to read.
+          {{ t('check.page.prepareIntro', { n: size.questions }) }}
         </p>
       </template>
       <template v-else>
         <p class="max-w-[460px] text-[16px] leading-relaxed text-text-muted">
-          Explain it as if to a classmate who missed the class: 2 to 5 minutes, typed. I'll listen,
-          ask you one question, then mark it against your material.
+          {{ t('check.page.teachIntro', { how: t(isDesktopApp() ? 'check.page.howTypedOrSaid' : 'check.page.howTyped') }) }}
         </p>
         <p
           v-if="warm"
           class="max-w-[460px] text-[15px] leading-relaxed text-text-muted"
         >
-          Doing it now is practice. Do it again in a few days and it counts as a check.
+          {{ t('check.page.warm') }}
         </p>
       </template>
 
+      <CompanionOutOfAi
+        v-if="startError && startLimited && !waiting"
+        :reason="startError"
+        class="max-w-[440px] !text-[15px] text-danger-text"
+      />
       <p
-        v-if="startError && !waiting"
-        class="max-w-[440px] text-[15px] text-coral-text"
+        v-else-if="startError && !waiting"
+        class="max-w-[440px] text-[15px] text-danger-text"
         aria-live="polite"
       >
         {{ startError }}
@@ -653,7 +679,7 @@ const progress = computed(() =>
           :disabled="waiting"
           @click="start"
         >
-          {{ startError ? 'Try again' : 'Start' }}
+          {{ startError ? t('common.retry') : t('check.page.start') }}
         </UiBtn>
       </div>
       <CompanionCreateBuilding
@@ -661,8 +687,8 @@ const progress = computed(() =>
         class="mt-3 w-full max-w-[440px] text-left"
         compact
         flat
-        title="Writing your questions"
-        lead="From your own material"
+        :title="t('check.page.writing')"
+        :lead="t('check.page.fromMaterial')"
         :steps="writingSteps"
         @cancel="waiting = false"
       />
@@ -693,21 +719,30 @@ const progress = computed(() =>
     >
       <div class="grid gap-3">
         <h1
-          class="t-head text-[30px]"
+          class="font-display text-[30px] leading-[1.05] font-semibold tracking-[-0.035em] min-[900px]:text-[36px]"
           aria-live="polite"
         >
           {{ headline }}
         </h1>
+        <!-- Each topic as its node on the path (06-checks .ck-path): a pass ticks it leaf-green. -->
         <ul
           v-if="settled && topicLines.length"
-          class="grid gap-1 text-[16px] leading-relaxed"
+          class="grid gap-1.5"
         >
           <li
             v-for="line in topicLines"
             :key="line.id"
-            class="text-text"
+            :class="[
+              'cp-tick flex min-h-[38px] items-center gap-2.5 rounded-[10px] px-3 py-1.5 text-[14px] font-semibold text-text shadow-[0_0_0_1px_var(--border-strong)]',
+              line.mark === 'checked' ? 'bg-[color-mix(in_oklab,var(--leaf-soft)_55%,var(--surface))]' : 'bg-surface',
+            ]"
           >
-            {{ line.title }}: <span :class="line.tone">{{ line.words }}</span>
+            <CompanionCourseMark
+              :state="line.mark"
+              class="cp-tick-mark"
+            />
+            <span class="min-w-0 flex-1">{{ line.title }}</span>
+            <span :class="['text-[13px] font-medium', line.tone]">{{ line.words }}</span>
           </li>
         </ul>
         <p
@@ -735,7 +770,7 @@ const progress = computed(() =>
           variant="primary"
           size="lg"
         >
-          Done
+          {{ t('common.done') }}
         </UiBtn>
         <UiBtn
           v-if="missed.length"
@@ -743,9 +778,33 @@ const progress = computed(() =>
           size="lg"
           @click="askAboutMisses"
         >
-          Ask about what I missed
+          {{ t('check.page.askMissed') }}
         </UiBtn>
       </div>
     </section>
   </div>
 </template>
+
+<style scoped>
+/* The mark lands with a small spring, as a node ticks on the path. */
+@media (prefers-reduced-motion: no-preference) {
+  .cp-tick-mark {
+    animation: cp-pop 0.45s var(--spring) both;
+  }
+
+  .cp-tick:nth-child(2) .cp-tick-mark {
+    animation-delay: 0.12s;
+  }
+
+  .cp-tick:nth-child(3) .cp-tick-mark {
+    animation-delay: 0.24s;
+  }
+}
+
+@keyframes cp-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+</style>

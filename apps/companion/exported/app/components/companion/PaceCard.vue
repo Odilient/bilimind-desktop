@@ -19,11 +19,12 @@ const props = withDefaults(
   }>(),
   { compact: false, hideStatus: false },
 )
+const { t } = useI18n()
 const c = useCompanion()
 const toast = useToast()
 const busy = ref<'slot' | 'date' | null>(null)
 
-const finish = computed(() => (props.goal.ends_on ? dayMonthLong(props.goal.ends_on) : 'the finish'))
+const finish = computed(() => (props.goal.ends_on ? dayMonthLong(props.goal.ends_on) : t('today.pace.theFinish')))
 const later = computed(() =>
   props.goal.ends_on ? shiftDay(props.goal.ends_on, 7 * Math.max(1, props.pace?.weeks_behind ?? 1) * 2) : null,
 )
@@ -52,7 +53,7 @@ async function addSession(): Promise<void> {
     })
     await c.sync()
     await c.loadToday()
-    toast.success({ title: `${weekdayLong(freeDay.value)}s added`, body: 'The plan is redrawn around them.' })
+    toast.success({ title: t('today.pace.added', { day: weekdayLong(freeDay.value) }), body: t('today.pace.redrawn') })
   } finally {
     busy.value = null
   }
@@ -65,7 +66,7 @@ async function moveDate(): Promise<void> {
     await c.upsert<Goal>('goals', { id: props.goal.id, ends_on: later.value })
     await c.sync()
     await c.loadToday()
-    toast.success({ title: `Finish line moved to ${dayMonthLong(later.value)}`, body: 'Same pace, a little more time.' })
+    toast.success({ title: t('today.pace.moved', { date: dayMonthLong(later.value) }), body: t('today.pace.moreTime') })
   } finally {
     busy.value = null
   }
@@ -80,13 +81,12 @@ async function moveDate(): Promise<void> {
     <p class="text-[14.5px] leading-snug text-text-body">
       <template v-if="compact">
         <b class="font-semibold text-text">{{ subject.title }}:</b>
-        {{ pace.weeks_behind === 1 ? 'a week' : `${pace.weeks_behind} weeks` }} behind for {{ finish }}.
+        {{ t('today.pace.behindFor', { n: pace.weeks_behind, finish }, pace.weeks_behind) }}
       </template>
       <template v-else-if="!hideStatus">
-        <b class="font-semibold text-text">{{ pace.weeks_behind === 1 ? 'A week' : `${pace.weeks_behind} weeks` }} behind for {{ finish }}.</b>
+        <b class="font-semibold text-text">{{ t('today.pace.behindForCap', { n: pace.weeks_behind, finish }, pace.weeks_behind) }}</b>
       </template>
-      {{ pace.sessions_per_week_actual }} sessions a week lately; the plan needs
-      {{ pace.sessions_per_week_needed }}. That's normal. Pick one:
+      {{ t('today.pace.rate', { actual: pace.sessions_per_week_actual, needed: pace.sessions_per_week_needed }) }}
     </p>
     <div class="flex flex-wrap gap-2">
       <UiBtn
@@ -96,7 +96,7 @@ async function moveDate(): Promise<void> {
         :disabled="busy !== null"
         @click="addSession"
       >
-        Add {{ weekdayLong(freeDay) }}s
+        {{ t('today.pace.addDay', { day: weekdayLong(freeDay) }) }}
       </UiBtn>
       <UiBtn
         variant="secondary"
@@ -105,7 +105,7 @@ async function moveDate(): Promise<void> {
         :disabled="busy !== null || !later"
         @click="moveDate"
       >
-        Move to {{ later ? dayMonthLong(later) : 'later' }}
+        {{ t('today.pace.moveTo', { date: later ? dayMonthLong(later) : t('today.pace.later') }) }}
       </UiBtn>
     </div>
   </section>

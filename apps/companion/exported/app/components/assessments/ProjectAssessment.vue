@@ -6,6 +6,7 @@ import type { Assessment, AttemptResponse } from '~/types/api'
  * shape SubmitAttemptRequest accepts — and shows the deliverables from the
  * project block so the learner can tick them off as they write.
  */
+const { t } = useI18n()
 const props = withDefaults(
   defineProps<{
     assessment: Assessment
@@ -78,7 +79,7 @@ function removeLink(index: number): void {
 <template>
   <div class="flex flex-col gap-4">
     <div v-if="deliverables.length">
-      <p class="eyebrow-loud mb-2.5 text-text-faint">What you're handing in</p>
+      <p class="mb-2.5 text-[12px] leading-none font-bold text-text-muted">{{ t('check.assess.handingIn') }}</p>
       <ul class="flex flex-col gap-1">
         <li
           v-for="(item, index) in deliverables"
@@ -119,16 +120,16 @@ function removeLink(index: number): void {
 
     <UiTextField
       v-model="text"
-      label="What you built"
+      :label="t('check.assess.built')"
       multiline
       :rows="8"
       :maxlength="40000"
       :disabled="disabled"
-      placeholder="Describe what you built, the decisions you made and where it falls short. The rubric grades what you actually say here."
+      :placeholder="t('check.assess.builtPlaceholder')"
     />
 
     <div>
-      <p class="eyebrow-loud mb-2.5 text-text-faint">Links (optional)</p>
+      <p class="mb-2.5 text-[12px] leading-none font-bold text-text-muted">{{ t('check.assess.links') }}</p>
       <div class="flex flex-col gap-1.5">
         <div
           v-for="(_, index) in links"
@@ -142,7 +143,7 @@ function removeLink(index: number): void {
             icon="link"
             :disabled="disabled"
             placeholder="https://github.com/you/project"
-            aria-label="Link to your work"
+            :aria-label="t('check.assess.linkAria')"
           />
           <UiBtn
             v-if="links.length > 1 || links[0] !== ''"
@@ -150,7 +151,7 @@ function removeLink(index: number): void {
             size="sm"
             square
             icon="x"
-            label="Remove link"
+            :label="t('check.assess.removeLink')"
             :disabled="disabled"
             @click="removeLink(index)"
           />
@@ -164,13 +165,13 @@ function removeLink(index: number): void {
           :disabled="disabled || links.length >= 20"
           @click="addLink"
         >
-          Add another
+          {{ t('check.assess.addAnother') }}
         </UiBtn>
         <p
           v-if="brokenLinks"
           class="text-[11.5px] text-warn"
         >
-          Links need the full https:// prefix to be sent.
+          {{ t('check.assess.brokenLinks') }}
         </p>
       </div>
     </div>

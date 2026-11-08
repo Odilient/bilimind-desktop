@@ -19,6 +19,7 @@ import { useCompanion } from '~/companion/store'
 
 const props = withDefaults(defineProps<{ shown?: number | null }>(), { shown: null })
 const emit = defineEmits<{ pick: [week: number] }>()
+const { t } = useI18n()
 const c = useCompanion()
 
 interface Cell {
@@ -31,8 +32,8 @@ interface Cell {
 const cells = computed<Cell[]>(() => {
   const out: Cell[] = Array.from({ length: 16 }, (_, i) => ({
     n: i + 1,
-    label: i < 14 ? String(i + 1) : `Exams ${i - 13}`,
-    name: i < 14 ? `Week ${i + 1}` : `Exam week ${i - 13}`,
+    label: i < 14 ? String(i + 1) : t('today.semester.exams', { n: i - 13 }),
+    name: i < 14 ? t('today.semester.week', { n: i + 1 }) : t('today.semester.examWeek', { n: i - 13 }),
     marks: [],
   }))
   for (const d of c.deadlines.value) {
@@ -53,8 +54,8 @@ onMounted(() => {
 })
 
 function label(cell: Cell): string {
-  const what = cell.marks.length ? cell.marks.map((m) => m.title).join(', ') : 'nothing due'
-  return `${cell.name}${cell.n === week.value ? ', this week' : ''}: ${what}`
+  const what = cell.marks.length ? cell.marks.map((m) => m.title).join(', ') : t('today.semester.nothingDue')
+  return `${cell.name}${cell.n === week.value ? `, ${t('today.semester.thisWeek')}` : ''}: ${what}`
 }
 </script>
 
@@ -65,7 +66,7 @@ function label(cell: Cell): string {
   >
     <ol
       class="grid min-w-[880px] grid-cols-[repeat(14,minmax(52px,1fr))_repeat(2,minmax(76px,1.3fr))] divide-x divide-border-rule"
-      aria-label="The semester, week by week"
+      :aria-label="t('today.semester.label')"
     >
       <li
         v-for="cell in cells"
@@ -88,7 +89,7 @@ function label(cell: Cell): string {
           <span
             class="text-[13px] leading-tight whitespace-nowrap"
             :class="cell.marks.length >= 3 ? 'font-semibold text-text' : 'text-text-muted'"
-          >{{ cell.marks.length ? `${cell.marks.length} due` : '–' }}</span>
+          >{{ cell.marks.length ? t('today.semester.due', { n: cell.marks.length }) : '–' }}</span>
         </button>
       </li>
     </ol>

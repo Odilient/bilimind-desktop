@@ -32,8 +32,7 @@ app.setAppUserModelId('com.bilimind.companion')
 registerScheme()
 
 const spaRoot = process.env.BILIMIND_SPA_DIR || join(app.getAppPath(), 'spa')
-const demo = process.env.BILIMIND_DEMO === '1' || process.argv.includes('--demo')
-const startUrl = `${ORIGIN}/app${demo ? '?demo=1' : ''}`
+const startUrl = `${ORIGIN}/app`
 const iconFile = join(app.getAppPath(), 'resources', 'icon.png')
 
 let win: BrowserWindow | null = null
