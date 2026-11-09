@@ -1,0 +1,18 @@
+/* rhythm: one deep ink band in the middle of the page (LearnHouse / Raycast), tokens re-scoped so the
+   section's own components just follow. In dark mode it lifts a step instead. */
+.d2 .band-ink {
+  --paper: #1c1a16; --paper-2: #23201b; --paper-3: #2c2923; --card: #26231e; --card-2: #211e1a;
+  --ink: #f3eee4; --ink-2: rgb(243 238 228 / 0.72); --ink-3: rgb(243 238 228 / 0.5); --ink-4: rgb(243 238 228 / 0.28);
+  --line: rgb(243 238 228 / 0.09); --line-2: rgb(243 238 228 / 0.16); --wash: rgb(243 238 228 / 0.04); --wash-2: rgb(243 238 228 / 0.08); --on-ink: #1a1814;
+  --hi-soft: rgb(244 210 101 / 0.16); --hi-ink: #f4d265;
+  --leaf-soft: rgb(108 194 135 / 0.15); --sky-soft: rgb(111 169 245 / 0.15); --apricot-soft: rgb(245 166 116 / 0.15); --lilac-soft: rgb(171 156 245 / 0.16); --rose-soft: rgb(240 149 178 / 0.15); --butter-soft: rgb(242 205 92 / 0.15);
+  --leaf-ink: #8fd6a5; --sky-ink: #9cc3fa; --apricot-ink: #f7bb92; --lilac-ink: #c2b6fa; --rose-ink: #f5afc6;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3); --shadow-2: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 22px -8px rgb(0 0 0 / 0.5);
+  color-scheme: dark; color: var(--ink); background: var(--paper);
+  margin: 12px; border-radius: 30px; border-top-color: transparent;
+}
+.d2 .band-ink::before, .d2 .band-ink::after { display: none; }
+.d2 .band-ink + .sec, .d2 .frame:has(> .band-ink) + .frame > .sec:first-child { border-top-color: transparent; }
+:root[data-theme='dark'] .d2 .band-ink { --paper: #211e1a; --card: #2a2721; --card-2: #25221d; background: var(--paper); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .d2 .band-ink { --paper: #211e1a; --card: #2a2721; --card-2: #25221d; background: var(--paper); } }
+@media (max-width: 640px) { .d2 .band-ink { margin: 6px; border-radius: 22px; } }

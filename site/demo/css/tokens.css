@@ -1,0 +1,162 @@
+/* BiliMind · Daylight 2 — tokens.
+   Warm paper, warm ink, one loud colour (the highlighter), six soft-vivid colours for courses and features.
+   Display: Bricolage Grotesque. Text and UI: Figtree. */
+
+:root {
+  color-scheme: light;
+  --paper: #f6f3ec;
+  --paper-2: #efeadf;
+  --paper-3: #e6e0d2;
+  --card: #fffefb;
+  --card-2: #faf8f2;
+  --ink: #1f1c17;
+  --ink-2: rgb(31 28 23 / 0.7);
+  --ink-3: rgb(31 28 23 / 0.5);
+  --ink-4: rgb(31 28 23 / 0.3);
+  --line: rgb(31 28 23 / 0.09);
+  --line-2: rgb(31 28 23 / 0.15);
+  --wash: rgb(31 28 23 / 0.035);
+  --wash-2: rgb(31 28 23 / 0.065);
+  --on-ink: #fffdf8;
+  --hi: #ffe27a;
+  --hi-2: #ffd447;
+  --hi-soft: #fff3c4;
+  --hi-ink: #6b5200;
+  --hl-mark: #ffe27a;
+  --leaf: #5bb276;
+  --sky: #5b9cf0;
+  --apricot: #f59a62;
+  --lilac: #9d8cf2;
+  --rose: #ec85a6;
+  --butter: #f2c84b;
+  --leaf-soft: #e2f0dc;
+  --sky-soft: #e1ebfb;
+  --apricot-soft: #fce6d6;
+  --lilac-soft: #ebe6fc;
+  --rose-soft: #fbe4eb;
+  --butter-soft: #fff1c7;
+  --leaf-ink: #2f7a47;
+  --sky-ink: #2d64b8;
+  --apricot-ink: #b2541c;
+  --lilac-ink: #5b49c2;
+  --rose-ink: #b23f68;
+  --good: #3f9b5f;
+  --warn: #c9861a;
+  --bad: #d4553f;
+  /* the morning sky behind paintings, and the panels of the big colour sheets */
+  --sky-top: #bcd3f0;
+  --sky-low: #f6ead3;
+  --sheet-ink: #1f1c17;
+  --shadow-1: 0 1px 2px rgb(70 50 20 / 0.06), 0 1px 1px rgb(70 50 20 / 0.03);
+  --shadow-2: 0 1px 2px rgb(70 50 20 / 0.05), 0 6px 18px -6px rgb(70 50 20 / 0.12);
+  --shadow-3: 0 2px 6px rgb(70 50 20 / 0.05), 0 22px 48px -18px rgb(70 50 20 / 0.24);
+  --shadow-pop: 0 0 0 1px var(--line), 0 12px 32px -10px rgb(70 50 20 / 0.28);
+  --r-xs: 6px;
+  --r-sm: 9px;
+  --r: 12px;
+  --r-lg: 18px;
+  --r-xl: 26px;
+  --r-2xl: 34px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --font: 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  --frame: 1280px;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #151310;
+  --paper-2: #1b1915;
+  --paper-3: #24211c;
+  --card: #201d19;
+  --card-2: #1c1a16;
+  --ink: #f3eee4;
+  --ink-2: rgb(243 238 228 / 0.72);
+  --ink-3: rgb(243 238 228 / 0.5);
+  --ink-4: rgb(243 238 228 / 0.28);
+  --line: rgb(243 238 228 / 0.085);
+  --line-2: rgb(243 238 228 / 0.15);
+  --wash: rgb(243 238 228 / 0.04);
+  --wash-2: rgb(243 238 228 / 0.075);
+  --on-ink: #1a1814;
+  --hi: #f4d265;
+  --hi-2: #f0c53e;
+  --hi-soft: rgb(244 210 101 / 0.16);
+  --hi-ink: #f4d265;
+  --hl-mark: #ecc94f;
+  --leaf: #6cc287;
+  --sky: #6fa9f5;
+  --apricot: #f5a674;
+  --lilac: #ab9cf5;
+  --rose: #f095b2;
+  --butter: #f2cd5c;
+  --leaf-soft: rgb(108 194 135 / 0.14);
+  --sky-soft: rgb(111 169 245 / 0.14);
+  --apricot-soft: rgb(245 166 116 / 0.14);
+  --lilac-soft: rgb(171 156 245 / 0.15);
+  --rose-soft: rgb(240 149 178 / 0.14);
+  --butter-soft: rgb(242 205 92 / 0.14);
+  --leaf-ink: #8fd6a5;
+  --sky-ink: #9cc3fa;
+  --apricot-ink: #f7bb92;
+  --lilac-ink: #c2b6fa;
+  --rose-ink: #f5afc6;
+  --sky-top: #1d2740;
+  --sky-low: #3a2f2a;
+  --sheet-ink: #f3eee4;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 22px -8px rgb(0 0 0 / 0.5);
+  --shadow-3: 0 2px 6px rgb(0 0 0 / 0.3), 0 24px 50px -18px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 0 0 1px var(--line-2), 0 14px 36px -10px rgb(0 0 0 / 0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #151310;
+    --paper-2: #1b1915;
+    --paper-3: #24211c;
+    --card: #201d19;
+    --card-2: #1c1a16;
+    --ink: #f3eee4;
+    --ink-2: rgb(243 238 228 / 0.72);
+    --ink-3: rgb(243 238 228 / 0.5);
+    --ink-4: rgb(243 238 228 / 0.28);
+    --line: rgb(243 238 228 / 0.085);
+    --line-2: rgb(243 238 228 / 0.15);
+    --wash: rgb(243 238 228 / 0.04);
+    --wash-2: rgb(243 238 228 / 0.075);
+    --on-ink: #1a1814;
+    --hi: #f4d265;
+    --hi-2: #f0c53e;
+    --hi-soft: rgb(244 210 101 / 0.16);
+    --hi-ink: #f4d265;
+    --hl-mark: #ecc94f;
+    --leaf: #6cc287;
+    --sky: #6fa9f5;
+    --apricot: #f5a674;
+    --lilac: #ab9cf5;
+    --rose: #f095b2;
+    --butter: #f2cd5c;
+    --leaf-soft: rgb(108 194 135 / 0.14);
+    --sky-soft: rgb(111 169 245 / 0.14);
+    --apricot-soft: rgb(245 166 116 / 0.14);
+    --lilac-soft: rgb(171 156 245 / 0.15);
+    --rose-soft: rgb(240 149 178 / 0.14);
+    --butter-soft: rgb(242 205 92 / 0.14);
+    --leaf-ink: #8fd6a5;
+    --sky-ink: #9cc3fa;
+    --apricot-ink: #f7bb92;
+    --lilac-ink: #c2b6fa;
+    --rose-ink: #f5afc6;
+    --sky-top: #1d2740;
+    --sky-low: #3a2f2a;
+    --sheet-ink: #f3eee4;
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-2: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 22px -8px rgb(0 0 0 / 0.5);
+    --shadow-3: 0 2px 6px rgb(0 0 0 / 0.3), 0 24px 50px -18px rgb(0 0 0 / 0.7);
+    --shadow-pop: 0 0 0 1px var(--line-2), 0 14px 36px -10px rgb(0 0 0 / 0.7);
+  }
+}

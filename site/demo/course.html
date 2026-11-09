@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why we forget · Psychology 101 · BiliMind</title>
+<link rel="stylesheet" href="fonts.css">
+<script src="js/theme.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/dates.js"></script>
+<script>if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embed');</script>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="course/course.css">
+<script src="js/bili.js"></script>
+<script src="js/logos.js"></script>
+</head>
+<body>
+
+<div class="app" id="app">
+  <!-- global rail -->
+  <nav class="rail" aria-label="BiliMind">
+    <button class="r-brand" id="brand" data-tip="BiliMind" aria-label="BiliMind"><bili-blob size="26"></bili-blob></button>
+    <button class="r-btn" data-tip="Home" aria-label="Home" data-toast="Home: today across all your courses"><i data-lucide="house"></i></button>
+    <button class="r-btn" id="searchBtn" data-tip="Search" data-key="⌘K" aria-label="Search"><i data-lucide="search"></i></button>
+    <button class="r-btn" id="inboxBtn" data-tip="Inbox" aria-label="Inbox, 2 new"><i data-lucide="inbox"></i><span class="badge" id="inboxN">2</span></button>
+    <span class="r-sep"></span>
+    <button class="r-cov on" data-tip="Psychology 101" aria-label="Psychology 101"><img src="img/cover-psychology.jpg" alt=""></button>
+    <button class="r-cov" data-tip="Biology: cells to systems" aria-label="Biology" data-toast="Biology: cells to systems · 8 cards due"><img src="img/cover-biology.jpg" alt=""></button>
+    <button class="r-cov" data-tip="Italian to B1" aria-label="Italian to B1" data-toast="Italian to B1 · lesson 9 is next"><img src="img/cover-italian.jpg" alt=""></button>
+    <button class="r-btn" data-tip="New course" aria-label="New course" data-toast="Say what you’re learning, or drop in a syllabus"><i data-lucide="plus"></i></button>
+    <span class="grow"></span>
+    <button class="r-btn" id="themeBtn" data-tip="Light or dark" aria-label="Switch light or dark"><i data-lucide="sun-medium" class="i-sun"></i><i data-lucide="moon" class="i-moon"></i></button>
+    <button class="r-btn" data-tip="Settings" aria-label="Settings" data-toast="Settings: AI allowance, connections, exports"><i data-lucide="settings-2"></i></button>
+    <span class="r-me" id="meAv"></span>
+  </nav>
+
+  <!-- course sidebar -->
+  <aside class="sb" id="sb" aria-label="Psychology 101"><div class="sb-in" id="sbIn"></div></aside>
+
+  <!-- main -->
+  <main class="main" id="main">
+    <header class="topbar">
+      <button class="icon-btn m-only" id="mMenu" aria-label="Open the course"><i data-lucide="panel-left"></i></button>
+      <button class="icon-btn d-only" id="sbToggle" data-tip="Sidebar" data-key="[" aria-label="Toggle sidebar"><i data-lucide="panel-left"></i></button>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Open pages"></div>
+      <div class="tb-end">
+        <span class="live" id="live" data-tip="Aziz and Sara are on the whiteboard"><span class="faces" id="liveFaces"></span></span>
+        <button class="btn-xs ghost" id="shareBtn"><i data-lucide="user-plus"></i><span>Share</span></button>
+        <button class="icon-btn" id="asToggle" data-tip="Bili" data-key="⌘J" aria-label="Open Bili"><i data-lucide="sparkles"></i></button>
+      </div>
+    </header>
+    <div class="views" id="views"></div>
+
+    <div class="tray" id="tray" role="toolbar" aria-label="Pen and markup">
+      <span class="t-ind" id="tInd" aria-hidden="true"></span>
+      <button class="tool on" data-tool="select" data-tip="Select" data-key="V" aria-label="Select"><i data-lucide="mouse-pointer-2"></i></button>
+      <button class="tool" data-tool="pen" data-tip="Pen" data-key="P" aria-label="Pen"><i data-lucide="pen-line"></i></button>
+      <button class="tool" data-tool="marker" data-tip="Marker" data-key="M" aria-label="Marker"><i data-lucide="brush"></i></button>
+      <button class="tool" data-tool="highlight" data-tip="Highlight a sentence" data-key="H" aria-label="Highlight"><i data-lucide="highlighter"></i></button>
+      <button class="tool" data-tool="note" data-tip="Sticky note" data-key="N" aria-label="Sticky note"><i data-lucide="sticky-note"></i></button>
+      <button class="tool" data-tool="text" data-tip="Handwritten text" data-key="T" aria-label="Text"><i data-lucide="type"></i></button>
+      <button class="tool" data-tool="arrow" data-tip="Arrow" data-key="A" aria-label="Arrow"><i data-lucide="move-up-right"></i></button>
+      <button class="tool" data-tool="eraser" data-tip="Eraser" data-key="E" aria-label="Eraser"><i data-lucide="eraser"></i></button>
+      <span class="t-sep"></span>
+      <span class="cols" role="radiogroup" aria-label="Ink colour">
+        <button class="col on" data-color="ink" style="--c:var(--ink)" aria-label="Ink" role="radio" aria-checked="true"><i></i></button>
+        <button class="col" data-color="rose" style="--c:var(--rose)" aria-label="Rose" role="radio" aria-checked="false"><i></i></button>
+        <button class="col" data-color="sky" style="--c:var(--sky)" aria-label="Sky" role="radio" aria-checked="false"><i></i></button>
+        <button class="col" data-color="leaf" style="--c:var(--leaf)" aria-label="Leaf" role="radio" aria-checked="false"><i></i></button>
+        <button class="col" data-color="butter" style="--c:var(--hi-2)" aria-label="Yellow" role="radio" aria-checked="false"><i></i></button>
+      </span>
+      <span class="t-sep"></span>
+      <button class="tool" id="undo" data-tip="Undo" data-key="⌘Z" aria-label="Undo" disabled><i data-lucide="undo-2"></i></button>
+      <button class="tool" id="redo" data-tip="Redo" data-key="⇧⌘Z" aria-label="Redo" disabled><i data-lucide="redo-2"></i></button>
+    </div>
+
+    <button class="ask-fab" id="askFab" aria-label="Ask Bili"><bili-blob size="22"></bili-blob><span>Ask Bili</span></button>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <!-- Bili -->
+  <div class="as-col" id="asCol">
+    <aside class="as" id="as" aria-label="Bili, your study assistant">
+      <div class="as-head" id="asHead">
+        <span class="as-grip m-only" aria-hidden="true"></span>
+        <bili-blob size="26" id="asBlob"></bili-blob>
+        <div class="as-t"><b>Bili</b><span id="asSub">Proactive or retroactive interference?</span></div>
+        <button class="icon-btn sm" id="asHist" data-tip="Earlier chats" aria-label="Earlier chats"><i data-lucide="history"></i></button>
+        <button class="icon-btn sm" id="asNew" data-tip="New chat" aria-label="New chat"><i data-lucide="square-pen"></i></button>
+        <button class="icon-btn sm d-only" id="asFloat" data-tip="Float" aria-label="Float or dock"><i data-lucide="picture-in-picture-2"></i></button>
+        <button class="icon-btn sm" id="asClose" data-tip="Close" data-key="⌘J" aria-label="Close Bili"><i data-lucide="x"></i></button>
+      </div>
+      <div class="as-scope" role="group" aria-label="What Bili reads">
+        <span>Reads</span>
+        <button class="on" data-scope="lesson"><i data-lucide="book-open"></i>This lesson</button>
+        <button data-scope="course"><i data-lucide="library"></i>Course</button>
+        <button class="on" data-scope="mats"><i data-lucide="files"></i>Lecture 6</button>
+      </div>
+      <div class="thread" id="thread"></div>
+      <form class="comp glow" id="comp" autocomplete="off">
+        <div class="cq" id="cq"><i data-lucide="quote"></i><span id="cqText"></span><button type="button" id="cqX" aria-label="Remove quote"><i data-lucide="x"></i></button></div>
+        <label class="sr" for="ta">Ask Bili</label>
+        <textarea id="ta" rows="1" placeholder="Ask about this lesson…"></textarea>
+        <div class="comp-row">
+          <button type="button" class="icon-btn sm" data-tip="Attach a file" aria-label="Attach" data-toast="Pick a file: PDF, slides, photo or doc"><i data-lucide="paperclip"></i></button>
+          <button type="button" class="icon-btn sm" id="mic" data-tip="Speak" aria-label="Speak"><i data-lucide="mic"></i></button>
+          <span class="grow"></span>
+          <span class="hint" id="hint">Uses a little of this week’s AI</span>
+          <button type="submit" class="send" id="send" aria-label="Send" disabled><i data-lucide="arrow-up"></i></button>
+        </div>
+      </form>
+    </aside>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="pal" id="pal" hidden>
+  <div class="pal-box" role="dialog" aria-label="Search">
+    <div class="pal-in"><i data-lucide="search"></i><input id="palIn" placeholder="Search topics, notes, files, or ask a question" autocomplete="off"><span class="kbd">esc</span></div>
+    <div class="pal-list" id="palList" role="listbox"></div>
+    <div class="pal-foot"><span><span class="kbd">↑</span><span class="kbd">↓</span> move</span><span><span class="kbd">↵</span> open</span><span class="r"><bili-blob size="16"></bili-blob>Anything else goes to Bili</span></div>
+  </div>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script src="js/icons.js"></script>
+<script src="course/data.js"></script>
+<script src="course/core.js"></script>
+<script src="course/roadmap.js"></script>
+<script src="course/lesson.js"></script>
+<script src="course/board.js"></script>
+<script src="course/notes.js"></script>
+<script src="course/markup.js"></script>
+<script src="course/assistant.js"></script>
+<script src="course/start.js"></script>
+</body>
+</html>

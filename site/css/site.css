@@ -1,0 +1,86 @@
+/* The desktop page's own parts. Everything else is Daylight 2 as bilimind.com draws it: tokens.css
+   comes from the design, the numbered files from the frontend's landing styles, unchanged. */
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body.d2 { margin: 0; }
+
+.d2 .brand-tag { padding: 3px 7px; border-radius: 7px; background: var(--wash-2); font: 650 12px/1.3 var(--font); letter-spacing: 0; color: var(--ink-2); }
+.d2 #menuBtn .i-close, .d2 #menuBtn[aria-expanded='true'] .i-open { display: none; }
+.d2 #menuBtn[aria-expanded='true'] .i-close { display: block; }
+
+/* the download card stands where bilimind.com has its field, and Bili stands on its edge */
+.d2 .dl-zone { position: relative; width: min(640px, 100%); margin-top: 42px; animation: d2-hero-up 1s cubic-bezier(0.215, 0.61, 0.355, 1) 160ms both; }
+.d2 .dl-card { position: relative; z-index: 1; text-align: left; border-radius: 24px; background: var(--card); box-shadow: 0 0 0 1px var(--line-2), 0 2px 4px rgb(70 50 20 / 0.05), 0 26px 60px -28px rgb(60 50 30 / 0.45); }
+.d2 .dl-main { display: flex; align-items: center; gap: 14px; padding: 18px; }
+.d2 .dl-what { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.d2 .dl-what b { font-size: 17px; font-weight: 680; letter-spacing: -0.015em; }
+.d2 .dl-what span { font-size: 13.5px; color: var(--ink-3); }
+.d2 .dl-other { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 12px 20px 14px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-3); }
+.d2 .dl-other .grow { flex: 1; }
+.d2 .dl-other .link { font-size: 13.5px; }
+.d2 .dl-alt a { font-weight: 600; color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.d2 .dl-alt a:hover { color: var(--ink); }
+.d2 .hero .fineprint { margin-top: 18px; }
+@media (max-width: 520px) {
+  .d2 .dl-zone { margin-top: 66px; } /* Bili stands 67px above the card; less and it covers the copy */
+  .d2 .dl-main { flex-wrap: wrap; padding: 16px; }
+  .d2 .dl-main .btn { width: 100%; }
+  .d2 .dl-other { padding: 12px 16px 14px; }
+  .d2 .hero .fineprint span:nth-child(3) { display: none; }
+  .d2 .hero .fineprint { gap: 6px 14px; font-size: 14px; border-radius: 20px; }
+}
+
+/* eight cells, so the grid steps 4 → 2 → 1 and never leaves a hole */
+@media (max-width: 1100px) { .d2 .fx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .d2 .fx-grid { grid-template-columns: 1fr; } }
+
+/* the dark band: a claim on the left, what backs it on the right */
+.d2 .rs-row.two { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+@media (max-width: 900px) { .d2 .rs-row.two { grid-template-columns: minmax(0, 1fr); } .d2 .rs-row.two .rs-say { grid-column: auto; } }
+.d2 .run { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.d2 .run span { display: grid; gap: 6px; font-size: 13px; line-height: 1.35; color: var(--ink-3); }
+.d2 .run b { font-family: var(--font-display); font-size: clamp(26px, 2.4vw, 34px); font-weight: 600; line-height: 1; letter-spacing: -0.03em; color: var(--ink); }
+@media (max-width: 640px) { .d2 .run { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; } }
+.d2 .limits { display: grid; gap: 8px; }
+.d2 .limits span { display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 14px; border-radius: 12px; background: var(--card); box-shadow: 0 0 0 1px var(--line); font-size: 14.5px; color: var(--ink-2); }
+.d2 .limits i { display: grid; place-items: center; color: var(--ink-3); }
+.d2 .limits svg { width: 16px; height: 16px; }
+.d2 .limits b { margin-left: auto; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+.d2 .leaves { display: grid; gap: 14px; }
+.d2 .leaves li { display: grid; gap: 3px; padding-left: 14px; border-left: 2px solid var(--line-2); font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.d2 .leaves b { font-weight: 650; color: var(--ink); }
+
+/* desktop or web */
+.d2 .cmp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.d2 .cmp .cell { display: grid; align-content: start; gap: 18px; padding: 40px 48px 44px; }
+.d2 .ticks { display: grid; gap: 11px; }
+.d2 .ticks li { position: relative; padding-left: 30px; font-size: 15.5px; line-height: 1.45; color: var(--ink-2); }
+.d2 .ticks li::before { content: ''; position: absolute; left: 0; top: 1px; width: 19px; height: 19px; border-radius: 99px; background: var(--leaf-soft); }
+.d2 .ticks li::after { content: ''; position: absolute; left: 7px; top: 5px; width: 5px; height: 9px; border: solid var(--leaf-ink); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.d2 .ticks.plus li::before { background: var(--sky-soft); }
+.d2 .ticks.plus li::after { content: '+'; left: 0; top: 1px; width: 19px; height: 19px; display: grid; place-items: center; border: 0; transform: none; font: 700 15px/1 var(--font); color: var(--sky-ink); }
+@media (max-width: 760px) { .d2 .cmp { grid-template-columns: 1fr; } .d2 .cmp .cell { padding: 32px 20px; } }
+
+/* downloads */
+.d2 .dl-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.d2 .dl-grid .cell, .d2 .src-grid .cell { display: grid; align-content: start; gap: 8px; padding: 32px; }
+.d2 .dl-grid .ico { margin-bottom: 10px; }
+.d2 .dl-grid .cell.is-you { background: var(--card-2); }
+.d2 .dl-grid .cell.is-you .h4::after { content: 'Your system'; margin-left: 10px; padding: 3px 8px; border-radius: 99px; background: var(--hi-soft); color: var(--hi-ink); font-size: 12px; font-weight: 700; vertical-align: 2px; }
+.d2 .dl-files { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.d2 .dl-files em { font-style: normal; font-weight: 560; color: var(--ink-3); }
+.d2 .src-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); border-top: 0; }
+.d2 .code { margin: 8px 0 0; padding: 16px 18px; border-radius: 14px; background: var(--wash); box-shadow: inset 0 0 0 1px var(--line); font: 500 13.5px/1.75 'Geist Mono', ui-monospace, monospace; color: var(--ink); overflow-x: auto; }
+.d2 .extras { display: grid; gap: 14px; margin: 6px 0 10px; }
+.d2 .extras li { display: grid; gap: 2px; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.d2 .extras a { font-weight: 650; color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+@media (max-width: 900px) { .d2 .dl-grid, .d2 .src-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .d2 .dl-grid .cell, .d2 .src-grid .cell { padding: 28px 20px; } }
+
+/* the closing sheet has two buttons where bilimind.com has its field */
+.d2 .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 8px; }
+
+/* four footer columns, and a wordmark that fits whatever the width */
+.d2 .foot-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 640px) { .d2 .foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.d2 .wordmark { font-size: clamp(64px, 21vw, 300px); }
